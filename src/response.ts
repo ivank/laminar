@@ -1,44 +1,49 @@
-import * as contentDisposition from 'content-disposition';
 import * as cookie from 'cookie';
 import { createReadStream, statSync } from 'fs';
-import * as mime from 'mime-types';
-import { extname } from 'path';
 import { Readable } from 'stream';
-import { Response } from './types';
+import { Laminar, LaminarResponse, ResolverResponse } from './types';
 
-export class LaminarResponse implements Response {
-  readonly body: Response['body'];
-  readonly type: Response['type'];
-  readonly status: Response['status'];
-  readonly cookies: Response['cookies'];
-  readonly headers: Response['headers'];
-  constructor({ type, body, status, headers }: Partial<Response>) {
-    this.type = type ? type : body ? bodyType(body) : 'txt';
-    this.status = status || 200;
-    this.headers = headers || {};
+export const response = ({
+  body,
+  status = 200,
+  headers = {},
+  cookies,
+}: Partial<LaminarResponse>): LaminarResponse => {
+  console.log('body!!!', body);
+  return {
+    [Laminar]: true,
+    status,
+    headers,
+    cookies,
+    body:
+      body instanceof Readable ||
+      body instanceof Buffer ||
+      typeof body === 'string' ||
+      body === undefined
+        ? body
+        : JSON.stringify(body),
+  };
+};
 
-    if (body instanceof Readable || body instanceof Buffer || typeof body === 'string') {
-      this.body = body;
-    } else if (typeof body === 'object') {
-      this.body = JSON.stringify(body);
-    }
-  }
-}
-export const response = (partial: Partial<Response>) => new LaminarResponse(partial);
+export const isResponse = (res: ResolverResponse): res is LaminarResponse =>
+  typeof res === 'object' && Laminar in res;
+
 export const message = (status: number, body: {} | string) => response({ status, body });
 
-export const redirect = (url: string, partial?: Partial<Response>) =>
+export const redirect = (url: string, partial?: Partial<LaminarResponse>) =>
   response({
-    headers: { Location: url, ...(partial ? partial.headers : undefined) },
-    type: 'text/plain; charset=utf-8',
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      Location: url,
+      ...(partial ? partial.headers : undefined),
+    },
     body: `Redirecting to ${url}.`,
     status: 302,
     ...partial,
   });
 
-export const file = (filename: string, partial?: Partial<Response>) =>
+export const file = (filename: string, partial?: Partial<LaminarResponse>) =>
   response({
-    type: extname(filename),
     body: createReadStream(filename),
     headers: {
       'Content-Length': statSync(filename).size,
@@ -47,38 +52,28 @@ export const file = (filename: string, partial?: Partial<Response>) =>
     ...partial,
   });
 
-export const attachment = (filename: string, partial?: Partial<Response>) =>
-  file(filename, {
-    headers: {
-      'Content-Disposition': contentDisposition(filename),
-      ...(partial ? partial.headers : undefined),
-    },
-    ...partial,
-  });
-
-const bodyType = (body: Response['body']) => {
+const contentType = (body: LaminarResponse['body']) => {
   return body instanceof Readable || body instanceof Buffer
-    ? 'bin'
+    ? 'application/octet-stream'
     : typeof body === 'object'
-    ? 'json'
-    : 'txt';
+    ? 'application/json'
+    : 'text/plain';
 };
 
-const contentLength = (body: Response['body']) =>
+const contentLength = (body: LaminarResponse['body']) =>
   body instanceof Buffer || typeof body === 'string' ? Buffer.byteLength(body) : undefined;
 
 const setCookie = (cookies: { [key: string]: string }) =>
   Object.entries(cookies).map(([name, value]) => cookie.serialize(name, value));
 
-export const resolveResponse = (res: Response) => {
+export const resolveResponse = (res: LaminarResponse) => {
   return {
+    ...res,
     headers: {
-      'Content-Type': mime.contentType(res.type),
+      'Content-Type': contentType(res.body),
       'Content-Length': res.body ? contentLength(res.body) : undefined,
       'Set-Cookie': res.cookies ? setCookie(res.cookies) : undefined,
       ...res.headers,
     },
-    status: res.status,
-    body: res.body,
   };
 };

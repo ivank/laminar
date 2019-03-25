@@ -19,10 +19,12 @@ export const routes = <TContext extends Context>(
   ...matchers: Array<RouteMatcher<TContext & RouteContext>>
 ): Resolver<TContext> => {
   return ctx => {
-    const select = selectMatcher(ctx.method, ctx.path, matchers);
+    const select = selectMatcher(ctx.request.method, ctx.request.url.pathname!, matchers);
 
     if (!select) {
-      return message(404, { message: `Path ${ctx.method} ${ctx.path} not found` });
+      return message(404, {
+        message: `Path ${ctx.request.method} ${ctx.request.url.pathname!} not found`,
+      });
     }
     return select.matcher.resolver({ ...ctx, params: select.params });
   };

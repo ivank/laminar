@@ -1,12 +1,23 @@
-import { IncomingHttpHeaders, IncomingMessage, OutgoingHttpHeaders } from 'http';
+import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import { ParsedUrlQuery } from 'querystring';
 import { Readable } from 'stream';
+import { UrlWithParsedQuery } from 'url';
 
-export const laminarKey = Symbol('Laminar Response');
+export const Laminar = Symbol('Laminar');
 
-export interface Response {
+export interface LaminarRequest {
+  [Laminar]: true;
+  url: UrlWithParsedQuery;
+  method: Method;
+  headers: IncomingHttpHeaders;
+  query?: ParsedUrlQuery;
+  body: any;
+  cookies?: { [key: string]: string };
+}
+
+export interface LaminarResponse {
+  [Laminar]: true;
   body: string | Readable | Buffer | object | undefined;
-  type: string;
   status: number;
   cookies: { [key: string]: string } | undefined;
   headers: OutgoingHttpHeaders;
@@ -24,18 +35,13 @@ export enum Method {
 }
 
 export interface Context {
-  method: Method;
-  path: string;
-  query: ParsedUrlQuery;
-  headers: IncomingHttpHeaders;
-  cookies?: { [key: string]: string };
-  request: IncomingMessage;
+  request: LaminarRequest;
 }
 
 export type Middleware<TAddition extends {} = {}> = <TContext extends Context = Context>(
   resolver: Resolver<TContext & TAddition>,
 ) => Resolver<TContext>;
-export type ResolverResponse = string | Readable | Buffer | Response | object;
+export type ResolverResponse = string | Readable | Buffer | LaminarResponse | object;
 export type Resolver<TContext extends Context = Context> = (
   ctx: TContext,
 ) => Promise<ResolverResponse> | ResolverResponse;

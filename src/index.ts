@@ -35,7 +35,7 @@ const start = async () => {
         return { test: '123', result: ctx.params };
       },
       post: ctx => {
-        console.log(ctx.body);
+        console.log(ctx.params);
         return { post: true };
       },
     },

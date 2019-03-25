@@ -1,114 +1,60 @@
-import * as contentType from 'content-type';
-import { IncomingMessage } from 'http';
-import { ValidationError, Validator } from 'jsonschema';
-import * as mime from 'mime-types';
-import {
-  ContentObject,
-  OpenAPIObject,
-  OperationObject,
-  ParameterObject,
-  RequestBodyObject,
-} from 'openapi3-ts';
+import { Schema, Validator } from 'jsonschema';
+import { OpenAPIObject, OperationObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
 import { validate } from 'swagger-parser';
-import { concatStream } from '../helpers/concatStream';
-import { isMatchingType } from '../helpers/matchMediaType';
 import { Matcher, MatcherParams, selectMatcher, toMatcher } from '../helpers/route';
+import { flow, isMatchingType, noop, push, set } from '../helpers/util';
 import { message } from '../response';
 import { Context, Resolver } from '../types';
 
 interface RouteMatcher<TContext extends Context> extends Matcher {
-  operation: OperationObject;
   resolver: Resolver<TContext>;
+  contextSchema: (contentType: string | undefined) => (schema: Schema) => Schema;
 }
 
 interface RouteContext {
   params: MatcherParams;
-  body: {};
 }
 
 type PathMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch';
 
-export const getParameterValue = (param: ParameterObject, ctx: Context & RouteContext) => {
-  switch (param.in) {
-    case 'path':
-      return ctx.params[param.name];
-    case 'header':
-      return ctx.headers[param.name];
-    case 'query':
-      return ctx.query[param.name];
-    case 'cookie':
-      return ctx.cookies![param.name];
-  }
+const parameterMap = {
+  path: ['properties', 'params'],
+  header: ['properties', 'request', 'headers'],
+  query: ['properties', 'request', 'headers'],
+  cookie: ['properties', 'request', 'cookies'],
 };
 
-export const parseBody = async (request: IncomingMessage) => {
-  const requestType = contentType.parse(request.headers['content-type'] || 'text/plain').type;
-  const type = mime.extension(requestType);
-  const body = await concatStream(request);
+const parameterSchema = (param: ParameterObject) =>
+  flow(
+    set([...parameterMap[param.in], 'properties', param.name], param.schema),
+    param.required ? push([...parameterMap[param.in], 'required'], param.name) : noop,
+  );
 
-  switch (type) {
-    case 'json':
-      return JSON.parse(body);
-    default:
-      return body;
-  }
+const parameterContextSchema = (parameters: ParameterObject[] | undefined) =>
+  parameters ? flow(...parameters.map(param => parameterSchema(param))) : noop;
+
+const matchingMediaTypeSchema = (contentType: string, requestBody: RequestBodyObject) => {
+  const mediaType = Object.keys(requestBody.content).find(mediatype =>
+    isMatchingType(contentType, mediatype),
+  );
+  return mediaType ? requestBody.content[mediaType].schema : undefined;
 };
 
-export const validateParameter = (validator: Validator, param: ParameterObject, value: any) => {
-  if (!value && param.required) {
-    return [new ValidationError(`Parameter ${param.name} in ${param.in} required`)];
-  }
-  return value && param.schema
-    ? validator.validate(value, param.schema, { propertyName: `${param.in}.${param.name}` }).errors
-    : [];
-};
-
-export const validateRequestBody = async (
-  validator: Validator,
-  requestBody: RequestBodyObject,
-  request: IncomingMessage,
-) => {
-  const requestType = contentType.parse(request.headers['content-type'] || 'text/plain').type;
-  const mediaType = selectContent(requestType, requestBody.content);
-
-  if (mediaType) {
-    if (mediaType.schema) {
-      const body = await parseBody(request);
-      return validator.validate(body, mediaType.schema, { propertyName: 'request' }).errors;
-    } else {
-      return [];
-    }
-  } else if (requestBody.required) {
-    return [new ValidationError(`Request required, but type was ${requestType}`)];
-  } else {
-    return [];
-  }
-};
-
-export const selectContent = (requestType: string, content: ContentObject) => {
-  const key = Object.keys(content).find(type => isMatchingType(requestType, type));
-  return key ? content[key] : undefined;
-};
-
-export const validateContext = async (
-  parameters: ParameterObject[] | undefined,
+const requestBodySchema = (
+  contentType: string | undefined,
   requestBody: RequestBodyObject | undefined,
-  ctx: Context & RouteContext,
 ) => {
-  const validator = new Validator();
-  const parameterErrors = parameters
-    ? parameters.reduce<ValidationError[]>(
-        (all, param) => [
-          ...all,
-          ...validateParameter(validator, param, getParameterValue(param, ctx)),
-        ],
-        [],
-      )
-    : [];
-  const bodyErrors = requestBody
-    ? await validateRequestBody(validator, requestBody, ctx.request)
-    : [];
-  return [...parameterErrors, ...bodyErrors];
+  if (requestBody && contentType) {
+    return flow(
+      requestBody.required ? push(['properties', 'request', 'required'], 'body') : noop,
+      set(
+        ['properties', 'request', 'properties', 'body'],
+        matchingMediaTypeSchema(contentType, requestBody),
+      ),
+    );
+  } else {
+    return noop;
+  }
 };
 
 export const oapi = async <TContext extends Context>(
@@ -133,32 +79,41 @@ export const oapi = async <TContext extends Context>(
         throw new Error(`Method ${method} on path ${path} is not defined in the schema`);
       }
 
-      matchers.push({ ...toMatcher(method, path), resolver, operation });
+      const parametersSchema = parameterContextSchema(operation.parameters as
+        | ParameterObject[]
+        | undefined);
+
+      const contextSchema = (contentType: string | undefined) =>
+        flow(
+          parametersSchema,
+          requestBodySchema(contentType, operation.requestBody as RequestBodyObject | undefined),
+        );
+
+      matchers.push({ ...toMatcher(method, path), resolver, contextSchema });
     }
   }
 
   return async ctx => {
-    const select = selectMatcher(ctx.method, ctx.path, matchers);
+    const select = selectMatcher(ctx.request.method, ctx.request.url.pathname!, matchers);
 
     if (!select) {
-      return message(404, { message: `Path ${ctx.method} ${ctx.path} not found` });
+      return message(404, {
+        message: `Path ${ctx.request.method} ${ctx.request.url.pathname!} not found`,
+      });
     }
-
+    const validator = new Validator();
     const {
-      matcher: { operation, resolver },
+      matcher: { resolver, contextSchema },
       params,
     } = select;
 
-    const context = { ...ctx, params, body: '111' };
+    const context = { ...ctx, params };
+    const contentType = ctx.request.headers['content-type'];
+    const schema = contextSchema(contentType)({ type: 'object', properties: {} });
+    const result = validator.validate(context, schema, { propertyName: 'context' });
 
-    const errors = await validateContext(
-      operation.parameters as ParameterObject[],
-      operation.requestBody as RequestBodyObject,
-      context,
-    );
-
-    if (errors.length) {
-      const errorMessages = errors.map(error => `${error.property}: ${error.message}`);
+    if (!result.valid) {
+      const errorMessages = result.errors.map(error => `${error.property}: ${error.message}`);
       return message(400, { message: 'Request Validation Error', errors: errorMessages });
     }
 
