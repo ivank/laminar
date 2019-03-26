@@ -8,22 +8,18 @@ export const response = ({
   status = 200,
   headers = {},
   cookies,
-}: Partial<LaminarResponse>): LaminarResponse => {
-  console.log('body!!!', body);
-  return {
-    [Laminar]: true,
-    status,
-    headers,
-    cookies,
-    body:
-      body instanceof Readable ||
-      body instanceof Buffer ||
-      typeof body === 'string' ||
-      body === undefined
-        ? body
-        : JSON.stringify(body),
-  };
-};
+}: Partial<LaminarResponse>): LaminarResponse => ({
+  [Laminar]: true,
+  status,
+  headers: {
+    'Content-Type': contentType(body),
+    'Content-Length': body ? contentLength(body) : undefined,
+    'Set-Cookie': cookies ? setCookie(cookies) : undefined,
+    ...headers,
+  },
+  cookies,
+  body,
+});
 
 export const isResponse = (res: ResolverResponse): res is LaminarResponse =>
   typeof res === 'object' && Laminar in res;
@@ -66,14 +62,10 @@ const contentLength = (body: LaminarResponse['body']) =>
 const setCookie = (cookies: { [key: string]: string }) =>
   Object.entries(cookies).map(([name, value]) => cookie.serialize(name, value));
 
-export const resolveResponse = (res: LaminarResponse) => {
-  return {
-    ...res,
-    headers: {
-      'Content-Type': contentType(res.body),
-      'Content-Length': res.body ? contentLength(res.body) : undefined,
-      'Set-Cookie': res.cookies ? setCookie(res.cookies) : undefined,
-      ...res.headers,
-    },
-  };
-};
+export const resolveBody = (body: LaminarResponse['body']) =>
+  body instanceof Readable ||
+  body instanceof Buffer ||
+  typeof body === 'string' ||
+  body === undefined
+    ? body
+    : JSON.stringify(body);

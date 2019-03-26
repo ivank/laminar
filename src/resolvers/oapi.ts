@@ -1,14 +1,22 @@
 import { Schema, Validator } from 'jsonschema';
-import { OpenAPIObject, OperationObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
+import {
+  OpenAPIObject,
+  OperationObject,
+  ParameterObject,
+  RequestBodyObject,
+  ResponsesObject,
+} from 'openapi3-ts';
 import { validate } from 'swagger-parser';
+import { inspect } from 'util';
 import { Matcher, MatcherParams, selectMatcher, toMatcher } from '../helpers/route';
-import { flow, isMatchingType, noop, push, set } from '../helpers/util';
-import { message } from '../response';
+import { flow, getIn, isMatching, noop, push, set } from '../helpers/util';
+import { isResponse, message, response } from '../response';
 import { Context, Resolver } from '../types';
 
 interface RouteMatcher<TContext extends Context> extends Matcher {
   resolver: Resolver<TContext>;
   contextSchema: (contentType: string | undefined) => (schema: Schema) => Schema;
+  responseSchema: (statuscode: string, contentType: string) => Schema;
 }
 
 interface RouteContext {
@@ -33,29 +41,24 @@ const parameterSchema = (param: ParameterObject) =>
 const parameterContextSchema = (parameters: ParameterObject[] | undefined) =>
   parameters ? flow(...parameters.map(param => parameterSchema(param))) : noop;
 
-const matchingMediaTypeSchema = (contentType: string, requestBody: RequestBodyObject) => {
-  const mediaType = Object.keys(requestBody.content).find(mediatype =>
-    isMatchingType(contentType, mediatype),
-  );
-  return mediaType ? requestBody.content[mediaType].schema : undefined;
-};
-
 const requestBodySchema = (
   contentType: string | undefined,
   requestBody: RequestBodyObject | undefined,
 ) => {
   if (requestBody && contentType) {
+    const bodySchema = getIn(['content', isMatching(contentType), 'schema'], requestBody);
     return flow(
       requestBody.required ? push(['properties', 'request', 'required'], 'body') : noop,
-      set(
-        ['properties', 'request', 'properties', 'body'],
-        matchingMediaTypeSchema(contentType, requestBody),
-      ),
+      set(['properties', 'request', 'properties', 'body'], bodySchema),
     );
   } else {
     return noop;
   }
 };
+
+const matchResponseSchema = (statuscode: string, contentType: string, responses: ResponsesObject) =>
+  getIn([statuscode, 'content', isMatching(contentType), 'schema'], responses) ||
+  getIn(['default', 'content', isMatching(contentType), 'schema'], responses);
 
 export const oapi = async <TContext extends Context>(
   apiSpec: string,
@@ -83,13 +86,17 @@ export const oapi = async <TContext extends Context>(
         | ParameterObject[]
         | undefined);
 
-      const contextSchema = (contentType: string | undefined) =>
-        flow(
-          parametersSchema,
-          requestBodySchema(contentType, operation.requestBody as RequestBodyObject | undefined),
-        );
-
-      matchers.push({ ...toMatcher(method, path), resolver, contextSchema });
+      matchers.push({
+        ...toMatcher(method, path),
+        resolver,
+        contextSchema: (contentType: string | undefined) =>
+          flow(
+            parametersSchema,
+            requestBodySchema(contentType, operation.requestBody as RequestBodyObject | undefined),
+          ),
+        responseSchema: (statuscode: string, contentType: string) =>
+          matchResponseSchema(statuscode, contentType, operation.responses),
+      });
     }
   }
 
@@ -103,20 +110,43 @@ export const oapi = async <TContext extends Context>(
     }
     const validator = new Validator();
     const {
-      matcher: { resolver, contextSchema },
+      matcher: { resolver, contextSchema, responseSchema },
       params,
     } = select;
 
     const context = { ...ctx, params };
     const contentType = ctx.request.headers['content-type'];
     const schema = contextSchema(contentType)({ type: 'object', properties: {} });
-    const result = validator.validate(context, schema, { propertyName: 'context' });
+    const requestValidation = validator.validate(context, schema, { propertyName: 'context' });
 
-    if (!result.valid) {
-      const errorMessages = result.errors.map(error => `${error.property}: ${error.message}`);
+    if (!requestValidation.valid) {
+      const errorMessages = requestValidation.errors.map(
+        error => `${error.property}: ${error.message}`,
+      );
       return message(400, { message: 'Request Validation Error', errors: errorMessages });
     }
 
-    return resolver(context);
+    const rawResponse = resolver(context);
+    const laminarResponse = isResponse(rawResponse) ? rawResponse : response({ body: rawResponse });
+
+    const responseSchema2 = responseSchema(String(laminarResponse.status), laminarResponse.headers[
+      'Content-Type'
+    ] as string);
+
+    if (responseSchema2) {
+      const responseValidation = validator.validate(laminarResponse.body, responseSchema2, {
+        propertyName: 'response',
+      });
+      console.log(inspect(responseSchema2, { depth: 10 }));
+
+      if (!responseValidation.valid) {
+        const errorMessages = responseValidation.errors.map(
+          error => `${error.property}: ${error.message}`,
+        );
+        return message(400, { message: 'Response Validation Error', errors: errorMessages });
+      }
+    }
+
+    return laminarResponse;
   };
 };

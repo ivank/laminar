@@ -2,6 +2,16 @@ interface Subject {
   [key: string]: any;
 }
 
+export const getIn = <T extends Subject>(
+  path: Array<string | ((part: T) => string)>,
+  obj: T,
+): any =>
+  path.reduce(
+    (value, name) =>
+      value ? (typeof name === 'string' ? value[name] : value[name(value)]) : undefined,
+    obj,
+  );
+
 export const pushIn = <T extends Subject>(path: string[], value: any, obj: T): T => {
   const [current, ...rest] = path;
   return {
@@ -33,6 +43,9 @@ export const isMatchingType = (type: string, matchType: string): boolean => {
   const [matchMajor, matchSub] = matchType.split('/');
   return (major === '*' || major === matchMajor) && (sub === '*' || sub === matchSub);
 };
+
+export const isMatching = (type: string) => (obj: any) =>
+  Object.keys(obj).find(key => isMatchingType(key, type)) || '';
 
 export const toArray = (value: string[] | string | number | false | undefined) =>
   Array.isArray(value) ? value : value ? [value] : [];
