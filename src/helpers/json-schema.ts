@@ -280,6 +280,8 @@ export const validate: Validator<Schema> = (schema, value, options) => {
     return validateAllOf(schema, value, options);
   } else if ('anyOf' in schema) {
     return validateAnyOf(schema, value, options);
+  } else if ('required' in schema || 'properties' in schema || 'patternProperties' in schema) {
+    return validateObject(schema, value, options);
   } else {
     return [];
   }
