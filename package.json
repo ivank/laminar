@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@types/cookie": "^0.3.2",
+    "@types/js-yaml": "^3.12.0",
     "@types/node-fetch": "^2.1.7",
     "cookie": "^0.3.1",
+    "js-yaml": "^3.13.0",
     "jsonschema": "^1.2.4",
     "node-fetch": "^2.3.0",
     "swagger-parser": "^6.0.5"

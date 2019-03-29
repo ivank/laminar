@@ -1,4 +1,5 @@
-import { Schema, Validator } from 'jsonschema';
+import { readFileSync } from 'fs';
+import * as YAML from 'js-yaml';
 import {
   OpenAPIObject,
   OperationObject,
@@ -6,12 +7,13 @@ import {
   RequestBodyObject,
   ResponsesObject,
 } from 'openapi3-ts';
-import { validate } from 'swagger-parser';
-import { inspect } from 'util';
+import { resolveRefs } from '../helpers/json-refs';
+import { Schema, validate } from '../helpers/json-schema';
 import { Matcher, MatcherParams, selectMatcher, toMatcher } from '../helpers/route';
 import { flow, getIn, isMatching, noop, push, set } from '../helpers/util';
 import { isResponse, message, response } from '../response';
 import { Context, Resolver } from '../types';
+import { OpenApi } from './OpenApi';
 
 interface RouteMatcher<TContext extends Context> extends Matcher {
   resolver: Resolver<TContext>;
@@ -61,12 +63,17 @@ const matchResponseSchema = (statuscode: string, contentType: string, responses:
   getIn(['default', 'content', isMatching(contentType), 'schema'], responses);
 
 export const oapi = async <TContext extends Context>(
-  apiSpec: string,
+  apiSpecContent: string,
   resolvers: {
     [path: string]: { [method in PathMethod]?: Resolver<TContext & RouteContext> };
   },
 ): Promise<Resolver<TContext>> => {
-  const api: OpenAPIObject = await validate(apiSpec);
+  const api: OpenAPIObject = await resolveRefs(YAML.load(String(readFileSync(apiSpecContent)))!);
+  const errors = validate(OpenApi, api);
+  if (errors.length) {
+    console.log(errors);
+    throw new Error('Invalid Open API');
+  }
   const matchers: Array<RouteMatcher<TContext & RouteContext>> = [];
 
   for (const [path, methods] of Object.entries(resolvers)) {
@@ -108,7 +115,6 @@ export const oapi = async <TContext extends Context>(
         message: `Path ${ctx.request.method} ${ctx.request.url.pathname!} not found`,
       });
     }
-    const validator = new Validator();
     const {
       matcher: { resolver, contextSchema, responseSchema },
       params,
@@ -117,13 +123,10 @@ export const oapi = async <TContext extends Context>(
     const context = { ...ctx, params };
     const contentType = ctx.request.headers['content-type'];
     const schema = contextSchema(contentType)({ type: 'object', properties: {} });
-    const requestValidation = validator.validate(context, schema, { propertyName: 'context' });
+    const contextErrors = validate(schema, context);
 
-    if (!requestValidation.valid) {
-      const errorMessages = requestValidation.errors.map(
-        error => `${error.property}: ${error.message}`,
-      );
-      return message(400, { message: 'Request Validation Error', errors: errorMessages });
+    if (contextErrors.length) {
+      return message(400, { message: 'Request Validation Error', errors: contextErrors });
     }
 
     const rawResponse = resolver(context);
@@ -134,16 +137,12 @@ export const oapi = async <TContext extends Context>(
     ] as string);
 
     if (responseSchema2) {
-      const responseValidation = validator.validate(laminarResponse.body, responseSchema2, {
-        propertyName: 'response',
-      });
-      console.log(inspect(responseSchema2, { depth: 10 }));
+      const responseErrors = validate(responseSchema2, laminarResponse.body);
 
-      if (!responseValidation.valid) {
-        const errorMessages = responseValidation.errors.map(
-          error => `${error.property}: ${error.message}`,
-        );
-        return message(400, { message: 'Response Validation Error', errors: errorMessages });
+      console.log(responseErrors, laminarResponse.body, responseSchema2);
+
+      if (responseErrors.length) {
+        return message(400, { message: 'Response Validation Error', errors: responseErrors });
       }
     }
 
