@@ -12,7 +12,5 @@
     "sourceMap": false,
     "lib": ["es2018"],
     "outDir": "dist"
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  }
 }
