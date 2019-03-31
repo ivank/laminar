@@ -1,10 +1,19 @@
-import { isEqual, some, uniq } from 'lodash/fp';
+import { isEqual, some, uniqWith } from 'lodash/fp';
+import fetch from 'node-fetch';
 
-export interface StringType extends BaseType {
-  type: 'string';
+export type PrimitiveType = 'string' | 'integer' | 'number' | 'boolean' | 'array' | 'object';
+
+export interface Schema {
+  $ref?: string;
+  $id?: string;
+  if?: Schema;
+  then?: Schema;
+  else?: Schema;
+  type?: PrimitiveType | PrimitiveType[];
   pattern?: string;
   minLength?: number;
   maxLength?: number;
+  const?: any;
   format?:
     | 'date'
     | 'date-time'
@@ -20,32 +29,17 @@ export interface StringType extends BaseType {
     | 'binary'
     | 'byte'
     | string;
-}
-
-export interface NumberType extends BaseType {
-  type: 'integer' | 'number';
   minimum?: number;
   maximum?: number;
-  exclusiveMinimum?: boolean;
-  exclusiveMaximum?: boolean;
+  exclusiveMinimum?: boolean | number;
+  exclusiveMaximum?: boolean | number;
   multipleOf?: number;
-}
-
-export interface BooleanType extends BaseType {
-  type: 'boolean';
-}
-
-export interface ArrayType extends BaseType {
-  type: 'array';
   items?: Schema | Schema[];
+  contains?: Schema;
   additionalItems?: boolean | Schema;
   uniqueItems?: boolean;
   minItems?: number;
   maxItems?: number;
-}
-
-export interface ObjectType extends BaseType {
-  type: 'object';
   properties?: { [key: string]: Schema };
   required?: string[];
   readOnly?: boolean;
@@ -53,189 +47,162 @@ export interface ObjectType extends BaseType {
   additionalProperties?: boolean | Schema;
   minProperties?: number;
   maxProperties?: number;
-  propertyNames?: { pattern: string };
+  propertyNames?: Schema;
   patternProperties?: { [key: string]: Schema };
   dependencies?: { [key: string]: string[] | Schema };
-}
-
-export interface BaseType {
   title?: string;
   description?: string;
   nullable?: boolean;
   enum?: any[];
+  oneOf?: Schema[];
+  allOf?: Schema[];
+  anyOf?: Schema[];
+  discriminator?: Discriminator;
+  [key: string]: any;
 }
 
 export interface Discriminator {
   propertyName: string;
 }
 
-export interface OneOfType {
-  oneOf: Schema[];
-  discriminator?: Discriminator;
-}
-
-export interface AllOfType {
-  allOf: Schema[];
-  discriminator?: Discriminator;
-}
-
-export interface AnyOfType {
-  anyOf: Schema[];
-  discriminator?: Discriminator;
-}
-
-export type Schema =
-  | StringType
-  | NumberType
-  | BooleanType
-  | ArrayType
-  | ObjectType
-  | OneOfType
-  | AllOfType
-  | AnyOfType
-  | {};
-
 export interface Invalid {
-  code: Code;
+  code: keyof Messages;
   name: string;
   param?: any;
 }
 
-const enum Code {
-  ENUM,
-  BOOLEAN,
-  NUMBER,
-  NUMBER_INTEGER,
-  NUMBER_MULTIPLE_OF,
-  NUMBER_MIN,
-  NUMBER_EXCLUSIVE_MIN,
-  NUMBER_MAX,
-  NUMBER_EXCLUSIVE_MAX,
-  STRING,
-  STRING_PATTERN,
-  STRING_FORMAT,
-  STRING_MAX_LENGTH,
-  STRING_MIN_LENGTH,
-  OBJECT,
-  OBJECT_REQUIRED,
-  OBJECT_MIN_PROPS,
-  OBJECT_MAX_PROPS,
-  OBJECT_UNKNOWN,
-  OBJECT_PROPERTY_NAME,
-  OBJECT_DEPENDANCY,
-  ARRAY,
-  ARRAY_UNIQUE,
-  ARRAY_MIN_ITEMS,
-  ARRAY_MAX_ITEMS,
-  ARRAY_UNKNOWN,
-  ONE_OF,
-  ANY_OF,
-}
-
 export interface ValidateOptions {
   name: string;
+  root: Schema;
+  schemas: Map<string, Schema>;
+  id?: string;
 }
 
-export type Validator<TSchema> = (
-  schema: TSchema,
-  value: any,
-  options: ValidateOptions,
-) => Invalid[];
+type Validator = (schema: Schema, value: any, options: ValidateOptions) => Invalid[];
 
-type Messages = { [key in Code]: (error: Invalid) => string };
+export interface Messages {
+  [key: string]: (error: Invalid) => string;
+}
 
-export const messages: Messages = {
-  [Code.ENUM]: ({ name, param }) => `"${name}" should be one of [${param.join(', ')}]`,
-  [Code.BOOLEAN]: ({ name }) => `"${name}" should be a boolean`,
-  [Code.NUMBER]: ({ name }) => `"${name}" should be a number`,
-  [Code.NUMBER_INTEGER]: ({ name }) => `"${name}" should be an integer`,
-  [Code.NUMBER_MULTIPLE_OF]: ({ name, param }) => `"${name}" should be a multiple of ${param}`,
-  [Code.NUMBER_MIN]: ({ name, param }) => `"${name}" should be >= ${param}`,
-  [Code.NUMBER_EXCLUSIVE_MIN]: ({ name, param }) => `"${name}" should be > ${param}`,
-  [Code.NUMBER_MAX]: ({ name, param }) => `"${name}" should be <= ${param}`,
-  [Code.NUMBER_EXCLUSIVE_MAX]: ({ name, param }) => `"${name}" should be < ${param}`,
-  [Code.STRING]: ({ name }) => `"${name}" should be a string`,
-  [Code.STRING_PATTERN]: ({ name, param }) => `"${name}" should match /${param}/`,
-  [Code.STRING_FORMAT]: ({ name, param }) => `"${name}" should match ${param} format`,
-  [Code.STRING_MAX_LENGTH]: ({ name, param }) => `"${name}" should have length <= ${param}`,
-  [Code.STRING_MIN_LENGTH]: ({ name, param }) => `"${name}" should have length >= ${param}`,
-  [Code.OBJECT]: ({ name }) => `"${name}" should be an object`,
-  [Code.OBJECT_UNKNOWN]: ({ name }) => `"${name}" key is unknown`,
-  [Code.OBJECT_REQUIRED]: ({ name }) => `"${name}" key is missing`,
-  [Code.OBJECT_PROPERTY_NAME]: ({ name, param }) => `"${name}" key does not match /${param}/`,
-  [Code.OBJECT_MIN_PROPS]: ({ name, param }) => `"${name}" should have >= ${param} keys`,
-  [Code.OBJECT_MAX_PROPS]: ({ name, param }) => `"${name}" should have <= ${param} keys`,
-  [Code.OBJECT_DEPENDANCY]: ({ name, param }) => `"${name}" requires [${param.join(', ')}] keys`,
-  [Code.ARRAY]: ({ name }) => `"${name}" should be an array`,
-  [Code.ARRAY_UNIQUE]: ({ name }) => `"${name}" should have only unique values`,
-  [Code.ARRAY_MIN_ITEMS]: ({ name, param }) => `"${name}" should have >= ${param} items`,
-  [Code.ARRAY_MAX_ITEMS]: ({ name, param }) => `"${name}" should have <= ${param} items`,
-  [Code.ARRAY_UNKNOWN]: ({ name }) => `"${name}" item is unknown`,
-  [Code.ONE_OF]: ({ name, param }) => `"${name}" should match only 1 schema, matching ${param}`,
-  [Code.ANY_OF]: ({ name }) => `"${name}" should match at least 1 schema`,
+const messages: Messages = {
+  not: ({ name }) => `"${name}" should not match`,
+  enum: ({ name, param }) => `"${name}" should be one of [${param.join(', ')}]`,
+  type: ({ name, param }) => `"${name}" should be a [${param}]`,
+  multipleOf: ({ name, param }) => `"${name}" should be a multiple of ${param}`,
+  minimum: ({ name, param }) => `"${name}" should be >= ${param}`,
+  exclusiveMinimum: ({ name, param }) => `"${name}" should be > ${param}`,
+  maximum: ({ name, param }) => `"${name}" should be <= ${param}`,
+  exclusiveMaximum: ({ name, param }) => `"${name}" should be < ${param}`,
+  pattern: ({ name, param }) => `"${name}" should match /${param}/`,
+  typeFormat: ({ name, param }) => `"${name}" should match ${param} format`,
+  maxLength: ({ name, param }) => `"${name}" should have length <= ${param}`,
+  minLength: ({ name, param }) => `"${name}" should have length >= ${param}`,
+  false: ({ name }) => `"${name}" should not exist`,
+  additionalProperties: ({ name, param }) => `"${name}" has unknown keys [${param.join(', ')}]`,
+  required: ({ name, param }) => `"${name}" is missing [${param.join(', ')}] keys`,
+  minProperties: ({ name, param }) => `"${name}" should have >= ${param} keys`,
+  maxProperties: ({ name, param }) => `"${name}" should have <= ${param} keys`,
+  dependencies: ({ name, param }) => `"${name}" requires [${param.join(', ')}] keys`,
+  uniqueItems: ({ name }) => `"${name}" should have only unique values`,
+  minItems: ({ name, param }) => `"${name}" should have >= ${param} items`,
+  maxItems: ({ name, param }) => `"${name}" should have <= ${param} items`,
+  additionalItems: ({ name, param }) => `"${name}" has unknown indexes ${param}`,
+  oneOf: ({ name, param }) => `"${name}" should match only 1 schema, matching ${param}`,
+  anyOf: ({ name }) => `"${name}" should match at least 1 schema`,
 };
 
-export const validateGeneral: Validator<Schema> = (schema, value, { name }) => {
-  const errors: Invalid[] = [];
-
-  if ('enum' in schema && schema.enum && !some(isEqual(value), schema.enum)) {
-    errors.push({ name, code: Code.ENUM, param: schema.enum });
-  }
-
-  return errors;
-};
-
-export const validateBoolean: Validator<BooleanType> = (schema, value, { name }) => {
-  const errors: Invalid[] = [];
-
-  if (typeof value !== 'boolean') {
-    errors.push({ name, code: Code.BOOLEAN });
-  }
-
-  return errors;
-};
-
-export const validateNumber: Validator<NumberType> = (schema, value, { name }) => {
-  const errors: Invalid[] = [];
-
-  if (typeof value !== 'number') {
-    errors.push({ name, code: Code.NUMBER });
+const getPrecision = (num: number) => {
+  if (!Number.isFinite(num)) {
+    return 0;
   } else {
-    if (schema.type === 'integer' && !Number.isInteger(value)) {
-      errors.push({ name, code: Code.NUMBER_INTEGER });
+    let e = 1;
+    let p = 0;
+    while (Math.round(num * e) / e !== num) {
+      e *= 10;
+      p++;
+    }
+    return Math.round(p);
+  }
+};
+
+const isDivisible = (num: number, divisor: number) => {
+  const multiplier = Math.pow(10, Math.max(getPrecision(num), getPrecision(divisor)));
+  return Math.round(num * multiplier) % Math.round(divisor * multiplier) === 0;
+};
+
+const isObject = (value: any): value is { [key: string]: any } =>
+  typeof value === 'object' && !Array.isArray(value);
+
+const validateEnum: Validator = (schema, value, { name }) =>
+  schema.enum && !some(isEqual(value), schema.enum)
+    ? [{ name, code: 'enum', param: schema.enum }]
+    : [];
+
+const validateType: Validator = ({ type, format }, value, { name }) => {
+  const errors: Invalid[] = [];
+
+  if (type) {
+    const valueType =
+      value === null
+        ? 'null'
+        : Array.isArray(value)
+        ? 'array'
+        : Number.isInteger(value)
+        ? 'integer'
+        : typeof value;
+    const allowed = Array.isArray(type) ? type : [type];
+    if (allowed.includes('number') && !allowed.includes('integer')) {
+      allowed.push('integer');
     }
 
-    if (schema.multipleOf && value % schema.multipleOf !== 0) {
-      errors.push({ name, code: Code.NUMBER_MULTIPLE_OF, param: schema.multipleOf });
+    if (!allowed.includes(valueType as any)) {
+      errors.push({ name, code: 'type', param: allowed });
     }
 
-    if (schema.minimum) {
-      if (schema.exclusiveMinimum) {
-        if (value <= schema.minimum) {
-          errors.push({ name, code: Code.NUMBER_EXCLUSIVE_MIN, param: schema.minimum });
-        }
-      } else {
-        if (value < schema.minimum) {
-          errors.push({ name, code: Code.NUMBER_MIN, param: schema.minimum });
-        }
-      }
-    }
-
-    if (schema.maximum) {
-      if (schema.exclusiveMaximum) {
-        if (value >= schema.maximum) {
-          errors.push({ name, code: Code.NUMBER_EXCLUSIVE_MAX, param: schema.maximum });
-        }
-      } else {
-        if (value > schema.maximum) {
-          errors.push({ name, code: Code.NUMBER_MAX, param: schema.maximum });
-        }
-      }
+    if (format && format in formats && !formats[format].test(value)) {
+      errors.push({ name, code: 'typeFormat', param: format });
     }
   }
 
   return errors;
 };
+
+const validateMultipleOf: Validator = ({ multipleOf }, value, { name }) =>
+  multipleOf && typeof value === 'number' && !isDivisible(value, multipleOf)
+    ? [{ name, code: 'multipleOf', param: multipleOf }]
+    : [];
+
+const validateMinimum: Validator = ({ minimum, exclusiveMinimum }, value, options) => {
+  if (minimum !== undefined) {
+    if (typeof exclusiveMinimum === 'boolean') {
+      return validateExclusiveMinimum({ exclusiveMinimum: minimum }, value, options);
+    } else if (value < minimum) {
+      return [{ name: options.name, code: 'minimum', param: minimum }];
+    }
+  }
+  return [];
+};
+
+const validateExclusiveMinimum: Validator = ({ exclusiveMinimum }, value, { name }) =>
+  typeof exclusiveMinimum === 'number' && value <= exclusiveMinimum
+    ? [{ name, code: 'exclusiveMinimum', param: exclusiveMinimum }]
+    : [];
+
+const validateMaximum: Validator = ({ maximum, exclusiveMaximum }, value, options) => {
+  if (maximum !== undefined) {
+    if (typeof exclusiveMaximum === 'boolean') {
+      return validateExclusiveMaximum({ exclusiveMaximum: maximum }, value, options);
+    } else if (value > maximum) {
+      return [{ name: options.name, code: 'maximum', param: maximum }];
+    }
+  }
+  return [];
+};
+
+const validateExclusiveMaximum: Validator = ({ exclusiveMaximum }, value, { name }) =>
+  typeof exclusiveMaximum === 'number' && value >= exclusiveMaximum!
+    ? [{ name, code: 'exclusiveMaximum', param: exclusiveMaximum }]
+    : [];
 
 const formats: { [key: string]: RegExp } = {
   'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d:\d\d)$/i,
@@ -253,144 +220,232 @@ const formats: { [key: string]: RegExp } = {
   'relative-json-pointer': /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
 };
 
-export const validateString: Validator<StringType> = (schema, value, { name }) => {
+const validateString: Validator = ({ type, format }, value, { name }) => {
   const errors: Invalid[] = [];
-
-  if (typeof value !== 'string') {
-    errors.push({ name, code: Code.STRING });
-  } else {
-    if (schema.pattern && !new RegExp(schema.pattern).test(value)) {
-      errors.push({ name, code: Code.STRING_PATTERN, param: schema.pattern });
-    }
-
-    if (schema.format && schema.format in formats && !formats[schema.format].test(value)) {
-      errors.push({ name, code: Code.STRING_FORMAT, param: schema.format });
-    }
-
-    if (schema.maxLength && value.length > schema.maxLength) {
-      errors.push({ name, code: Code.STRING_MAX_LENGTH, param: schema.maxLength });
-    }
-
-    if (schema.minLength && value.length < schema.minLength) {
-      errors.push({ name, code: Code.STRING_MIN_LENGTH, param: schema.minLength });
+  if (type === 'string') {
+    if (typeof value !== 'string') {
+      errors.push({ name, code: 'type', param: type });
+    } else if (format && format in formats && !formats[format].test(value)) {
+      errors.push({ name, code: 'typeFormat', param: format });
     }
   }
-
   return errors;
 };
 
-export const findPropertySchema = (
-  { properties, patternProperties, additionalProperties }: ObjectType,
-  key: string,
-): Schema | undefined => {
-  if (properties && properties[key]) {
-    return properties[key];
-  } else if (patternProperties) {
-    const match = Object.keys(patternProperties).find(pattern => RegExp(pattern).test(key));
-    return match ? patternProperties[match] : undefined;
-  } else if (typeof additionalProperties === 'object') {
-    return additionalProperties;
-  } else {
-    return undefined;
-  }
-};
+const validatePattern: Validator = ({ pattern }, value, { name }) =>
+  pattern && typeof value === 'string' && !new RegExp(pattern).test(value)
+    ? [{ name, code: 'pattern', param: pattern }]
+    : [];
 
-export const validateObject: Validator<ObjectType> = (schema, value, { name }) => {
-  let errors: Invalid[] = [];
+const validateMinLength: Validator = ({ minLength }, value, { name }) =>
+  minLength && typeof value === 'string' && [...value].length < minLength
+    ? [{ name, code: 'minLength', param: minLength }]
+    : [];
 
-  if (typeof value !== 'object' || value === null) {
-    errors.push({ name, code: Code.OBJECT });
-  } else {
+const validateMaxLength: Validator = ({ maxLength }, value, { name }) =>
+  maxLength && typeof value === 'string' && [...value].length > maxLength
+    ? [{ name, code: 'maxLength', param: maxLength }]
+    : [];
+
+const validateMinProperties: Validator = ({ minProperties }, value, { name }) =>
+  minProperties &&
+  typeof value === 'object' &&
+  !Array.isArray(value) &&
+  Object.keys(value).length < minProperties
+    ? [{ name, code: 'minProperties', param: minProperties }]
+    : [];
+
+const validateMaxProperties: Validator = ({ maxProperties }, value, { name }) =>
+  maxProperties &&
+  typeof value === 'object' &&
+  !Array.isArray(value) &&
+  Object.keys(value).length > maxProperties
+    ? [{ name, code: 'maxProperties', param: maxProperties }]
+    : [];
+
+const validateRequired: Validator = ({ required }, value, { name }) => {
+  if (required && required.length && isObject(value)) {
     const keys = Object.keys(value);
-    for (const key of keys) {
-      const keyName = `${name}.${key}`;
-      if (schema.propertyNames && !new RegExp(schema.propertyNames.pattern).test(key)) {
-        errors.push({
-          name: keyName,
-          code: Code.OBJECT_PROPERTY_NAME,
-          param: schema.propertyNames.pattern,
-        });
-      }
-
-      const itemSchema = findPropertySchema(schema, key);
-      if (itemSchema) {
-        errors = errors.concat(validateSchema(itemSchema, value[key], { name: keyName }));
-      } else if (schema.additionalProperties === false) {
-        errors.push({ name: `${name}.${key}`, code: Code.OBJECT_UNKNOWN });
-      }
-
-      if (schema.dependencies && schema.dependencies[key]) {
-        const dependency = schema.dependencies[key];
-        if (Array.isArray(dependency)) {
-          if (dependency.find(item => !keys.includes(item))) {
-            errors.push({ name: keyName, code: Code.OBJECT_DEPENDANCY, param: dependency });
-          }
-        } else {
-          errors = errors.concat(validateSchema(dependency, value, { name }));
-        }
-      }
-    }
-
-    if (schema.minProperties && keys.length < schema.minProperties) {
-      errors.push({ name, code: Code.OBJECT_MIN_PROPS, param: schema.minProperties });
-    }
-
-    if (schema.maxProperties && keys.length > schema.maxProperties) {
-      errors.push({ name, code: Code.OBJECT_MAX_PROPS, param: schema.maxProperties });
-    }
-
-    if (schema.required) {
-      for (const key of schema.required) {
-        if (!keys.includes(key)) {
-          errors.push({ name: `${name}.${key}`, code: Code.OBJECT_REQUIRED });
-        }
-      }
+    const missingKeys = required.filter(key => !keys.includes(key));
+    if (missingKeys.length > 0) {
+      return [{ name, code: 'required', param: missingKeys }];
     }
   }
+  return [];
+};
 
+const validateProperties: Validator = ({ properties }, value, options) => {
+  const errors: Invalid[] = [];
+  if (properties && isObject(value)) {
+    return errors.concat(
+      ...Object.keys(value).map(key =>
+        validateSchema(properties[key], value[key], { ...options, name: `${options.name}.${key}` }),
+      ),
+    );
+  }
   return errors;
 };
 
-export const findItemSchema = (
-  { items, additionalItems }: ArrayType,
-  index: number,
-): Schema | undefined => (Array.isArray(items) ? items[index] || additionalItems : items || {});
+const validatePatternProperties: Validator = ({ patternProperties }, value, options) => {
+  const errors: Invalid[] = [];
+  if (patternProperties && isObject(value)) {
+    return errors.concat(
+      ...Object.keys(patternProperties).map(pattern => {
+        const regExp = RegExp(pattern);
+        const matchingKeys = Object.keys(value).filter(key => regExp.test(key));
+        const matchingSchema = patternProperties[pattern];
+        return errors.concat(
+          ...matchingKeys.map(key =>
+            validateSchema(matchingSchema, value[key], {
+              ...options,
+              name: `${options.name}.${key}`,
+            }),
+          ),
+        );
+      }),
+    );
+  }
+  return errors;
+};
 
-export const validateArray: Validator<ArrayType> = (schema, value, { name }) => {
+const validatePropertyNames: Validator = ({ propertyNames }, value, options) => {
   let errors: Invalid[] = [];
+  if (propertyNames !== undefined && isObject(value)) {
+    for (const key of Object.keys(value)) {
+      errors = errors.concat(
+        validateSchema(propertyNames, key, { ...options, name: `${options.name}.${key}` }),
+      );
+    }
+  }
+  return errors;
+};
 
-  if (!Array.isArray(value)) {
-    errors.push({ name, code: Code.ARRAY });
-  } else {
-    if (schema.items) {
-      value.forEach((item, index) => {
-        const itemSchema = findItemSchema(schema, index);
-        const itemName = `${name}[${index}]`;
-        if (itemSchema) {
-          errors = errors.concat(validateSchema(itemSchema, item, { name: itemName }));
-        } else if (schema.additionalItems === false) {
-          errors.push({ name: itemName, code: Code.ARRAY_UNKNOWN });
+const validateDependencies: Validator = ({ dependencies }, value, options) => {
+  let errors: Invalid[] = [];
+  if (dependencies && isObject(value)) {
+    const keys = Object.keys(value);
+    const dependentKeys = Object.keys(dependencies).filter(key => keys.includes(key));
+
+    for (const key of dependentKeys) {
+      const dependency = dependencies[key];
+      if (Array.isArray(dependency)) {
+        if (dependency.find(item => !keys.includes(item))) {
+          errors.push({ name: `${options.name}.${key}`, code: 'dependencies', param: dependency });
         }
-      });
+      } else {
+        errors = errors.concat(
+          validateSchema(dependency, value, { ...options, name: `${options.name}.${key}` }),
+        );
+      }
     }
+  }
+  return errors;
+};
 
-    if (schema.uniqueItems && !uniq(value)) {
-      errors.push({ name, code: Code.ARRAY_UNIQUE });
-    }
+const validateAdditionalProperties: Validator = (
+  { additionalProperties, properties, patternProperties },
+  value,
+  options,
+) => {
+  let errors: Invalid[] = [];
+  if (additionalProperties !== undefined && additionalProperties !== true && isObject(value)) {
+    const additionalKeys = Object.keys(value)
+      .filter(key => !(properties && key in properties))
+      .filter(
+        key =>
+          !(
+            patternProperties &&
+            Object.keys(patternProperties).find(pattern => RegExp(pattern).test(key))
+          ),
+      );
 
-    if (schema.minItems && value.length < schema.minItems) {
-      errors.push({ name, code: Code.ARRAY_MIN_ITEMS, param: schema.minItems });
-    }
-
-    if (schema.maxItems && value.length > schema.maxItems) {
-      errors.push({ name, code: Code.ARRAY_MAX_ITEMS, param: schema.maxItems });
+    if (additionalKeys.length > 0) {
+      if (additionalProperties === false) {
+        errors.push({ name: options.name, code: 'additionalProperties', param: additionalKeys });
+      } else if (typeof additionalProperties === 'object') {
+        for (const key of additionalKeys) {
+          errors = errors.concat(
+            validateSchema(additionalProperties, value[key], {
+              ...options,
+              name: `${options.name}.${key}`,
+            }),
+          );
+        }
+      }
     }
   }
 
   return errors;
 };
 
-export const findDiscriminatedSchema = (
+const validateMinItems: Validator = ({ minItems }, value, { name }) =>
+  minItems && Array.isArray(value) && value.length < minItems
+    ? [{ name, code: 'minItems', param: minItems }]
+    : [];
+
+const validateMaxItems: Validator = ({ maxItems }, value, { name }) =>
+  maxItems && Array.isArray(value) && value.length > maxItems
+    ? [{ name, code: 'maxItems', param: maxItems }]
+    : [];
+
+const validateUniqueItems: Validator = ({ uniqueItems }, value, { name }) =>
+  uniqueItems && Array.isArray(value) && uniqWith(isEqual, value).length !== value.length
+    ? [{ name, code: 'uniqueItems' }]
+    : [];
+
+const validateItems: Validator = ({ items, additionalItems }, value, options) => {
+  let errors: Invalid[] = [];
+  if (items !== undefined && Array.isArray(value)) {
+    value.forEach((item, index) => {
+      const itemSchema = Array.isArray(items)
+        ? items[index] === undefined
+          ? additionalItems === undefined
+            ? {}
+            : additionalItems
+          : items[index]
+        : items;
+      errors = errors.concat(
+        validateSchema(itemSchema, item, { ...options, name: `${options.name}[${index}]` }),
+      );
+    });
+  }
+  return errors;
+};
+
+const validateContains: Validator = ({ contains }, value, options) => {
+  let errors: Invalid[] = [];
+  if (contains !== undefined && Array.isArray(value)) {
+    errors = errors.concat(validateMinItems({ minItems: 1 }, value, options));
+    const allItemsErrors = value.map((item, index) =>
+      validateSchema(contains, item, { ...options, name: `${options.name}[${index}]` }),
+    );
+    if (allItemsErrors.every(itemErrors => itemErrors.length > 0)) {
+      errors = errors.concat(...allItemsErrors);
+    }
+  }
+  return errors;
+};
+
+const validateConst: Validator = (schema, value, options) =>
+  schema.const !== undefined ? validateEnum({ enum: [schema.const] }, value, options) : [];
+
+const validateConditionals: Validator = (schema, value, options) => {
+  if (schema.if !== undefined && (schema.then !== undefined || schema.else !== undefined)) {
+    if (validateSchema(schema.if, value, options).length === 0) {
+      return schema.then ? validateSchema(schema.then, value, options) : [];
+    } else {
+      return schema.else ? validateSchema(schema.else, value, options) : [];
+    }
+  }
+  return [];
+};
+
+const validateNot: Validator = ({ not }, value, options) =>
+  not && validateSchema(not, value, options).length === 0
+    ? [{ name: options.name, code: 'not' }]
+    : [];
+
+const findDiscriminatedSchema = (
   schemas: Schema[],
   propertyName: string,
   propertyValue: any,
@@ -405,99 +460,159 @@ export const findDiscriminatedSchema = (
     ),
   );
 
-export const validateOneOf: Validator<OneOfType> = (schema, value, options) => {
-  if (schema.oneOf.length === 0) {
-    return [];
-  } else if (schema.oneOf.length === 1) {
-    return validateSchema(schema.oneOf[0], value, options);
-  } else if (schema.discriminator && value && value[schema.discriminator.propertyName]) {
-    const discriminatedSchema = findDiscriminatedSchema(
-      schema.oneOf,
-      schema.discriminator.propertyName,
-      value[schema.discriminator.propertyName],
-      options,
-    );
-    if (discriminatedSchema) {
-      return validateSchema(discriminatedSchema, value, options);
+const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
+  if (oneOf && oneOf.length > 0) {
+    if (oneOf.length === 1) {
+      return validateSchema(oneOf[0], value, options);
+    } else if (discriminator && value && value[discriminator.propertyName]) {
+      const discriminatedSchema = findDiscriminatedSchema(
+        oneOf,
+        discriminator.propertyName,
+        value[discriminator.propertyName],
+        options,
+      );
+      if (discriminatedSchema) {
+        return validateSchema(discriminatedSchema, value, options);
+      }
     }
+
+    const validations = oneOf.map(item => validateSchema(item, value, options));
+    const matching = validations.filter(errors => errors.length === 0);
+
+    return matching.length === 1
+      ? []
+      : [{ name: options.name, code: 'oneOf', param: matching.length }];
+  } else {
+    return [];
   }
-
-  const validations = schema.oneOf.map(item => validateSchema(item, value, options));
-  const matching = validations.filter(errors => errors.length === 0);
-
-  return matching.length === 1
-    ? []
-    : [{ name: options.name, code: Code.ONE_OF, param: matching.length }];
 };
 
-export const validateAllOf: Validator<AllOfType> = (schema, value, options) => {
-  return schema.allOf.reduce<Invalid[]>(
-    (errors, item) => [...errors, ...validateSchema(item, value, options)],
-    [],
+const validateAllOf: Validator = ({ allOf }, value, options) =>
+  allOf
+    ? allOf.reduce<Invalid[]>(
+        (errors, item) => [...errors, ...validateSchema(item, value, options)],
+        [],
+      )
+    : [];
+
+const validateAnyOf: Validator = ({ anyOf }, value, options) => {
+  if (anyOf && anyOf.length > 0) {
+    if (anyOf.length === 1) {
+      return validateSchema(anyOf[0], value, options);
+    } else {
+      return anyOf.find(item => validateSchema(item, value, options).length === 0)
+        ? []
+        : [{ name: options.name, code: 'anyOf' }];
+    }
+  } else {
+    return [];
+  }
+};
+
+const parseJsonPointer = (name: string) =>
+  decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
+
+const getJsonPointer = (document: any, pointer?: string) =>
+  pointer
+    ? pointer
+        .split('/')
+        .reduce(
+          (value, name) => (name ? (value ? value[parseJsonPointer(name)] : undefined) : value),
+          document,
+        )
+    : document;
+
+const getRef = (ref: string, { schemas, root }: ValidateOptions) => {
+  const [url, pointer] = ref.split('#');
+  const document = url ? schemas.get(url) : root;
+
+  return [document, getJsonPointer(document, pointer)];
+};
+
+const validateSchema = (
+  schema: Schema | boolean,
+  value: any,
+  options: ValidateOptions,
+): Invalid[] => {
+  if (schema === false) {
+    return [{ name: options.name, code: 'false' }];
+  }
+
+  if (schema === true || schema === undefined || (schema.nullable && value === null)) {
+    return [];
+  }
+
+  if (schema.$ref && typeof schema.$ref === 'string') {
+    const [root, refSchema] = getRef(schema.$ref, options);
+
+    return validateSchema(refSchema === undefined ? {} : refSchema, value, { ...options, root });
+  }
+
+  const errors: Invalid[] = [];
+
+  return errors.concat(
+    validateConst(schema, value, options),
+    validateEnum(schema, value, options),
+    validateType(schema, value, options),
+    validateMultipleOf(schema, value, options),
+    validateMinimum(schema, value, options),
+    validateExclusiveMinimum(schema, value, options),
+    validateMaximum(schema, value, options),
+    validateExclusiveMaximum(schema, value, options),
+    validateString(schema, value, options),
+    validatePattern(schema, value, options),
+    validateMinLength(schema, value, options),
+    validateMaxLength(schema, value, options),
+    validateMinProperties(schema, value, options),
+    validateMaxProperties(schema, value, options),
+    validateRequired(schema, value, options),
+    validateProperties(schema, value, options),
+    validatePatternProperties(schema, value, options),
+    validatePropertyNames(schema, value, options),
+    validateDependencies(schema, value, options),
+    validateAdditionalProperties(schema, value, options),
+    validateMinItems(schema, value, options),
+    validateMaxItems(schema, value, options),
+    validateUniqueItems(schema, value, options),
+    validateItems(schema, value, options),
+    validateContains(schema, value, options),
+    validateConditionals(schema, value, options),
+    validateNot(schema, value, options),
+    validateOneOf(schema, value, options),
+    validateAllOf(schema, value, options),
+    validateAnyOf(schema, value, options),
   );
 };
 
-export const validateAnyOf: Validator<AnyOfType> = (schema, value, options) => {
-  if (schema.anyOf.length === 0) {
-    return [];
-  } else if (schema.anyOf.length === 1) {
-    return validateSchema(schema.anyOf[0], value, options);
-  } else {
-    return schema.anyOf.find(item => validateSchema(item, value, options).length === 0)
-      ? []
-      : [{ name: options.name, code: Code.ANY_OF }];
+const extractUrls = (document: any, urls: string[] = []): string[] => {
+  if (document && typeof document === 'object') {
+    if (
+      '$ref' in document &&
+      typeof document.$ref === 'string' &&
+      document.$ref.includes('://') &&
+      !urls.includes(document.$ref)
+    ) {
+      const [url] = document.$ref.split('#');
+      urls.push(url);
+    } else {
+      Object.values(document).forEach(propValue => extractUrls(propValue, urls));
+    }
   }
+  return urls;
 };
 
-export const validateSchema: Validator<Schema> = (schema, value, options) => {
-  if ('nullable' in schema && schema.nullable && value === null) {
-    return [];
-  }
+const loadJsonFiles = async (urls: string[]) => {
+  const jsons = await Promise.all(urls.map(url => fetch(url).then(response => response.json())));
 
-  let errors = validateGeneral(schema, value, options);
-
-  if (
-    ('type' in schema && schema.type === 'object') ||
-    'required' in schema ||
-    'properties' in schema ||
-    'patternProperties' in schema
-  ) {
-    errors = errors.concat(errors.concat(validateObject(schema, value, options)));
-  } else if (
-    ('type' in schema && (schema.type === 'number' || schema.type === 'integer')) ||
-    'minimum' in schema ||
-    'maximum' in schema ||
-    'multipleOf' in schema
-  ) {
-    errors = errors.concat(validateNumber(schema, value, options));
-  } else if (
-    ('type' in schema && schema.type === 'string') ||
-    'maxLength' in schema ||
-    'minLength' in schema ||
-    'pattern' in schema
-  ) {
-    errors = errors.concat(validateString(schema, value, options));
-  } else if (
-    ('type' in schema && schema.type === 'array') ||
-    'items' in schema ||
-    'minItems' in schema ||
-    'maxItems' in schema ||
-    'additionalItems' in schema ||
-    'uniqueItems' in schema
-  ) {
-    errors = errors.concat(validateArray(schema, value, options));
-  } else if ('type' in schema && schema.type === 'boolean') {
-    errors = errors.concat(validateBoolean(schema, value, options));
-  } else if ('oneOf' in schema) {
-    errors = errors.concat(validateOneOf(schema, value, options));
-  } else if ('allOf' in schema) {
-    errors = errors.concat(validateAllOf(schema, value, options));
-  } else if ('anyOf' in schema) {
-    errors = errors.concat(validateAnyOf(schema, value, options));
-  }
-
-  return errors;
+  return jsons.reduce<Map<string, any>>(
+    (files, json, index) => files.set(urls[index], json),
+    new Map(),
+  );
 };
 
-export const validate = (schema: Schema, value: any) =>
-  validateSchema(schema, value, { name: 'value' }).map(error => messages[error.code](error));
+export const validate = async (schema: Schema, value: any) =>
+  validateSchema(schema, value, {
+    name: 'value',
+    root: schema,
+    schemas: await loadJsonFiles(extractUrls(schema)),
+  }).map(error => messages[error.code](error));

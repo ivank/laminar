@@ -32,8 +32,12 @@ for (const [name, suites] of draft7) {
 
       it.each<[string, any, boolean]>(tests)(
         `Should test ${suite.description}: %s`,
-        (_, data, expected) => {
-          expect(validate(suite.schema, data).length === 0).toBe(expected);
+        async (testName, data, expected) => {
+          const errors = await validate(suite.schema, data);
+          if ((errors.length === 0) !== expected) {
+            console.log(testName, suite.schema, data, errors);
+          }
+          expect(errors.length === 0).toBe(expected);
         },
       );
     }

@@ -1,31 +1,34 @@
 import fetch from 'node-fetch';
+import { URL } from 'url';
 
 interface Options {
   root: any;
   files: Map<string, any>;
   refs: Map<string, any>;
+  id?: string;
 }
 
-const getRef = async (ref: string, { files, root }: Options) => {
-  const [url, path] = ref.split('#/');
-  const document = url ? files.get(url) : root;
+const parseName = (name: string) => decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
 
-  return path.split('/').reduce((value, name) => (value ? value[name] : undefined), document);
+const getRef = (ref: string, { files, root, id }: Options) => {
+  const [url, path] = ref.split('#/');
+  const resolvedUrl = new URL(url, id);
+  const document = resolvedUrl ? files.get(resolvedUrl.toString()) : root;
+
+  return path
+    .split('/')
+    .reduce((value, name) => (value ? value[parseName(name)] : undefined), document);
 };
 
-const resolveRef = async (ref: string, options: Options) => {
+const resolveRef = (ref: string, options: Options) => {
   if (!options.refs.has(ref)) {
-    options.refs.set(ref, await getRef(ref, options));
+    options.refs.set(ref, getRef(ref, options));
   }
   return options.refs.get(ref);
 };
 
 const isRef = (item: any): item is { $ref: string } =>
-  item &&
-  typeof item === 'object' &&
-  item.$ref &&
-  typeof item.$ref === 'string' &&
-  item.$ref.includes('#/');
+  item && typeof item === 'object' && item.$ref && typeof item.$ref === 'string';
 
 const extractUrls = (document: any): string[] =>
   Object.values(document).reduce<string[]>((urls, item) => {
@@ -49,20 +52,29 @@ const loadJsonFiles = async (urls: string[]) => {
   );
 };
 
-export const resolveRefs = async (object: any, initOptions?: Options): Promise<any> => {
-  const options = initOptions || {
+export const resolveNestedRefs = (object: any, options: Options) => {
+  const currentOptions = object.$id ? { ...options, id: object.$id } : options;
+  if (object.$id) {
+    options.files.set(object.$id, object);
+  }
+
+  for (const [key, item] of Object.entries(object)) {
+    if (isRef(item)) {
+      object[key] = resolveRef(item.$ref, currentOptions);
+    } else if (typeof item === 'object') {
+      object[key] = resolveNestedRefs(object[key], currentOptions);
+    }
+  }
+
+  return isRef(object) ? resolveRef(object.$ref, currentOptions) : object;
+};
+
+export const resolveRefs = async (object: any): Promise<any> => {
+  const options: Options = {
     refs: new Map(),
     files: await loadJsonFiles(extractUrls(object)),
     root: object,
   };
 
-  for (const [key, item] of Object.entries(object)) {
-    if (isRef(item)) {
-      object[key] = await resolveRef(item.$ref, options);
-    } else if (typeof item === 'object') {
-      object[key] = await resolveRefs(object[key], options);
-    }
-  }
-
-  return object;
+  return resolveNestedRefs(object, options);
 };

@@ -10,6 +10,56 @@ describe('json-refs', () => {
 
   it('Should resolve nested refs', async () => {
     const schema = {
+      definitions: {
+        a: { type: 'integer' },
+        b: { $ref: '#/definitions/a' },
+        c: { $ref: '#/definitions/b' },
+      },
+      $ref: '#/definitions/c',
+    };
+    const expected = {
+      type: 'integer',
+    };
+
+    const result = await resolveRefs(schema);
+    expect(result).toEqual(expected);
+  });
+
+  it('Should resolve nested refs', async () => {
+    const schema = {
+      $id: 'http://localhost:1234/tree',
+      description: 'tree of nodes',
+      type: 'object',
+      properties: {
+        meta: { type: 'string' },
+        nodes: {
+          type: 'array',
+          items: { $ref: 'node' },
+        },
+      },
+      required: ['meta', 'nodes'],
+      definitions: {
+        node: {
+          $id: 'http://localhost:1234/node',
+          description: 'node',
+          type: 'object',
+          properties: {
+            value: { type: 'number' },
+            subtree: { $ref: 'tree' },
+          },
+          required: ['value'],
+        },
+      },
+    };
+
+    const expected = {};
+
+    const result = await resolveRefs(schema);
+    expect(result).toEqual(expected);
+  });
+
+  it('Should resolve complex refs', async () => {
+    const schema = {
       type: 'object',
       properties: {
         user: {
@@ -31,7 +81,19 @@ describe('json-refs', () => {
           properties: {
             id: { $ref: '#/definitions/id' },
             street: { $ref: '#/definitions/title' },
+            price: { $ref: '#/definitions/test~1slash' },
+            town: { $ref: '#/definitions/test~0tilde' },
+            num: { $ref: '#/definitions/test%25percent' },
           },
+        },
+        'test/slash': {
+          type: 'number',
+        },
+        'test~tilde': {
+          type: 'string',
+        },
+        'test%percent': {
+          type: 'integer',
         },
         id: {
           type: 'string',
@@ -53,6 +115,9 @@ describe('json-refs', () => {
               pattern: '^[A-Z]',
               type: 'string',
             },
+            price: { type: 'number' },
+            num: { type: 'integer' },
+            town: { type: 'string' },
           },
           type: 'object',
         },
@@ -61,10 +126,10 @@ describe('json-refs', () => {
           minLength: 3,
           type: 'string',
         },
-        title: {
-          pattern: '^[A-Z]',
-          type: 'string',
-        },
+        title: { pattern: '^[A-Z]', type: 'string' },
+        'test/slash': { type: 'number' },
+        'test~tilde': { type: 'string' },
+        'test%percent': { type: 'integer' },
       },
       properties: {
         user: {
@@ -80,6 +145,9 @@ describe('json-refs', () => {
                   pattern: '^[A-Z]',
                   type: 'string',
                 },
+                price: { type: 'number' },
+                num: { type: 'integer' },
+                town: { type: 'string' },
               },
               type: 'object',
             },

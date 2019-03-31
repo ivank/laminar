@@ -29,6 +29,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
+    "@ovotech/json-refs": "^1.0.0",
     "lodash": "^4.17.11"
   }
 }
