@@ -1,5 +1,6 @@
 import { isEqual, some, uniqWith } from 'lodash/fp';
 import fetch from 'node-fetch';
+import { URL } from 'url';
 
 export type PrimitiveType = 'string' | 'integer' | 'number' | 'boolean' | 'array' | 'object';
 
@@ -78,7 +79,7 @@ export interface ValidateOptions {
   id?: string;
 }
 
-type Validator = (schema: Schema, value: any, options: ValidateOptions) => Invalid[];
+type Validator = (schema: Schema, value: any, options: ValidateOptions) => Promise<Invalid[]>;
 
 export interface Messages {
   [key: string]: (error: Invalid) => string;
@@ -133,12 +134,12 @@ const isDivisible = (num: number, divisor: number) => {
 const isObject = (value: any): value is { [key: string]: any } =>
   typeof value === 'object' && !Array.isArray(value);
 
-const validateEnum: Validator = (schema, value, { name }) =>
+const validateEnum: Validator = async (schema, value, { name }) =>
   schema.enum && !some(isEqual(value), schema.enum)
     ? [{ name, code: 'enum', param: schema.enum }]
     : [];
 
-const validateType: Validator = ({ type, format }, value, { name }) => {
+const validateType: Validator = async ({ type, format }, value, { name }) => {
   const errors: Invalid[] = [];
 
   if (type) {
@@ -167,15 +168,15 @@ const validateType: Validator = ({ type, format }, value, { name }) => {
   return errors;
 };
 
-const validateMultipleOf: Validator = ({ multipleOf }, value, { name }) =>
+const validateMultipleOf: Validator = async ({ multipleOf }, value, { name }) =>
   multipleOf && typeof value === 'number' && !isDivisible(value, multipleOf)
     ? [{ name, code: 'multipleOf', param: multipleOf }]
     : [];
 
-const validateMinimum: Validator = ({ minimum, exclusiveMinimum }, value, options) => {
+const validateMinimum: Validator = async ({ minimum, exclusiveMinimum }, value, options) => {
   if (minimum !== undefined) {
     if (typeof exclusiveMinimum === 'boolean') {
-      return validateExclusiveMinimum({ exclusiveMinimum: minimum }, value, options);
+      return await validateExclusiveMinimum({ exclusiveMinimum: minimum }, value, options);
     } else if (value < minimum) {
       return [{ name: options.name, code: 'minimum', param: minimum }];
     }
@@ -183,15 +184,15 @@ const validateMinimum: Validator = ({ minimum, exclusiveMinimum }, value, option
   return [];
 };
 
-const validateExclusiveMinimum: Validator = ({ exclusiveMinimum }, value, { name }) =>
+const validateExclusiveMinimum: Validator = async ({ exclusiveMinimum }, value, { name }) =>
   typeof exclusiveMinimum === 'number' && value <= exclusiveMinimum
     ? [{ name, code: 'exclusiveMinimum', param: exclusiveMinimum }]
     : [];
 
-const validateMaximum: Validator = ({ maximum, exclusiveMaximum }, value, options) => {
+const validateMaximum: Validator = async ({ maximum, exclusiveMaximum }, value, options) => {
   if (maximum !== undefined) {
     if (typeof exclusiveMaximum === 'boolean') {
-      return validateExclusiveMaximum({ exclusiveMaximum: maximum }, value, options);
+      return await validateExclusiveMaximum({ exclusiveMaximum: maximum }, value, options);
     } else if (value > maximum) {
       return [{ name: options.name, code: 'maximum', param: maximum }];
     }
@@ -199,7 +200,7 @@ const validateMaximum: Validator = ({ maximum, exclusiveMaximum }, value, option
   return [];
 };
 
-const validateExclusiveMaximum: Validator = ({ exclusiveMaximum }, value, { name }) =>
+const validateExclusiveMaximum: Validator = async ({ exclusiveMaximum }, value, { name }) =>
   typeof exclusiveMaximum === 'number' && value >= exclusiveMaximum!
     ? [{ name, code: 'exclusiveMaximum', param: exclusiveMaximum }]
     : [];
@@ -220,7 +221,7 @@ const formats: { [key: string]: RegExp } = {
   'relative-json-pointer': /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
 };
 
-const validateString: Validator = ({ type, format }, value, { name }) => {
+const validateString: Validator = async ({ type, format }, value, { name }) => {
   const errors: Invalid[] = [];
   if (type === 'string') {
     if (typeof value !== 'string') {
@@ -232,22 +233,22 @@ const validateString: Validator = ({ type, format }, value, { name }) => {
   return errors;
 };
 
-const validatePattern: Validator = ({ pattern }, value, { name }) =>
+const validatePattern: Validator = async ({ pattern }, value, { name }) =>
   pattern && typeof value === 'string' && !new RegExp(pattern).test(value)
     ? [{ name, code: 'pattern', param: pattern }]
     : [];
 
-const validateMinLength: Validator = ({ minLength }, value, { name }) =>
+const validateMinLength: Validator = async ({ minLength }, value, { name }) =>
   minLength && typeof value === 'string' && [...value].length < minLength
     ? [{ name, code: 'minLength', param: minLength }]
     : [];
 
-const validateMaxLength: Validator = ({ maxLength }, value, { name }) =>
+const validateMaxLength: Validator = async ({ maxLength }, value, { name }) =>
   maxLength && typeof value === 'string' && [...value].length > maxLength
     ? [{ name, code: 'maxLength', param: maxLength }]
     : [];
 
-const validateMinProperties: Validator = ({ minProperties }, value, { name }) =>
+const validateMinProperties: Validator = async ({ minProperties }, value, { name }) =>
   minProperties &&
   typeof value === 'object' &&
   !Array.isArray(value) &&
@@ -255,7 +256,7 @@ const validateMinProperties: Validator = ({ minProperties }, value, { name }) =>
     ? [{ name, code: 'minProperties', param: minProperties }]
     : [];
 
-const validateMaxProperties: Validator = ({ maxProperties }, value, { name }) =>
+const validateMaxProperties: Validator = async ({ maxProperties }, value, { name }) =>
   maxProperties &&
   typeof value === 'object' &&
   !Array.isArray(value) &&
@@ -263,7 +264,7 @@ const validateMaxProperties: Validator = ({ maxProperties }, value, { name }) =>
     ? [{ name, code: 'maxProperties', param: maxProperties }]
     : [];
 
-const validateRequired: Validator = ({ required }, value, { name }) => {
+const validateRequired: Validator = async ({ required }, value, { name }) => {
   if (required && required.length && isObject(value)) {
     const keys = Object.keys(value);
     const missingKeys = required.filter(key => !keys.includes(key));
@@ -274,53 +275,55 @@ const validateRequired: Validator = ({ required }, value, { name }) => {
   return [];
 };
 
-const validateProperties: Validator = ({ properties }, value, options) => {
-  const errors: Invalid[] = [];
-  if (properties && isObject(value)) {
-    return errors.concat(
-      ...Object.keys(value).map(key =>
-        validateSchema(properties[key], value[key], { ...options, name: `${options.name}.${key}` }),
-      ),
-    );
-  }
-  return errors;
-};
-
-const validatePatternProperties: Validator = ({ patternProperties }, value, options) => {
-  const errors: Invalid[] = [];
-  if (patternProperties && isObject(value)) {
-    return errors.concat(
-      ...Object.keys(patternProperties).map(pattern => {
-        const regExp = RegExp(pattern);
-        const matchingKeys = Object.keys(value).filter(key => regExp.test(key));
-        const matchingSchema = patternProperties[pattern];
-        return errors.concat(
-          ...matchingKeys.map(key =>
-            validateSchema(matchingSchema, value[key], {
-              ...options,
-              name: `${options.name}.${key}`,
-            }),
-          ),
-        );
-      }),
-    );
-  }
-  return errors;
-};
-
-const validatePropertyNames: Validator = ({ propertyNames }, value, options) => {
+const validateProperties: Validator = async ({ properties }, value, options) => {
   let errors: Invalid[] = [];
-  if (propertyNames !== undefined && isObject(value)) {
+  if (properties && isObject(value)) {
     for (const key of Object.keys(value)) {
       errors = errors.concat(
-        validateSchema(propertyNames, key, { ...options, name: `${options.name}.${key}` }),
+        await validateSchema(properties[key], value[key], {
+          ...options,
+          name: `${options.name}.${key}`,
+        }),
       );
     }
   }
   return errors;
 };
 
-const validateDependencies: Validator = ({ dependencies }, value, options) => {
+const validatePatternProperties: Validator = async ({ patternProperties }, value, options) => {
+  let errors: Invalid[] = [];
+  if (patternProperties && isObject(value)) {
+    for (const pattern of Object.keys(patternProperties)) {
+      const regExp = RegExp(pattern);
+      const matchingKeys = Object.keys(value).filter(key => regExp.test(key));
+      const matchingSchema = patternProperties[pattern];
+      for (const key of matchingKeys) {
+        errors = errors.concat(
+          await validateSchema(matchingSchema, value[key], {
+            ...options,
+            name: `${options.name}.${key}`,
+          }),
+        );
+      }
+    }
+  }
+
+  return errors;
+};
+
+const validatePropertyNames: Validator = async ({ propertyNames }, value, options) => {
+  let errors: Invalid[] = [];
+  if (propertyNames !== undefined && isObject(value)) {
+    for (const key of Object.keys(value)) {
+      errors = errors.concat(
+        await validateSchema(propertyNames, key, { ...options, name: `${options.name}.${key}` }),
+      );
+    }
+  }
+  return errors;
+};
+
+const validateDependencies: Validator = async ({ dependencies }, value, options) => {
   let errors: Invalid[] = [];
   if (dependencies && isObject(value)) {
     const keys = Object.keys(value);
@@ -334,7 +337,7 @@ const validateDependencies: Validator = ({ dependencies }, value, options) => {
         }
       } else {
         errors = errors.concat(
-          validateSchema(dependency, value, { ...options, name: `${options.name}.${key}` }),
+          await validateSchema(dependency, value, { ...options, name: `${options.name}.${key}` }),
         );
       }
     }
@@ -342,7 +345,7 @@ const validateDependencies: Validator = ({ dependencies }, value, options) => {
   return errors;
 };
 
-const validateAdditionalProperties: Validator = (
+const validateAdditionalProperties: Validator = async (
   { additionalProperties, properties, patternProperties },
   value,
   options,
@@ -365,7 +368,7 @@ const validateAdditionalProperties: Validator = (
       } else if (typeof additionalProperties === 'object') {
         for (const key of additionalKeys) {
           errors = errors.concat(
-            validateSchema(additionalProperties, value[key], {
+            await validateSchema(additionalProperties, value[key], {
               ...options,
               name: `${options.name}.${key}`,
             }),
@@ -378,25 +381,25 @@ const validateAdditionalProperties: Validator = (
   return errors;
 };
 
-const validateMinItems: Validator = ({ minItems }, value, { name }) =>
+const validateMinItems: Validator = async ({ minItems }, value, { name }) =>
   minItems && Array.isArray(value) && value.length < minItems
     ? [{ name, code: 'minItems', param: minItems }]
     : [];
 
-const validateMaxItems: Validator = ({ maxItems }, value, { name }) =>
+const validateMaxItems: Validator = async ({ maxItems }, value, { name }) =>
   maxItems && Array.isArray(value) && value.length > maxItems
     ? [{ name, code: 'maxItems', param: maxItems }]
     : [];
 
-const validateUniqueItems: Validator = ({ uniqueItems }, value, { name }) =>
+const validateUniqueItems: Validator = async ({ uniqueItems }, value, { name }) =>
   uniqueItems && Array.isArray(value) && uniqWith(isEqual, value).length !== value.length
     ? [{ name, code: 'uniqueItems' }]
     : [];
 
-const validateItems: Validator = ({ items, additionalItems }, value, options) => {
+const validateItems: Validator = async ({ items, additionalItems }, value, options) => {
   let errors: Invalid[] = [];
   if (items !== undefined && Array.isArray(value)) {
-    value.forEach((item, index) => {
+    for (let index = 0; index < value.length; index++) {
       const itemSchema = Array.isArray(items)
         ? items[index] === undefined
           ? additionalItems === undefined
@@ -405,20 +408,32 @@ const validateItems: Validator = ({ items, additionalItems }, value, options) =>
           : items[index]
         : items;
       errors = errors.concat(
-        validateSchema(itemSchema, item, { ...options, name: `${options.name}[${index}]` }),
+        await validateSchema(itemSchema, value[index], {
+          ...options,
+          name: `${options.name}[${index}]`,
+        }),
       );
-    });
+    }
   }
+
   return errors;
 };
 
-const validateContains: Validator = ({ contains }, value, options) => {
+const validateContains: Validator = async ({ contains }, value, options) => {
   let errors: Invalid[] = [];
   if (contains !== undefined && Array.isArray(value)) {
-    errors = errors.concat(validateMinItems({ minItems: 1 }, value, options));
-    const allItemsErrors = value.map((item, index) =>
-      validateSchema(contains, item, { ...options, name: `${options.name}[${index}]` }),
-    );
+    errors = errors.concat(await validateMinItems({ minItems: 1 }, value, options));
+    const allItemsErrors: Invalid[][] = [];
+
+    for (let index = 0; index < value.length; index++) {
+      allItemsErrors.push(
+        await validateSchema(contains, value[index], {
+          ...options,
+          name: `${options.name}[${index}]`,
+        }),
+      );
+    }
+
     if (allItemsErrors.every(itemErrors => itemErrors.length > 0)) {
       errors = errors.concat(...allItemsErrors);
     }
@@ -426,57 +441,65 @@ const validateContains: Validator = ({ contains }, value, options) => {
   return errors;
 };
 
-const validateConst: Validator = (schema, value, options) =>
-  schema.const !== undefined ? validateEnum({ enum: [schema.const] }, value, options) : [];
+const validateConst: Validator = async (schema, value, options) =>
+  schema.const !== undefined ? await validateEnum({ enum: [schema.const] }, value, options) : [];
 
-const validateConditionals: Validator = (schema, value, options) => {
+const validateConditionals: Validator = async (schema, value, options) => {
   if (schema.if !== undefined && (schema.then !== undefined || schema.else !== undefined)) {
-    if (validateSchema(schema.if, value, options).length === 0) {
-      return schema.then ? validateSchema(schema.then, value, options) : [];
+    if ((await validateSchema(schema.if, value, options)).length === 0) {
+      return schema.then ? await validateSchema(schema.then, value, options) : [];
     } else {
-      return schema.else ? validateSchema(schema.else, value, options) : [];
+      return schema.else ? await validateSchema(schema.else, value, options) : [];
     }
   }
   return [];
 };
 
-const validateNot: Validator = ({ not }, value, options) =>
-  not && validateSchema(not, value, options).length === 0
+const validateNot: Validator = async ({ not }, value, options) =>
+  not && (await validateSchema(not, value, options)).length === 0
     ? [{ name: options.name, code: 'not' }]
     : [];
 
-const findDiscriminatedSchema = (
+const findDiscriminatedSchema = async (
   schemas: Schema[],
   propertyName: string,
   propertyValue: any,
   options: ValidateOptions,
-) =>
-  schemas.find(item =>
-    Boolean(
+) => {
+  for (const item of schemas) {
+    if (
       'type' in item &&
-        item.type === 'object' &&
-        item.properties &&
-        validateSchema(item.properties[propertyName], propertyValue, options).length === 0,
-    ),
-  );
+      item.type === 'object' &&
+      item.properties &&
+      (await validateSchema(item.properties[propertyName], propertyValue, options)).length === 0
+    ) {
+      return item;
+    }
+  }
+  return undefined;
+};
 
-const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
+const validateOneOf: Validator = async ({ oneOf, discriminator }, value, options) => {
   if (oneOf && oneOf.length > 0) {
     if (oneOf.length === 1) {
-      return validateSchema(oneOf[0], value, options);
+      return await validateSchema(oneOf[0], value, options);
     } else if (discriminator && value && value[discriminator.propertyName]) {
-      const discriminatedSchema = findDiscriminatedSchema(
+      const discriminatedSchema = await findDiscriminatedSchema(
         oneOf,
         discriminator.propertyName,
         value[discriminator.propertyName],
         options,
       );
       if (discriminatedSchema) {
-        return validateSchema(discriminatedSchema, value, options);
+        return await validateSchema(discriminatedSchema, value, options);
       }
     }
 
-    const validations = oneOf.map(item => validateSchema(item, value, options));
+    const validations: Invalid[][] = [];
+    for (const item of oneOf) {
+      validations.push(await validateSchema(item, value, options));
+    }
+
     const matching = validations.filter(errors => errors.length === 0);
 
     return matching.length === 1
@@ -487,20 +510,27 @@ const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
   }
 };
 
-const validateAllOf: Validator = ({ allOf }, value, options) =>
-  allOf
-    ? allOf.reduce<Invalid[]>(
-        (errors, item) => [...errors, ...validateSchema(item, value, options)],
-        [],
-      )
-    : [];
+const validateAllOf: Validator = async ({ allOf }, value, options) => {
+  let errors: Invalid[] = [];
+  if (allOf) {
+    for (const item of allOf) {
+      errors = errors.concat(await validateSchema(item, value, options));
+    }
+  }
+  return errors;
+};
 
-const validateAnyOf: Validator = ({ anyOf }, value, options) => {
+const validateAnyOf: Validator = async ({ anyOf }, value, options) => {
   if (anyOf && anyOf.length > 0) {
     if (anyOf.length === 1) {
-      return validateSchema(anyOf[0], value, options);
+      return await validateSchema(anyOf[0], value, options);
     } else {
-      return anyOf.find(item => validateSchema(item, value, options).length === 0)
+      const validations: Invalid[][] = [];
+      for (const item of anyOf) {
+        validations.push(await validateSchema(item, value, options));
+      }
+
+      return validations.find(item => item.length === 0)
         ? []
         : [{ name: options.name, code: 'anyOf' }];
     }
@@ -512,107 +542,126 @@ const validateAnyOf: Validator = ({ anyOf }, value, options) => {
 const parseJsonPointer = (name: string) =>
   decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
 
-const getJsonPointer = (document: any, pointer?: string) =>
-  pointer
-    ? pointer
-        .split('/')
-        .reduce(
-          (value, name) => (name ? (value ? value[parseJsonPointer(name)] : undefined) : value),
-          document,
-        )
-    : document;
+const getJsonPointer = (document: any, pointer?: string) => {
+  let currentId: string = typeof document === 'object' && '$id' in document && document.$id;
+  let current: any = document;
 
-const getRef = (ref: string, { schemas, root }: ValidateOptions) => {
-  const [url, pointer] = ref.split('#');
-  const document = url ? schemas.get(url) : root;
+  if (pointer) {
+    const path = pointer.split('/').filter(item => item);
 
-  return [document, getJsonPointer(document, pointer)];
+    for (const name of path) {
+      currentId =
+        typeof current === 'object' && '$id' in current && current.$id
+          ? new URL(current.$id, currentId).toString()
+          : currentId;
+      current = current ? current[parseJsonPointer(name)] : undefined;
+    }
+  }
+
+  return [current, currentId];
 };
 
-const validateSchema = (
+const loadDocument = async (url: string, { id, schemas }: ValidateOptions) => {
+  const fullUrl = new URL(url, id).toString();
+  if (!schemas.has(fullUrl)) {
+    schemas.set(fullUrl, await (await fetch(fullUrl)).json());
+  }
+  return schemas.get(fullUrl);
+};
+
+const getRef = async (ref: string, options: ValidateOptions) => {
+  const [url, pointer] = ref.split('#');
+  const document = url ? await loadDocument(url, options) : options.root;
+
+  return [document, ...getJsonPointer(document, pointer)];
+};
+
+const validateSchema = async (
   schema: Schema | boolean,
   value: any,
-  options: ValidateOptions,
-): Invalid[] => {
+  initialOptions: ValidateOptions,
+): Promise<Invalid[]> => {
   if (schema === false) {
-    return [{ name: options.name, code: 'false' }];
+    return [{ name: initialOptions.name, code: 'false' }];
   }
 
   if (schema === true || schema === undefined || (schema.nullable && value === null)) {
     return [];
   }
 
-  if (schema.$ref && typeof schema.$ref === 'string') {
-    const [root, refSchema] = getRef(schema.$ref, options);
+  const options = schema.$id
+    ? { ...initialOptions, id: new URL(schema.$id, initialOptions.id).toString() }
+    : initialOptions;
 
-    return validateSchema(refSchema === undefined ? {} : refSchema, value, { ...options, root });
+  if (schema.$ref && typeof schema.$ref === 'string') {
+    const [root, refSchema, id] = await getRef(schema.$ref, options);
+
+    return await validateSchema(refSchema === undefined ? {} : refSchema, value, {
+      ...options,
+      id,
+      root,
+    });
   }
 
   const errors: Invalid[] = [];
 
   return errors.concat(
-    validateConst(schema, value, options),
-    validateEnum(schema, value, options),
-    validateType(schema, value, options),
-    validateMultipleOf(schema, value, options),
-    validateMinimum(schema, value, options),
-    validateExclusiveMinimum(schema, value, options),
-    validateMaximum(schema, value, options),
-    validateExclusiveMaximum(schema, value, options),
-    validateString(schema, value, options),
-    validatePattern(schema, value, options),
-    validateMinLength(schema, value, options),
-    validateMaxLength(schema, value, options),
-    validateMinProperties(schema, value, options),
-    validateMaxProperties(schema, value, options),
-    validateRequired(schema, value, options),
-    validateProperties(schema, value, options),
-    validatePatternProperties(schema, value, options),
-    validatePropertyNames(schema, value, options),
-    validateDependencies(schema, value, options),
-    validateAdditionalProperties(schema, value, options),
-    validateMinItems(schema, value, options),
-    validateMaxItems(schema, value, options),
-    validateUniqueItems(schema, value, options),
-    validateItems(schema, value, options),
-    validateContains(schema, value, options),
-    validateConditionals(schema, value, options),
-    validateNot(schema, value, options),
-    validateOneOf(schema, value, options),
-    validateAllOf(schema, value, options),
-    validateAnyOf(schema, value, options),
+    await validateConst(schema, value, options),
+    await validateEnum(schema, value, options),
+    await validateType(schema, value, options),
+    await validateMultipleOf(schema, value, options),
+    await validateMinimum(schema, value, options),
+    await validateExclusiveMinimum(schema, value, options),
+    await validateMaximum(schema, value, options),
+    await validateExclusiveMaximum(schema, value, options),
+    await validateString(schema, value, options),
+    await validatePattern(schema, value, options),
+    await validateMinLength(schema, value, options),
+    await validateMaxLength(schema, value, options),
+    await validateMinProperties(schema, value, options),
+    await validateMaxProperties(schema, value, options),
+    await validateRequired(schema, value, options),
+    await validateProperties(schema, value, options),
+    await validatePatternProperties(schema, value, options),
+    await validatePropertyNames(schema, value, options),
+    await validateDependencies(schema, value, options),
+    await validateAdditionalProperties(schema, value, options),
+    await validateMinItems(schema, value, options),
+    await validateMaxItems(schema, value, options),
+    await validateUniqueItems(schema, value, options),
+    await validateItems(schema, value, options),
+    await validateContains(schema, value, options),
+    await validateConditionals(schema, value, options),
+    await validateNot(schema, value, options),
+    await validateOneOf(schema, value, options),
+    await validateAllOf(schema, value, options),
+    await validateAnyOf(schema, value, options),
   );
 };
 
-const extractUrls = (document: any, urls: string[] = []): string[] => {
+const extractIds = (
+  document: any,
+  id?: string,
+  files: Map<string, Schema> = new Map(),
+): Map<string, Schema> => {
   if (document && typeof document === 'object') {
-    if (
-      '$ref' in document &&
-      typeof document.$ref === 'string' &&
-      document.$ref.includes('://') &&
-      !urls.includes(document.$ref)
-    ) {
-      const [url] = document.$ref.split('#');
-      urls.push(url);
-    } else {
-      Object.values(document).forEach(propValue => extractUrls(propValue, urls));
+    const documentId =
+      '$id' in document && document.$id ? new URL(document.$id, id).toString() : undefined;
+
+    if (documentId) {
+      files.set(documentId, document);
+    }
+
+    for (const propValue of Object.values(document)) {
+      extractIds(propValue, documentId || id, files);
     }
   }
-  return urls;
-};
-
-const loadJsonFiles = async (urls: string[]) => {
-  const jsons = await Promise.all(urls.map(url => fetch(url).then(response => response.json())));
-
-  return jsons.reduce<Map<string, any>>(
-    (files, json, index) => files.set(urls[index], json),
-    new Map(),
-  );
+  return files;
 };
 
 export const validate = async (schema: Schema, value: any) =>
-  validateSchema(schema, value, {
+  (await validateSchema(schema, value, {
     name: 'value',
     root: schema,
-    schemas: await loadJsonFiles(extractUrls(schema)),
-  }).map(error => messages[error.code](error));
+    schemas: extractIds(schema),
+  })).map(error => messages[error.code](error));

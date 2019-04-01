@@ -1,4 +1,5 @@
 import { readdirSync, readFileSync } from 'fs';
+import nock = require('nock');
 import { join } from 'path';
 import { Schema, validate } from '../src';
 
@@ -13,6 +14,17 @@ interface Suite {
   schema: Schema;
   tests: Test[];
 }
+
+nock('http://localhost:1234')
+  .persist()
+  .get('/integer.json')
+  .replyWithFile(200, join(__dirname, 'remotes/integer.json'))
+  .get('/subSchemas.json')
+  .replyWithFile(200, join(__dirname, 'remotes/subSchemas.json'))
+  .get('/folder/folderInteger.json')
+  .replyWithFile(200, join(__dirname, 'remotes/folder/folderInteger.json'))
+  .get('/name.json')
+  .replyWithFile(200, join(__dirname, 'remotes/name.json'));
 
 const draft7 = readdirSync(join(__dirname, 'draft7'))
   .filter(file => file.endsWith('.json'))
