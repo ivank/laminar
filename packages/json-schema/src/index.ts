@@ -173,32 +173,20 @@ const validateMultipleOf: Validator = async ({ multipleOf }, value, { name }) =>
     ? [{ name, code: 'multipleOf', param: multipleOf }]
     : [];
 
-const validateMinimum: Validator = async ({ minimum, exclusiveMinimum }, value, options) => {
-  if (minimum !== undefined) {
-    if (typeof exclusiveMinimum === 'boolean') {
-      return await validateExclusiveMinimum({ exclusiveMinimum: minimum }, value, options);
-    } else if (value < minimum) {
-      return [{ name: options.name, code: 'minimum', param: minimum }];
-    }
-  }
-  return [];
-};
+const validateMinimum: Validator = async ({ minimum }, value, options) =>
+  minimum !== undefined && value < minimum
+    ? [{ name: options.name, code: 'minimum', param: minimum }]
+    : [];
 
 const validateExclusiveMinimum: Validator = async ({ exclusiveMinimum }, value, { name }) =>
   typeof exclusiveMinimum === 'number' && value <= exclusiveMinimum
     ? [{ name, code: 'exclusiveMinimum', param: exclusiveMinimum }]
     : [];
 
-const validateMaximum: Validator = async ({ maximum, exclusiveMaximum }, value, options) => {
-  if (maximum !== undefined) {
-    if (typeof exclusiveMaximum === 'boolean') {
-      return await validateExclusiveMaximum({ exclusiveMaximum: maximum }, value, options);
-    } else if (value > maximum) {
-      return [{ name: options.name, code: 'maximum', param: maximum }];
-    }
-  }
-  return [];
-};
+const validateMaximum: Validator = async ({ maximum }, value, options) =>
+  maximum !== undefined && value > maximum
+    ? [{ name: options.name, code: 'maximum', param: maximum }]
+    : [];
 
 const validateExclusiveMaximum: Validator = async ({ exclusiveMaximum }, value, { name }) =>
   typeof exclusiveMaximum === 'number' && value >= exclusiveMaximum!
