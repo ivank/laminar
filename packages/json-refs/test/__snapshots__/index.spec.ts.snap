@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`json-refs Should resolve nested refs 1`] = `
+Object {
+  "$id": "http://localhost:1234/tree",
+  "definitions": Object {
+    "node": Object {
+      "$id": "http://localhost:1234/node",
+      "description": "node",
+      "properties": Object {
+        "subtree": [Circular],
+        "value": Object {
+          "type": "number",
+        },
+      },
+      "required": Array [
+        "value",
+      ],
+      "type": "object",
+    },
+  },
+  "description": "tree of nodes",
+  "properties": Object {
+    "meta": Object {
+      "type": "string",
+    },
+    "nodes": Object {
+      "items": Object {
+        "$id": "http://localhost:1234/node",
+        "description": "node",
+        "properties": Object {
+          "subtree": [Circular],
+          "value": Object {
+            "type": "number",
+          },
+        },
+        "required": Array [
+          "value",
+        ],
+        "type": "object",
+      },
+      "type": "array",
+    },
+  },
+  "required": Array [
+    "meta",
+    "nodes",
+  ],
+  "type": "object",
+}
+`;

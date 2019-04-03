@@ -1,80 +1,120 @@
 import fetch from 'node-fetch';
 import { URL } from 'url';
 
-interface Options {
-  root: any;
-  files: Map<string, any>;
-  refs: Map<string, any>;
-  id?: string;
+interface IdSchema {
+  $id: string;
+}
+interface RefSchema {
+  $ref: string;
+}
+interface TraversableSchema {
+  [key: string]: any;
 }
 
-const parseName = (name: string) => decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
+interface FilesMap {
+  [file: string]: any;
+}
 
-const getRef = (ref: string, { files, root, id }: Options) => {
-  const [url, path] = ref.split('#/');
-  const resolvedUrl = new URL(url, id);
-  const document = resolvedUrl ? files.get(resolvedUrl.toString()) : root;
+interface Context {
+  schema: any;
+  files: FilesMap;
+}
 
-  return path
-    .split('/')
-    .reduce((value, name) => (value ? value[parseName(name)] : undefined), document);
-};
+export const isTraversable = (schema: any): schema is TraversableSchema =>
+  schema && typeof schema === 'object';
 
-const resolveRef = (ref: string, options: Options) => {
-  if (!options.refs.has(ref)) {
-    options.refs.set(ref, getRef(ref, options));
-  }
-  return options.refs.get(ref);
-};
+export const isIdSchema = (schema: any): schema is IdSchema =>
+  isTraversable(schema) && '$id' in schema && schema.$id;
 
-const isRef = (item: any): item is { $ref: string } =>
-  item && typeof item === 'object' && item.$ref && typeof item.$ref === 'string';
+export const isRefSchema = (schema: any): schema is RefSchema =>
+  isTraversable(schema) && '$ref' in schema && schema.$ref;
 
-const extractUrls = (document: any): string[] =>
-  Object.values(document).reduce<string[]>((urls, item) => {
-    if (isRef(item)) {
-      const [url] = item.$ref.split('#/');
-      return url && !urls.includes(url) ? urls.concat([url]) : urls;
-    } else if (typeof item === 'object') {
-      const itemUrls = extractUrls(item).filter(url => !urls.includes(url));
-      return urls.concat(itemUrls);
-    } else {
-      return urls;
-    }
-  }, []);
+export const currentId = (schema: any, parentId?: string) =>
+  isIdSchema(schema) ? new URL(schema.$id, parentId).toString() : parentId;
 
-const loadJsonFiles = async (urls: string[]) => {
-  const jsons = await Promise.all(urls.map(url => fetch(url).then(response => response.json())));
+export const currentUrl = (url: string | undefined, id?: string) =>
+  url ? new URL(url, id).toString() : undefined;
 
-  return jsons.reduce<Map<string, any>>(
-    (files, json, index) => files.set(urls[index], json),
-    new Map(),
+export const reduceSchema = <TResult = any>(
+  schema: any,
+  cb: (all: TResult, item: any, id?: string) => TResult,
+  initial: TResult,
+  id?: string,
+): TResult =>
+  isTraversable(schema)
+    ? Object.values(schema).reduce(
+        (all, item) => reduceSchema(item, cb, all, currentId(schema, id)),
+        cb(initial, schema, id),
+      )
+    : cb(initial, schema, id);
+
+export const extractNamedRefs = (document: any): FilesMap =>
+  reduceSchema(
+    document,
+    (all, item, id) =>
+      isIdSchema(item) ? { ...all, [new URL(item.$id, id).toString()]: item } : all,
+    {},
   );
+
+export const extractUrls = (schema: any, namedRefs: string[] = []) =>
+  reduceSchema<string[]>(
+    schema,
+    (all, item, id) => {
+      if (isRefSchema(item)) {
+        const [url] = item.$ref.split('#');
+        const fullUrl = currentUrl(url, id);
+
+        if (fullUrl && !all.includes(fullUrl) && !namedRefs.includes(fullUrl)) {
+          return [...all, fullUrl];
+        }
+      }
+      return all;
+    },
+    [],
+  );
+
+export const extractFiles = async (schema: any): Promise<FilesMap> => {
+  const refs = extractNamedRefs(schema);
+  const result = await Promise.all(
+    extractUrls(schema, Object.keys(refs)).map(url =>
+      fetch(url)
+        .then(response => response.json())
+        .then(content => extractFiles(content).then(filesMap => ({ ...filesMap, [url]: content }))),
+    ),
+  );
+  return result.reduce((all, item) => ({ ...all, ...item }), refs);
 };
 
-export const resolveNestedRefs = (object: any, options: Options) => {
-  const currentOptions = object.$id ? { ...options, id: object.$id } : options;
-  if (object.$id) {
-    options.files.set(object.$id, object);
-  }
+export const parseJsonPointer = (name: string) =>
+  decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
 
-  for (const [key, item] of Object.entries(object)) {
-    if (isRef(item)) {
-      object[key] = resolveRef(item.$ref, currentOptions);
-    } else if (typeof item === 'object') {
-      object[key] = resolveNestedRefs(object[key], currentOptions);
+export const getJsonPointer = (document: any, pointer: string) =>
+  pointer
+    .split('/')
+    .reduce<any>(
+      (item, name) => (name ? (item ? item[parseJsonPointer(name)] : undefined) : item),
+      document,
+    );
+
+export const resolveNestedRefs = (schema: any, context: Context, parentId?: string) => {
+  const id = currentId(schema, parentId);
+
+  if (isTraversable(schema)) {
+    for (const [key, item] of Object.entries(schema)) {
+      schema[key] = resolveNestedRefs(item, context, id);
     }
   }
 
-  return isRef(object) ? resolveRef(object.$ref, currentOptions) : object;
+  if (isRefSchema(schema)) {
+    const [url, pointer] = schema.$ref.split('#');
+    const fullUrl = currentUrl(url, id);
+    const currentDocument = fullUrl ? context.files[fullUrl] : context.schema;
+
+    return pointer ? getJsonPointer(currentDocument, pointer) : currentDocument;
+  }
+
+  return schema;
 };
 
-export const resolveRefs = async (object: any): Promise<any> => {
-  const options: Options = {
-    refs: new Map(),
-    files: await loadJsonFiles(extractUrls(object)),
-    root: object,
-  };
-
-  return resolveNestedRefs(object, options);
-};
+export const resolveRefs = async (schema: any): Promise<any> =>
+  resolveNestedRefs(schema, { schema, files: await extractFiles(schema) });

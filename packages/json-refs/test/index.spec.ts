@@ -1,11 +1,137 @@
 import nock = require('nock');
-import { resolveRefs } from '../src';
+import { extractFiles, extractNamedRefs, extractUrls, resolveRefs } from '../src';
 
 describe('json-refs', () => {
-  it('Should resolve refs', async () => {
-    const schema = { test: '123', other: { $ref: '#/test' } };
-    const result = await resolveRefs(schema);
-    expect(result).toEqual({ other: '123', test: '123' });
+  it.each<[string, any, string[]]>([
+    [
+      'no ref',
+      {
+        $ref: '#/definition/test',
+        definition: {
+          test: { maximum: 10 },
+        },
+      },
+      [],
+    ],
+    [
+      'single ref',
+      {
+        $ref: 'http://one.test#/test',
+      },
+      ['http://one.test/'],
+    ],
+    [
+      'nested multiple ref',
+      {
+        test: { $ref: 'http://one.test#/test' },
+        other: {
+          deep: { $ref: 'http://two.test#/test' },
+        },
+      },
+      ['http://one.test/', 'http://two.test/'],
+    ],
+    [
+      'nested multiple ref with ids',
+      {
+        $id: 'http://one.test',
+        test: { $ref: 'first#/test' },
+        other: {
+          deep: { $ref: 'second#/test' },
+        },
+      },
+      ['http://one.test/first', 'http://one.test/second'],
+    ],
+    [
+      'nested multiple refs and different ids',
+      {
+        one: {
+          $id: 'http://one.test',
+          test: { $ref: 'first#/test-1' },
+        },
+        two: {
+          $id: 'http://two.test',
+          deep: {
+            other: { $ref: 'second#/test-2' },
+          },
+        },
+        standAlone: { $ref: 'http://three.test' },
+      },
+      ['http://one.test/first', 'http://two.test/second', 'http://three.test/'],
+    ],
+  ])('Should extractUrls for %s', (_, schema, expected) => {
+    expect(extractUrls(schema)).toEqual(expected);
+  });
+
+  it.each<[string, any, any]>([
+    [
+      'single id',
+      {
+        $id: 'http://one.test',
+        minimum: 12,
+      },
+      { 'http://one.test/': { $id: 'http://one.test', minimum: 12 } },
+    ],
+    [
+      'nested id',
+      {
+        $id: 'http://one.test',
+        minimum: 12,
+        deep: {
+          $id: 'other',
+          maximum: 22,
+        },
+      },
+      {
+        'http://one.test/': {
+          $id: 'http://one.test',
+          minimum: 12,
+          deep: { $id: 'other', maximum: 22 },
+        },
+        'http://one.test/other': { $id: 'other', maximum: 22 },
+      },
+    ],
+  ])('Should extractNamedRefs for %s', (_, schema, expected) => {
+    expect(extractNamedRefs(schema)).toEqual(expected);
+  });
+
+  it('Should extract multiple urls', async () => {
+    const schema = {
+      test: { $ref: 'http://one.test#/test' },
+      other: {
+        deep: { $ref: 'http://two.test/folder#/test' },
+      },
+      last: {
+        $id: 'http://two.test',
+        deep: {
+          $ref: 'folder',
+        },
+      },
+    };
+
+    nock('http://one.test')
+      .get('/')
+      .reply(200, { $ref: 'http://three.test#/test' });
+
+    nock('http://two.test')
+      .get('/folder')
+      .reply(200, { test: 2 });
+
+    nock('http://three.test')
+      .get('/')
+      .reply(200, { $ref: 'http://four.test#/test', test: 3 });
+
+    nock('http://four.test')
+      .get('/')
+      .reply(200, { test: 4 });
+
+    const expected = {
+      'http://four.test/': { test: 4 },
+      'http://three.test/': { $ref: 'http://four.test#/test', test: 3 },
+      'http://one.test/': { $ref: 'http://three.test#/test' },
+      'http://two.test/folder': { test: 2 },
+    };
+
+    expect(extractFiles(schema)).resolves.toEqual(expected);
   });
 
   it('Should resolve nested refs', async () => {
@@ -17,6 +143,7 @@ describe('json-refs', () => {
       },
       $ref: '#/definitions/c',
     };
+
     const expected = {
       type: 'integer',
     };
@@ -52,10 +179,8 @@ describe('json-refs', () => {
       },
     };
 
-    const expected = {};
-
     const result = await resolveRefs(schema);
-    expect(result).toEqual(expected);
+    expect(result).toMatchSnapshot();
   });
 
   it('Should resolve complex refs', async () => {
