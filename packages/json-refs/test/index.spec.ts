@@ -129,9 +129,10 @@ describe('json-refs', () => {
       'http://three.test/': { $ref: 'http://four.test#/test', test: 3 },
       'http://one.test/': { $ref: 'http://three.test#/test' },
       'http://two.test/folder': { test: 2 },
+      'http://two.test/': { $id: 'http://two.test', deep: { $ref: 'folder' } },
     };
 
-    expect(extractFiles(schema)).resolves.toEqual(expected);
+    await expect(extractFiles(schema)).resolves.toEqual(expected);
   });
 
   it('Should resolve nested refs', async () => {
@@ -148,8 +149,7 @@ describe('json-refs', () => {
       type: 'integer',
     };
 
-    const result = await resolveRefs(schema);
-    expect(result).toEqual(expected);
+    await expect(resolveRefs(schema)).resolves.toEqual(expected);
   });
 
   it('Should resolve nested refs', async () => {
@@ -179,8 +179,7 @@ describe('json-refs', () => {
       },
     };
 
-    const result = await resolveRefs(schema);
-    expect(result).toMatchSnapshot();
+    await expect(resolveRefs(schema)).resolves.toMatchSnapshot();
   });
 
   it('Should resolve complex refs', async () => {
@@ -292,8 +291,7 @@ describe('json-refs', () => {
       type: 'object',
     };
 
-    const result = await resolveRefs(schema);
-    expect(result).toEqual(expected);
+    await expect(resolveRefs(schema)).resolves.toEqual(expected);
   });
 
   it('Should resolve url refs', async () => {
@@ -302,8 +300,7 @@ describe('json-refs', () => {
       .reply(200, { test: { type: 'number' } });
 
     const schema = { test: '123', other: { $ref: 'http://example.test/schema#/test' } };
-    const result = await resolveRefs(schema);
-    expect(result).toEqual({ other: { type: 'number' }, test: '123' });
+    await expect(resolveRefs(schema)).resolves.toEqual({ other: { type: 'number' }, test: '123' });
   });
 
   it('Should resolve multiple refs with one load', async () => {
@@ -316,8 +313,10 @@ describe('json-refs', () => {
       other: { $ref: 'http://example.test/schema#/other' },
     };
 
-    const result = await resolveRefs(schema);
-    expect(result).toEqual({ other: { type: 'array' }, test: { type: 'number' } });
+    await expect(resolveRefs(schema)).resolves.toEqual({
+      other: { type: 'array' },
+      test: { type: 'number' },
+    });
   });
 
   it('Should resolve nested refs', async () => {
@@ -333,9 +332,7 @@ describe('json-refs', () => {
       last: { $ref: 'http://example.test/other-schema#/last' },
     };
 
-    const result = await resolveRefs(schema);
-
-    expect(result).toEqual({
+    await expect(resolveRefs(schema)).resolves.toEqual({
       other: { type: 'array' },
       test: { type: 'number' },
       last: { type: 'object' },

@@ -32,7 +32,7 @@ export const isRefSchema = (schema: any): schema is RefSchema =>
 export const currentId = (schema: any, parentId?: string) =>
   isIdSchema(schema) ? new URL(schema.$id, parentId).toString() : parentId;
 
-export const currentUrl = (url: string | undefined, id?: string) =>
+export const currentUrl = (url?: string, id?: string) =>
   url ? new URL(url, id).toString() : undefined;
 
 export const reduceSchema = <TResult = any>(
