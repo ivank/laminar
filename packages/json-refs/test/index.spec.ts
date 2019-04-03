@@ -110,7 +110,7 @@ describe('json-refs', () => {
 
     nock('http://one.test')
       .get('/')
-      .reply(200, { $ref: 'http://three.test#/test' });
+      .reply(200, { $ref: 'http://three.test#' });
 
     nock('http://two.test')
       .get('/folder')
@@ -126,8 +126,8 @@ describe('json-refs', () => {
 
     const expected = {
       'http://four.test/': { test: 4 },
-      'http://three.test/': { $ref: 'http://four.test#/test', test: 3 },
-      'http://one.test/': { $ref: 'http://three.test#/test' },
+      'http://three.test/': 4,
+      'http://one.test/': 4,
       'http://two.test/folder': { test: 2 },
       'http://two.test/': { $id: 'http://two.test', deep: { $ref: 'folder' } },
     };
@@ -337,5 +337,19 @@ describe('json-refs', () => {
       test: { type: 'number' },
       last: { type: 'object' },
     });
+  });
+
+  it('Should resolve recursive copy', async () => {
+    const schema = {
+      properties: {
+        foo: { $ref: '#' },
+      },
+      additionalProperties: false,
+    };
+
+    const schema1 = await resolveRefs(schema);
+    const schema2 = await resolveRefs(schema);
+
+    expect(schema1).toEqual(schema2);
   });
 });

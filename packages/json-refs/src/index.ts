@@ -24,10 +24,10 @@ export const isTraversable = (schema: any): schema is TraversableSchema =>
   schema && typeof schema === 'object';
 
 export const isIdSchema = (schema: any): schema is IdSchema =>
-  isTraversable(schema) && '$id' in schema && schema.$id;
+  isTraversable(schema) && '$id' in schema && schema.$id && typeof schema.$id === 'string';
 
 export const isRefSchema = (schema: any): schema is RefSchema =>
-  isTraversable(schema) && '$ref' in schema && schema.$ref;
+  isTraversable(schema) && '$ref' in schema && schema.$ref && typeof schema.$ref === 'string';
 
 export const currentId = (schema: any, parentId?: string) =>
   isIdSchema(schema) ? new URL(schema.$id, parentId).toString() : parentId;
@@ -79,7 +79,12 @@ export const extractFiles = async (schema: any): Promise<FilesMap> => {
     extractUrls(schema, Object.keys(refs)).map(url =>
       fetch(url)
         .then(response => response.json())
-        .then(content => extractFiles(content).then(filesMap => ({ ...filesMap, [url]: content }))),
+        .then(content =>
+          extractFiles(content).then(filesMap => ({
+            ...filesMap,
+            [url]: resolveNestedRefs(content, { schema: content, files: filesMap }),
+          })),
+        ),
     ),
   );
   return result.reduce((all, item) => ({ ...all, ...item }), refs);
@@ -116,5 +121,7 @@ export const resolveNestedRefs = (schema: any, context: Context, parentId?: stri
   return schema;
 };
 
-export const resolveRefs = async (schema: any): Promise<any> =>
-  resolveNestedRefs(schema, { schema, files: await extractFiles(schema) });
+export const resolveRefs = async (original: any): Promise<any> => {
+  const schema = JSON.parse(JSON.stringify(original));
+  return resolveNestedRefs(schema, { schema, files: await extractFiles(schema) });
+};
