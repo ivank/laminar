@@ -1,24 +1,5 @@
 import { resolveRefs } from '@ovotech/json-refs';
-import {
-  difference,
-  entries,
-  filter,
-  find,
-  flatMap,
-  flow,
-  getOr,
-  has,
-  isArray,
-  isEmpty,
-  isEqual,
-  isInteger,
-  isPlainObject,
-  keys,
-  map,
-  set,
-  some,
-  uniqWith,
-} from 'lodash/fp';
+import { isEqual, uniqWith } from 'lodash/fp';
 
 export type PrimitiveType = 'string' | 'integer' | 'number' | 'boolean' | 'array' | 'object';
 
@@ -147,16 +128,22 @@ const isDivisible = (num: number, divisor: number) => {
   return Math.round(num * multiplier) % Math.round(divisor * multiplier) === 0;
 };
 
-const flatMapIndex = (flatMap as any).convert({ cap: false });
-const mapIndex = (map as any).convert({ cap: false });
-
 const validateEnum: Validator = (schema, value, { name }) =>
-  schema.enum && !some(isEqual(value), schema.enum)
+  schema.enum && !schema.enum.some(isEqual(value))
     ? [{ name, code: 'enum', param: schema.enum }]
     : [];
 
+const isObject = (value: any): value is { [key: string]: any } =>
+  value && typeof value === 'object' && !Array.isArray(value);
+
 const getType = (value: any) =>
-  value === null ? 'null' : isArray(value) ? 'array' : isInteger(value) ? 'integer' : typeof value;
+  value === null
+    ? 'null'
+    : Array.isArray(value)
+    ? 'array'
+    : Number.isInteger(value)
+    ? 'integer'
+    : typeof value;
 
 const formats: { [key: string]: RegExp } = {
   'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d:\d\d)$/i,
@@ -175,25 +162,21 @@ const formats: { [key: string]: RegExp } = {
 };
 
 const validateType: Validator = ({ type, format }, value, { name }) => {
-  const errors: Invalid[] = [];
-
   if (type) {
     const valueType = getType(value);
-    const allowed = isArray(type) ? type : [type];
+    const allowed = Array.isArray(type) ? type : [type];
     if (allowed.includes('number') && !allowed.includes('integer')) {
       allowed.push('integer');
     }
 
-    if (!allowed.includes(valueType as any)) {
-      errors.push({ name, code: 'type', param: allowed });
-    }
-
-    if (format && format in formats && !formats[format].test(value)) {
-      errors.push({ name, code: 'typeFormat', param: format });
-    }
+    return [
+      ...(!allowed.includes(valueType as any) ? [{ name, code: 'type', param: allowed }] : []),
+      ...(format && format in formats && !formats[format].test(value)
+        ? [{ name, code: 'typeFormat', param: format }]
+        : []),
+    ];
   }
-
-  return errors;
+  return [];
 };
 
 const validateMultipleOf: Validator = ({ multipleOf }, value, { name }) =>
@@ -250,18 +233,18 @@ const validateMaxLength: Validator = ({ maxLength }, value, { name }) =>
     : [];
 
 const validateMinProperties: Validator = ({ minProperties }, value, { name }) =>
-  minProperties && isPlainObject(value) && keys(value).length < minProperties
+  minProperties && isObject(value) && Object.keys(value).length < minProperties
     ? [{ name, code: 'minProperties', param: minProperties }]
     : [];
 
 const validateMaxProperties: Validator = ({ maxProperties }, value, { name }) =>
-  maxProperties && isPlainObject(value) && keys(value).length > maxProperties
+  maxProperties && isObject(value) && Object.keys(value).length > maxProperties
     ? [{ name, code: 'maxProperties', param: maxProperties }]
     : [];
 
 const validateRequired: Validator = ({ required }, value, { name }) => {
-  if (required && required.length && isPlainObject(value)) {
-    const missingKeys = difference(required, keys(value));
+  if (required && required.length && isObject(value)) {
+    const missingKeys = required.filter(key => !Object.keys(value).includes(key));
     if (missingKeys.length > 0) {
       return [{ name, code: 'required', param: missingKeys }];
     }
@@ -269,54 +252,70 @@ const validateRequired: Validator = ({ required }, value, { name }) => {
   return [];
 };
 
-const childOptions = (name: string | number, options: ValidateOptions) =>
-  set('name', `${options.name}.${name}`, options);
+const childOptions = (name: string | number, options: ValidateOptions) => ({
+  name: `${options.name}.${name}`,
+  ...options,
+});
 
 const validateProperties: Validator = ({ properties }, value, options) => {
-  if (properties && isPlainObject(value)) {
-    return flatMap(
-      key => validateSchema(properties[key], value[key], childOptions(key, options)),
-      keys(value),
+  if (properties && isObject(value)) {
+    return Object.keys(value).reduce<Invalid[]>(
+      (errors, key) => [
+        ...errors,
+        ...validateSchema(properties[key], value[key], childOptions(key, options)),
+      ],
+      [],
     );
   }
   return [];
 };
 
 const validatePatternProperties: Validator = ({ patternProperties }, value, options) => {
-  if (patternProperties && isPlainObject(value)) {
-    return flatMap(([pattern, schema]) => {
-      return flatMap(
-        key => validateSchema(schema, value[key], childOptions(key, options)),
-        keys(value).filter(key => RegExp(pattern).test(key)),
-      );
-    }, entries(patternProperties));
+  if (patternProperties && isObject(value)) {
+    return Object.entries(patternProperties).reduce<Invalid[]>(
+      (all, [pattern, schema]) =>
+        Object.keys(value)
+          .filter(key => RegExp(pattern).test(key))
+          .reduce(
+            (errors, key) => [
+              ...errors,
+              ...validateSchema(schema, value[key], childOptions(key, options)),
+            ],
+            all,
+          ),
+      [],
+    );
   }
   return [];
 };
 
 const validatePropertyNames: Validator = ({ propertyNames }, value, options) => {
-  if (propertyNames !== undefined && isPlainObject(value)) {
-    return flatMap(
-      key => validateSchema(propertyNames, key, childOptions(key, options)),
-      keys(value),
+  if (propertyNames !== undefined && isObject(value)) {
+    return Object.keys(value).reduce<Invalid[]>(
+      (errors, key) => [
+        ...errors,
+        ...validateSchema(propertyNames, key, childOptions(key, options)),
+      ],
+      [],
     );
   }
   return [];
 };
 
 const validateDependencies: Validator = ({ dependencies }, value, options) => {
-  if (dependencies && isPlainObject(value)) {
-    const activeDependencies = filter(([key]) => has(key, value), entries(dependencies));
-    return flatMap(([key, dependency]) => {
-      if (isArray(dependency)) {
-        const missing = difference(dependency, keys(value));
-        return missing.length > 0
-          ? [{ name: `${options.name}.${key}`, code: 'dependencies', param: missing }]
-          : [];
-      } else {
-        return validateSchema(dependency, value, childOptions(key, options));
-      }
-    }, activeDependencies);
+  if (dependencies && isObject(value)) {
+    return Object.entries(dependencies)
+      .filter(([key]) => key in value)
+      .reduce<Invalid[]>((errors, [key, dependency]) => {
+        if (Array.isArray(dependency)) {
+          const missing = dependency.filter(item => !Object.keys(value).includes(item));
+          return missing.length > 0
+            ? [...errors, { name: `${options.name}.${key}`, code: 'dependencies', param: missing }]
+            : errors;
+        } else {
+          return [...errors, ...validateSchema(dependency, value, childOptions(key, options))];
+        }
+      }, []);
   }
   return [];
 };
@@ -326,19 +325,27 @@ const validateAdditionalProperties: Validator = (
   value,
   options,
 ) => {
-  if (additionalProperties !== undefined && additionalProperties !== true && isPlainObject(value)) {
-    const additionalKeys = flow(
-      filter((key: string) => !has(key, properties)),
-      filter((key: string) => !some(pattern => RegExp(pattern).test(key), keys(patternProperties))),
-    )(keys(value));
+  if (additionalProperties !== undefined && additionalProperties !== true && isObject(value)) {
+    const additionalKeys = Object.keys(value)
+      .filter(key => !(properties && key in properties))
+      .filter(
+        key =>
+          !(
+            patternProperties &&
+            Object.keys(patternProperties).some(pattern => RegExp(pattern).test(key))
+          ),
+      );
 
     if (additionalKeys.length > 0) {
       if (additionalProperties === false) {
         return [{ name: options.name, code: 'additionalProperties', param: additionalKeys }];
-      } else if (isPlainObject(additionalProperties)) {
-        return flatMap(
-          key => validateSchema(additionalProperties, value[key], childOptions(key, options)),
-          additionalKeys,
+      } else if (isObject(additionalProperties)) {
+        return additionalKeys.reduce<Invalid[]>(
+          (errors, key) => [
+            ...errors,
+            ...validateSchema(additionalProperties, value[key], childOptions(key, options)),
+          ],
+          [],
         );
       }
     }
@@ -348,38 +355,40 @@ const validateAdditionalProperties: Validator = (
 };
 
 const validateMinItems: Validator = ({ minItems }, value, { name }) =>
-  minItems && isArray(value) && value.length < minItems
+  minItems && Array.isArray(value) && value.length < minItems
     ? [{ name, code: 'minItems', param: minItems }]
     : [];
 
 const validateMaxItems: Validator = ({ maxItems }, value, { name }) =>
-  maxItems && isArray(value) && value.length > maxItems
+  maxItems && Array.isArray(value) && value.length > maxItems
     ? [{ name, code: 'maxItems', param: maxItems }]
     : [];
 
 const validateUniqueItems: Validator = ({ uniqueItems }, value, { name }) =>
-  uniqueItems && isArray(value) && uniqWith(isEqual, value).length !== value.length
+  uniqueItems && Array.isArray(value) && uniqWith(isEqual, value).length !== value.length
     ? [{ name, code: 'uniqueItems' }]
     : [];
 
 const validateItems: Validator = ({ items, additionalItems }, value, options) => {
-  if (items !== undefined && isArray(value)) {
-    return flatMapIndex((item: any, index: number) => {
-      const itemSchema = isArray(items)
-        ? getOr(additionalItems === undefined ? {} : additionalItems, index, items)
+  if (items !== undefined && Array.isArray(value)) {
+    return value.reduce<Invalid[]>((errors, item, index) => {
+      const additional = additionalItems === undefined ? {} : additionalItems;
+      const itemSchema = Array.isArray(items)
+        ? items[index] === undefined
+          ? additional
+          : items[index]
         : items;
-      return validateSchema(itemSchema, item, childOptions(index, options));
-    }, value);
+      return [...errors, ...validateSchema(itemSchema, item, childOptions(index, options))];
+    }, []);
   }
   return [];
 };
 
 const validateContains: Validator = ({ contains }, value, options) => {
-  if (contains !== undefined && isArray(value)) {
+  if (contains !== undefined && Array.isArray(value)) {
     let errors = validateMinItems({ minItems: 1 }, value, options);
-    const allItemsErrors: Invalid[][] = mapIndex(
-      (item: any, index: number) => validateSchema(contains, item, childOptions(index, options)),
-      value,
+    const allItemsErrors = value.map((item, index) =>
+      validateSchema(contains, item, childOptions(index, options)),
     );
     if (allItemsErrors.every(itemErrors => itemErrors.length > 0)) {
       errors = errors.concat(...allItemsErrors);
@@ -409,13 +418,12 @@ const validateNot: Validator = ({ not }, value, options) =>
     : [];
 
 const findSchema = (schemas: Schema[], name: string, value: any, options: ValidateOptions) =>
-  find(
+  schemas.find(
     item =>
       'type' in item &&
       item.type === 'object' &&
       !!item.properties &&
       validateSchema(item.properties[name], value, options).length === 0,
-    schemas,
   );
 
 const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
@@ -434,8 +442,8 @@ const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
       }
     }
 
-    const validations = map(item => validateSchema(item, value, options), oneOf);
-    const matching = filter(isEmpty, validations);
+    const validations = oneOf.map(item => validateSchema(item, value, options));
+    const matching = validations.filter(item => item.length === 0);
 
     if (matching.length !== 1) {
       return [{ name: options.name, code: 'oneOf', param: matching.length }];
@@ -445,14 +453,21 @@ const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
 };
 
 const validateAllOf: Validator = ({ allOf }, value, options) =>
-  allOf ? flatMap(item => validateSchema(item, value, options), allOf) : [];
+  allOf
+    ? allOf.reduce<Invalid[]>(
+        (errors, item) => [...errors, ...validateSchema(item, value, options)],
+        [],
+      )
+    : [];
 
 const validateAnyOf: Validator = ({ anyOf }, value, options) => {
   if (anyOf && anyOf.length > 0) {
     if (anyOf.length === 1) {
       return validateSchema(anyOf[0], value, options);
     } else {
-      if (!some(isEmpty, map(item => validateSchema(item, value, options), anyOf))) {
+      if (
+        !anyOf.map(item => validateSchema(item, value, options)).some(errors => errors.length === 0)
+      ) {
         return [{ name: options.name, code: 'anyOf' }];
       }
     }
