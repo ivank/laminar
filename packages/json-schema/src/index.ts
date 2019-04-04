@@ -1,5 +1,24 @@
 import { resolveRefs } from '@ovotech/json-refs';
-import { isEqual, uniqWith } from 'lodash/fp';
+import {
+  difference,
+  entries,
+  filter,
+  find,
+  flatMap,
+  flow,
+  getOr,
+  has,
+  isArray,
+  isEmpty,
+  isEqual,
+  isInteger,
+  isPlainObject,
+  keys,
+  map,
+  set,
+  some,
+  uniqWith,
+} from 'lodash/fp';
 
 export type PrimitiveType = 'string' | 'integer' | 'number' | 'boolean' | 'array' | 'object';
 
@@ -128,27 +147,39 @@ const isDivisible = (num: number, divisor: number) => {
   return Math.round(num * multiplier) % Math.round(divisor * multiplier) === 0;
 };
 
-const isObject = (value: any): value is { [key: string]: any } =>
-  typeof value === 'object' && !Array.isArray(value);
+const flatMapIndex = (flatMap as any).convert({ cap: false });
+const mapIndex = (map as any).convert({ cap: false });
 
 const validateEnum: Validator = (schema, value, { name }) =>
-  schema.enum && !schema.enum.some(item => isEqual(value, item))
+  schema.enum && !some(isEqual(value), schema.enum)
     ? [{ name, code: 'enum', param: schema.enum }]
     : [];
+
+const getType = (value: any) =>
+  value === null ? 'null' : isArray(value) ? 'array' : isInteger(value) ? 'integer' : typeof value;
+
+const formats: { [key: string]: RegExp } = {
+  'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d:\d\d)$/i,
+  time: /^(\d\d):(\d\d):(\d\d)(\.\d+)?(z|[+-]\d\d:\d\d)?$/i,
+  date: /^(\d\d\d\d)-(\d\d)-(\d\d)$/,
+  email: /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i,
+  hostname: /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*$/i,
+  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
+  ipv6: /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i,
+  uri: /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i,
+  'uri-reference': /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i,
+  url: /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)(?:\.(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu,
+  uuid: /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i,
+  'json-pointer': /^(?:\/(?:[^~/]|~0|~1)*)*$/,
+  'relative-json-pointer': /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
+};
 
 const validateType: Validator = ({ type, format }, value, { name }) => {
   const errors: Invalid[] = [];
 
   if (type) {
-    const valueType =
-      value === null
-        ? 'null'
-        : Array.isArray(value)
-        ? 'array'
-        : Number.isInteger(value)
-        ? 'integer'
-        : typeof value;
-    const allowed = Array.isArray(type) ? type : [type];
+    const valueType = getType(value);
+    const allowed = isArray(type) ? type : [type];
     if (allowed.includes('number') && !allowed.includes('integer')) {
       allowed.push('integer');
     }
@@ -203,34 +234,6 @@ const validateExclusiveMaximum: Validator = ({ exclusiveMaximum }, value, { name
     ? [{ name, code: 'exclusiveMaximum', param: exclusiveMaximum }]
     : [];
 
-const formats: { [key: string]: RegExp } = {
-  'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d:\d\d)$/i,
-  time: /^(\d\d):(\d\d):(\d\d)(\.\d+)?(z|[+-]\d\d:\d\d)?$/i,
-  date: /^(\d\d\d\d)-(\d\d)-(\d\d)$/,
-  email: /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i,
-  hostname: /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*$/i,
-  ipv4: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/,
-  ipv6: /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i,
-  uri: /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i,
-  'uri-reference': /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i,
-  url: /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)(?:\.(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu,
-  uuid: /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i,
-  'json-pointer': /^(?:\/(?:[^~/]|~0|~1)*)*$/,
-  'relative-json-pointer': /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/,
-};
-
-const validateString: Validator = ({ type, format }, value, { name }) => {
-  const errors: Invalid[] = [];
-  if (type === 'string') {
-    if (typeof value !== 'string') {
-      errors.push({ name, code: 'type', param: type });
-    } else if (format && format in formats && !formats[format].test(value)) {
-      errors.push({ name, code: 'typeFormat', param: format });
-    }
-  }
-  return errors;
-};
-
 const validatePattern: Validator = ({ pattern }, value, { name }) =>
   pattern && typeof value === 'string' && !new RegExp(pattern).test(value)
     ? [{ name, code: 'pattern', param: pattern }]
@@ -247,25 +250,18 @@ const validateMaxLength: Validator = ({ maxLength }, value, { name }) =>
     : [];
 
 const validateMinProperties: Validator = ({ minProperties }, value, { name }) =>
-  minProperties &&
-  typeof value === 'object' &&
-  !Array.isArray(value) &&
-  Object.keys(value).length < minProperties
+  minProperties && isPlainObject(value) && keys(value).length < minProperties
     ? [{ name, code: 'minProperties', param: minProperties }]
     : [];
 
 const validateMaxProperties: Validator = ({ maxProperties }, value, { name }) =>
-  maxProperties &&
-  typeof value === 'object' &&
-  !Array.isArray(value) &&
-  Object.keys(value).length > maxProperties
+  maxProperties && isPlainObject(value) && keys(value).length > maxProperties
     ? [{ name, code: 'maxProperties', param: maxProperties }]
     : [];
 
 const validateRequired: Validator = ({ required }, value, { name }) => {
-  if (required && required.length && isObject(value)) {
-    const keys = Object.keys(value);
-    const missingKeys = required.filter(key => !keys.includes(key));
+  if (required && required.length && isPlainObject(value)) {
+    const missingKeys = difference(required, keys(value));
     if (missingKeys.length > 0) {
       return [{ name, code: 'required', param: missingKeys }];
     }
@@ -273,74 +269,56 @@ const validateRequired: Validator = ({ required }, value, { name }) => {
   return [];
 };
 
+const childOptions = (name: string | number, options: ValidateOptions) =>
+  set('name', `${options.name}.${name}`, options);
+
 const validateProperties: Validator = ({ properties }, value, options) => {
-  let errors: Invalid[] = [];
-  if (properties && isObject(value)) {
-    for (const key of Object.keys(value)) {
-      errors = errors.concat(
-        validateSchema(properties[key], value[key], {
-          ...options,
-          name: `${options.name}.${key}`,
-        }),
-      );
-    }
+  if (properties && isPlainObject(value)) {
+    return flatMap(
+      key => validateSchema(properties[key], value[key], childOptions(key, options)),
+      keys(value),
+    );
   }
-  return errors;
+  return [];
 };
 
 const validatePatternProperties: Validator = ({ patternProperties }, value, options) => {
-  let errors: Invalid[] = [];
-  if (patternProperties && isObject(value)) {
-    for (const pattern of Object.keys(patternProperties)) {
-      const regExp = RegExp(pattern);
-      const matchingKeys = Object.keys(value).filter(key => regExp.test(key));
-      const matchingSchema = patternProperties[pattern];
-      for (const key of matchingKeys) {
-        errors = errors.concat(
-          validateSchema(matchingSchema, value[key], {
-            ...options,
-            name: `${options.name}.${key}`,
-          }),
-        );
-      }
-    }
+  if (patternProperties && isPlainObject(value)) {
+    return flatMap(([pattern, schema]) => {
+      return flatMap(
+        key => validateSchema(schema, value[key], childOptions(key, options)),
+        keys(value).filter(key => RegExp(pattern).test(key)),
+      );
+    }, entries(patternProperties));
   }
-
-  return errors;
+  return [];
 };
 
 const validatePropertyNames: Validator = ({ propertyNames }, value, options) => {
-  let errors: Invalid[] = [];
-  if (propertyNames !== undefined && isObject(value)) {
-    for (const key of Object.keys(value)) {
-      errors = errors.concat(
-        validateSchema(propertyNames, key, { ...options, name: `${options.name}.${key}` }),
-      );
-    }
+  if (propertyNames !== undefined && isPlainObject(value)) {
+    return flatMap(
+      key => validateSchema(propertyNames, key, childOptions(key, options)),
+      keys(value),
+    );
   }
-  return errors;
+  return [];
 };
 
 const validateDependencies: Validator = ({ dependencies }, value, options) => {
-  let errors: Invalid[] = [];
-  if (dependencies && isObject(value)) {
-    const keys = Object.keys(value);
-    const dependentKeys = Object.keys(dependencies).filter(key => keys.includes(key));
-
-    for (const key of dependentKeys) {
-      const dependency = dependencies[key];
-      if (Array.isArray(dependency)) {
-        if (dependency.find(item => !keys.includes(item))) {
-          errors.push({ name: `${options.name}.${key}`, code: 'dependencies', param: dependency });
-        }
+  if (dependencies && isPlainObject(value)) {
+    const activeDependencies = filter(([key]) => has(key, value), entries(dependencies));
+    return flatMap(([key, dependency]) => {
+      if (isArray(dependency)) {
+        const missing = difference(dependency, keys(value));
+        return missing.length > 0
+          ? [{ name: `${options.name}.${key}`, code: 'dependencies', param: missing }]
+          : [];
       } else {
-        errors = errors.concat(
-          validateSchema(dependency, value, { ...options, name: `${options.name}.${key}` }),
-        );
+        return validateSchema(dependency, value, childOptions(key, options));
       }
-    }
+    }, activeDependencies);
   }
-  return errors;
+  return [];
 };
 
 const validateAdditionalProperties: Validator = (
@@ -348,95 +326,67 @@ const validateAdditionalProperties: Validator = (
   value,
   options,
 ) => {
-  let errors: Invalid[] = [];
-  if (additionalProperties !== undefined && additionalProperties !== true && isObject(value)) {
-    const additionalKeys = Object.keys(value)
-      .filter(key => !(properties && key in properties))
-      .filter(
-        key =>
-          !(
-            patternProperties &&
-            Object.keys(patternProperties).find(pattern => RegExp(pattern).test(key))
-          ),
-      );
+  if (additionalProperties !== undefined && additionalProperties !== true && isPlainObject(value)) {
+    const additionalKeys = flow(
+      filter((key: string) => !has(key, properties)),
+      filter((key: string) => !some(pattern => RegExp(pattern).test(key), keys(patternProperties))),
+    )(keys(value));
 
     if (additionalKeys.length > 0) {
       if (additionalProperties === false) {
-        errors.push({ name: options.name, code: 'additionalProperties', param: additionalKeys });
-      } else if (typeof additionalProperties === 'object') {
-        for (const key of additionalKeys) {
-          errors = errors.concat(
-            validateSchema(additionalProperties, value[key], {
-              ...options,
-              name: `${options.name}.${key}`,
-            }),
-          );
-        }
+        return [{ name: options.name, code: 'additionalProperties', param: additionalKeys }];
+      } else if (isPlainObject(additionalProperties)) {
+        return flatMap(
+          key => validateSchema(additionalProperties, value[key], childOptions(key, options)),
+          additionalKeys,
+        );
       }
     }
   }
 
-  return errors;
+  return [];
 };
 
 const validateMinItems: Validator = ({ minItems }, value, { name }) =>
-  minItems && Array.isArray(value) && value.length < minItems
+  minItems && isArray(value) && value.length < minItems
     ? [{ name, code: 'minItems', param: minItems }]
     : [];
 
 const validateMaxItems: Validator = ({ maxItems }, value, { name }) =>
-  maxItems && Array.isArray(value) && value.length > maxItems
+  maxItems && isArray(value) && value.length > maxItems
     ? [{ name, code: 'maxItems', param: maxItems }]
     : [];
 
 const validateUniqueItems: Validator = ({ uniqueItems }, value, { name }) =>
-  uniqueItems && Array.isArray(value) && uniqWith(isEqual, value).length !== value.length
+  uniqueItems && isArray(value) && uniqWith(isEqual, value).length !== value.length
     ? [{ name, code: 'uniqueItems' }]
     : [];
 
 const validateItems: Validator = ({ items, additionalItems }, value, options) => {
-  let errors: Invalid[] = [];
-  if (items !== undefined && Array.isArray(value)) {
-    for (let index = 0; index < value.length; index++) {
-      const itemSchema = Array.isArray(items)
-        ? items[index] === undefined
-          ? additionalItems === undefined
-            ? {}
-            : additionalItems
-          : items[index]
+  if (items !== undefined && isArray(value)) {
+    return flatMapIndex((item: any, index: number) => {
+      const itemSchema = isArray(items)
+        ? getOr(additionalItems === undefined ? {} : additionalItems, index, items)
         : items;
-      errors = errors.concat(
-        validateSchema(itemSchema, value[index], {
-          ...options,
-          name: `${options.name}[${index}]`,
-        }),
-      );
-    }
+      return validateSchema(itemSchema, item, childOptions(index, options));
+    }, value);
   }
-
-  return errors;
+  return [];
 };
 
 const validateContains: Validator = ({ contains }, value, options) => {
-  let errors: Invalid[] = [];
-  if (contains !== undefined && Array.isArray(value)) {
-    errors = errors.concat(validateMinItems({ minItems: 1 }, value, options));
-    const allItemsErrors: Invalid[][] = [];
-
-    for (let index = 0; index < value.length; index++) {
-      allItemsErrors.push(
-        validateSchema(contains, value[index], {
-          ...options,
-          name: `${options.name}[${index}]`,
-        }),
-      );
-    }
-
+  if (contains !== undefined && isArray(value)) {
+    let errors = validateMinItems({ minItems: 1 }, value, options);
+    const allItemsErrors: Invalid[][] = mapIndex(
+      (item: any, index: number) => validateSchema(contains, item, childOptions(index, options)),
+      value,
+    );
     if (allItemsErrors.every(itemErrors => itemErrors.length > 0)) {
       errors = errors.concat(...allItemsErrors);
     }
+    return errors;
   }
-  return errors;
+  return [];
 };
 
 const validateConst: Validator = (schema, value, options) =>
@@ -458,31 +408,22 @@ const validateNot: Validator = ({ not }, value, options) =>
     ? [{ name: options.name, code: 'not' }]
     : [];
 
-const findDiscriminatedSchema = (
-  schemas: Schema[],
-  propertyName: string,
-  propertyValue: any,
-  options: ValidateOptions,
-) => {
-  for (const item of schemas) {
-    if (
+const findSchema = (schemas: Schema[], name: string, value: any, options: ValidateOptions) =>
+  find(
+    item =>
       'type' in item &&
       item.type === 'object' &&
-      item.properties &&
-      validateSchema(item.properties[propertyName], propertyValue, options).length === 0
-    ) {
-      return item;
-    }
-  }
-  return undefined;
-};
+      !!item.properties &&
+      validateSchema(item.properties[name], value, options).length === 0,
+    schemas,
+  );
 
 const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
   if (oneOf && oneOf.length > 0) {
     if (oneOf.length === 1) {
       return validateSchema(oneOf[0], value, options);
     } else if (discriminator && value && value[discriminator.propertyName]) {
-      const discriminatedSchema = findDiscriminatedSchema(
+      const discriminatedSchema = findSchema(
         oneOf,
         discriminator.propertyName,
         value[discriminator.propertyName],
@@ -493,48 +434,30 @@ const validateOneOf: Validator = ({ oneOf, discriminator }, value, options) => {
       }
     }
 
-    const validations: Invalid[][] = [];
-    for (const item of oneOf) {
-      validations.push(validateSchema(item, value, options));
-    }
+    const validations = map(item => validateSchema(item, value, options), oneOf);
+    const matching = filter(isEmpty, validations);
 
-    const matching = validations.filter(errors => errors.length === 0);
-
-    return matching.length === 1
-      ? []
-      : [{ name: options.name, code: 'oneOf', param: matching.length }];
-  } else {
-    return [];
-  }
-};
-
-const validateAllOf: Validator = ({ allOf }, value, options) => {
-  let errors: Invalid[] = [];
-  if (allOf) {
-    for (const item of allOf) {
-      errors = errors.concat(validateSchema(item, value, options));
+    if (matching.length !== 1) {
+      return [{ name: options.name, code: 'oneOf', param: matching.length }];
     }
   }
-  return errors;
+  return [];
 };
+
+const validateAllOf: Validator = ({ allOf }, value, options) =>
+  allOf ? flatMap(item => validateSchema(item, value, options), allOf) : [];
 
 const validateAnyOf: Validator = ({ anyOf }, value, options) => {
   if (anyOf && anyOf.length > 0) {
     if (anyOf.length === 1) {
       return validateSchema(anyOf[0], value, options);
     } else {
-      const validations: Invalid[][] = [];
-      for (const item of anyOf) {
-        validations.push(validateSchema(item, value, options));
+      if (!some(isEmpty, map(item => validateSchema(item, value, options), anyOf))) {
+        return [{ name: options.name, code: 'anyOf' }];
       }
-
-      return validations.find(item => item.length === 0)
-        ? []
-        : [{ name: options.name, code: 'anyOf' }];
     }
-  } else {
-    return [];
   }
+  return [];
 };
 
 const validateSchema = (
@@ -544,9 +467,7 @@ const validateSchema = (
 ): Invalid[] => {
   if (schema === false) {
     return [{ name: options.name, code: 'false' }];
-  }
-
-  if (schema === true || schema === undefined || (schema.nullable && value === null)) {
+  } else if (schema === true || schema === undefined || (schema.nullable && value === null)) {
     return [];
   }
 
@@ -561,7 +482,6 @@ const validateSchema = (
     validateExclusiveMinimum(schema, value, options),
     validateMaximum(schema, value, options),
     validateExclusiveMaximum(schema, value, options),
-    validateString(schema, value, options),
     validatePattern(schema, value, options),
     validateMinLength(schema, value, options),
     validateMaxLength(schema, value, options),
