@@ -9,7 +9,6 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^24.0.9",
-    "@types/lodash": "^4.14.123",
     "@types/node": "^11.10.5",
     "jest": "^24.3.1",
     "prettier": "^1.16.4",
@@ -29,7 +28,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-refs": "^1.0.0",
-    "lodash": "^4.17.11"
+    "@ovotech/json-refs": "^1.0.0"
   }
 }

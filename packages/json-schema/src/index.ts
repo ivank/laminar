@@ -1,9 +1,25 @@
 import { resolveRefs } from '@ovotech/json-refs';
-import { isEqual, uniqWith } from 'lodash/fp';
 
 export type PrimitiveType = 'string' | 'integer' | 'number' | 'boolean' | 'array' | 'object';
 
-export interface Schema {
+export interface SwaggerAdditions {
+  deprecated?: boolean;
+  readOnly?: boolean;
+  externalDocs?: boolean;
+  writeOnly?: boolean;
+  nullable?: boolean;
+  discriminator?: Discriminator;
+  example?: any;
+  examples?: {
+    [name: string]: {
+      value: any;
+      summary?: string;
+    };
+  };
+  xml?: { name: string };
+}
+
+export interface Schema extends SwaggerAdditions {
   $ref?: string;
   $id?: string;
   id?: string;
@@ -43,8 +59,6 @@ export interface Schema {
   maxItems?: number;
   properties?: { [key: string]: Schema };
   required?: string[];
-  readOnly?: boolean;
-  writeOnly?: boolean;
   additionalProperties?: boolean | Schema;
   minProperties?: number;
   maxProperties?: number;
@@ -53,12 +67,10 @@ export interface Schema {
   dependencies?: { [key: string]: string[] | Schema };
   title?: string;
   description?: string;
-  nullable?: boolean;
   enum?: any[];
   oneOf?: Schema[];
   allOf?: Schema[];
   anyOf?: Schema[];
-  discriminator?: Discriminator;
   [key: string]: any;
 }
 
@@ -129,12 +141,39 @@ const isDivisible = (num: number, divisor: number) => {
 };
 
 const validateEnum: Validator = (schema, value, { name }) =>
-  schema.enum && !schema.enum.some(isEqual(value))
+  schema.enum && !schema.enum.some(item => isEqual(item, value))
     ? [{ name, code: 'enum', param: schema.enum }]
     : [];
 
 const isObject = (value: any): value is { [key: string]: any } =>
   value && typeof value === 'object' && !Array.isArray(value);
+
+export const isEqual = (a: any, b: any): boolean => {
+  if (a === b) {
+    return true;
+  }
+  if (a === undefined || b === undefined || a === null || b === null) {
+    return false;
+  }
+  if (typeof a === 'object' && typeof b === 'object') {
+    if (a instanceof Date && b instanceof Date) {
+      return a.getTime() === b.getTime();
+    } else if (Array.isArray(a) && Array.isArray(b)) {
+      return a.length === b.length && a.every((item, index) => isEqual(item, b[index]));
+    } else if (!Array.isArray(a) && !Array.isArray(b)) {
+      const aKeys = Object.keys(a).sort();
+      const bKeys = Object.keys(a).sort();
+      return isEqual(aKeys, bKeys) && aKeys.every(key => isEqual(a[key], b[key]));
+    }
+  }
+  return false;
+};
+
+export const isUniqueWith = (compare: (a: any, b: any) => boolean, array: any[]) =>
+  array.reduce<any[]>(
+    (all, item) => (all.some(prev => compare(prev, item)) ? all : [...all, item]),
+    [],
+  );
 
 const getType = (value: any) =>
   value === null
@@ -365,7 +404,7 @@ const validateMaxItems: Validator = ({ maxItems }, value, { name }) =>
     : [];
 
 const validateUniqueItems: Validator = ({ uniqueItems }, value, { name }) =>
-  uniqueItems && Array.isArray(value) && uniqWith(isEqual, value).length !== value.length
+  uniqueItems && Array.isArray(value) && isUniqueWith(isEqual, value).length !== value.length
     ? [{ name, code: 'uniqueItems' }]
     : [];
 
