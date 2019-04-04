@@ -26,32 +26,59 @@ nock('http://localhost:1234')
   .get('/name.json')
   .replyWithFile(200, join(__dirname, 'remotes/name.json'));
 
-const draft7 = readdirSync(join(__dirname, 'draft7'))
-  .filter(file => file.endsWith('.json'))
-  .map<[string, Suite[]]>(file => [
-    file,
-    JSON.parse(String(readFileSync(join(__dirname, 'draft7', file)))),
-  ]);
+const testFolders = ['draft4', 'draft6', 'draft7'];
 
-for (const [name, suites] of draft7) {
-  describe(`Draft7 ${name}`, () => {
-    for (const suite of suites) {
-      const tests = suite.tests.map<[string, any, boolean]>(test => [
-        test.description,
-        test.data,
-        test.valid,
-      ]);
+expect.extend({
+  async toValidateAgainstSchema(data, schema) {
+    const errors = await validate(schema, data);
+    const pass = errors.length === 0;
+    return {
+      pass,
+      message: pass
+        ? () =>
+            `Expected data:\n` +
+            this.utils.printExpected(data) +
+            `\nTo not be valid against schema:\n` +
+            this.utils.printExpected(schema)
+        : () =>
+            `Expected data:\n` +
+            this.utils.printExpected(data) +
+            `\nTo be valid against schema:\n` +
+            this.utils.printExpected(schema) +
+            `but got errors:\n` +
+            this.utils.printReceived(errors),
+    };
+  },
+});
 
-      it.each<[string, any, boolean]>(tests)(
-        `Should test ${suite.description}: %s`,
-        async (testName, data, expected) => {
-          const errors = await validate(suite.schema, data);
-          if ((errors.length === 0) !== expected) {
-            console.log(testName, suite.schema, data, errors);
-          }
-          expect(errors.length === 0).toBe(expected);
-        },
-      );
-    }
-  });
+for (const testFolder of testFolders) {
+  const testFiles = readdirSync(join(__dirname, testFolder))
+    .filter(file => file.endsWith('.json'))
+    .map<[string, Suite[]]>(file => [
+      file,
+      JSON.parse(String(readFileSync(join(__dirname, testFolder, file)))),
+    ]);
+
+  for (const [name, suites] of testFiles) {
+    describe(`${testFolder} ${name}`, () => {
+      for (const suite of suites) {
+        const tests = suite.tests.map<[string, any, boolean]>(test => [
+          test.description,
+          test.data,
+          test.valid,
+        ]);
+
+        it.each<[string, any, boolean]>(tests)(
+          `Should test ${suite.description}: %s`,
+          async (testName, data, expected) => {
+            if (expected) {
+              await (expect as any)(data).toValidateAgainstSchema(suite.schema);
+            } else {
+              await (expect as any)(data).not.toValidateAgainstSchema(suite.schema);
+            }
+          },
+        );
+      }
+    });
+  }
 }

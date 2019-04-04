@@ -1,9 +1,6 @@
 import fetch from 'node-fetch';
 import { URL } from 'url';
 
-interface IdSchema {
-  $id: string;
-}
 interface RefSchema {
   $ref: string;
 }
@@ -23,14 +20,24 @@ interface Context {
 export const isTraversable = (schema: any): schema is TraversableSchema =>
   schema && typeof schema === 'object';
 
-export const isIdSchema = (schema: any): schema is IdSchema =>
-  isTraversable(schema) && '$id' in schema && schema.$id && typeof schema.$id === 'string';
+export const getId = (schema: any): string | undefined => {
+  if (isTraversable(schema)) {
+    if ('$id' in schema && schema.$id && typeof schema.$id === 'string') {
+      return schema.$id;
+    } else if ('id' in schema && schema.id && typeof schema.id === 'string') {
+      return schema.id;
+    }
+  }
+  return undefined;
+};
 
 export const isRefSchema = (schema: any): schema is RefSchema =>
   isTraversable(schema) && '$ref' in schema && schema.$ref && typeof schema.$ref === 'string';
 
-export const currentId = (schema: any, parentId?: string) =>
-  isIdSchema(schema) ? new URL(schema.$id, parentId).toString() : parentId;
+export const currentId = (schema: any, parentId?: string) => {
+  const id = getId(schema);
+  return id ? new URL(id, parentId).toString() : parentId;
+};
 
 export const currentUrl = (url?: string, id?: string) =>
   url ? new URL(url, id).toString() : undefined;
@@ -51,8 +58,10 @@ export const reduceSchema = <TResult = any>(
 export const extractNamedRefs = (document: any): FilesMap =>
   reduceSchema(
     document,
-    (all, item, id) =>
-      isIdSchema(item) ? { ...all, [new URL(item.$id, id).toString()]: item } : all,
+    (all, item, id) => {
+      const itemId = getId(item);
+      return itemId ? { ...all, [new URL(itemId, id).toString()]: item } : all;
+    },
     {},
   );
 

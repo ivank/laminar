@@ -1,11 +1,12 @@
 import { resolveRefs } from '@ovotech/json-refs';
-import { isEqual, some, uniqWith } from 'lodash/fp';
+import { isEqual, uniqWith } from 'lodash/fp';
 
 export type PrimitiveType = 'string' | 'integer' | 'number' | 'boolean' | 'array' | 'object';
 
 export interface Schema {
   $ref?: string;
   $id?: string;
+  id?: string;
   if?: Schema;
   then?: Schema;
   else?: Schema;
@@ -131,7 +132,7 @@ const isObject = (value: any): value is { [key: string]: any } =>
   typeof value === 'object' && !Array.isArray(value);
 
 const validateEnum: Validator = (schema, value, { name }) =>
-  schema.enum && !some(isEqual(value), schema.enum)
+  schema.enum && !schema.enum.some(item => isEqual(value, item))
     ? [{ name, code: 'enum', param: schema.enum }]
     : [];
 
@@ -169,20 +170,33 @@ const validateMultipleOf: Validator = ({ multipleOf }, value, { name }) =>
     ? [{ name, code: 'multipleOf', param: multipleOf }]
     : [];
 
-const validateMinimum: Validator = ({ minimum }, value, options) =>
-  minimum !== undefined && value < minimum
-    ? [{ name: options.name, code: 'minimum', param: minimum }]
-    : [];
+const validateMinimum: Validator = ({ minimum, exclusiveMinimum }, value, options) => {
+  if (minimum !== undefined) {
+    if (exclusiveMinimum === true) {
+      return validateExclusiveMinimum({ exclusiveMinimum: minimum }, value, options);
+    } else if (value < minimum) {
+      return [{ name: options.name, code: 'minimum', param: minimum }];
+    }
+  }
+
+  return [];
+};
 
 const validateExclusiveMinimum: Validator = ({ exclusiveMinimum }, value, { name }) =>
   typeof exclusiveMinimum === 'number' && value <= exclusiveMinimum
     ? [{ name, code: 'exclusiveMinimum', param: exclusiveMinimum }]
     : [];
 
-const validateMaximum: Validator = ({ maximum }, value, options) =>
-  maximum !== undefined && value > maximum
-    ? [{ name: options.name, code: 'maximum', param: maximum }]
-    : [];
+const validateMaximum: Validator = ({ maximum, exclusiveMaximum }, value, options) => {
+  if (maximum !== undefined) {
+    if (exclusiveMaximum === true) {
+      return validateExclusiveMaximum({ exclusiveMaximum: maximum }, value, options);
+    } else if (value > maximum) {
+      return [{ name: options.name, code: 'maximum', param: maximum }];
+    }
+  }
+  return [];
+};
 
 const validateExclusiveMaximum: Validator = ({ exclusiveMaximum }, value, { name }) =>
   typeof exclusiveMaximum === 'number' && value >= exclusiveMaximum!

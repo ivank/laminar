@@ -42,6 +42,17 @@ describe('json-refs', () => {
       ['http://one.test/first', 'http://one.test/second'],
     ],
     [
+      'nested multiple ref with ids old style',
+      {
+        id: 'http://one.test',
+        test: { $ref: 'first#/test' },
+        other: {
+          deep: { $ref: 'second#/test' },
+        },
+      },
+      ['http://one.test/first', 'http://one.test/second'],
+    ],
+    [
       'nested multiple refs and different ids',
       {
         one: {
