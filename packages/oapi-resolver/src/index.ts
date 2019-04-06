@@ -2,17 +2,18 @@ import { resolveRefs } from '@ovotech/json-refs';
 import { Schema, validate } from '@ovotech/json-schema';
 import {
   Context,
+  HttpError,
   isResponse,
   Matcher,
-  MatcherParams,
-  message,
   Resolver,
   response,
+  RouteContext,
   selectMatcher,
   toMatcher,
 } from '@ovotech/laminar';
 import { readFileSync } from 'fs';
 import * as YAML from 'js-yaml';
+import { OapiResolverError } from './OapiResolverError';
 import { OpenApi } from './schema';
 import { toContextSchema } from './to-context-schema';
 import { toResponseSchema } from './to-response-schema';
@@ -24,18 +25,14 @@ interface RouteMatcher<TContext extends Context> extends Matcher {
   responseSchema: Schema;
 }
 
-interface RouteContext {
-  params: MatcherParams;
-}
-
 export const toMatchers = <TContext extends Context & RouteContext>(
   api: OpenAPIObject,
-  resolvers: {
+  paths: {
     [path: string]: { [method: string]: Resolver<TContext> };
   },
 ) =>
-  Object.entries(resolvers).reduce<Array<RouteMatcher<TContext>>>(
-    (paths, [path, methods]) =>
+  Object.entries(paths).reduce<Array<RouteMatcher<TContext>>>(
+    (allPaths, [path, methods]) =>
       Object.entries(methods).reduce((all, [method, resolver]) => {
         const operation = api.paths[path][method];
         return [
@@ -47,56 +44,75 @@ export const toMatchers = <TContext extends Context & RouteContext>(
             responseSchema: toResponseSchema(operation),
           },
         ];
-      }, paths),
+      }, allPaths),
     [],
   );
 
+type LoadApi = { yamlFile: string } | { jsonFile: string } | { json: string } | { yaml: string };
+
+export const loadApi = (api: LoadApi): OpenAPIObject => {
+  if ('yamlFile' in api) {
+    return YAML.load(String(readFileSync(api.yamlFile)));
+  } else if ('yaml' in api) {
+    return YAML.load(api.yaml);
+  } else if ('jsonFile' in api) {
+    return JSON.parse(String(readFileSync(api.jsonFile)));
+  } else if ('json' in api) {
+    return JSON.parse(String(readFileSync(api.json)));
+  } else {
+    throw new OapiResolverError('Cannot load api');
+  }
+};
+
 export const oapi = async <TContext extends Context>(
-  apiFile: string,
-  resolvers: {
-    [path: string]: { [method: string]: Resolver<TContext & RouteContext> };
-  },
+  options: {
+    paths: {
+      [path: string]: {
+        [method: string]: Resolver<TContext & RouteContext>;
+      };
+    };
+  } & LoadApi,
 ): Promise<Resolver<TContext>> => {
-  const api: OpenAPIObject = YAML.load(String(readFileSync(apiFile)));
-  const apiResult = await validate(OpenApi, api);
-  if (!apiResult.valid) {
-    console.log(apiResult.errors);
-    throw new Error('Invalid Open API');
+  const api = loadApi(options);
+  const checkApi = await validate(OpenApi, api);
+  if (!checkApi.valid) {
+    throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
 
-  const matchers = toMatchers(await resolveRefs(api), resolvers);
+  const matchers = toMatchers(await resolveRefs(api), options.paths);
 
   return async ctx => {
-    const select = selectMatcher(ctx.request.method, ctx.request.url.pathname!, matchers);
+    const select = selectMatcher(ctx.method, ctx.url.pathname!, matchers);
 
     if (!select) {
-      return message(404, {
-        message: `Path ${ctx.request.method} ${ctx.request.url.pathname!} not found`,
+      throw new HttpError(404, {
+        message: `Path ${ctx.method} ${ctx.url.pathname!} not found`,
       });
     }
     const {
       matcher: { resolver, contextSchema, responseSchema },
-      params,
+      path,
     } = select;
+    const context = { ...ctx, path };
+    const checkContext = await validate(contextSchema, context, { name: 'context' });
 
-    const context = { ...ctx, params };
-
-    const contextResponse = await validate(contextSchema, context, { name: 'context' });
-
-    if (!contextResponse.valid) {
-      return message(400, { message: 'Request Validation Error', errors: contextResponse.errors });
+    if (!checkContext.valid) {
+      throw new HttpError(400, {
+        message: `Request Validation Error`,
+        errors: checkContext.errors,
+      });
     }
 
     const result = resolver(context);
     const laminarResponse = isResponse(result) ? result : response({ body: result });
-    const responseResult = await validate(responseSchema, laminarResponse, {
+    const checkResponse = await validate(responseSchema, laminarResponse, {
       name: 'response',
     });
 
-    if (!responseResult.valid) {
-      return message(500, {
-        message: 'Response Validation Error',
-        errors: responseResult.errors,
+    if (!checkResponse.valid) {
+      throw new HttpError(500, {
+        message: `Response Validation Error`,
+        errors: checkResponse.errors,
       });
     }
 

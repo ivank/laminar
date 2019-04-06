@@ -1,12 +1,14 @@
-export interface MatcherParams {
-  [key: string]: string;
-}
-
-export interface Matcher {
-  method: string;
-  pathRe: RegExp;
-  keys: string[];
-}
+import { HttpError } from './HttpError';
+import {
+  Context,
+  Matcher,
+  MatcherPath,
+  Method,
+  Resolver,
+  Route,
+  RouteContext,
+  RouteMatcher,
+} from './types';
 
 export const paramRegEx = /\{[^\}]+\}/g;
 
@@ -28,7 +30,7 @@ export const match = (method: string, path: string, matcher: Matcher) => {
   if (matcher.method === method) {
     const pathMatch = matcher.pathRe.exec(path);
     if (pathMatch) {
-      const params: MatcherParams = pathMatch
+      const params: MatcherPath = pathMatch
         .slice(1)
         .reduce((all, val, i) => ({ [matcher.keys[i]]: val, ...all }), {});
 
@@ -47,8 +49,30 @@ export const selectMatcher = <TMatcher extends Matcher>(
   for (const matcher of matchers) {
     const params = match(method, path, matcher);
     if (params) {
-      return { matcher, params };
+      return { matcher, path: params };
     }
   }
   return false;
 };
+
+export const routes = <TContext extends Context>(
+  ...matchers: Array<RouteMatcher<TContext & RouteContext>>
+): Resolver<TContext> => {
+  return ctx => {
+    const select = selectMatcher(ctx.method, ctx.url.pathname!, matchers);
+
+    if (!select) {
+      throw new HttpError(404, {
+        message: `Path ${ctx.method} ${ctx.url.pathname!} not found`,
+      });
+    }
+    return select.matcher.resolver({ ...ctx, path: select.path });
+  };
+};
+
+export const get: Route = (path, resolver) => ({ ...toMatcher(Method.GET, path), resolver });
+export const post: Route = (path, resolver) => ({ ...toMatcher(Method.POST, path), resolver });
+export const del: Route = (path, resolver) => ({ ...toMatcher(Method.DELETE, path), resolver });
+export const patch: Route = (path, resolver) => ({ ...toMatcher(Method.PATCH, path), resolver });
+export const put: Route = (path, resolver) => ({ ...toMatcher(Method.PUT, path), resolver });
+export const head: Route = (path, resolver) => ({ ...toMatcher(Method.HEAD, path), resolver });

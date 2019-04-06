@@ -34,9 +34,10 @@ export enum Method {
   PATCH = 'PATCH',
 }
 
-export interface Context {
-  request: LaminarRequest;
-}
+export type Context = Pick<
+  LaminarRequest,
+  'url' | 'method' | 'headers' | 'query' | 'body' | 'cookies'
+>;
 
 export type Middleware<TAddition extends {} = {}> = <TContext extends Context = Context>(
   resolver: Resolver<TContext & TAddition>,
@@ -45,3 +46,26 @@ export type ResolverResponse = string | Readable | Buffer | LaminarResponse | ob
 export type Resolver<TContext extends Context = Context> = (
   ctx: TContext,
 ) => Promise<ResolverResponse> | ResolverResponse;
+
+export interface MatcherPath {
+  [key: string]: string;
+}
+
+export interface Matcher {
+  method: string;
+  pathRe: RegExp;
+  keys: string[];
+}
+
+export interface RouteMatcher<TContext extends Context> extends Matcher {
+  resolver: Resolver<TContext>;
+}
+
+export interface RouteContext {
+  path: MatcherPath;
+}
+
+export type Route = <TContext extends Context>(
+  path: string,
+  resolver: Resolver<TContext>,
+) => RouteMatcher<TContext>;

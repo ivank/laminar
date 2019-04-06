@@ -1,4 +1,4 @@
-import { Context, laminar } from '@ovotech/laminar';
+import { laminar } from '@ovotech/laminar';
 import { createServer } from 'http';
 import { join } from 'path';
 import { oapi } from '../src';
@@ -18,20 +18,23 @@ import { oapi } from '../src';
 // );
 
 const start = async () => {
-  const swagger = join(__dirname, './swagger.yaml');
+  const yamlFile = join(__dirname, './swagger.yaml');
 
-  const app = await oapi<Context>(swagger, {
-    '/.well-known/health-check': {
-      get: () => ({ healthy: true }),
-    },
-    '/v1/{accountID}/balance/last-known': {
-      get: ctx => {
-        console.log(ctx.params);
-        return { test: '123', result: ctx.params };
+  const app = await oapi({
+    yamlFile,
+    paths: {
+      '/.well-known/health-check': {
+        get: () => ({ healthy: true }),
       },
-      post: ctx => {
-        console.log(ctx.params);
-        return { post: true, singleWalletBalance: { value: 1, fuelType: 'DualFuel' } };
+      '/v1/{accountID}/balance/last-known': {
+        get: ctx => {
+          console.log(ctx.path);
+          return { test: '123', result: ctx.path };
+        },
+        post: ctx => {
+          console.log(ctx.path);
+          return { post: true, singleWalletBalance: { value: 1, fuelType: 'DualFuel' } };
+        },
       },
     },
   });
