@@ -1,0 +1,38 @@
+{
+  "name": "@ovotech/laminar",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "description": "Laminar implementation",
+  "author": "Boost Internal Tools <boost-bit-tech@ovoenergy.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/cookie": "^0.3.2",
+    "@types/jest": "^24.0.9",
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^11.10.5",
+    "jest": "^24.3.1",
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.0",
+    "ts-node-dev": "^1.0.0-pre.32",
+    "tslint": "^5.13.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.4000"
+  },
+  "scripts": {
+    "build": "tsc --outDir dist --declaration",
+    "test": "jest test --runInBand",
+    "lint-prettier": "prettier --list-different {src,test}/**/*.ts",
+    "lint-tslint": "tslint --config tslint.json '{src,test}/**/*.ts'",
+    "lint": "yarn lint-prettier && yarn lint-tslint"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "dependencies": {
+    "@ovotech/json-schema": "^1.0.0",
+    "cookie": "^0.3.1",
+    "js-yaml": "^3.13.0"
+  }
+}

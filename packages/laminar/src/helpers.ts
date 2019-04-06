@@ -9,3 +9,6 @@ export const concatStream = async (stream: Readable): Promise<Buffer> => {
       .on('error', reject);
   });
 };
+
+export const toArray = (value: string[] | string | number | false | undefined) =>
+  Array.isArray(value) ? value : value ? [value] : [];

@@ -26,12 +26,21 @@ nock('http://localhost:1234')
   .get('/name.json')
   .replyWithFile(200, join(__dirname, 'remotes/name.json'));
 
+nock('http://json-schema.org')
+  .persist()
+  .get('/draft-04/schema')
+  .replyWithFile(200, join(__dirname, 'remotes/draft-4-schema.json'))
+  .get('/draft-06/schema')
+  .replyWithFile(200, join(__dirname, 'remotes/draft-6-schema.json'))
+  .get('/draft-07/schema')
+  .replyWithFile(200, join(__dirname, 'remotes/draft-7-schema.json'));
+
 const testFolders = ['draft4', 'draft6', 'draft7'];
 
 expect.extend({
   async toValidateAgainstSchema(data, schema) {
-    const errors = await validate(schema, data);
-    const pass = errors.length === 0;
+    const result = await validate(schema, data);
+    const pass = result.valid;
     return {
       pass,
       message: pass
@@ -46,7 +55,7 @@ expect.extend({
             `\nTo be valid against schema:\n` +
             this.utils.printExpected(schema) +
             `but got errors:\n` +
-            this.utils.printReceived(errors),
+            this.utils.printReceived(result.errors),
     };
   },
 });

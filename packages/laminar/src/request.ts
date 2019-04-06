@@ -2,10 +2,11 @@ import * as cookie from 'cookie';
 import { IncomingMessage } from 'http';
 import { Readable } from 'stream';
 import { parse, URLSearchParams } from 'url';
-import { concatStream } from './helpers/concatStream';
+import { concatStream } from './helpers';
 import { Laminar, LaminarRequest, Method } from './types';
 
 const CONTENT_TYPE = /^([^\/]+)\/([^\+\;]+)(\+[^;]+)?(\;.*)?/;
+
 export const parseContentType = (value: string) => {
   const parts = CONTENT_TYPE.exec(value);
   if (!parts) {

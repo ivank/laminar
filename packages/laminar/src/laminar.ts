@@ -1,6 +1,6 @@
 import { RequestListener } from 'http';
 import { Readable } from 'stream';
-import { toArray } from './helpers/util';
+import { toArray } from './helpers';
 import { request } from './request';
 import { isResponse, resolveBody, response } from './response';
 import { Context, Resolver } from './types';

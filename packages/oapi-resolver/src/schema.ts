@@ -1,4 +1,6 @@
-export const OpenApi = {
+import { Schema } from '@ovotech/json-schema';
+
+export const OpenApi: Schema = {
   title: 'A JSON Schema for OpenAPI 3.0.',
   id: 'http://openapis.org/v3/schema.json#',
   $schema: 'http://json-schema.org/draft-04/schema#',

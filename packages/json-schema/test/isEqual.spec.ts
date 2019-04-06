@@ -1,4 +1,4 @@
-import { isEqual } from '../src';
+import { isEqual } from '../src/helpers';
 
 describe('Helper isEqual', () => {
   it.each<[string, any, any, boolean]>([

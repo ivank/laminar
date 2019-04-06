@@ -1,4 +1,4 @@
-import { Matcher, MatcherParams, selectMatcher, toMatcher } from '../helpers/route';
+import { Matcher, MatcherParams, selectMatcher, toMatcher } from '../route';
 import { message } from '../response';
 import { Context, Method, Resolver } from '../types';
 

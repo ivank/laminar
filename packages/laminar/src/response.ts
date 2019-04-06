@@ -12,9 +12,9 @@ export const response = ({
   [Laminar]: true,
   status,
   headers: {
-    'Content-Type': contentType(body),
-    'Content-Length': body ? contentLength(body) : undefined,
-    'Set-Cookie': cookies ? setCookie(cookies) : undefined,
+    'content-type': contentType(body),
+    'content-length': body ? contentLength(body) : undefined,
+    'set-cookie': cookies ? setCookie(cookies) : undefined,
     ...headers,
   },
   cookies,
@@ -29,8 +29,8 @@ export const message = (status: number, body: {} | string) => response({ status,
 export const redirect = (url: string, partial?: Partial<LaminarResponse>) =>
   response({
     headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      Location: url,
+      'content-type': 'text/plain; charset=utf-8',
+      location: url,
       ...(partial ? partial.headers : undefined),
     },
     body: `Redirecting to ${url}.`,
@@ -42,7 +42,7 @@ export const file = (filename: string, partial?: Partial<LaminarResponse>) =>
   response({
     body: createReadStream(filename),
     headers: {
-      'Content-Length': statSync(filename).size,
+      'content-length': statSync(filename).size,
       ...(partial ? partial.headers : undefined),
     },
     ...partial,
