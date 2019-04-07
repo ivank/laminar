@@ -10,7 +10,7 @@ export const messages: Messages = {
   maximum: ({ name, param }) => `[${name}] should be <= ${param}`,
   exclusiveMaximum: ({ name, param }) => `[${name}] should be < ${param}`,
   pattern: ({ name, param }) => `[${name}] should match /${param}/`,
-  typeFormat: ({ name, param }) => `[${name}] should match ${param} format`,
+  format: ({ name, param }) => `[${name}] should match ${param} format`,
   maxLength: ({ name, param }) => `[${name}] should have length <= ${param}`,
   minLength: ({ name, param }) => `[${name}] should have length >= ${param}`,
   false: ({ name }) => `[${name}] should not exist`,
@@ -23,13 +23,7 @@ export const messages: Messages = {
     `[${name}] should have only unique values, has ${param} duplicates`,
   minItems: ({ name, param }) => `[${name}] should have >= ${param} items`,
   maxItems: ({ name, param }) => `[${name}] should have <= ${param} items`,
-  additionalItems: ({ name, param }) => `[${name}] has unknown indexes ${param}`,
   oneOf: ({ name, param }: Invalid<{ matching: number; errors: Result[] }>) =>
-    `[${name}] should match only 1 schema, matching in ${
-      param.matching
-    }. Errors: ${param.errors.map(
-      (item, index) =>
-        `${index}: ${item.errors.map(error => messages[error.code](error)).join(', ')}`,
-    )}`,
+    `[${name}] should match only 1 schema, matching ${param.matching}}`,
   anyOf: ({ name }) => `[${name}] should match at least 1 schema`,
 };

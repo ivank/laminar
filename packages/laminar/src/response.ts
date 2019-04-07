@@ -26,17 +26,19 @@ export const isResponse = (res: ResolverResponse): res is LaminarResponse =>
 
 export const message = (status: number, body: {} | string) => response({ status, body });
 
-export const redirect = (url: string, partial?: Partial<LaminarResponse>) =>
-  response({
+export const redirect = (url: string, partial?: Partial<LaminarResponse>) => {
+  const { headers, ...rest } = partial || { headers: {} };
+  return response({
     headers: {
       'content-type': 'text/plain; charset=utf-8',
       location: url,
-      ...(partial ? partial.headers : undefined),
+      ...headers,
     },
     body: `Redirecting to ${url}.`,
     status: 302,
-    ...partial,
+    ...rest,
   });
+};
 
 export const file = (filename: string, partial?: Partial<LaminarResponse>) =>
   response({

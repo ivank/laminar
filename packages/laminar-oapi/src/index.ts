@@ -64,7 +64,7 @@ export const loadApi = (api: LoadApi): OpenAPIObject => {
   }
 };
 
-export const oapi = async <TContext extends Context>(
+export const oapi = async <TContext extends Context = Context>(
   options: {
     paths: {
       [path: string]: {

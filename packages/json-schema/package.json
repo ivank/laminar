@@ -9,13 +9,13 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^24.0.9",
-    "@types/node": "^11.10.5",
-    "jest": "^24.3.1",
+    "@types/node": "^11.13.0",
+    "jest": "^24.7.1",
     "prettier": "^1.16.4",
-    "ts-jest": "^24.0.0",
-    "tslint": "^5.13.1",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.4.2"
   },
   "scripts": {
     "build": "tsc --outDir dist --declaration",

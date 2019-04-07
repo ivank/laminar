@@ -24,12 +24,14 @@ export const laminar = (resolver: Resolver<Context>): RequestListener => {
       res.statusCode = laminarResponse.status;
       resolvedBody instanceof Readable ? resolvedBody.pipe(res) : res.end(resolvedBody);
     } catch (error) {
+      res.setHeader('content-type', 'application/json');
+
       if (error instanceof HttpError) {
         res.statusCode = error.code;
         res.end(JSON.stringify(error.body));
       } else {
         res.statusCode = 500;
-        res.end(error.message);
+        res.end(JSON.stringify({ message: error.message }));
       }
     }
   };

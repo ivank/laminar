@@ -1,5 +1,6 @@
 import { createServer, Server } from 'http';
 import fetch from 'node-fetch';
+import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
 import { laminar } from '../src';
 
@@ -134,5 +135,48 @@ describe('Requests', () => {
     );
 
     await expect(result.text()).resolves.toEqual('Test');
+  });
+
+  it('Should handle malformed content type', async () => {
+    const result = await fetch('http://localhost:8090/post', {
+      body: 'test',
+      method: 'post',
+      headers: { 'Content-Type': '123123' },
+    });
+
+    expect(app).toHaveBeenCalledWith(
+      expect.objectContaining({ body: expect.any(Readable), method: 'POST' }),
+    );
+
+    await expect(result.text()).resolves.toEqual('Test');
+  });
+
+  it('Should handle unknown content type', async () => {
+    const result = await fetch('http://localhost:8090/post', {
+      body: 'test',
+      method: 'post',
+      headers: { 'Content-Type': 'some/other' },
+    });
+
+    expect(app).toHaveBeenCalledWith(
+      expect.objectContaining({ body: expect.any(Readable), method: 'POST' }),
+    );
+
+    await expect(result.text()).resolves.toEqual('Test');
+  });
+
+  it('Should handle malformed json', async () => {
+    const result = await fetch('http://localhost:8090/post', {
+      body: '{"test":Date}',
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    expect(app).not.toHaveBeenCalled();
+
+    await expect(result.json()).resolves.toEqual({
+      message: 'Error parsing request body',
+      error: 'Unexpected token D in JSON at position 8',
+    });
   });
 });

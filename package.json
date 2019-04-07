@@ -5,14 +5,17 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "start": "ts-node-dev src/index.ts",
-    "test": "jest test"
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "build": "lerna run build"
   },
   "workspaces": [
     "packages/*"
   ],
   "jest": {
     "preset": "./jest.json"
+  },
+  "devDependencies": {
+    "lerna": "^3.13.1"
   }
 }

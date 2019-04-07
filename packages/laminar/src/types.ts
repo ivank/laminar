@@ -34,10 +34,14 @@ export enum Method {
   PATCH = 'PATCH',
 }
 
-export type Context = Pick<
-  LaminarRequest,
-  'url' | 'method' | 'headers' | 'query' | 'body' | 'cookies'
->;
+export interface Context {
+  url: LaminarRequest['url'];
+  method: LaminarRequest['method'];
+  headers: LaminarRequest['headers'];
+  query: LaminarRequest['query'];
+  body: LaminarRequest['body'];
+  cookies: LaminarRequest['cookies'];
+}
 
 export type Middleware<TAddition extends {} = {}> = <TContext extends Context = Context>(
   resolver: Resolver<TContext & TAddition>,

@@ -26,16 +26,14 @@ export const toMatcher = (method: string, path: string): Matcher => ({
   pathRe: toPathRe(path),
 });
 
-export const match = (method: string, path: string, matcher: Matcher) => {
-  if (matcher.method === method) {
-    const pathMatch = matcher.pathRe.exec(path);
-    if (pathMatch) {
-      const params: MatcherPath = pathMatch
-        .slice(1)
-        .reduce((all, val, i) => ({ [matcher.keys[i]]: val, ...all }), {});
+export const match = (path: string, matcher: Matcher) => {
+  const pathMatch = matcher.pathRe.exec(path);
+  if (pathMatch) {
+    const params: MatcherPath = pathMatch
+      .slice(1)
+      .reduce((all, val, i) => ({ [matcher.keys[i]]: val, ...all }), {});
 
-      return params;
-    }
+    return params;
   }
 
   return false;
@@ -47,7 +45,7 @@ export const selectMatcher = <TMatcher extends Matcher>(
   matchers: TMatcher[],
 ) => {
   for (const matcher of matchers) {
-    const params = match(method, path, matcher);
+    const params = method === matcher.method && match(path, matcher);
     if (params) {
       return { matcher, path: params };
     }
@@ -75,4 +73,7 @@ export const post: Route = (path, resolver) => ({ ...toMatcher(Method.POST, path
 export const del: Route = (path, resolver) => ({ ...toMatcher(Method.DELETE, path), resolver });
 export const patch: Route = (path, resolver) => ({ ...toMatcher(Method.PATCH, path), resolver });
 export const put: Route = (path, resolver) => ({ ...toMatcher(Method.PUT, path), resolver });
-export const head: Route = (path, resolver) => ({ ...toMatcher(Method.HEAD, path), resolver });
+export const options: Route = (path, resolver) => ({
+  ...toMatcher(Method.OPTIONS, path),
+  resolver,
+});

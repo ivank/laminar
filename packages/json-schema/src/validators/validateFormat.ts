@@ -22,5 +22,5 @@ export const validateFormat: Validator = (schema, value, { name }) =>
   schema.format &&
   schema.format in formats &&
   !formats[schema.format].test(value)
-    ? HasError('typeFormat', name, schema.format)
+    ? HasError('format', name, schema.format)
     : NoErrors;

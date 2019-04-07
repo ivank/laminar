@@ -6,6 +6,7 @@ describe('Helper isEqual', () => {
     ['strings', 'test', 'test', true],
     ['numbers', 1, 2, false],
     ['numbers', 1, 1, true],
+    ['dates', new Date('2018-01-01'), new Date('2018-01-01'), true],
     ['numbers', 1, 1.2, false],
     ['empty arrays', [], [], true],
     ['arrays', ['one'], ['two'], false],
