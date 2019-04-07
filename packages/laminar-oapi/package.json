@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-oapi",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
   "author": "Boost Internal Tools <boost-bit-tech@ovoenergy.com>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^1.0.0",
+    "@ovotech/laminar": "^0.1.0",
     "@types/date-fns": "^2.6.0",
     "@types/jest": "^24.0.9",
     "@types/js-yaml": "^3.12.1",
@@ -17,7 +17,6 @@
     "jest": "^24.7.1",
     "prettier": "^1.16.4",
     "ts-jest": "^24.0.2",
-    "ts-node-dev": "^1.0.0-pre.32",
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.4.2"
@@ -36,6 +35,6 @@
     "@ovotech/laminar": "*"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^1.0.0"
+    "@ovotech/json-schema": "^0.1.0"
   }
 }

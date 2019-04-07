@@ -93,9 +93,9 @@ createServer(app).listen(8080, () => {
 
 ## The Middleware
 
-Laminar is built with the concept of nested middleware, that add / modify the context, and execute the next middleware. It can also read the response and modify it, "wrapping" the whole request / response execution.
+Laminar is built with the concept of nested middleware, that add / modify the context, and execute the next middleware. Each one can also read the response of the previous and modify it, "wrapping" the whole request / response execution.
 
-Moreover, since its a simple function, the types for the additional context properties will be passed down to the other resolvers.
+Moreover, since a middleware is just a wrapper function, the types for the additional context properties will be passed down to the other resolvers.
 In this example, 'logger' is actually typed properly all the way to the `get('/users/{id}', ({ path, logger })`.
 
 ```typescript
