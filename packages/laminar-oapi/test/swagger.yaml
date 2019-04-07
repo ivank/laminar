@@ -97,8 +97,9 @@ paths:
           in: 'query'
           description: 'Transaction type to search. If not provided every transaction will be fetched relevant for the account/period'
           schema:
-            type: string
-            enum: [TopUp, ElectricityUsageCharge, ElectricityStandingCharge, BalanceAdjustment]
+            type: array
+            items:
+              enum: [TopUp, ElectricityUsageCharge, ElectricityStandingCharge, BalanceAdjustment]
       responses:
         200:
           description: 'Successful response. NOTE: If the account ID is valid but does not exists in our system the result will be an empty transactions list with 200 unlike for the balance endpoint where it returns with 204. It might change in the future if the client needs this information for the transaction history as well.'
@@ -227,8 +228,9 @@ paths:
           in: 'query'
           description: 'Transaction type to search. If not provided every transaction will be fetched relevant for the account/period'
           schema:
-            type: string
-            enum: [TopUp, ElectricityUsageCharge, ElectricityStandingCharge, BalanceAdjustment]
+            type: array
+            items:
+              enum: [TopUp, ElectricityUsageCharge, ElectricityStandingCharge, BalanceAdjustment]
       responses:
         200:
           description: 'Successful response. NOTE: If the account ID is valid but does not exists in our system the result will be an empty transactions list with 200 unlike for the balance endpoint where it returns with 204. It might change in the future if the client needs this information for the transaction history as well.'

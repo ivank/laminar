@@ -197,6 +197,7 @@ describe('json-refs', () => {
     const schema = {
       type: 'object',
       properties: {
+        mangled: { $ref: '#/definitions/unknown/more-unknown' },
         user: {
           type: 'object',
           properties: {

@@ -2,7 +2,7 @@ import * as cookie from 'cookie';
 import { IncomingMessage } from 'http';
 import { Readable } from 'stream';
 import { parse, URLSearchParams } from 'url';
-import { concatStream } from './helpers';
+import { concatStream, parseQueryObjects } from './helpers';
 import { HttpError } from './HttpError';
 import { Laminar, LaminarRequest, Method } from './types';
 
@@ -45,7 +45,7 @@ export const request = async (req: IncomingMessage): Promise<LaminarRequest> => 
     body,
     url,
     method: req.method as Method,
-    query: url.query,
+    query: parseQueryObjects(url.query),
     cookies: req.headers.cookie ? cookie.parse(req.headers.cookie) : undefined,
     headers: req.headers,
   };

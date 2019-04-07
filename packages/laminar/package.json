@@ -10,7 +10,6 @@
   "devDependencies": {
     "@types/cookie": "^0.3.2",
     "@types/jest": "^24.0.9",
-    "@types/js-yaml": "^3.12.1",
     "@types/node": "^11.10.5",
     "@types/stream-mock": "^1.2.0",
     "jest": "^24.3.1",
@@ -18,7 +17,6 @@
     "prettier": "^1.16.4",
     "stream-mock": "^1.2.0",
     "ts-jest": "^24.0.0",
-    "ts-node-dev": "^1.0.0-pre.32",
     "tslint": "^5.13.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.4000"
@@ -35,7 +33,6 @@
   },
   "dependencies": {
     "@ovotech/json-schema": "^1.0.0",
-    "cookie": "^0.3.1",
-    "js-yaml": "^3.13.0"
+    "cookie": "^0.3.1"
   }
 }

@@ -13,35 +13,16 @@ export const concatStream = async (stream: Readable): Promise<Buffer> => {
 export const toArray = (value: string[] | string | number | false | undefined) =>
   Array.isArray(value) ? value : value ? [value] : [];
 
-export const deepQueryObjects = (plain: { [key: string]: any }): any => {
-  return Object.entries(plain).reduce((all, [key, val]) => {
-    // key
-    //   .replace(/\]/g, '')
-    //   .split('[')
-    //   .reduce((current, path) => ({ current[path]: nested }), val);
-
-    let name = '';
-    let current = val;
-    if (key.includes(']') && key.includes('[')) {
-      for (const char of key) {
-        if (char === '[') {
-          current = { [name]: current };
-          name = '';
-        } else if (char === ']') {
-          if (name) {
-            current = { [name]: current };
-            name = '';
-          } else {
-            current = [current];
-          }
-        } else {
-          name += char;
-        }
-      }
-    } else {
-      current = { [key]: current };
-    }
-
-    return { ...all, ...current };
-  }, {});
+const setQuery = (path: string[], value: any, obj: any): any => {
+  const [current, ...rest] = path;
+  return current
+    ? { ...obj, [current]: rest.length ? setQuery(rest, value, obj[current] || {}) : value }
+    : toArray(rest.length ? setQuery(rest, value, obj) : value);
 };
+
+const toQueryPath = (key: string) => key.replace(/\]/g, '').split('[');
+
+export const parseQueryObjects = (plain: { [key: string]: any }): any =>
+  Object.entries(plain)
+    .map(([key, val]) => [key, val.includes(',') ? val.split(',') : val])
+    .reduce((all, [key, val]) => setQuery(toQueryPath(key), val, all), {});

@@ -58,12 +58,12 @@ describe('Requests', () => {
   });
 
   it('Should parse nested search query', async () => {
-    const result = await fetch('http://localhost:8090/me?this[one][two]=other', {
+    const result = await fetch('http://localhost:8090/me?this[one][two]=other&arr[]=111', {
       headers: { 'Content-Type': 'text/plain' },
     });
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({
-        query: { this: { one: { two: 'other' } } },
+        query: { this: { one: { two: 'other' } }, arr: ['111'] },
       }),
     );
     await expect(result.text()).resolves.toEqual('Test');
