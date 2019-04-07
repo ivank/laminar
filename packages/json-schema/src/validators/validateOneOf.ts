@@ -32,7 +32,7 @@ export const validateOneOf: Validator = (schema, value, options) => {
     const matching = validations.filter(item => item.errors.length === 0);
 
     if (matching.length !== 1) {
-      return HasError('oneOf', options.name, matching.length);
+      return HasError('oneOf', options.name, { matching: matching.length, errors: validations });
     }
   }
   return NoErrors;

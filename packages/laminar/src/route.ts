@@ -18,7 +18,7 @@ export const toPathKeys = (path: string): string[] => {
 };
 
 export const toPathRe = (path: string) =>
-  new RegExp(path.replace('/', '\\/').replace(paramRegEx, '([^/]+)'));
+  new RegExp('^' + path.replace('/', '\\/').replace(paramRegEx, '([^/]+)') + '/?$');
 
 export const toMatcher = (method: string, path: string): Matcher => ({
   method: method.toUpperCase(),

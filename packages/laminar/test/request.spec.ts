@@ -57,6 +57,18 @@ describe('Requests', () => {
     await expect(result.text()).resolves.toEqual('Test');
   });
 
+  it('Should parse nested search query', async () => {
+    const result = await fetch('http://localhost:8090/me?this[one][two]=other', {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+    expect(app).toHaveBeenCalledWith(
+      expect.objectContaining({
+        query: { this: { one: { two: 'other' } } },
+      }),
+    );
+    await expect(result.text()).resolves.toEqual('Test');
+  });
+
   it('Should parse cookies', async () => {
     const result = await fetch('http://localhost:8090/login', {
       headers: { 'Content-Type': 'text/plain', cookie: 'accessToken=1234abc; userId=1234' },

@@ -12,9 +12,13 @@ interface FilesMap {
   [file: string]: any;
 }
 
-interface Context {
+interface Context extends Options {
   schema: any;
   files: FilesMap;
+}
+
+interface Options {
+  keepRefAs?: string;
 }
 
 export const isTraversable = (schema: any): schema is TraversableSchema =>
@@ -82,7 +86,7 @@ export const extractUrls = (schema: any, namedRefs: string[] = []) =>
     [],
   );
 
-export const extractFiles = async (schema: any): Promise<FilesMap> => {
+export const extractFiles = async (schema: any, options?: Options): Promise<FilesMap> => {
   const refs = extractNamedRefs(schema);
   const result = await Promise.all(
     extractUrls(schema, Object.keys(refs)).map(url =>
@@ -91,7 +95,7 @@ export const extractFiles = async (schema: any): Promise<FilesMap> => {
         .then(content =>
           extractFiles(content).then(filesMap => ({
             ...filesMap,
-            [url]: resolveNestedRefs(content, { schema: content, files: filesMap }),
+            [url]: resolveNestedRefs(content, { ...options, schema: content, files: filesMap }),
           })),
         ),
     ),
@@ -110,6 +114,9 @@ export const getJsonPointer = (document: any, pointer: string) =>
       document,
     );
 
+export const decorateSchema = (schema: any, ref: string, keepRefAs?: string) =>
+  isTraversable(schema) && ref && keepRefAs ? { ...schema, [keepRefAs]: ref } : schema;
+
 export const resolveNestedRefs = (schema: any, context: Context, parentId?: string) => {
   const id = currentId(schema, parentId);
 
@@ -124,13 +131,19 @@ export const resolveNestedRefs = (schema: any, context: Context, parentId?: stri
     const fullUrl = currentUrl(url, id);
     const currentDocument = fullUrl ? context.files[fullUrl] : context.schema;
 
-    return pointer ? getJsonPointer(currentDocument, pointer) : currentDocument;
+    return pointer
+      ? decorateSchema(getJsonPointer(currentDocument, pointer), schema.$ref, context.keepRefAs)
+      : currentDocument;
   }
 
   return schema;
 };
 
-export const resolveRefs = async (original: any): Promise<any> => {
+export const resolveRefs = async (original: any, options?: Options): Promise<any> => {
   const schema = JSON.parse(JSON.stringify(original));
-  return resolveNestedRefs(schema, { schema, files: await extractFiles(schema) });
+  return resolveNestedRefs(schema, {
+    ...options,
+    schema,
+    files: await extractFiles(schema, options),
+  });
 };

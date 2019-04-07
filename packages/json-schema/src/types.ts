@@ -61,10 +61,10 @@ export interface Discriminator {
   propertyName: string;
 }
 
-export interface Invalid {
+export interface Invalid<TParam = any> {
   code: keyof Messages;
   name: string;
-  param?: any;
+  param: TParam;
 }
 
 export interface Result {

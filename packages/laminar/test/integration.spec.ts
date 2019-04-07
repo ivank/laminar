@@ -4,7 +4,7 @@ import { del, get, HttpError, laminar, post, routes } from '../src';
 
 let server: Server;
 
-describe('Requests', () => {
+describe('Integration', () => {
   afterEach(async () => {
     await new Promise(resolve => server.close(resolve));
   });
@@ -49,6 +49,8 @@ describe('Requests', () => {
 
     const unknown = await fetch('http://localhost:8092/unknown');
     const healthCheck = await fetch('http://localhost:8092/.well-known/health-check');
+    const healthCheckWithSlash = await fetch('http://localhost:8092/.well-known/health-check/');
+    const other = await fetch('http://localhost:8092/.well-known/health-check/other');
     const userJohn = await fetch('http://localhost:8092/users/10');
     const userTom = await fetch('http://localhost:8092/users/20');
     const userUnknown = await fetch('http://localhost:8092/users/30');
@@ -62,13 +64,15 @@ describe('Requests', () => {
     const userDeleted = await fetch('http://localhost:8092/users/10');
 
     expect(unknown.status).toEqual(404);
-    await expect(healthCheck.json()).resolves.toEqual({ health: 'ok' });
-    await expect(userJohn.json()).resolves.toEqual({ id: '10', name: 'John' });
-    await expect(userTom.json()).resolves.toEqual({ id: '20', name: 'Tom' });
+    expect(other.status).toEqual(404);
+    expect(await healthCheck.json()).toEqual({ health: 'ok' });
+    expect(await healthCheckWithSlash.json()).toEqual({ health: 'ok' });
+    expect(await userJohn.json()).toEqual({ id: '10', name: 'John' });
+    expect(await userTom.json()).toEqual({ id: '20', name: 'Tom' });
     expect(userUnknown.status).toEqual(404);
-    await expect(userChange.json()).resolves.toEqual({ saved: true });
-    await expect(userChanged.json()).resolves.toEqual({ id: '10', name: 'Kostas' });
-    await expect(userDelete.json()).resolves.toEqual({ deleted: true });
+    expect(await userChange.json()).toEqual({ saved: true });
+    expect(await userChanged.json()).toEqual({ id: '10', name: 'Kostas' });
+    expect(await userDelete.json()).toEqual({ deleted: true });
     expect(userDeleted.status).toEqual(404);
   });
 });

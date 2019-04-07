@@ -363,4 +363,123 @@ describe('json-refs', () => {
 
     expect(schema1).toEqual(schema2);
   });
+
+  it('Should resolve complex refs and keep them', async () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        user: {
+          type: 'object',
+          properties: {
+            name: { $ref: '#/definitions/title' },
+            id: { $ref: '#/definitions/id' },
+            address: { $ref: '#/definitions/address' },
+          },
+        },
+      },
+      definitions: {
+        title: {
+          type: 'string',
+          pattern: '^[A-Z]',
+        },
+        address: {
+          type: 'object',
+          properties: {
+            id: { $ref: '#/definitions/id' },
+            street: { $ref: '#/definitions/title' },
+            price: { $ref: '#/definitions/test~1slash' },
+            town: { $ref: '#/definitions/test~0tilde' },
+            num: { $ref: '#/definitions/test%25percent' },
+          },
+        },
+        'test/slash': {
+          type: 'number',
+        },
+        'test~tilde': {
+          type: 'string',
+        },
+        'test%percent': {
+          type: 'integer',
+        },
+        id: {
+          type: 'string',
+          minLength: 3,
+          maxLength: 4,
+        },
+      },
+    };
+    const expected = {
+      definitions: {
+        address: {
+          properties: {
+            id: {
+              $_ref: '#/definitions/id',
+              maxLength: 4,
+              minLength: 3,
+              type: 'string',
+            },
+            street: {
+              $_ref: '#/definitions/title',
+              pattern: '^[A-Z]',
+              type: 'string',
+            },
+            price: { $_ref: '#/definitions/test~1slash', type: 'number' },
+            num: { $_ref: '#/definitions/test%25percent', type: 'integer' },
+            town: { $_ref: '#/definitions/test~0tilde', type: 'string' },
+          },
+          type: 'object',
+        },
+        id: {
+          maxLength: 4,
+          minLength: 3,
+          type: 'string',
+        },
+        title: { pattern: '^[A-Z]', type: 'string' },
+        'test/slash': { type: 'number' },
+        'test~tilde': { type: 'string' },
+        'test%percent': { type: 'integer' },
+      },
+      properties: {
+        user: {
+          properties: {
+            address: {
+              $_ref: '#/definitions/address',
+              properties: {
+                id: {
+                  $_ref: '#/definitions/id',
+                  maxLength: 4,
+                  minLength: 3,
+                  type: 'string',
+                },
+                street: {
+                  $_ref: '#/definitions/title',
+                  pattern: '^[A-Z]',
+                  type: 'string',
+                },
+                price: { $_ref: '#/definitions/test~1slash', type: 'number' },
+                num: { $_ref: '#/definitions/test%25percent', type: 'integer' },
+                town: { $_ref: '#/definitions/test~0tilde', type: 'string' },
+              },
+              type: 'object',
+            },
+            id: {
+              $_ref: '#/definitions/id',
+              maxLength: 4,
+              minLength: 3,
+              type: 'string',
+            },
+            name: {
+              $_ref: '#/definitions/title',
+              pattern: '^[A-Z]',
+              type: 'string',
+            },
+          },
+          type: 'object',
+        },
+      },
+      type: 'object',
+    };
+
+    await expect(resolveRefs(schema, { keepRefAs: '$_ref' })).resolves.toEqual(expected);
+  });
 });

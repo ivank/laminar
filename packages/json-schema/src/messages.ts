@@ -1,4 +1,4 @@
-import { Messages } from './types';
+import { Invalid, Messages, Result } from './types';
 
 export const messages: Messages = {
   not: ({ name }) => `[${name}] should not match`,
@@ -24,6 +24,12 @@ export const messages: Messages = {
   minItems: ({ name, param }) => `[${name}] should have >= ${param} items`,
   maxItems: ({ name, param }) => `[${name}] should have <= ${param} items`,
   additionalItems: ({ name, param }) => `[${name}] has unknown indexes ${param}`,
-  oneOf: ({ name, param }) => `[${name}] should match only 1 schema, matching ${param}`,
+  oneOf: ({ name, param }: Invalid<{ matching: number; errors: Result[] }>) =>
+    `[${name}] should match only 1 schema, matching in ${
+      param.matching
+    }. Errors: ${param.errors.map(
+      (item, index) =>
+        `${index}: ${item.errors.map(error => messages[error.code](error)).join(', ')}`,
+    )}`,
   anyOf: ({ name }) => `[${name}] should match at least 1 schema`,
 };

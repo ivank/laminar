@@ -15,14 +15,15 @@ import { readFileSync } from 'fs';
 import * as YAML from 'js-yaml';
 import { OapiResolverError } from './OapiResolverError';
 import { OpenApi } from './schema';
-import { toContextSchema } from './to-context-schema';
-import { toResponseSchema } from './to-response-schema';
+import { toSchema } from './to-schema';
 import { OpenAPIObject } from './types';
 
 interface RouteMatcher<TContext extends Context> extends Matcher {
   resolver: Resolver<TContext>;
-  contextSchema: Schema;
-  responseSchema: Schema;
+  schema: {
+    context: Schema;
+    response: Schema;
+  };
 }
 
 export const toMatchers = <TContext extends Context & RouteContext>(
@@ -33,18 +34,17 @@ export const toMatchers = <TContext extends Context & RouteContext>(
 ) =>
   Object.entries(paths).reduce<Array<RouteMatcher<TContext>>>(
     (allPaths, [path, methods]) =>
-      Object.entries(methods).reduce((all, [method, resolver]) => {
-        const operation = api.paths[path][method];
-        return [
+      Object.entries(methods).reduce(
+        (all, [method, resolver]) => [
           ...all,
           {
             ...toMatcher(method, path),
             resolver,
-            contextSchema: toContextSchema(operation),
-            responseSchema: toResponseSchema(operation),
+            schema: toSchema(api, path, method),
           },
-        ];
-      }, allPaths),
+        ],
+        allPaths,
+      ),
     [],
   );
 
@@ -90,11 +90,11 @@ export const oapi = async <TContext extends Context>(
       });
     }
     const {
-      matcher: { resolver, contextSchema, responseSchema },
+      matcher: { resolver, schema },
       path,
     } = select;
     const context = { ...ctx, path };
-    const checkContext = await validate(contextSchema, context, { name: 'context' });
+    const checkContext = await validate(schema.context, context, { name: 'context' });
 
     if (!checkContext.valid) {
       throw new HttpError(400, {
@@ -105,7 +105,7 @@ export const oapi = async <TContext extends Context>(
 
     const result = resolver(context);
     const laminarResponse = isResponse(result) ? result : response({ body: result });
-    const checkResponse = await validate(responseSchema, laminarResponse, {
+    const checkResponse = await validate(schema.response, laminarResponse, {
       name: 'response',
     });
 
