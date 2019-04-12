@@ -6,29 +6,69 @@ describe('Json Schema Ts', () => {
   it('Test', () => {
     const schema: Schema = {
       $schema: 'http://json-schema.org/draft-07/schema#',
-      definitions: {
-        'foo.Date': {
-          properties: {
-            day: {
-              type: 'number',
-            },
-            month: {
-              type: 'number',
-            },
-            year: {
-              type: 'number',
-            },
-          },
-          type: 'object',
+      type: 'array',
+      items: [
+        {
+          type: 'string',
         },
-      },
-      properties: {
-        date: {
-          $ref: '#/definitions/foo.Date',
+        {
+          type: 'number',
         },
-      },
-      required: ['date'],
-      type: 'object',
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+        {
+          type: 'string',
+        },
+        {
+          type: 'number',
+        },
+      ],
     };
 
     const ast = jsonSchemaToAST(schema, { root: schema, registry: {} });

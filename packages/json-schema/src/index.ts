@@ -47,7 +47,7 @@ export {
   validateSchema,
 } from './helpers';
 
-export { Schema, JsonSchema, ValidateOptions, Validator, Messages } from './types';
+export { Schema, JsonSchema, ValidateOptions, Validator, Messages, PrimitiveType } from './types';
 
 export const draft7 = [
   validateBoolean,

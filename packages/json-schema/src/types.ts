@@ -1,4 +1,11 @@
-export type PrimitiveType = 'string' | 'integer' | 'number' | 'boolean' | 'array' | 'object';
+export type PrimitiveType =
+  | 'string'
+  | 'integer'
+  | 'number'
+  | 'boolean'
+  | 'array'
+  | 'object'
+  | 'null';
 
 export interface JsonSchema {
   $ref?: string;
