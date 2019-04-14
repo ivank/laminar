@@ -1,109 +1,26 @@
+import { currentId, currentUrl, extractFiles, isRefSchema } from '@ovotech/json-refs';
 import { JsonSchema, PrimitiveType, Schema } from '@ovotech/json-schema';
-
-enum AST {
-  NULL,
-  BOOLEAN,
-  STRING,
-  STRING_LITERAL,
-  NUMBER_LITERAL,
-  BOOLEAN_LITERAL,
-  NUMBER,
-  OBJECT,
-  UNION,
-  INTERSECTION,
-  VOID,
-  ANY,
-  ARRAY,
-  TUPLE,
-  REF,
-}
+import * as ts from 'typescript';
 
 interface Registry {
-  [key: string]: Node;
+  [key: string]: ts.TypeAliasDeclaration | ts.InterfaceDeclaration;
+}
+
+interface FilesMap {
+  [file: string]: any;
 }
 
 interface AstContext {
   root: Schema;
   registry: Registry;
+  files: FilesMap;
+  parentId?: string;
 }
 
-interface AstNode {
-  type: AST;
+interface AstNode<TNode = ts.TypeNode> {
+  type: TNode;
   context: AstContext;
-  description?: string;
-  annotate?: {
-    [key: string]: string | number | boolean | undefined;
-  };
 }
-
-interface BasicNode extends AstNode {
-  type: AST.STRING | AST.BOOLEAN | AST.NUMBER | AST.ANY | AST.VOID | AST.NULL;
-}
-
-interface LiteralStringNode extends AstNode {
-  type: AST.STRING_LITERAL;
-  value: string;
-}
-
-interface LiteralNumberNode extends AstNode {
-  type: AST.NUMBER_LITERAL;
-  value: number;
-}
-
-interface LiteralBooleanNode extends AstNode {
-  type: AST.BOOLEAN_LITERAL;
-  value: boolean;
-}
-
-interface ArrayNode extends AstNode {
-  type: AST.ARRAY;
-  value: Node;
-}
-
-interface TupleNode extends AstNode {
-  type: AST.TUPLE;
-  values: Node[];
-}
-
-interface RefNode extends AstNode {
-  type: AST.REF;
-  ref: string;
-}
-
-interface UnionNode extends AstNode {
-  type: AST.UNION;
-  values: Node[];
-}
-
-interface IntersectionNode extends AstNode {
-  type: AST.INTERSECTION;
-  values: Node[];
-}
-
-interface ObjectProps {
-  [type: string]: {
-    optional: boolean;
-    type: Node;
-  };
-}
-
-interface ObjectNode extends AstNode {
-  type: AST.OBJECT;
-  props: ObjectProps;
-  additionalProperties?: Node;
-}
-
-type Node =
-  | BasicNode
-  | RefNode
-  | ObjectNode
-  | UnionNode
-  | LiteralStringNode
-  | LiteralNumberNode
-  | LiteralBooleanNode
-  | IntersectionNode
-  | TupleNode
-  | ArrayNode;
 
 export const parseJsonPointer = (name: string) =>
   decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
@@ -116,49 +33,64 @@ export const getJsonPointer = (document: any, pointer: string) =>
       document,
     );
 
-type AstConvert<TNode = Node> = (schema: Schema, context: AstContext) => TNode | null;
+type AstConvert<TNode = ts.TypeNode> = (
+  schema: Schema,
+  context: AstContext,
+) => AstNode<TNode> | null;
 
 export const isJsonSchema = (schema: any): schema is JsonSchema =>
   schema && typeof schema === 'object';
 
-export const astType = (type: PrimitiveType, context: AstContext): Node => {
+export const nodeType = (type: PrimitiveType): ts.TypeNode => {
   switch (type) {
     case 'null':
-      return { type: AST.NULL, context };
+      return ts.createNull();
     case 'integer':
     case 'number':
-      return { type: AST.NUMBER, context };
+      return ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword);
     case 'string':
-      return { type: AST.STRING, context };
+      return ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
     case 'array':
-      return { type: AST.ARRAY, value: { type: AST.ANY, context }, context };
+      return ts.createArrayTypeNode(ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword));
     case 'object':
-      return { type: AST.OBJECT, props: {}, context };
+      return ts.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword);
     case 'boolean':
-      return { type: AST.BOOLEAN, context };
+      return ts.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword);
   }
 };
 
-const astArrayType: AstConvert<UnionNode> = (schema, context) => {
-  if (isJsonSchema(schema) && Array.isArray(schema.type)) {
-    const values = schema.type.map(type => astType(type, context));
+export const astAny = (context: AstContext) => ({
+  type: ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+  context,
+});
 
-    return {
-      type: AST.UNION,
-      context,
-      values,
-    };
-  } else {
-    return null;
-  }
-};
+export const astUnion = (types: ReadonlyArray<ts.TypeNode>, context: AstContext) => ({
+  type: ts.createUnionTypeNode(types),
+  context,
+});
 
-const astBooleanSchema: AstConvert<BasicNode> = (schema, context) =>
-  typeof schema === 'boolean' ? { context, type: schema === true ? AST.ANY : AST.VOID } : null;
+const convertArrayType: AstConvert<ts.UnionTypeNode> = (schema, context) =>
+  isJsonSchema(schema) && Array.isArray(schema.type)
+    ? astUnion(schema.type.map(nodeType), context)
+    : null;
 
-const astBoolean: AstConvert<BasicNode> = (schema, context) =>
-  isJsonSchema(schema) && schema.type === 'boolean' ? { context, type: AST.BOOLEAN } : null;
-const astString: AstConvert<BasicNode> = (schema, context) =>
+const convertBooleanSchema: AstConvert<ts.KeywordTypeNode> = (schema, context) =>
+  typeof schema === 'boolean'
+    ? {
+        context,
+        type:
+          schema === true
+            ? ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword)
+            : ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
+      }
+    : null;
+
+const convertBoolean: AstConvert<ts.KeywordTypeNode> = (schema, context) =>
+  isJsonSchema(schema) && schema.type === 'boolean'
+    ? { context, type: ts.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword) }
+    : null;
+
+const convertString: AstConvert<ts.KeywordTypeNode> = (schema, context) =>
   isJsonSchema(schema) &&
   (schema.type === 'string' ||
     schema.pattern !== undefined ||
@@ -166,7 +98,7 @@ const astString: AstConvert<BasicNode> = (schema, context) =>
     schema.maxLength !== undefined)
     ? {
         context,
-        type: AST.STRING,
+        type: ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
         annotate: {
           pattern: schema.pattern,
           minLength: schema.minLength,
@@ -176,7 +108,7 @@ const astString: AstConvert<BasicNode> = (schema, context) =>
       }
     : null;
 
-const astNumber: AstConvert<BasicNode> = (schema, context) =>
+const convertNumber: AstConvert<ts.KeywordTypeNode> = (schema, context) =>
   isJsonSchema(schema) &&
   (schema.type === 'integer' ||
     schema.type === 'number' ||
@@ -186,7 +118,7 @@ const astNumber: AstConvert<BasicNode> = (schema, context) =>
     schema.exclusiveMaximum !== undefined)
     ? {
         context,
-        type: AST.NUMBER,
+        type: ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
         annotate: {
           minimum: schema.minimum,
           exclusiveMinimum: schema.exclusiveMinimum,
@@ -197,92 +129,135 @@ const astNumber: AstConvert<BasicNode> = (schema, context) =>
       }
     : null;
 
-const astLiteral = (value: any, context: AstContext): Node => {
+const astLiteral = (value: any): ts.TypeNode => {
   switch (typeof value) {
     case 'string':
-      return { type: AST.STRING_LITERAL, value, context };
+      return ts.createLiteralTypeNode(ts.createLiteral(value));
     case 'number':
-      return { type: AST.NUMBER_LITERAL, value, context };
+      return ts.createLiteralTypeNode(ts.createLiteral(value));
     case 'boolean':
-      return { type: AST.BOOLEAN_LITERAL, value, context };
+      return ts.createLiteralTypeNode(ts.createLiteral(value));
     default:
-      return { type: AST.ANY, context };
+      return ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword);
   }
 };
 
-const astEnum: AstConvert<UnionNode> = (schema, context) => {
-  if (isJsonSchema(schema) && schema.enum && Array.isArray(schema.enum)) {
-    const values = schema.enum.map(value => astLiteral(value, context));
-    return { type: AST.UNION, context, values };
-  } else {
-    return null;
-  }
-};
+const convertEnum: AstConvert<ts.UnionTypeNode> = (schema, context) =>
+  isJsonSchema(schema) && schema.enum && Array.isArray(schema.enum)
+    ? astUnion(schema.enum.map(value => astLiteral(value)), context)
+    : null;
 
-const astConst: AstConvert = (schema, context) =>
-  isJsonSchema(schema) && schema.const !== undefined ? astLiteral(schema.const, context) : null;
+const convertConst: AstConvert = (schema, context) =>
+  isJsonSchema(schema) && schema.const !== undefined
+    ? { type: astLiteral(schema.const), context }
+    : null;
 
-const astRef: AstConvert<RefNode> = (schema, context) => {
-  if (isJsonSchema(schema) && schema.$ref) {
-    const [, pointer] = schema.$ref.split('#');
-    const identifier = pointer.split('/').reverse()[0];
+const convertRef: AstConvert<ts.TypeNode> = (schema, context) => {
+  if (isJsonSchema(schema) && isRefSchema(schema)) {
+    const [url, pointer] = schema.$ref.split('#');
+    const fullUrl = currentUrl(url, context.parentId);
+    const root = fullUrl ? context.files[fullUrl] : context.root;
+
+    const identifier = pointer ? pointer.split('/').reverse()[0] : url;
     if (context.registry[identifier]) {
-      return { type: AST.REF, ref: identifier, context };
-    } else {
-      const refered = getJsonPointer(context.root, pointer);
-      const referedRegistry: Registry = {
-        ...context.registry,
-        [identifier]: { type: AST.ANY, context },
+      return {
+        type: ts.createTypeReferenceNode(identifier, undefined),
+        context,
       };
-      const referedNode: Node = refered
-        ? jsonSchemaToAST(refered, { ...context, registry: referedRegistry })
-        : { type: AST.ANY, context };
+    } else {
+      const refered = pointer ? getJsonPointer(root, pointer) : root;
+
+      const referedContext: AstContext = {
+        ...context,
+        root,
+        registry: {
+          ...context.registry,
+          [identifier]: ts.createTypeAliasDeclaration(
+            undefined,
+            undefined,
+            identifier,
+            undefined,
+            ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+          ),
+        },
+      };
+
+      const referedNode: AstNode = refered
+        ? convertSchema(refered, referedContext)
+        : astAny(context);
+
+      const entry = ts.isTypeLiteralNode(referedNode.type)
+        ? ts.createInterfaceDeclaration(
+            undefined,
+            undefined,
+            identifier,
+            undefined,
+            undefined,
+            referedNode.type.members,
+          )
+        : ts.createTypeAliasDeclaration(
+            undefined,
+            undefined,
+            identifier,
+            undefined,
+            referedNode.type,
+          );
 
       const registry: Registry = {
         ...context.registry,
         ...referedNode.context.registry,
-        [identifier]: referedNode,
+        [identifier]: entry,
       };
 
-      return { type: AST.REF, ref: identifier, context: { ...context, registry } };
+      return {
+        type: ts.createTypeReferenceNode(entry.name, undefined),
+        context: { ...context, registry },
+      };
     }
   } else {
     return null;
   }
 };
 
-const jsonSchemaArrayToAST = (schema: Schema[], context: AstContext) =>
-  schema.reduce<{ values: Node[]; context: AstContext }>(
+const convertSchemas = (schema: Schema[], context: AstContext) =>
+  schema.reduce<{ types: ts.TypeNode[]; context: AstContext }>(
     (all, item) => {
-      const value = jsonSchemaToAST(item, all.context);
-      return { values: [...all.values, value], context: value.context };
+      const value = convertSchema(item, all.context);
+      return { types: [...all.types, value.type], context: value.context };
     },
-    { values: [], context },
+    { types: [], context },
   );
 
-const astObject: AstConvert<ObjectNode> = (schema, context) => {
+const convertObject: AstConvert<ts.TypeLiteralNode> = (schema, context) => {
   if (isJsonSchema(schema) && schema.properties !== undefined) {
-    const additionalProperties: Node | undefined = isJsonSchema(schema.additionalProperties)
-      ? jsonSchemaToAST(schema.additionalProperties, context)
+    const additionalProperties: AstNode | undefined = isJsonSchema(schema.additionalProperties)
+      ? convertSchema(schema.additionalProperties, context)
       : schema.additionalProperties !== false
-      ? { type: AST.ANY, context }
+      ? astAny(context)
       : undefined;
 
-    return Object.entries(schema.properties).reduce<ObjectNode>(
-      (all, [key, value]) => {
-        const type = jsonSchemaToAST(value, all.context);
+    return Object.entries(schema.properties).reduce<AstNode<ts.TypeLiteralNode>>(
+      (astNode, [key, value]) => {
+        const item = convertSchema(value, astNode.context);
         const optional = !(Array.isArray(schema.required) && schema.required.includes(key));
+        const prop = ts.createPropertySignature(
+          undefined,
+          key,
+          optional ? ts.createToken(ts.SyntaxKind.QuestionToken) : undefined,
+          item.type,
+          undefined,
+        );
 
         return {
-          ...all,
-          context: type.context,
-          props: { ...all.props, [key]: { optional, type } },
+          type: ts.updateTypeLiteralNode(
+            astNode.type,
+            ts.createNodeArray(astNode.type.members.concat([prop])),
+          ),
+          context: item.context,
         };
       },
       {
-        type: AST.OBJECT,
-        props: {},
-        additionalProperties,
+        type: ts.createTypeLiteralNode([]),
         context: additionalProperties ? additionalProperties.context : context,
       },
     );
@@ -291,167 +266,116 @@ const astObject: AstConvert<ObjectNode> = (schema, context) => {
   }
 };
 
-const astOneOf: AstConvert<UnionNode> = (schema, context) => {
+const convertOneOf: AstConvert<ts.UnionTypeNode> = (schema, context) => {
   if (isJsonSchema(schema) && schema.oneOf && Array.isArray(schema.oneOf)) {
-    return { type: AST.UNION, ...jsonSchemaArrayToAST(schema.oneOf, context) };
+    const schemas = convertSchemas(schema.oneOf, context);
+    return astUnion(schemas.types, schemas.context);
   } else {
     return null;
   }
 };
 
-const astAnyOf: AstConvert<UnionNode> = (schema, context) => {
+const convertAnyOf: AstConvert<ts.UnionTypeNode> = (schema, context) => {
   if (isJsonSchema(schema) && schema.anyOf && Array.isArray(schema.anyOf)) {
-    return { type: AST.UNION, ...jsonSchemaArrayToAST(schema.anyOf, context) };
+    const schemas = convertSchemas(schema.anyOf, context);
+    return astUnion(schemas.types, schemas.context);
   } else {
     return null;
   }
 };
 
-const astAllOf: AstConvert<IntersectionNode> = (schema, context) => {
+const convertAllOf: AstConvert<ts.IntersectionTypeNode> = (schema, context) => {
   if (isJsonSchema(schema) && schema.allOf && Array.isArray(schema.allOf)) {
-    return { type: AST.INTERSECTION, ...jsonSchemaArrayToAST(schema.allOf, context) };
+    const schemas = convertSchemas(schema.allOf, context);
+    return {
+      type: ts.createIntersectionTypeNode(schemas.types),
+      context: schemas.context,
+    };
   } else {
     return null;
   }
 };
 
-const astArray: AstConvert<ArrayNode | TupleNode> = (schema, context) => {
+const convertArray: AstConvert<ts.TupleTypeNode | ts.ArrayTypeNode> = (schema, context) => {
   if (isJsonSchema(schema) && (schema.items || schema.maxItems || schema.minItems)) {
     if (schema.items && Array.isArray(schema.items)) {
       if (schema.additionalItems === false) {
-        return { type: AST.TUPLE, ...jsonSchemaArrayToAST(schema.items, context) };
+        const schemas = convertSchemas(schema.items, context);
+        return {
+          type: ts.createTupleTypeNode(schemas.types),
+          context: schemas.context,
+        };
       } else {
-        const types = jsonSchemaArrayToAST(
+        const items = convertSchemas(
           schema.items.concat(isJsonSchema(schema.additionalItems) ? [schema.additionalItems] : []),
           context,
         );
 
         return {
-          type: AST.ARRAY,
-          context: types.context,
-          value: {
-            type: AST.UNION,
-            ...types,
-          },
+          type: ts.createArrayTypeNode(ts.createUnionTypeNode(items.types)),
+          context: items.context,
         };
       }
     } else {
-      const value: Node = schema.items
-        ? jsonSchemaToAST(schema.items, context)
-        : { type: AST.ANY, context };
-
-      return { type: AST.ARRAY, context: value.context, value };
+      const value: AstNode = schema.items ? convertSchema(schema.items, context) : astAny(context);
+      return { type: ts.createArrayTypeNode(value.type), context: value.context };
     }
   } else {
     return null;
   }
 };
 
-const enrichAst = (schema: Schema, node: Node | null): Node | null =>
-  node ? (isJsonSchema(schema) ? { ...node, description: schema.description } : node) : node;
-
 const converters: AstConvert[] = [
-  astBooleanSchema,
-  astEnum,
-  astBoolean,
-  astString,
-  astNumber,
-  astRef,
-  astObject,
-  astOneOf,
-  astAnyOf,
-  astAllOf,
-  astArray,
-  astArrayType,
-  astConst,
+  convertBooleanSchema,
+  convertEnum,
+  convertBoolean,
+  convertString,
+  convertNumber,
+  convertRef,
+  convertObject,
+  convertOneOf,
+  convertAnyOf,
+  convertAllOf,
+  convertArray,
+  convertArrayType,
+  convertConst,
 ];
 
-export const jsonSchemaToAST = (schema: Schema, context: AstContext): Node =>
-  converters.reduce<Node | null>(
-    (ast, converter) => ast || enrichAst(schema, converter(schema, context)),
-    null,
-  ) || {
-    type: AST.ANY,
-    context,
+export const convertSchema = (schema: Schema, initContext: AstContext): AstNode => {
+  const parentId = currentId(schema, initContext.parentId);
+  const context = { ...initContext, parentId };
+
+  return (
+    converters.reduce<AstNode | null>(
+      (ast, converter) => ast || converter(schema, context),
+      null,
+    ) || {
+      type: ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+      context,
+    }
+  );
+};
+
+export const printAstNode = (node: AstNode): string => {
+  const resultFile = ts.createSourceFile('someFileName.ts', '', ts.ScriptTarget.Latest);
+  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+  const entries = Object.values(node.context.registry);
+  const fullSourceFile = ts.updateSourceFileNode(resultFile, entries);
+
+  return [
+    printer.printNode(ts.EmitHint.Unspecified, node.type, fullSourceFile),
+    ...entries.map(entry => printer.printNode(ts.EmitHint.Unspecified, entry, fullSourceFile)),
+  ].join('\n\n');
+};
+
+export const convert = async (schema: Schema) => {
+  const context: AstContext = {
+    root: schema,
+    files: await extractFiles(schema),
+    registry: {},
   };
 
-export const indent = (str: string, ind = '  ') =>
-  str
-    .split('\n')
-    .map(line => ind + line)
-    .join('\n');
+  const astNode = convertSchema(schema, context);
 
-export const wrapDescription = (description: string) =>
-  ['/**', indent(description, ' * '), ' */'].join('\n');
-
-export const wrapItems = (items: string[], delimiter: string, maxWidth = 80) => {
-  const singleLine = items.join(delimiter);
-  return singleLine.length > maxWidth
-    ? '\n' + items.map(item => indent(item, delimiter)).join('\n') + '\n'
-    : singleLine;
+  return printAstNode(astNode);
 };
-
-export const astToTS = (node: Node): string => {
-  switch (node.type) {
-    case AST.NULL:
-      return 'null';
-    case AST.ANY:
-      return 'any';
-    case AST.NUMBER:
-      return 'number';
-    case AST.STRING:
-      return 'string';
-    case AST.STRING_LITERAL:
-      return `"${node.value}"`;
-    case AST.NUMBER_LITERAL:
-      return String(node.value);
-    case AST.BOOLEAN_LITERAL:
-      return String(node.value);
-    case AST.VOID:
-      return 'void';
-    case AST.BOOLEAN:
-      return 'boolean';
-    case AST.UNION:
-      return wrapItems(node.values.map(item => astToTS(item)), ' | ');
-    case AST.INTERSECTION:
-      return wrapItems(node.values.map(item => astToTS(item)), ' & ');
-    case AST.ARRAY:
-      return `Array<${astToTS(node.value)}>`;
-    case AST.TUPLE:
-      return `[${node.values.map(item => astToTS(item)).join(', ')}]`;
-    case AST.OBJECT:
-      const props = Object.entries(node.props)
-        .concat(
-          node.additionalProperties
-            ? [['[key: string]', { optional: false, type: node.additionalProperties }]]
-            : [],
-        )
-        .map(([name, { optional, type }]) => {
-          const propAnnotate = type.annotate
-            ? Object.entries(type.annotate)
-                .filter(([key, value]) => value !== undefined)
-                .map(([key, value]) => `@${key}: ${value}`)
-                .join('\n')
-            : '';
-          const propDesc = type.description ? `${type.description}\n` : '';
-          const fullDesc =
-            propAnnotate || propDesc ? wrapDescription(propDesc + propAnnotate) + '\n' : '';
-
-          return `${fullDesc}${name}${optional ? '?' : ''}: ${astToTS(type)};`;
-        });
-      return `{\n${indent(props.join('\n'))}\n}`;
-    case AST.REF:
-      return node.ref;
-  }
-};
-
-export const registryToTs = (registry: Registry) =>
-  Object.entries(registry)
-    .map(([key, node]) => {
-      const desc = node.description ? wrapDescription(node.description) + '\n' : '';
-
-      return node.type === AST.OBJECT
-        ? `${desc}interface ${key} ${astToTS(node)}`
-        : `${desc}type ${key} = ${astToTS(node)};`;
-    })
-    .join('\n\n');

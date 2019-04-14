@@ -1,0 +1,1310 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`draft4 additionalItems.json Test additionalItems are allowed by default 1`] = `"(number)[]"`;
+
+exports[`draft4 additionalItems.json Test additionalItems as false without items 1`] = `"any"`;
+
+exports[`draft4 additionalItems.json Test additionalItems as schema 1`] = `"(any | number)[]"`;
+
+exports[`draft4 additionalItems.json Test array of items with no additionalItems 1`] = `"[any, any, any]"`;
+
+exports[`draft4 additionalItems.json Test items is schema, no additionalItems 1`] = `"any[]"`;
+
+exports[`draft4 additionalProperties.json Test additionalProperties allows a schema which should validate 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft4 additionalProperties.json Test additionalProperties are allowed by default 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft4 additionalProperties.json Test additionalProperties being false does not allow other properties 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft4 additionalProperties.json Test additionalProperties can exist by itself 1`] = `"any"`;
+
+exports[`draft4 additionalProperties.json Test additionalProperties should not look in applicators 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft4 additionalProperties.json Test non-ASCII pattern with additionalProperties 1`] = `"any"`;
+
+exports[`draft4 allOf.json Test allOf 1`] = `
+"{
+    bar: number;
+} & {
+    foo: string;
+}"
+`;
+
+exports[`draft4 allOf.json Test allOf simple types 1`] = `"number & number"`;
+
+exports[`draft4 allOf.json Test allOf with base schema 1`] = `
+"{
+    bar: number;
+}"
+`;
+
+exports[`draft4 allOf.json Test allOf with one empty schema 1`] = `"any"`;
+
+exports[`draft4 allOf.json Test allOf with the first empty schema 1`] = `"any & number"`;
+
+exports[`draft4 allOf.json Test allOf with the last empty schema 1`] = `"number & any"`;
+
+exports[`draft4 allOf.json Test allOf with two empty schemas 1`] = `"any & any"`;
+
+exports[`draft4 anyOf.json Test anyOf 1`] = `"number | number"`;
+
+exports[`draft4 anyOf.json Test anyOf complex types 1`] = `
+"{
+    bar: number;
+} | {
+    foo: string;
+}"
+`;
+
+exports[`draft4 anyOf.json Test anyOf with base schema 1`] = `"string"`;
+
+exports[`draft4 anyOf.json Test anyOf with one empty schema 1`] = `"number | any"`;
+
+exports[`draft4 default.json Test invalid string value for default 1`] = `
+"{
+    bar?: string;
+}"
+`;
+
+exports[`draft4 default.json Test invalid type for default 1`] = `
+"{
+    foo?: number;
+}"
+`;
+
+exports[`draft4 dependencies.json Test dependencies 1`] = `"any"`;
+
+exports[`draft4 dependencies.json Test multiple dependencies 1`] = `"any"`;
+
+exports[`draft4 dependencies.json Test multiple dependencies subschema 1`] = `"any"`;
+
+exports[`draft4 enum.json Test enums in properties 1`] = `
+"{
+    foo?: \\"foo\\";
+    bar: \\"bar\\";
+}"
+`;
+
+exports[`draft4 enum.json Test heterogeneous enum validation 1`] = `"6 | \\"foo\\" | any | true | any"`;
+
+exports[`draft4 enum.json Test simple enum validation 1`] = `"1 | 2 | 3"`;
+
+exports[`draft4 items.json Test a schema given for items 1`] = `"number[]"`;
+
+exports[`draft4 items.json Test an array of schemas for items 1`] = `"(number | string)[]"`;
+
+exports[`draft4 items.json Test items and subitems 1`] = `
+"[item, item, item]
+
+type item = [sub-item, sub-item];
+
+type sub-item = any;"
+`;
+
+exports[`draft4 items.json Test nested items 1`] = `"number[][][][]"`;
+
+exports[`draft4 maxItems.json Test maxItems validation 1`] = `"any[]"`;
+
+exports[`draft4 maxLength.json Test maxLength validation 1`] = `"string"`;
+
+exports[`draft4 maxProperties.json Test maxProperties validation 1`] = `"any"`;
+
+exports[`draft4 maximum.json Test exclusiveMaximum validation 1`] = `"number"`;
+
+exports[`draft4 maximum.json Test maximum validation (explicit false exclusivity) 1`] = `"number"`;
+
+exports[`draft4 maximum.json Test maximum validation 1`] = `"number"`;
+
+exports[`draft4 minItems.json Test minItems validation 1`] = `"any[]"`;
+
+exports[`draft4 minLength.json Test minLength validation 1`] = `"string"`;
+
+exports[`draft4 minProperties.json Test minProperties validation 1`] = `"any"`;
+
+exports[`draft4 minimum.json Test exclusiveMinimum validation 1`] = `"number"`;
+
+exports[`draft4 minimum.json Test minimum validation (explicit false exclusivity) 1`] = `"number"`;
+
+exports[`draft4 minimum.json Test minimum validation 1`] = `"number"`;
+
+exports[`draft4 minimum.json Test minimum validation with signed integer 1`] = `"number"`;
+
+exports[`draft4 multipleOf.json Test by int 1`] = `"any"`;
+
+exports[`draft4 multipleOf.json Test by number 1`] = `"any"`;
+
+exports[`draft4 multipleOf.json Test by small number 1`] = `"any"`;
+
+exports[`draft4 not.json Test forbidden property 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft4 not.json Test not 1`] = `"any"`;
+
+exports[`draft4 not.json Test not more complex schema 1`] = `"any"`;
+
+exports[`draft4 not.json Test not multiple types 1`] = `"any"`;
+
+exports[`draft4 oneOf.json Test oneOf 1`] = `"number | number"`;
+
+exports[`draft4 oneOf.json Test oneOf complex types 1`] = `
+"{
+    bar: number;
+} | {
+    foo: string;
+}"
+`;
+
+exports[`draft4 oneOf.json Test oneOf with base schema 1`] = `"string"`;
+
+exports[`draft4 oneOf.json Test oneOf with empty schema 1`] = `"number | any"`;
+
+exports[`draft4 oneOf.json Test oneOf with required 1`] = `"any | any"`;
+
+exports[`draft4 pattern.json Test pattern is not anchored 1`] = `"string"`;
+
+exports[`draft4 pattern.json Test pattern validation 1`] = `"string"`;
+
+exports[`draft4 patternProperties.json Test multiple simultaneous patternProperties are validated 1`] = `"any"`;
+
+exports[`draft4 patternProperties.json Test patternProperties validates properties matching a regex 1`] = `"any"`;
+
+exports[`draft4 patternProperties.json Test regexes are not anchored by default and are case sensitive 1`] = `"any"`;
+
+exports[`draft4 properties.json Test object properties validation 1`] = `
+"{
+    foo?: number;
+    bar?: string;
+}"
+`;
+
+exports[`draft4 properties.json Test properties, patternProperties, additionalProperties interaction 1`] = `
+"{
+    foo?: any[];
+    bar?: any;
+}"
+`;
+
+exports[`draft4 ref.json Test Recursive references between schemas 1`] = `
+"{
+    meta: string;
+    nodes: node[];
+}
+
+interface node {
+    value: number;
+    subtree?: tree;
+}
+
+interface tree {
+    meta: string;
+    nodes: node[];
+}"
+`;
+
+exports[`draft4 ref.json Test escaped pointer ref 1`] = `
+"{
+    tilda?: tilda~0field;
+    slash?: slash~1field;
+    percent?: percent%25field;
+}
+
+type tilda~0field = number;
+
+type slash~1field = number;
+
+type percent%25field = number;"
+`;
+
+exports[`draft4 ref.json Test nested refs 1`] = `
+"c
+
+type c = b;
+
+type b = a;
+
+type a = number;"
+`;
+
+exports[`draft4 ref.json Test property named $ref that is not a reference 1`] = `
+"{
+    $ref?: string;
+}"
+`;
+
+exports[`draft4 ref.json Test ref overrides any sibling keywords 1`] = `
+"{
+    foo?: reffed;
+}
+
+type reffed = any;"
+`;
+
+exports[`draft4 ref.json Test relative pointer ref to array 1`] = `
+"(number | 0)[]
+
+type 0 = number;"
+`;
+
+exports[`draft4 ref.json Test relative pointer ref to object 1`] = `
+"{
+    foo?: number;
+    bar?: foo;
+}
+
+type foo = number;"
+`;
+
+exports[`draft4 ref.json Test root pointer ref 1`] = `
+"{
+    foo?: ;
+}
+
+interface  {
+    foo?: ;
+}"
+`;
+
+exports[`draft4 refRemote.json Test base URI change - change folder 1`] = `
+"{
+    list?: baz;
+}
+
+type baz = folderInteger.json[];
+
+type folderInteger.json = number;"
+`;
+
+exports[`draft4 refRemote.json Test base URI change - change folder in subschema 1`] = `
+"{
+    list?: bar;
+}
+
+type bar = folderInteger.json[];
+
+type folderInteger.json = any;"
+`;
+
+exports[`draft4 refRemote.json Test base URI change 1`] = `
+"folderInteger.json[][]
+
+type folderInteger.json = number;"
+`;
+
+exports[`draft4 refRemote.json Test fragment within remote ref 1`] = `
+"integer
+
+type integer = number;"
+`;
+
+exports[`draft4 refRemote.json Test ref within remote ref 1`] = `
+"refToInteger
+
+type refToInteger = number;"
+`;
+
+exports[`draft4 refRemote.json Test remote ref 1`] = `
+"http://localhost:1234/integer.json
+
+type http://localhost:1234/integer.json = number;"
+`;
+
+exports[`draft4 refRemote.json Test root ref in remote ref 1`] = `
+"{
+    name?: orNull;
+}
+
+type orNull = any | string;"
+`;
+
+exports[`draft4 required.json Test required default validation 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft4 required.json Test required validation 1`] = `
+"{
+    foo: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft4 type.json Test array type matches arrays 1`] = `"any"`;
+
+exports[`draft4 type.json Test boolean type matches booleans 1`] = `"boolean"`;
+
+exports[`draft4 type.json Test integer type matches integers 1`] = `"number"`;
+
+exports[`draft4 type.json Test multiple types can be specified in an array 1`] = `"number | string"`;
+
+exports[`draft4 type.json Test null type matches only the null object 1`] = `"any"`;
+
+exports[`draft4 type.json Test number type matches numbers 1`] = `"number"`;
+
+exports[`draft4 type.json Test object type matches objects 1`] = `"any"`;
+
+exports[`draft4 type.json Test string type matches strings 1`] = `"string"`;
+
+exports[`draft4 type.json Test type as array with one item 1`] = `"string"`;
+
+exports[`draft4 type.json Test type: array or object 1`] = `"any[] | object"`;
+
+exports[`draft4 type.json Test type: array, object or null 1`] = `"any[] | object | null"`;
+
+exports[`draft4 uniqueItems.json Test uniqueItems validation 1`] = `"any"`;
+
+exports[`draft6 additionalItems.json Test additionalItems are allowed by default 1`] = `"(number)[]"`;
+
+exports[`draft6 additionalItems.json Test additionalItems as false without items 1`] = `"any"`;
+
+exports[`draft6 additionalItems.json Test additionalItems as schema 1`] = `"(any | number)[]"`;
+
+exports[`draft6 additionalItems.json Test array of items with no additionalItems 1`] = `"[any, any, any]"`;
+
+exports[`draft6 additionalItems.json Test items is schema, no additionalItems 1`] = `"any[]"`;
+
+exports[`draft6 additionalProperties.json Test additionalProperties allows a schema which should validate 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft6 additionalProperties.json Test additionalProperties are allowed by default 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft6 additionalProperties.json Test additionalProperties being false does not allow other properties 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft6 additionalProperties.json Test additionalProperties can exist by itself 1`] = `"any"`;
+
+exports[`draft6 additionalProperties.json Test additionalProperties should not look in applicators 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft6 additionalProperties.json Test non-ASCII pattern with additionalProperties 1`] = `"any"`;
+
+exports[`draft6 allOf.json Test allOf 1`] = `
+"{
+    bar: number;
+} & {
+    foo: string;
+}"
+`;
+
+exports[`draft6 allOf.json Test allOf simple types 1`] = `"number & number"`;
+
+exports[`draft6 allOf.json Test allOf with base schema 1`] = `
+"{
+    bar: number;
+}"
+`;
+
+exports[`draft6 allOf.json Test allOf with boolean schemas, all false 1`] = `"void & void"`;
+
+exports[`draft6 allOf.json Test allOf with boolean schemas, all true 1`] = `"any & any"`;
+
+exports[`draft6 allOf.json Test allOf with boolean schemas, some false 1`] = `"any & void"`;
+
+exports[`draft6 allOf.json Test allOf with one empty schema 1`] = `"any"`;
+
+exports[`draft6 allOf.json Test allOf with the first empty schema 1`] = `"any & number"`;
+
+exports[`draft6 allOf.json Test allOf with the last empty schema 1`] = `"number & any"`;
+
+exports[`draft6 allOf.json Test allOf with two empty schemas 1`] = `"any & any"`;
+
+exports[`draft6 anyOf.json Test anyOf 1`] = `"number | number"`;
+
+exports[`draft6 anyOf.json Test anyOf complex types 1`] = `
+"{
+    bar: number;
+} | {
+    foo: string;
+}"
+`;
+
+exports[`draft6 anyOf.json Test anyOf with base schema 1`] = `"string"`;
+
+exports[`draft6 anyOf.json Test anyOf with boolean schemas, all false 1`] = `"void | void"`;
+
+exports[`draft6 anyOf.json Test anyOf with boolean schemas, all true 1`] = `"any | any"`;
+
+exports[`draft6 anyOf.json Test anyOf with boolean schemas, some true 1`] = `"any | void"`;
+
+exports[`draft6 anyOf.json Test anyOf with one empty schema 1`] = `"number | any"`;
+
+exports[`draft6 boolean_schema.json Test boolean schema 'false' 1`] = `"void"`;
+
+exports[`draft6 boolean_schema.json Test boolean schema 'true' 1`] = `"any"`;
+
+exports[`draft6 const.json Test const validation 1`] = `"2"`;
+
+exports[`draft6 const.json Test const with array 1`] = `"any"`;
+
+exports[`draft6 const.json Test const with null 1`] = `"any"`;
+
+exports[`draft6 const.json Test const with object 1`] = `"any"`;
+
+exports[`draft6 contains.json Test contains keyword validation 1`] = `"any"`;
+
+exports[`draft6 contains.json Test contains keyword with boolean schema false 1`] = `"any"`;
+
+exports[`draft6 contains.json Test contains keyword with boolean schema true 1`] = `"any"`;
+
+exports[`draft6 contains.json Test contains keyword with const keyword 1`] = `"any"`;
+
+exports[`draft6 default.json Test invalid string value for default 1`] = `
+"{
+    bar?: string;
+}"
+`;
+
+exports[`draft6 default.json Test invalid type for default 1`] = `
+"{
+    foo?: number;
+}"
+`;
+
+exports[`draft6 dependencies.json Test dependencies 1`] = `"any"`;
+
+exports[`draft6 dependencies.json Test dependencies with boolean subschemas 1`] = `"any"`;
+
+exports[`draft6 dependencies.json Test dependencies with empty array 1`] = `"any"`;
+
+exports[`draft6 dependencies.json Test empty array of dependencies 1`] = `"any"`;
+
+exports[`draft6 dependencies.json Test multiple dependencies 1`] = `"any"`;
+
+exports[`draft6 dependencies.json Test multiple dependencies subschema 1`] = `"any"`;
+
+exports[`draft6 enum.json Test enums in properties 1`] = `
+"{
+    foo?: \\"foo\\";
+    bar: \\"bar\\";
+}"
+`;
+
+exports[`draft6 enum.json Test heterogeneous enum validation 1`] = `"6 | \\"foo\\" | any | true | any"`;
+
+exports[`draft6 enum.json Test simple enum validation 1`] = `"1 | 2 | 3"`;
+
+exports[`draft6 exclusiveMaximum.json Test exclusiveMaximum validation 1`] = `"number"`;
+
+exports[`draft6 exclusiveMinimum.json Test exclusiveMinimum validation 1`] = `"number"`;
+
+exports[`draft6 items.json Test a schema given for items 1`] = `"number[]"`;
+
+exports[`draft6 items.json Test an array of schemas for items 1`] = `"(number | string)[]"`;
+
+exports[`draft6 items.json Test items and subitems 1`] = `
+"[item, item, item]
+
+type item = [sub-item, sub-item];
+
+type sub-item = any;"
+`;
+
+exports[`draft6 items.json Test items with boolean schema (false) 1`] = `"any"`;
+
+exports[`draft6 items.json Test items with boolean schema (true) 1`] = `"any[]"`;
+
+exports[`draft6 items.json Test items with boolean schemas 1`] = `"(any | void)[]"`;
+
+exports[`draft6 items.json Test nested items 1`] = `"number[][][][]"`;
+
+exports[`draft6 maxItems.json Test maxItems validation 1`] = `"any[]"`;
+
+exports[`draft6 maxLength.json Test maxLength validation 1`] = `"string"`;
+
+exports[`draft6 maxProperties.json Test maxProperties validation 1`] = `"any"`;
+
+exports[`draft6 maximum.json Test maximum validation 1`] = `"number"`;
+
+exports[`draft6 minItems.json Test minItems validation 1`] = `"any[]"`;
+
+exports[`draft6 minLength.json Test minLength validation 1`] = `"string"`;
+
+exports[`draft6 minProperties.json Test minProperties validation 1`] = `"any"`;
+
+exports[`draft6 minimum.json Test minimum validation 1`] = `"number"`;
+
+exports[`draft6 minimum.json Test minimum validation with signed integer 1`] = `"number"`;
+
+exports[`draft6 multipleOf.json Test by int 1`] = `"any"`;
+
+exports[`draft6 multipleOf.json Test by number 1`] = `"any"`;
+
+exports[`draft6 multipleOf.json Test by small number 1`] = `"any"`;
+
+exports[`draft6 not.json Test forbidden property 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft6 not.json Test not 1`] = `"any"`;
+
+exports[`draft6 not.json Test not more complex schema 1`] = `"any"`;
+
+exports[`draft6 not.json Test not multiple types 1`] = `"any"`;
+
+exports[`draft6 not.json Test not with boolean schema false 1`] = `"any"`;
+
+exports[`draft6 not.json Test not with boolean schema true 1`] = `"any"`;
+
+exports[`draft6 oneOf.json Test oneOf 1`] = `"number | number"`;
+
+exports[`draft6 oneOf.json Test oneOf complex types 1`] = `
+"{
+    bar: number;
+} | {
+    foo: string;
+}"
+`;
+
+exports[`draft6 oneOf.json Test oneOf with base schema 1`] = `"string"`;
+
+exports[`draft6 oneOf.json Test oneOf with boolean schemas, all false 1`] = `"void | void | void"`;
+
+exports[`draft6 oneOf.json Test oneOf with boolean schemas, all true 1`] = `"any | any | any"`;
+
+exports[`draft6 oneOf.json Test oneOf with boolean schemas, more than one true 1`] = `"any | any | void"`;
+
+exports[`draft6 oneOf.json Test oneOf with boolean schemas, one true 1`] = `"any | void | void"`;
+
+exports[`draft6 oneOf.json Test oneOf with empty schema 1`] = `"number | any"`;
+
+exports[`draft6 oneOf.json Test oneOf with required 1`] = `"any | any"`;
+
+exports[`draft6 pattern.json Test pattern is not anchored 1`] = `"string"`;
+
+exports[`draft6 pattern.json Test pattern validation 1`] = `"string"`;
+
+exports[`draft6 patternProperties.json Test multiple simultaneous patternProperties are validated 1`] = `"any"`;
+
+exports[`draft6 patternProperties.json Test patternProperties validates properties matching a regex 1`] = `"any"`;
+
+exports[`draft6 patternProperties.json Test patternProperties with boolean schemas 1`] = `"any"`;
+
+exports[`draft6 patternProperties.json Test regexes are not anchored by default and are case sensitive 1`] = `"any"`;
+
+exports[`draft6 properties.json Test object properties validation 1`] = `
+"{
+    foo?: number;
+    bar?: string;
+}"
+`;
+
+exports[`draft6 properties.json Test properties with boolean schema 1`] = `
+"{
+    foo?: any;
+    bar?: void;
+}"
+`;
+
+exports[`draft6 properties.json Test properties, patternProperties, additionalProperties interaction 1`] = `
+"{
+    foo?: any[];
+    bar?: any;
+}"
+`;
+
+exports[`draft6 propertyNames.json Test propertyNames validation 1`] = `"any"`;
+
+exports[`draft6 propertyNames.json Test propertyNames with boolean schema false 1`] = `"any"`;
+
+exports[`draft6 propertyNames.json Test propertyNames with boolean schema true 1`] = `"any"`;
+
+exports[`draft6 ref.json Test $ref to boolean schema false 1`] = `
+"bool
+
+type bool = any;"
+`;
+
+exports[`draft6 ref.json Test $ref to boolean schema true 1`] = `
+"bool
+
+type bool = any;"
+`;
+
+exports[`draft6 ref.json Test Recursive references between schemas 1`] = `
+"{
+    meta: string;
+    nodes: node[];
+}
+
+interface node {
+    value: number;
+    subtree?: tree;
+}
+
+interface tree {
+    meta: string;
+    nodes: node[];
+}"
+`;
+
+exports[`draft6 ref.json Test escaped pointer ref 1`] = `
+"{
+    tilda?: tilda~0field;
+    slash?: slash~1field;
+    percent?: percent%25field;
+}
+
+type tilda~0field = number;
+
+type slash~1field = number;
+
+type percent%25field = number;"
+`;
+
+exports[`draft6 ref.json Test nested refs 1`] = `
+"c
+
+type c = b;
+
+type b = a;
+
+type a = number;"
+`;
+
+exports[`draft6 ref.json Test property named $ref that is not a reference 1`] = `
+"{
+    $ref?: string;
+}"
+`;
+
+exports[`draft6 ref.json Test ref overrides any sibling keywords 1`] = `
+"{
+    foo?: reffed;
+}
+
+type reffed = any;"
+`;
+
+exports[`draft6 ref.json Test relative pointer ref to array 1`] = `
+"(number | 0)[]
+
+type 0 = number;"
+`;
+
+exports[`draft6 ref.json Test relative pointer ref to object 1`] = `
+"{
+    foo?: number;
+    bar?: foo;
+}
+
+type foo = number;"
+`;
+
+exports[`draft6 ref.json Test root pointer ref 1`] = `
+"{
+    foo?: ;
+}
+
+interface  {
+    foo?: ;
+}"
+`;
+
+exports[`draft6 refRemote.json Test base URI change - change folder 1`] = `
+"{
+    list?: baz;
+}
+
+type baz = folderInteger.json[];
+
+type folderInteger.json = number;"
+`;
+
+exports[`draft6 refRemote.json Test base URI change - change folder in subschema 1`] = `
+"{
+    list?: bar;
+}
+
+type bar = folderInteger.json[];
+
+type folderInteger.json = any;"
+`;
+
+exports[`draft6 refRemote.json Test base URI change 1`] = `
+"folderInteger.json[][]
+
+type folderInteger.json = number;"
+`;
+
+exports[`draft6 refRemote.json Test fragment within remote ref 1`] = `
+"integer
+
+type integer = number;"
+`;
+
+exports[`draft6 refRemote.json Test ref within remote ref 1`] = `
+"refToInteger
+
+type refToInteger = number;"
+`;
+
+exports[`draft6 refRemote.json Test remote ref 1`] = `
+"http://localhost:1234/integer.json
+
+type http://localhost:1234/integer.json = number;"
+`;
+
+exports[`draft6 refRemote.json Test root ref in remote ref 1`] = `
+"{
+    name?: orNull;
+}
+
+type orNull = any | string;"
+`;
+
+exports[`draft6 required.json Test required default validation 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft6 required.json Test required validation 1`] = `
+"{
+    foo: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft6 required.json Test required with empty array 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft6 type.json Test array type matches arrays 1`] = `"any"`;
+
+exports[`draft6 type.json Test boolean type matches booleans 1`] = `"boolean"`;
+
+exports[`draft6 type.json Test integer type matches integers 1`] = `"number"`;
+
+exports[`draft6 type.json Test multiple types can be specified in an array 1`] = `"number | string"`;
+
+exports[`draft6 type.json Test null type matches only the null object 1`] = `"any"`;
+
+exports[`draft6 type.json Test number type matches numbers 1`] = `"number"`;
+
+exports[`draft6 type.json Test object type matches objects 1`] = `"any"`;
+
+exports[`draft6 type.json Test string type matches strings 1`] = `"string"`;
+
+exports[`draft6 type.json Test type as array with one item 1`] = `"string"`;
+
+exports[`draft6 type.json Test type: array or object 1`] = `"any[] | object"`;
+
+exports[`draft6 type.json Test type: array, object or null 1`] = `"any[] | object | null"`;
+
+exports[`draft6 uniqueItems.json Test uniqueItems validation 1`] = `"any"`;
+
+exports[`draft7 additionalItems.json Test additionalItems are allowed by default 1`] = `"(number)[]"`;
+
+exports[`draft7 additionalItems.json Test additionalItems as false without items 1`] = `"any"`;
+
+exports[`draft7 additionalItems.json Test additionalItems as schema 1`] = `"(any | number)[]"`;
+
+exports[`draft7 additionalItems.json Test array of items with no additionalItems 1`] = `"[any, any, any]"`;
+
+exports[`draft7 additionalItems.json Test items is schema, no additionalItems 1`] = `"any[]"`;
+
+exports[`draft7 additionalProperties.json Test additionalProperties allows a schema which should validate 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft7 additionalProperties.json Test additionalProperties are allowed by default 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft7 additionalProperties.json Test additionalProperties being false does not allow other properties 1`] = `
+"{
+    foo?: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft7 additionalProperties.json Test additionalProperties can exist by itself 1`] = `"any"`;
+
+exports[`draft7 additionalProperties.json Test additionalProperties should not look in applicators 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft7 additionalProperties.json Test non-ASCII pattern with additionalProperties 1`] = `"any"`;
+
+exports[`draft7 allOf.json Test allOf 1`] = `
+"{
+    bar: number;
+} & {
+    foo: string;
+}"
+`;
+
+exports[`draft7 allOf.json Test allOf simple types 1`] = `"number & number"`;
+
+exports[`draft7 allOf.json Test allOf with base schema 1`] = `
+"{
+    bar: number;
+}"
+`;
+
+exports[`draft7 allOf.json Test allOf with boolean schemas, all false 1`] = `"void & void"`;
+
+exports[`draft7 allOf.json Test allOf with boolean schemas, all true 1`] = `"any & any"`;
+
+exports[`draft7 allOf.json Test allOf with boolean schemas, some false 1`] = `"any & void"`;
+
+exports[`draft7 allOf.json Test allOf with one empty schema 1`] = `"any"`;
+
+exports[`draft7 allOf.json Test allOf with the first empty schema 1`] = `"any & number"`;
+
+exports[`draft7 allOf.json Test allOf with the last empty schema 1`] = `"number & any"`;
+
+exports[`draft7 allOf.json Test allOf with two empty schemas 1`] = `"any & any"`;
+
+exports[`draft7 anyOf.json Test anyOf 1`] = `"number | number"`;
+
+exports[`draft7 anyOf.json Test anyOf complex types 1`] = `
+"{
+    bar: number;
+} | {
+    foo: string;
+}"
+`;
+
+exports[`draft7 anyOf.json Test anyOf with base schema 1`] = `"string"`;
+
+exports[`draft7 anyOf.json Test anyOf with boolean schemas, all false 1`] = `"void | void"`;
+
+exports[`draft7 anyOf.json Test anyOf with boolean schemas, all true 1`] = `"any | any"`;
+
+exports[`draft7 anyOf.json Test anyOf with boolean schemas, some true 1`] = `"any | void"`;
+
+exports[`draft7 anyOf.json Test anyOf with one empty schema 1`] = `"number | any"`;
+
+exports[`draft7 boolean_schema.json Test boolean schema 'false' 1`] = `"void"`;
+
+exports[`draft7 boolean_schema.json Test boolean schema 'true' 1`] = `"any"`;
+
+exports[`draft7 const.json Test const validation 1`] = `"2"`;
+
+exports[`draft7 const.json Test const with array 1`] = `"any"`;
+
+exports[`draft7 const.json Test const with null 1`] = `"any"`;
+
+exports[`draft7 const.json Test const with object 1`] = `"any"`;
+
+exports[`draft7 contains.json Test contains keyword validation 1`] = `"any"`;
+
+exports[`draft7 contains.json Test contains keyword with boolean schema false 1`] = `"any"`;
+
+exports[`draft7 contains.json Test contains keyword with boolean schema true 1`] = `"any"`;
+
+exports[`draft7 contains.json Test contains keyword with const keyword 1`] = `"any"`;
+
+exports[`draft7 default.json Test invalid string value for default 1`] = `
+"{
+    bar?: string;
+}"
+`;
+
+exports[`draft7 default.json Test invalid type for default 1`] = `
+"{
+    foo?: number;
+}"
+`;
+
+exports[`draft7 dependencies.json Test dependencies 1`] = `"any"`;
+
+exports[`draft7 dependencies.json Test dependencies with boolean subschemas 1`] = `"any"`;
+
+exports[`draft7 dependencies.json Test dependencies with empty array 1`] = `"any"`;
+
+exports[`draft7 dependencies.json Test empty array of dependencies 1`] = `"any"`;
+
+exports[`draft7 dependencies.json Test multiple dependencies 1`] = `"any"`;
+
+exports[`draft7 dependencies.json Test multiple dependencies subschema 1`] = `"any"`;
+
+exports[`draft7 enum.json Test enums in properties 1`] = `
+"{
+    foo?: \\"foo\\";
+    bar: \\"bar\\";
+}"
+`;
+
+exports[`draft7 enum.json Test heterogeneous enum validation 1`] = `"6 | \\"foo\\" | any | true | any"`;
+
+exports[`draft7 enum.json Test simple enum validation 1`] = `"1 | 2 | 3"`;
+
+exports[`draft7 exclusiveMaximum.json Test exclusiveMaximum validation 1`] = `"number"`;
+
+exports[`draft7 exclusiveMinimum.json Test exclusiveMinimum validation 1`] = `"number"`;
+
+exports[`draft7 if-then-else.json Test if and else without then 1`] = `"any"`;
+
+exports[`draft7 if-then-else.json Test if and then without else 1`] = `"any"`;
+
+exports[`draft7 if-then-else.json Test ignore else without if 1`] = `"any"`;
+
+exports[`draft7 if-then-else.json Test ignore if without then or else 1`] = `"any"`;
+
+exports[`draft7 if-then-else.json Test ignore then without if 1`] = `"any"`;
+
+exports[`draft7 if-then-else.json Test non-interference across combined schemas 1`] = `"any & any & any"`;
+
+exports[`draft7 if-then-else.json Test validate against correct branch, then vs else 1`] = `"any"`;
+
+exports[`draft7 items.json Test a schema given for items 1`] = `"number[]"`;
+
+exports[`draft7 items.json Test an array of schemas for items 1`] = `"(number | string)[]"`;
+
+exports[`draft7 items.json Test items and subitems 1`] = `
+"[item, item, item]
+
+type item = [sub-item, sub-item];
+
+type sub-item = any;"
+`;
+
+exports[`draft7 items.json Test items with boolean schema (false) 1`] = `"any"`;
+
+exports[`draft7 items.json Test items with boolean schema (true) 1`] = `"any[]"`;
+
+exports[`draft7 items.json Test items with boolean schemas 1`] = `"(any | void)[]"`;
+
+exports[`draft7 items.json Test nested items 1`] = `"number[][][][]"`;
+
+exports[`draft7 maxItems.json Test maxItems validation 1`] = `"any[]"`;
+
+exports[`draft7 maxLength.json Test maxLength validation 1`] = `"string"`;
+
+exports[`draft7 maxProperties.json Test maxProperties validation 1`] = `"any"`;
+
+exports[`draft7 maximum.json Test maximum validation 1`] = `"number"`;
+
+exports[`draft7 minItems.json Test minItems validation 1`] = `"any[]"`;
+
+exports[`draft7 minLength.json Test minLength validation 1`] = `"string"`;
+
+exports[`draft7 minProperties.json Test minProperties validation 1`] = `"any"`;
+
+exports[`draft7 minimum.json Test minimum validation 1`] = `"number"`;
+
+exports[`draft7 minimum.json Test minimum validation with signed integer 1`] = `"number"`;
+
+exports[`draft7 multipleOf.json Test by int 1`] = `"any"`;
+
+exports[`draft7 multipleOf.json Test by number 1`] = `"any"`;
+
+exports[`draft7 multipleOf.json Test by small number 1`] = `"any"`;
+
+exports[`draft7 not.json Test forbidden property 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft7 not.json Test not 1`] = `"any"`;
+
+exports[`draft7 not.json Test not more complex schema 1`] = `"any"`;
+
+exports[`draft7 not.json Test not multiple types 1`] = `"any"`;
+
+exports[`draft7 not.json Test not with boolean schema false 1`] = `"any"`;
+
+exports[`draft7 not.json Test not with boolean schema true 1`] = `"any"`;
+
+exports[`draft7 oneOf.json Test oneOf 1`] = `"number | number"`;
+
+exports[`draft7 oneOf.json Test oneOf complex types 1`] = `
+"{
+    bar: number;
+} | {
+    foo: string;
+}"
+`;
+
+exports[`draft7 oneOf.json Test oneOf with base schema 1`] = `"string"`;
+
+exports[`draft7 oneOf.json Test oneOf with boolean schemas, all false 1`] = `"void | void | void"`;
+
+exports[`draft7 oneOf.json Test oneOf with boolean schemas, all true 1`] = `"any | any | any"`;
+
+exports[`draft7 oneOf.json Test oneOf with boolean schemas, more than one true 1`] = `"any | any | void"`;
+
+exports[`draft7 oneOf.json Test oneOf with boolean schemas, one true 1`] = `"any | void | void"`;
+
+exports[`draft7 oneOf.json Test oneOf with empty schema 1`] = `"number | any"`;
+
+exports[`draft7 oneOf.json Test oneOf with required 1`] = `"any | any"`;
+
+exports[`draft7 pattern.json Test pattern is not anchored 1`] = `"string"`;
+
+exports[`draft7 pattern.json Test pattern validation 1`] = `"string"`;
+
+exports[`draft7 patternProperties.json Test multiple simultaneous patternProperties are validated 1`] = `"any"`;
+
+exports[`draft7 patternProperties.json Test patternProperties validates properties matching a regex 1`] = `"any"`;
+
+exports[`draft7 patternProperties.json Test patternProperties with boolean schemas 1`] = `"any"`;
+
+exports[`draft7 patternProperties.json Test regexes are not anchored by default and are case sensitive 1`] = `"any"`;
+
+exports[`draft7 properties.json Test object properties validation 1`] = `
+"{
+    foo?: number;
+    bar?: string;
+}"
+`;
+
+exports[`draft7 properties.json Test properties with boolean schema 1`] = `
+"{
+    foo?: any;
+    bar?: void;
+}"
+`;
+
+exports[`draft7 properties.json Test properties, patternProperties, additionalProperties interaction 1`] = `
+"{
+    foo?: any[];
+    bar?: any;
+}"
+`;
+
+exports[`draft7 propertyNames.json Test propertyNames validation 1`] = `"any"`;
+
+exports[`draft7 propertyNames.json Test propertyNames with boolean schema false 1`] = `"any"`;
+
+exports[`draft7 propertyNames.json Test propertyNames with boolean schema true 1`] = `"any"`;
+
+exports[`draft7 ref.json Test $ref to boolean schema false 1`] = `
+"bool
+
+type bool = any;"
+`;
+
+exports[`draft7 ref.json Test $ref to boolean schema true 1`] = `
+"bool
+
+type bool = any;"
+`;
+
+exports[`draft7 ref.json Test Recursive references between schemas 1`] = `
+"{
+    meta: string;
+    nodes: node[];
+}
+
+interface node {
+    value: number;
+    subtree?: tree;
+}
+
+interface tree {
+    meta: string;
+    nodes: node[];
+}"
+`;
+
+exports[`draft7 ref.json Test escaped pointer ref 1`] = `
+"{
+    tilda?: tilda~0field;
+    slash?: slash~1field;
+    percent?: percent%25field;
+}
+
+type tilda~0field = number;
+
+type slash~1field = number;
+
+type percent%25field = number;"
+`;
+
+exports[`draft7 ref.json Test nested refs 1`] = `
+"c
+
+type c = b;
+
+type b = a;
+
+type a = number;"
+`;
+
+exports[`draft7 ref.json Test property named $ref that is not a reference 1`] = `
+"{
+    $ref?: string;
+}"
+`;
+
+exports[`draft7 ref.json Test ref overrides any sibling keywords 1`] = `
+"{
+    foo?: reffed;
+}
+
+type reffed = any;"
+`;
+
+exports[`draft7 ref.json Test relative pointer ref to array 1`] = `
+"(number | 0)[]
+
+type 0 = number;"
+`;
+
+exports[`draft7 ref.json Test relative pointer ref to object 1`] = `
+"{
+    foo?: number;
+    bar?: foo;
+}
+
+type foo = number;"
+`;
+
+exports[`draft7 ref.json Test root pointer ref 1`] = `
+"{
+    foo?: ;
+}
+
+interface  {
+    foo?: ;
+}"
+`;
+
+exports[`draft7 refRemote.json Test base URI change - change folder 1`] = `
+"{
+    list?: baz;
+}
+
+type baz = folderInteger.json[];
+
+type folderInteger.json = number;"
+`;
+
+exports[`draft7 refRemote.json Test base URI change - change folder in subschema 1`] = `
+"{
+    list?: bar;
+}
+
+type bar = folderInteger.json[];
+
+type folderInteger.json = any;"
+`;
+
+exports[`draft7 refRemote.json Test base URI change 1`] = `
+"folderInteger.json[][]
+
+type folderInteger.json = number;"
+`;
+
+exports[`draft7 refRemote.json Test fragment within remote ref 1`] = `
+"integer
+
+type integer = number;"
+`;
+
+exports[`draft7 refRemote.json Test ref within remote ref 1`] = `
+"refToInteger
+
+type refToInteger = number;"
+`;
+
+exports[`draft7 refRemote.json Test remote ref 1`] = `
+"http://localhost:1234/integer.json
+
+type http://localhost:1234/integer.json = number;"
+`;
+
+exports[`draft7 refRemote.json Test root ref in remote ref 1`] = `
+"{
+    name?: orNull;
+}
+
+type orNull = any | string;"
+`;
+
+exports[`draft7 required.json Test required default validation 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft7 required.json Test required validation 1`] = `
+"{
+    foo: any;
+    bar?: any;
+}"
+`;
+
+exports[`draft7 required.json Test required with empty array 1`] = `
+"{
+    foo?: any;
+}"
+`;
+
+exports[`draft7 type.json Test array type matches arrays 1`] = `"any"`;
+
+exports[`draft7 type.json Test boolean type matches booleans 1`] = `"boolean"`;
+
+exports[`draft7 type.json Test integer type matches integers 1`] = `"number"`;
+
+exports[`draft7 type.json Test multiple types can be specified in an array 1`] = `"number | string"`;
+
+exports[`draft7 type.json Test null type matches only the null object 1`] = `"any"`;
+
+exports[`draft7 type.json Test number type matches numbers 1`] = `"number"`;
+
+exports[`draft7 type.json Test object type matches objects 1`] = `"any"`;
+
+exports[`draft7 type.json Test string type matches strings 1`] = `"string"`;
+
+exports[`draft7 type.json Test type as array with one item 1`] = `"string"`;
+
+exports[`draft7 type.json Test type: array or object 1`] = `"any[] | object"`;
+
+exports[`draft7 type.json Test type: array, object or null 1`] = `"any[] | object | null"`;
+
+exports[`draft7 uniqueItems.json Test uniqueItems validation 1`] = `"any"`;

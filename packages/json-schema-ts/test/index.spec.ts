@@ -1,80 +1,151 @@
 import { Schema } from '@ovotech/json-schema';
-import { inspect } from 'util';
-import { astToTS, jsonSchemaToAST, registryToTs } from '../src';
+// import { inspect } from 'util';
+import { convert } from '../src';
 
 describe('Json Schema Ts', () => {
-  it('Test', () => {
+  it('Test', async () => {
     const schema: Schema = {
-      $schema: 'http://json-schema.org/draft-07/schema#',
-      type: 'array',
-      items: [
-        {
+      id: 'http://json-schema.org/draft-04/schema#',
+      $schema: 'http://json-schema.org/draft-04/schema#',
+      description: 'Core schema meta-schema',
+      definitions: {
+        schemaArray: {
+          type: 'array',
+          minItems: 1,
+          items: { $ref: '#' },
+        },
+        positiveInteger: {
+          type: 'integer',
+          minimum: 0,
+        },
+        positiveIntegerDefault0: {
+          allOf: [{ $ref: '#/definitions/positiveInteger' }, { default: 0 }],
+        },
+        simpleTypes: {
+          enum: ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'],
+        },
+        stringArray: {
+          type: 'array',
+          items: { type: 'string' },
+          minItems: 1,
+          uniqueItems: true,
+        },
+      },
+      type: 'object',
+      properties: {
+        id: {
           type: 'string',
         },
-        {
-          type: 'number',
-        },
-        {
+        $schema: {
           type: 'string',
         },
-        {
-          type: 'number',
-        },
-        {
+        title: {
           type: 'string',
         },
-        {
-          type: 'number',
-        },
-        {
+        description: {
           type: 'string',
         },
-        {
+        default: {},
+        multipleOf: {
+          type: 'number',
+          minimum: 0,
+          exclusiveMinimum: true,
+        },
+        maximum: {
           type: 'number',
         },
-        {
+        exclusiveMaximum: {
+          type: 'boolean',
+          default: false,
+        },
+        minimum: {
+          type: 'number',
+        },
+        exclusiveMinimum: {
+          type: 'boolean',
+          default: false,
+        },
+        maxLength: { $ref: '#/definitions/positiveInteger' },
+        minLength: { $ref: '#/definitions/positiveIntegerDefault0' },
+        pattern: {
           type: 'string',
+          format: 'regex',
         },
-        {
-          type: 'number',
+        additionalItems: {
+          anyOf: [{ type: 'boolean' }, { $ref: '#' }],
+          default: {},
         },
-        {
-          type: 'string',
+        items: {
+          anyOf: [{ $ref: '#' }, { $ref: '#/definitions/schemaArray' }],
+          default: {},
         },
-        {
-          type: 'number',
+        maxItems: { $ref: '#/definitions/positiveInteger' },
+        minItems: { $ref: '#/definitions/positiveIntegerDefault0' },
+        uniqueItems: {
+          type: 'boolean',
+          default: false,
         },
-        {
-          type: 'string',
+        maxProperties: { $ref: '#/definitions/positiveInteger' },
+        minProperties: { $ref: '#/definitions/positiveIntegerDefault0' },
+        required: { $ref: '#/definitions/stringArray' },
+        additionalProperties: {
+          anyOf: [{ type: 'boolean' }, { $ref: '#' }],
+          default: {},
         },
-        {
-          type: 'number',
+        definitions: {
+          type: 'object',
+          additionalProperties: { $ref: '#' },
+          default: {},
         },
-        {
-          type: 'string',
+        properties: {
+          type: 'object',
+          additionalProperties: { $ref: '#' },
+          default: {},
         },
-        {
-          type: 'number',
+        patternProperties: {
+          type: 'object',
+          additionalProperties: { $ref: '#' },
+          default: {},
         },
-        {
-          type: 'string',
+        dependencies: {
+          type: 'object',
+          additionalProperties: {
+            anyOf: [{ $ref: '#' }, { $ref: '#/definitions/stringArray' }],
+          },
         },
-        {
-          type: 'number',
+        enum: {
+          type: 'array',
+          minItems: 1,
+          uniqueItems: true,
         },
-        {
-          type: 'string',
+        type: {
+          anyOf: [
+            { $ref: '#/definitions/simpleTypes' },
+            {
+              type: 'array',
+              items: { $ref: '#/definitions/simpleTypes' },
+              minItems: 1,
+              uniqueItems: true,
+            },
+          ],
         },
-        {
-          type: 'number',
-        },
-      ],
+        format: { type: 'string' },
+        allOf: { $ref: '#/definitions/schemaArray' },
+        anyOf: { $ref: '#/definitions/schemaArray' },
+        oneOf: { $ref: '#/definitions/schemaArray' },
+        not: { $ref: '#' },
+      },
+      dependencies: {
+        exclusiveMaximum: ['maximum'],
+        exclusiveMinimum: ['minimum'],
+      },
+      default: {},
     };
 
-    const ast = jsonSchemaToAST(schema, { root: schema, registry: {} });
-    console.log(inspect(ast, { depth: 10 }));
-    console.log(astToTS(ast));
-    console.log(ast.context.registry);
-    console.log(registryToTs(ast.context.registry));
+    const result = await convert(schema);
+    // console.log(inspect(ast, { depth: 10 }));
+    console.log(result);
+    // console.log(ast.context.registry);
+    // console.log(registryToTs(ast.context.registry));
   });
 });

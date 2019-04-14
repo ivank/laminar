@@ -20,7 +20,7 @@
     "typescript": "^3.4.3"
   },
   "dependencies": {
-    "node-fetch": "^2.3.0"
+    "@ovotech/json-schema-ts": "^0.1.0"
   },
   "scripts": {
     "build": "tsc --outDir dist --declaration",
