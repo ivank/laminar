@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
-  "description": "Json Schema To TypeScript transpiler",
+  "description": "Generate typescript types from json-schema",
   "author": "Boost Internal Tools <boost-bit-tech@ovoenergy.com>",
   "license": "Apache-2.0",
   "devDependencies": {
@@ -13,14 +13,15 @@
     "@types/node": "^11.13.4",
     "jest": "^24.7.1",
     "nock": "^10.0.6",
-    "prettier": "^1.16.4",
+    "prettier": "^1.17.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.4.3"
   },
   "dependencies": {
-    "@ovotech/json-schema-ts": "^0.1.0"
+    "@ovotech/json-refs": "^0.1.0",
+    "openapi3-ts": "^1.2.0"
   },
   "scripts": {
     "build": "tsc --outDir dist --declaration",

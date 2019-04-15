@@ -79,7 +79,9 @@ export const oapi = async <TContext extends Context = Context>(
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
 
-  const matchers = toMatchers(await resolveRefs(api), options.paths);
+  const resolved = await resolveRefs(api);
+
+  const matchers = toMatchers(resolved.schema, options.paths);
 
   return async ctx => {
     const select = selectMatcher(ctx.method, ctx.url.pathname!, matchers);
@@ -94,7 +96,10 @@ export const oapi = async <TContext extends Context = Context>(
       path,
     } = select;
     const context = { ...ctx, path };
-    const checkContext = await validate(schema.context, context, { name: 'context' });
+    const checkContext = await validate(schema.context, context, {
+      name: 'context',
+      refs: resolved.refs,
+    });
 
     if (!checkContext.valid) {
       throw new HttpError(400, {
@@ -107,6 +112,7 @@ export const oapi = async <TContext extends Context = Context>(
     const laminarResponse = isResponse(result) ? result : response({ body: result });
     const checkResponse = await validate(schema.response, laminarResponse, {
       name: 'response',
+      refs: resolved.refs,
     });
 
     if (!checkResponse.valid) {

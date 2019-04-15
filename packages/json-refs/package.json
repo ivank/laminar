@@ -14,7 +14,7 @@
     "@types/node-fetch": "^2.3.2",
     "jest": "^24.7.1",
     "nock": "^10.0.6",
-    "prettier": "^1.16.4",
+    "prettier": "^1.17.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",

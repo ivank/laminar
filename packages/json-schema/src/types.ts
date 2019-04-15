@@ -1,3 +1,5 @@
+import { RefMap } from '@ovotech/json-refs';
+
 export type PrimitiveType =
   | 'string'
   | 'integer'
@@ -82,6 +84,7 @@ export interface Result {
 export interface ValidateOptions {
   name: string;
   validators: Validator[];
+  refs: RefMap;
 }
 
 export type Validator<TSchema = Schema, TValue = any> = (

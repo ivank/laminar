@@ -50,10 +50,11 @@ for (const testFolder of testFolders) {
 
   for (const [name, suites] of testFiles) {
     describe(`${testFolder} ${name}`, () => {
-      it.each<[string, Suite]>(suites.map(suite => [suite.description, suite]))(
+      it.each<[string, Schema]>(suites.map(suite => [suite.description, suite.schema]))(
         'Test %s',
-        async (description, suite) => {
-          expect(await convert(suite.schema)).toMatchSnapshot();
+        async (description, schema) => {
+          const ts = await convert(schema);
+          expect({ ts, schema }).toMatchSnapshot();
         },
       );
     });

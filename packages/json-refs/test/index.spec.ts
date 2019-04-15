@@ -136,17 +136,19 @@ describe('json-refs', () => {
       .reply(200, { test: 4 });
 
     const expected = {
-      'http://four.test/': { test: 4 },
-      'http://three.test/': 4,
-      'http://one.test/': 4,
-      'http://two.test/folder': { test: 2 },
       'http://two.test/': { $id: 'http://two.test', deep: { $ref: 'folder' } },
+      'http://four.test/': { test: 4 },
+      'http://four.test/#/test': 4,
+      'http://three.test/': { $ref: 'http://four.test/#/test' },
+      'http://three.test/#': { $ref: 'http://four.test/#/test' },
+      'http://one.test/': { $ref: 'http://three.test/#' },
+      'http://two.test/folder': { test: 2 },
     };
 
-    await expect(extractFiles(schema)).resolves.toEqual(expected);
+    expect(await extractFiles(schema)).toEqual(expected);
   });
 
-  it('Should resolve nested refs', async () => {
+  it('Should resolve simple nested refs', async () => {
     const schema = {
       definitions: {
         a: { type: 'integer' },
@@ -157,13 +159,20 @@ describe('json-refs', () => {
     };
 
     const expected = {
-      type: 'integer',
+      schema: {
+        $ref: '#/definitions/c',
+      },
+      refs: {
+        '#/definitions/a': { type: 'integer' },
+        '#/definitions/b': { $ref: '#/definitions/a' },
+        '#/definitions/c': { $ref: '#/definitions/b' },
+      },
     };
 
-    await expect(resolveRefs(schema)).resolves.toEqual(expected);
+    expect(await resolveRefs(schema)).toEqual(expected);
   });
 
-  it('Should resolve nested refs', async () => {
+  it('Should resolve nested recursive with files', async () => {
     const schema = {
       $id: 'http://localhost:1234/tree',
       description: 'tree of nodes',
@@ -190,7 +199,7 @@ describe('json-refs', () => {
       },
     };
 
-    await expect(resolveRefs(schema)).resolves.toMatchSnapshot();
+    expect(await resolveRefs(schema)).toMatchSnapshot();
   });
 
   it('Should resolve complex refs', async () => {
@@ -238,72 +247,8 @@ describe('json-refs', () => {
         },
       },
     };
-    const expected = {
-      definitions: {
-        address: {
-          properties: {
-            id: {
-              maxLength: 4,
-              minLength: 3,
-              type: 'string',
-            },
-            street: {
-              pattern: '^[A-Z]',
-              type: 'string',
-            },
-            price: { type: 'number' },
-            num: { type: 'integer' },
-            town: { type: 'string' },
-          },
-          type: 'object',
-        },
-        id: {
-          maxLength: 4,
-          minLength: 3,
-          type: 'string',
-        },
-        title: { pattern: '^[A-Z]', type: 'string' },
-        'test/slash': { type: 'number' },
-        'test~tilde': { type: 'string' },
-        'test%percent': { type: 'integer' },
-      },
-      properties: {
-        user: {
-          properties: {
-            address: {
-              properties: {
-                id: {
-                  maxLength: 4,
-                  minLength: 3,
-                  type: 'string',
-                },
-                street: {
-                  pattern: '^[A-Z]',
-                  type: 'string',
-                },
-                price: { type: 'number' },
-                num: { type: 'integer' },
-                town: { type: 'string' },
-              },
-              type: 'object',
-            },
-            id: {
-              maxLength: 4,
-              minLength: 3,
-              type: 'string',
-            },
-            name: {
-              pattern: '^[A-Z]',
-              type: 'string',
-            },
-          },
-          type: 'object',
-        },
-      },
-      type: 'object',
-    };
 
-    await expect(resolveRefs(schema)).resolves.toEqual(expected);
+    expect(await resolveRefs(schema)).toMatchSnapshot();
   });
 
   it('Should resolve url refs', async () => {
@@ -312,7 +257,19 @@ describe('json-refs', () => {
       .reply(200, { test: { type: 'number' } });
 
     const schema = { test: '123', other: { $ref: 'http://example.test/schema#/test' } };
-    await expect(resolveRefs(schema)).resolves.toEqual({ other: { type: 'number' }, test: '123' });
+    expect(await resolveRefs(schema)).toEqual({
+      schema: { other: { $ref: 'http://example.test/schema#/test' }, test: '123' },
+      refs: {
+        'http://example.test/schema': {
+          test: {
+            type: 'number',
+          },
+        },
+        'http://example.test/schema#/test': {
+          type: 'number',
+        },
+      },
+    });
   });
 
   it('Should resolve multiple refs with one load', async () => {
@@ -325,9 +282,16 @@ describe('json-refs', () => {
       other: { $ref: 'http://example.test/schema#/other' },
     };
 
-    await expect(resolveRefs(schema)).resolves.toEqual({
-      other: { type: 'array' },
-      test: { type: 'number' },
+    expect(await resolveRefs(schema)).toEqual({
+      schema: {
+        test: { $ref: 'http://example.test/schema#/test' },
+        other: { $ref: 'http://example.test/schema#/other' },
+      },
+      refs: {
+        'http://example.test/schema': { test: { type: 'number' }, other: { type: 'array' } },
+        'http://example.test/schema#/test': { type: 'number' },
+        'http://example.test/schema#/other': { type: 'array' },
+      },
     });
   });
 
@@ -344,10 +308,19 @@ describe('json-refs', () => {
       last: { $ref: 'http://example.test/other-schema#/last' },
     };
 
-    await expect(resolveRefs(schema)).resolves.toEqual({
-      other: { type: 'array' },
-      test: { type: 'number' },
-      last: { type: 'object' },
+    expect(await resolveRefs(schema)).toEqual({
+      schema: {
+        test: { $ref: 'http://example.test/schema#/test' },
+        other: { $ref: 'http://example.test/schema#/other' },
+        last: { $ref: 'http://example.test/other-schema#/last' },
+      },
+      refs: {
+        'http://example.test/schema': { test: { type: 'number' }, other: { type: 'array' } },
+        'http://example.test/other-schema': { last: { type: 'object' } },
+        'http://example.test/schema#/test': { type: 'number' },
+        'http://example.test/schema#/other': { type: 'array' },
+        'http://example.test/other-schema#/last': { type: 'object' },
+      },
     });
   });
 
@@ -363,124 +336,5 @@ describe('json-refs', () => {
     const schema2 = await resolveRefs(schema);
 
     expect(schema1).toEqual(schema2);
-  });
-
-  it('Should resolve complex refs and keep them', async () => {
-    const schema = {
-      type: 'object',
-      properties: {
-        user: {
-          type: 'object',
-          properties: {
-            name: { $ref: '#/definitions/title' },
-            id: { $ref: '#/definitions/id' },
-            address: { $ref: '#/definitions/address' },
-          },
-        },
-      },
-      definitions: {
-        title: {
-          type: 'string',
-          pattern: '^[A-Z]',
-        },
-        address: {
-          type: 'object',
-          properties: {
-            id: { $ref: '#/definitions/id' },
-            street: { $ref: '#/definitions/title' },
-            price: { $ref: '#/definitions/test~1slash' },
-            town: { $ref: '#/definitions/test~0tilde' },
-            num: { $ref: '#/definitions/test%25percent' },
-          },
-        },
-        'test/slash': {
-          type: 'number',
-        },
-        'test~tilde': {
-          type: 'string',
-        },
-        'test%percent': {
-          type: 'integer',
-        },
-        id: {
-          type: 'string',
-          minLength: 3,
-          maxLength: 4,
-        },
-      },
-    };
-    const expected = {
-      definitions: {
-        address: {
-          properties: {
-            id: {
-              $_ref: '#/definitions/id',
-              maxLength: 4,
-              minLength: 3,
-              type: 'string',
-            },
-            street: {
-              $_ref: '#/definitions/title',
-              pattern: '^[A-Z]',
-              type: 'string',
-            },
-            price: { $_ref: '#/definitions/test~1slash', type: 'number' },
-            num: { $_ref: '#/definitions/test%25percent', type: 'integer' },
-            town: { $_ref: '#/definitions/test~0tilde', type: 'string' },
-          },
-          type: 'object',
-        },
-        id: {
-          maxLength: 4,
-          minLength: 3,
-          type: 'string',
-        },
-        title: { pattern: '^[A-Z]', type: 'string' },
-        'test/slash': { type: 'number' },
-        'test~tilde': { type: 'string' },
-        'test%percent': { type: 'integer' },
-      },
-      properties: {
-        user: {
-          properties: {
-            address: {
-              $_ref: '#/definitions/address',
-              properties: {
-                id: {
-                  $_ref: '#/definitions/id',
-                  maxLength: 4,
-                  minLength: 3,
-                  type: 'string',
-                },
-                street: {
-                  $_ref: '#/definitions/title',
-                  pattern: '^[A-Z]',
-                  type: 'string',
-                },
-                price: { $_ref: '#/definitions/test~1slash', type: 'number' },
-                num: { $_ref: '#/definitions/test%25percent', type: 'integer' },
-                town: { $_ref: '#/definitions/test~0tilde', type: 'string' },
-              },
-              type: 'object',
-            },
-            id: {
-              $_ref: '#/definitions/id',
-              maxLength: 4,
-              minLength: 3,
-              type: 'string',
-            },
-            name: {
-              $_ref: '#/definitions/title',
-              pattern: '^[A-Z]',
-              type: 'string',
-            },
-          },
-          type: 'object',
-        },
-      },
-      type: 'object',
-    };
-
-    await expect(resolveRefs(schema, { keepRefAs: '$_ref' })).resolves.toEqual(expected);
   });
 });

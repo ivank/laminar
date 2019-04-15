@@ -1,24 +1,20 @@
 import fetch from 'node-fetch';
 import { URL } from 'url';
 
-interface RefSchema {
+export interface RefSchema {
   $ref: string;
 }
+export interface RefMap {
+  [ref: string]: any;
+}
+
 interface TraversableSchema {
   [key: string]: any;
 }
 
-interface FilesMap {
-  [file: string]: any;
-}
-
-interface Context extends Options {
+interface Context {
   schema: any;
-  files: FilesMap;
-}
-
-interface Options {
-  keepRefAs?: string;
+  refs: RefMap;
 }
 
 export const isTraversable = (schema: any): schema is TraversableSchema =>
@@ -59,7 +55,7 @@ export const reduceSchema = <TResult = any>(
       )
     : cb(initial, schema, id);
 
-export const extractNamedRefs = (document: any): FilesMap =>
+export const extractNamedRefs = (document: any): RefMap =>
   reduceSchema(
     document,
     (all, item, id) => {
@@ -86,17 +82,17 @@ export const extractUrls = (schema: any, namedRefs: string[] = []) =>
     [],
   );
 
-export const extractFiles = async (schema: any, options?: Options): Promise<FilesMap> => {
+export const extractFiles = async (schema: any): Promise<RefMap> => {
   const refs = extractNamedRefs(schema);
   const result = await Promise.all(
     extractUrls(schema, Object.keys(refs)).map(url =>
       fetch(url)
         .then(response => response.json())
         .then(content =>
-          extractFiles(content).then(filesMap => ({
-            ...filesMap,
-            [url]: resolveNestedRefs(content, { ...options, schema: content, files: filesMap }),
-          })),
+          extractFiles(content).then(refMap => {
+            refMap[url] = resolveNestedRefs(content, { schema: content, refs: refMap });
+            return refMap;
+          }),
         ),
     ),
   );
@@ -114,9 +110,6 @@ export const getJsonPointer = (document: any, pointer: string) =>
       document,
     );
 
-export const decorateSchema = (schema: any, ref: string, keepRefAs?: string) =>
-  isTraversable(schema) && ref && keepRefAs ? { ...schema, [keepRefAs]: ref } : schema;
-
 export const resolveNestedRefs = (schema: any, context: Context, parentId?: string) => {
   const id = currentId(schema, parentId);
 
@@ -129,21 +122,28 @@ export const resolveNestedRefs = (schema: any, context: Context, parentId?: stri
   if (isRefSchema(schema)) {
     const [url, pointer] = schema.$ref.split('#');
     const fullUrl = currentUrl(url, id);
-    const currentDocument = fullUrl ? context.files[fullUrl] : context.schema;
+    const fullPointer = [fullUrl, pointer].join('#');
+    if (!context.refs[fullPointer]) {
+      const currentDocument = fullUrl ? context.refs[fullUrl] : context.schema;
+      context.refs[fullPointer] = pointer
+        ? getJsonPointer(currentDocument, pointer)
+        : currentDocument;
+    }
 
-    return pointer
-      ? decorateSchema(getJsonPointer(currentDocument, pointer), schema.$ref, context.keepRefAs)
-      : currentDocument;
+    return {
+      $ref: fullPointer,
+    };
   }
 
   return schema;
 };
 
-export const resolveRefs = async (original: any, options?: Options): Promise<any> => {
-  const schema = JSON.parse(JSON.stringify(original));
-  return resolveNestedRefs(schema, {
-    ...options,
+export const resolveRefs = async <TSchema = any>(original: TSchema) => {
+  const copy: TSchema = JSON.parse(JSON.stringify(original));
+  const context = { schema: copy, refs: await extractFiles(copy) };
+  const schema: TSchema = resolveNestedRefs(copy, context);
+  return {
     schema,
-    files: await extractFiles(schema, options),
-  });
+    refs: context.refs,
+  };
 };

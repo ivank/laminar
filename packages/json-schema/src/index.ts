@@ -30,6 +30,7 @@ import { validatePattern } from './validators/validatePattern';
 import { validatePatternProperties } from './validators/validatePatternProperties';
 import { validateProperties } from './validators/validateProperties';
 import { validatePropertyNames } from './validators/validatePropertyNames';
+import { validateRef } from './validators/validateRefs';
 import { validateRequired } from './validators/validateRequired';
 import { validateType } from './validators/validateType';
 import { validateUniqueItems } from './validators/validateUniqueItems';
@@ -51,6 +52,7 @@ export { Schema, JsonSchema, ValidateOptions, Validator, Messages, PrimitiveType
 
 export const draft7 = [
   validateBoolean,
+  validateRef,
   validateConst,
   validateEnum,
   validateType,
@@ -86,11 +88,11 @@ export const draft7 = [
 export const validate = async (
   original: Schema,
   value: any,
-  { name = 'value', validators = draft7 }: Partial<ValidateOptions> = {},
+  { name = 'value', validators = draft7, refs }: Partial<ValidateOptions> = {},
 ) => {
-  const schema = await resolveRefs(original);
-  const result = validateSchema(schema, value, { name, validators });
+  const resolved = refs ? { schema: original, refs } : await resolveRefs(original);
+  const result = validateSchema(resolved.schema, value, { name, validators, refs: resolved.refs });
   const errors = result.errors.map(error => messages[error.code](error));
 
-  return { schema, errors, valid: errors.length === 0 };
+  return { schema: resolved.schema, errors, valid: errors.length === 0 };
 };

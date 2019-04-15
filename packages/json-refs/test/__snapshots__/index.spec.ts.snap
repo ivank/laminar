@@ -1,14 +1,123 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`json-refs Should resolve nested refs 1`] = `
+exports[`json-refs Should resolve complex refs 1`] = `
 Object {
-  "$id": "http://localhost:1234/tree",
-  "definitions": Object {
-    "node": Object {
+  "refs": Object {
+    "#/definitions/address": Object {
+      "properties": Object {
+        "id": Object {
+          "$ref": "#/definitions/id",
+        },
+        "num": Object {
+          "$ref": "#/definitions/test%25percent",
+        },
+        "price": Object {
+          "$ref": "#/definitions/test~1slash",
+        },
+        "street": Object {
+          "$ref": "#/definitions/title",
+        },
+        "town": Object {
+          "$ref": "#/definitions/test~0tilde",
+        },
+      },
+      "type": "object",
+    },
+    "#/definitions/id": Object {
+      "maxLength": 4,
+      "minLength": 3,
+      "type": "string",
+    },
+    "#/definitions/test%25percent": Object {
+      "type": "integer",
+    },
+    "#/definitions/test~0tilde": Object {
+      "type": "string",
+    },
+    "#/definitions/test~1slash": Object {
+      "type": "number",
+    },
+    "#/definitions/title": Object {
+      "pattern": "^[A-Z]",
+      "type": "string",
+    },
+    "#/definitions/unknown/more-unknown": undefined,
+  },
+  "schema": Object {
+    "definitions": Object {
+      "address": Object {
+        "properties": Object {
+          "id": Object {
+            "$ref": "#/definitions/id",
+          },
+          "num": Object {
+            "$ref": "#/definitions/test%25percent",
+          },
+          "price": Object {
+            "$ref": "#/definitions/test~1slash",
+          },
+          "street": Object {
+            "$ref": "#/definitions/title",
+          },
+          "town": Object {
+            "$ref": "#/definitions/test~0tilde",
+          },
+        },
+        "type": "object",
+      },
+      "id": Object {
+        "maxLength": 4,
+        "minLength": 3,
+        "type": "string",
+      },
+      "test%percent": Object {
+        "type": "integer",
+      },
+      "test/slash": Object {
+        "type": "number",
+      },
+      "test~tilde": Object {
+        "type": "string",
+      },
+      "title": Object {
+        "pattern": "^[A-Z]",
+        "type": "string",
+      },
+    },
+    "properties": Object {
+      "mangled": Object {
+        "$ref": "#/definitions/unknown/more-unknown",
+      },
+      "user": Object {
+        "properties": Object {
+          "address": Object {
+            "$ref": "#/definitions/address",
+          },
+          "id": Object {
+            "$ref": "#/definitions/id",
+          },
+          "name": Object {
+            "$ref": "#/definitions/title",
+          },
+        },
+        "type": "object",
+      },
+    },
+    "type": "object",
+  },
+}
+`;
+
+exports[`json-refs Should resolve nested recursive with files 1`] = `
+Object {
+  "refs": Object {
+    "http://localhost:1234/node": Object {
       "$id": "http://localhost:1234/node",
       "description": "node",
       "properties": Object {
-        "subtree": [Circular],
+        "subtree": Object {
+          "$ref": "http://localhost:1234/tree#",
+        },
         "value": Object {
           "type": "number",
         },
@@ -18,18 +127,109 @@ Object {
       ],
       "type": "object",
     },
-  },
-  "description": "tree of nodes",
-  "properties": Object {
-    "meta": Object {
-      "type": "string",
+    "http://localhost:1234/node#": Object {
+      "$id": "http://localhost:1234/node",
+      "description": "node",
+      "properties": Object {
+        "subtree": Object {
+          "$ref": "http://localhost:1234/tree#",
+        },
+        "value": Object {
+          "type": "number",
+        },
+      },
+      "required": Array [
+        "value",
+      ],
+      "type": "object",
     },
-    "nodes": Object {
-      "items": Object {
+    "http://localhost:1234/tree": Object {
+      "$id": "http://localhost:1234/tree",
+      "definitions": Object {
+        "node": Object {
+          "$id": "http://localhost:1234/node",
+          "description": "node",
+          "properties": Object {
+            "subtree": Object {
+              "$ref": "http://localhost:1234/tree#",
+            },
+            "value": Object {
+              "type": "number",
+            },
+          },
+          "required": Array [
+            "value",
+          ],
+          "type": "object",
+        },
+      },
+      "description": "tree of nodes",
+      "properties": Object {
+        "meta": Object {
+          "type": "string",
+        },
+        "nodes": Object {
+          "items": Object {
+            "$ref": "http://localhost:1234/node#",
+          },
+          "type": "array",
+        },
+      },
+      "required": Array [
+        "meta",
+        "nodes",
+      ],
+      "type": "object",
+    },
+    "http://localhost:1234/tree#": Object {
+      "$id": "http://localhost:1234/tree",
+      "definitions": Object {
+        "node": Object {
+          "$id": "http://localhost:1234/node",
+          "description": "node",
+          "properties": Object {
+            "subtree": Object {
+              "$ref": "http://localhost:1234/tree#",
+            },
+            "value": Object {
+              "type": "number",
+            },
+          },
+          "required": Array [
+            "value",
+          ],
+          "type": "object",
+        },
+      },
+      "description": "tree of nodes",
+      "properties": Object {
+        "meta": Object {
+          "type": "string",
+        },
+        "nodes": Object {
+          "items": Object {
+            "$ref": "http://localhost:1234/node#",
+          },
+          "type": "array",
+        },
+      },
+      "required": Array [
+        "meta",
+        "nodes",
+      ],
+      "type": "object",
+    },
+  },
+  "schema": Object {
+    "$id": "http://localhost:1234/tree",
+    "definitions": Object {
+      "node": Object {
         "$id": "http://localhost:1234/node",
         "description": "node",
         "properties": Object {
-          "subtree": [Circular],
+          "subtree": Object {
+            "$ref": "http://localhost:1234/tree#",
+          },
           "value": Object {
             "type": "number",
           },
@@ -39,13 +239,24 @@ Object {
         ],
         "type": "object",
       },
-      "type": "array",
     },
+    "description": "tree of nodes",
+    "properties": Object {
+      "meta": Object {
+        "type": "string",
+      },
+      "nodes": Object {
+        "items": Object {
+          "$ref": "http://localhost:1234/node#",
+        },
+        "type": "array",
+      },
+    },
+    "required": Array [
+      "meta",
+      "nodes",
+    ],
+    "type": "object",
   },
-  "required": Array [
-    "meta",
-    "nodes",
-  ],
-  "type": "object",
 }
 `;
