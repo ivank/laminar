@@ -15,10 +15,13 @@ export interface LaminarRequest {
   cookies?: { [key: string]: string };
 }
 
-export interface LaminarResponse {
+export interface LaminarResponse<
+  TStatus = number,
+  TBody = string | Readable | Buffer | object | undefined
+> {
   [Laminar]: true;
-  body: string | Readable | Buffer | object | undefined;
-  status: number;
+  body: TBody;
+  status: TStatus;
   cookies: { [key: string]: string } | undefined;
   headers: OutgoingHttpHeaders;
 }

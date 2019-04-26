@@ -1,5 +1,5 @@
 import { OpenAPIObject } from 'openapi3-ts';
-import { convert } from '../src/oapi';
+import { oapiTs } from '../src';
 
 describe('Json Schema Ts', () => {
   it('Test', async () => {
@@ -689,7 +689,7 @@ describe('Json Schema Ts', () => {
       },
     };
 
-    const result = await convert(schema);
+    const result = await oapiTs(schema);
     // console.log(inspect(ast, { depth: 10 }));
     console.log(result);
     // console.log(ast.context.registry);

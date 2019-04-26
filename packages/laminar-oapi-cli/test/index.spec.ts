@@ -1,10 +1,9 @@
-import { Schema } from '@ovotech/json-schema';
-// import { inspect } from 'util';
-import { convert } from '../src';
+import { SchemaObject } from 'openapi3-ts';
+import { schemaTs } from '../src';
 
 describe('Json Schema Ts', () => {
   it('Test', async () => {
-    const schema: Schema = {
+    const schema: SchemaObject = {
       id: 'http://json-schema.org/draft-04/schema#',
       $schema: 'http://json-schema.org/draft-04/schema#',
       description: 'Core schema meta-schema',
@@ -142,10 +141,34 @@ describe('Json Schema Ts', () => {
       default: {},
     };
 
-    const result = await convert(schema);
+    const result = await schemaTs(schema);
     // console.log(inspect(ast, { depth: 10 }));
     console.log(result);
     // console.log(ast.context.registry);
     // console.log(registryToTs(ast.context.registry));
   });
+
+  // it('should test', () => {
+  //   const node: Result = {
+  //     type: ts.createImportDeclaration(
+  //       undefined,
+  //       undefined,
+  //       ts.createImportClause(
+  //         ts.createIdentifier('test'),
+  //         ts.createNamedImports([
+  //           ts.createImportSpecifier(ts.createIdentifier('one'), ts.createIdentifier('two')),
+  //         ]),
+  //       ),
+  //       ts.createStringLiteral('./test'),
+  //     ),
+  //     context: {
+  //       refs: {},
+  //       root: {},
+  //       registry: {},
+  //       imports: {},
+  //     },
+  //   };
+
+  //   console.log(((node.type as ts.ImportDeclaration).moduleSpecifier as ts.StringLiteral).text);
+  // });
 });

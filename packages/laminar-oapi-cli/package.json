@@ -1,10 +1,10 @@
 {
-  "name": "@ovotech/json-schema-ts",
+  "name": "@ovotech/laminar-oapi-cli",
   "version": "0.1.0",
   "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
-  "description": "Generate typescript types from json-schema",
+  "description": "Generate typescript types from OpenAPI",
   "author": "Boost Internal Tools <boost-bit-tech@ovoenergy.com>",
   "license": "Apache-2.0",
   "devDependencies": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@ovotech/json-refs": "^0.1.0",
+    "@ovotech/ts-compose": "^0.1.0",
     "openapi3-ts": "^1.2.0"
   },
   "scripts": {
