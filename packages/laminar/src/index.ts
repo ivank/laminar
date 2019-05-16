@@ -9,7 +9,6 @@ export {
   LaminarRequest,
   LaminarResponse,
   Matcher,
-  MatcherPath,
   Method,
   Middleware,
   Resolver,

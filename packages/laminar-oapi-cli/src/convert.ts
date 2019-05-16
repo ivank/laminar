@@ -1,11 +1,12 @@
 import { resolveRefs } from '@ovotech/json-refs';
 import { Node, printNode } from '@ovotech/ts-compose';
 import { OpenAPIObject, SchemaObject } from 'openapi3-ts';
+import * as ts from 'typescript';
 import { convertOapi } from './convert-oapi';
 import { convertSchema } from './convert-schema';
 import { Result } from './traverse';
 
-export const printResult = (node: Result): string => {
+export const printResult = <T extends ts.Node>(node: Result<T>): string => {
   const entries = Object.values(node.context.registry);
   const imports = Object.entries(node.context.imports);
 
@@ -20,7 +21,9 @@ export const printResult = (node: Result): string => {
 
 export const oapiTs = async (original: OpenAPIObject) => {
   const { schema, refs } = await resolveRefs(original);
-  return printResult(convertOapi({ root: schema, refs, registry: {}, imports: {} }, schema));
+  const context = { root: schema, refs, registry: {}, imports: {} };
+
+  return printResult(convertOapi(context, schema));
 };
 
 export const schemaTs = async (api: SchemaObject) => {

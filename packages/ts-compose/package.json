@@ -15,10 +15,10 @@
     "build": "tsc --outDir dist --declaration"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.11",
+    "@types/jest": "^24.0.13",
     "@types/node": "^11.11.4",
-    "jest": "^24.5.0",
-    "prettier": "^1.16.4",
+    "jest": "^24.8.0",
+    "prettier": "^1.17.1",
     "ts-jest": "^24.0.0",
     "tslint": "^5.14.0",
     "tslint-config-prettier": "^1.18.0"
@@ -27,6 +27,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.5"
   }
 }

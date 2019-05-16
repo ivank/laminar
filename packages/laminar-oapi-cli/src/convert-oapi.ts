@@ -110,8 +110,14 @@ const convertResponses = (context: AstContext, name: string, responses: Response
   );
 
   return params.type.types.length
-    ? result(withEntry(params.context, Type.Alias({ name, type: params.type })), Type.Ref(name))
-    : result(context, Type.Any);
+    ? result(
+        withEntry(params.context, Type.Alias({ name, type: params.type, isExport: true })),
+        Type.Ref(name),
+      )
+    : result(
+        withImports(context, '@ovotech/laminar', ['ResolverResponse']),
+        Type.Ref('ResolverResponse'),
+      );
 };
 
 const convertRequestBody = (
@@ -132,7 +138,7 @@ const convertRequestBody = (
 };
 
 export const convertOapi = (context: AstContext, api: OpenAPIObject) =>
-  Object.entries<PathItemObject>(api.paths).reduce<Result<ts.TypeLiteralNode>>(
+  Object.entries<PathItemObject>(api.paths).reduce<Result<ts.TypeAliasDeclaration>>(
     (pathsNode, [path, pathApiOrRef]) => {
       const pathApi = withRef(pathApiOrRef, context);
 
@@ -152,8 +158,9 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) =>
           const responseIdentifier = identifier + 'Response';
           const contextInterface = Type.Interface({
             name: contextIdentifier,
+            isExport: true,
+            ext: [{ name: 'Context' }, { name: 'RouteContext' }],
             props: astParams.type.members.concat(astRequestBody.type.members),
-            ext: [{ name: 'Context' }],
           });
 
           const responseAst = convertResponses(
@@ -163,7 +170,12 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) =>
           );
 
           const methodCall = Type.Arrow(
-            [Type.Param({ name: 'context', type: Type.Ref(contextIdentifier) })],
+            [
+              Type.Param({
+                name: 'context',
+                type: Type.Intersection([Type.Ref(contextIdentifier), Type.Ref('TContext')]),
+              }),
+            ],
             responseAst.type,
           );
 
@@ -174,9 +186,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) =>
           });
 
           return result(
-            withImports(withEntry(responseAst.context, contextInterface), '@ovotech/laminar', [
-              'Context',
-            ]),
+            withEntry(responseAst.context, contextInterface),
             Type.TypeLiteral({ props: methodsNode.type.members.concat([methodSignature]) }),
           );
         } else {
@@ -186,12 +196,30 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) =>
 
       return result(
         methods.context,
-        Type.TypeLiteral({
-          props: pathsNode.type.members.concat([
-            Type.Prop({ name: Type.LiteralString(path), type: methods.type }),
-          ]),
+        Type.Alias({
+          isExport: true,
+          name: pathsNode.type.name,
+          typeArgs: [...pathsNode.type.typeParameters!],
+          type: Type.TypeLiteral({
+            props: (pathsNode.type.type as ts.TypeLiteralNode).members.concat([
+              Type.Prop({ name: Type.LiteralString(path), type: methods.type }),
+            ]),
+          }),
         }),
       );
     },
-    result(context, Type.TypeLiteral()),
+    result(
+      withImports(context, '@ovotech/laminar', ['Context', 'RouteContext']),
+      Type.Alias({
+        name: 'LaminarPaths',
+        isExport: true,
+        type: Type.TypeLiteral({ props: [] }),
+        typeArgs: [
+          Type.TypeArg({
+            name: 'TContext',
+            defaultType: Type.TypeLiteral(),
+          }),
+        ],
+      }),
+    ),
   );

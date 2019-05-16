@@ -85,8 +85,8 @@ const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
         : result(context, Type.Any);
 
       const entry = ts.isTypeLiteralNode(node.type)
-        ? Type.Interface({ name, props: [...node.type.members] })
-        : Type.Alias({ name, type: node.type });
+        ? Type.Interface({ name, props: [...node.type.members], isExport: true })
+        : Type.Alias({ name, type: node.type, isExport: true });
 
       return result(withEntry(node.context, entry), Type.Ref(entry.name));
     }

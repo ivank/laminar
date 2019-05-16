@@ -1,5 +1,5 @@
-import * as Node from './Node';
-import * as Type from './Type';
+import * as Node from './node';
+import * as Type from './type';
 
 export { printNode } from './print';
 export { addJSDoc } from './docs';

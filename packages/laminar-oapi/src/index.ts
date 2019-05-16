@@ -7,7 +7,6 @@ import {
   Matcher,
   Resolver,
   response,
-  RouteContext,
   selectMatcher,
   toMatcher,
 } from '@ovotech/laminar';
@@ -18,21 +17,21 @@ import { OpenApi } from './schema';
 import { toSchema } from './to-schema';
 import { OpenAPIObject } from './types';
 
-interface RouteMatcher<TContext extends Context> extends Matcher {
-  resolver: Resolver<TContext>;
+interface RouteMatcher<TResolver> extends Matcher {
+  resolver: TResolver;
   schema: {
     context: Schema;
     response: Schema;
   };
 }
 
-export const toMatchers = <TContext extends Context & RouteContext>(
+export const toMatchers = <TResolver>(
   api: OpenAPIObject,
   paths: {
-    [path: string]: { [method: string]: Resolver<TContext> };
+    [path: string]: { [method: string]: TResolver };
   },
 ) =>
-  Object.entries(paths).reduce<Array<RouteMatcher<TContext>>>(
+  Object.entries(paths).reduce<Array<RouteMatcher<TResolver>>>(
     (allPaths, [path, methods]) =>
       Object.entries(methods).reduce(
         (all, [method, resolver]) => [
@@ -64,15 +63,17 @@ export const loadApi = (api: LoadApi): OpenAPIObject => {
   }
 };
 
-export const oapi = async <TContext extends Context = Context>(
+export interface LaminarPaths {
+  [path: string]: {
+    [method: string]: Resolver<any>;
+  };
+}
+
+export const oapi = async <TPaths extends LaminarPaths>(
   options: {
-    paths: {
-      [path: string]: {
-        [method: string]: Resolver<TContext & RouteContext>;
-      };
-    };
+    paths: TPaths;
   } & LoadApi,
-): Promise<Resolver<TContext>> => {
+): Promise<Resolver<Context>> => {
   const api = loadApi(options);
   const checkApi = await validate(OpenApi, api);
   if (!checkApi.valid) {

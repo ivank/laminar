@@ -125,11 +125,13 @@ export const Param = ({
 
 export const TypeArg = ({
   name,
+  ext,
   defaultType,
 }: {
   name: string | ts.Identifier;
+  ext?: ts.TypeNode;
   defaultType?: ts.TypeNode;
-}) => ts.createTypeParameterDeclaration(name, undefined, defaultType);
+}) => ts.createTypeParameterDeclaration(name, ext, defaultType);
 
 export const Index = ({
   name,
@@ -179,9 +181,14 @@ export const Alias = ({
     jsDoc,
   );
 
+export interface InterfaceExtend {
+  name: string;
+  types?: ts.TypeNode[];
+}
+
 export const Interface = ({
   name,
-  props,
+  props = [],
   index,
   typeArgs,
   ext,
@@ -189,10 +196,10 @@ export const Interface = ({
   jsDoc,
 }: {
   name: string | ts.Identifier;
-  props: ts.TypeElement[];
+  props?: ts.TypeElement[];
   index?: ts.IndexSignatureDeclaration;
   typeArgs?: ts.TypeParameterDeclaration[];
-  ext?: Array<{ name: string; types?: ts.TypeNode[] }>;
+  ext?: InterfaceExtend[];
   isExport?: boolean;
   jsDoc?: string;
 }) =>

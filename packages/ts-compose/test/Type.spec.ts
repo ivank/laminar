@@ -68,9 +68,37 @@ describe('TS Compose', () => {
       }),
     ],
     [
+      'type mytype<Best extends Parent<string> = any> = number;',
+      Type.Alias({
+        name: 'mytype',
+        type: Type.Num,
+        typeArgs: [
+          Type.TypeArg({
+            name: 'Best',
+            ext: Type.Ref('Parent', [Type.Str]),
+            defaultType: Type.Any,
+          }),
+        ],
+      }),
+    ],
+    [
       'interface test {\n    name: string;\n}',
       Type.Interface({ name: 'test', props: [Type.Prop({ name: 'name', type: Type.Str })] }),
     ],
+    [
+      'export interface LaminarPaths<TContext extends Context | RouteContext> {\n}',
+      Type.Interface({
+        name: 'LaminarPaths',
+        isExport: true,
+        typeArgs: [
+          Type.TypeArg({
+            name: 'TContext',
+            ext: Type.Union([Type.Ref('Context'), Type.Ref('RouteContext')]),
+          }),
+        ],
+      }),
+    ],
+    ['interface test {\n}', Type.Interface({ name: 'test' })],
     [
       'export interface MyTest extends OtherTest {\n    name: string;\n}',
       Type.Interface({

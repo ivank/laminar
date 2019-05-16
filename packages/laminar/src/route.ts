@@ -1,14 +1,5 @@
 import { HttpError } from './HttpError';
-import {
-  Context,
-  Matcher,
-  MatcherPath,
-  Method,
-  Resolver,
-  Route,
-  RouteContext,
-  RouteMatcher,
-} from './types';
+import { Context, Matcher, Method, Resolver, Route, RouteContext, RouteMatcher } from './types';
 
 export const paramRegEx = /\{[^\}]+\}/g;
 
@@ -29,7 +20,7 @@ export const toMatcher = (method: string, path: string): Matcher => ({
 export const match = (path: string, matcher: Matcher) => {
   const pathMatch = matcher.pathRe.exec(path);
   if (pathMatch) {
-    const params: MatcherPath = pathMatch
+    const params = pathMatch
       .slice(1)
       .reduce((all, val, i) => ({ [matcher.keys[i]]: val, ...all }), {});
 

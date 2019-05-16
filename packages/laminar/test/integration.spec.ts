@@ -1,6 +1,7 @@
 import { createServer, Server } from 'http';
 import fetch from 'node-fetch';
 import {
+  Context,
   del,
   get,
   HttpError,
@@ -11,10 +12,20 @@ import {
   put,
   redirect,
   response,
+  RouteContext,
   routes,
 } from '../src';
 
 let server: Server;
+
+interface Item {
+  id: string;
+  name: string;
+}
+
+interface TestContext extends Context, RouteContext {
+  body: Item;
+}
 
 describe('Integration', () => {
   afterEach(async () => {
@@ -55,11 +66,11 @@ describe('Integration', () => {
               throw new HttpError(404, { message: 'No User Found' });
             }
           }),
-          put('/users', ({ body }) => {
+          put<TestContext>('/users', ({ body }) => {
             users[body.id] = body.name;
             return { added: true };
           }),
-          patch('/users/{id}', ({ path, body }) => {
+          patch<TestContext>('/users/{id}', ({ path, body }) => {
             if (users[path.id]) {
               users[path.id] = body.name;
               return { patched: true };
@@ -67,7 +78,7 @@ describe('Integration', () => {
               throw new HttpError(404, { message: 'No User Found' });
             }
           }),
-          post('/users/{id}', ({ path, body }) => {
+          post<TestContext>('/users/{id}', ({ path, body }) => {
             if (users[path.id]) {
               users[path.id] = body.name;
               return { saved: true };

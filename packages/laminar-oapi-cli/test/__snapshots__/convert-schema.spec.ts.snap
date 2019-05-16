@@ -427,7 +427,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     id?: string;
     $schema?: string;
     title?: string;
@@ -464,11 +464,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type positiveInteger = number;
+export type positiveInteger = number;
 
-type positiveIntegerDefault0 = positiveInteger & any;
+export type positiveIntegerDefault0 = positiveInteger & any;
 
-interface # {
+export interface # {
     id?: string;
     $schema?: string;
     title?: string;
@@ -505,11 +505,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -520,7 +520,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     id?: string;
     $schema?: string;
     title?: string;
@@ -557,11 +557,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type positiveInteger = number;
+export type positiveInteger = number;
 
-type positiveIntegerDefault0 = positiveInteger & any;
+export type positiveIntegerDefault0 = positiveInteger & any;
 
-interface # {
+export interface # {
     id?: string;
     $schema?: string;
     title?: string;
@@ -598,11 +598,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -777,9 +777,9 @@ Object {
   },
   "ts": "[item, item, item]
 
-type item = [sub-item, sub-item];
+export type item = [sub-item, sub-item];
 
-type sub-item = any;",
+export type sub-item = any;",
 }
 `;
 
@@ -1273,13 +1273,13 @@ Object {
     [key: string]: any;
 }
 
-interface node# {
+export interface node# {
     value: number;
     subtree?: tree#;
     [key: string]: any;
 }
 
-interface tree# {
+export interface tree# {
     meta: string;
     nodes: node#[];
     [key: string]: any;
@@ -1318,11 +1318,11 @@ Object {
     [key: string]: any;
 }
 
-type tilda~0field = number;
+export type tilda~0field = number;
 
-type slash~1field = number;
+export type slash~1field = number;
 
-type percent%25field = number;",
+export type percent%25field = number;",
 }
 `;
 
@@ -1344,11 +1344,11 @@ Object {
   },
   "ts": "c
 
-type c = b;
+export type c = b;
 
-type b = a;
+export type b = a;
 
-type a = number;",
+export type a = number;",
 }
 `;
 
@@ -1388,7 +1388,7 @@ Object {
     [key: string]: any;
 }
 
-type reffed = any;",
+export type reffed = any;",
 }
 `;
 
@@ -1406,7 +1406,7 @@ Object {
   },
   "ts": "(number | 0)[]
 
-type 0 = number;",
+export type 0 = number;",
 }
 `;
 
@@ -1428,7 +1428,7 @@ Object {
     [key: string]: any;
 }
 
-type foo = number;",
+export type foo = number;",
 }
 `;
 
@@ -1439,7 +1439,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     id?: string;
     $schema?: string;
     title?: string;
@@ -1476,11 +1476,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type positiveInteger = number;
+export type positiveInteger = number;
 
-type positiveIntegerDefault0 = positiveInteger & any;
+export type positiveIntegerDefault0 = positiveInteger & any;
 
-interface # {
+export interface # {
     id?: string;
     $schema?: string;
     title?: string;
@@ -1517,11 +1517,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -1539,7 +1539,7 @@ Object {
     foo?: #;
 }
 
-interface # {
+export interface # {
     foo?: #;
 }",
 }
@@ -1570,9 +1570,9 @@ Object {
     [key: string]: any;
 }
 
-type baz = folderInteger.json#[];
+export type baz = folderInteger.json#[];
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -1605,9 +1605,9 @@ Object {
     [key: string]: any;
 }
 
-type bar = folderInteger.json#[];
+export type bar = folderInteger.json#[];
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -1624,7 +1624,7 @@ Object {
   },
   "ts": "folderInteger.json#[][]
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -1635,7 +1635,7 @@ Object {
   },
   "ts": "integer
 
-type integer = number;",
+export type integer = number;",
 }
 `;
 
@@ -1646,9 +1646,9 @@ Object {
   },
   "ts": "refToInteger
 
-type refToInteger = integer;
+export type refToInteger = integer;
 
-type integer = number;",
+export type integer = number;",
 }
 `;
 
@@ -1659,7 +1659,7 @@ Object {
   },
   "ts": "integer.json#
 
-type integer.json# = number;",
+export type integer.json# = number;",
 }
 `;
 
@@ -1679,9 +1679,9 @@ Object {
     [key: string]: any;
 }
 
-type orNull = any | #;
+export type orNull = any | #;
 
-type # = string;",
+export type # = string;",
 }
 `;
 
@@ -2434,7 +2434,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -2476,11 +2476,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type nonNegativeInteger = number;
+export type nonNegativeInteger = number;
 
-type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
+export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-interface # {
+export interface # {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -2522,11 +2522,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -2537,7 +2537,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -2579,11 +2579,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type nonNegativeInteger = number;
+export type nonNegativeInteger = number;
 
-type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
+export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-interface # {
+export interface # {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -2625,11 +2625,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -2856,9 +2856,9 @@ Object {
   },
   "ts": "[item, item, item]
 
-type item = [sub-item, sub-item];
+export type item = [sub-item, sub-item];
 
-type sub-item = any;",
+export type sub-item = any;",
 }
 `;
 
@@ -3433,7 +3433,7 @@ Object {
   },
   "ts": "bool
 
-type bool = bool;",
+export type bool = bool;",
 }
 `;
 
@@ -3447,7 +3447,7 @@ Object {
   },
   "ts": "bool
 
-type bool = any;",
+export type bool = any;",
 }
 `;
 
@@ -3497,13 +3497,13 @@ Object {
     [key: string]: any;
 }
 
-interface node# {
+export interface node# {
     value: number;
     subtree?: tree#;
     [key: string]: any;
 }
 
-interface tree# {
+export interface tree# {
     meta: string;
     nodes: node#[];
     [key: string]: any;
@@ -3542,11 +3542,11 @@ Object {
     [key: string]: any;
 }
 
-type tilda~0field = number;
+export type tilda~0field = number;
 
-type slash~1field = number;
+export type slash~1field = number;
 
-type percent%25field = number;",
+export type percent%25field = number;",
 }
 `;
 
@@ -3568,11 +3568,11 @@ Object {
   },
   "ts": "c
 
-type c = b;
+export type c = b;
 
-type b = a;
+export type b = a;
 
-type a = number;",
+export type a = number;",
 }
 `;
 
@@ -3612,7 +3612,7 @@ Object {
     [key: string]: any;
 }
 
-type reffed = any;",
+export type reffed = any;",
 }
 `;
 
@@ -3630,7 +3630,7 @@ Object {
   },
   "ts": "(number | 0)[]
 
-type 0 = number;",
+export type 0 = number;",
 }
 `;
 
@@ -3652,7 +3652,7 @@ Object {
     [key: string]: any;
 }
 
-type foo = number;",
+export type foo = number;",
 }
 `;
 
@@ -3663,7 +3663,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -3705,11 +3705,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type nonNegativeInteger = number;
+export type nonNegativeInteger = number;
 
-type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
+export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-interface # {
+export interface # {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -3751,11 +3751,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -3773,7 +3773,7 @@ Object {
     foo?: #;
 }
 
-interface # {
+export interface # {
     foo?: #;
 }",
 }
@@ -3804,9 +3804,9 @@ Object {
     [key: string]: any;
 }
 
-type baz = folderInteger.json#[];
+export type baz = folderInteger.json#[];
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -3839,9 +3839,9 @@ Object {
     [key: string]: any;
 }
 
-type bar = folderInteger.json#[];
+export type bar = folderInteger.json#[];
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -3858,7 +3858,7 @@ Object {
   },
   "ts": "folderInteger.json#[][]
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -3869,7 +3869,7 @@ Object {
   },
   "ts": "integer
 
-type integer = number;",
+export type integer = number;",
 }
 `;
 
@@ -3880,9 +3880,9 @@ Object {
   },
   "ts": "refToInteger
 
-type refToInteger = integer;
+export type refToInteger = integer;
 
-type integer = number;",
+export type integer = number;",
 }
 `;
 
@@ -3893,7 +3893,7 @@ Object {
   },
   "ts": "integer.json#
 
-type integer.json# = number;",
+export type integer.json# = number;",
 }
 `;
 
@@ -3913,9 +3913,9 @@ Object {
     [key: string]: any;
 }
 
-type orNull = any | #;
+export type orNull = any | #;
 
-type # = string;",
+export type # = string;",
 }
 `;
 
@@ -4683,7 +4683,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -4732,11 +4732,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type nonNegativeInteger = number;
+export type nonNegativeInteger = number;
 
-type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
+export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-interface # {
+export interface # {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -4785,11 +4785,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -4800,7 +4800,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -4849,11 +4849,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type nonNegativeInteger = number;
+export type nonNegativeInteger = number;
 
-type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
+export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-interface # {
+export interface # {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -4902,11 +4902,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -5236,9 +5236,9 @@ Object {
   },
   "ts": "[item, item, item]
 
-type item = [sub-item, sub-item];
+export type item = [sub-item, sub-item];
 
-type sub-item = any;",
+export type sub-item = any;",
 }
 `;
 
@@ -5813,7 +5813,7 @@ Object {
   },
   "ts": "bool
 
-type bool = bool;",
+export type bool = bool;",
 }
 `;
 
@@ -5827,7 +5827,7 @@ Object {
   },
   "ts": "bool
 
-type bool = any;",
+export type bool = any;",
 }
 `;
 
@@ -5877,13 +5877,13 @@ Object {
     [key: string]: any;
 }
 
-interface node# {
+export interface node# {
     value: number;
     subtree?: tree#;
     [key: string]: any;
 }
 
-interface tree# {
+export interface tree# {
     meta: string;
     nodes: node#[];
     [key: string]: any;
@@ -5922,11 +5922,11 @@ Object {
     [key: string]: any;
 }
 
-type tilda~0field = number;
+export type tilda~0field = number;
 
-type slash~1field = number;
+export type slash~1field = number;
 
-type percent%25field = number;",
+export type percent%25field = number;",
 }
 `;
 
@@ -5948,11 +5948,11 @@ Object {
   },
   "ts": "c
 
-type c = b;
+export type c = b;
 
-type b = a;
+export type b = a;
 
-type a = number;",
+export type a = number;",
 }
 `;
 
@@ -5992,7 +5992,7 @@ Object {
     [key: string]: any;
 }
 
-type reffed = any;",
+export type reffed = any;",
 }
 `;
 
@@ -6010,7 +6010,7 @@ Object {
   },
   "ts": "(number | 0)[]
 
-type 0 = number;",
+export type 0 = number;",
 }
 `;
 
@@ -6032,7 +6032,7 @@ Object {
     [key: string]: any;
 }
 
-type foo = number;",
+export type foo = number;",
 }
 `;
 
@@ -6043,7 +6043,7 @@ Object {
   },
   "ts": "schema#
 
-interface schema# {
+export interface schema# {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -6092,11 +6092,11 @@ interface schema# {
     [key: string]: any;
 }
 
-type nonNegativeInteger = number;
+export type nonNegativeInteger = number;
 
-type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
+export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-interface # {
+export interface # {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -6145,11 +6145,11 @@ interface # {
     [key: string]: any;
 }
 
-type schemaArray = #[];
+export type schemaArray = #[];
 
-type stringArray = string[];
+export type stringArray = string[];
 
-type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
 }
 `;
 
@@ -6167,7 +6167,7 @@ Object {
     foo?: #;
 }
 
-interface # {
+export interface # {
     foo?: #;
 }",
 }
@@ -6198,9 +6198,9 @@ Object {
     [key: string]: any;
 }
 
-type baz = folderInteger.json#[];
+export type baz = folderInteger.json#[];
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -6233,9 +6233,9 @@ Object {
     [key: string]: any;
 }
 
-type bar = folderInteger.json#[];
+export type bar = folderInteger.json#[];
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -6252,7 +6252,7 @@ Object {
   },
   "ts": "folderInteger.json#[][]
 
-type folderInteger.json# = number;",
+export type folderInteger.json# = number;",
 }
 `;
 
@@ -6263,7 +6263,7 @@ Object {
   },
   "ts": "integer
 
-type integer = number;",
+export type integer = number;",
 }
 `;
 
@@ -6274,9 +6274,9 @@ Object {
   },
   "ts": "refToInteger
 
-type refToInteger = integer;
+export type refToInteger = integer;
 
-type integer = number;",
+export type integer = number;",
 }
 `;
 
@@ -6287,7 +6287,7 @@ Object {
   },
   "ts": "integer.json#
 
-type integer.json# = number;",
+export type integer.json# = number;",
 }
 `;
 
@@ -6307,9 +6307,9 @@ Object {
     [key: string]: any;
 }
 
-type orNull = any | #;
+export type orNull = any | #;
 
-type # = string;",
+export type # = string;",
 }
 `;
 

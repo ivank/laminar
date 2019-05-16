@@ -1,5 +1,4 @@
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { ParsedUrlQuery } from 'querystring';
 import { Readable } from 'stream';
 import { UrlWithParsedQuery } from 'url';
 
@@ -10,19 +9,16 @@ export interface LaminarRequest {
   url: UrlWithParsedQuery;
   method: Method;
   headers: IncomingHttpHeaders;
-  query?: ParsedUrlQuery;
+  query?: any;
   body: any;
   cookies?: { [key: string]: string };
 }
 
-export interface LaminarResponse<
-  TStatus = number,
-  TBody = string | Readable | Buffer | object | undefined
-> {
+export interface LaminarResponse<TBody = string | Readable | Buffer | object> {
   [Laminar]: true;
-  body: TBody;
-  status: TStatus;
-  cookies: { [key: string]: string } | undefined;
+  body?: TBody;
+  status: number;
+  cookies?: { [key: string]: string };
   headers: OutgoingHttpHeaders;
 }
 
@@ -54,10 +50,6 @@ export type Resolver<TContext extends Context = Context> = (
   ctx: TContext,
 ) => Promise<ResolverResponse> | ResolverResponse;
 
-export interface MatcherPath {
-  [key: string]: string;
-}
-
 export interface Matcher {
   method: string;
   pathRe: RegExp;
@@ -69,7 +61,7 @@ export interface RouteMatcher<TContext extends Context> extends Matcher {
 }
 
 export interface RouteContext {
-  path: MatcherPath;
+  path: any;
 }
 
 export type Route = <TContext extends Context>(

@@ -3,12 +3,17 @@ import { createReadStream, statSync } from 'fs';
 import { Readable } from 'stream';
 import { Laminar, LaminarResponse, ResolverResponse } from './types';
 
-export const response = ({
+export const response = <TBody = LaminarResponse['body']>({
   body,
   status = 200,
   headers = {},
   cookies,
-}: Partial<LaminarResponse>): LaminarResponse => ({
+}: {
+  status?: number;
+  body?: TBody;
+  headers?: LaminarResponse['headers'];
+  cookies?: LaminarResponse['cookies'];
+}): LaminarResponse<TBody> => ({
   [Laminar]: true,
   status,
   headers: {
@@ -50,7 +55,7 @@ export const file = (filename: string, partial?: Partial<LaminarResponse>) =>
     ...partial,
   });
 
-const contentType = (body: LaminarResponse['body']) => {
+const contentType = (body: any) => {
   return body instanceof Readable || body instanceof Buffer
     ? 'application/octet-stream'
     : typeof body === 'object'
@@ -58,7 +63,7 @@ const contentType = (body: LaminarResponse['body']) => {
     : 'text/plain';
 };
 
-const contentLength = (body: LaminarResponse['body']) =>
+const contentLength = (body: any) =>
   body instanceof Buffer || typeof body === 'string' ? Buffer.byteLength(body) : undefined;
 
 const setCookie = (cookies: { [key: string]: string }) =>

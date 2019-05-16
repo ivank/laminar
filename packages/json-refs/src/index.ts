@@ -36,11 +36,20 @@ export const isRefSchema = (schema: any): schema is RefSchema =>
 
 export const currentId = (schema: any, parentId?: string) => {
   const id = getId(schema);
-  return id ? new URL(id, parentId).toString() : parentId;
+  try {
+    return id ? new URL(id, parentId).toString() : parentId;
+  } catch (error) {
+    return parentId;
+  }
 };
 
-export const currentUrl = (url?: string, id?: string) =>
-  url ? new URL(url, id).toString() : undefined;
+export const currentUrl = (url?: string, id?: string) => {
+  try {
+    return url ? new URL(url, id).toString() : undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
 
 export const reduceSchema = <TResult = any>(
   schema: any,
@@ -60,7 +69,11 @@ export const extractNamedRefs = (document: any): RefMap =>
     document,
     (all, item, id) => {
       const itemId = getId(item);
-      return itemId ? { ...all, [new URL(itemId, id).toString()]: item } : all;
+      try {
+        return itemId ? { ...all, [new URL(itemId, id).toString()]: item } : all;
+      } catch (error) {
+        return all;
+      }
     },
     {},
   );

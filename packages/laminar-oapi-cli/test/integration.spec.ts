@@ -4,18 +4,9 @@ import { createServer, Server } from 'http';
 import fetch from 'node-fetch';
 import { join } from 'path';
 
+import { LaminarPaths, Pet } from './__generated__/integration';
+
 let server: Server;
-
-export type Pet = NewPet & {
-  id: number;
-  [key: string]: any;
-};
-
-export interface NewPet {
-  name: string;
-  tag?: string;
-  [key: string]: any;
-}
 
 describe('Integration', () => {
   afterEach(async () => {
@@ -26,20 +17,20 @@ describe('Integration', () => {
     const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
     const yamlFile = join(__dirname, 'integration.yaml');
 
-    const paths = {
+    const paths: LaminarPaths = {
       '/pets': {
         get: () => db,
-        post: ({ body }: { body: NewPet }) => {
+        post: ({ body }) => {
           const pet = { ...body, id: db.reduce((id, item) => Math.max(item.id, id), 0) + 1 };
           db.push(pet);
           return pet;
         },
       },
       '/pets/{id}': {
-        get: ({ path }: { path: { id: string } }) =>
+        get: ({ path }) =>
           db.find(item => item.id === Number(path.id)) ||
           response({ status: 404, body: { code: 123, message: 'Not Found' } }),
-        delete: ({ path }: { path: { id: string } }) => {
+        delete: ({ path }) => {
           const index = db.findIndex(item => item.id === Number(path.id));
           if (index !== -1) {
             delete db[index];
