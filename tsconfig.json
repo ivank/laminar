@@ -5,6 +5,7 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "resolveJsonModule": true,
     "noUnusedLocals": true,
     "strict": true,
     "module": "commonjs",

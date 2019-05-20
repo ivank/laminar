@@ -1,11 +1,13 @@
-import { toMatchPattern } from './helpers';
 import {
   HeaderObject,
   MediaTypeObject,
   OpenAPIObject,
   OperationObject,
+  ParameterObject,
+  RequestBodyObject,
   ResponseObject,
-} from './types';
+} from 'openapi3-ts';
+import { toMatchPattern } from './helpers';
 
 export const toSchema = (api: OpenAPIObject, path: string, method: string) => {
   const operation = api.paths[path][method];
@@ -19,7 +21,7 @@ export const toSchema = (api: OpenAPIObject, path: string, method: string) => {
 export const toContextSchema = ({ requestBody, parameters }: Partial<OperationObject>): any => ({
   allOf: [
     ...(parameters
-      ? parameters.map(param => ({
+      ? (parameters as ParameterObject[]).map(param => ({
           properties: {
             [param.in]: {
               ...(param.required ? { required: [param.name] } : {}),
@@ -30,27 +32,29 @@ export const toContextSchema = ({ requestBody, parameters }: Partial<OperationOb
       : []),
     requestBody
       ? {
-          ...(requestBody.required ? { required: ['body'] } : {}),
-          ...(requestBody.content
+          ...((requestBody as RequestBodyObject).required ? { required: ['body'] } : {}),
+          ...((requestBody as RequestBodyObject).content
             ? {
                 discriminator: {
                   propertyName: 'headers',
                 },
-                oneOf: Object.entries(requestBody.content).map(([match, mediaType]) => ({
-                  properties: {
-                    headers: {
-                      type: 'object',
-                      required: ['content-type'],
-                      properties: {
-                        'content-type': {
-                          type: 'string',
-                          pattern: toMatchPattern(match),
+                oneOf: Object.entries((requestBody as RequestBodyObject).content).map(
+                  ([match, mediaType]) => ({
+                    properties: {
+                      headers: {
+                        type: 'object',
+                        required: ['content-type'],
+                        properties: {
+                          'content-type': {
+                            type: 'string',
+                            pattern: toMatchPattern(match),
+                          },
                         },
                       },
+                      body: mediaType.schema,
                     },
-                    body: mediaType.schema,
-                  },
-                })),
+                  }),
+                ),
               }
             : {}),
         }

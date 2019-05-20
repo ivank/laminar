@@ -13,6 +13,7 @@
     "@types/jest": "^24.0.13",
     "@types/js-yaml": "^3.12.1",
     "@types/node": "^11.13.4",
+    "axios": "^0.18.0",
     "date-fns": "^1.30.1",
     "jest": "^24.8.0",
     "prettier": "^1.17.1",
@@ -35,6 +36,8 @@
     "@ovotech/laminar": "*"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.1.0"
+    "@ovotech/json-schema": "^0.1.0",
+    "oas-schemas": "https://github.com/OAI/OpenAPI-Specification.git",
+    "openapi3-ts": "^1.2.0"
   }
 }

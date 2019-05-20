@@ -12,10 +12,10 @@ import {
 } from '@ovotech/laminar';
 import { readFileSync } from 'fs';
 import * as YAML from 'js-yaml';
+import * as OpenApiSchema from 'oas-schemas/schemas/v3.0/schema.json';
+import { OpenAPIObject } from 'openapi3-ts';
 import { OapiResolverError } from './OapiResolverError';
-import { OpenApi } from './schema';
 import { toSchema } from './to-schema';
-import { OpenAPIObject } from './types';
 
 interface RouteMatcher<TResolver> extends Matcher {
   resolver: TResolver;
@@ -75,7 +75,7 @@ export const oapi = async <TPaths extends LaminarPaths>(
   } & LoadApi,
 ): Promise<Resolver<Context>> => {
   const api = loadApi(options);
-  const checkApi = await validate(OpenApi, api);
+  const checkApi = await validate(OpenApiSchema as Schema, api);
   if (!checkApi.valid) {
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
