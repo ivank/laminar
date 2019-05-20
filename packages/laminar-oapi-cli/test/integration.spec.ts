@@ -1,7 +1,7 @@
 import { laminar, response } from '@ovotech/laminar';
 import { oapi } from '@ovotech/laminar-oapi';
+import axios from 'axios';
 import { createServer, Server } from 'http';
-import fetch from 'node-fetch';
 import { join } from 'path';
 
 import { LaminarPaths, Pet } from './__generated__/integration';
@@ -33,7 +33,7 @@ describe('Integration', () => {
         delete: ({ path }) => {
           const index = db.findIndex(item => item.id === Number(path.id));
           if (index !== -1) {
-            delete db[index];
+            db.splice(index, 1);
             return response({ status: 204 });
           } else {
             return response({ status: 404, body: { code: 12, message: 'Item not found' } });
@@ -46,43 +46,86 @@ describe('Integration', () => {
     server = createServer(laminar(app));
 
     await new Promise(resolve => server.listen(8093, resolve));
+    const api = axios.create({ baseURL: 'http://localhost:8093' });
 
-    const baseUrl = 'http://localhost:8093';
+    await expect(api.get('/unknown-url')).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 404,
+        data: { message: 'Path GET /unknown-url not found' },
+      }),
+    );
 
-    expect(await (await fetch(`${baseUrl}/pets`)).json()).toEqual([
-      { id: 111, name: 'Catty', tag: 'kitten' },
-      { id: 222, name: 'Doggy' },
-    ]);
-
-    const added = await fetch(`${baseUrl}/pets`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'New Puppy' }),
+    await expect(api.get('/pets')).resolves.toMatchObject({
+      status: 200,
+      data: [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }],
     });
 
-    expect(await added.json()).toEqual({ id: 223, name: 'New Puppy' });
+    await expect(api.post('/pets', { other: 'New Puppy' })).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 400,
+        data: {
+          errors: ['[context.body] is missing [name] keys'],
+          message: 'Request Validation Error',
+        },
+      }),
+    );
 
-    expect(await (await fetch(`${baseUrl}/pets/111`)).json()).toEqual({
-      id: 111,
-      name: 'Catty',
-      tag: 'kitten',
+    await expect(api.post('/pets', { name: 'New Puppy' })).resolves.toMatchObject({
+      status: 200,
+      data: { id: 223, name: 'New Puppy' },
     });
 
-    expect(await (await fetch(`${baseUrl}/pets/223`)).json()).toEqual({
-      id: 223,
-      name: 'New Puppy',
+    await expect(api.get('/pets/111')).resolves.toMatchObject({
+      status: 200,
+      data: { id: 111, name: 'Catty', tag: 'kitten' },
     });
 
-    expect(await (await fetch(`${baseUrl}/pets`)).json()).toEqual([
-      { id: 111, name: 'Catty', tag: 'kitten' },
-      { id: 222, name: 'Doggy' },
-      { id: 223, name: 'New Puppy' },
-    ]);
+    await expect(api.get('/pets/000')).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 404,
+        data: {
+          code: 123,
+          message: 'Not Found',
+        },
+      }),
+    );
 
-    const deleteReponse = await fetch(`${baseUrl}/pets/222`, {
-      method: 'DELETE',
+    await expect(api.get('/pets/223')).resolves.toMatchObject({
+      status: 200,
+      data: { id: 223, name: 'New Puppy' },
     });
 
-    expect(deleteReponse.status).toEqual(204);
+    await expect(api.get('/pets')).resolves.toMatchObject({
+      status: 200,
+      data: [
+        { id: 111, name: 'Catty', tag: 'kitten' },
+        { id: 222, name: 'Doggy' },
+        { id: 223, name: 'New Puppy' },
+      ],
+    });
+
+    await expect(api.delete('/pets/228')).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 404,
+        data: {
+          code: 12,
+          message: 'Item not found',
+        },
+      }),
+    );
+
+    await expect(api.delete('/pets/222')).resolves.toMatchObject({
+      status: 204,
+      data: {},
+    });
+
+    await expect(api.get('/pets')).resolves.toMatchObject({
+      status: 200,
+      data: [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 223, name: 'New Puppy' }],
+    });
   });
 });

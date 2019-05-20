@@ -116,6 +116,17 @@ describe('Integration', () => {
       ],
     });
 
+    await expect(api.delete('/pets/228')).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 404,
+        data: {
+          code: 12,
+          message: 'Item not found',
+        },
+      }),
+    );
+
     await expect(api.delete('/pets/222')).resolves.toMatchObject({
       status: 204,
       data: {},

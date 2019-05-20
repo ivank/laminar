@@ -98,7 +98,7 @@ export interface HttpErrorResponse {
     [key: string]: any;
 }
 
-export type ApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<200, BalanceSummaryHttpResponse>) | LaminarResponse<400, HttpErrorResponse> | LaminarResponse<500, HttpErrorResponse>;
+export type ApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV2AccountsAccountIdBalanceGetContext extends Context, RouteContext {
     path: {
@@ -142,7 +142,7 @@ export interface ChargeTransactionEntity {
     [key: string]: any;
 }
 
-export type ApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<200, TransactionHistoryHttpResponseV2>) | LaminarResponse<400, HttpErrorResponse> | LaminarResponse<500, HttpErrorResponse>;
+export type ApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV2AccountsAccountIdTransactionsGetContext extends Context, RouteContext {
     path: {
@@ -172,7 +172,7 @@ export interface AdjustBalanceRequest {
     [key: string]: any;
 }
 
-export type ApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<200, BalanceSummaryHttpResponse>) | LaminarResponse<400, HttpErrorResponse> | LaminarResponse<500, HttpErrorResponse>;
+export type ApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV2AccountsAccountIdAdjustbalancePostContext extends Context, RouteContext {
     path: {
@@ -181,7 +181,7 @@ export interface ApiV2AccountsAccountIdAdjustbalancePostContext extends Context,
     body: AdjustBalanceRequest;
 }
 
-export type ApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<200, BalanceSummaryHttpResponse>) | LaminarResponse<400, HttpErrorResponse> | LaminarResponse<500, HttpErrorResponse>;
+export type ApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV3AccountsAccountIdBalanceGetContext extends Context, RouteContext {
     path: {
@@ -226,7 +226,7 @@ export interface StandingChargeTransactionEntity {
     [key: string]: any;
 }
 
-export type ApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<200, TransactionHistoryHttpResponseV3>) | LaminarResponse<400, HttpErrorResponse> | LaminarResponse<500, HttpErrorResponse>;
+export type ApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV3AccountsAccountIdTransactionsGetContext extends Context, RouteContext {
     path: {
@@ -239,7 +239,7 @@ export interface ApiV3AccountsAccountIdTransactionsGetContext extends Context, R
     };
 }
 
-export type ApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<200, BalanceSummaryHttpResponse>) | LaminarResponse<400, HttpErrorResponse> | LaminarResponse<500, HttpErrorResponse>;
+export type ApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV3AccountsAccountIdAdjustbalancePostContext extends Context, RouteContext {
     path: {
@@ -279,7 +279,7 @@ export interface user {
     [key: string]: any;
 }
 
-export type 20UsersUsernameGetResponse = (user | LaminarResponse<200, user>);
+export type 20UsersUsernameGetResponse = (user | LaminarResponse<user>);
 
 export interface 20UsersUsernameGetContext extends Context, RouteContext {
     path: {
@@ -293,7 +293,7 @@ export interface repository {
     [key: string]: any;
 }
 
-export type 20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<200, repository[]>);
+export type 20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<repository[]>);
 
 export interface 20RepositoriesUsernameGetContext extends Context, RouteContext {
     path: {
@@ -301,7 +301,7 @@ export interface 20RepositoriesUsernameGetContext extends Context, RouteContext 
     };
 }
 
-export type 20RepositoriesUsernameSlugGetResponse = (repository | LaminarResponse<200, repository>);
+export type 20RepositoriesUsernameSlugGetResponse = (repository | LaminarResponse<repository>);
 
 export interface 20RepositoriesUsernameSlugGetContext extends Context, RouteContext {
     path: {
@@ -318,7 +318,7 @@ export interface pullrequest {
     [key: string]: any;
 }
 
-export type 20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<200, pullrequest[]>);
+export type 20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<pullrequest[]>);
 
 export interface 20RepositoriesUsernameSlugPullrequestsGetContext extends Context, RouteContext {
     path: {
@@ -330,7 +330,7 @@ export interface 20RepositoriesUsernameSlugPullrequestsGetContext extends Contex
     };
 }
 
-export type 20RepositoriesUsernameSlugPullrequestsPidGetResponse = (pullrequest | LaminarResponse<200, pullrequest>);
+export type 20RepositoriesUsernameSlugPullrequestsPidGetResponse = (pullrequest | LaminarResponse<pullrequest>);
 
 export interface 20RepositoriesUsernameSlugPullrequestsPidGetContext extends Context, RouteContext {
     path: {
@@ -377,7 +377,7 @@ export interface Error {
     [key: string]: any;
 }
 
-export type PetsGetResponse = (Pets | LaminarResponse<200, Pets>) | (Error | LaminarResponse<any, Error>);
+export type PetsGetResponse = (Pets | LaminarResponse<Pets>) | (Error | LaminarResponse<Error>);
 
 export interface PetsGetContext extends Context, RouteContext {
     query: {
@@ -385,12 +385,12 @@ export interface PetsGetContext extends Context, RouteContext {
     };
 }
 
-export type PetsPostResponse = (Error | LaminarResponse<any, Error>);
+export type PetsPostResponse = (Error | LaminarResponse<Error>);
 
 export interface PetsPostContext extends Context, RouteContext {
 }
 
-export type PetsPetIdGetResponse = (Pets | LaminarResponse<200, Pets>) | (Error | LaminarResponse<any, Error>);
+export type PetsPetIdGetResponse = (Pets | LaminarResponse<Pets>) | (Error | LaminarResponse<Error>);
 
 export interface PetsPetIdGetContext extends Context, RouteContext {
     path: {
@@ -446,7 +446,7 @@ export interface Error {
     [key: string]: any;
 }
 
-export type PetsGetResponse = (Pet[] | LaminarResponse<200, Pet[]>) | (Error | LaminarResponse<any, Error>);
+export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]>) | (Error | LaminarResponse<Error>);
 
 export interface PetsGetContext extends Context, RouteContext {
     query: {
@@ -455,13 +455,13 @@ export interface PetsGetContext extends Context, RouteContext {
     };
 }
 
-export type PetsPostResponse = (Pet | LaminarResponse<200, Pet>) | (Error | LaminarResponse<any, Error>);
+export type PetsPostResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
 
 export interface PetsPostContext extends Context, RouteContext {
     body: NewPet;
 }
 
-export type PetsIdGetResponse = (Pet | LaminarResponse<200, Pet>) | (Error | LaminarResponse<any, Error>);
+export type PetsIdGetResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
 
 export interface PetsIdGetContext extends Context, RouteContext {
     path: {
@@ -469,7 +469,7 @@ export interface PetsIdGetContext extends Context, RouteContext {
     };
 }
 
-export type PetsIdDeleteResponse = (Error | LaminarResponse<any, Error>);
+export type PetsIdDeleteResponse = (Error | LaminarResponse<Error>);
 
 export interface PetsIdDeleteContext extends Context, RouteContext {
     path: {
@@ -523,12 +523,12 @@ export interface dataSetList {
     [key: string]: any;
 }
 
-export type GetResponse = (dataSetList | LaminarResponse<200, dataSetList>);
+export type GetResponse = (dataSetList | LaminarResponse<dataSetList>);
 
 export interface GetContext extends Context, RouteContext {
 }
 
-export type DatasetVersionFieldsGetResponse = (string | LaminarResponse<200, string>) | LaminarResponse<404, string>;
+export type DatasetVersionFieldsGetResponse = (string | LaminarResponse<string>) | LaminarResponse<string>;
 
 export interface DatasetVersionFieldsGetContext extends Context, RouteContext {
     path: {
@@ -537,7 +537,7 @@ export interface DatasetVersionFieldsGetContext extends Context, RouteContext {
     };
 }
 
-export type DatasetVersionRecordsPostResponse = (any[] | LaminarResponse<200, any[]>);
+export type DatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]>);
 
 export interface DatasetVersionRecordsPostContext extends Context, RouteContext {
     path: {

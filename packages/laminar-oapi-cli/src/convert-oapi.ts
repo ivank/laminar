@@ -80,13 +80,10 @@ const convertResponse = (context: AstContext, key: string, response: ResponseObj
     const node = convertSchema(context, response.content['application/json'].schema);
     const nodeType =
       key === '200'
-        ? Type.Union([
-            node.type,
-            Type.Ref('LaminarResponse', [Type.Literal(Number(key)), node.type]),
-          ])
+        ? Type.Union([node.type, Type.Ref('LaminarResponse', [node.type])])
         : key === 'default'
-        ? Type.Union([node.type, Type.Ref('LaminarResponse', [Type.Any, node.type])])
-        : Type.Ref('LaminarResponse', [Type.Literal(Number(key)), node.type]);
+        ? Type.Union([node.type, Type.Ref('LaminarResponse', [node.type])])
+        : Type.Ref('LaminarResponse', [node.type]);
 
     return result(withImports(node.context, '@ovotech/laminar', ['LaminarResponse']), nodeType);
   } else {
