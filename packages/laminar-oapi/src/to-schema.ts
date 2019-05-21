@@ -1,7 +1,7 @@
+import { Schema } from '@ovotech/json-schema';
 import {
   HeaderObject,
   MediaTypeObject,
-  OpenAPIObject,
   OperationObject,
   ParameterObject,
   RequestBodyObject,
@@ -9,14 +9,15 @@ import {
 } from 'openapi3-ts';
 import { toMatchPattern } from './helpers';
 
-export const toSchema = (api: OpenAPIObject, path: string, method: string) => {
-  const operation = api.paths[path][method];
+export interface OperationSchema {
+  context: Schema;
+  response: Schema;
+}
 
-  return {
-    context: toContextSchema(operation),
-    response: toResponseSchema(operation),
-  };
-};
+export const toSchema = (operation: OperationObject): OperationSchema => ({
+  context: toContextSchema(operation),
+  response: toResponseSchema(operation),
+});
 
 export const toContextSchema = ({ requestBody, parameters }: Partial<OperationObject>): any => ({
   allOf: [

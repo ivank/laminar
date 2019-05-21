@@ -10,10 +10,15 @@ import {
 } from 'openapi3-ts';
 import * as ts from 'typescript';
 import { convertSchema } from './convert-schema';
-import { AstContext, result, Result, withEntry, withImports, withRef } from './traverse';
-
-type Method = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
-const methodNames: Method[] = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
+import {
+  AstContext,
+  mapContext,
+  result,
+  Result,
+  withEntry,
+  withImports,
+  withRef,
+} from './traverse';
 
 interface AstParameters {
   in: {
@@ -134,21 +139,24 @@ const convertRequestBody = (
   );
 };
 
-export const convertOapi = (context: AstContext, api: OpenAPIObject) =>
-  Object.entries<PathItemObject>(api.paths).reduce<Result<ts.TypeAliasDeclaration>>(
-    (pathsNode, [path, pathApiOrRef]) => {
+export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
+  const paths = mapContext(
+    context,
+    Object.entries<PathItemObject>(api.paths),
+    (pathContext, [path, pathApiOrRef]) => {
       const pathApi = withRef(pathApiOrRef, context);
 
-      const methods = methodNames.reduce<Result<ts.TypeLiteralNode>>((methodsNode, method) => {
-        const operation = pathApi[method];
-        if (operation) {
+      const methods = mapContext(
+        pathContext,
+        Object.entries(pathApi),
+        (methodContext, [method, operation]) => {
           const astParams = operation.parameters
-            ? convertParameters(methodsNode.context, operation.parameters)
-            : result(methodsNode.context, Type.TypeLiteral());
+            ? convertParameters(methodContext, operation.parameters)
+            : result(methodContext, Type.TypeLiteral());
 
           const astRequestBody = operation.requestBody
             ? convertRequestBody(astParams.context, operation.requestBody)
-            : result(methodsNode.context, Type.TypeLiteral());
+            : result(methodContext, Type.TypeLiteral());
 
           const identifier = pathToIdentifier(path) + title(method);
           const contextIdentifier = identifier + 'Context';
@@ -182,41 +190,32 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) =>
             jsDoc: operation.description,
           });
 
-          return result(
-            withEntry(responseAst.context, contextInterface),
-            Type.TypeLiteral({ props: methodsNode.type.members.concat([methodSignature]) }),
-          );
-        } else {
-          return methodsNode;
-        }
-      }, result(pathsNode.context, Type.TypeLiteral()));
+          return result(withEntry(responseAst.context, contextInterface), methodSignature);
+        },
+      );
 
       return result(
         methods.context,
-        Type.Alias({
-          isExport: true,
-          name: pathsNode.type.name,
-          typeArgs: [...pathsNode.type.typeParameters!],
-          type: Type.TypeLiteral({
-            props: (pathsNode.type.type as ts.TypeLiteralNode).members.concat([
-              Type.Prop({ name: Type.LiteralString(path), type: methods.type }),
-            ]),
-          }),
+        Type.Prop({
+          name: Type.LiteralString(path),
+          type: Type.TypeLiteral({ props: methods.items }),
         }),
       );
     },
-    result(
-      withImports(context, '@ovotech/laminar', ['Context', 'RouteContext']),
-      Type.Alias({
-        name: 'LaminarPaths',
-        isExport: true,
-        type: Type.TypeLiteral({ props: [] }),
-        typeArgs: [
-          Type.TypeArg({
-            name: 'TContext',
-            defaultType: Type.TypeLiteral(),
-          }),
-        ],
-      }),
-    ),
   );
+
+  return result(
+    withImports(paths.context, '@ovotech/laminar', ['Context', 'RouteContext']),
+    Type.Alias({
+      name: 'LaminarPaths',
+      isExport: true,
+      type: Type.TypeLiteral({ props: paths.items }),
+      typeArgs: [
+        Type.TypeArg({
+          name: 'TContext',
+          defaultType: Type.TypeLiteral(),
+        }),
+      ],
+    }),
+  );
+};

@@ -12,7 +12,7 @@ export const printResult = <T extends ts.Node>(node: Result<T>): string => {
 
   return [
     ...imports.map(([module, names]) =>
-      printNode(Node.Import({ named: names.map(item => ({ name: item })), module })),
+      printNode(Node.Import({ named: [...names].sort().map(item => ({ name: item })), module })),
     ),
     printNode(node.type),
     ...entries.map(entry => printNode(entry)),

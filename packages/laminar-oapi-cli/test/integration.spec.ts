@@ -1,5 +1,5 @@
 import { laminar, response } from '@ovotech/laminar';
-import { oapi } from '@ovotech/laminar-oapi';
+import { loadYamlFile, oapi } from '@ovotech/laminar-oapi';
 import axios from 'axios';
 import { createServer, Server } from 'http';
 import { join } from 'path';
@@ -15,13 +15,12 @@ describe('Integration', () => {
 
   it('Should process response', async () => {
     const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
-    const yamlFile = join(__dirname, 'integration.yaml');
 
     const paths: LaminarPaths = {
       '/pets': {
         get: () => db,
         post: ({ body }) => {
-          const pet = { ...body, id: db.reduce((id, item) => Math.max(item.id, id), 0) + 1 };
+          const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };
           db.push(pet);
           return pet;
         },
@@ -42,7 +41,7 @@ describe('Integration', () => {
       },
     };
 
-    const app = await oapi({ yamlFile, paths });
+    const app = await oapi({ paths, api: loadYamlFile(join(__dirname, 'integration.yaml')) });
     server = createServer(laminar(app));
 
     await new Promise(resolve => server.listen(8093, resolve));

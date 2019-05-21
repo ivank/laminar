@@ -1,8 +1,7 @@
-import { loadYamlFile } from '@ovotech/laminar-oapi';
 import { readdirSync } from 'fs';
 import { OpenAPIObject } from 'openapi3-ts';
 import { join } from 'path';
-import { oapiTs } from '../src';
+import { loadYamlFile, toSchemas } from '../src';
 
 const oapiSchemas = readdirSync(join(__dirname, 'specs'))
   .filter(file => file.endsWith('.yaml'))
@@ -10,7 +9,7 @@ const oapiSchemas = readdirSync(join(__dirname, 'specs'))
 
 describe('Json Schema Ts', () => {
   it.each(oapiSchemas)('Test %s', async (file, schema) => {
-    const result = await oapiTs(schema);
+    const result = toSchemas(schema);
     expect(result).toMatchSnapshot();
   });
 });

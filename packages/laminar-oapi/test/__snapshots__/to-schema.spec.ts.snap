@@ -1,0 +1,2536 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Json Schema Ts Test api-with-examples.yaml 1`] = `
+Object {
+  "/": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": undefined,
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": undefined,
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 300,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/v2": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": undefined,
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": undefined,
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 203,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`Json Schema Ts Test balance-service.yaml 1`] = `
+Object {
+  "/api/v2/accounts/{accountId}/adjust-balance": Object {
+    "post": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "accountId": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "accountId",
+                ],
+              },
+            },
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/AdjustBalanceRequest",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "required": Array [
+              "body",
+            ],
+          },
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/BalanceSummaryHttpResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 400,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 404,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 500,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/api/v2/accounts/{accountId}/balance": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "accountId": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "accountId",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/BalanceSummaryHttpResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 400,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 404,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 500,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/api/v2/accounts/{accountId}/transactions": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "accountId": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "accountId",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "fromDate": Object {
+                    "format": "date",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "fromDate",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "toDate": Object {
+                    "format": "date",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "toDate",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "transactionType": Object {
+                    "items": Object {
+                      "enum": Array [
+                        "TopUp",
+                        "ElectricityUsageCharge",
+                        "ElectricityStandingCharge",
+                        "BalanceAdjustment",
+                      ],
+                    },
+                    "type": "array",
+                  },
+                },
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/TransactionHistoryHttpResponseV2",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 400,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 500,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/api/v3/accounts/{accountId}/adjust-balance": Object {
+    "post": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "accountId": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "accountId",
+                ],
+              },
+            },
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/AdjustBalanceRequest",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "required": Array [
+              "body",
+            ],
+          },
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/BalanceSummaryHttpResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 400,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 404,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 500,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/api/v3/accounts/{accountId}/balance": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "accountId": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "accountId",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/BalanceSummaryHttpResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 400,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 404,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 500,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/api/v3/accounts/{accountId}/transactions": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "accountId": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "accountId",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "fromDate": Object {
+                    "format": "date",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "fromDate",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "toDate": Object {
+                    "format": "date",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "toDate",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "transactionType": Object {
+                    "items": Object {
+                      "enum": Array [
+                        "TopUp",
+                        "ElectricityUsageCharge",
+                        "ElectricityStandingCharge",
+                        "BalanceAdjustment",
+                      ],
+                    },
+                    "type": "array",
+                  },
+                },
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/TransactionHistoryHttpResponseV3",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 400,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/HttpErrorResponse",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 500,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/internal/status": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/internal/swagger.yaml": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`Json Schema Ts Test link-example.yaml 1`] = `
+Object {
+  "/2.0/repositories/{username}": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "username": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "username",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "items": Object {
+                      "$ref": "#/components/schemas/repository",
+                    },
+                    "type": "array",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/2.0/repositories/{username}/{slug}": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "username": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "username",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "slug": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "slug",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/repository",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/2.0/repositories/{username}/{slug}/pullrequests": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "username": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "username",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "slug": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "slug",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "state": Object {
+                    "enum": Array [
+                      "open",
+                      "merged",
+                      "declined",
+                    ],
+                    "type": "string",
+                  },
+                },
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "items": Object {
+                      "$ref": "#/components/schemas/pullrequest",
+                    },
+                    "type": "array",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/2.0/repositories/{username}/{slug}/pullrequests/{pid}": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "username": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "username",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "slug": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "slug",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "pid": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "pid",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/pullrequest",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge": Object {
+    "post": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "username": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "username",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "slug": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "slug",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "pid": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "pid",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 204,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/2.0/users/{username}": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "username": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "username",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/user",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`Json Schema Ts Test petstore.yaml 1`] = `
+Object {
+  "/pets": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "limit": Object {
+                    "format": "int32",
+                    "type": "integer",
+                  },
+                },
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Pets",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "headers": Object {
+                "allOf": Array [
+                  Object {
+                    "properties": Object {
+                      "x-next": Object {
+                        "type": "string",
+                      },
+                    },
+                  },
+                ],
+              },
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Error",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": true,
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+    "post": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 201,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Error",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": true,
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/pets/{petId}": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "petId": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "petId",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Pets",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Error",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": true,
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`Json Schema Ts Test petstore-expanded.yaml 1`] = `
+Object {
+  "/pets": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "tags": Object {
+                    "items": Object {
+                      "type": "string",
+                    },
+                    "type": "array",
+                  },
+                },
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "query": Object {
+                "properties": Object {
+                  "limit": Object {
+                    "format": "int32",
+                    "type": "integer",
+                  },
+                },
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "items": Object {
+                      "$ref": "#/components/schemas/Pet",
+                    },
+                    "type": "array",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Error",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": true,
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+    "post": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/NewPet",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "required": Array [
+              "body",
+            ],
+          },
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Pet",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Error",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": true,
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/pets/{id}": Object {
+    "delete": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "id": Object {
+                    "format": "int64",
+                    "type": "integer",
+                  },
+                },
+                "required": Array [
+                  "id",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 204,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Error",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": true,
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "id": Object {
+                    "format": "int64",
+                    "type": "integer",
+                  },
+                },
+                "required": Array [
+                  "id",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Pet",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/Error",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": true,
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`Json Schema Ts Test uspto.yaml 1`] = `
+Object {
+  "/": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "$ref": "#/components/schemas/dataSetList",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/{dataset}/{version}/fields": Object {
+    "get": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "dataset": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "dataset",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "version": Object {
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "version",
+                ],
+              },
+            },
+          },
+          Object {},
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "type": "string",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "type": "string",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 404,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+  "/{dataset}/{version}/records": Object {
+    "post": Object {
+      "context": Object {
+        "allOf": Array [
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "version": Object {
+                    "default": "v1",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "version",
+                ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "path": Object {
+                "properties": Object {
+                  "dataset": Object {
+                    "default": "oa_citations",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "dataset",
+                ],
+              },
+            },
+          },
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "properties": Object {
+                      "criteria": Object {
+                        "default": "*:*",
+                        "description": "Uses Lucene Query Syntax in the format of propertyName:value, propertyName:[num1 TO num2] and date range format: propertyName:[yyyyMMdd TO yyyyMMdd]. In the response please see the 'docs' element which has the list of record objects. Each record structure would consist of all the fields and their corresponding values.",
+                        "type": "string",
+                      },
+                      "rows": Object {
+                        "default": 100,
+                        "description": "Specify number of rows to be returned. If you run the search with default values, in the response you will see 'numFound' attribute which will tell the number of records available in the dataset.",
+                        "type": "integer",
+                      },
+                      "start": Object {
+                        "default": 0,
+                        "description": "Starting record number. Default value is 0.",
+                        "type": "integer",
+                      },
+                    },
+                    "required": Array [
+                      "criteria",
+                    ],
+                    "type": "object",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/x\\\\-www\\\\-form\\\\-urlencoded",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      "response": Object {
+        "discriminator": Object {
+          "propertyName": "status",
+        },
+        "oneOf": Array [
+          Object {
+            "discriminator": Object {
+              "propertyName": "headers",
+            },
+            "oneOf": Array [
+              Object {
+                "properties": Object {
+                  "body": Object {
+                    "items": Object {
+                      "additionalProperties": Object {
+                        "type": "object",
+                      },
+                      "type": "object",
+                    },
+                    "type": "array",
+                  },
+                  "headers": Object {
+                    "properties": Object {
+                      "content-type": Object {
+                        "pattern": "application\\\\/json",
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "content-type",
+                    ],
+                    "type": "object",
+                  },
+                },
+              },
+            ],
+            "properties": Object {
+              "status": Object {
+                "const": 200,
+              },
+            },
+            "type": "object",
+          },
+          Object {
+            "properties": Object {
+              "status": Object {
+                "const": 404,
+              },
+            },
+            "type": "object",
+          },
+        ],
+      },
+    },
+  },
+}
+`;
