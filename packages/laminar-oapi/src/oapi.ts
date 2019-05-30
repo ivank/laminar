@@ -4,62 +4,40 @@ import {
   Context,
   HttpError,
   isResponse,
-  Matcher,
   Resolver,
   response,
-  selectMatcher,
-  toMatcher,
+  Route,
+  RouteContext,
+  selectRoute,
+  toRoute,
 } from '@ovotech/laminar';
 import * as OpenApiSchema from 'oas-schemas/schemas/v3.0/schema.json';
-import { OpenAPIObject, OperationObject } from 'openapi3-ts';
+import { OpenAPIObject } from 'openapi3-ts';
+import { OperationSchema, PathsSchema, toPathsSchema } from './oapi-to-schema';
 import { OapiResolverError } from './OapiResolverError';
-import { OperationSchema, toSchema } from './to-schema';
 
-interface RouteMatcher<TResolver> extends Matcher {
-  resolver: TResolver;
+interface OapiRoute<TContext extends Context = Context> extends Route<TContext> {
   schema: OperationSchema;
 }
 
-interface Schemas {
-  [path: string]: { [method: string]: OperationSchema };
+export interface LaminarPaths<TContext extends Context = Context> {
+  [path: string]: { [method: string]: Resolver<TContext & RouteContext> };
 }
 
-export interface LaminarPaths {
-  [path: string]: {
-    [method: string]: Resolver<any>;
-  };
-}
-
-export const toSchemas = (api: OpenAPIObject) =>
-  Object.entries(api.paths).reduce<Schemas>(
-    (paths, [path, methods]) => ({
-      ...paths,
-      [path]: Object.entries(methods).reduce(
-        (all, [method, operation]) => ({
-          ...all,
-          [method]: toSchema(operation as OperationObject),
-        }),
-        {},
-      ),
-    }),
-    {},
-  );
-
-const toMatchers = <TResolver>(
-  schemas: Schemas,
+const toRoutes = <TContext extends Context>(
+  pathsSchema: PathsSchema,
   paths: {
-    [path: string]: { [method: string]: TResolver };
+    [path: string]: { [method: string]: Resolver<TContext> };
   },
 ) =>
-  Object.entries(paths).reduce<Array<RouteMatcher<TResolver>>>(
+  Object.entries(paths).reduce<Array<OapiRoute<TContext>>>(
     (allPaths, [path, methods]) =>
       Object.entries(methods).reduce(
         (all, [method, resolver]) => [
           ...all,
           {
-            ...toMatcher(method, path),
-            resolver,
-            schema: schemas[path][method],
+            ...toRoute(method, path, resolver),
+            schema: pathsSchema[path][method],
           },
         ],
         allPaths,
@@ -80,11 +58,11 @@ export const oapi = async <TPaths extends LaminarPaths>({
   }
 
   const resolved = await resolveRefs(api);
-  const schemas = toSchemas(resolved.schema);
-  const matchers = toMatchers(schemas, paths);
+  const schemas = toPathsSchema(resolved.schema.paths);
+  const routes = toRoutes(schemas, paths);
 
   return async ctx => {
-    const select = selectMatcher(ctx.method, ctx.url.pathname!, matchers);
+    const select = selectRoute(ctx, routes as OapiRoute[]);
 
     if (!select) {
       throw new HttpError(404, {
@@ -92,7 +70,7 @@ export const oapi = async <TPaths extends LaminarPaths>({
       });
     }
     const {
-      matcher: { resolver, schema },
+      route: { resolver, schema },
       path,
     } = select;
     const context = { ...ctx, path };

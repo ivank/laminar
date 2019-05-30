@@ -1,7 +1,7 @@
 import { readdirSync } from 'fs';
 import { OpenAPIObject } from 'openapi3-ts';
 import { join } from 'path';
-import { loadYamlFile, toSchemas } from '../src';
+import { loadYamlFile, toPathsSchema } from '../src';
 
 const oapiSchemas = readdirSync(join(__dirname, 'specs'))
   .filter(file => file.endsWith('.yaml'))
@@ -9,7 +9,7 @@ const oapiSchemas = readdirSync(join(__dirname, 'specs'))
 
 describe('Json Schema Ts', () => {
   it.each(oapiSchemas)('Test %s', async (file, schema) => {
-    const result = toSchemas(schema);
+    const result = toPathsSchema(schema.paths);
     expect(result).toMatchSnapshot();
   });
 });

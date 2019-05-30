@@ -29,6 +29,19 @@ export const response = <TBody = LaminarResponse['body']>({
 export const isResponse = (res: ResolverResponse): res is LaminarResponse =>
   typeof res === 'object' && Laminar in res;
 
+export const extendResponse = (res: ResolverResponse, extend: Partial<LaminarResponse>) => {
+  const original = toResponse(res);
+  return {
+    ...original,
+    ...extend,
+    headers: { ...original.headers, ...extend.headers },
+    cookies: { ...original.cookies, ...extend.cookies },
+  };
+};
+
+export const toResponse = (res: ResolverResponse): LaminarResponse =>
+  isResponse(res) ? res : response({ body: res });
+
 export const message = (status: number, body: {} | string) => response({ status, body });
 
 export const redirect = (url: string, partial?: Partial<LaminarResponse>) => {

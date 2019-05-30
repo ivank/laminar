@@ -1,8 +1,8 @@
 import { laminar, response } from '@ovotech/laminar';
-import { loadYamlFile, oapi } from '@ovotech/laminar-oapi';
 import axios from 'axios';
 import { createServer, Server } from 'http';
 import { join } from 'path';
+import { LaminarPaths, loadYamlFile, oapi } from '../src';
 
 let server: Server;
 
@@ -25,7 +25,7 @@ describe('Integration', () => {
   it('Should process response', async () => {
     const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
 
-    const paths = {
+    const paths: LaminarPaths = {
       '/pets': {
         get: () => db,
         post: ({ body }: { body: NewPet }) => {

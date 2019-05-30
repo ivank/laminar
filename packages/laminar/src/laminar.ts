@@ -3,7 +3,7 @@ import { Readable } from 'stream';
 import { toArray } from './helpers';
 import { HttpError } from './HttpError';
 import { request } from './request';
-import { isResponse, resolveBody, response } from './response';
+import { resolveBody, toResponse } from './response';
 import { Context, Resolver } from './types';
 
 export const laminar = (resolver: Resolver<Context>): RequestListener => {
@@ -12,7 +12,7 @@ export const laminar = (resolver: Resolver<Context>): RequestListener => {
       const { url, method, headers, query, body, cookies } = await request(req);
       const context: Context = { url, method, headers, query, body, cookies };
       const result = await resolver(context);
-      const laminarResponse = isResponse(result) ? result : response({ body: result });
+      const laminarResponse = toResponse(result);
       const resolvedBody = resolveBody(laminarResponse.body);
 
       for (const [header, headerValue] of Object.entries(laminarResponse.headers)) {

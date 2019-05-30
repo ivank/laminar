@@ -1,19 +1,28 @@
 export { laminar } from './laminar';
 export { request } from './request';
-export { response, isResponse, message, redirect, file } from './response';
+export {
+  response,
+  isResponse,
+  message,
+  redirect,
+  file,
+  toResponse,
+  extendResponse,
+} from './response';
+export { cors, CorsConfig } from './middleware/cors';
+export { responseTime, ResponseTimeConfig } from './middleware/responseTime';
 export { HttpError } from './HttpError';
-export { selectMatcher, toMatcher, routes, get, post, patch, del, options, put } from './route';
+export { selectRoute, toRoute, router, get, post, patch, del, options, put } from './router';
 export {
   Context,
   Laminar,
   LaminarRequest,
   LaminarResponse,
-  Matcher,
+  RouteResolver,
   Method,
   Middleware,
   Resolver,
   ResolverResponse,
   Route,
   RouteContext,
-  RouteMatcher,
 } from './types';

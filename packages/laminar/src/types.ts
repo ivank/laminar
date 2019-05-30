@@ -50,21 +50,19 @@ export type Resolver<TContext extends Context = Context> = (
   ctx: TContext,
 ) => Promise<ResolverResponse> | ResolverResponse;
 
-export interface Matcher {
-  method: string;
-  pathRe: RegExp;
-  keys: string[];
-}
-
-export interface RouteMatcher<TContext extends Context> extends Matcher {
-  resolver: Resolver<TContext>;
+export interface Route<
+  TContext extends Context = Context,
+  TMatchedContext extends RouteContext = RouteContext
+> {
+  matcher: (ctx: TContext) => TMatchedContext | false;
+  resolver: Resolver<TContext & TMatchedContext>;
 }
 
 export interface RouteContext {
   path: any;
 }
 
-export type Route = <TContext extends Context>(
+export type RouteResolver = <TContext extends Context = Context>(
   path: string,
   resolver: Resolver<TContext>,
-) => RouteMatcher<TContext>;
+) => Route<TContext>;
