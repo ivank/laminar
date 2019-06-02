@@ -1,4 +1,4 @@
 export { loadJson, loadJsonFile, loadYaml, loadYamlFile } from './load';
-export { oapi, LaminarPaths } from './oapi';
-export { toPathsSchema } from './oapi-to-schema';
+export { oapi, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers, OapiContext } from './oapi';
+export { toSchema } from './oapi-to-schema';
 export { OapiResolverError } from './OapiResolverError';

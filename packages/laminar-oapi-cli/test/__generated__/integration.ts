@@ -1,6 +1,8 @@
-import { Context, RouteContext, LaminarResponse } from "@ovotech/laminar";
+import { LaminarResponse, RouteContext } from "@ovotech/laminar";
 
-export type LaminarPaths<TContext = {}> = {
+import { OapiContext, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers } from "@ovotech/laminar-oapi";
+
+export interface Paths<TContext = {}> extends OapiPaths<TContext> {
     "/pets": {
         /**
          * Returns all pets from the system that the user has access to
@@ -25,7 +27,7 @@ export type LaminarPaths<TContext = {}> = {
          */
         delete: (context: PetsIdDeleteContext & TContext) => PetsIdDeleteResponse;
     };
-};
+}
 
 export type Pet = NewPet & {
     id: number;
@@ -46,22 +48,28 @@ export interface Error {
 
 export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]>) | (Error | LaminarResponse<Error>);
 
-export interface PetsGetContext extends Context, RouteContext {
+export interface PetsGetContext extends OapiContext, RouteContext {
     query: {
         tags?: string[];
         limit?: number;
     };
 }
 
-export type PetsPostResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
+export interface PetCreated {
+    pet?: NewPet;
+    user?: string;
+    [key: string]: any;
+}
 
-export interface PetsPostContext extends Context, RouteContext {
+export type PetsPostResponse = (PetCreated | LaminarResponse<PetCreated>) | (Error | LaminarResponse<Error>);
+
+export interface PetsPostContext extends OapiContext, RouteContext {
     body: NewPet;
 }
 
 export type PetsIdGetResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
 
-export interface PetsIdGetContext extends Context, RouteContext {
+export interface PetsIdGetContext extends OapiContext, RouteContext {
     path: {
         id: string;
     };
@@ -69,8 +77,14 @@ export interface PetsIdGetContext extends Context, RouteContext {
 
 export type PetsIdDeleteResponse = (Error | LaminarResponse<Error>);
 
-export interface PetsIdDeleteContext extends Context, RouteContext {
+export interface PetsIdDeleteContext extends OapiContext, RouteContext {
     path: {
         id: string;
     };
+}
+
+export interface SecurityResolvers<TContext = {}> extends OapiSecurityResolvers<TContext> {
+    BasicAuth: OapiSecurityResolver;
+    BearerAuth: OapiSecurityResolver;
+    ApiKeyAuth: OapiSecurityResolver;
 }

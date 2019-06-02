@@ -12,16 +12,32 @@ import {
   toRoute,
 } from '@ovotech/laminar';
 import * as OpenApiSchema from 'oas-schemas/schemas/v3.0/schema.json';
-import { OpenAPIObject } from 'openapi3-ts';
-import { OperationSchema, PathsSchema, toPathsSchema } from './oapi-to-schema';
+import { OpenAPIObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
+import { merge } from './helpers';
+import { OperationSchema, PathsSchema, toSchema } from './oapi-to-schema';
 import { OapiResolverError } from './OapiResolverError';
+import { ResoledOpenAPIObject } from './resolved-openapi-object';
 
-interface OapiRoute<TContext extends Context = Context> extends Route<TContext> {
+export interface OapiContext extends Context {
+  security?: any;
+}
+
+export interface OapiRoute<TContext extends OapiContext = OapiContext> extends Route<TContext> {
   schema: OperationSchema;
 }
 
-export interface LaminarPaths<TContext extends Context = Context> {
-  [path: string]: { [method: string]: Resolver<TContext & RouteContext> };
+export interface OapiPaths<TContext extends {} = {}> {
+  [path: string]: { [method: string]: Resolver<TContext & OapiContext & RouteContext> };
+}
+
+export type OapiSecurityResolver<TContext extends {} = {}> = (options: {
+  context: TContext & OapiContext & RouteContext;
+  scheme: SecuritySchemeObject;
+  scopes: string[];
+}) => any | Promise<any>;
+
+export interface OapiSecurityResolvers<TContext extends {} = {}> {
+  [key: string]: OapiSecurityResolver<TContext>;
 }
 
 const toRoutes = <TContext extends Context>(
@@ -45,11 +61,54 @@ const toRoutes = <TContext extends Context>(
     [],
   );
 
-export const oapi = async <TPaths extends LaminarPaths>({
+const validateSecurity = async <TContext extends {} = {}>(
+  context: TContext & OapiContext & RouteContext,
+  requirements?: SecurityRequirementObject[],
+  schemes?: { [securityScheme: string]: SecuritySchemeObject },
+  resolvers?: OapiSecurityResolvers,
+): Promise<any> => {
+  if (!requirements || requirements.length === 0) {
+    return undefined;
+  }
+
+  for (const requirement of requirements) {
+    for (const name of Object.keys(requirement)) {
+      if (!schemes || !schemes[name]) {
+        throw new HttpError(500, { message: `Security ${name} not defined` });
+      }
+      if (!resolvers || !resolvers[name]) {
+        throw new HttpError(500, { message: `Security resolver ${name} not implemented` });
+      }
+    }
+  }
+
+  const checks = requirements
+    .map(async requirement => {
+      const securityContexts = Object.entries(requirement).map(([name, scopes]) =>
+        resolvers![name]({ context, scheme: schemes![name], scopes }),
+      );
+      return merge(await Promise.all(securityContexts));
+    })
+    .map(check => check.catch(error => error));
+
+  const results = await Promise.all(checks);
+
+  const checkPassed = results.find(result => !(result instanceof Error));
+
+  if (!checkPassed) {
+    throw results.find(result => result instanceof Error);
+  }
+
+  return checkPassed;
+};
+
+export const oapi = async <TPaths extends OapiPaths>({
   api,
   paths,
+  securityResolvers,
 }: {
   paths: TPaths;
+  securityResolvers?: OapiSecurityResolvers;
   api: OpenAPIObject;
 }): Promise<Resolver<Context>> => {
   const checkApi = await validate(OpenApiSchema as Schema, api);
@@ -57,8 +116,8 @@ export const oapi = async <TPaths extends LaminarPaths>({
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
 
-  const resolved = await resolveRefs(api);
-  const schemas = toPathsSchema(resolved.schema.paths);
+  const resolved = await resolveRefs<ResoledOpenAPIObject>(api);
+  const schemas = toSchema(resolved.schema);
   const routes = toRoutes(schemas, paths);
 
   return async ctx => {
@@ -73,7 +132,9 @@ export const oapi = async <TPaths extends LaminarPaths>({
       route: { resolver, schema },
       path,
     } = select;
+
     const context = { ...ctx, path };
+
     const checkContext = await validate(schema.context, context, {
       name: 'context',
       refs: resolved.refs,
@@ -86,7 +147,14 @@ export const oapi = async <TPaths extends LaminarPaths>({
       });
     }
 
-    const result = resolver(context);
+    const security = await validateSecurity(
+      context,
+      schema.security,
+      resolved.schema.components && resolved.schema.components.securitySchemes,
+      securityResolvers,
+    );
+
+    const result = resolver({ ...context, security });
     const laminarResponse = isResponse(result) ? result : response({ body: result });
     const checkResponse = await validate(schema.response, laminarResponse, {
       name: 'response',

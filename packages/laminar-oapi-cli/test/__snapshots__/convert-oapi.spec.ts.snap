@@ -1,28 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Json Schema Ts Test api-with-examples.yaml 1`] = `
-"import { Context, ResolverResponse, RouteContext } from \\"@ovotech/laminar\\";
+"import { ResolverResponse, RouteContext } from \\"@ovotech/laminar\\";
 
-export type LaminarPaths<TContext = {}> = {
+import { OapiContext, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers } from \\"@ovotech/laminar-oapi\\";
+
+export interface Paths<TContext = {}> extends OapiPaths<TContext> {
     \\"/\\": {
         get: (context: GetContext & TContext) => ResolverResponse;
     };
     \\"/v2\\": {
         get: (context: V2GetContext & TContext) => ResolverResponse;
     };
-};
-
-export interface GetContext extends Context, RouteContext {
 }
 
-export interface V2GetContext extends Context, RouteContext {
+export interface GetContext extends OapiContext, RouteContext {
+}
+
+export interface V2GetContext extends OapiContext, RouteContext {
 }"
 `;
 
 exports[`Json Schema Ts Test balance-service.yaml 1`] = `
-"import { Context, LaminarResponse, ResolverResponse, RouteContext } from \\"@ovotech/laminar\\";
+"import { LaminarResponse, ResolverResponse, RouteContext } from \\"@ovotech/laminar\\";
 
-export type LaminarPaths<TContext = {}> = {
+import { OapiContext, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers } from \\"@ovotech/laminar-oapi\\";
+
+export interface Paths<TContext = {}> extends OapiPaths<TContext> {
     \\"/internal/status\\": {
         /**
          * Returns 200 if the application is up. It does not do deep check. Always gives back 200.
@@ -68,12 +72,12 @@ export type LaminarPaths<TContext = {}> = {
          */
         post: (context: ApiV3AccountsAccountIdAdjustbalancePostContext & TContext) => ApiV3AccountsAccountIdAdjustbalancePostResponse;
     };
-};
-
-export interface InternalStatusGetContext extends Context, RouteContext {
 }
 
-export interface InternalSwaggeryamlGetContext extends Context, RouteContext {
+export interface InternalStatusGetContext extends OapiContext, RouteContext {
+}
+
+export interface InternalSwaggeryamlGetContext extends OapiContext, RouteContext {
 }
 
 export interface BalanceSummaryHttpResponse {
@@ -100,7 +104,7 @@ export interface HttpErrorResponse {
 
 export type ApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
-export interface ApiV2AccountsAccountIdBalanceGetContext extends Context, RouteContext {
+export interface ApiV2AccountsAccountIdBalanceGetContext extends OapiContext, RouteContext {
     path: {
         accountId: string;
     };
@@ -144,9 +148,15 @@ export interface ChargeTransactionEntity {
 
 export type ApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
-export interface ApiV2AccountsAccountIdTransactionsGetContext extends Context, RouteContext {
+export interface ApiV2AccountsAccountIdTransactionsGetContext extends OapiContext, RouteContext {
     path: {
         accountId: string;
+    };
+    headers: {
+        scenario?: string;
+    };
+    cookies: {
+        session?: string;
     };
     query: {
         fromDate: string;
@@ -174,7 +184,7 @@ export interface AdjustBalanceRequest {
 
 export type ApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
-export interface ApiV2AccountsAccountIdAdjustbalancePostContext extends Context, RouteContext {
+export interface ApiV2AccountsAccountIdAdjustbalancePostContext extends OapiContext, RouteContext {
     path: {
         accountId: string;
     };
@@ -183,7 +193,7 @@ export interface ApiV2AccountsAccountIdAdjustbalancePostContext extends Context,
 
 export type ApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
-export interface ApiV3AccountsAccountIdBalanceGetContext extends Context, RouteContext {
+export interface ApiV3AccountsAccountIdBalanceGetContext extends OapiContext, RouteContext {
     path: {
         accountId: string;
     };
@@ -228,7 +238,7 @@ export interface StandingChargeTransactionEntity {
 
 export type ApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
-export interface ApiV3AccountsAccountIdTransactionsGetContext extends Context, RouteContext {
+export interface ApiV3AccountsAccountIdTransactionsGetContext extends OapiContext, RouteContext {
     path: {
         accountId: string;
     };
@@ -241,18 +251,26 @@ export interface ApiV3AccountsAccountIdTransactionsGetContext extends Context, R
 
 export type ApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
-export interface ApiV3AccountsAccountIdAdjustbalancePostContext extends Context, RouteContext {
+export interface ApiV3AccountsAccountIdAdjustbalancePostContext extends OapiContext, RouteContext {
     path: {
         accountId: string;
     };
     body: AdjustBalanceRequest;
+}
+
+export interface SecurityResolvers<TContext = {}> extends OapiSecurityResolvers<TContext> {
+    BasicAuth: OapiSecurityResolver;
+    BearerAuth: OapiSecurityResolver;
+    ApiKeyAuth: OapiSecurityResolver;
 }"
 `;
 
 exports[`Json Schema Ts Test link-example.yaml 1`] = `
-"import { Context, LaminarResponse, ResolverResponse, RouteContext } from \\"@ovotech/laminar\\";
+"import { LaminarResponse, ResolverResponse, RouteContext } from \\"@ovotech/laminar\\";
 
-export type LaminarPaths<TContext = {}> = {
+import { OapiContext, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers } from \\"@ovotech/laminar-oapi\\";
+
+export interface Paths<TContext = {}> extends OapiPaths<TContext> {
     \\"/2.0/users/{username}\\": {
         get: (context: 20UsersUsernameGetContext & TContext) => 20UsersUsernameGetResponse;
     };
@@ -271,7 +289,7 @@ export type LaminarPaths<TContext = {}> = {
     \\"/2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge\\": {
         post: (context: 20RepositoriesUsernameSlugPullrequestsPidMergePostContext & TContext) => ResolverResponse;
     };
-};
+}
 
 export interface user {
     username?: string;
@@ -281,7 +299,7 @@ export interface user {
 
 export type 20UsersUsernameGetResponse = (user | LaminarResponse<user>);
 
-export interface 20UsersUsernameGetContext extends Context, RouteContext {
+export interface 20UsersUsernameGetContext extends OapiContext, RouteContext {
     path: {
         username: string;
     };
@@ -295,7 +313,7 @@ export interface repository {
 
 export type 20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<repository[]>);
 
-export interface 20RepositoriesUsernameGetContext extends Context, RouteContext {
+export interface 20RepositoriesUsernameGetContext extends OapiContext, RouteContext {
     path: {
         username: string;
     };
@@ -303,7 +321,7 @@ export interface 20RepositoriesUsernameGetContext extends Context, RouteContext 
 
 export type 20RepositoriesUsernameSlugGetResponse = (repository | LaminarResponse<repository>);
 
-export interface 20RepositoriesUsernameSlugGetContext extends Context, RouteContext {
+export interface 20RepositoriesUsernameSlugGetContext extends OapiContext, RouteContext {
     path: {
         username: string;
         slug: string;
@@ -320,7 +338,7 @@ export interface pullrequest {
 
 export type 20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<pullrequest[]>);
 
-export interface 20RepositoriesUsernameSlugPullrequestsGetContext extends Context, RouteContext {
+export interface 20RepositoriesUsernameSlugPullrequestsGetContext extends OapiContext, RouteContext {
     path: {
         username: string;
         slug: string;
@@ -332,7 +350,7 @@ export interface 20RepositoriesUsernameSlugPullrequestsGetContext extends Contex
 
 export type 20RepositoriesUsernameSlugPullrequestsPidGetResponse = (pullrequest | LaminarResponse<pullrequest>);
 
-export interface 20RepositoriesUsernameSlugPullrequestsPidGetContext extends Context, RouteContext {
+export interface 20RepositoriesUsernameSlugPullrequestsPidGetContext extends OapiContext, RouteContext {
     path: {
         username: string;
         slug: string;
@@ -340,7 +358,7 @@ export interface 20RepositoriesUsernameSlugPullrequestsPidGetContext extends Con
     };
 }
 
-export interface 20RepositoriesUsernameSlugPullrequestsPidMergePostContext extends Context, RouteContext {
+export interface 20RepositoriesUsernameSlugPullrequestsPidMergePostContext extends OapiContext, RouteContext {
     path: {
         username: string;
         slug: string;
@@ -350,9 +368,11 @@ export interface 20RepositoriesUsernameSlugPullrequestsPidMergePostContext exten
 `;
 
 exports[`Json Schema Ts Test petstore.yaml 1`] = `
-"import { Context, LaminarResponse, RouteContext } from \\"@ovotech/laminar\\";
+"import { LaminarResponse, RouteContext } from \\"@ovotech/laminar\\";
 
-export type LaminarPaths<TContext = {}> = {
+import { OapiContext, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers } from \\"@ovotech/laminar-oapi\\";
+
+export interface Paths<TContext = {}> extends OapiPaths<TContext> {
     \\"/pets\\": {
         get: (context: PetsGetContext & TContext) => PetsGetResponse;
         post: (context: PetsPostContext & TContext) => PetsPostResponse;
@@ -360,7 +380,7 @@ export type LaminarPaths<TContext = {}> = {
     \\"/pets/{petId}\\": {
         get: (context: PetsPetIdGetContext & TContext) => PetsPetIdGetResponse;
     };
-};
+}
 
 export type Pets = Pet[];
 
@@ -379,7 +399,7 @@ export interface Error {
 
 export type PetsGetResponse = (Pets | LaminarResponse<Pets>) | (Error | LaminarResponse<Error>);
 
-export interface PetsGetContext extends Context, RouteContext {
+export interface PetsGetContext extends OapiContext, RouteContext {
     query: {
         limit?: number;
     };
@@ -387,12 +407,12 @@ export interface PetsGetContext extends Context, RouteContext {
 
 export type PetsPostResponse = (Error | LaminarResponse<Error>);
 
-export interface PetsPostContext extends Context, RouteContext {
+export interface PetsPostContext extends OapiContext, RouteContext {
 }
 
 export type PetsPetIdGetResponse = (Pets | LaminarResponse<Pets>) | (Error | LaminarResponse<Error>);
 
-export interface PetsPetIdGetContext extends Context, RouteContext {
+export interface PetsPetIdGetContext extends OapiContext, RouteContext {
     path: {
         petId: string;
     };
@@ -400,9 +420,11 @@ export interface PetsPetIdGetContext extends Context, RouteContext {
 `;
 
 exports[`Json Schema Ts Test petstore-expanded.yaml 1`] = `
-"import { Context, LaminarResponse, RouteContext } from \\"@ovotech/laminar\\";
+"import { LaminarResponse, RouteContext } from \\"@ovotech/laminar\\";
 
-export type LaminarPaths<TContext = {}> = {
+import { OapiContext, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers } from \\"@ovotech/laminar-oapi\\";
+
+export interface Paths<TContext = {}> extends OapiPaths<TContext> {
     \\"/pets\\": {
         /**
          * Returns all pets from the system that the user has access to
@@ -427,7 +449,7 @@ export type LaminarPaths<TContext = {}> = {
          */
         delete: (context: PetsIdDeleteContext & TContext) => PetsIdDeleteResponse;
     };
-};
+}
 
 export type Pet = NewPet & {
     id: number;
@@ -448,7 +470,7 @@ export interface Error {
 
 export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]>) | (Error | LaminarResponse<Error>);
 
-export interface PetsGetContext extends Context, RouteContext {
+export interface PetsGetContext extends OapiContext, RouteContext {
     query: {
         tags?: string[];
         limit?: number;
@@ -457,13 +479,13 @@ export interface PetsGetContext extends Context, RouteContext {
 
 export type PetsPostResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
 
-export interface PetsPostContext extends Context, RouteContext {
+export interface PetsPostContext extends OapiContext, RouteContext {
     body: NewPet;
 }
 
 export type PetsIdGetResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
 
-export interface PetsIdGetContext extends Context, RouteContext {
+export interface PetsIdGetContext extends OapiContext, RouteContext {
     path: {
         id: number;
     };
@@ -471,7 +493,7 @@ export interface PetsIdGetContext extends Context, RouteContext {
 
 export type PetsIdDeleteResponse = (Error | LaminarResponse<Error>);
 
-export interface PetsIdDeleteContext extends Context, RouteContext {
+export interface PetsIdDeleteContext extends OapiContext, RouteContext {
     path: {
         id: number;
     };
@@ -479,9 +501,11 @@ export interface PetsIdDeleteContext extends Context, RouteContext {
 `;
 
 exports[`Json Schema Ts Test uspto.yaml 1`] = `
-"import { Context, LaminarResponse, RouteContext } from \\"@ovotech/laminar\\";
+"import { LaminarResponse, RouteContext } from \\"@ovotech/laminar\\";
 
-export type LaminarPaths<TContext = {}> = {
+import { OapiContext, OapiPaths, OapiSecurityResolver, OapiSecurityResolvers } from \\"@ovotech/laminar-oapi\\";
+
+export interface Paths<TContext = {}> extends OapiPaths<TContext> {
     \\"/\\": {
         get: (context: GetContext & TContext) => GetResponse;
     };
@@ -497,7 +521,7 @@ export type LaminarPaths<TContext = {}> = {
          */
         post: (context: DatasetVersionRecordsPostContext & TContext) => DatasetVersionRecordsPostResponse;
     };
-};
+}
 
 export interface dataSetList {
     total?: number;
@@ -525,12 +549,12 @@ export interface dataSetList {
 
 export type GetResponse = (dataSetList | LaminarResponse<dataSetList>);
 
-export interface GetContext extends Context, RouteContext {
+export interface GetContext extends OapiContext, RouteContext {
 }
 
 export type DatasetVersionFieldsGetResponse = (string | LaminarResponse<string>) | LaminarResponse<string>;
 
-export interface DatasetVersionFieldsGetContext extends Context, RouteContext {
+export interface DatasetVersionFieldsGetContext extends OapiContext, RouteContext {
     path: {
         dataset: string;
         version: string;
@@ -539,7 +563,7 @@ export interface DatasetVersionFieldsGetContext extends Context, RouteContext {
 
 export type DatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]>);
 
-export interface DatasetVersionRecordsPostContext extends Context, RouteContext {
+export interface DatasetVersionRecordsPostContext extends OapiContext, RouteContext {
     path: {
         version: string;
         dataset: string;

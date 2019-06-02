@@ -13,6 +13,8 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: http://petstore.swagger.io/api
+security:
+  - BearerAuth: []
 paths:
   /pets:
     get:
@@ -22,6 +24,7 @@ paths:
 
         Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
       operationId: findPets
+      security: []
       parameters:
         - name: tags
           in: query
@@ -70,7 +73,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/PetCreated'
         default:
           description: unexpected error
           content:
@@ -81,6 +84,8 @@ paths:
     get:
       description: Returns a user based on a single ID, if the user does not have access to the pet
       operationId: find pet by id
+      security:
+        - BasicAuth: []
       parameters:
         - name: id
           in: path
@@ -105,6 +110,8 @@ paths:
     delete:
       description: deletes a single pet based on the ID supplied
       operationId: deletePet
+      security:
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -123,7 +130,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
   schemas:
+    PetCreated:
+      properties:
+        pet: { $ref: '#/components/schemas/NewPet' }
+        user:
+          type: string
     Pet:
       allOf:
         - $ref: '#/components/schemas/NewPet'

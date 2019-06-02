@@ -20,6 +20,7 @@ const toAllowOrigin = (
     return origin;
   } else {
     const requestOrigin = Array.isArray(originHeader) ? originHeader[0] : originHeader;
+
     if (requestOrigin) {
       if (Array.isArray(origin)) {
         return origin.find(item => item === requestOrigin);

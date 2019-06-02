@@ -40,6 +40,17 @@ const pathToIdentifier = (path: string) =>
     .map(title)
     .join('');
 
+const toParamLocation = (location: string) => {
+  switch (location) {
+    case 'header':
+      return 'headers';
+    case 'cookie':
+      return 'cookies';
+    default:
+      return location;
+  }
+};
+
 const convertParameters = (
   context: AstContext,
   parameters: Array<ParameterObject | ReferenceObject>,
@@ -55,7 +66,7 @@ const convertParameters = (
         context: paramNode.context,
         in: {
           ...node.in,
-          [param.in]: [
+          [toParamLocation(param.in)]: [
             ...params,
             Type.Prop({ name: param.name, type: paramNode.type, isOptional: !param.required }),
           ],
@@ -164,7 +175,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
           const contextInterface = Type.Interface({
             name: contextIdentifier,
             isExport: true,
-            ext: [{ name: 'Context' }, { name: 'RouteContext' }],
+            ext: [{ name: 'OapiContext' }, { name: 'RouteContext' }],
             props: astParams.type.members.concat(astRequestBody.type.members),
           });
 
@@ -204,12 +215,40 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
     },
   );
 
+  const security =
+    api.components && api.components.securitySchemes
+      ? Type.Interface({
+          name: 'SecurityResolvers',
+          isExport: true,
+          ext: [{ name: 'OapiSecurityResolvers', types: [Type.Ref('TContext')] }],
+          typeArgs: [
+            Type.TypeArg({
+              name: 'TContext',
+              defaultType: Type.TypeLiteral(),
+            }),
+          ],
+          props: Object.keys(api.components.securitySchemes).map(scheme =>
+            Type.Prop({
+              name: scheme,
+              type: Type.Ref('OapiSecurityResolver'),
+            }),
+          ),
+        })
+      : undefined;
+
+  const contextWithSecurity = security ? withEntry(paths.context, security) : paths.context;
+
   return result(
-    withImports(paths.context, '@ovotech/laminar', ['Context', 'RouteContext']),
-    Type.Alias({
-      name: 'LaminarPaths',
+    withImports(
+      withImports(contextWithSecurity, '@ovotech/laminar', ['RouteContext']),
+      '@ovotech/laminar-oapi',
+      ['OapiContext', 'OapiSecurityResolver', 'OapiSecurityResolvers', 'OapiPaths'],
+    ),
+    Type.Interface({
+      name: 'Paths',
       isExport: true,
-      type: Type.TypeLiteral({ props: paths.items }),
+      ext: [{ name: 'OapiPaths', types: [Type.Ref('TContext')] }],
+      props: paths.items,
       typeArgs: [
         Type.TypeArg({
           name: 'TContext',

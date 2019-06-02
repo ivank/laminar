@@ -5,3 +5,6 @@ export const toMatchPattern = (match: string) =>
     .split('/')
     .map(part => (part === '*' ? '[^\\/]*' : escapeRegExp(part)))
     .join('\\/');
+
+export const merge = <T extends {}>(objects: T[]) =>
+  objects.reduce<T>((a, b) => ({ ...a, ...b }), {} as T);

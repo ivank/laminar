@@ -160,6 +160,18 @@ describe('Cors middleware', () => {
     });
   });
 
+  it('Should be able to set origin as string', async () => {
+    await testServer(cors({ allowOrigin: '127.0.0.1' })(app));
+
+    await expect(api.get('/test', { headers: { origin: '127.0.0.1' } })).resolves.toMatchObject({
+      status: 200,
+      data: { health: 'ok' },
+      headers: expect.objectContaining({
+        'access-control-allow-origin': '127.0.0.1',
+      }),
+    });
+  });
+
   it('Should be able to set origin as array', async () => {
     await testServer(cors({ allowOrigin: ['127.0.0.1', '127.0.0.2'] })(app));
 
@@ -179,7 +191,17 @@ describe('Cors middleware', () => {
       }),
     });
 
-    await expect(api.get('/test', { headers: { origin: '127.0.0.3' } })).resolves.toMatchObject({
+    await expect(
+      api.get('/test', { headers: { origin: ['127.0.0.3', '127.0.0.4'] } }),
+    ).resolves.toMatchObject({
+      status: 200,
+      data: { health: 'ok' },
+      headers: expect.not.objectContaining({
+        'access-control-allow-origin': expect.anything(),
+      }),
+    });
+
+    await expect(api.get('/test')).resolves.toMatchObject({
       status: 200,
       data: { health: 'ok' },
       headers: expect.not.objectContaining({

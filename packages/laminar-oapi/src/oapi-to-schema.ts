@@ -1,30 +1,38 @@
 import { Schema } from '@ovotech/json-schema';
+import { SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
 import { toMatchPattern } from './helpers';
 import {
+  ResoledOpenAPIObject,
   ResolvedOperationObject,
   ResolvedParameterObject,
-  ResolvedPathsObject,
   ResolvedRequestBodyObject,
   ResolvedResponseObject,
 } from './resolved-openapi-object';
 
+export interface OperationSecurity {
+  [schemeName: string]: {
+    scopes: string[];
+    scheme: SecuritySchemeObject;
+  };
+}
 export interface OperationSchema {
   context: Schema;
   response: Schema;
+  security?: SecurityRequirementObject[];
 }
 
 export interface PathsSchema {
   [path: string]: { [method: string]: OperationSchema };
 }
 
-export const toPathsSchema = (paths: ResolvedPathsObject) => {
-  return Object.entries(paths).reduce<PathsSchema>(
+export const toSchema = (api: ResoledOpenAPIObject) => {
+  return Object.entries(api.paths).reduce<PathsSchema>(
     (pathsSchema, [path, methods]) => ({
       ...pathsSchema,
       [path]: Object.entries(methods).reduce(
         (methodSchema, [method, operation]) => ({
           ...methodSchema,
-          [method]: toOperationSchema(operation),
+          [method]: toOperationSchema(api, operation),
         }),
         {},
       ),
@@ -33,9 +41,13 @@ export const toPathsSchema = (paths: ResolvedPathsObject) => {
   );
 };
 
-export const toOperationSchema = (operation: ResolvedOperationObject) => ({
-  context: toContextSchema(operation),
+export const toOperationSchema = (
+  api: ResoledOpenAPIObject,
+  operation: ResolvedOperationObject,
+): OperationSchema => ({
+  context: toContextSchema(api, operation),
   response: toResponseSchema(operation),
+  security: operation.security || api.security,
 });
 
 export const toRequestBodySchema = (requestBody: ResolvedRequestBodyObject) => ({
@@ -59,23 +71,41 @@ export const toRequestBodySchema = (requestBody: ResolvedRequestBodyObject) => (
     : {}),
 });
 
+const toParamLocation = (location: string) => {
+  switch (location) {
+    case 'header':
+      return 'headers';
+    case 'cookie':
+      return 'cookies';
+    default:
+      return location;
+  }
+};
+
 export const toParameterSchema = (param: ResolvedParameterObject) =>
   ({
     properties: {
-      [param.in]: {
+      [toParamLocation(param.in)]: {
         ...(param.required ? { required: [param.name] } : {}),
         ...(param.schema ? { properties: { [param.name]: param.schema } } : {}),
       },
     },
   } as Schema);
 
-export const toContextSchema = ({ requestBody, parameters }: ResolvedOperationObject) =>
-  ({
+export const toContextSchema = (
+  { security: defaultSecurity, components }: ResoledOpenAPIObject,
+  { requestBody, parameters, security: operationSecurity }: ResolvedOperationObject,
+) => {
+  const security = operationSecurity || defaultSecurity;
+  const securitySchemes = components && components.securitySchemes;
+  return {
     allOf: [
       ...(parameters ? parameters.map(toParameterSchema) : []),
       ...(requestBody ? [toRequestBodySchema(requestBody)] : []),
+      ...(security && securitySchemes ? [toSecuritySchema(security, securitySchemes)] : []),
     ],
-  } as Schema);
+  } as Schema;
+};
 
 export const toResponseSchema = ({ responses }: ResolvedOperationObject) =>
   ({
@@ -113,3 +143,43 @@ export const toResponseSchema = ({ responses }: ResolvedOperationObject) =>
         : {}),
     })),
   } as Schema);
+
+export const toSecuritySchema = (
+  security: SecurityRequirementObject[],
+  schemes: { [securityScheme: string]: SecuritySchemeObject },
+) => ({
+  anyOf: security.map(item => ({
+    allOf: Object.entries(item).map(([name, scopes]) => {
+      const scheme = schemes[name];
+      if (!scheme) {
+        return {};
+      }
+
+      switch (scheme.type) {
+        case 'http':
+          return {
+            properties: {
+              headers: {
+                properties: {
+                  authorization: {
+                    format: new RegExp(`^${scheme.scheme}`, 'i'),
+                  },
+                },
+                required: ['authorization'],
+              },
+            },
+          };
+        case 'apiKey':
+          return {
+            properties: {
+              [toParamLocation(scheme.in!)]: {
+                required: [scheme.name!.toLowerCase()],
+              },
+            },
+          };
+        default:
+          return {};
+      }
+    }),
+  })),
+});

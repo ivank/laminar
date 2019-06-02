@@ -151,8 +151,8 @@ export const resolveNestedRefs = (schema: any, context: Context, parentId?: stri
   return schema;
 };
 
-export const resolveRefs = async <TSchema = any>(original: TSchema) => {
-  const copy: TSchema = JSON.parse(JSON.stringify(original));
+export const resolveRefs = async <TSchema = any>(original: any) => {
+  const copy = JSON.parse(JSON.stringify(original));
   const context = { schema: copy, refs: await extractFiles(copy) };
   const schema: TSchema = resolveNestedRefs(copy, context);
   return {

@@ -74,6 +74,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/v2": Object {
@@ -148,6 +149,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
 }
@@ -202,6 +204,28 @@ Object {
               "body",
             ],
           },
+          Object {
+            "anyOf": Array [
+              Object {
+                "allOf": Array [
+                  Object {
+                    "properties": Object {
+                      "headers": Object {
+                        "properties": Object {
+                          "authorization": Object {
+                            "format": /\\^bearer/i,
+                          },
+                        },
+                        "required": Array [
+                          "authorization",
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
       "response": Object {
@@ -315,6 +339,11 @@ Object {
           },
         ],
       },
+      "security": Array [
+        Object {
+          "BearerAuth": Array [],
+        },
+      ],
     },
   },
   "/api/v2/accounts/{accountId}/balance": Object {
@@ -335,6 +364,28 @@ Object {
               },
             },
           },
+          Object {
+            "anyOf": Array [
+              Object {
+                "allOf": Array [
+                  Object {
+                    "properties": Object {
+                      "headers": Object {
+                        "properties": Object {
+                          "authorization": Object {
+                            "format": /\\^bearer/i,
+                          },
+                        },
+                        "required": Array [
+                          "authorization",
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
       "response": Object {
@@ -448,6 +499,11 @@ Object {
           },
         ],
       },
+      "security": Array [
+        Object {
+          "BearerAuth": Array [],
+        },
+      ],
     },
   },
   "/api/v2/accounts/{accountId}/transactions": Object {
@@ -465,6 +521,28 @@ Object {
                 "required": Array [
                   "accountId",
                 ],
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "headers": Object {
+                "properties": Object {
+                  "scenario": Object {
+                    "type": "string",
+                  },
+                },
+              },
+            },
+          },
+          Object {
+            "properties": Object {
+              "cookies": Object {
+                "properties": Object {
+                  "session": Object {
+                    "type": "string",
+                  },
+                },
               },
             },
           },
@@ -516,6 +594,23 @@ Object {
                 },
               },
             },
+          },
+          Object {
+            "anyOf": Array [
+              Object {
+                "allOf": Array [
+                  Object {
+                    "properties": Object {
+                      "headers": Object {
+                        "required": Array [
+                          "x-api-key",
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
@@ -622,6 +717,11 @@ Object {
           },
         ],
       },
+      "security": Array [
+        Object {
+          "ApiKeyAuth": Array [],
+        },
+      ],
     },
   },
   "/api/v3/accounts/{accountId}/adjust-balance": Object {
@@ -671,6 +771,28 @@ Object {
               "body",
             ],
           },
+          Object {
+            "anyOf": Array [
+              Object {
+                "allOf": Array [
+                  Object {
+                    "properties": Object {
+                      "headers": Object {
+                        "properties": Object {
+                          "authorization": Object {
+                            "format": /\\^bearer/i,
+                          },
+                        },
+                        "required": Array [
+                          "authorization",
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
       "response": Object {
@@ -784,6 +906,11 @@ Object {
           },
         ],
       },
+      "security": Array [
+        Object {
+          "BearerAuth": Array [],
+        },
+      ],
     },
   },
   "/api/v3/accounts/{accountId}/balance": Object {
@@ -804,6 +931,28 @@ Object {
               },
             },
           },
+          Object {
+            "anyOf": Array [
+              Object {
+                "allOf": Array [
+                  Object {
+                    "properties": Object {
+                      "headers": Object {
+                        "properties": Object {
+                          "authorization": Object {
+                            "format": /\\^bearer/i,
+                          },
+                        },
+                        "required": Array [
+                          "authorization",
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
       "response": Object {
@@ -917,6 +1066,11 @@ Object {
           },
         ],
       },
+      "security": Array [
+        Object {
+          "BearerAuth": Array [],
+        },
+      ],
     },
   },
   "/api/v3/accounts/{accountId}/transactions": Object {
@@ -985,6 +1139,28 @@ Object {
                 },
               },
             },
+          },
+          Object {
+            "anyOf": Array [
+              Object {
+                "allOf": Array [
+                  Object {
+                    "properties": Object {
+                      "headers": Object {
+                        "properties": Object {
+                          "authorization": Object {
+                            "format": /\\^bearer/i,
+                          },
+                        },
+                        "required": Array [
+                          "authorization",
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
@@ -1091,12 +1267,21 @@ Object {
           },
         ],
       },
+      "security": Array [
+        Object {
+          "BearerAuth": Array [],
+        },
+      ],
     },
   },
   "/internal/status": Object {
     "get": Object {
       "context": Object {
-        "allOf": Array [],
+        "allOf": Array [
+          Object {
+            "anyOf": Array [],
+          },
+        ],
       },
       "response": Object {
         "discriminator": Object {
@@ -1113,12 +1298,17 @@ Object {
           },
         ],
       },
+      "security": Array [],
     },
   },
   "/internal/swagger.yaml": Object {
     "get": Object {
       "context": Object {
-        "allOf": Array [],
+        "allOf": Array [
+          Object {
+            "anyOf": Array [],
+          },
+        ],
       },
       "response": Object {
         "discriminator": Object {
@@ -1135,6 +1325,7 @@ Object {
           },
         ],
       },
+      "security": Array [],
     },
   },
 }
@@ -1204,6 +1395,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/2.0/repositories/{username}/{slug}": Object {
@@ -1279,6 +1471,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/2.0/repositories/{username}/{slug}/pullrequests": Object {
@@ -1373,6 +1566,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/2.0/repositories/{username}/{slug}/pullrequests/{pid}": Object {
@@ -1462,6 +1656,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge": Object {
@@ -1527,6 +1722,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/2.0/users/{username}": Object {
@@ -1588,6 +1784,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
 }
@@ -1693,6 +1890,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
     "post": Object {
       "context": Object {
@@ -1743,6 +1941,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/pets/{petId}": Object {
@@ -1834,6 +2033,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
 }
@@ -1945,6 +2145,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
     "post": Object {
       "context": Object {
@@ -2049,6 +2250,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/pets/{id}": Object {
@@ -2117,6 +2319,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
     "get": Object {
       "context": Object {
@@ -2207,6 +2410,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
 }
@@ -2258,6 +2462,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/{dataset}/{version}/fields": Object {
@@ -2365,6 +2570,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
   "/{dataset}/{version}/records": Object {
@@ -2502,6 +2708,7 @@ Object {
           },
         ],
       },
+      "security": undefined,
     },
   },
 }
