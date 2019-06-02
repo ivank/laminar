@@ -4,7 +4,7 @@ import { laminar, responseTime } from '../../src';
 
 let server: Server;
 
-const api = axios.create({ baseURL: 'http://localhost:8093' });
+const api = axios.create({ baseURL: 'http://localhost:8096' });
 
 describe('responseTime middleware', () => {
   afterEach(async () => {
@@ -21,7 +21,7 @@ describe('responseTime middleware', () => {
       ),
     );
 
-    await new Promise(resolve => server.listen(8093, resolve));
+    await new Promise(resolve => server.listen(8096, resolve));
     const result = await api.get('/test');
     expect(result.status).toBe(200);
     expect(Number(result.headers['x-response-time'])).toBeGreaterThan(15);
@@ -38,7 +38,7 @@ describe('responseTime middleware', () => {
       ),
     );
 
-    await new Promise(resolve => server.listen(8093, resolve));
+    await new Promise(resolve => server.listen(8096, resolve));
     const result = await api.get('/test');
 
     expect(result.status).toBe(200);
@@ -49,7 +49,7 @@ describe('responseTime middleware', () => {
   it('Should use custom header', async () => {
     server = createServer(laminar(responseTime({ header: 'My-Time' })(async () => 'OK')));
 
-    await new Promise(resolve => server.listen(8093, resolve));
+    await new Promise(resolve => server.listen(8096, resolve));
     const result = await api.get('/test');
 
     expect(result.status).toBe(200);

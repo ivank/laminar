@@ -1,10 +1,11 @@
+import axios from 'axios';
 import { createServer, Server } from 'http';
-import fetch from 'node-fetch';
 import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
 import { laminar } from '../src';
 
 const app = jest.fn().mockReturnValue('Test');
+const api = axios.create({ baseURL: 'http://localhost:8090' });
 let server: Server;
 
 describe('Requests', () => {
@@ -20,7 +21,7 @@ describe('Requests', () => {
   beforeEach(() => app.mockClear());
 
   it('Should process request', async () => {
-    const result = await fetch('http://localhost:8090/test2');
+    const result = await api.get('/test2');
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({
         url: expect.objectContaining({ pathname: '/test2' }),
@@ -29,12 +30,12 @@ describe('Requests', () => {
       }),
     );
     expect(result.status).toEqual(200);
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse headers', async () => {
-    const result = await fetch('http://localhost:8090/other-test/123', {
-      headers: { Authorization: 'Bearer 234', 'Content-Type': 'text/plain' },
+    const result = await api.get('/other-test/123', {
+      headers: { Authorization: 'Bearer 234' },
     });
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -43,76 +44,70 @@ describe('Requests', () => {
         method: 'GET',
       }),
     );
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse search query', async () => {
-    const result = await fetch('http://localhost:8090/me?this=other&last=new', {
-      headers: { 'Content-Type': 'text/plain' },
+    const result = await api.get('/me', {
+      params: { this: 'other', last: 'new' },
     });
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({
         query: { this: 'other', last: 'new' },
       }),
     );
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse nested search query', async () => {
-    const result = await fetch('http://localhost:8090/me?this[one][two]=other&arr[]=111', {
-      headers: { 'Content-Type': 'text/plain' },
-    });
+    const result = await api.get('/me?this[one][two]=other&arr[]=111');
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({
         query: { this: { one: { two: 'other' } }, arr: ['111'] },
       }),
     );
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse cookies', async () => {
-    const result = await fetch('http://localhost:8090/login', {
-      headers: { 'Content-Type': 'text/plain', cookie: 'accessToken=1234abc; userId=1234' },
+    const result = await api.get('http://localhost:8090/login', {
+      headers: { cookie: 'accessToken=1234abc; userId=1234' },
     });
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({
         cookies: { accessToken: '1234abc', userId: '1234' },
       }),
     );
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse json', async () => {
-    const result = await fetch('http://localhost:8090/login', {
-      body: JSON.stringify({ test: 'other' }),
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const result = await api.post('/login', { test: 'other' });
 
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({ body: { test: 'other' }, method: 'POST' }),
     );
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse json like', async () => {
-    const result = await fetch('http://localhost:8090/swish', {
-      body: JSON.stringify({ test: 'other' }),
-      method: 'post',
-      headers: { 'Content-Type': 'application/vnd.schemaregistry.v1+json' },
-    });
+    const result = await api.post(
+      '/swish',
+      { test: 'other' },
+      {
+        headers: { 'Content-Type': 'application/vnd.schemaregistry.v1+json' },
+      },
+    );
 
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({ body: { test: 'other' }, method: 'POST' }),
     );
 
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse url', async () => {
-    const result = await fetch('http://localhost:8090/logout', {
-      body: 'one=other',
-      method: 'post',
+    const result = await api.post('/logout', 'one=other', {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
 
@@ -120,13 +115,11 @@ describe('Requests', () => {
       expect.objectContaining({ body: new URLSearchParams({ one: 'other' }), method: 'POST' }),
     );
 
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should parse text', async () => {
-    const result = await fetch('http://localhost:8090/post', {
-      body: 'document { height: 100%; }',
-      method: 'post',
+    const result = await api.post('/post', 'document { height: 100%; }', {
       headers: { 'Content-Type': 'text/css' },
     });
 
@@ -134,13 +127,11 @@ describe('Requests', () => {
       expect.objectContaining({ body: 'document { height: 100%; }', method: 'POST' }),
     );
 
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should handle malformed content type', async () => {
-    const result = await fetch('http://localhost:8090/post', {
-      body: 'test',
-      method: 'post',
+    const result = await api.post('http://localhost:8090/post', 'test', {
       headers: { 'Content-Type': '123123' },
     });
 
@@ -148,13 +139,11 @@ describe('Requests', () => {
       expect.objectContaining({ body: expect.any(Readable), method: 'POST' }),
     );
 
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should handle unknown content type', async () => {
-    const result = await fetch('http://localhost:8090/post', {
-      body: 'test',
-      method: 'post',
+    const result = await api.post('http://localhost:8090/post', 'test', {
       headers: { 'Content-Type': 'some/other' },
     });
 
@@ -162,21 +151,26 @@ describe('Requests', () => {
       expect.objectContaining({ body: expect.any(Readable), method: 'POST' }),
     );
 
-    await expect(result.text()).resolves.toEqual('Test');
+    expect(result.data).toEqual('Test');
   });
 
   it('Should handle malformed json', async () => {
-    const result = await fetch('http://localhost:8090/post', {
-      body: '{"test":Date}',
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    await expect(
+      api.post('http://localhost:8090/post', '{"test":Date}', {
+        transformRequest: [],
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    ).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 400,
+        data: {
+          message: 'Error parsing request body',
+          error: 'Unexpected token D in JSON at position 8',
+        },
+      }),
+    );
 
     expect(app).not.toHaveBeenCalled();
-
-    await expect(result.json()).resolves.toEqual({
-      message: 'Error parsing request body',
-      error: 'Unexpected token D in JSON at position 8',
-    });
   });
 });

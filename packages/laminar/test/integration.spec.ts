@@ -60,7 +60,7 @@ describe('Integration', () => {
                 },
               }),
             ),
-            get('/users/{id}', ({ path, logger }) => {
+            get<TestContext>('/users/{id}', ({ path, logger }) => {
               logger(`Getting id ${path.id}`);
 
               if (users[path.id]) {

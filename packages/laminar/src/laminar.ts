@@ -16,8 +16,9 @@ export const laminar = (resolver: Resolver<Context>): RequestListener => {
       const resolvedBody = resolveBody(laminarResponse.body);
 
       for (const [headerName, headerValue] of Object.entries(laminarResponse.headers)) {
-        for (const value of toArray(headerValue)) {
-          res.setHeader(headerName, value);
+        const values = toArray(headerValue).map(item => String(item));
+        if (values.length) {
+          res.setHeader(headerName, values);
         }
       }
 

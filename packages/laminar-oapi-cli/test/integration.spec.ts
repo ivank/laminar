@@ -73,8 +73,8 @@ describe('Integration', () => {
     const app = await oapi(config);
     server = createServer(laminar(withLogger(log)(app)));
 
-    await new Promise(resolve => server.listen(8093, resolve));
-    const api = axios.create({ baseURL: 'http://localhost:8093' });
+    await new Promise(resolve => server.listen(8094, resolve));
+    const api = axios.create({ baseURL: 'http://localhost:8094' });
 
     await expect(api.get('/unknown-url')).rejects.toHaveProperty(
       'response',

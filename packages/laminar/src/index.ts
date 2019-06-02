@@ -17,6 +17,7 @@ export {
   Addition,
   Context,
   Laminar,
+  LaminarCookie,
   LaminarRequest,
   LaminarResponse,
   RouteResolver,

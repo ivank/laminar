@@ -1,7 +1,7 @@
 import * as cookie from 'cookie';
 import { createReadStream, statSync } from 'fs';
 import { Readable } from 'stream';
-import { Laminar, LaminarResponse, ResolverResponse } from './types';
+import { Laminar, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
 
 export const response = <TBody = LaminarResponse['body']>({
   body,
@@ -79,8 +79,15 @@ const contentType = (body: any) => {
 const contentLength = (body: any) =>
   body instanceof Buffer || typeof body === 'string' ? Buffer.byteLength(body) : undefined;
 
-const setCookie = (cookies: { [key: string]: string }) =>
-  Object.entries(cookies).map(([name, value]) => cookie.serialize(name, value));
+const setCookie = (cookies: { [key: string]: string | LaminarCookie }) =>
+  Object.entries(cookies).map(([name, content]) => {
+    if (typeof content === 'string') {
+      return cookie.serialize(name, content);
+    } else {
+      const { value, ...options } = content;
+      return cookie.serialize(name, value, options);
+    }
+  });
 
 export const resolveBody = (body: LaminarResponse['body']) =>
   body instanceof Readable ||

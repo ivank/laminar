@@ -1,3 +1,4 @@
+import { CookieSerializeOptions } from 'cookie';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { UrlWithParsedQuery } from 'url';
@@ -18,8 +19,12 @@ export interface LaminarResponse<TBody = string | Readable | Buffer | object> {
   [Laminar]: true;
   body?: TBody;
   status: number;
-  cookies?: { [key: string]: string };
+  cookies?: { [key: string]: string | LaminarCookie };
   headers: OutgoingHttpHeaders;
+}
+
+export interface LaminarCookie extends CookieSerializeOptions {
+  value: string;
 }
 
 export enum Method {

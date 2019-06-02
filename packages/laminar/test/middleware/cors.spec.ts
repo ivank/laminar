@@ -4,10 +4,10 @@ import { cors, laminar, Resolver } from '../../src';
 
 let server: Server;
 
-const api = axios.create({ baseURL: 'http://localhost:8093' });
+const api = axios.create({ baseURL: 'http://localhost:8095' });
 const testServer = async (resolver: Resolver) => {
   server = createServer(laminar(resolver));
-  await new Promise(resolve => server.listen(8093, resolve));
+  await new Promise(resolve => server.listen(8095, resolve));
 };
 const app = () => ({ health: 'ok' });
 
