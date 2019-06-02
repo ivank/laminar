@@ -147,7 +147,7 @@ describe('Cors middleware', () => {
       api.request({
         url: '/test',
         method: 'OPTIONS',
-        headers: { 'access-control-request-headers': ['Authentication', 'Content-Type'] },
+        headers: { 'access-control-request-headers': 'Authentication,Content-Type' },
       }),
     ).resolves.toMatchObject({
       status: 204,

@@ -2,7 +2,7 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { UrlWithParsedQuery } from 'url';
 
-export const Laminar = Symbol('Laminar');
+export const Laminar = '_isLaminar';
 
 export interface LaminarRequest {
   [Laminar]: true;
@@ -42,27 +42,29 @@ export interface Context {
   cookies: LaminarRequest['cookies'];
 }
 
-export type Middleware<TAddition extends {} = {}> = <TContext extends Context = Context>(
-  resolver: Resolver<TContext & TAddition>,
-) => Resolver<TContext>;
+export interface Addition {
+  [key: string]: any;
+}
+
+export type Middleware<MC extends Addition = {}> = <C extends Addition = {}>(
+  resolver: Resolver<MC & C>,
+) => Resolver<C>;
 export type ResolverResponse = string | Readable | Buffer | LaminarResponse | object;
-export type Resolver<TContext extends Context = Context> = (
-  ctx: TContext,
+export type Resolver<C extends Addition = {}> = (
+  ctx: C & Context,
 ) => Promise<ResolverResponse> | ResolverResponse;
 
-export interface Route<
-  TContext extends Context = Context,
-  TMatchedContext extends RouteContext = RouteContext
-> {
-  matcher: (ctx: TContext) => TMatchedContext | false;
-  resolver: Resolver<TContext & TMatchedContext>;
+export interface Route<C extends Addition = {}> {
+  matcher: (ctx: Context) => RouteContext | false;
+  resolver: Resolver<C & RouteContext>;
+  [key: string]: any;
 }
 
 export interface RouteContext {
   path: any;
 }
 
-export type RouteResolver = <TContext extends Context = Context>(
+export type RouteResolver = <C extends Addition = {}>(
   path: string,
-  resolver: Resolver<TContext>,
-) => Route<TContext>;
+  resolver: Resolver<C & RouteContext>,
+) => Route<C>;

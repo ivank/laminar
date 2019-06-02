@@ -1,8 +1,9 @@
 import { Schema } from '@ovotech/json-schema';
 import { SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
 import { toMatchPattern } from './helpers';
+import { OapiResolverError } from './OapiResolverError';
 import {
-  ResoledOpenAPIObject,
+  ResolvedOpenAPIObject,
   ResolvedOperationObject,
   ResolvedParameterObject,
   ResolvedRequestBodyObject,
@@ -25,8 +26,8 @@ export interface PathsSchema {
   [path: string]: { [method: string]: OperationSchema };
 }
 
-export const toSchema = (api: ResoledOpenAPIObject) => {
-  return Object.entries(api.paths).reduce<PathsSchema>(
+export const toSchema = (api: ResolvedOpenAPIObject) => ({
+  routes: Object.entries(api.paths).reduce<PathsSchema>(
     (pathsSchema, [path, methods]) => ({
       ...pathsSchema,
       [path]: Object.entries(methods).reduce(
@@ -38,11 +39,26 @@ export const toSchema = (api: ResoledOpenAPIObject) => {
       ),
     }),
     {},
-  );
-};
+  ),
+  resolvers: {
+    required: ['paths', ...(api.components && api.components.securitySchemes ? ['security'] : [])],
+    properties: {
+      paths: {
+        required: Object.keys(api.paths),
+        properties: Object.entries(api.paths).reduce(
+          (all, [path, methods]) => ({ ...all, [path]: { required: Object.keys(methods) } }),
+          {},
+        ),
+      },
+      ...(api.components && api.components.securitySchemes
+        ? { security: { required: Object.keys(api.components.securitySchemes) } }
+        : {}),
+    },
+  },
+});
 
 export const toOperationSchema = (
-  api: ResoledOpenAPIObject,
+  api: ResolvedOpenAPIObject,
   operation: ResolvedOperationObject,
 ): OperationSchema => ({
   context: toContextSchema(api, operation),
@@ -93,7 +109,7 @@ export const toParameterSchema = (param: ResolvedParameterObject) =>
   } as Schema);
 
 export const toContextSchema = (
-  { security: defaultSecurity, components }: ResoledOpenAPIObject,
+  { security: defaultSecurity, components }: ResolvedOpenAPIObject,
   { requestBody, parameters, security: operationSecurity }: ResolvedOperationObject,
 ) => {
   const security = operationSecurity || defaultSecurity;
@@ -151,8 +167,13 @@ export const toSecuritySchema = (
   anyOf: security.map(item => ({
     allOf: Object.entries(item).map(([name, scopes]) => {
       const scheme = schemes[name];
+
       if (!scheme) {
-        return {};
+        if (!schemes || !schemes[name]) {
+          throw new OapiResolverError(
+            `Security scheme ${name} not defined in components.securitySchemes`,
+          );
+        }
       }
 
       switch (scheme.type) {

@@ -1,6 +1,7 @@
 import { resolveRefs } from '@ovotech/json-refs';
 import { Schema, validate } from '@ovotech/json-schema';
 import {
+  Addition,
   Context,
   HttpError,
   isResponse,
@@ -16,43 +17,51 @@ import { OpenAPIObject, SecurityRequirementObject, SecuritySchemeObject } from '
 import { merge } from './helpers';
 import { OperationSchema, PathsSchema, toSchema } from './oapi-to-schema';
 import { OapiResolverError } from './OapiResolverError';
-import { ResoledOpenAPIObject } from './resolved-openapi-object';
+import { ResolvedOpenAPIObject } from './resolved-openapi-object';
 
-export interface OapiContext extends Context {
-  security?: any;
+export interface OapiContext extends RouteContext {
+  authInfo?: any;
 }
 
-export interface OapiRoute<TContext extends OapiContext = OapiContext> extends Route<TContext> {
+export interface OapiRoute<C extends Addition = {}> extends Route<C> {
   schema: OperationSchema;
 }
 
-export interface OapiPaths<TContext extends {} = {}> {
-  [path: string]: { [method: string]: Resolver<TContext & OapiContext & RouteContext> };
+export interface OapiPaths<C extends Addition = {}> {
+  [path: string]: { [method: string]: Resolver<C & OapiContext> };
 }
 
-export type OapiSecurityResolver<TContext extends {} = {}> = (options: {
-  context: TContext & OapiContext & RouteContext;
-  scheme: SecuritySchemeObject;
-  scopes: string[];
-}) => any | Promise<any>;
-
-export interface OapiSecurityResolvers<TContext extends {} = {}> {
-  [key: string]: OapiSecurityResolver<TContext>;
+export interface OapiConfig<C extends Addition = {}> {
+  api: OpenAPIObject;
+  paths: OapiPaths<C>;
+  security?: OapiSecurity<C>;
 }
 
-const toRoutes = <TContext extends Context>(
+export type OapiSecurityResolver<C extends Addition = {}> = (
+  context: C & Context & OapiContext,
+  options: {
+    scheme: SecuritySchemeObject;
+    scopes: string[];
+  },
+) => any | Promise<any>;
+
+export interface OapiSecurity<C extends Addition = {}> {
+  [key: string]: OapiSecurityResolver<C>;
+}
+
+const toRoutes = <C extends {} = {}>(
   pathsSchema: PathsSchema,
   paths: {
-    [path: string]: { [method: string]: Resolver<TContext> };
+    [path: string]: { [method: string]: Resolver<C & OapiContext> };
   },
 ) =>
-  Object.entries(paths).reduce<Array<OapiRoute<TContext>>>(
+  Object.entries(paths).reduce<Array<OapiRoute<C>>>(
     (allPaths, [path, methods]) =>
       Object.entries(methods).reduce(
         (all, [method, resolver]) => [
           ...all,
           {
-            ...toRoute(method, path, resolver),
+            ...toRoute<C & OapiContext>(method, path, resolver),
             schema: pathsSchema[path][method],
           },
         ],
@@ -61,79 +70,74 @@ const toRoutes = <TContext extends Context>(
     [],
   );
 
-const validateSecurity = async <TContext extends {} = {}>(
-  context: TContext & OapiContext & RouteContext,
+const validateSecurity = async <C extends Addition = {}>(
+  context: C & Context & OapiContext,
   requirements?: SecurityRequirementObject[],
   schemes?: { [securityScheme: string]: SecuritySchemeObject },
-  resolvers?: OapiSecurityResolvers,
+  security?: OapiSecurity<C>,
 ): Promise<any> => {
   if (!requirements || requirements.length === 0) {
     return undefined;
   }
 
-  for (const requirement of requirements) {
-    for (const name of Object.keys(requirement)) {
-      if (!schemes || !schemes[name]) {
-        throw new HttpError(500, { message: `Security ${name} not defined` });
-      }
-      if (!resolvers || !resolvers[name]) {
-        throw new HttpError(500, { message: `Security resolver ${name} not implemented` });
-      }
-    }
-  }
-
   const checks = requirements
     .map(async requirement => {
       const securityContexts = Object.entries(requirement).map(([name, scopes]) =>
-        resolvers![name]({ context, scheme: schemes![name], scopes }),
+        security![name](context, { scheme: schemes![name], scopes }),
       );
       return merge(await Promise.all(securityContexts));
     })
     .map(check => check.catch(error => error));
 
   const results = await Promise.all(checks);
+  const authInfo = results.find(result => !(result instanceof Error));
 
-  const checkPassed = results.find(result => !(result instanceof Error));
-
-  if (!checkPassed) {
+  if (!authInfo) {
     throw results.find(result => result instanceof Error);
   }
 
-  return checkPassed;
+  return authInfo;
 };
 
-export const oapi = async <TPaths extends OapiPaths>({
+export const oapi = async <C extends Addition = {}>({
   api,
   paths,
-  securityResolvers,
-}: {
-  paths: TPaths;
-  securityResolvers?: OapiSecurityResolvers;
-  api: OpenAPIObject;
-}): Promise<Resolver<Context>> => {
+  security,
+}: OapiConfig<C>): Promise<Resolver<C & Context>> => {
   const checkApi = await validate(OpenApiSchema as Schema, api);
   if (!checkApi.valid) {
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
 
-  const resolved = await resolveRefs<ResoledOpenAPIObject>(api);
+  const resolved = await resolveRefs<ResolvedOpenAPIObject>(api);
   const schemas = toSchema(resolved.schema);
-  const routes = toRoutes(schemas, paths);
+  const routes = toRoutes(schemas.routes, paths);
+
+  const checkResolvers = await validate(
+    schemas.resolvers,
+    { paths, security },
+    { name: 'api', refs: resolved.refs },
+  );
+
+  if (!checkResolvers.valid) {
+    throw new OapiResolverError('Invalid Resolvers', checkResolvers.errors);
+  }
 
   return async ctx => {
-    const select = selectRoute(ctx, routes as OapiRoute[]);
+    const select = selectRoute<Addition, C, OapiRoute<C>>(ctx, routes);
 
     if (!select) {
       throw new HttpError(404, {
         message: `Path ${ctx.method} ${ctx.url.pathname!} not found`,
       });
     }
+
     const {
       route: { resolver, schema },
       path,
     } = select;
 
-    const context = { ...ctx, path };
+    const context: C & Context & OapiContext = { ...ctx, path };
 
     const checkContext = await validate(schema.context, context, {
       name: 'context',
@@ -147,14 +151,14 @@ export const oapi = async <TPaths extends OapiPaths>({
       });
     }
 
-    const security = await validateSecurity(
+    const authInfo = await validateSecurity<C>(
       context,
       schema.security,
       resolved.schema.components && resolved.schema.components.securitySchemes,
-      securityResolvers,
+      security,
     );
 
-    const result = resolver({ ...context, security });
+    const result = resolver({ ...context, authInfo });
     const laminarResponse = isResponse(result) ? result : response({ body: result });
     const checkResponse = await validate(schema.response, laminarResponse, {
       name: 'response',

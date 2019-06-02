@@ -4,7 +4,8 @@ import axios from 'axios';
 import { createServer, Server } from 'http';
 import { join } from 'path';
 
-import { Paths, Pet, SecurityResolvers } from './__generated__/integration';
+import { Config, Pet } from './__generated__/integration';
+import { LoggerContext, withLogger } from './middleware/logger';
 
 let server: Server;
 
@@ -15,58 +16,62 @@ describe('Integration', () => {
 
   it('Should process response', async () => {
     const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
+    const log = jest.fn();
 
-    const securityResolvers: SecurityResolvers = {
-      BearerAuth: ({ context }) => {
-        if (context.headers.authorization === 'Bearer 123') {
-          return { user: 'dinkey' };
-        } else {
-          throw new HttpError(401, { message: 'Unathorized user' });
-        }
-      },
-      BasicAuth: ({ context }) => {
-        if (context.headers.authorization !== 'Basic 123') {
-          throw new HttpError(401, { message: 'Unathorized user' });
-        }
-      },
-      ApiKeyAuth: ({ context }) => {
-        if (context.headers['x-api-key'] !== 'Me') {
-          throw new HttpError(401, { message: 'Unathorized user' });
-        }
-      },
-    };
-
-    const paths: Paths = {
-      '/pets': {
-        get: () => db,
-        post: ({ body, security }) => {
-          const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };
-          db.push(pet);
-          return { pet, user: security.user };
-        },
-      },
-      '/pets/{id}': {
-        get: ({ path }) =>
-          db.find(item => item.id === Number(path.id)) ||
-          response({ status: 404, body: { code: 123, message: 'Not Found' } }),
-        delete: ({ path }) => {
-          const index = db.findIndex(item => item.id === Number(path.id));
-          if (index !== -1) {
-            db.splice(index, 1);
-            return response({ status: 204 });
+    const config: Config<LoggerContext> = {
+      api: loadYamlFile(join(__dirname, 'integration.yaml')),
+      security: {
+        BearerAuth: ({ headers, logger }) => {
+          if (headers.authorization === 'Bearer 123') {
+            logger('Auth Successful');
+            return { user: 'dinkey' };
           } else {
-            return response({ status: 404, body: { code: 12, message: 'Item not found' } });
+            throw new HttpError(401, { message: 'Unathorized user' });
+          }
+        },
+        BasicAuth: ({ headers }) => {
+          if (headers.authorization !== 'Basic 123') {
+            throw new HttpError(401, { message: 'Unathorized user' });
+          }
+        },
+        ApiKeyAuth: ({ headers }) => {
+          if (headers['x-api-key'] !== 'Me') {
+            throw new HttpError(401, { message: 'Unathorized user' });
           }
         },
       },
+      paths: {
+        '/pets': {
+          get: ({ logger }) => {
+            logger('Get all');
+            return db;
+          },
+          post: ({ body, authInfo, logger }) => {
+            const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };
+            logger(`new pet ${pet.name}`);
+            db.push(pet);
+            return { pet, user: authInfo.user };
+          },
+        },
+        '/pets/{id}': {
+          get: ({ path }) =>
+            db.find(item => item.id === Number(path.id)) ||
+            response({ status: 404, body: { code: 123, message: 'Not Found' } }),
+          delete: ({ path }) => {
+            const index = db.findIndex(item => item.id === Number(path.id));
+            if (index !== -1) {
+              db.splice(index, 1);
+              return response({ status: 204 });
+            } else {
+              return response({ status: 404, body: { code: 12, message: 'Item not found' } });
+            }
+          },
+        },
+      },
     };
 
-    const app = await oapi({
-      paths,
-      securityResolvers,
-      api: loadYamlFile(join(__dirname, 'integration.yaml')),
-    });
-    server = createServer(laminar(app));
+    const app = await oapi(config);
+    server = createServer(laminar(withLogger(log)(app)));
 
     await new Promise(resolve => server.listen(8093, resolve));
     const api = axios.create({ baseURL: 'http://localhost:8093' });
@@ -201,5 +206,11 @@ describe('Integration', () => {
       status: 200,
       data: [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 223, name: 'New Puppy' }],
     });
+
+    expect(log).toHaveBeenNthCalledWith(1, 'Get all');
+    expect(log).toHaveBeenNthCalledWith(2, 'Auth Successful');
+    expect(log).toHaveBeenNthCalledWith(3, 'new pet New Puppy');
+    expect(log).toHaveBeenNthCalledWith(4, 'Get all');
+    expect(log).toHaveBeenNthCalledWith(5, 'Get all');
   });
 });

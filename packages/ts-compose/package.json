@@ -1,7 +1,7 @@
 {
   "name": "@ovotech/ts-compose",
   "description": "An ts compiler api wrapper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
@@ -20,13 +20,13 @@
     "jest": "^24.8.0",
     "prettier": "^1.17.1",
     "ts-jest": "^24.0.0",
-    "tslint": "^5.14.0",
+    "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0"
   },
   "jest": {
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.1"
   }
 }

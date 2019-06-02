@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { createServer, Server } from 'http';
 import {
-  Context,
   del,
   get,
   HttpError,
@@ -12,7 +11,6 @@ import {
   put,
   redirect,
   response,
-  RouteContext,
   router,
 } from '../src';
 import { LoggerContext, withLogger } from './middleware/logger';
@@ -24,7 +22,7 @@ interface Item {
   name: string;
 }
 
-interface TestContext extends Context, RouteContext, LoggerContext {
+interface TestContext extends LoggerContext {
   body: Item;
 }
 

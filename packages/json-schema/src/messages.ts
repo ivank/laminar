@@ -24,6 +24,6 @@ export const messages: Messages = {
   minItems: ({ name, param }) => `[${name}] should have >= ${param} items`,
   maxItems: ({ name, param }) => `[${name}] should have <= ${param} items`,
   oneOf: ({ name, param }: Invalid<{ matching: number; errors: Result[] }>) =>
-    `[${name}] should match only 1 schema, matching ${param.matching}}`,
+    `[${name}] should match only 1 schema, matching ${param.matching}`,
   anyOf: ({ name }) => `[${name}] should match at least 1 schema`,
 };

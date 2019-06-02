@@ -21,7 +21,7 @@ import {
   SecuritySchemeObject,
 } from 'openapi3-ts';
 
-export interface ResoledOpenAPIObject extends OpenAPIObject {
+export interface ResolvedOpenAPIObject extends OpenAPIObject {
   paths: ResolvedPathsObject;
   components?: ResolvedComponentsObject;
 }

@@ -1,5 +1,5 @@
 import { HttpError } from './HttpError';
-import { Context, Method, Resolver, Route, RouteContext, RouteResolver } from './types';
+import { Addition, Context, Method, Resolver, Route, RouteContext, RouteResolver } from './types';
 
 export const paramRegEx = /\{[^\}]+\}/g;
 
@@ -25,27 +25,28 @@ export const toPathMatcher = (path: string) => {
   };
 };
 
-export const toRouteMatcher = <TContext extends Context = Context>(
-  method: string,
-  path: string,
-) => {
+export const toRouteMatcher = <C extends Addition = {}>(method: string, path: string) => {
   const methodMatcher = method.toUpperCase();
   const pathMatcher = toPathMatcher(path);
-  return (ctx: TContext) => ctx.method === methodMatcher && pathMatcher(ctx);
+  return (ctx: C & Context) => ctx.method === methodMatcher && pathMatcher(ctx);
 };
 
-export const toRoute = <TContext extends Context = Context>(
+export const toRoute = <C extends Addition = {}>(
   method: string,
   path: string,
-  resolver: Resolver<TContext>,
-): Route<TContext> => ({
+  resolver: Resolver<C & RouteContext>,
+): Route<C> => ({
   matcher: toRouteMatcher(method, path),
   resolver,
 });
 
-export const selectRoute = <TContext extends Context, TRoute extends Route<TContext>>(
-  ctx: TContext,
-  routes: TRoute[],
+export const selectRoute = <
+  C extends Addition = {},
+  CR extends Addition = {},
+  R extends Route<CR> = Route<CR>
+>(
+  ctx: C & Context,
+  routes: R[],
 ) => {
   for (const route of routes) {
     const params = route.matcher(ctx);
@@ -56,9 +57,9 @@ export const selectRoute = <TContext extends Context, TRoute extends Route<TCont
   return false;
 };
 
-export const router = <TContext extends Context>(
-  ...routes: Array<Route<TContext & RouteContext>>
-): Resolver<TContext> => {
+export const router = <C extends Addition = {}, RC extends Addition = {}>(
+  ...routes: Array<Route<C>>
+): Resolver<RC> => {
   return ctx => {
     const select = selectRoute(ctx, routes as Route[]);
 

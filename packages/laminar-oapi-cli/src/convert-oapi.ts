@@ -23,9 +23,9 @@ import {
 interface AstParameters {
   in: {
     query?: ts.TypeElement[];
-    header?: ts.TypeElement[];
+    headers?: ts.TypeElement[];
     path?: ts.TypeElement[];
-    cookie?: ts.TypeElement[];
+    cookies?: ts.TypeElement[];
   };
   context: AstContext;
 }
@@ -40,7 +40,7 @@ const pathToIdentifier = (path: string) =>
     .map(title)
     .join('');
 
-const toParamLocation = (location: string) => {
+const toParamLocation = (location: 'header' | 'cookie' | 'path' | 'query') => {
   switch (location) {
     case 'header':
       return 'headers';
@@ -61,7 +61,7 @@ const convertParameters = (
       const paramNode = param.schema
         ? convertSchema(node.context, param.schema)
         : result(node.context, Type.Any);
-      const params = node.in[param.in] || [];
+      const params = node.in[toParamLocation(param.in)] || [];
       return {
         context: paramNode.context,
         in: {
@@ -175,7 +175,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
           const contextInterface = Type.Interface({
             name: contextIdentifier,
             isExport: true,
-            ext: [{ name: 'OapiContext' }, { name: 'RouteContext' }],
+            ext: [{ name: 'OapiContext' }],
             props: astParams.type.members.concat(astRequestBody.type.members),
           });
 
@@ -189,7 +189,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
             [
               Type.Param({
                 name: 'context',
-                type: Type.Intersection([Type.Ref(contextIdentifier), Type.Ref('TContext')]),
+                type: Type.Intersection([Type.Ref(contextIdentifier), Type.Ref('C')]),
               }),
             ],
             responseAst.type,
@@ -215,45 +215,40 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
     },
   );
 
-  const security =
-    api.components && api.components.securitySchemes
-      ? Type.Interface({
-          name: 'SecurityResolvers',
-          isExport: true,
-          ext: [{ name: 'OapiSecurityResolvers', types: [Type.Ref('TContext')] }],
-          typeArgs: [
-            Type.TypeArg({
-              name: 'TContext',
-              defaultType: Type.TypeLiteral(),
-            }),
-          ],
-          props: Object.keys(api.components.securitySchemes).map(scheme =>
-            Type.Prop({
-              name: scheme,
-              type: Type.Ref('OapiSecurityResolver'),
-            }),
-          ),
-        })
-      : undefined;
-
-  const contextWithSecurity = security ? withEntry(paths.context, security) : paths.context;
-
   return result(
-    withImports(
-      withImports(contextWithSecurity, '@ovotech/laminar', ['RouteContext']),
-      '@ovotech/laminar-oapi',
-      ['OapiContext', 'OapiSecurityResolver', 'OapiSecurityResolvers', 'OapiPaths'],
-    ),
+    withImports(paths.context, '@ovotech/laminar-oapi', [
+      'OapiContext',
+      'OapiConfig',
+      ...(api.components && api.components.securitySchemes ? ['OapiSecurityResolver'] : []),
+    ]),
     Type.Interface({
-      name: 'Paths',
+      name: 'Config',
       isExport: true,
-      ext: [{ name: 'OapiPaths', types: [Type.Ref('TContext')] }],
-      props: paths.items,
+      ext: [{ name: 'OapiConfig', types: [Type.Ref('C')] }],
       typeArgs: [
         Type.TypeArg({
-          name: 'TContext',
+          name: 'C',
+          ext: Type.TypeLiteral(),
           defaultType: Type.TypeLiteral(),
         }),
+      ],
+      props: [
+        Type.Prop({ name: 'paths', type: Type.TypeLiteral({ props: paths.items }) }),
+        ...(api.components && api.components.securitySchemes
+          ? [
+              Type.Prop({
+                name: 'security',
+                type: Type.TypeLiteral({
+                  props: Object.keys(api.components.securitySchemes).map(scheme =>
+                    Type.Prop({
+                      name: scheme,
+                      type: Type.Ref('OapiSecurityResolver', [Type.Ref('C')]),
+                    }),
+                  ),
+                }),
+              }),
+            ]
+          : []),
       ],
     }),
   );
