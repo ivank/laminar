@@ -85,14 +85,15 @@ export const draft7 = [
   validateAnyOf,
 ];
 
-export const validate = async (
-  original: Schema,
-  value: any,
-  { name = 'value', validators = draft7, refs }: Partial<ValidateOptions> = {},
-) => {
-  const resolved = refs ? { schema: original, refs } : await resolveRefs(original);
-  const result = validateSchema(resolved.schema, value, { name, validators, refs: resolved.refs });
-  const errors = result.errors.map(error => messages[error.code](error));
+const defaultOptions = { name: 'value', validators: draft7, refs: {} };
 
-  return { schema: resolved.schema, errors, valid: errors.length === 0 };
+export const validate = (schema: Schema, value: any, options: Partial<ValidateOptions> = {}) => {
+  const result = validateSchema(schema, value, { ...defaultOptions, ...options });
+  const errors = result.errors.map(error => messages[error.code](error));
+  return { schema, errors, valid: errors.length === 0 };
+};
+
+export const compile = async (schema: Schema, options: Partial<ValidateOptions> = {}) => {
+  const resolved = await resolveRefs(schema);
+  return (value: any) => validate(resolved.schema, value, { ...options, refs: resolved.refs });
 };

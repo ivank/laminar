@@ -1,5 +1,5 @@
 import { resolveRefs } from '@ovotech/json-refs';
-import { Schema, validate } from '@ovotech/json-schema';
+import { compile, Schema, validate } from '@ovotech/json-schema';
 import {
   Addition,
   Context,
@@ -104,16 +104,16 @@ export const oapi = async <C extends Addition = {}>({
   paths,
   security,
 }: OapiConfig<C>): Promise<Resolver<C & Context>> => {
-  const checkApi = await validate(OpenApiSchema as Schema, api);
+  const checkApi = (await compile(OpenApiSchema as Schema))(api);
   if (!checkApi.valid) {
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
-
   const resolved = await resolveRefs<ResolvedOpenAPIObject>(api);
+
   const schemas = toSchema(resolved.schema);
   const routes = toRoutes(schemas.routes, paths);
 
-  const checkResolvers = await validate(
+  const checkResolvers = validate(
     schemas.resolvers,
     { paths, security },
     { name: 'api', refs: resolved.refs },
@@ -139,7 +139,7 @@ export const oapi = async <C extends Addition = {}>({
 
     const context: C & Context & OapiContext = { ...ctx, path };
 
-    const checkContext = await validate(schema.context, context, {
+    const checkContext = validate(schema.context, context, {
       name: 'context',
       refs: resolved.refs,
     });
@@ -160,7 +160,7 @@ export const oapi = async <C extends Addition = {}>({
 
     const result = resolver({ ...context, authInfo });
     const laminarResponse = isResponse(result) ? result : response({ body: result });
-    const checkResponse = await validate(schema.response, laminarResponse, {
+    const checkResponse = validate(schema.response, laminarResponse, {
       name: 'response',
       refs: resolved.refs,
     });

@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'fs';
 import nock = require('nock');
 import { join } from 'path';
-import { Schema, validate } from '../src';
+import { compile, Schema } from '../src';
 
 interface Test {
   description: string;
@@ -15,7 +15,8 @@ interface Suite {
   tests: Test[];
 }
 
-const testSuiteFolder = join(__dirname, '../../../json-schema-test-suite');
+const testSuiteFolder = join(__dirname, '../../../JSON-Schema-Test-Suite');
+const draftsFolder = join(__dirname, '../../../json-schema-drafts');
 
 nock('http://localhost:1234')
   .persist()
@@ -31,17 +32,17 @@ nock('http://localhost:1234')
 nock('http://json-schema.org')
   .persist()
   .get('/draft-04/schema')
-  .replyWithFile(200, join(testSuiteFolder, 'remotes/draft-4-schema.json'))
+  .replyWithFile(200, join(draftsFolder, 'draft-4-schema.json'))
   .get('/draft-06/schema')
-  .replyWithFile(200, join(testSuiteFolder, 'remotes/draft-6-schema.json'))
+  .replyWithFile(200, join(draftsFolder, 'draft-6-schema.json'))
   .get('/draft-07/schema')
-  .replyWithFile(200, join(testSuiteFolder, 'remotes/draft-7-schema.json'));
+  .replyWithFile(200, join(draftsFolder, 'draft-7-schema.json'));
 
 const testFolders = ['draft4', 'draft6', 'draft7'];
 
 expect.extend({
   async toValidateAgainstSchema(data, schema) {
-    const result = await validate(schema, data);
+    const result = (await compile(schema))(data);
     const pass = result.valid;
     return {
       pass,
@@ -63,11 +64,11 @@ expect.extend({
 });
 
 for (const testFolder of testFolders) {
-  const testFiles = readdirSync(join(testSuiteFolder, testFolder))
+  const testFiles = readdirSync(join(testSuiteFolder, 'tests', testFolder))
     .filter(file => file.endsWith('.json'))
     .map<[string, Suite[]]>(file => [
       file,
-      JSON.parse(String(readFileSync(join(testSuiteFolder, testFolder, file)))),
+      JSON.parse(String(readFileSync(join(testSuiteFolder, 'tests', testFolder, file)))),
     ]);
 
   for (const [name, suites] of testFiles) {

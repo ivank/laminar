@@ -1,7 +1,7 @@
 import { Schema, validate } from '../src';
 
 describe('Helper isEqual', () => {
-  it('Should validate schema', async () => {
+  it('Should validate schema', () => {
     const schema: Schema = {
       oneOf: [
         {
@@ -54,7 +54,7 @@ describe('Helper isEqual', () => {
       ],
     };
 
-    const result = await validate(schema, { post: true, singleWalletBalance: { fuelType: '111' } });
+    const result = validate(schema, { post: true, singleWalletBalance: { fuelType: '111' } });
     expect(result.errors).toEqual([
       '[value] has unknown keys [post]',
       '[value.singleWalletBalance] is missing [value] keys',
@@ -62,7 +62,7 @@ describe('Helper isEqual', () => {
     ]);
   });
 
-  it('Should discriminate schema', async () => {
+  it('Should discriminate schema', () => {
     const schema: Schema = {
       oneOf: [
         {
@@ -90,11 +90,11 @@ describe('Helper isEqual', () => {
       },
     };
 
-    const result = await validate(schema, { type: 'cat', size: 'big' });
+    const result = validate(schema, { type: 'cat', size: 'big' });
     expect(result.errors).toEqual(['[value.size] should be a [integer]']);
   });
 
-  it('Should optimize one anyOf', async () => {
+  it('Should optimize one anyOf', () => {
     const schema: Schema = {
       anyOf: [
         {
@@ -111,15 +111,15 @@ describe('Helper isEqual', () => {
       ],
     };
 
-    const result = await validate(schema, { type: 'cat', size: 'big' });
+    const result = validate(schema, { type: 'cat', size: 'big' });
     expect(result.errors).toEqual(['[value.size] should be a [integer]']);
   });
 
-  it('Should protect multipleOf', async () => {
+  it('Should protect multipleOf', () => {
     const schema: Schema = { multipleOf: 2 };
 
-    const infinityResult = await validate(schema, Infinity);
-    const nanResult = await validate(schema, NaN);
+    const infinityResult = validate(schema, Infinity);
+    const nanResult = validate(schema, NaN);
     expect(infinityResult.errors).toEqual(['[value] should be a multiple of 2']);
     expect(nanResult.errors).toEqual(['[value] should be a multiple of 2']);
   });
@@ -166,8 +166,8 @@ describe('Helper isEqual', () => {
 
     ['ipv4', '127.0.0.1', true],
     ['ipv4', 'aa.0.0.1', false],
-  ])('Should validate format %s for %s is %s', async (format, value, expected) => {
-    const result = await validate({ format }, value);
+  ])('Should validate format %s for %s is %s', (format, value, expected) => {
+    const result = validate({ format }, value);
     expect(result.valid).toBe(expected);
   });
 });

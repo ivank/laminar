@@ -11,6 +11,7 @@
     "@types/jest": "^24.0.13",
     "@types/node": "^11.13.4",
     "jest": "^24.8.0",
+    "json-schema-test-suite": "^0.0.10",
     "prettier": "^1.17.1",
     "ts-jest": "^24.0.2",
     "tslint": "^5.17.0",
@@ -28,6 +29,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-refs": "^0.1.0"
+    "@ovotech/json-refs": "^0.2.0"
   }
 }
