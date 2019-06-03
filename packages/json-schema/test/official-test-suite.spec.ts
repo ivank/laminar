@@ -15,8 +15,8 @@ interface Suite {
   tests: Test[];
 }
 
-const testSuiteFolder = join(__dirname, '../../../JSON-Schema-Test-Suite');
-const draftsFolder = join(__dirname, '../../../json-schema-drafts');
+const testSuiteFolder = join(__dirname, '../../../external/JSON-Schema-Test-Suite');
+const draftsFolder = join(__dirname, '../../../external/json-schema-drafts');
 
 nock('http://localhost:1234')
   .persist()

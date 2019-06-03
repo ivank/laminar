@@ -619,6 +619,32 @@ Object {
 }
 `;
 
+exports[`draft4 dependencies.json Test dependencies with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "dependencies": Object {
+      "foo	bar": Object {
+        "minProperties": 4,
+      },
+      "foo
+bar": Array [
+        "foo
+bar",
+      ],
+      "foo\\"bar": Array [
+        "foo'bar",
+      ],
+      "foo'bar": Object {
+        "required": Array [
+          "foo\\"bar",
+        ],
+      },
+    },
+  },
+  "ts": "any",
+}
+`;
+
 exports[`draft4 dependencies.json Test multiple dependencies 1`] = `
 Object {
   "schema": Object {
@@ -650,6 +676,20 @@ Object {
     },
   },
   "ts": "any",
+}
+`;
+
+exports[`draft4 enum.json Test enum with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "foo
+bar",
+      "foo
+bar",
+    ],
+  },
+  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"",
 }
 `;
 
@@ -1198,6 +1238,46 @@ Object {
 }
 `;
 
+exports[`draft4 properties.json Test properties with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo	bar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foobar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+      "foo\\\\bar": Object {
+        "type": "number",
+      },
+    },
+  },
+  "ts": "{
+    foo
+bar?: number;
+    foo\\"bar?: number;
+    foo\\\\bar?: number;
+    foo
+bar?: number;
+    foo	bar?: number;
+    foobar?: number;
+    [key: string]: any;
+}",
+}
+`;
+
 exports[`draft4 properties.json Test properties, patternProperties, additionalProperties interaction 1`] = `
 Object {
   "schema": Object {
@@ -1389,6 +1469,29 @@ Object {
 }
 
 export type reffed = any;",
+}
+`;
+
+exports[`draft4 ref.json Test refs with quote 1`] = `
+Object {
+  "schema": Object {
+    "definitions": Object {
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+    },
+    "properties": Object {
+      "foo\\"bar": Object {
+        "$ref": "#/definitions/foo%22bar",
+      },
+    },
+  },
+  "ts": "{
+    foo\\"bar?: foo%22bar;
+    [key: string]: any;
+}
+
+export type foo%22bar = number;",
 }
 `;
 
@@ -1715,6 +1818,24 @@ Object {
     bar?: any;
     [key: string]: any;
 }",
+}
+`;
+
+exports[`draft4 required.json Test required with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "required": Array [
+      "foo
+bar",
+      "foo\\"bar",
+      "foo\\\\bar",
+      "foo
+bar",
+      "foo	bar",
+      "foobar",
+    ],
+  },
+  "ts": "any",
 }
 `;
 
@@ -2669,6 +2790,32 @@ Object {
 }
 `;
 
+exports[`draft6 dependencies.json Test dependencies with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "dependencies": Object {
+      "foo	bar": Object {
+        "minProperties": 4,
+      },
+      "foo
+bar": Array [
+        "foo
+bar",
+      ],
+      "foo\\"bar": Array [
+        "foo'bar",
+      ],
+      "foo'bar": Object {
+        "required": Array [
+          "foo\\"bar",
+        ],
+      },
+    },
+  },
+  "ts": "any",
+}
+`;
+
 exports[`draft6 dependencies.json Test empty array of dependencies 1`] = `
 Object {
   "schema": Object {
@@ -2711,6 +2858,20 @@ Object {
     },
   },
   "ts": "any",
+}
+`;
+
+exports[`draft6 enum.json Test enum with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "foo
+bar",
+      "foo
+bar",
+    ],
+  },
+  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"",
 }
 `;
 
@@ -3365,6 +3526,46 @@ Object {
 }
 `;
 
+exports[`draft6 properties.json Test properties with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo	bar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foobar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+      "foo\\\\bar": Object {
+        "type": "number",
+      },
+    },
+  },
+  "ts": "{
+    foo
+bar?: number;
+    foo\\"bar?: number;
+    foo\\\\bar?: number;
+    foo
+bar?: number;
+    foo	bar?: number;
+    foobar?: number;
+    [key: string]: any;
+}",
+}
+`;
+
 exports[`draft6 properties.json Test properties, patternProperties, additionalProperties interaction 1`] = `
 Object {
   "schema": Object {
@@ -3613,6 +3814,29 @@ Object {
 }
 
 export type reffed = any;",
+}
+`;
+
+exports[`draft6 ref.json Test refs with quote 1`] = `
+Object {
+  "schema": Object {
+    "definitions": Object {
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+    },
+    "properties": Object {
+      "foo\\"bar": Object {
+        "$ref": "#/definitions/foo%22bar",
+      },
+    },
+  },
+  "ts": "{
+    foo\\"bar?: foo%22bar;
+    [key: string]: any;
+}
+
+export type foo%22bar = number;",
 }
 `;
 
@@ -3964,6 +4188,24 @@ Object {
     foo?: any;
     [key: string]: any;
 }",
+}
+`;
+
+exports[`draft6 required.json Test required with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "required": Array [
+      "foo
+bar",
+      "foo\\"bar",
+      "foo\\\\bar",
+      "foo
+bar",
+      "foo	bar",
+      "foobar",
+    ],
+  },
+  "ts": "any",
 }
 `;
 
@@ -4946,6 +5188,32 @@ Object {
 }
 `;
 
+exports[`draft7 dependencies.json Test dependencies with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "dependencies": Object {
+      "foo	bar": Object {
+        "minProperties": 4,
+      },
+      "foo
+bar": Array [
+        "foo
+bar",
+      ],
+      "foo\\"bar": Array [
+        "foo'bar",
+      ],
+      "foo'bar": Object {
+        "required": Array [
+          "foo\\"bar",
+        ],
+      },
+    },
+  },
+  "ts": "any",
+}
+`;
+
 exports[`draft7 dependencies.json Test empty array of dependencies 1`] = `
 Object {
   "schema": Object {
@@ -4988,6 +5256,20 @@ Object {
     },
   },
   "ts": "any",
+}
+`;
+
+exports[`draft7 enum.json Test enum with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "foo
+bar",
+      "foo
+bar",
+    ],
+  },
+  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"",
 }
 `;
 
@@ -5745,6 +6027,46 @@ Object {
 }
 `;
 
+exports[`draft7 properties.json Test properties with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo	bar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foobar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+      "foo\\\\bar": Object {
+        "type": "number",
+      },
+    },
+  },
+  "ts": "{
+    foo
+bar?: number;
+    foo\\"bar?: number;
+    foo\\\\bar?: number;
+    foo
+bar?: number;
+    foo	bar?: number;
+    foobar?: number;
+    [key: string]: any;
+}",
+}
+`;
+
 exports[`draft7 properties.json Test properties, patternProperties, additionalProperties interaction 1`] = `
 Object {
   "schema": Object {
@@ -5993,6 +6315,29 @@ Object {
 }
 
 export type reffed = any;",
+}
+`;
+
+exports[`draft7 ref.json Test refs with quote 1`] = `
+Object {
+  "schema": Object {
+    "definitions": Object {
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+    },
+    "properties": Object {
+      "foo\\"bar": Object {
+        "$ref": "#/definitions/foo%22bar",
+      },
+    },
+  },
+  "ts": "{
+    foo\\"bar?: foo%22bar;
+    [key: string]: any;
+}
+
+export type foo%22bar = number;",
 }
 `;
 
@@ -6358,6 +6703,24 @@ Object {
     foo?: any;
     [key: string]: any;
 }",
+}
+`;
+
+exports[`draft7 required.json Test required with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "required": Array [
+      "foo
+bar",
+      "foo\\"bar",
+      "foo\\\\bar",
+      "foo
+bar",
+      "foo	bar",
+      "foobar",
+    ],
+  },
+  "ts": "any",
 }
 `;
 
