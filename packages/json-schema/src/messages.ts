@@ -1,4 +1,4 @@
-import { Invalid, Messages, Result } from './types';
+import { Invalid, Messages } from './types';
 
 export const messages: Messages = {
   not: ({ name }) => `[${name}] should not match`,
@@ -23,7 +23,7 @@ export const messages: Messages = {
     `[${name}] should have only unique values, has ${param} duplicates`,
   minItems: ({ name, param }) => `[${name}] should have >= ${param} items`,
   maxItems: ({ name, param }) => `[${name}] should have <= ${param} items`,
-  oneOf: ({ name, param }: Invalid<{ matching: number; errors: Result[] }>) =>
+  oneOf: ({ name, param }: Invalid<{ matching: number; errors: Invalid[] }>) =>
     `[${name}] should match only 1 schema, matching ${param.matching}`,
   anyOf: ({ name }) => `[${name}] should match at least 1 schema`,
 };

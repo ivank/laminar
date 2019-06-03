@@ -1,4 +1,4 @@
-import { childOptions, CombineResults, NoErrors, validateSchema } from '../helpers';
+import { childOptions, flatten, NoErrors, validateSchema } from '../helpers';
 import { Validator } from '../types';
 import { validateMinItems } from './validateMinItems';
 
@@ -9,8 +9,8 @@ export const validateContains: Validator = (schema, value, options) => {
     const allItemsResults = value.map((item, index) =>
       validateSchema(contains, item, childOptions(index, options)),
     );
-    if (allItemsResults.every(item => item.errors.length > 0)) {
-      return CombineResults([result, ...allItemsResults]);
+    if (allItemsResults.every(item => item.length > 0)) {
+      return flatten([result, ...allItemsResults]);
     }
     return result;
   }

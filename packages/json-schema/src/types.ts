@@ -76,11 +76,6 @@ export interface Invalid<TParam = any> {
   param: TParam;
 }
 
-export interface Result {
-  errors: Invalid[];
-  valid?: boolean;
-}
-
 export interface ValidateOptions {
   name: string;
   validators: Validator[];
@@ -91,8 +86,13 @@ export type Validator<TSchema = JsonSchema, TValue = any> = (
   schema: TSchema,
   value: TValue,
   options: ValidateOptions,
-) => Result;
+) => Invalid[];
 
 export interface Messages {
   [key: string]: (error: Invalid) => string;
+}
+
+export interface CompiledSchema<TSchema = Schema> {
+  schema: TSchema;
+  refs: RefMap;
 }

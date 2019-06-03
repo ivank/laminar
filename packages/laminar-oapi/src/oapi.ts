@@ -1,5 +1,4 @@
-import { resolveRefs } from '@ovotech/json-refs';
-import { compile, Schema, validate } from '@ovotech/json-schema';
+import { compile, Schema, validate, validateCompiled } from '@ovotech/json-schema';
 import {
   Addition,
   Context,
@@ -104,19 +103,19 @@ export const oapi = async <C extends Addition = {}>({
   paths,
   security,
 }: OapiConfig<C>): Promise<Resolver<C & Context>> => {
-  const checkApi = (await compile(OpenApiSchema as Schema))(api);
+  const checkApi = await validate(OpenApiSchema as Schema, api);
   if (!checkApi.valid) {
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
-  const resolved = await resolveRefs<ResolvedOpenAPIObject>(api);
+  const compiled = await compile<ResolvedOpenAPIObject>(api);
 
-  const schemas = toSchema(resolved.schema);
+  const schemas = toSchema(compiled.schema);
   const routes = toRoutes(schemas.routes, paths);
 
-  const checkResolvers = validate(
-    schemas.resolvers,
+  const checkResolvers = validateCompiled(
+    { schema: schemas.resolvers, refs: compiled.refs },
     { paths, security },
-    { name: 'api', refs: resolved.refs },
+    { name: 'api' },
   );
 
   if (!checkResolvers.valid) {
@@ -139,10 +138,11 @@ export const oapi = async <C extends Addition = {}>({
 
     const context: C & Context & OapiContext = { ...ctx, path };
 
-    const checkContext = validate(schema.context, context, {
-      name: 'context',
-      refs: resolved.refs,
-    });
+    const checkContext = validateCompiled(
+      { schema: schema.context, refs: compiled.refs },
+      context,
+      { name: 'context' },
+    );
 
     if (!checkContext.valid) {
       throw new HttpError(400, {
@@ -154,16 +154,17 @@ export const oapi = async <C extends Addition = {}>({
     const authInfo = await validateSecurity<C>(
       context,
       schema.security,
-      resolved.schema.components && resolved.schema.components.securitySchemes,
+      compiled.schema.components && compiled.schema.components.securitySchemes,
       security,
     );
 
     const result = resolver({ ...context, authInfo });
     const laminarResponse = isResponse(result) ? result : response({ body: result });
-    const checkResponse = validate(schema.response, laminarResponse, {
-      name: 'response',
-      refs: resolved.refs,
-    });
+    const checkResponse = validateCompiled(
+      { schema: schema.response, refs: compiled.refs },
+      laminarResponse,
+      { name: 'response' },
+    );
 
     if (!checkResponse.valid) {
       throw new HttpError(500, {

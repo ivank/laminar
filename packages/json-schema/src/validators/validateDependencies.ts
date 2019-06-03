@@ -1,16 +1,9 @@
-import {
-  childOptions,
-  CombineResults,
-  HasError,
-  isObject,
-  NoErrors,
-  validateSchema,
-} from '../helpers';
+import { childOptions, flatten, HasError, isObject, NoErrors, validateSchema } from '../helpers';
 import { Validator } from '../types';
 
 export const validateDependencies: Validator = (schema, value, options) => {
   if (schema.dependencies && isObject(value)) {
-    return CombineResults(
+    return flatten(
       Object.entries(schema.dependencies)
         .filter(([key]) => key in value)
         .map(([key, dependency]) => {
@@ -22,7 +15,7 @@ export const validateDependencies: Validator = (schema, value, options) => {
           } else {
             return validateSchema(dependency, value, childOptions(key, options));
           }
-        }, []),
+        }),
     );
   }
   return NoErrors;

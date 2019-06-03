@@ -9,7 +9,7 @@ export const validateAnyOf: Validator = (schema, value, options) => {
       if (
         !schema.anyOf
           .map(item => validateSchema(item, value, options))
-          .some(result => result.errors.length === 0)
+          .some(result => result.length === 0)
       ) {
         return HasError('anyOf', options.name);
       }

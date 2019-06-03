@@ -8,7 +8,7 @@ const findSchema = (schemas: Schema[], name: string, value: any, options: Valida
       'type' in item &&
       item.type === 'object' &&
       !!item.properties &&
-      validateSchema(item.properties[name], value, options).errors.length === 0,
+      validateSchema(item.properties[name], value, options).length === 0,
   );
 
 export const validateOneOf: Validator = (schema, value, options) => {
@@ -29,7 +29,7 @@ export const validateOneOf: Validator = (schema, value, options) => {
     }
 
     const validations = oneOf.map(item => validateSchema(item, value, options));
-    const matching = validations.filter(item => item.errors.length === 0);
+    const matching = validations.filter(item => item.length === 0);
 
     if (matching.length !== 1) {
       return HasError('oneOf', options.name, { matching: matching.length, errors: validations });

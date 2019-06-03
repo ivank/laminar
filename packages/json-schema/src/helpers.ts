@@ -1,4 +1,4 @@
-import { Invalid, JsonSchema, Messages, Result, Schema, ValidateOptions, Validator } from './types';
+import { JsonSchema, Messages, Schema, ValidateOptions, Validator } from './types';
 
 export const childOptions = (name: string | number, options: ValidateOptions) => ({
   ...options,
@@ -32,14 +32,14 @@ export const isEqual = (a: any, b: any): boolean => {
   return false;
 };
 
-export const flatten = <T>(arr: T[][]): T[] => {
-  const result: T[] = [];
-  for (const item of arr) {
-    for (const inner of item) {
-      result.push(inner);
+export const flatten = <T>(results: T[][]): T[] => {
+  const combined: T[] = [];
+  for (const result of results) {
+    for (const error of result) {
+      combined.push(error);
     }
   }
-  return result;
+  return combined;
 };
 
 export const isUniqueWith = <T = any>(compare: (a: T, b: T) => boolean, array: T[]) => {
@@ -52,22 +52,19 @@ export const isUniqueWith = <T = any>(compare: (a: T, b: T) => boolean, array: T
   return items;
 };
 
-export const NoErrors = { errors: [] };
-export const HasError = (code: keyof Messages, name: string, param?: any) => ({
-  errors: [{ code, name, param }],
-});
-export const HasErrors = (errors: Invalid[]) => ({ errors });
-export const CombineResults = (results: Result[]) =>
-  HasErrors(flatten(results.map(result => result.errors)));
+export const NoErrors = [];
+export const HasError = (code: keyof Messages, name: string, param?: any) => [
+  { code, name, param },
+];
 
 export const validateSchema: Validator<Schema> = (schema, value, options) => {
   if (schema === true) {
-    return { errors: [], valid: true };
+    return [];
   } else if (schema === false) {
-    return { errors: [{ code: 'false', name: options.name, param: false }], valid: false };
+    return [{ code: 'false', name: options.name, param: false }];
   } else if (schema) {
-    return CombineResults(options.validators.map(validator => validator(schema, value, options)));
+    return flatten(options.validators.map(validator => validator(schema, value, options)));
   } else {
-    return NoErrors;
+    return [];
   }
 };

@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'fs';
 import nock = require('nock');
 import { join } from 'path';
-import { compile, Schema } from '../src';
+import { Schema, validate } from '../src';
 
 interface Test {
   description: string;
@@ -42,7 +42,7 @@ const testFolders = ['draft4', 'draft6', 'draft7'];
 
 expect.extend({
   async toValidateAgainstSchema(data, schema) {
-    const result = (await compile(schema))(data);
+    const result = await validate(schema, data);
     const pass = result.valid;
     return {
       pass,

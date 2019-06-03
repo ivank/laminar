@@ -1,7 +1,7 @@
 import { resolveRefs } from '@ovotech/json-refs';
 import { validateSchema } from './helpers';
 import { messages } from './messages';
-import { Schema, ValidateOptions } from './types';
+import { CompiledSchema, Schema, ValidateOptions } from './types';
 import { validateAdditionalProperties } from './validators/validateAdditionalProperties';
 import { validateAllOf } from './validators/validateAllOf';
 import { validateAnyOf } from './validators/validateAnyOf';
@@ -42,8 +42,6 @@ export {
   isUniqueWith,
   NoErrors,
   HasError,
-  HasErrors,
-  CombineResults,
   validateSchema,
 } from './helpers';
 
@@ -85,13 +83,30 @@ export const draft7 = [
 
 const defaultOptions = { name: 'value', validators: draft7, refs: {} };
 
-export const validate = (schema: Schema, value: any, options: Partial<ValidateOptions> = {}) => {
-  const result = validateSchema(schema, value, { ...defaultOptions, ...options });
-  const errors = result.errors.map(error => messages[error.code](error));
-  return { schema, errors, valid: errors.length === 0 };
+export const compile = async <TSchema = Schema>(schema: Schema): Promise<CompiledSchema<TSchema>> =>
+  resolveRefs(schema);
+
+export const isCompiled = (schema: any): schema is CompiledSchema =>
+  typeof schema === 'object' && 'schema' in schema && 'refs' in schema;
+
+export const validate = async (
+  schema: Schema | CompiledSchema,
+  value: any,
+  options: Partial<ValidateOptions> = {},
+) => {
+  return validateCompiled(isCompiled(schema) ? schema : await compile(schema), value, options);
 };
 
-export const compile = async (schema: Schema, options: Partial<ValidateOptions> = {}) => {
-  const resolved = await resolveRefs(schema);
-  return (value: any) => validate(resolved.schema, value, { ...options, refs: resolved.refs });
+export const validateCompiled = (
+  schema: CompiledSchema,
+  value: any,
+  options: Partial<ValidateOptions> = {},
+) => {
+  const result = validateSchema(schema.schema, value, {
+    ...defaultOptions,
+    refs: schema.refs,
+    ...options,
+  });
+  const errors = result.map(error => messages[error.code](error));
+  return { schema, errors, valid: errors.length === 0 };
 };
