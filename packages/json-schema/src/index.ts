@@ -5,7 +5,6 @@ import { Schema, ValidateOptions } from './types';
 import { validateAdditionalProperties } from './validators/validateAdditionalProperties';
 import { validateAllOf } from './validators/validateAllOf';
 import { validateAnyOf } from './validators/validateAnyOf';
-import { validateBoolean } from './validators/validateBoolean';
 import { validateConditionals } from './validators/validateConditionals';
 import { validateConst } from './validators/validateConst';
 import { validateContains } from './validators/validateContains';
@@ -51,8 +50,10 @@ export {
 export { Schema, JsonSchema, ValidateOptions, Validator, Messages, PrimitiveType } from './types';
 
 export const draft7 = [
-  validateBoolean,
   validateRef,
+  validateProperties,
+  validateRequired,
+  validateItems,
   validateConst,
   validateEnum,
   validateType,
@@ -67,8 +68,6 @@ export const draft7 = [
   validateMaxLength,
   validateMinProperties,
   validateMaxProperties,
-  validateRequired,
-  validateProperties,
   validatePatternProperties,
   validatePropertyNames,
   validateDependencies,
@@ -76,7 +75,6 @@ export const draft7 = [
   validateMinItems,
   validateMaxItems,
   validateUniqueItems,
-  validateItems,
   validateContains,
   validateConditionals,
   validateNot,

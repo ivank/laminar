@@ -1,9 +1,9 @@
-import { childOptions, CombineResults, isJsonSchema, NoErrors, validateSchema } from '../helpers';
+import { childOptions, CombineResults, NoErrors, validateSchema } from '../helpers';
 import { Validator } from '../types';
 import { validateMinItems } from './validateMinItems';
 
 export const validateContains: Validator = (schema, value, options) => {
-  if (isJsonSchema(schema) && schema.contains !== undefined && Array.isArray(value)) {
+  if (schema.contains !== undefined && Array.isArray(value)) {
     const { contains } = schema;
     const result = validateMinItems({ minItems: 1 }, value, options);
     const allItemsResults = value.map((item, index) =>

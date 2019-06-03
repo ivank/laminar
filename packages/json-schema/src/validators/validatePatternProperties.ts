@@ -1,15 +1,8 @@
-import {
-  childOptions,
-  CombineResults,
-  isJsonSchema,
-  isObject,
-  NoErrors,
-  validateSchema,
-} from '../helpers';
+import { childOptions, CombineResults, isObject, NoErrors, validateSchema } from '../helpers';
 import { Validator } from '../types';
 
 export const validatePatternProperties: Validator = (schema, value, options) => {
-  if (isJsonSchema(schema) && schema.patternProperties && isObject(value)) {
+  if (schema.patternProperties && isObject(value)) {
     return CombineResults(
       Object.entries(schema.patternProperties).map(([pattern, patternSchema]) =>
         CombineResults(

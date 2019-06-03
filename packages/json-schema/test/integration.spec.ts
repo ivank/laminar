@@ -56,9 +56,9 @@ describe('Helper isEqual', () => {
 
     const result = validate(schema, { post: true, singleWalletBalance: { fuelType: '111' } });
     expect(result.errors).toEqual([
-      '[value] has unknown keys [post]',
       '[value.singleWalletBalance] is missing [value] keys',
       '[value.singleWalletBalance.fuelType] should be one of [DualFuel]',
+      '[value] has unknown keys [post]',
     ]);
   });
 

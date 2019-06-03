@@ -87,7 +87,7 @@ export interface ValidateOptions {
   refs: RefMap;
 }
 
-export type Validator<TSchema = Schema, TValue = any> = (
+export type Validator<TSchema = JsonSchema, TValue = any> = (
   schema: TSchema,
   value: TValue,
   options: ValidateOptions,

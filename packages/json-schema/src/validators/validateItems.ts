@@ -1,8 +1,8 @@
-import { childOptions, CombineResults, isJsonSchema, NoErrors, validateSchema } from '../helpers';
+import { childOptions, CombineResults, NoErrors, validateSchema } from '../helpers';
 import { Validator } from '../types';
 
 export const validateItems: Validator = (schema, value, options) => {
-  if (isJsonSchema(schema) && schema.items !== undefined && Array.isArray(value)) {
+  if (schema.items !== undefined && Array.isArray(value)) {
     const { items, additionalItems } = schema;
     return CombineResults(
       value.map((item, index) => {

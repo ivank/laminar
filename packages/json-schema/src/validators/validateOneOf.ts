@@ -12,7 +12,7 @@ const findSchema = (schemas: Schema[], name: string, value: any, options: Valida
   );
 
 export const validateOneOf: Validator = (schema, value, options) => {
-  if (isJsonSchema(schema) && schema.oneOf && schema.oneOf.length > 0) {
+  if (schema.oneOf && schema.oneOf.length > 0) {
     const { oneOf, discriminator } = schema;
     if (oneOf.length === 1) {
       return validateSchema(oneOf[0], value, options);

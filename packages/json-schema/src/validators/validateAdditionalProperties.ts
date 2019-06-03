@@ -2,7 +2,6 @@ import {
   childOptions,
   CombineResults,
   HasError,
-  isJsonSchema,
   isObject,
   NoErrors,
   validateSchema,
@@ -11,7 +10,6 @@ import { Validator } from '../types';
 
 export const validateAdditionalProperties: Validator = (schema, value, options) => {
   if (
-    isJsonSchema(schema) &&
     schema.additionalProperties !== undefined &&
     schema.additionalProperties !== true &&
     isObject(value)

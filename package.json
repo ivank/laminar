@@ -10,7 +10,8 @@
     "build": "lerna run build"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "performance"
   ],
   "jest": {
     "preset": "./jest.json"

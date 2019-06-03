@@ -1,4 +1,4 @@
-import { HasError, isJsonSchema, NoErrors } from '../helpers';
+import { HasError, NoErrors } from '../helpers';
 import { Validator } from '../types';
 
 const formats: { [key: string]: RegExp } = {
@@ -18,9 +18,6 @@ const formats: { [key: string]: RegExp } = {
 };
 
 export const validateFormat: Validator = (schema, value, { name }) =>
-  isJsonSchema(schema) &&
-  schema.format &&
-  schema.format in formats &&
-  !formats[schema.format].test(value)
+  schema.format && schema.format in formats && !formats[schema.format].test(value)
     ? HasError('format', name, schema.format)
     : NoErrors;

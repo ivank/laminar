@@ -2,7 +2,6 @@ import {
   childOptions,
   CombineResults,
   HasError,
-  isJsonSchema,
   isObject,
   NoErrors,
   validateSchema,
@@ -10,7 +9,7 @@ import {
 import { Validator } from '../types';
 
 export const validateDependencies: Validator = (schema, value, options) => {
-  if (isJsonSchema(schema) && schema.dependencies && isObject(value)) {
+  if (schema.dependencies && isObject(value)) {
     return CombineResults(
       Object.entries(schema.dependencies)
         .filter(([key]) => key in value)

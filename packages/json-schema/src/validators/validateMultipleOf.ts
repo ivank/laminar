@@ -1,4 +1,4 @@
-import { HasError, isJsonSchema, NoErrors } from '../helpers';
+import { HasError, NoErrors } from '../helpers';
 import { Validator } from '../types';
 
 const getPrecision = (num: number) => {
@@ -21,9 +21,6 @@ const isDivisible = (num: number, divisor: number) => {
 };
 
 export const validateMultipleOf: Validator = (schema, value, { name }) =>
-  isJsonSchema(schema) &&
-  schema.multipleOf &&
-  typeof value === 'number' &&
-  !isDivisible(value, schema.multipleOf)
+  schema.multipleOf && typeof value === 'number' && !isDivisible(value, schema.multipleOf)
     ? HasError('multipleOf', name, schema.multipleOf)
     : NoErrors;

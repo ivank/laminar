@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@ovotech/json-schema": "^0.2.0",
+    "@ovotech/json-refs": "^0.2.0",
     "oas-schemas": "https://github.com/OAI/OpenAPI-Specification.git",
     "openapi3-ts": "^1.3.0"
   }

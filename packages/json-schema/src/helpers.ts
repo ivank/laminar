@@ -32,11 +32,25 @@ export const isEqual = (a: any, b: any): boolean => {
   return false;
 };
 
-export const isUniqueWith = (compare: (a: any, b: any) => boolean, array: any[]) =>
-  array.reduce<any[]>(
-    (all, item) => (all.some(prev => compare(prev, item)) ? all : [...all, item]),
-    [],
-  );
+export const flatten = <T>(arr: T[][]): T[] => {
+  const result: T[] = [];
+  for (const item of arr) {
+    for (const inner of item) {
+      result.push(inner);
+    }
+  }
+  return result;
+};
+
+export const isUniqueWith = <T = any>(compare: (a: T, b: T) => boolean, array: T[]) => {
+  const items: T[] = [];
+  for (const item of array) {
+    if (!items.some(prev => compare(prev, item))) {
+      items.push(item);
+    }
+  }
+  return items;
+};
 
 export const NoErrors = { errors: [] };
 export const HasError = (code: keyof Messages, name: string, param?: any) => ({
@@ -44,13 +58,16 @@ export const HasError = (code: keyof Messages, name: string, param?: any) => ({
 });
 export const HasErrors = (errors: Invalid[]) => ({ errors });
 export const CombineResults = (results: Result[]) =>
-  HasErrors(results.reduce<Invalid[]>((errors, item) => [...errors, ...item.errors], []));
+  HasErrors(flatten(results.map(result => result.errors)));
 
-export const validateSchema: Validator = (schema, value, options) =>
-  options.validators.reduce<Result>((current, validator) => {
-    if (current.valid === true || current.valid === false) {
-      return current;
-    }
-    const { errors, valid } = validator(schema, value, options);
-    return { errors: [...errors, ...current.errors], valid };
-  }, NoErrors);
+export const validateSchema: Validator<Schema> = (schema, value, options) => {
+  if (schema === true) {
+    return { errors: [], valid: true };
+  } else if (schema === false) {
+    return { errors: [{ code: 'false', name: options.name, param: false }], valid: false };
+  } else if (schema) {
+    return CombineResults(options.validators.map(validator => validator(schema, value, options)));
+  } else {
+    return NoErrors;
+  }
+};

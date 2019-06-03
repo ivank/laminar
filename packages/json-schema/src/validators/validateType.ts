@@ -1,4 +1,4 @@
-import { HasError, isJsonSchema, NoErrors } from '../helpers';
+import { HasError, NoErrors } from '../helpers';
 import { Validator } from '../types';
 
 const getType = (value: any) =>
@@ -11,7 +11,7 @@ const getType = (value: any) =>
     : typeof value;
 
 export const validateType: Validator = (schema, value, { name }) => {
-  if (isJsonSchema(schema) && schema.type) {
+  if (schema.type) {
     const valueType = getType(value);
     const allowed = Array.isArray(schema.type) ? schema.type : [schema.type];
     if (allowed.includes('number') && !allowed.includes('integer')) {
