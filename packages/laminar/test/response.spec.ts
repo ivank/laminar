@@ -39,7 +39,7 @@ describe('Requests', () => {
   });
 
   it('Should process buffer', async () => {
-    server = createServer(laminar(() => new Buffer('test-test-maaaany-test')));
+    server = createServer(laminar(() => Buffer.from('test-test-maaaany-test')));
     await new Promise(resolve => server.listen(8091, resolve));
 
     await expect(api.get('/test')).resolves.toMatchObject({
@@ -95,7 +95,7 @@ describe('Requests', () => {
       headers: expect.objectContaining({
         'content-type': 'application/json',
         'content-length': '16',
-        'set-cookie': ['me=test; Max-Age=1000; HttpOnly,other=test2'],
+        'set-cookie': ['me=test; Max-Age=1000; HttpOnly', 'other=test2'],
         'x-response': 'other',
       }),
       data: { some: 'stuff' },

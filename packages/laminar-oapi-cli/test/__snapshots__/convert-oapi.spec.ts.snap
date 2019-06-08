@@ -111,7 +111,7 @@ export interface HttpErrorResponse {
     [key: string]: any;
 }
 
-export type ApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
+export type ApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV2AccountsAccountIdBalanceGetContext extends OapiContext {
     path: {
@@ -155,7 +155,7 @@ export interface ChargeTransactionEntity {
     [key: string]: any;
 }
 
-export type ApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
+export type ApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2> | Promise<TransactionHistoryHttpResponseV2> | Promise<LaminarResponse<TransactionHistoryHttpResponseV2>>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV2AccountsAccountIdTransactionsGetContext extends OapiContext {
     path: {
@@ -191,7 +191,7 @@ export interface AdjustBalanceRequest {
     [key: string]: any;
 }
 
-export type ApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
+export type ApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV2AccountsAccountIdAdjustbalancePostContext extends OapiContext {
     path: {
@@ -200,7 +200,7 @@ export interface ApiV2AccountsAccountIdAdjustbalancePostContext extends OapiCont
     body: AdjustBalanceRequest;
 }
 
-export type ApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
+export type ApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV3AccountsAccountIdBalanceGetContext extends OapiContext {
     path: {
@@ -245,7 +245,7 @@ export interface StandingChargeTransactionEntity {
     [key: string]: any;
 }
 
-export type ApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
+export type ApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3> | Promise<TransactionHistoryHttpResponseV3> | Promise<LaminarResponse<TransactionHistoryHttpResponseV3>>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV3AccountsAccountIdTransactionsGetContext extends OapiContext {
     path: {
@@ -258,7 +258,7 @@ export interface ApiV3AccountsAccountIdTransactionsGetContext extends OapiContex
     };
 }
 
-export type ApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
+export type ApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | LaminarResponse<HttpErrorResponse> | LaminarResponse<HttpErrorResponse>;
 
 export interface ApiV3AccountsAccountIdAdjustbalancePostContext extends OapiContext {
     path: {
@@ -302,7 +302,7 @@ export interface user {
     [key: string]: any;
 }
 
-export type 20UsersUsernameGetResponse = (user | LaminarResponse<user>);
+export type 20UsersUsernameGetResponse = (user | LaminarResponse<user> | Promise<user> | Promise<LaminarResponse<user>>);
 
 export interface 20UsersUsernameGetContext extends OapiContext {
     path: {
@@ -316,7 +316,7 @@ export interface repository {
     [key: string]: any;
 }
 
-export type 20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<repository[]>);
+export type 20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<repository[]> | Promise<repository[]> | Promise<LaminarResponse<repository[]>>);
 
 export interface 20RepositoriesUsernameGetContext extends OapiContext {
     path: {
@@ -324,7 +324,7 @@ export interface 20RepositoriesUsernameGetContext extends OapiContext {
     };
 }
 
-export type 20RepositoriesUsernameSlugGetResponse = (repository | LaminarResponse<repository>);
+export type 20RepositoriesUsernameSlugGetResponse = (repository | LaminarResponse<repository> | Promise<repository> | Promise<LaminarResponse<repository>>);
 
 export interface 20RepositoriesUsernameSlugGetContext extends OapiContext {
     path: {
@@ -341,7 +341,7 @@ export interface pullrequest {
     [key: string]: any;
 }
 
-export type 20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<pullrequest[]>);
+export type 20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<pullrequest[]> | Promise<pullrequest[]> | Promise<LaminarResponse<pullrequest[]>>);
 
 export interface 20RepositoriesUsernameSlugPullrequestsGetContext extends OapiContext {
     path: {
@@ -353,7 +353,7 @@ export interface 20RepositoriesUsernameSlugPullrequestsGetContext extends OapiCo
     };
 }
 
-export type 20RepositoriesUsernameSlugPullrequestsPidGetResponse = (pullrequest | LaminarResponse<pullrequest>);
+export type 20RepositoriesUsernameSlugPullrequestsPidGetResponse = (pullrequest | LaminarResponse<pullrequest> | Promise<pullrequest> | Promise<LaminarResponse<pullrequest>>);
 
 export interface 20RepositoriesUsernameSlugPullrequestsPidGetContext extends OapiContext {
     path: {
@@ -404,7 +404,7 @@ export interface Error {
     [key: string]: any;
 }
 
-export type PetsGetResponse = (Pets | LaminarResponse<Pets>) | (Error | LaminarResponse<Error>);
+export type PetsGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsGetContext extends OapiContext {
     query: {
@@ -412,12 +412,12 @@ export interface PetsGetContext extends OapiContext {
     };
 }
 
-export type PetsPostResponse = (Error | LaminarResponse<Error>);
+export type PetsPostResponse = (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsPostContext extends OapiContext {
 }
 
-export type PetsPetIdGetResponse = (Pets | LaminarResponse<Pets>) | (Error | LaminarResponse<Error>);
+export type PetsPetIdGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsPetIdGetContext extends OapiContext {
     path: {
@@ -477,7 +477,7 @@ export interface Error {
     [key: string]: any;
 }
 
-export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]>) | (Error | LaminarResponse<Error>);
+export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsGetContext extends OapiContext {
     query: {
@@ -486,13 +486,13 @@ export interface PetsGetContext extends OapiContext {
     };
 }
 
-export type PetsPostResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
+export type PetsPostResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsPostContext extends OapiContext {
     body: NewPet;
 }
 
-export type PetsIdGetResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
+export type PetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsIdGetContext extends OapiContext {
     path: {
@@ -500,7 +500,7 @@ export interface PetsIdGetContext extends OapiContext {
     };
 }
 
-export type PetsIdDeleteResponse = (Error | LaminarResponse<Error>);
+export type PetsIdDeleteResponse = (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsIdDeleteContext extends OapiContext {
     path: {
@@ -558,12 +558,12 @@ export interface dataSetList {
     [key: string]: any;
 }
 
-export type GetResponse = (dataSetList | LaminarResponse<dataSetList>);
+export type GetResponse = (dataSetList | LaminarResponse<dataSetList> | Promise<dataSetList> | Promise<LaminarResponse<dataSetList>>);
 
 export interface GetContext extends OapiContext {
 }
 
-export type DatasetVersionFieldsGetResponse = (string | LaminarResponse<string>) | LaminarResponse<string>;
+export type DatasetVersionFieldsGetResponse = (string | LaminarResponse<string> | Promise<string> | Promise<LaminarResponse<string>>) | LaminarResponse<string>;
 
 export interface DatasetVersionFieldsGetContext extends OapiContext {
     path: {
@@ -572,7 +572,7 @@ export interface DatasetVersionFieldsGetContext extends OapiContext {
     };
 }
 
-export type DatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]>);
+export type DatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]> | Promise<any[]> | Promise<LaminarResponse<any[]>>);
 
 export interface DatasetVersionRecordsPostContext extends OapiContext {
     path: {

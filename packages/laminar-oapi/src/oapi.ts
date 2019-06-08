@@ -158,7 +158,7 @@ export const oapi = async <C extends Addition = {}>({
       security,
     );
 
-    const result = resolver({ ...context, authInfo });
+    const result = await resolver({ ...context, authInfo });
     const laminarResponse = isResponse(result) ? result : response({ body: result });
     const checkResponse = validateCompiled(
       { schema: schema.response, refs: compiled.refs },

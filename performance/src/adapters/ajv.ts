@@ -1,6 +1,6 @@
 import * as Ajv from 'ajv';
 import fetch from 'node-fetch';
-import { Adapter } from '..';
+import { Adapter } from '../json-schema';
 
 const ajv = new Ajv({
   loadSchema: async uri => {

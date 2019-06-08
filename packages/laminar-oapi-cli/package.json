@@ -34,6 +34,7 @@
   "scripts": {
     "laminar-oapi": "ts-node src/cli.ts",
     "build": "tsc --outDir dist --declaration",
+    "test:build": "laminar-oapi convert test/integration.yaml -o test/__generated__/integration.ts",
     "test": "jest test --runInBand",
     "lint-prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint-tslint": "tslint --config tslint.json '{src,test}/**/*.ts'",

@@ -53,7 +53,7 @@ describe('Integration', () => {
         '/pets': {
           get: ({ logger }) => {
             logger('Get all');
-            return db;
+            return Promise.resolve(db);
           },
           post: ({ body, authInfo, logger }: LoggerContext & OapiContext & { body: NewPet }) => {
             const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };

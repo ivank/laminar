@@ -53,7 +53,7 @@ export interface Error {
     [key: string]: any;
 }
 
-export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]>) | (Error | LaminarResponse<Error>);
+export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsGetContext extends OapiContext {
     query: {
@@ -68,13 +68,13 @@ export interface PetCreated {
     [key: string]: any;
 }
 
-export type PetsPostResponse = (PetCreated | LaminarResponse<PetCreated>) | (Error | LaminarResponse<Error>);
+export type PetsPostResponse = (PetCreated | LaminarResponse<PetCreated> | Promise<PetCreated> | Promise<LaminarResponse<PetCreated>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsPostContext extends OapiContext {
     body: NewPet;
 }
 
-export type PetsIdGetResponse = (Pet | LaminarResponse<Pet>) | (Error | LaminarResponse<Error>);
+export type PetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsIdGetContext extends OapiContext {
     path: {
@@ -82,7 +82,7 @@ export interface PetsIdGetContext extends OapiContext {
     };
 }
 
-export type PetsIdDeleteResponse = (Error | LaminarResponse<Error>);
+export type PetsIdDeleteResponse = (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
 export interface PetsIdDeleteContext extends OapiContext {
     path: {

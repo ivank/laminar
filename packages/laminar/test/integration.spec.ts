@@ -64,7 +64,7 @@ describe('Integration', () => {
               logger(`Getting id ${path.id}`);
 
               if (users[path.id]) {
-                return { id: path.id, name: users[path.id] };
+                return Promise.resolve({ id: path.id, name: users[path.id] });
               } else {
                 throw new HttpError(404, { message: 'No User Found' });
               }

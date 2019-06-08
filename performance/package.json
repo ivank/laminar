@@ -17,7 +17,6 @@
   "devDependencies": {
     "@ovotech/json-schema": "^0.2.0",
     "@types/benchmark": "^1.0.31",
-    "ajv": "^6.10.0",
     "benchmark": "^2.1.4",
     "node-fetch": "^2.6.0",
     "ts-node": "^8.2.0"
