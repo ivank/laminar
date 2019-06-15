@@ -1,4 +1,11 @@
-import { HasError, isJsonSchema, NoErrors, validateSchema } from '../helpers';
+import {
+  childOptions,
+  flatten,
+  HasError,
+  isJsonSchema,
+  NoErrors,
+  validateSchema,
+} from '../helpers';
 import { Schema, ValidateOptions, Validator } from '../types';
 
 const findSchema = (schemas: Schema[], name: string, value: any, options: ValidateOptions) =>
@@ -28,11 +35,13 @@ export const validateOneOf: Validator = (schema, value, options) => {
       }
     }
 
-    const validations = oneOf.map(item => validateSchema(item, value, options));
+    const validations = oneOf.map((item, index) =>
+      validateSchema(item, value, childOptions(`${index}?`, options)),
+    );
     const matching = validations.filter(item => item.length === 0);
 
     if (matching.length !== 1) {
-      return HasError('oneOf', options.name, { matching: matching.length, errors: validations });
+      return [...HasError('oneOf', options.name, matching.length), ...flatten(validations)];
     }
   }
   return NoErrors;

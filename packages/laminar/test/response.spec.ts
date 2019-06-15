@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createServer, Server } from 'http';
 import { join } from 'path';
-import { ReadableMock } from 'stream-mock';
+import { ObjectReadableMock } from 'stream-mock';
 import { file, laminar, message, response } from '../src';
 
 let server: Server;
@@ -52,7 +52,9 @@ describe('Requests', () => {
   });
 
   it('Should process stream', async () => {
-    server = createServer(laminar(() => new ReadableMock(['test-', 'test-', 'maaaany-', 'test'])));
+    server = createServer(
+      laminar(() => new ObjectReadableMock(['test-', 'test-', 'maaaany-', 'test'])),
+    );
     await new Promise(resolve => server.listen(8091, resolve));
 
     await expect(api.get('/test')).resolves.toMatchObject({
@@ -115,13 +117,31 @@ describe('Requests', () => {
     );
   });
 
-  it('Should process laminar file', async () => {
+  it('Should process laminar text file', async () => {
     server = createServer(laminar(() => file(join(__dirname, 'test.txt'))));
     await new Promise(resolve => server.listen(8091, resolve));
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 200,
+      headers: expect.objectContaining({
+        'content-length': '11',
+        'content-type': 'text/plain',
+      }),
       data: 'some stuff\n',
+    });
+  });
+
+  it('Should process laminar html file', async () => {
+    server = createServer(laminar(() => file(join(__dirname, 'test.html'))));
+    await new Promise(resolve => server.listen(8091, resolve));
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      status: 200,
+      headers: expect.objectContaining({
+        'content-length': '14',
+        'content-type': 'text/html',
+      }),
+      data: '<html></html>\n',
     });
   });
 

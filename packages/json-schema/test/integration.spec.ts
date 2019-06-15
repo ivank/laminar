@@ -115,6 +115,34 @@ describe('Helper isEqual', () => {
     expect(result.errors).toEqual(['[value.size] should be a [integer]']);
   });
 
+  it('Should display errors for oneOf', async () => {
+    const schema: Schema = {
+      oneOf: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'object',
+          properties: {
+            type: {
+              const: 'cat',
+            },
+            size: {
+              type: 'integer',
+            },
+          },
+        },
+      ],
+    };
+
+    const result = await validate(schema, 123);
+    expect(result.errors).toEqual([
+      '[value] should match only 1 schema, matching 0',
+      '[value.0?] should be a [string]',
+      '[value.1?] should be a [object]',
+    ]);
+  });
+
   it('Should protect multipleOf', async () => {
     const schema: Schema = { multipleOf: 2 };
 

@@ -12,12 +12,12 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
-    "@types/nock": "^9.3.1",
-    "@types/node": "^11.13.4",
+    "@types/nock": "^10.0.3",
+    "@types/node": "^12.0.7",
     "axios": "^0.19.0",
     "jest": "^24.8.0",
     "nock": "^10.0.6",
-    "prettier": "^1.17.1",
+    "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.2.0",
     "tslint": "^5.17.0",
@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@ovotech/json-refs": "^0.2.0",
+    "@ovotech/json-schema": "^0.2.0",
+    "oas-schemas": "https://github.com/OAI/OpenAPI-Specification.git",
     "@ovotech/ts-compose": "^0.2.0",
     "js-yaml": "^3.13.1",
     "openapi3-ts": "^1.3.0",
@@ -34,7 +36,7 @@
   "scripts": {
     "laminar-oapi": "ts-node src/cli.ts",
     "build": "tsc --outDir dist --declaration",
-    "test:build": "laminar-oapi convert test/integration.yaml -o test/__generated__/integration.ts",
+    "test:build": "laminar-oapi convert test/integration.yaml test/__generated__/integration.ts",
     "test": "jest test --runInBand",
     "lint-prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint-tslint": "tslint --config tslint.json '{src,test}/**/*.ts'",

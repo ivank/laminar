@@ -1,5 +1,6 @@
 import * as cookie from 'cookie';
 import { createReadStream, statSync } from 'fs';
+import { lookup } from 'mime-types';
 import { Readable } from 'stream';
 import { Laminar, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
 
@@ -62,6 +63,7 @@ export const file = (filename: string, partial?: Partial<LaminarResponse>) =>
   response({
     body: createReadStream(filename),
     headers: {
+      'content-type': lookup(filename) || 'text/plain',
       'content-length': statSync(filename).size,
       ...(partial ? partial.headers : undefined),
     },

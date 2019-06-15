@@ -235,6 +235,13 @@ describe('Invalid Schema', () => {
       message: 'Invalid API Definition',
       errors: [
         '[value.paths./pets.get.parameters.0] should match only 1 schema, matching 0',
+        '[value.paths./pets.get.parameters.0.0?] should match only 1 schema, matching 0',
+        '[value.paths./pets.get.parameters.0.0?.0?.in] should be one of [path]',
+        '[value.paths./pets.get.parameters.0.0?.0?.required] should be one of [true]',
+        '[value.paths./pets.get.parameters.0.0?.1?.in] should be one of [query]',
+        '[value.paths./pets.get.parameters.0.0?.2?.in] should be one of [header]',
+        '[value.paths./pets.get.parameters.0.0?.3?.in] should be one of [cookie]',
+        '[value.paths./pets.get.parameters.0.1?] is missing [$ref] keys',
         '[value.paths./pets.get.responses] has unknown keys [wrong status]',
       ],
     });
