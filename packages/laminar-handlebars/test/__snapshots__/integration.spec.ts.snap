@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Should process response 1`] = `
+Object {
+  "config": Anything,
+  "data": "<html>
+  <body>
+    <span>Index</span>
+  </body>
+</html>
+",
+  "headers": Object {
+    "connection": "close",
+    "content-length": "57",
+    "content-type": "text/html",
+    "date": Anything,
+  },
+  "request": Anything,
+  "status": 200,
+  "statusText": "OK",
+}
+`;
+
+exports[`Integration Should process response 2`] = `
+Object {
+  "config": Anything,
+  "data": "<html>
+  <body>
+    <span>name: JOHN SMITH</span>
+    <span><span>has test John Smith</span>
+    </span>
+  </body>
+</html>
+",
+  "headers": Object {
+    "connection": "close",
+    "content-length": "123",
+    "content-type": "text/html",
+    "date": Anything,
+  },
+  "request": Anything,
+  "status": 201,
+  "statusText": "Created",
+}
+`;

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Laminar Handlebars Test compileTemplates 1`] = `
+"<ul>
+  <li>0: one</li>
+  <li>1: two</li>
+</ul>
+"
+`;
+
+exports[`Laminar Handlebars Test compileTemplates 2`] = `
+"<span>example</span>
+"
+`;
+
+exports[`Laminar Handlebars Test compileTemplates 3`] = `
+"<span>has test true</span>
+"
+`;
+
+exports[`Laminar Handlebars Test compileTemplates 4`] = `
+"<div class=\\"entry\\">WARNING</div>
+"
+`;
