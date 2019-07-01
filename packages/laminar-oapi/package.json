@@ -22,7 +22,11 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.1"
   },
+  "bin": {
+    "laminar-oapi": "./scripts/laminar-oapi"
+  },
   "scripts": {
+    "test:build": "laminar-oapi test/integration.yaml test/__generated__/integration.ts",
     "build": "tsc --outDir dist --declaration",
     "test": "jest test --runInBand",
     "lint-prettier": "prettier --list-different {src,test}/**/*.ts",

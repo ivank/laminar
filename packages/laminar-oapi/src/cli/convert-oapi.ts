@@ -1,4 +1,11 @@
-import { Type } from '@ovotech/ts-compose';
+import {
+  document,
+  Document,
+  mapWithContext,
+  Type,
+  withIdentifier,
+  withImports,
+} from '@ovotech/ts-compose';
 import {
   OpenAPIObject,
   ParameterObject,
@@ -10,15 +17,7 @@ import {
 } from 'openapi3-ts';
 import * as ts from 'typescript';
 import { convertSchema } from './convert-schema';
-import {
-  AstContext,
-  mapContext,
-  result,
-  Result,
-  withEntry,
-  withImports,
-  withRef,
-} from './traverse';
+import { AstContext, withRef } from './traverse';
 
 interface AstParameters {
   in: {
@@ -34,6 +33,7 @@ const title = (str: string) => str.replace(/^./, first => first.toUpperCase());
 const cleanIdentifierName = (str: string) => str.replace(/[^0-9a-zA-Z_$]+/g, '');
 
 const pathToIdentifier = (path: string) =>
+  'T' +
   path
     .split('/')
     .map(cleanIdentifierName)
@@ -60,7 +60,7 @@ const convertParameters = (
       const param = withRef(paramOrRef, node.context);
       const paramNode = param.schema
         ? convertSchema(node.context, param.schema)
-        : result(node.context, Type.Any);
+        : document(node.context, Type.Any);
       const params = node.in[toParamLocation(param.in)] || [];
       return {
         context: paramNode.context,
@@ -102,35 +102,43 @@ const convertResponse = (context: AstContext, key: string, response: ResponseObj
             Type.Ref('Promise', [node.type]),
             Type.Ref('Promise', [Type.Ref('LaminarResponse', [node.type])]),
           ])
-        : Type.Ref('LaminarResponse', [node.type]);
+        : Type.Union([
+            Type.Ref('LaminarResponse', [node.type]),
+            Type.Ref('Promise', [Type.Ref('LaminarResponse', [node.type])]),
+          ]);
 
-    return result(withImports(node.context, '@ovotech/laminar', ['LaminarResponse']), nodeType);
+    return document(withImports(node.context, '@ovotech/laminar', ['LaminarResponse']), nodeType);
   } else {
-    return null;
+    const nodeType = Type.Union([
+      Type.Ref('LaminarResponse'),
+      Type.Ref('Promise', [Type.Ref('LaminarResponse')]),
+    ]);
+
+    return document(withImports(context, '@ovotech/laminar', ['LaminarResponse']), nodeType);
   }
 };
 
 const convertResponses = (context: AstContext, name: string, responses: ResponsesObject) => {
   const responseEntries = Object.entries<ResponseObject | ReferenceObject>(responses);
 
-  const params = responseEntries.reduce<Result<ts.UnionTypeNode>>(
+  const params = responseEntries.reduce<Document<ts.UnionTypeNode, AstContext>>(
     (responseNode, [key, responseOrRef]) => {
       const response = withRef(responseOrRef, responseNode.context);
       const node = convertResponse(responseNode.context, key, response);
 
       return node
-        ? result(node.context, Type.Union(responseNode.type.types.concat([node.type])))
+        ? document(node.context, Type.Union(responseNode.type.types.concat([node.type])))
         : responseNode;
     },
-    result(context, Type.Union([])),
+    document(context, Type.Union([])),
   );
 
   return params.type.types.length
-    ? result(
-        withEntry(params.context, Type.Alias({ name, type: params.type, isExport: true })),
+    ? document(
+        withIdentifier(params.context, Type.Alias({ name, type: params.type, isExport: true })),
         Type.Ref(name),
       )
-    : result(
+    : document(
         withImports(context, '@ovotech/laminar', ['ResolverResponse']),
         Type.Ref('ResolverResponse'),
       );
@@ -144,8 +152,8 @@ const convertRequestBody = (
   const schema = requestBody.content['application/json']
     ? requestBody.content['application/json'].schema
     : {};
-  const node = schema ? convertSchema(context, schema) : result(context, Type.Any);
-  return result(
+  const node = schema ? convertSchema(context, schema) : document(context, Type.Any);
+  return document(
     node.context,
     Type.TypeLiteral({
       props: [Type.Prop({ name: 'body', type: node.type, isOptional: !requestBody.required })],
@@ -154,23 +162,23 @@ const convertRequestBody = (
 };
 
 export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
-  const paths = mapContext(
+  const paths = mapWithContext(
     context,
     Object.entries<PathItemObject>(api.paths),
     (pathContext, [path, pathApiOrRef]) => {
       const pathApi = withRef(pathApiOrRef, context);
 
-      const methods = mapContext(
+      const methods = mapWithContext(
         pathContext,
         Object.entries(pathApi),
         (methodContext, [method, operation]) => {
           const astParams = operation.parameters
             ? convertParameters(methodContext, operation.parameters)
-            : result(methodContext, Type.TypeLiteral());
+            : document(methodContext, Type.TypeLiteral());
 
           const astRequestBody = operation.requestBody
             ? convertRequestBody(astParams.context, operation.requestBody)
-            : result(methodContext, Type.TypeLiteral());
+            : document(methodContext, Type.TypeLiteral());
 
           const identifier = pathToIdentifier(path) + title(method);
           const contextIdentifier = identifier + 'Context';
@@ -204,11 +212,11 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
             jsDoc: operation.description,
           });
 
-          return result(withEntry(responseAst.context, contextInterface), methodSignature);
+          return document(withIdentifier(responseAst.context, contextInterface), methodSignature);
         },
       );
 
-      return result(
+      return document(
         methods.context,
         Type.Prop({
           name: Type.LiteralString(path),
@@ -218,7 +226,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
     },
   );
 
-  return result(
+  return document(
     withImports(paths.context, '@ovotech/laminar-oapi', [
       'OapiContext',
       'OapiConfig',

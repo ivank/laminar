@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'fs';
 import nock = require('nock');
 import { SchemaObject } from 'openapi3-ts';
 import { join } from 'path';
-import { schemaTs } from '../src';
+import { schemaTs } from '../../src';
 
 interface Test {
   description: string;
@@ -16,8 +16,8 @@ interface Suite {
   tests: Test[];
 }
 
-const testSuiteFolder = join(__dirname, '../../../external/JSON-Schema-Test-Suite');
-const draftsFolder = join(__dirname, '../../../external/json-schema-drafts');
+const testSuiteFolder = join(__dirname, '../../../../external/JSON-Schema-Test-Suite');
+const draftsFolder = join(__dirname, '../../../../external/json-schema-drafts');
 
 nock('http://localhost:1234')
   .persist()

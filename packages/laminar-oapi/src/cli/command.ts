@@ -1,18 +1,11 @@
 import { Schema, validate } from '@ovotech/json-schema';
+import { Command } from 'commander';
 import { readFileSync, watchFile, writeFileSync } from 'fs';
 import { safeLoad } from 'js-yaml';
 import * as OpenApiSchema from 'oas-schemas/schemas/v3.0/schema.json';
 import { OpenAPIObject } from 'openapi3-ts';
-import * as yargs from 'yargs';
 import { oapiTs } from './convert';
 import { OapiValidationError } from './OapiValidationError';
-
-interface ConvertOapiTags {
-  outputFile: string;
-  inputFile: string;
-  watch?: boolean;
-  w?: boolean;
-}
 
 export const isYaml = (fileName: string) => fileName.endsWith('.yaml') || fileName.endsWith('.yml');
 
@@ -28,22 +21,24 @@ export const processFile = async (fileName: string) => {
   return await oapiTs(api);
 };
 
-export const convertOapiCommand: yargs.CommandModule<{}, ConvertOapiTags> = {
-  command: 'convert <input-file> <output-file>',
-  builder: {
-    watch: {
-      alias: 'w',
-      description: 'Watch for file changes and update live',
-      type: 'boolean',
-      default: false,
-    },
-  },
-  describe: 'Convert avsc to typescript files',
-  handler: async ({ inputFile, outputFile, watch }) => {
-    writeFileSync(outputFile, await processFile(inputFile));
-    process.stdout.write(`Conterted ${inputFile} -> ${outputFile}\n`);
+new Command()
+  .description('Convert openapi schemas to typescript types')
+  .option('-w, --watch', 'Watch for file changes and update live')
+  .arguments('<input-file> <output-file>')
+  .action(async (inputFile, outputFile, { watch }) => {
+    try {
+      writeFileSync(outputFile, await processFile(inputFile));
+      process.stdout.write(`Conterted ${inputFile} -> ${outputFile}\n`);
+    } catch (error) {
+      if (error instanceof OapiValidationError) {
+        process.stderr.write(`-----\n${error.toString()}`);
+      } else {
+        throw error;
+      }
+    }
 
     if (watch) {
+      process.stdout.write(`Watching ${inputFile} for changes\n`);
       watchFile(inputFile, async stats => {
         try {
           writeFileSync(outputFile!, await processFile(inputFile));
@@ -59,19 +54,5 @@ export const convertOapiCommand: yargs.CommandModule<{}, ConvertOapiTags> = {
         }
       });
     }
-  },
-};
-
-export const argv = yargs
-  .command(convertOapiCommand)
-  .epilog('copyright OVO Energy 2019')
-  .demandCommand()
-  .fail((msg, err) => {
-    if (err instanceof OapiValidationError) {
-      process.stderr.write(err.toString());
-    } else {
-      process.stderr.write(`Error: ${msg || err.message}\n`);
-    }
-    process.exit(1);
   })
-  .help().argv;
+  .parse(process.argv);

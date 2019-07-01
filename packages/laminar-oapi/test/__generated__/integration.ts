@@ -12,21 +12,21 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
              * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
              *
              */
-            get: (context: PetsGetContext & C) => PetsGetResponse;
+            get: (context: TPetsGetContext & C) => TPetsGetResponse;
             /**
              * Creates a new pet in the store.  Duplicates are allowed
              */
-            post: (context: PetsPostContext & C) => PetsPostResponse;
+            post: (context: TPetsPostContext & C) => TPetsPostResponse;
         };
         "/pets/{id}": {
             /**
              * Returns a user based on a single ID, if the user does not have access to the pet
              */
-            get: (context: PetsIdGetContext & C) => PetsIdGetResponse;
+            get: (context: TPetsIdGetContext & C) => TPetsIdGetResponse;
             /**
              * deletes a single pet based on the ID supplied
              */
-            delete: (context: PetsIdDeleteContext & C) => PetsIdDeleteResponse;
+            delete: (context: TPetsIdDeleteContext & C) => TPetsIdDeleteResponse;
         };
     };
     security: {
@@ -53,9 +53,9 @@ export interface Error {
     [key: string]: any;
 }
 
-export type PetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface PetsGetContext extends OapiContext {
+export interface TPetsGetContext extends OapiContext {
     query: {
         tags?: string[];
         limit?: number;
@@ -68,23 +68,23 @@ export interface PetCreated {
     [key: string]: any;
 }
 
-export type PetsPostResponse = (PetCreated | LaminarResponse<PetCreated> | Promise<PetCreated> | Promise<LaminarResponse<PetCreated>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsPostResponse = (PetCreated | LaminarResponse<PetCreated> | Promise<PetCreated> | Promise<LaminarResponse<PetCreated>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface PetsPostContext extends OapiContext {
+export interface TPetsPostContext extends OapiContext {
     body: NewPet;
 }
 
-export type PetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface PetsIdGetContext extends OapiContext {
+export interface TPetsIdGetContext extends OapiContext {
     path: {
         id: string;
     };
 }
 
-export type PetsIdDeleteResponse = (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface PetsIdDeleteContext extends OapiContext {
+export interface TPetsIdDeleteContext extends OapiContext {
     path: {
         id: string;
     };

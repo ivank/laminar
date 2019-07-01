@@ -1,0 +1,55 @@
+---
+openapi: 3.0.0
+info:
+  title: PDF Render api
+  version: 1.0.0
+servers:
+  - url: http://localhost:3300
+paths:
+  '/.well-known/docs':
+    get:
+      summary: HTML Docs
+      responses:
+        '200':
+          description: Index route with html docs
+          content:
+            text/html: {}
+
+  '/.well-known/openapi.yaml':
+    get:
+      summary: API
+      responses:
+        '200':
+          description: API Definition
+          content:
+            text/yaml: {}
+
+  '/html':
+    post:
+      requestBody:
+        description: The html content to render
+        required: true
+        content:
+          text/html: {}
+      summary: Generate PDF from html
+      responses:
+        'default': { $ref: '#/components/responses/HttpErrorResponse' }
+        '200':
+          description: PDF REsult
+          content:
+            application/pdf: {}
+
+components:
+  responses:
+    HttpErrorResponse:
+      description: Error Response
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/HttpError' }
+
+  schemas:
+    HttpError:
+      properties:
+        message:
+          type: string
+      additionalProperties: false

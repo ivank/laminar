@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Document Test print document with context 1`] = `
+"import { inspect, tmp } from \\"utils\\";
+
+interface Orange {
+    value: number;
+    other: test;
+}
+
+type test = string;"
+`;

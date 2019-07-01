@@ -1,16 +1,8 @@
 import { isRefSchema } from '@ovotech/json-refs';
-import { Type } from '@ovotech/ts-compose';
+import { document, Document, mapWithContext, Type, withIdentifier } from '@ovotech/ts-compose';
 import { SchemaObject } from 'openapi3-ts';
 import * as ts from 'typescript';
-import {
-  AstContext,
-  AstConvert,
-  isSchema,
-  mapContext,
-  result,
-  Result,
-  withEntry,
-} from './traverse';
+import { AstContext, AstConvert, isSchema } from './traverse';
 
 const nodeType = (type: string) => {
   switch (type) {
@@ -34,14 +26,14 @@ const nodeType = (type: string) => {
 
 const convertArrayType: AstConvert<ts.UnionTypeNode> = (context, schema) =>
   isSchema(schema) && Array.isArray(schema.type)
-    ? result(context, Type.Union(schema.type.map(nodeType)))
+    ? document(context, Type.Union(schema.type.map(nodeType)))
     : null;
 
 const convertBooleanSchema: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
-  typeof schema === 'boolean' ? result(context, schema === true ? Type.Any : Type.Void) : null;
+  typeof schema === 'boolean' ? document(context, schema === true ? Type.Any : Type.Void) : null;
 
 const convertBoolean: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
-  isSchema(schema) && schema.type === 'boolean' ? result(context, Type.Bool) : null;
+  isSchema(schema) && schema.type === 'boolean' ? document(context, Type.Bool) : null;
 
 const convertString: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
   isSchema(schema) &&
@@ -49,7 +41,7 @@ const convertString: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
     schema.pattern !== undefined ||
     schema.minLength !== undefined ||
     schema.maxLength !== undefined)
-    ? result(context, Type.Str)
+    ? document(context, Type.Str)
     : null;
 
 const convertNumber: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
@@ -60,35 +52,35 @@ const convertNumber: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
     schema.exclusiveMinimum !== undefined ||
     schema.maximum !== undefined ||
     schema.exclusiveMaximum !== undefined)
-    ? result(context, Type.Num)
+    ? document(context, Type.Num)
     : null;
 
 const convertEnum: AstConvert<ts.UnionTypeNode> = (context, schema) =>
   isSchema(schema) && schema.enum && Array.isArray(schema.enum)
-    ? result(context, Type.Union(schema.enum.map(Type.Literal)))
+    ? document(context, Type.Union(schema.enum.map(Type.Literal)))
     : null;
 
 const convertConst: AstConvert = (context, schema) =>
   isSchema(schema) && schema.const !== undefined
-    ? result(context, Type.Literal(schema.const))
+    ? document(context, Type.Literal(schema.const))
     : null;
 
 const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
   if (isSchema(schema) && isRefSchema(schema)) {
     const name = schema.$ref.split('/').reverse()[0];
-    if (context.registry[name]) {
-      return result(context, Type.Ref(name));
+    if (context.identifiers[name]) {
+      return document(context, Type.Ref(name));
     } else {
       const refered = context.refs[schema.$ref] || context.root;
       const node = refered
-        ? convertSchema(withEntry(context, Type.Alias({ name, type: Type.Any })), refered)
-        : result(context, Type.Any);
+        ? convertSchema(withIdentifier(context, Type.Alias({ name, type: Type.Any })), refered)
+        : document(context, Type.Any);
 
       const entry = ts.isTypeLiteralNode(node.type)
         ? Type.Interface({ name, props: [...node.type.members], isExport: true })
         : Type.Alias({ name, type: node.type, isExport: true });
 
-      return result(withEntry(node.context, entry), Type.Ref(entry.name));
+      return document(withIdentifier(node.context, entry), Type.Ref(entry.name));
     }
   } else {
     return null;
@@ -100,17 +92,17 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
     const additional = isSchema(schema.additionalProperties)
       ? convertSchema(context, schema.additionalProperties)
       : schema.additionalProperties !== false
-      ? result(context, Type.Any)
-      : result(context, Type.Void);
+      ? document(context, Type.Any)
+      : document(context, Type.Void);
 
-    const props = mapContext(
+    const props = mapWithContext(
       additional.context,
       Object.entries(schema.properties),
       (propContext, [name, value]) => {
         const item = convertSchema(propContext, value);
         const isOptional = !(Array.isArray(schema.required) && schema.required.includes(name));
 
-        return result(
+        return document(
           item.context,
           Type.Prop({
             name,
@@ -122,7 +114,7 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
       },
     );
 
-    return result(
+    return document(
       props.context,
       Type.TypeLiteral({
         props: props.items,
@@ -139,8 +131,8 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
 
 const convertOneOf: AstConvert<ts.UnionTypeNode> = (context, schema) => {
   if (isSchema(schema) && schema.oneOf && Array.isArray(schema.oneOf)) {
-    const schemas = mapContext(context, schema.oneOf, convertSchema);
-    return result(schemas.context, Type.Union(schemas.items));
+    const schemas = mapWithContext(context, schema.oneOf, convertSchema);
+    return document(schemas.context, Type.Union(schemas.items));
   } else {
     return null;
   }
@@ -148,8 +140,8 @@ const convertOneOf: AstConvert<ts.UnionTypeNode> = (context, schema) => {
 
 const convertAnyOf: AstConvert<ts.UnionTypeNode> = (context, schema) => {
   if (isSchema(schema) && schema.anyOf && Array.isArray(schema.anyOf)) {
-    const schemas = mapContext(context, schema.anyOf, convertSchema);
-    return result(schemas.context, Type.Union(schemas.items));
+    const schemas = mapWithContext(context, schema.anyOf, convertSchema);
+    return document(schemas.context, Type.Union(schemas.items));
   } else {
     return null;
   }
@@ -157,8 +149,8 @@ const convertAnyOf: AstConvert<ts.UnionTypeNode> = (context, schema) => {
 
 const convertAllOf: AstConvert<ts.IntersectionTypeNode> = (context, schema) => {
   if (isSchema(schema) && schema.allOf && Array.isArray(schema.allOf)) {
-    const schemas = mapContext(context, schema.allOf, convertSchema);
-    return result(schemas.context, Type.Intersection(schemas.items));
+    const schemas = mapWithContext(context, schema.allOf, convertSchema);
+    return document(schemas.context, Type.Intersection(schemas.items));
   } else {
     return null;
   }
@@ -168,19 +160,21 @@ const convertArray: AstConvert<ts.ArrayTypeNode | ts.TupleTypeNode> = (context, 
   if (isSchema(schema) && (schema.items || schema.maxItems || schema.minItems)) {
     if (schema.items && Array.isArray(schema.items)) {
       if (schema.additionalItems === false) {
-        const schemas = mapContext(context, schema.items, convertSchema);
-        return result(schemas.context, Type.Tuple(schemas.items));
+        const schemas = mapWithContext(context, schema.items, convertSchema);
+        return document(schemas.context, Type.Tuple(schemas.items));
       } else {
         const schemaItems = schema.items.concat(
           isSchema(schema.additionalItems) ? [schema.additionalItems] : [],
         );
-        const items = mapContext(context, schemaItems, convertSchema);
+        const items = mapWithContext(context, schemaItems, convertSchema);
 
-        return result(items.context, Type.Arr(Type.Union(items.items)));
+        return document(items.context, Type.Arr(Type.Union(items.items)));
       }
     } else {
-      const value = schema.items ? convertSchema(context, schema.items) : result(context, Type.Any);
-      return result(value.context, Type.Arr(value.type));
+      const value = schema.items
+        ? convertSchema(context, schema.items)
+        : document(context, Type.Any);
+      return document(value.context, Type.Arr(value.type));
     }
   } else {
     return null;
@@ -203,6 +197,8 @@ const converters: AstConvert[] = [
   convertConst,
 ];
 
-export const convertSchema = (context: AstContext, schema: SchemaObject): Result =>
-  converters.reduce<Result | null>((node, converter) => node || converter(context, schema), null) ||
-  result(context, Type.Any);
+export const convertSchema = (context: AstContext, schema: SchemaObject) =>
+  converters.reduce<Document<ts.TypeNode, AstContext> | null>(
+    (node, converter) => node || converter(context, schema),
+    null,
+  ) || document(context, Type.Any);

@@ -2858,6 +2858,420 @@ Object {
 }
 `;
 
+exports[`Loading and processing json schemas Test converter.json 1`] = `
+Object {
+  "resolvers": Object {
+    "properties": Object {
+      "paths": Object {
+        "properties": Object {
+          "/.well-known/docs": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/.well-known/openapi.yaml": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/html": Object {
+            "required": Array [
+              "post",
+            ],
+          },
+        },
+        "required": Array [
+          "/.well-known/docs",
+          "/.well-known/openapi.yaml",
+          "/html",
+        ],
+      },
+    },
+    "required": Array [
+      "paths",
+    ],
+  },
+  "routes": Object {
+    "/.well-known/docs": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/.well-known/openapi.yaml": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/yaml",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/html": Object {
+      "post": Object {
+        "context": Object {
+          "allOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "required": Array [
+                "body",
+              ],
+            },
+          ],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "application\\\\/pdf",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+            Object {
+              "properties": Object {
+                "status": true,
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+  },
+}
+`;
+
+exports[`Loading and processing json schemas Test converter.json 2`] = `
+Object {
+  "resolvers": Object {
+    "properties": Object {
+      "paths": Object {
+        "properties": Object {
+          "/.well-known/docs": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/.well-known/openapi.yaml": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/html": Object {
+            "required": Array [
+              "post",
+            ],
+          },
+        },
+        "required": Array [
+          "/.well-known/docs",
+          "/.well-known/openapi.yaml",
+          "/html",
+        ],
+      },
+    },
+    "required": Array [
+      "paths",
+    ],
+  },
+  "routes": Object {
+    "/.well-known/docs": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/.well-known/openapi.yaml": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/yaml",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/html": Object {
+      "post": Object {
+        "context": Object {
+          "allOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "required": Array [
+                "body",
+              ],
+            },
+          ],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "application\\\\/pdf",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+            Object {
+              "properties": Object {
+                "status": true,
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+  },
+}
+`;
+
 exports[`Loading and processing json schemas Test link-example.json 1`] = `
 Object {
   "resolvers": Object {
@@ -8758,6 +9172,420 @@ Object {
           ],
         },
         "security": Array [],
+      },
+    },
+  },
+}
+`;
+
+exports[`Loading and processing yaml schemas Test converter.yaml 1`] = `
+Object {
+  "resolvers": Object {
+    "properties": Object {
+      "paths": Object {
+        "properties": Object {
+          "/.well-known/docs": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/.well-known/openapi.yaml": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/html": Object {
+            "required": Array [
+              "post",
+            ],
+          },
+        },
+        "required": Array [
+          "/.well-known/docs",
+          "/.well-known/openapi.yaml",
+          "/html",
+        ],
+      },
+    },
+    "required": Array [
+      "paths",
+    ],
+  },
+  "routes": Object {
+    "/.well-known/docs": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/.well-known/openapi.yaml": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/yaml",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/html": Object {
+      "post": Object {
+        "context": Object {
+          "allOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "required": Array [
+                "body",
+              ],
+            },
+          ],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "application\\\\/pdf",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+            Object {
+              "properties": Object {
+                "status": true,
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+  },
+}
+`;
+
+exports[`Loading and processing yaml schemas Test converter.yaml 2`] = `
+Object {
+  "resolvers": Object {
+    "properties": Object {
+      "paths": Object {
+        "properties": Object {
+          "/.well-known/docs": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/.well-known/openapi.yaml": Object {
+            "required": Array [
+              "get",
+            ],
+          },
+          "/html": Object {
+            "required": Array [
+              "post",
+            ],
+          },
+        },
+        "required": Array [
+          "/.well-known/docs",
+          "/.well-known/openapi.yaml",
+          "/html",
+        ],
+      },
+    },
+    "required": Array [
+      "paths",
+    ],
+  },
+  "routes": Object {
+    "/.well-known/docs": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/.well-known/openapi.yaml": Object {
+      "get": Object {
+        "context": Object {
+          "allOf": Array [],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/yaml",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
+      },
+    },
+    "/html": Object {
+      "post": Object {
+        "context": Object {
+          "allOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "text\\\\/html",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "required": Array [
+                "body",
+              ],
+            },
+          ],
+        },
+        "response": Object {
+          "discriminator": Object {
+            "propertyName": "status",
+          },
+          "oneOf": Array [
+            Object {
+              "discriminator": Object {
+                "propertyName": "headers",
+              },
+              "oneOf": Array [
+                Object {
+                  "properties": Object {
+                    "body": undefined,
+                    "headers": Object {
+                      "properties": Object {
+                        "content-type": Object {
+                          "pattern": "application\\\\/pdf",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "content-type",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+              ],
+              "properties": Object {
+                "status": Object {
+                  "const": 200,
+                },
+              },
+              "type": "object",
+            },
+            Object {
+              "properties": Object {
+                "status": true,
+              },
+              "type": "object",
+            },
+          ],
+        },
+        "security": undefined,
       },
     },
   },
