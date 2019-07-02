@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Server } from 'http';
-import { cors, laminar } from '../../src';
+import { laminar, withCors } from '../../src';
 
 let server: Server;
 
@@ -14,7 +14,7 @@ describe('Cors middleware', () => {
   });
 
   it('Should allow all by default', async () => {
-    server = await laminar({ port: 8095, resolver: () => cors()(app) });
+    server = await laminar({ port: 8095, app: withCors()(app) });
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 200,
@@ -37,7 +37,7 @@ describe('Cors middleware', () => {
   it('Should be able to change allowed methods', async () => {
     server = await laminar({
       port: 8095,
-      resolver: () => cors({ allowMethods: ['GET', 'POST', 'DELETE'] })(app),
+      app: withCors({ allowMethods: ['GET', 'POST', 'DELETE'] })(app),
     });
 
     await expect(api.get('/test')).resolves.toMatchObject({
@@ -61,7 +61,7 @@ describe('Cors middleware', () => {
   it('Should be able to change allowed credentials', async () => {
     server = await laminar({
       port: 8095,
-      resolver: () => cors({ allowCredentials: true })(app),
+      app: withCors({ allowCredentials: true })(app),
     });
 
     await expect(api.get('/test')).resolves.toMatchObject({
@@ -85,7 +85,7 @@ describe('Cors middleware', () => {
   });
 
   it('Should be able to set max age', async () => {
-    server = await laminar({ port: 8095, resolver: () => cors({ maxAge: 1200 })(app) });
+    server = await laminar({ port: 8095, app: withCors({ maxAge: 1200 })(app) });
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 200,
@@ -110,7 +110,7 @@ describe('Cors middleware', () => {
     server = await laminar({
       port: 8095,
 
-      resolver: () => cors({ exposeHeaders: ['Authentication', 'Content-Type'] })(app),
+      app: withCors({ exposeHeaders: ['Authentication', 'Content-Type'] })(app),
     });
 
     await expect(api.get('/test')).resolves.toMatchObject({
@@ -136,7 +136,7 @@ describe('Cors middleware', () => {
   it('Should be able to set allowed headers directly', async () => {
     server = await laminar({
       port: 8095,
-      resolver: () => cors({ allowHeaders: ['Authentication', 'Content-Type'] })(app),
+      app: withCors({ allowHeaders: ['Authentication', 'Content-Type'] })(app),
     });
 
     await expect(api.request({ url: '/test', method: 'OPTIONS' })).resolves.toMatchObject({
@@ -151,7 +151,7 @@ describe('Cors middleware', () => {
   });
 
   it('Should be able to infer allowed headers from request headers', async () => {
-    server = await laminar({ port: 8095, resolver: () => cors()(app) });
+    server = await laminar({ port: 8095, app: withCors()(app) });
 
     await expect(
       api.request({
@@ -173,7 +173,7 @@ describe('Cors middleware', () => {
   it('Should be able to set origin as string', async () => {
     server = await laminar({
       port: 8095,
-      resolver: () => cors({ allowOrigin: '127.0.0.1' })(app),
+      app: withCors({ allowOrigin: '127.0.0.1' })(app),
     });
 
     await expect(api.get('/test', { headers: { origin: '127.0.0.1' } })).resolves.toMatchObject({
@@ -188,7 +188,7 @@ describe('Cors middleware', () => {
   it('Should be able to set origin as array', async () => {
     server = await laminar({
       port: 8095,
-      resolver: () => cors({ allowOrigin: ['127.0.0.1', '127.0.0.2'] })(app),
+      app: withCors({ allowOrigin: ['127.0.0.1', '127.0.0.2'] })(app),
     });
 
     await expect(api.get('/test', { headers: { origin: '127.0.0.1' } })).resolves.toMatchObject({
@@ -229,7 +229,7 @@ describe('Cors middleware', () => {
   it('Should be able to set origin as regex', async () => {
     server = await laminar({
       port: 8095,
-      resolver: () => cors({ allowOrigin: /127\.0\.0\.\d/ })(app),
+      app: withCors({ allowOrigin: /127\.0\.0\.\d/ })(app),
     });
 
     await expect(api.get('/test', { headers: { origin: '127.0.0.1' } })).resolves.toMatchObject({
@@ -260,7 +260,7 @@ describe('Cors middleware', () => {
   it('Should be able to set origin as function', async () => {
     server = await laminar({
       port: 8095,
-      resolver: () => cors({ allowOrigin: origin => origin === '127.0.0.3' })(app),
+      app: withCors({ allowOrigin: origin => origin === '127.0.0.3' })(app),
     });
 
     await expect(api.get('/test', { headers: { origin: '127.0.0.3' } })).resolves.toMatchObject({

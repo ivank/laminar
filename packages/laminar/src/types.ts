@@ -6,7 +6,7 @@ import { UrlWithParsedQuery } from 'url';
 export const Laminar = '_isLaminar';
 
 export interface LaminarOptions {
-  resolver: () => Promise<Resolver<Context>> | Resolver<Context>;
+  app: Promise<Resolver<Context>> | Resolver<Context>;
   port?: number;
   hostname?: string;
   http?: ServerOptions;

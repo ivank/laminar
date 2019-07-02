@@ -4,7 +4,7 @@ export interface ResponseTimeConfig {
   header?: string;
 }
 
-export const responseTime = ({ header }: ResponseTimeConfig = {}): Middleware => resolver => {
+export const withResponseTime = ({ header }: ResponseTimeConfig = {}): Middleware => resolver => {
   const startAt = process.hrtime();
   const headerName = header || 'X-Response-Time';
 

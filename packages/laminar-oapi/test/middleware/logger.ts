@@ -5,5 +5,5 @@ export interface LoggerContext {
   logger: LoggerFunc;
 }
 
-export const withLogger = (func: LoggerFunc): Middleware<LoggerContext> => resolver => ctx =>
-  resolver({ ...ctx, logger: func });
+export const withLogger = (func: LoggerFunc): Middleware<LoggerContext> => resolver => async ctx =>
+  await resolver({ ...ctx, logger: func });

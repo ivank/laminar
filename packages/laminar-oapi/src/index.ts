@@ -1,6 +1,6 @@
 export { loadJson, loadJsonFile, loadYaml, loadYamlFile } from './load';
 export {
-  oapi,
+  withOapi,
   OapiConfig,
   OapiPaths,
   OapiSecurityResolver,

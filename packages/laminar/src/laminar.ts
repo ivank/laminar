@@ -39,13 +39,12 @@ export const laminarRequestListener = (resolver: Resolver<Context>): RequestList
 };
 
 export const laminar = async ({
-  resolver,
+  app,
   port = 3300,
   hostname = 'localhost',
   http = {},
 }: LaminarOptions) => {
-  const app = await resolver();
-  const server = createServer(http, laminarRequestListener(app));
+  const server = createServer(http, laminarRequestListener(await app));
   await new Promise(resolve => server.listen(port, hostname, resolve));
   return server;
 };

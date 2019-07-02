@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { Server } from 'http';
-import { laminar, responseTime } from '../../src';
+import { laminar, withResponseTime } from '../../src';
 
 let server: Server;
 
 const api = axios.create({ baseURL: 'http://localhost:8096' });
 
-describe('responseTime middleware', () => {
+describe('withResponseTime middleware', () => {
   afterEach(async () => {
     await new Promise(resolve => server.close(resolve));
   });
@@ -14,11 +14,10 @@ describe('responseTime middleware', () => {
   it('Should measure small response time', async () => {
     server = await laminar({
       port: 8096,
-      resolver: () =>
-        responseTime()(async () => {
-          await new Promise(resolve => setTimeout(resolve, 15));
-          return 'OK';
-        }),
+      app: withResponseTime()(async () => {
+        await new Promise(resolve => setTimeout(resolve, 15));
+        return 'OK';
+      }),
     });
 
     const result = await api.get('/test');
@@ -30,11 +29,10 @@ describe('responseTime middleware', () => {
   it('Should measure larger response time', async () => {
     server = await laminar({
       port: 8096,
-      resolver: () =>
-        responseTime()(async () => {
-          await new Promise(resolve => setTimeout(resolve, 55));
-          return 'OK';
-        }),
+      app: withResponseTime()(async () => {
+        await new Promise(resolve => setTimeout(resolve, 55));
+        return 'OK';
+      }),
     });
 
     const result = await api.get('/test');
@@ -47,7 +45,7 @@ describe('responseTime middleware', () => {
   it('Should use custom header', async () => {
     server = await laminar({
       port: 8096,
-      resolver: () => responseTime({ header: 'My-Time' })(async () => 'OK'),
+      app: withResponseTime({ header: 'My-Time' })(async () => 'OK'),
     });
 
     const result = await api.get('/test');

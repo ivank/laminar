@@ -9,8 +9,9 @@ export {
   toResponse,
   extendResponse,
 } from './response';
-export { cors, CorsConfig } from './middleware/cors';
-export { responseTime, ResponseTimeConfig } from './middleware/responseTime';
+export { withCors, CorsConfig } from './middleware/cors';
+export { withResponseTime, ResponseTimeConfig } from './middleware/responseTime';
+export { withLogger, Logger, LoggerContext } from './middleware/logger';
 export { HttpError } from './HttpError';
 export { selectRoute, toRoute, router, get, post, patch, del, options, put } from './router';
 export {

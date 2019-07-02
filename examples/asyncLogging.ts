@@ -1,7 +1,5 @@
-import { Context, laminar, Middleware } from '@ovotech/laminar';
-import { oapi } from '@ovotech/laminar-oapi';
-import { createServer } from 'http';
-import { join } from 'path';
+import { laminar, Middleware } from '@ovotech/laminar';
+import { loadYamlFile, withOapi } from '@ovotech/laminar-oapi';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
@@ -20,9 +18,9 @@ const withLogging: Middleware<Logger> = resolver => {
 };
 
 const start = async () => {
-  const app = withLogging<Context>(
-    await oapi({
-      yamlFile: join(__dirname, 'simple.yaml'),
+  try {
+    const app = await withOapi<Logger>({
+      api: loadYamlFile('simple.yaml'),
       paths: {
         '/user/{id}': {
           get: ({ path, logger }) => {
@@ -31,12 +29,13 @@ const start = async () => {
           },
         },
       },
-    }),
-  );
+    });
 
-  createServer(laminar(app)).listen(8080, () => {
-    console.log('Server started');
-  });
+    const server = await laminar({ app: withLogging(app), port: 8080 });
+    console.log('Started', server.address());
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 start();

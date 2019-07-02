@@ -15,22 +15,21 @@ const axiosSnapshot = {
 const capitalizeName = (name: string) => name.toUpperCase();
 
 describe('Integration', () => {
-  afterEach(async () => {
-    await new Promise(resolve => server.close(resolve));
-  });
+  afterEach(() => new Promise(resolve => server.close(resolve)));
 
   it('Should process response', async () => {
+    const hbs = withHandlebars({ rootDir: join(__dirname, 'root'), helpers: { capitalizeName } });
+
     server = await laminar({
       port: 8092,
-      resolver: () =>
-        withHandlebars({ rootDir: join(__dirname, 'root'), helpers: { capitalizeName } })(
-          router<HandlebarsContext>(
-            get('/', ({ render }) => render('index')),
-            post('/result', ({ render, body: { name } }) =>
-              render('result', { name }, { status: 201 }),
-            ),
+      app: hbs(
+        router<HandlebarsContext>(
+          get('/', ({ render }) => render('index')),
+          post('/result', ({ render, body: { name } }) =>
+            render('result', { name }, { status: 201 }),
           ),
         ),
+      ),
     });
 
     const api = axios.create({ baseURL: 'http://localhost:8092' });

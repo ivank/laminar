@@ -11,7 +11,7 @@ let server: Server;
 
 describe('Requests', () => {
   beforeAll(async () => {
-    server = await laminar({ resolver: () => app, port: 8090 });
+    server = await laminar({ app, port: 8090 });
   });
 
   afterAll(async () => {

@@ -98,7 +98,7 @@ const validateSecurity = async <C extends Addition = {}>(
   return authInfo;
 };
 
-export const oapi = async <C extends Addition = {}>({
+export const withOapi = async <C extends Addition = {}>({
   api,
   paths,
   security,

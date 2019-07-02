@@ -13,7 +13,7 @@ import {
   response,
   router,
 } from '../src';
-import { LoggerContext, withLogger } from './middleware/logger';
+import { LoggerContext, withLogger } from '../src';
 
 let server: Server;
 
@@ -36,71 +36,70 @@ describe('Integration', () => {
       10: 'John',
       20: 'Tom',
     };
-    const loggerFunc = jest.fn();
+    const loggerMock = { log: jest.fn() };
     server = await laminar({
       port: 8092,
-      resolver: () =>
-        withLogger(loggerFunc)(
-          router(
-            get('/.well-known/health-check', () => ({ health: 'ok' })),
-            get('/link', () => redirect('http://localhost:8092/destination')),
-            get('/link-other', () =>
-              redirect('http://localhost:8092/destination', {
-                headers: { Authorization: 'Bearer 123' },
-              }),
-            ),
-            get('/destination', () => ({ arrived: true })),
-            get('/error', () => {
-              throw new Error('unknown');
-            }),
-            options('/users/{id}', () =>
-              response({
-                headers: {
-                  'Access-Control-Allow-Origin': 'http://localhost:8092',
-                  'Access-Control-Allow-Methods': 'GET,POST,DELETE',
-                },
-              }),
-            ),
-            get<TestContext>('/users/{id}', ({ path, logger }) => {
-              logger(`Getting id ${path.id}`);
-
-              if (users[path.id]) {
-                return Promise.resolve({ id: path.id, name: users[path.id] });
-              } else {
-                throw new HttpError(404, { message: 'No User Found' });
-              }
-            }),
-            put<TestContext>('/users', ({ body, logger }) => {
-              logger(`Test Body ${body.name}`);
-              users[body.id] = body.name;
-              return { added: true };
-            }),
-            patch<TestContext>('/users/{id}', ({ path, body }) => {
-              if (users[path.id]) {
-                users[path.id] = body.name;
-                return { patched: true };
-              } else {
-                throw new HttpError(404, { message: 'No User Found' });
-              }
-            }),
-            post<TestContext>('/users/{id}', ({ path, body }) => {
-              if (users[path.id]) {
-                users[path.id] = body.name;
-                return { saved: true };
-              } else {
-                throw new HttpError(404, { message: 'No User Found' });
-              }
-            }),
-            del('/users/{id}', ({ path }) => {
-              if (users[path.id]) {
-                delete users[path.id];
-                return { deleted: true };
-              } else {
-                throw new HttpError(404, { message: 'No User Found' });
-              }
+      app: withLogger(loggerMock)(
+        router(
+          get('/.well-known/health-check', () => ({ health: 'ok' })),
+          get('/link', () => redirect('http://localhost:8092/destination')),
+          get('/link-other', () =>
+            redirect('http://localhost:8092/destination', {
+              headers: { Authorization: 'Bearer 123' },
             }),
           ),
+          get('/destination', () => ({ arrived: true })),
+          get('/error', () => {
+            throw new Error('unknown');
+          }),
+          options('/users/{id}', () =>
+            response({
+              headers: {
+                'Access-Control-Allow-Origin': 'http://localhost:8092',
+                'Access-Control-Allow-Methods': 'GET,POST,DELETE',
+              },
+            }),
+          ),
+          get<TestContext>('/users/{id}', ({ path, logger }) => {
+            logger.log('debug', `Getting id ${path.id}`);
+
+            if (users[path.id]) {
+              return Promise.resolve({ id: path.id, name: users[path.id] });
+            } else {
+              throw new HttpError(404, { message: 'No User Found' });
+            }
+          }),
+          put<TestContext>('/users', ({ body, logger }) => {
+            logger.log('debug', `Test Body ${body.name}`);
+            users[body.id] = body.name;
+            return { added: true };
+          }),
+          patch<TestContext>('/users/{id}', ({ path, body }) => {
+            if (users[path.id]) {
+              users[path.id] = body.name;
+              return { patched: true };
+            } else {
+              throw new HttpError(404, { message: 'No User Found' });
+            }
+          }),
+          post<TestContext>('/users/{id}', ({ path, body }) => {
+            if (users[path.id]) {
+              users[path.id] = body.name;
+              return { saved: true };
+            } else {
+              throw new HttpError(404, { message: 'No User Found' });
+            }
+          }),
+          del('/users/{id}', ({ path }) => {
+            if (users[path.id]) {
+              delete users[path.id];
+              return { deleted: true };
+            } else {
+              throw new HttpError(404, { message: 'No User Found' });
+            }
+          }),
         ),
+      ),
     });
 
     const api = axios.create({ baseURL: 'http://localhost:8092' });
@@ -213,12 +212,6 @@ describe('Integration', () => {
       data: { id: '30', name: 'Added' },
     });
 
-    expect(loggerFunc).toHaveBeenNthCalledWith(1, 'Getting id 10');
-    expect(loggerFunc).toHaveBeenNthCalledWith(2, 'Getting id 20');
-    expect(loggerFunc).toHaveBeenNthCalledWith(3, 'Getting id 30');
-    expect(loggerFunc).toHaveBeenNthCalledWith(4, 'Getting id 10');
-    expect(loggerFunc).toHaveBeenNthCalledWith(5, 'Getting id 10');
-    expect(loggerFunc).toHaveBeenNthCalledWith(6, 'Test Body Added');
-    expect(loggerFunc).toHaveBeenNthCalledWith(7, 'Getting id 30');
+    expect(loggerMock.log.mock.calls).toMatchSnapshot();
   });
 });

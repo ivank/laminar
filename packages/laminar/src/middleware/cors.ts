@@ -54,7 +54,7 @@ const toAllowMethods = (methods: CorsConfig['allowMethods']) =>
 const toAllowCredentials = (credentials: CorsConfig['allowCredentials']) =>
   credentials ? 'true' : undefined;
 
-export const cors = (config: CorsConfig = {}): Middleware => resolver => {
+export const withCors = (config: CorsConfig = {}): Middleware => resolver => {
   return ctx => {
     const headers = {
       'Access-Control-Allow-Origin': toAllowOrigin(config.allowOrigin, ctx.headers.origin),

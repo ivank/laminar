@@ -2,7 +2,7 @@ import { HttpError, laminar, response } from '@ovotech/laminar';
 import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
-import { loadYamlFile, oapi, OapiConfig, OapiContext } from '../src';
+import { loadYamlFile, OapiConfig, OapiContext, withOapi } from '../src';
 import { LoggerContext, withLogger } from './middleware/logger';
 
 let server: Server;
@@ -80,10 +80,8 @@ describe('Integration', () => {
       },
     };
 
-    server = await laminar({
-      resolver: async () => withLogger(log)(await oapi(config)),
-      port: 8093,
-    });
+    const app = await withOapi(config);
+    server = await laminar({ app: withLogger(log)(app), port: 8093 });
 
     const api = axios.create({ baseURL: 'http://localhost:8093' });
 
@@ -229,7 +227,7 @@ describe('Integration', () => {
 describe('Invalid Schema', () => {
   it('Should throw an error on invalid schema', async () => {
     expect(
-      oapi({
+      withOapi({
         paths: {},
         api: loadYamlFile(join(__dirname, 'invalid-schema.yaml')),
       }),
@@ -251,7 +249,7 @@ describe('Invalid Schema', () => {
 
   it('Should throw an error on invalid security', async () => {
     expect(
-      oapi({
+      withOapi({
         paths: {},
         api: loadYamlFile(join(__dirname, 'invalid-security.yaml')),
       }),
@@ -262,7 +260,7 @@ describe('Invalid Schema', () => {
 
   it('Should throw an error if some resolvers are not implemented', async () => {
     expect(
-      oapi({
+      withOapi({
         paths: {
           '/pets': {
             get: () => '',

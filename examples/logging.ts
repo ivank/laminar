@@ -1,5 +1,4 @@
-import { get, laminar, Middleware, routes } from '@ovotech/laminar';
-import { createServer } from 'http';
+import { get, laminar, Middleware, router } from '@ovotech/laminar';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
@@ -17,18 +16,16 @@ const withLogging: Middleware<Logger> = resolver => {
   };
 };
 
-const app = laminar(
-  withLogging(
-    routes(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      get('/users/{id}', ({ path, logger }) => {
-        logger('More stuff');
-        return findUser(path.id);
-      }),
-    ),
+const app = withLogging(
+  router<Logger>(
+    get('/.well-known/health-check', () => ({ health: 'ok' })),
+    get('/users/{id}', ({ path, logger }) => {
+      logger('More stuff');
+      return findUser(path.id);
+    }),
   ),
 );
 
-createServer(app).listen(8080, () => {
-  console.log('Server started');
-});
+laminar({ app, port: 8080 })
+  .then(server => console.log('Started', server.address()))
+  .catch(error => console.log(error));
