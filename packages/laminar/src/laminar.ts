@@ -1,12 +1,12 @@
-import { RequestListener } from 'http';
+import { createServer, RequestListener } from 'http';
 import { Readable } from 'stream';
 import { toArray } from './helpers';
 import { HttpError } from './HttpError';
 import { request } from './request';
 import { resolveBody, toResponse } from './response';
-import { Context, Resolver } from './types';
+import { Context, LaminarOptions, Resolver } from './types';
 
-export const laminar = (resolver: Resolver<Context>): RequestListener => {
+export const laminarRequestListener = (resolver: Resolver<Context>): RequestListener => {
   return async (req, res) => {
     try {
       const { url, method, headers, query, body, cookies } = await request(req);
@@ -36,4 +36,16 @@ export const laminar = (resolver: Resolver<Context>): RequestListener => {
       }
     }
   };
+};
+
+export const laminar = async ({
+  resolver,
+  port = 3300,
+  hostname = 'localhost',
+  http = {},
+}: LaminarOptions) => {
+  const app = await resolver();
+  const server = createServer(http, laminarRequestListener(app));
+  await new Promise(resolve => server.listen(port, hostname, resolve));
+  return server;
 };

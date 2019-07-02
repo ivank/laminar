@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { createServer, Server } from 'http';
+import { Server } from 'http';
 import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
 import { laminar } from '../src';
 
 const app = jest.fn().mockReturnValue('Test');
 const api = axios.create({ baseURL: 'http://localhost:8090' });
+
 let server: Server;
 
 describe('Requests', () => {
   beforeAll(async () => {
-    server = createServer(laminar(app));
-    await new Promise(resolve => server.listen(8090, resolve));
+    server = await laminar({ resolver: () => app, port: 8090 });
   });
 
   afterAll(async () => {

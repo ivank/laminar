@@ -1,6 +1,6 @@
 import { get, laminar, post, router } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
-import { createServer, Server } from 'http';
+import { Server } from 'http';
 import { join } from 'path';
 import { HandlebarsContext, withHandlebars } from '../src';
 
@@ -20,8 +20,9 @@ describe('Integration', () => {
   });
 
   it('Should process response', async () => {
-    server = createServer(
-      laminar(
+    server = await laminar({
+      port: 8092,
+      resolver: () =>
         withHandlebars({ rootDir: join(__dirname, 'root'), helpers: { capitalizeName } })(
           router<HandlebarsContext>(
             get('/', ({ render }) => render('index')),
@@ -30,10 +31,8 @@ describe('Integration', () => {
             ),
           ),
         ),
-      ),
-    );
+    });
 
-    await new Promise(resolve => server.listen(8092, resolve));
     const api = axios.create({ baseURL: 'http://localhost:8092' });
 
     expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot);

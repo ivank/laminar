@@ -1,6 +1,6 @@
 import { HttpError, laminar, response } from '@ovotech/laminar';
 import axios from 'axios';
-import { createServer, Server } from 'http';
+import { Server } from 'http';
 import { join } from 'path';
 import { loadYamlFile, oapi, OapiConfig, OapiContext } from '../src';
 import { LoggerContext, withLogger } from './middleware/logger';
@@ -80,9 +80,11 @@ describe('Integration', () => {
       },
     };
 
-    server = createServer(laminar(withLogger(log)(await oapi(config))));
+    server = await laminar({
+      resolver: async () => withLogger(log)(await oapi(config)),
+      port: 8093,
+    });
 
-    await new Promise(resolve => server.listen(8093, resolve));
     const api = axios.create({ baseURL: 'http://localhost:8093' });
 
     await expect(api.get('/unknown-url')).rejects.toHaveProperty(

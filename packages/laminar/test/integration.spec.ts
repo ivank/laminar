@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createServer, Server } from 'http';
+import { Server } from 'http';
 import {
   del,
   get,
@@ -37,8 +37,9 @@ describe('Integration', () => {
       20: 'Tom',
     };
     const loggerFunc = jest.fn();
-    server = createServer(
-      laminar(
+    server = await laminar({
+      port: 8092,
+      resolver: () =>
         withLogger(loggerFunc)(
           router(
             get('/.well-known/health-check', () => ({ health: 'ok' })),
@@ -100,10 +101,8 @@ describe('Integration', () => {
             }),
           ),
         ),
-      ),
-    );
+    });
 
-    await new Promise(resolve => server.listen(8092, resolve));
     const api = axios.create({ baseURL: 'http://localhost:8092' });
 
     await expect(api.get('/unknown-url')).rejects.toHaveProperty(

@@ -1,9 +1,16 @@
 import { CookieSerializeOptions } from 'cookie';
-import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
+import { IncomingHttpHeaders, OutgoingHttpHeaders, ServerOptions } from 'http';
 import { Readable } from 'stream';
 import { UrlWithParsedQuery } from 'url';
 
 export const Laminar = '_isLaminar';
+
+export interface LaminarOptions {
+  resolver: () => Promise<Resolver<Context>> | Resolver<Context>;
+  port?: number;
+  hostname?: string;
+  http?: ServerOptions;
+}
 
 export interface LaminarRequest {
   [Laminar]: true;
