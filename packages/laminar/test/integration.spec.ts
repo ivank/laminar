@@ -17,15 +17,6 @@ import { LoggerContext, withLogger } from '../src';
 
 let server: Server;
 
-interface Item {
-  id: string;
-  name: string;
-}
-
-interface TestContext extends LoggerContext {
-  body: Item;
-}
-
 describe('Integration', () => {
   afterEach(async () => {
     await new Promise(resolve => server.close(resolve));
@@ -40,7 +31,7 @@ describe('Integration', () => {
     server = await laminar({
       port: 8092,
       app: withLogger(loggerMock)(
-        router(
+        router<LoggerContext>(
           get('/.well-known/health-check', () => ({ health: 'ok' })),
           get('/link', () => redirect('http://localhost:8092/destination')),
           get('/link-other', () =>
@@ -60,7 +51,7 @@ describe('Integration', () => {
               },
             }),
           ),
-          get<TestContext>('/users/{id}', ({ path, logger }) => {
+          get('/users/{id}', ({ path, logger }) => {
             logger.log('debug', `Getting id ${path.id}`);
 
             if (users[path.id]) {
@@ -69,12 +60,12 @@ describe('Integration', () => {
               throw new HttpError(404, { message: 'No User Found' });
             }
           }),
-          put<TestContext>('/users', ({ body, logger }) => {
+          put('/users', ({ body, logger }) => {
             logger.log('debug', `Test Body ${body.name}`);
             users[body.id] = body.name;
             return { added: true };
           }),
-          patch<TestContext>('/users/{id}', ({ path, body }) => {
+          patch('/users/{id}', ({ path, body }) => {
             if (users[path.id]) {
               users[path.id] = body.name;
               return { patched: true };
@@ -82,7 +73,7 @@ describe('Integration', () => {
               throw new HttpError(404, { message: 'No User Found' });
             }
           }),
-          post<TestContext>('/users/{id}', ({ path, body }) => {
+          post('/users/{id}', ({ path, body }) => {
             if (users[path.id]) {
               users[path.id] = body.name;
               return { saved: true };

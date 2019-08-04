@@ -5,7 +5,8 @@
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "description": "Laminar handlebars middleware",
-  "author": "Ivan Kerin <ivan.kerin@ovoenergy.com>",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --outDir dist --declaration",

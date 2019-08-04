@@ -5,7 +5,8 @@
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "description": "Laminar implementation",
-  "author": "Boost Internal Tools <boost-bit-tech@ovoenergy.com>",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/cookie": "^0.3.3",

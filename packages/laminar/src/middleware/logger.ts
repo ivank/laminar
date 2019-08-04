@@ -1,5 +1,4 @@
-import { Middleware } from '..';
-import { Context } from '../types';
+import { Context, Middleware } from '../types';
 
 export interface Metadata {
   [key: string]: unknown;
@@ -24,9 +23,9 @@ export const defaultMetadata: ContextErrorMetadata = (error, ctx) => ({
 export const withLogger = (
   logger: Logger = console,
   metadata: ContextErrorMetadata = defaultMetadata,
-): Middleware<LoggerContext, Context> => resolver => async ctx => {
+): Middleware<LoggerContext, Context> => next => async ctx => {
   try {
-    return await resolver({ ...ctx, logger });
+    return await next({ ...ctx, logger });
   } catch (errorOrFailure) {
     const error = errorOrFailure instanceof Error ? errorOrFailure : new Error(errorOrFailure);
     logger.log('error', error.message, metadata(error, ctx));

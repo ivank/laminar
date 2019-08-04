@@ -55,7 +55,7 @@ const toAllowMethods = (methods: CorsConfig['allowMethods']): string =>
 const toAllowCredentials = (credentials: CorsConfig['allowCredentials']): 'true' | undefined =>
   credentials ? 'true' : undefined;
 
-export const withCors = (config: CorsConfig = {}): Middleware<{}, Context> => resolver => {
+export const withCors = (config: CorsConfig = {}): Middleware<{}, Context> => next => {
   return ctx => {
     const headers = {
       'Access-Control-Allow-Origin': toAllowOrigin(config.allowOrigin, ctx.headers.origin),
@@ -77,7 +77,7 @@ export const withCors = (config: CorsConfig = {}): Middleware<{}, Context> => re
         status: 204,
       });
     } else {
-      return extendResponse(resolver(ctx), { headers });
+      return extendResponse(next(ctx), { headers });
     }
   };
 };

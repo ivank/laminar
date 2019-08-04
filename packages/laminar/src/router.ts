@@ -72,7 +72,7 @@ export const selectRoute = <
   return false;
 };
 
-export const router = <C extends object = {}>(...routes: Route<C>[]): Resolver<Context> => {
+export const router = <C extends object = {}>(...routes: Route<C>[]): Resolver<C & Context> => {
   return ctx => {
     const select = selectRoute(ctx, routes as Route[]);
 

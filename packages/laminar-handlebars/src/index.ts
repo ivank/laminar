@@ -74,7 +74,7 @@ export const withHandlebars = ({
     });
   };
 
-  return resolver => {
-    return ctx => resolver({ ...ctx, render });
+  return next => {
+    return ctx => next({ ...ctx, render });
   };
 };

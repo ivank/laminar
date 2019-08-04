@@ -9,28 +9,31 @@ Generate TypeScript types using a cli.
 
 ```typescript
 import { laminar } from '@ovotech/laminar';
-import { oapi, loadYamlFile } from '@ovotech/laminar-oapi';
-import { createServer } from 'http';
-import { join } from 'path';
+import { withOapi, OapiConfig } from '@ovotech/laminar-oapi';
 
-const findUser = (id: string) => ({ id, name: 'John' });
+interface User {
+  id: string;
+  name: string;
+}
 
-const start = async () => {
-  const app = await oapi<Config>({
-    api: loadYamlFile(join(__dirname, 'simple.yaml')),
-    paths: {
-      '/user/{id}': {
-        get: ({ path }) => findUser(path.id),
-      },
+const findUser = (id: string): User => ({ id, name: 'John' });
+
+const config: OapiConfig = {
+  api: 'simple.yaml',
+  paths: {
+    '/user/{id}': {
+      get: ({ path }) => findUser(path.id),
     },
-  });
-
-  createServer(laminar(app)).listen(8080, () => {
-    console.log('Server started');
-  });
+  },
 };
 
-start();
+const main = async (): Promise<void> => {
+  const resolver = await withOapi(config);
+  const server = await laminar({ app: resolver, port: 8081 });
+  console.log('Started', server.address());
+};
+
+main();
 ```
 
 For a OpenApi specification of `simple.yaml`:
@@ -115,108 +118,141 @@ components:
 You can then implement the security with:
 
 ```typescript
-import { laminar } from '@ovotech/laminar';
-import { oapi } from '@ovotech/laminar-oapi';
-import { createServer } from 'http';
-import { join } from 'path';
+import { laminar, HttpError } from '@ovotech/laminar';
+import { withOapi, OapiConfig } from '@ovotech/laminar-oapi';
 
-const findUser = (id: string) => ({ id, name: 'John' });
+interface User {
+  id: string;
+  name: string;
+}
 
-const start = async () => {
-  const app = await oapi({
-    api: loadYamlFile(join(__dirname, 'security.yaml')),
-    security: {
-      JWT: ({ headers }) => validate(headers.authorization),
-    },
-    paths: {
-      '/user/{id}': {
-        get: ({ path }) => findUser(path.id),
-      },
-    },
-  });
-
-  createServer(laminar(app)).listen(8080, () => console.log('Server started'));
+const findUser = (id: string): User => ({ id, name: 'John' });
+const validate = (authorizaitonHeader: string | undefined): void => {
+  if (authorizaitonHeader !== 'Secret Pass') {
+    throw new HttpError(403, { message: 'Unkown user' });
+  }
 };
 
-start();
+const config: OapiConfig = {
+  api: 'simple.yaml',
+  security: {
+    JWT: ({ headers }) => validate(headers.authorization),
+  },
+  paths: {
+    '/user/{id}': {
+      get: ({ path }) => findUser(path.id),
+    },
+  },
+};
+
+const main = async (): Promise<void> => {
+  const resolver = await withOapi(config);
+  const server = await laminar({ app: resolver, port: 8081 });
+  console.log('Started', server.address());
+};
+
+main();
 ```
 
 ## Generating types
 
-To generate a typescript types out of the OpenApi schema, run:
+To generate a typescript types out of the OpenApi schema, you need to add the `@ovotech/laminar-oapi-cli` package, and then run the cli command:
 
 ```shell
-yarn laminar-oapi convert <path to schema> --output-file <output path>
+yarn add --dev @ovotech/laminar-oapi-cli
+yarn laminar-oapi simple.yaml __generated__/simple.ts
 ```
+
+You also have the option of running a watcher that will auto-generate on file update.
+
+```shell
+yarn laminar-oapi simple.yaml __generated__/simple.ts --watch
+```
+
+If the schema has references to multiple files and those files are in the local file system, they will be watched for changes as well.
 
 After that you can add the type with `oapi<Config>`, which will add types to both requests and responses.
 
 ```typescript
 import { laminar } from '@ovotech/laminar';
-import { oapi, loadYamlFile } from '@ovotech/laminar-oapi';
-import { createServer } from 'http';
-import { join } from 'path';
-import { Config } from './__generated__/schema';
+import { withOapi } from '@ovotech/laminar-oapi';
+import { Config } from './__generated__/simple';
 
-const findUser = (id: string) => ({ id, name: 'John' });
+interface User {
+  id: string;
+  name: string;
+}
 
-const start = async () => {
-  const app = await oapi<Config>({
-    api: loadYamlFile(join(__dirname, 'simple.yaml')),
-    paths: {
-      '/user/{id}': {
-        get: ({ path }) => findUser(path.id),
-      },
+const findUser = (id: string): User => ({ id, name: 'John' });
+
+const config: Config = {
+  api: 'simple.yaml',
+  paths: {
+    '/user/{id}': {
+      get: ({ path }) => findUser(path.id),
     },
-  });
-
-  createServer(laminar(app)).listen(8080, () => {
-    console.log('Server started');
-  });
+  },
 };
 
-start();
+const main = async (): Promise<void> => {
+  const resolver = await withOapi(config);
+  const server = await laminar({ app: resolver, port: 8081 });
+  console.log('Started', server.address());
+};
+
+main();
 ```
 
 ## Simple Usage
 
-Laminar can also be used without any spec for a very minimal and fast rest api
+Laminar can also be used without any spec for a very minimal rest api
 
 ```typescript
 import { get, laminar, router } from '@ovotech/laminar';
-import { createServer } from 'http';
 
-const findUser = (id: string) => ({ id, name: 'John' });
+interface User {
+  id: string;
+  name: string;
+}
 
-const app = laminar(
-  router(
-    get('/.well-known/health-check', () => ({ health: 'ok' })),
-    get('/users/{id}', ({ path }) => findUser(path.id)),
-  ),
-));
+const findUser = (id: string): User => ({ id, name: 'John' });
+const resolver = router(
+  get('/.well-known/health-check', () => ({ health: 'ok' })),
+  get('/users/{id}', ({ path }) => findUser(path.id)),
+);
 
-createServer(app).listen(8080, () => console.log('Server started'));
+const main = async (): Promise<void> => {
+  const server = await laminar({ app: resolver, port: 8082 });
+  console.log('Started', server.address());
+};
+
+main();
 ```
 
 ## The Middleware
 
-Laminar is built with the concept of nested middleware, that add / modify the context, and execute the next middleware. Each one can also read the response of the previous and modify it, "wrapping" the whole request / response execution.
+Laminar is built with the concept of nested middlewares, that add / modify the context, and execute the next middleware. Each one can also read the response of the previous and modify it, "wrapping" the whole request / response execution.
 
-Moreover, since a middleware is just a wrapper function, the types for the additional context properties will be passed down to the other resolvers.
-In this example, 'logger' is actually typed properly all the way to the `get('/users/{id}', ({ path, logger })`.
+Since a middleware is just a wrapper function, the types for the additional context properties will be passed down to the other resolvers.
+In this example, 'logger' is defined by the `withLogging` middleware, but that type propagates all the way to the `get('/users/{id}', ({ path, logger })`.
 
 ```typescript
-import { get, laminar, Middleware, routes } from '@ovotech/laminar';
-import { createServer } from 'http';
+import { get, laminar, Context, Middleware, router } from '@ovotech/laminar';
 
-const findUser = (id: string) => ({ id, name: 'John' });
+interface User {
+  id: string;
+  name: string;
+}
 
-interface Logger {
+const findUser = (id: string): User => ({ id, name: 'John' });
+
+interface LoggerContext {
   logger: (message: string) => void;
 }
 
-const withLogging: Middleware<Logger> = resolver => {
+const withLogging: Middleware<LoggerContext, Context> = resolver => {
   const logger = console.log;
+
   return ctx => {
     logger('Requesting', ctx.url.pathname);
     const response = resolver({ ...ctx, logger });
@@ -225,24 +261,26 @@ const withLogging: Middleware<Logger> = resolver => {
   };
 };
 
-const app = laminar(
-  withLogging(
-    routes(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      get('/users/{id}', ({ path, logger }) => {
-        logger('More stuff');
-        return findUser(path.id);
-      }),
+const main = async (): Promise<void> => {
+  const server = await laminar({
+    app: withLogging(
+      router(
+        get('/.well-known/health-check', () => ({ health: 'ok' })),
+        get('/users/{id}', ({ path, logger }) => {
+          logger('More stuff');
+          return findUser(path.id);
+        }),
+      ),
     ),
-  ),
-);
+    port: 8082,
+  });
+  console.log('Started', server.address());
+};
 
-createServer(app).listen(8080, () => {
-  console.log('Server started');
-});
+main();
 ```
 
-Resolvers in the middleware can be async as well, the default oapi middleware is like that, so middleware for them also have to be async if it wants to process the response in any way. otherwise it can just pass it along.
+Resolvers in the middleware can be async as well, the default oapi middleware is like that, so middleware for them also has to be async if it wants to process the response in any way. otherwise it can just pass it along.
 
 ## Key concepts
 
@@ -268,9 +306,9 @@ This way you can pipe the middlewares between each other, where each can modify 
 const process = middleware1(middleware2(middleware3()));
 ```
 
-What's neat about it is that since those are simply nested function calls, all typescript types are preserved, so that if one middleware adds something to the context, all the next would be aware of that at compile time.
+What's neat about it is that since those are simply nested function calls, all typescript types are preserved, so that if one middleware adds something to the context, all the rest would be aware of that at compile time.
 
-I can picture this as an ordered flow of information through the pipes of the middlewares, thus the name.
+I can picture this as an ordered flow of information through the pipes of the middlewares, thus the name (Laminar).
 
 ### Processing Open API
 

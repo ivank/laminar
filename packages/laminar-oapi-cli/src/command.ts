@@ -1,7 +1,7 @@
 import { compile, Schema, validate } from '@ovotech/json-schema';
 import { Command } from 'commander';
 import * as fs from 'fs';
-import * as OpenApiSchema from 'oas-schemas/schemas/v3.0/schema.json';
+import { openapiV3 } from 'openapi-schemas';
 import { oapiTs } from './convert';
 import { OapiValidationError } from './OapiValidationError';
 
@@ -9,7 +9,7 @@ export const processFile = async (
   fileName: string,
 ): Promise<{ content: string; uris: string[] }> => {
   const { schema, uris } = await compile(fileName);
-  const check = await validate(OpenApiSchema as Schema, schema);
+  const check = await validate(openapiV3 as Schema, schema);
 
   if (!check.valid) {
     throw new OapiValidationError('Invalid API Definition', check.errors);

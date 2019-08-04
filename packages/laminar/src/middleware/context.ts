@@ -1,3 +1,3 @@
 import { Middleware, Context } from '../types';
 
-export const withContext: Middleware<{}, Context> = resolver => ctx => resolver(ctx);
+export const withContext: Middleware<{}, Context> = next => ctx => next(ctx);

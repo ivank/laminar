@@ -59,7 +59,7 @@ export interface Context {
 export type Middleware<TProvide extends object = {}, TRequire extends object = {}> = <
   TInherit extends object = {}
 >(
-  resolver: Resolver<TProvide & TRequire & TInherit>,
+  next: Resolver<TProvide & TRequire & TInherit>,
 ) => Resolver<TRequire & TInherit>;
 
 export type ResolverResponse = string | Readable | Buffer | LaminarResponse | object;
