@@ -46,7 +46,7 @@ nock('http://json-schema.org')
   .get('/draft-07/schema')
   .replyWithFile(200, join(draftsFolder, 'draft-7-schema.json'));
 
-const adapters = [jsonSchema, ajv];
+const adapters = [ajv, jsonSchema];
 const testFolders = ['draft7'];
 
 const benchmarkSuite = new Benchmark.Suite();

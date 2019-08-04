@@ -31,14 +31,14 @@ export const document = <
 });
 
 export const mapWithContext = <
-  T = any,
+  T = unknown,
   TAstType = ts.TypeNode,
   TContext extends DocumentContext = DocumentContext
 >(
   context: TContext,
   items: T[],
   callbackfn: (context: TContext, item: T) => Document<TAstType, TContext>,
-) =>
+): { items: TAstType[]; context: TContext } =>
   items.reduce<{ items: TAstType[]; context: TContext }>(
     (all, item) => {
       const current = callbackfn(all.context, item);

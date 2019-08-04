@@ -2,7 +2,7 @@ import { parse } from 'querystring';
 import { parseQueryObjects } from '../src/helpers';
 
 describe('Helpers', () => {
-  it.each<[string, any]>([
+  it.each<[string, object]>([
     ['test=123', { test: '123' }],
     ['test=111,222', { test: ['111', '222'] }],
     ['test[]=111', { test: ['111'] }],

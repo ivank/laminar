@@ -1,14 +1,25 @@
 import { HasError, NoErrors } from '../helpers';
 import { Validator } from '../types';
 
-const getType = (value: any) =>
-  value === null
-    ? 'null'
-    : Array.isArray(value)
-    ? 'array'
-    : Number.isInteger(value)
-    ? 'integer'
-    : typeof value;
+const getType = (
+  value: unknown,
+): 'null' | 'boolean' | 'object' | 'array' | 'number' | 'string' | 'integer' | undefined => {
+  if (value === null) {
+    return 'null';
+  } else if (Array.isArray(value)) {
+    return 'array';
+  } else if (typeof value === 'number') {
+    return Number.isInteger(value) ? 'integer' : 'number';
+  } else if (typeof value === 'object') {
+    return 'object';
+  } else if (typeof value === 'boolean') {
+    return 'boolean';
+  } else if (typeof value === 'string') {
+    return 'string';
+  } else {
+    return undefined;
+  }
+};
 
 export const validateType: Validator = (schema, value, { name }) => {
   if (schema.type) {
@@ -18,7 +29,7 @@ export const validateType: Validator = (schema, value, { name }) => {
       allowed.push('integer');
     }
 
-    if (!allowed.includes(valueType as any)) {
+    if (!valueType || !allowed.includes(valueType)) {
       return HasError('type', name, allowed);
     }
   }

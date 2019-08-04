@@ -18,6 +18,6 @@ const formats: { [key: string]: RegExp } = {
 };
 
 export const validateFormat: Validator = (schema, value, { name }) =>
-  schema.format && schema.format in formats && !formats[schema.format].test(value)
+  schema.format && schema.format in formats && !formats[schema.format].test(String(value))
     ? HasError('format', name, schema.format)
     : NoErrors;

@@ -1,0 +1,4 @@
+UserResponse:
+  type: object
+  properties:
+    id: { $ref: 'test.json#/UserResponse' }

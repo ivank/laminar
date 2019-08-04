@@ -1,4 +1,3 @@
-export { loadJson, loadJsonFile, loadYaml, loadYamlFile } from './load';
 export {
   withOapi,
   OapiConfig,

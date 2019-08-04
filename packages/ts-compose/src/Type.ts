@@ -15,21 +15,24 @@ export const Obj = ts.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword);
 
 export const Void = ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
 
+export const Unknown = ts.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword);
+
 export const TypeLiteral = ({
   props = [],
   index,
 }: {
   props?: ts.TypeElement[];
   index?: ts.IndexSignatureDeclaration;
-} = {}) => ts.createTypeLiteralNode([...props, ...(index ? [index] : [])]);
+} = {}): ts.TypeLiteralNode => ts.createTypeLiteralNode([...props, ...(index ? [index] : [])]);
 
-export const Arr = (type: ts.TypeNode) => ts.createArrayTypeNode(type);
+export const Arr = (type: ts.TypeNode): ts.ArrayTypeNode => ts.createArrayTypeNode(type);
 
-export const Union = (types: ts.TypeNode[]) => ts.createUnionTypeNode(types);
+export const Union = (types: ts.TypeNode[]): ts.UnionTypeNode => ts.createUnionTypeNode(types);
 
-export const Intersection = (types: ts.TypeNode[]) => ts.createIntersectionTypeNode(types);
+export const Intersection = (types: ts.TypeNode[]): ts.IntersectionTypeNode =>
+  ts.createIntersectionTypeNode(types);
 
-export const Literal = (value: any) => {
+export const Literal = (value: unknown): ts.LiteralTypeNode | ts.KeywordTypeNode => {
   switch (typeof value) {
     case 'number':
       return ts.createLiteralTypeNode(ts.createLiteral(value));
@@ -42,10 +45,28 @@ export const Literal = (value: any) => {
   }
 };
 
-export const LiteralString = (value: string) => ts.createLiteral(value);
+export const LiteralString = (value: string): ts.StringLiteral => ts.createLiteral(value);
 
-export const Arrow = (args: ts.ParameterDeclaration[], ret: ts.TypeNode) =>
+export const Arrow = (args: ts.ParameterDeclaration[], ret: ts.TypeNode): ts.FunctionTypeNode =>
   ts.createFunctionTypeNode(undefined, args, ret);
+
+export const Optional = (isOptional?: boolean): ts.Token<ts.SyntaxKind.QuestionToken> | undefined =>
+  isOptional ? ts.createToken(ts.SyntaxKind.QuestionToken) : undefined;
+
+export const Public = (isPublic?: boolean): ts.Token<ts.SyntaxKind.PublicKeyword>[] =>
+  isPublic ? [ts.createModifier(ts.SyntaxKind.PublicKeyword)] : [];
+
+export const Readonly = (isReadonly?: boolean): ts.Token<ts.SyntaxKind.ReadonlyKeyword>[] =>
+  isReadonly ? [ts.createModifier(ts.SyntaxKind.ReadonlyKeyword)] : [];
+
+export const Private = (isPrivate?: boolean): ts.Token<ts.SyntaxKind.PrivateKeyword>[] =>
+  isPrivate ? [ts.createModifier(ts.SyntaxKind.PrivateKeyword)] : [];
+
+export const Export = (isExport?: boolean): ts.Token<ts.SyntaxKind.ExportKeyword>[] =>
+  isExport ? [ts.createModifier(ts.SyntaxKind.ExportKeyword)] : [];
+
+export const Protected = (isProtected?: boolean): ts.Token<ts.SyntaxKind.ProtectedKeyword>[] =>
+  isProtected ? [ts.createModifier(ts.SyntaxKind.ProtectedKeyword)] : [];
 
 export const Prop = ({
   name,
@@ -67,7 +88,7 @@ export const Prop = ({
   isProtected?: boolean;
   initializer?: ts.Expression;
   jsDoc?: string;
-}) =>
+}): ts.PropertySignature =>
   withJSDoc(
     ts.createPropertySignature(
       [
@@ -84,24 +105,6 @@ export const Prop = ({
     jsDoc,
   );
 
-export const Optional = (isOptional?: boolean) =>
-  isOptional ? ts.createToken(ts.SyntaxKind.QuestionToken) : undefined;
-
-export const Public = (isPublic?: boolean) =>
-  isPublic ? [ts.createModifier(ts.SyntaxKind.PublicKeyword)] : [];
-
-export const Readonly = (isReadonly?: boolean) =>
-  isReadonly ? [ts.createModifier(ts.SyntaxKind.ReadonlyKeyword)] : [];
-
-export const Private = (isPrivate?: boolean) =>
-  isPrivate ? [ts.createModifier(ts.SyntaxKind.PrivateKeyword)] : [];
-
-export const Export = (isExport?: boolean) =>
-  isExport ? [ts.createModifier(ts.SyntaxKind.ExportKeyword)] : [];
-
-export const Protected = (isProtected?: boolean) =>
-  isProtected ? [ts.createModifier(ts.SyntaxKind.ProtectedKeyword)] : [];
-
 export const Param = ({
   name,
   type,
@@ -112,7 +115,7 @@ export const Param = ({
   type: ts.TypeNode;
   isOptional?: boolean;
   isReadonly?: boolean;
-}) =>
+}): ts.ParameterDeclaration =>
   ts.createParameter(
     undefined,
     Readonly(isReadonly),
@@ -131,7 +134,7 @@ export const TypeArg = ({
   name: string | ts.Identifier;
   ext?: ts.TypeNode;
   defaultType?: ts.TypeNode;
-}) => ts.createTypeParameterDeclaration(name, ext, defaultType);
+}): ts.TypeParameterDeclaration => ts.createTypeParameterDeclaration(name, ext, defaultType);
 
 export const Index = ({
   name,
@@ -143,13 +146,13 @@ export const Index = ({
   nameType: ts.TypeNode;
   type: ts.TypeNode;
   isReadonly?: boolean;
-}) =>
+}): ts.IndexSignatureDeclaration =>
   ts.createIndexSignature(undefined, Readonly(isReadonly), [Param({ name, type: nameType })], type);
 
-export const Ref = (name: string | ts.Identifier, types?: ts.TypeNode[]) =>
+export const Ref = (name: string | ts.Identifier, types?: ts.TypeNode[]): ts.TypeReferenceNode =>
   ts.createTypeReferenceNode(name, types);
 
-export const Tuple = (types: ts.TypeNode[]) => ts.createTupleTypeNode(types);
+export const Tuple = (types: ts.TypeNode[]): ts.TupleTypeNode => ts.createTupleTypeNode(types);
 
 export const TypeExpression = ({
   name,
@@ -157,7 +160,7 @@ export const TypeExpression = ({
 }: {
   name: string | ts.Identifier;
   types?: ts.TypeNode[];
-}) =>
+}): ts.ExpressionWithTypeArguments =>
   ts.createExpressionWithTypeArguments(
     types,
     typeof name === 'string' ? ts.createIdentifier(name) : name,
@@ -175,7 +178,7 @@ export const Alias = ({
   isExport?: boolean;
   typeArgs?: ts.TypeParameterDeclaration[];
   jsDoc?: string;
-}) =>
+}): ts.TypeAliasDeclaration =>
   withJSDoc(
     ts.createTypeAliasDeclaration(undefined, Export(isExport), name, typeArgs, type),
     jsDoc,
@@ -202,7 +205,7 @@ export const Interface = ({
   ext?: InterfaceExtend[];
   isExport?: boolean;
   jsDoc?: string;
-}) =>
+}): ts.InterfaceDeclaration =>
   withJSDoc(
     ts.createInterfaceDeclaration(
       undefined,

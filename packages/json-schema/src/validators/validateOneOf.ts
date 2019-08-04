@@ -5,10 +5,17 @@ import {
   isJsonSchema,
   NoErrors,
   validateSchema,
+  isObject,
 } from '../helpers';
-import { Schema, ValidateOptions, Validator } from '../types';
+import { ValidateOptions, Validator } from '../types';
+import { Schema } from '@ovotech/json-refs';
 
-const findSchema = (schemas: Schema[], name: string, value: any, options: ValidateOptions) =>
+const findSchema = (
+  schemas: Schema[],
+  name: string,
+  value: unknown,
+  options: ValidateOptions,
+): Schema | undefined =>
   schemas.find(
     item =>
       isJsonSchema(item) &&
@@ -23,7 +30,12 @@ export const validateOneOf: Validator = (schema, value, options) => {
     const { oneOf, discriminator } = schema;
     if (oneOf.length === 1) {
       return validateSchema(oneOf[0], value, options);
-    } else if (discriminator && value && value[discriminator.propertyName]) {
+    } else if (
+      discriminator &&
+      discriminator.propertyName &&
+      isObject(value) &&
+      value[discriminator.propertyName]
+    ) {
       const discriminatedSchema = findSchema(
         oneOf,
         discriminator.propertyName,

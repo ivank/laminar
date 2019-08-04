@@ -12,7 +12,7 @@ const axiosSnapshot = {
   headers: { date: expect.anything() },
 };
 
-const capitalizeName = (name: string) => name.toUpperCase();
+const capitalizeName = (name: string): string => name.toUpperCase();
 
 describe('Integration', () => {
   afterEach(() => new Promise(resolve => server.close(resolve)));

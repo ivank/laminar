@@ -17,7 +17,14 @@ import {
 } from 'openapi3-ts';
 import * as ts from 'typescript';
 import { convertSchema } from './convert-schema';
-import { AstContext, withRef } from './traverse';
+import {
+  AstContext,
+  isSchemaObject,
+  isResponseObject,
+  getReferencedObject,
+  isRequestBodyObject,
+  isParameterObject,
+} from './traverse';
 
 interface AstParameters {
   in: {
@@ -29,10 +36,10 @@ interface AstParameters {
   context: AstContext;
 }
 
-const title = (str: string) => str.replace(/^./, first => first.toUpperCase());
-const cleanIdentifierName = (str: string) => str.replace(/[^0-9a-zA-Z_$]+/g, '');
+const title = (str: string): string => str.replace(/^./, first => first.toUpperCase());
+const cleanIdentifierName = (str: string): string => str.replace(/[^0-9a-zA-Z_$]+/g, '');
 
-const pathToIdentifier = (path: string) =>
+const pathToIdentifier = (path: string): string =>
   'T' +
   path
     .split('/')
@@ -40,7 +47,9 @@ const pathToIdentifier = (path: string) =>
     .map(title)
     .join('');
 
-const toParamLocation = (location: 'header' | 'cookie' | 'path' | 'query') => {
+const toParamLocation = (
+  location: 'header' | 'cookie' | 'path' | 'query',
+): 'headers' | 'cookies' | 'path' | 'query' => {
   switch (location) {
     case 'header':
       return 'headers';
@@ -53,11 +62,11 @@ const toParamLocation = (location: 'header' | 'cookie' | 'path' | 'query') => {
 
 const convertParameters = (
   context: AstContext,
-  parameters: Array<ParameterObject | ReferenceObject>,
-) => {
+  parameters: (ParameterObject | ReferenceObject)[],
+): Document<ts.TypeLiteralNode, AstContext> => {
   const astParams = parameters.reduce<AstParameters>(
     (node, paramOrRef) => {
-      const param = withRef(paramOrRef, node.context);
+      const param = getReferencedObject(paramOrRef, isParameterObject, node.context);
       const paramNode = param.schema
         ? convertSchema(node.context, param.schema)
         : document(node.context, Type.Any);
@@ -79,7 +88,7 @@ const convertParameters = (
   return {
     type: Type.TypeLiteral({
       props: Object.entries(astParams.in).map(([name, items]) =>
-        Type.Prop({ name, type: Type.TypeLiteral({ props: items! }) }),
+        Type.Prop({ name, type: Type.TypeLiteral({ props: items }) }),
       ),
     }),
 
@@ -87,7 +96,11 @@ const convertParameters = (
   };
 };
 
-const convertResponse = (context: AstContext, key: string, response: ResponseObject) => {
+const convertResponse = (
+  context: AstContext,
+  key: string,
+  response: ResponseObject,
+): Document<ts.UnionTypeNode, AstContext> => {
   if (
     response.content &&
     response.content['application/json'] &&
@@ -118,17 +131,18 @@ const convertResponse = (context: AstContext, key: string, response: ResponseObj
   }
 };
 
-const convertResponses = (context: AstContext, name: string, responses: ResponsesObject) => {
+const convertResponses = (
+  context: AstContext,
+  name: string,
+  responses: ResponsesObject,
+): Document<ts.TypeReferenceNode, AstContext> => {
   const responseEntries = Object.entries<ResponseObject | ReferenceObject>(responses);
 
   const params = responseEntries.reduce<Document<ts.UnionTypeNode, AstContext>>(
     (responseNode, [key, responseOrRef]) => {
-      const response = withRef(responseOrRef, responseNode.context);
+      const response = getReferencedObject(responseOrRef, isResponseObject, responseNode.context);
       const node = convertResponse(responseNode.context, key, response);
-
-      return node
-        ? document(node.context, Type.Union(responseNode.type.types.concat([node.type])))
-        : responseNode;
+      return document(node.context, Type.Union(responseNode.type.types.concat([node.type])));
     },
     document(context, Type.Union([])),
   );
@@ -147,8 +161,8 @@ const convertResponses = (context: AstContext, name: string, responses: Response
 const convertRequestBody = (
   context: AstContext,
   requestBodyOrRef: RequestBodyObject | ReferenceObject,
-) => {
-  const requestBody = withRef(requestBodyOrRef, context);
+): Document<ts.TypeLiteralNode, AstContext> => {
+  const requestBody = getReferencedObject(requestBodyOrRef, isRequestBodyObject, context);
   const schema = requestBody.content['application/json']
     ? requestBody.content['application/json'].schema
     : {};
@@ -161,12 +175,15 @@ const convertRequestBody = (
   );
 };
 
-export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
+export const convertOapi = (
+  context: AstContext,
+  api: OpenAPIObject,
+): Document<ts.InterfaceDeclaration, AstContext> => {
   const paths = mapWithContext(
     context,
     Object.entries<PathItemObject>(api.paths),
     (pathContext, [path, pathApiOrRef]) => {
-      const pathApi = withRef(pathApiOrRef, context);
+      const pathApi = getReferencedObject(pathApiOrRef, isSchemaObject, context);
 
       const methods = mapWithContext(
         pathContext,
@@ -186,7 +203,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
           const contextInterface = Type.Interface({
             name: contextIdentifier,
             isExport: true,
-            ext: [{ name: 'OapiContext' }],
+            ext: [{ name: 'Context' }, { name: 'OapiContext' }],
             props: astParams.type.members.concat(astRequestBody.type.members),
           });
 
@@ -227,11 +244,15 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject) => {
   );
 
   return document(
-    withImports(paths.context, '@ovotech/laminar-oapi', [
-      'OapiContext',
-      'OapiConfig',
-      ...(api.components && api.components.securitySchemes ? ['OapiSecurityResolver'] : []),
-    ]),
+    withImports(
+      withImports(paths.context, '@ovotech/laminar-oapi', [
+        'OapiContext',
+        'OapiConfig',
+        ...(api.components && api.components.securitySchemes ? ['OapiSecurityResolver'] : []),
+      ]),
+      '@ovotech/laminar',
+      ['Context'],
+    ),
     Type.Interface({
       name: 'Config',
       isExport: true,

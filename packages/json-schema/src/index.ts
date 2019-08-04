@@ -1,7 +1,7 @@
-import { resolveRefs } from '@ovotech/json-refs';
+import { resolveRefs, resolveRefsFile, ResolvedSchema, Schema } from '@ovotech/json-refs';
 import { validateSchema } from './helpers';
 import { messages } from './messages';
-import { CompiledSchema, Schema, ValidateOptions } from './types';
+import { ValidateOptions, ValidationResult } from './types';
 import { validateAdditionalProperties } from './validators/validateAdditionalProperties';
 import { validateAllOf } from './validators/validateAllOf';
 import { validateAnyOf } from './validators/validateAnyOf';
@@ -45,7 +45,7 @@ export {
   validateSchema,
 } from './helpers';
 
-export { Schema, JsonSchema, ValidateOptions, Validator, Messages, PrimitiveType } from './types';
+export { ValidateOptions, Validator, Messages } from './types';
 
 export const draft7 = [
   validateRef,
@@ -83,25 +83,17 @@ export const draft7 = [
 
 const defaultOptions = { name: 'value', validators: draft7, refs: {} };
 
-export const compile = async <TSchema = Schema>(schema: Schema): Promise<CompiledSchema<TSchema>> =>
-  resolveRefs(schema);
+export const compile = async (schema: Schema | string): Promise<ResolvedSchema> =>
+  typeof schema === 'string' ? resolveRefsFile(schema) : resolveRefs(schema);
 
-export const isCompiled = (schema: any): schema is CompiledSchema =>
-  typeof schema === 'object' && 'schema' in schema && 'refs' in schema;
-
-export const validate = async (
-  schema: Schema | CompiledSchema,
-  value: any,
-  options: Partial<ValidateOptions> = {},
-) => {
-  return validateCompiled(isCompiled(schema) ? schema : await compile(schema), value, options);
-};
+export const isCompiled = (schema: Schema | ResolvedSchema | string): schema is ResolvedSchema =>
+  typeof schema === 'object' && 'schema' in schema && 'refs' in schema && 'uris' in schema;
 
 export const validateCompiled = (
-  schema: CompiledSchema,
-  value: any,
+  schema: ResolvedSchema,
+  value: unknown,
   options: Partial<ValidateOptions> = {},
-) => {
+): ValidationResult => {
   const result = validateSchema(schema.schema, value, {
     ...defaultOptions,
     refs: schema.refs,
@@ -109,4 +101,12 @@ export const validateCompiled = (
   });
   const errors = result.map(error => messages[error.code](error));
   return { schema, errors, valid: errors.length === 0 };
+};
+
+export const validate = async (
+  schema: Schema | ResolvedSchema | string,
+  value: unknown,
+  options: Partial<ValidateOptions> = {},
+): Promise<ValidationResult> => {
+  return validateCompiled(isCompiled(schema) ? schema : await compile(schema), value, options);
 };

@@ -32,7 +32,7 @@ describe('Integration', () => {
   });
 
   it('Should process response', async () => {
-    const users: any = {
+    const users: { [key: string]: string } = {
       10: 'John',
       20: 'Tom',
     };

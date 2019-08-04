@@ -1,12 +1,19 @@
 import { get, laminar, router } from '@ovotech/laminar';
 
-const findUser = (id: string) => ({ id, name: 'John' });
+interface User {
+  id: string;
+  name: string;
+}
 
-const app = router(
+const findUser = (id: string): User => ({ id, name: 'John' });
+const resolver = router(
   get('/.well-known/health-check', () => ({ health: 'ok' })),
   get('/users/{id}', ({ path }) => findUser(path.id)),
 );
 
-laminar({ app })
-  .then(server => console.log('Started', server.address()))
-  .catch(error => console.log(error));
+const main = async (): Promise<void> => {
+  const server = await laminar({ app: resolver, port: 8082 });
+  console.log('Started', server.address());
+};
+
+main();

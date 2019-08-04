@@ -1,8 +1,8 @@
 import nock = require('nock');
-import { extractFiles, extractNamedRefs, extractUrls, resolveRefs } from '../src';
+import { extractFiles, extractNamedRefs, extractUrls, resolveRefs, Schema } from '../src';
 
 describe('json-refs', () => {
-  it.each<[string, any, string[]]>([
+  it.each<[string, Schema, string[]]>([
     [
       'no ref',
       {
@@ -73,7 +73,7 @@ describe('json-refs', () => {
     expect(extractUrls(schema)).toEqual(expected);
   });
 
-  it.each<[string, any, any]>([
+  it.each<[string, Schema, Schema]>([
     [
       'single id',
       {
@@ -136,13 +136,21 @@ describe('json-refs', () => {
       .reply(200, { test: 4 });
 
     const expected = {
-      'http://two.test/': { $id: 'http://two.test', deep: { $ref: 'folder' } },
-      'http://four.test/': { test: 4 },
-      'http://four.test/#/test': 4,
-      'http://three.test/': { $ref: 'http://four.test/#/test' },
-      'http://three.test/#': { $ref: 'http://four.test/#/test' },
-      'http://one.test/': { $ref: 'http://three.test/#' },
-      'http://two.test/folder': { test: 2 },
+      refs: {
+        'http://two.test/': { $id: 'http://two.test', deep: { $ref: 'folder' } },
+        'http://four.test/': { test: 4 },
+        'http://four.test/#/test': 4,
+        'http://three.test/': { $ref: 'http://four.test/#/test' },
+        'http://three.test/#': { $ref: 'http://four.test/#/test' },
+        'http://one.test/': { $ref: 'http://three.test/#' },
+        'http://two.test/folder': { test: 2 },
+      },
+      uris: [
+        'http://four.test/',
+        'http://three.test/',
+        'http://one.test/',
+        'http://two.test/folder',
+      ],
     };
 
     expect(await extractFiles(schema)).toEqual(expected);
@@ -167,13 +175,14 @@ describe('json-refs', () => {
         '#/definitions/b': { $ref: '#/definitions/a' },
         '#/definitions/c': { $ref: '#/definitions/b' },
       },
+      uris: [],
     };
 
     expect(await resolveRefs(schema)).toEqual(expected);
   });
 
   it('Should resolve nested recursive with files', async () => {
-    const schema = {
+    const schema: Schema = {
       $id: 'http://localhost:1234/tree',
       description: 'tree of nodes',
       type: 'object',
@@ -203,7 +212,7 @@ describe('json-refs', () => {
   });
 
   it('Should resolve complex refs', async () => {
-    const schema = {
+    const schema: Schema = {
       type: 'object',
       properties: {
         mangled: { $ref: '#/definitions/unknown/more-unknown' },
@@ -269,6 +278,92 @@ describe('json-refs', () => {
           type: 'number',
         },
       },
+      uris: ['http://example.test/schema'],
+    });
+  });
+
+  it('Should resolve local refs from json', async () => {
+    const schema = {
+      test: { $ref: 'assets/test.json#/UserResponse' },
+    };
+
+    expect(await resolveRefs(schema, { cwd: __dirname })).toEqual({
+      schema: {
+        test: { $ref: 'assets/test.json#/UserResponse' },
+      },
+      refs: {
+        'assets/test.json': {
+          UserResponse: {
+            type: 'object',
+            properties: { id: { type: 'string' }, name: { type: 'string' } },
+          },
+        },
+        'assets/test.json#/UserResponse': {
+          type: 'object',
+          properties: { id: { type: 'string' }, name: { type: 'string' } },
+        },
+      },
+      uris: [expect.stringContaining('file://')],
+    });
+  });
+
+  it('Should resolve local refs from yaml', async () => {
+    const schema = {
+      test: { $ref: 'assets/test.yaml#/UserResponse' },
+    };
+
+    expect(await resolveRefs(schema, { cwd: __dirname })).toEqual({
+      schema: {
+        test: { $ref: 'assets/test.yaml#/UserResponse' },
+      },
+      refs: {
+        'assets/test.yaml': {
+          UserResponse: {
+            type: 'object',
+            properties: { id: { type: 'string' }, name: { type: 'string' } },
+          },
+        },
+        'assets/test.yaml#/UserResponse': {
+          type: 'object',
+          properties: { id: { type: 'string' }, name: { type: 'string' } },
+        },
+      },
+      uris: [expect.stringContaining('file://')],
+    });
+  });
+
+  it('Should resolve local refs in nested files', async () => {
+    const schema = {
+      test: { $ref: 'assets/test.yml#/UserResponse' },
+    };
+
+    expect(await resolveRefs(schema, { cwd: __dirname })).toEqual({
+      schema: {
+        test: { $ref: 'assets/test.yml#/UserResponse' },
+      },
+      refs: {
+        'test.json': {
+          UserResponse: {
+            type: 'object',
+            properties: { id: { type: 'string' }, name: { type: 'string' } },
+          },
+        },
+        'test.json#/UserResponse': {
+          type: 'object',
+          properties: { id: { type: 'string' }, name: { type: 'string' } },
+        },
+        'assets/test.yml': {
+          UserResponse: {
+            type: 'object',
+            properties: { id: { $ref: 'test.json#/UserResponse' } },
+          },
+        },
+        'assets/test.yml#/UserResponse': {
+          type: 'object',
+          properties: { id: { $ref: 'test.json#/UserResponse' } },
+        },
+      },
+      uris: [expect.stringContaining('file://'), expect.stringContaining('file://')],
     });
   });
 
@@ -292,6 +387,7 @@ describe('json-refs', () => {
         'http://example.test/schema#/test': { type: 'number' },
         'http://example.test/schema#/other': { type: 'array' },
       },
+      uris: ['http://example.test/schema'],
     });
   });
 
@@ -321,6 +417,7 @@ describe('json-refs', () => {
         'http://example.test/schema#/other': { type: 'array' },
         'http://example.test/other-schema#/last': { type: 'object' },
       },
+      uris: ['http://example.test/schema', 'http://example.test/other-schema'],
     });
   });
 

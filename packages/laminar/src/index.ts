@@ -15,7 +15,6 @@ export { withLogger, Logger, LoggerContext } from './middleware/logger';
 export { HttpError } from './HttpError';
 export { selectRoute, toRoute, router, get, post, patch, del, options, put } from './router';
 export {
-  Addition,
   Context,
   Laminar,
   LaminarCookie,

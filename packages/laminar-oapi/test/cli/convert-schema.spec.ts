@@ -1,18 +1,18 @@
+import { Schema } from '@ovotech/json-schema';
 import { readdirSync, readFileSync } from 'fs';
 import nock = require('nock');
-import { SchemaObject } from 'openapi3-ts';
 import { join } from 'path';
 import { schemaTs } from '../../src';
 
 interface Test {
   description: string;
-  data: any;
+  data: unknown;
   valid: boolean;
 }
 
 interface Suite {
   description: string;
-  schema: SchemaObject;
+  schema: Schema;
   tests: Test[];
 }
 
@@ -51,7 +51,7 @@ for (const testFolder of testFolders) {
 
   for (const [name, suites] of testFiles) {
     describe(`${testFolder} ${name}`, () => {
-      it.each<[string, SchemaObject]>(suites.map(suite => [suite.description, suite.schema]))(
+      it.each<[string, Schema]>(suites.map(suite => [suite.description, suite.schema]))(
         'Test %s',
         async (description, schema) => {
           const ts = await schemaTs(schema);

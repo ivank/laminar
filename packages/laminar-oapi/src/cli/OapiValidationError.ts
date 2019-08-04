@@ -1,9 +1,12 @@
 export class OapiValidationError extends Error {
-  constructor(message: string, readonly errors: string[] = []) {
+  public readonly errors: string[];
+
+  public constructor(message: string, errors: string[] = []) {
     super(message);
+    this.errors = errors;
   }
 
-  toString() {
+  public toString(): string {
     return `Error: ${this.message}\n${this.errors.map(item => ` | ${item}`).join('\n')}\n`;
   }
 }

@@ -1,0 +1,66 @@
+# AccountMeter
+# =======================================
+AccountMeterBase:
+  properties:
+    tariffName:
+      type: string
+    plan:
+      type: string
+    address:
+      type: string
+    postCode:
+      type: string
+    mpxn:
+      type: string
+    msn:
+      type: string
+    startDate:
+      type: string
+      format: date
+    endDate:
+      type: string
+      format: date
+  required:
+    - tariffName
+    - plan
+    - address
+    - postCode
+    - mpxn
+    - msn
+    - startDate
+    - endDate
+
+AccountMeterElec:
+  allOf:
+    - { $ref: '#/AccountMeterBase' }
+    - properties:
+        meterType:
+          enum: ['elec']
+        profileClassId:
+          type: string
+        meterTimeswitchCode:
+          type: string
+        lineLossFactorClassId:
+          type: string
+      required:
+        - meterType
+        - profileClassId
+        - meterTimeswitchCode
+        - lineLossFactorClassId
+
+AccountMeterGas:
+  allOf:
+    - { $ref: '#/AccountMeterBase' }
+    - properties:
+        meterType:
+          enum: ['gas']
+        ldz:
+          type: string
+      required: ['meterType', 'ldz']
+
+AccountMeter:
+  oneOf:
+    - { $ref: '#/AccountMeterElec' }
+    - { $ref: '#/AccountMeterGas' }
+  discriminator:
+    propertyName: meterType

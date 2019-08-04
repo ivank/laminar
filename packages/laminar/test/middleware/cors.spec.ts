@@ -6,7 +6,7 @@ let server: Server;
 
 const api = axios.create({ baseURL: 'http://localhost:8095' });
 
-const app = () => ({ health: 'ok' });
+const app = (): object => ({ health: 'ok' });
 
 describe('Cors middleware', () => {
   afterEach(async () => {

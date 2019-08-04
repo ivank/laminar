@@ -1,0 +1,113 @@
+---
+openapi: 3.0.0
+info:
+  title: Boost statements
+  version: 1.0.0
+servers:
+  - url: http://localhost:8094
+paths:
+  '/accounts/{accountId}/meters':
+    get:
+      summary: Get Meters, associated with an account, and its service start and end dates (SSD...SED)
+      parameters:
+        - { $ref: '#/components/parameters/accountId' }
+      responses:
+        'default': { $ref: '#/components/responses/HttpErrorResponse' }
+        '200':
+          description: An list of meters for an account
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AccountMeterBase' }
+
+components:
+  responses:
+    HttpErrorResponse:
+      description: Error Response
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/HttpError' }
+
+  parameters:
+    accountId:
+      name: accountId
+      in: path
+      schema:
+        type: string
+      required: true
+
+  schemas:
+    HttpError:
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+
+    # AccountMeter
+    # =======================================
+
+    AccountMeterBase:
+      properties:
+        tariffName:
+          type: string
+        plan:
+          type: string
+        address:
+          type: string
+        postCode:
+          type: string
+        mpxn:
+          type: string
+        msn:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+      required:
+        - tariffName
+        - plan
+        - address
+        - postCode
+        - mpxn
+        - msn
+        - startDate
+        - endDate
+
+    AccountMeterElec:
+      allOf:
+        - { $ref: '#/components/schemas/AccountMeterBase' }
+        - properties:
+            meterType:
+              enum: ['elec']
+            profileClassId:
+              type: string
+            meterTimeswitchCode:
+              type: string
+            lineLossFactorClassId:
+              type: string
+          required:
+            - meterType
+            - profileClassId
+            - meterTimeswitchCode
+            - lineLossFactorClassId
+
+    AccountMeterGas:
+      allOf:
+        - { $ref: '#/components/schemas/AccountMeterBase' }
+        - properties:
+            meterType:
+              enum: ['gas']
+            ldz:
+              type: string
+          required: ['meterType', 'ldz']
+
+    AccountMeter:
+      oneOf:
+        - { $ref: '#/components/schemas/AccountMeterElec' }
+        - { $ref: '#/components/schemas/AccountMeterGas' }
+      discriminator:
+        propertyName: meterType

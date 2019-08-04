@@ -8,10 +8,7 @@
     "preset": "../jest.json"
   },
   "scripts": {
-    "build": "tsc --outDir dist --declaration",
-    "lint-prettier": "prettier --list-different {src,test}/**/*.ts",
-    "lint-tslint": "tslint --config tslint.json '{src,test}/**/*.ts'",
-    "lint": "yarn lint-prettier && yarn lint-tslint"
+    "build": "tsc --outDir dist --declaration"
   },
   "dependencies": {},
   "devDependencies": {
@@ -19,6 +16,6 @@
     "@types/benchmark": "^1.0.31",
     "benchmark": "^2.1.4",
     "node-fetch": "^2.6.0",
-    "ts-node": "^8.2.0"
+    "ts-node": "^8.3.0"
   }
 }

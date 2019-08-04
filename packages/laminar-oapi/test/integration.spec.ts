@@ -2,21 +2,37 @@ import { HttpError, laminar, response } from '@ovotech/laminar';
 import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
-import { loadYamlFile, OapiConfig, OapiContext, withOapi } from '../src';
+import { OapiConfig, withOapi } from '../src';
 import { LoggerContext, withLogger } from './middleware/logger';
 
 let server: Server;
 
-export type Pet = NewPet & {
+type Pet = NewPet & {
   id: number;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
-export interface NewPet {
+interface NewPet {
   name: string;
   tag?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
+
+interface PathWithId {
+  id: string;
+}
+
+interface AuthInfo {
+  authInfo?: {
+    user?: string;
+  };
+}
+
+const isBodyNewPet = (body: unknown): body is NewPet =>
+  typeof body === 'object' && body !== null && 'name' in body;
+
+const isPathWithId = (path: unknown): path is PathWithId =>
+  typeof path === 'object' && path !== null && 'id' in path;
 
 describe('Integration', () => {
   afterEach(async () => {
@@ -27,8 +43,8 @@ describe('Integration', () => {
     const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
     const log = jest.fn();
 
-    const config: OapiConfig<LoggerContext> = {
-      api: loadYamlFile(join(__dirname, 'integration.yaml')),
+    const config: OapiConfig<LoggerContext & AuthInfo> = {
+      api: join(__dirname, 'integration.yaml'),
       security: {
         BearerAuth: ({ headers, logger }) => {
           if (headers.authorization === 'Bearer 123') {
@@ -55,19 +71,32 @@ describe('Integration', () => {
             logger('Get all');
             return Promise.resolve(db);
           },
-          post: ({ body, authInfo, logger }: LoggerContext & OapiContext & { body: NewPet }) => {
+          post: ({ body, authInfo, logger }) => {
+            if (!isBodyNewPet(body)) {
+              throw new HttpError(400, { message: 'Wrong body' });
+            }
             const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };
             logger(`new pet ${pet.name}`);
 
             db.push(pet);
-            return { pet, user: authInfo.user };
+            return { pet, user: authInfo && authInfo.user };
           },
         },
         '/pets/{id}': {
-          get: ({ path }: { path: { id: string } }) =>
-            db.find(item => item.id === Number(path.id)) ||
-            response({ status: 404, body: { code: 123, message: 'Not Found' } }),
-          delete: ({ path }: { path: { id: string } }) => {
+          get: ({ path }) => {
+            if (!isPathWithId(path)) {
+              throw new HttpError(400, { message: 'Missing id in path' });
+            }
+            return (
+              db.find(item => item.id === Number(path.id)) ||
+              response({ status: 404, body: { code: 123, message: 'Not Found' } })
+            );
+          },
+          delete: ({ path }) => {
+            if (!isPathWithId(path)) {
+              throw new HttpError(400, { message: 'Missing id in path' });
+            }
+
             const index = db.findIndex(item => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
@@ -80,8 +109,10 @@ describe('Integration', () => {
       },
     };
 
-    const app = await withOapi(config);
-    server = await laminar({ app: withLogger(log)(app), port: 8093 });
+    const oapi = await withOapi(config);
+    const logger = withLogger(log);
+
+    server = await laminar({ app: logger(oapi), port: 8093 });
 
     const api = axios.create({ baseURL: 'http://localhost:8093' });
 
@@ -229,7 +260,7 @@ describe('Invalid Schema', () => {
     expect(
       withOapi({
         paths: {},
-        api: loadYamlFile(join(__dirname, 'invalid-schema.yaml')),
+        api: join(__dirname, 'invalid-schema.yaml'),
       }),
     ).rejects.toMatchObject({
       message: 'Invalid API Definition',
@@ -251,7 +282,7 @@ describe('Invalid Schema', () => {
     expect(
       withOapi({
         paths: {},
-        api: loadYamlFile(join(__dirname, 'invalid-security.yaml')),
+        api: join(__dirname, 'invalid-security.yaml'),
       }),
     ).rejects.toMatchObject({
       message: 'Security scheme WrongAuth not defined in components.securitySchemes',
@@ -269,7 +300,7 @@ describe('Invalid Schema', () => {
         security: {
           BasicAuth: () => ({}),
         },
-        api: loadYamlFile(join(__dirname, 'integration.yaml')),
+        api: join(__dirname, 'integration.yaml'),
       }),
     ).rejects.toMatchObject({
       message: 'Invalid Resolvers',

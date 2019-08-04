@@ -1,13 +1,19 @@
-import { get, laminar, Middleware, router } from '@ovotech/laminar';
+import { get, laminar, Context, Middleware, router } from '@ovotech/laminar';
 
-const findUser = (id: string) => ({ id, name: 'John' });
+interface User {
+  id: string;
+  name: string;
+}
+
+const findUser = (id: string): User => ({ id, name: 'John' });
 
 interface Logger {
   logger: (message: string) => void;
 }
 
-const withLogging: Middleware<Logger> = resolver => {
+const withLogging: Middleware<Logger, Context> = resolver => {
   const logger = console.log;
+
   return ctx => {
     logger('Requesting', ctx.url.pathname);
     const response = resolver({ ...ctx, logger });
@@ -16,16 +22,18 @@ const withLogging: Middleware<Logger> = resolver => {
   };
 };
 
-const app = withLogging(
-  router<Logger>(
-    get('/.well-known/health-check', () => ({ health: 'ok' })),
-    get('/users/{id}', ({ path, logger }) => {
-      logger('More stuff');
-      return findUser(path.id);
-    }),
-  ),
+const resolver = router<Logger>(
+  get('/.well-known/health-check', () => ({ health: 'ok' })),
+  get('/users/{id}', ({ path, logger }) => {
+    logger('More stuff');
+    return findUser(path.id);
+  }),
 );
 
-laminar({ app, port: 8080 })
-  .then(server => console.log('Started', server.address()))
-  .catch(error => console.log(error));
+const main = async (): Promise<void> => {
+  const app = withLogging(resolver);
+  const server = await laminar({ app, port: 8082 });
+  console.log('Started', server.address());
+};
+
+main();

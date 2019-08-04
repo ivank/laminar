@@ -1,5 +1,8 @@
 export class OapiResolverError extends Error {
-  constructor(message: string, readonly errors: string[] = []) {
+  public readonly errors: string[];
+
+  public constructor(message: string, errors: string[] = []) {
     super(message);
+    this.errors = errors;
   }
 }

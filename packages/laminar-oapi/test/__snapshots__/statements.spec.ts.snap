@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Statements Should process response 1`] = `
+Array [
+  Object {
+    "address": "87, TEST AVENUE, TEST TOWN",
+    "endDate": "2019-06-02",
+    "ldz": "WM",
+    "meterType": "gas",
+    "mpxn": "111111111",
+    "msn": "G4111111",
+    "plan": "PA_G_WM_R_25",
+    "postCode": "TT123EE",
+    "startDate": "2019-01-04",
+    "tariffName": "SMART PAYG (all online)",
+  },
+  Object {
+    "address": "87, TEST AVENUE, LOW HILL, TEST TOWN, WEST MIDLANDS",
+    "endDate": "2019-06-02",
+    "lineLossFactorClassId": "1",
+    "meterTimeswitchCode": "801",
+    "meterType": "elec",
+    "mpxn": "14111111",
+    "msn": "222222222",
+    "plan": "PA_E_14_R_1_25",
+    "postCode": "TT123EE",
+    "profileClassId": "01",
+    "startDate": "2019-01-04",
+    "tariffName": "SMART PAYG (all online)",
+  },
+]
+`;

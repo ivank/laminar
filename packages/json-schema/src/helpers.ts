@@ -1,6 +1,7 @@
-import { JsonSchema, Messages, Schema, ValidateOptions, Validator } from './types';
+import { Messages, ValidateOptions, Validator, Invalid } from './types';
+import { Schema, JsonSchema } from '@ovotech/json-refs';
 
-export const childOptions = (name: string | number, options: ValidateOptions) => ({
+export const childOptions = (name: string | number, options: ValidateOptions): ValidateOptions => ({
   ...options,
   name: `${options.name}.${name}`,
 });
@@ -8,22 +9,24 @@ export const childOptions = (name: string | number, options: ValidateOptions) =>
 export const isJsonSchema = (schema: Schema): schema is JsonSchema =>
   schema && typeof schema === 'object';
 
-export const isObject = (value: any): value is { [key: string]: any } =>
+export const isObject = (value: unknown): value is { [key: string]: unknown } =>
   value && typeof value === 'object' && !Array.isArray(value);
 
-export const isEqual = (a: any, b: any): boolean => {
+export const isEqual = (a: unknown, b: unknown): boolean => {
   if (a === b) {
     return true;
   }
-  if (a === undefined || b === undefined || a === null || b === null) {
+  if (a === undefined || b === undefined) {
     return false;
   }
   if (typeof a === 'object' && typeof b === 'object') {
-    if (a instanceof Date && b instanceof Date) {
+    if (a === null || b === null) {
+      return false;
+    } else if (a instanceof Date && b instanceof Date) {
       return a.getTime() === b.getTime();
     } else if (Array.isArray(a) && Array.isArray(b)) {
       return a.length === b.length && a.every((item, index) => isEqual(item, b[index]));
-    } else if (!Array.isArray(a) && !Array.isArray(b)) {
+    } else if (isObject(a) && isObject(b)) {
       const aKeys = Object.keys(a).sort();
       const bKeys = Object.keys(a).sort();
       return isEqual(aKeys, bKeys) && aKeys.every(key => isEqual(a[key], b[key]));
@@ -42,7 +45,7 @@ export const flatten = <T>(results: T[][]): T[] => {
   return combined;
 };
 
-export const isUniqueWith = <T = any>(compare: (a: T, b: T) => boolean, array: T[]) => {
+export const isUniqueWith = <T = unknown>(compare: (a: T, b: T) => boolean, array: T[]): T[] => {
   const items: T[] = [];
   for (const item of array) {
     if (!items.some(prev => compare(prev, item))) {
@@ -53,7 +56,7 @@ export const isUniqueWith = <T = any>(compare: (a: T, b: T) => boolean, array: T
 };
 
 export const NoErrors = [];
-export const HasError = (code: keyof Messages, name: string, param?: any) => [
+export const HasError = (code: keyof Messages, name: string, param?: unknown): [Invalid] => [
   { code, name, param },
 ];
 

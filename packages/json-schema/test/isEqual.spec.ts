@@ -1,7 +1,7 @@
 import { isEqual } from '../src/helpers';
 
 describe('Helper isEqual', () => {
-  it.each<[string, any, any, boolean]>([
+  it.each<[string, unknown, unknown, boolean]>([
     ['strings', 'test', 'other', false],
     ['strings', 'test', 'test', true],
     ['numbers', 1, 2, false],

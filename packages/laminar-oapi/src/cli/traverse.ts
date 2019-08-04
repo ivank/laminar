@@ -1,30 +1,56 @@
-import { RefMap } from '@ovotech/json-refs';
 import { Document, DocumentContext } from '@ovotech/ts-compose';
-import { ReferenceObject, SchemaObject } from 'openapi3-ts';
+import {
+  ReferenceObject,
+  SchemaObject,
+  ResponseObject,
+  RequestBodyObject,
+  ParameterObject,
+} from 'openapi3-ts';
 import * as ts from 'typescript';
+
+export interface AstRefMap {
+  [ref: string]: unknown;
+}
 
 export interface AstContext extends DocumentContext {
   root: SchemaObject;
-  refs: RefMap;
+  refs: AstRefMap;
 }
 
 export type AstConvert<TAstType = ts.TypeNode> = (
   context: AstContext,
-  schema: any,
+  schema: unknown,
 ) => Document<TAstType, AstContext> | null;
 
-export const isSchema = (schema: any): schema is SchemaObject =>
-  schema && typeof schema === 'object';
+export const isReferenceObject = (item: unknown): item is ReferenceObject =>
+  typeof item === 'object' && !!item && '$ref' in item;
 
-export const isRef = (item: any): item is ReferenceObject =>
-  typeof item === 'object' && '$ref' in item && typeof item.$ref === 'string';
+export const isResponseObject = (item: unknown): item is ResponseObject =>
+  !isReferenceObject(item) && typeof item === 'object' && !!item && 'description' in item;
 
-export const withRef = <T = any>(item: T | ReferenceObject, context: AstContext): T => {
-  if (isRef(item)) {
+export const isRequestBodyObject = (item: unknown): item is RequestBodyObject =>
+  !isReferenceObject(item) && typeof item === 'object' && !!item && 'content' in item;
+
+export const isParameterObject = (item: unknown): item is ParameterObject =>
+  !isReferenceObject(item) && typeof item === 'object' && !!item && 'in' in item && 'name' in item;
+
+export const isSchemaObject = (item: unknown): item is SchemaObject =>
+  !isReferenceObject(item) && typeof item === 'object' && !!item;
+
+export const getReferencedObject = <T>(
+  item: T | ReferenceObject,
+  guard: (item: unknown) => item is T,
+  context: AstContext,
+): T => {
+  if (isReferenceObject(item)) {
     if (!context.refs[item.$ref]) {
       throw Error(`Reference [${item.$ref}] not found`);
     }
-    return context.refs[item.$ref];
+    const resolved = context.refs[item.$ref];
+    if (!guard(resolved)) {
+      throw Error(`Reference [${item.$ref} was not the correct type`);
+    }
+    return resolved;
   } else {
     return item;
   }

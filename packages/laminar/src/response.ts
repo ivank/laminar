@@ -4,6 +4,27 @@ import { lookup } from 'mime-types';
 import { Readable } from 'stream';
 import { Laminar, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
 
+const contentType = (body: unknown): string => {
+  return body instanceof Readable || body instanceof Buffer
+    ? 'application/octet-stream'
+    : typeof body === 'object'
+    ? 'application/json'
+    : 'text/plain';
+};
+
+const contentLength = (body: unknown): number | undefined =>
+  body instanceof Buffer || typeof body === 'string' ? Buffer.byteLength(body) : undefined;
+
+const setCookie = (cookies: { [key: string]: string | LaminarCookie }): string[] =>
+  Object.entries(cookies).map(([name, content]) => {
+    if (typeof content === 'string') {
+      return cookie.serialize(name, content);
+    } else {
+      const { value, ...options } = content;
+      return cookie.serialize(name, value, options);
+    }
+  });
+
 export const response = <TBody = LaminarResponse['body']>({
   body,
   status = 200,
@@ -30,7 +51,13 @@ export const response = <TBody = LaminarResponse['body']>({
 export const isResponse = (res: ResolverResponse): res is LaminarResponse =>
   typeof res === 'object' && Laminar in res;
 
-export const extendResponse = (res: ResolverResponse, extend: Partial<LaminarResponse>) => {
+export const toResponse = (res: ResolverResponse): LaminarResponse =>
+  isResponse(res) ? res : response({ body: res });
+
+export const extendResponse = (
+  res: ResolverResponse,
+  extend: Partial<LaminarResponse>,
+): LaminarResponse => {
   const original = toResponse(res);
   return {
     ...original,
@@ -40,12 +67,10 @@ export const extendResponse = (res: ResolverResponse, extend: Partial<LaminarRes
   };
 };
 
-export const toResponse = (res: ResolverResponse): LaminarResponse =>
-  isResponse(res) ? res : response({ body: res });
+export const message = (status: number, body: {} | string): LaminarResponse =>
+  response({ status, body });
 
-export const message = (status: number, body: {} | string) => response({ status, body });
-
-export const redirect = (url: string, partial?: Partial<LaminarResponse>) => {
+export const redirect = (url: string, partial?: Partial<LaminarResponse>): LaminarResponse => {
   const { headers, ...rest } = partial || { headers: {} };
   return response({
     headers: {
@@ -59,7 +84,7 @@ export const redirect = (url: string, partial?: Partial<LaminarResponse>) => {
   });
 };
 
-export const file = (filename: string, partial?: Partial<LaminarResponse>) =>
+export const file = (filename: string, partial?: Partial<LaminarResponse>): LaminarResponse =>
   response({
     body: createReadStream(filename),
     headers: {
@@ -70,28 +95,9 @@ export const file = (filename: string, partial?: Partial<LaminarResponse>) =>
     ...partial,
   });
 
-const contentType = (body: any) => {
-  return body instanceof Readable || body instanceof Buffer
-    ? 'application/octet-stream'
-    : typeof body === 'object'
-    ? 'application/json'
-    : 'text/plain';
-};
-
-const contentLength = (body: any) =>
-  body instanceof Buffer || typeof body === 'string' ? Buffer.byteLength(body) : undefined;
-
-const setCookie = (cookies: { [key: string]: string | LaminarCookie }) =>
-  Object.entries(cookies).map(([name, content]) => {
-    if (typeof content === 'string') {
-      return cookie.serialize(name, content);
-    } else {
-      const { value, ...options } = content;
-      return cookie.serialize(name, value, options);
-    }
-  });
-
-export const resolveBody = (body: LaminarResponse['body']) =>
+export const resolveBody = (
+  body: LaminarResponse['body'],
+): string | Readable | Buffer | undefined =>
   body instanceof Readable ||
   body instanceof Buffer ||
   typeof body === 'string' ||

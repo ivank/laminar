@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { CookieSerializeOptions } from 'cookie';
 import { IncomingHttpHeaders, OutgoingHttpHeaders, ServerOptions } from 'http';
 import { Readable } from 'stream';
@@ -17,7 +19,7 @@ export interface LaminarRequest {
   url: UrlWithParsedQuery;
   method: Method;
   headers: IncomingHttpHeaders;
-  query?: any;
+  query: { [key: string]: any };
   body: any;
   cookies?: { [key: string]: string };
 }
@@ -54,29 +56,31 @@ export interface Context {
   cookies: LaminarRequest['cookies'];
 }
 
-export interface Addition {
-  [key: string]: any;
-}
+export type Middleware<TProvide extends object = {}, TRequire extends object = {}> = <
+  TInherit extends object = {}
+>(
+  resolver: Resolver<TProvide & TRequire & TInherit>,
+) => Resolver<TRequire & TInherit>;
 
-export type Middleware<MC extends Addition = {}> = <C extends Addition = {}>(
-  resolver: Resolver<MC & C>,
-) => Resolver<C>;
 export type ResolverResponse = string | Readable | Buffer | LaminarResponse | object;
-export type Resolver<C extends Addition = {}> = (
-  ctx: C & Context,
+
+export type Resolver<C extends object = {}> = (
+  ctx: C,
 ) => Promise<ResolverResponse> | ResolverResponse;
 
-export interface Route<C extends Addition = {}> {
-  matcher: (ctx: Context) => RouteContext | false;
-  resolver: Resolver<C & RouteContext>;
-  [key: string]: any;
+export type RouteMatcher<C extends object = {}> = (ctx: Context & C) => RouteContext | false;
+
+export interface Route<C extends object = {}> {
+  matcher: RouteMatcher;
+  resolver: Resolver<C & RouteContext & Context>;
+  [key: string]: unknown;
 }
 
 export interface RouteContext {
   path: any;
 }
 
-export type RouteResolver = <C extends Addition = {}>(
+export type RouteResolver = <C extends object = {}>(
   path: string,
-  resolver: Resolver<C & RouteContext>,
+  resolver: Resolver<C & RouteContext & Context>,
 ) => Route<C>;

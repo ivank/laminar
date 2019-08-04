@@ -1,4 +1,4 @@
-import { extendResponse, Middleware, response } from '..';
+import { extendResponse, Middleware, response, Context } from '..';
 
 export interface CorsConfig {
   allowOrigin?: string[] | string | RegExp | OriginChecker | true;
@@ -13,7 +13,7 @@ type OriginChecker = (requestOrigin: string) => boolean;
 const toAllowOrigin = (
   origin: CorsConfig['allowOrigin'],
   originHeader: string | string[] | undefined,
-) => {
+): string | undefined => {
   if (origin === true || origin === undefined) {
     return '*';
   } else if (typeof origin === 'string') {
@@ -38,23 +38,24 @@ const toAllowOrigin = (
 const toAllowHeaders = (
   headers: CorsConfig['allowHeaders'],
   requestHeaders: string | string[] | undefined,
-) => {
+): string | undefined => {
   const allowed = headers || requestHeaders;
   return Array.isArray(allowed) ? allowed.join(',') : allowed;
 };
 
-const toMaxAge = (maxAge: CorsConfig['maxAge']) => (maxAge ? maxAge.toString() : undefined);
+const toMaxAge = (maxAge: CorsConfig['maxAge']): string | undefined =>
+  maxAge ? maxAge.toString() : undefined;
 
-const toExposeHeaders = (headers: CorsConfig['exposeHeaders']) =>
+const toExposeHeaders = (headers: CorsConfig['exposeHeaders']): string | undefined =>
   Array.isArray(headers) ? headers.join(',') : headers;
 
-const toAllowMethods = (methods: CorsConfig['allowMethods']) =>
+const toAllowMethods = (methods: CorsConfig['allowMethods']): string =>
   (methods || ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE']).join(',');
 
-const toAllowCredentials = (credentials: CorsConfig['allowCredentials']) =>
+const toAllowCredentials = (credentials: CorsConfig['allowCredentials']): 'true' | undefined =>
   credentials ? 'true' : undefined;
 
-export const withCors = (config: CorsConfig = {}): Middleware => resolver => {
+export const withCors = (config: CorsConfig = {}): Middleware<{}, Context> => resolver => {
   return ctx => {
     const headers = {
       'Access-Control-Allow-Origin': toAllowOrigin(config.allowOrigin, ctx.headers.origin),

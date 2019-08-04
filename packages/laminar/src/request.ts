@@ -6,7 +6,7 @@ import { concatStream, parseQueryObjects } from './helpers';
 import { HttpError } from './HttpError';
 import { Laminar, LaminarRequest, Method } from './types';
 
-export const parseContentType = (value: string) => {
+export const parseContentType = (value: string): string | null => {
   const parts = /^([^\/]+)\/([^\+\;]+)(\+[^;]+)?(\;.*)?/.exec(value);
   if (!parts) {
     return null;
@@ -15,7 +15,7 @@ export const parseContentType = (value: string) => {
   return `${type.trim()}/${suffix ? suffix.substr(1).trim() : subtype.trim()}`.toLowerCase();
 };
 
-const parseBody = async (stream: Readable, contentType?: string) => {
+const parseBody = async (stream: Readable, contentType?: string): Promise<unknown> => {
   if (!contentType) {
     return stream;
   }
@@ -39,7 +39,7 @@ const parseBody = async (stream: Readable, contentType?: string) => {
 
 export const request = async (req: IncomingMessage): Promise<LaminarRequest> => {
   const body = await parseBody(req, req.headers['content-type']);
-  const url = parse(req.url!, true);
+  const url = req.url ? parse(req.url, true) : { query: {} };
   return {
     [Laminar]: true,
     body,

@@ -1,4 +1,4 @@
-import { LaminarResponse } from "@ovotech/laminar";
+import { Context, LaminarResponse } from "@ovotech/laminar";
 
 import { OapiConfig, OapiContext, OapiSecurityResolver } from "@ovotech/laminar-oapi";
 
@@ -55,7 +55,7 @@ export interface Error {
 
 export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsGetContext extends OapiContext {
+export interface TPetsGetContext extends Context, OapiContext {
     query: {
         tags?: string[];
         limit?: number;
@@ -70,13 +70,13 @@ export interface PetCreated {
 
 export type TPetsPostResponse = (PetCreated | LaminarResponse<PetCreated> | Promise<PetCreated> | Promise<LaminarResponse<PetCreated>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsPostContext extends OapiContext {
+export interface TPetsPostContext extends Context, OapiContext {
     body: NewPet;
 }
 
 export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsIdGetContext extends OapiContext {
+export interface TPetsIdGetContext extends Context, OapiContext {
     path: {
         id: string;
     };
@@ -84,7 +84,7 @@ export interface TPetsIdGetContext extends OapiContext {
 
 export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsIdDeleteContext extends OapiContext {
+export interface TPetsIdDeleteContext extends Context, OapiContext {
     path: {
         id: string;
     };

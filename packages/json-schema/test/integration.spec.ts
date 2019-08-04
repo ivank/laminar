@@ -1,4 +1,5 @@
-import { Schema, validate } from '../src';
+import { validate } from '../src';
+import { Schema } from '@ovotech/json-refs';
 
 describe('Helper isEqual', () => {
   it('Should validate schema', async () => {

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { LaminarResponse, Middleware, response } from '@ovotech/laminar';
 import { readdirSync, readFileSync } from 'fs';
 import { compile, RuntimeOptions, TemplateDelegate } from 'handlebars';

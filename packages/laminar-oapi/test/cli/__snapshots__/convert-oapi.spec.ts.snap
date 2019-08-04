@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Json Schema Ts Test api-with-examples.yaml 1`] = `
-"import { LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiConfig, OapiContext } from \\"@ovotech/laminar-oapi\\";
 
@@ -18,17 +18,17 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type TGetResponse = (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse | Promise<LaminarResponse>);
 
-export interface TGetContext extends OapiContext {
+export interface TGetContext extends Context, OapiContext {
 }
 
 export type TV2GetResponse = (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse | Promise<LaminarResponse>);
 
-export interface TV2GetContext extends OapiContext {
+export interface TV2GetContext extends Context, OapiContext {
 }"
 `;
 
 exports[`Json Schema Ts Test balance-service.yaml 1`] = `
-"import { LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiConfig, OapiContext, OapiSecurityResolver } from \\"@ovotech/laminar-oapi\\";
 
@@ -89,12 +89,12 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type TInternalStatusGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
-export interface TInternalStatusGetContext extends OapiContext {
+export interface TInternalStatusGetContext extends Context, OapiContext {
 }
 
 export type TInternalSwaggeryamlGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
-export interface TInternalSwaggeryamlGetContext extends OapiContext {
+export interface TInternalSwaggeryamlGetContext extends Context, OapiContext {
 }
 
 export interface BalanceSummaryHttpResponse {
@@ -121,7 +121,7 @@ export interface HttpErrorResponse {
 
 export type TApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
-export interface TApiV2AccountsAccountIdBalanceGetContext extends OapiContext {
+export interface TApiV2AccountsAccountIdBalanceGetContext extends Context, OapiContext {
     path: {
         accountId: string;
     };
@@ -165,7 +165,7 @@ export interface ChargeTransactionEntity {
 
 export type TApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2> | Promise<TransactionHistoryHttpResponseV2> | Promise<LaminarResponse<TransactionHistoryHttpResponseV2>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
-export interface TApiV2AccountsAccountIdTransactionsGetContext extends OapiContext {
+export interface TApiV2AccountsAccountIdTransactionsGetContext extends Context, OapiContext {
     path: {
         accountId: string;
     };
@@ -201,7 +201,7 @@ export interface AdjustBalanceRequest {
 
 export type TApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
-export interface TApiV2AccountsAccountIdAdjustbalancePostContext extends OapiContext {
+export interface TApiV2AccountsAccountIdAdjustbalancePostContext extends Context, OapiContext {
     path: {
         accountId: string;
     };
@@ -210,7 +210,7 @@ export interface TApiV2AccountsAccountIdAdjustbalancePostContext extends OapiCon
 
 export type TApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
-export interface TApiV3AccountsAccountIdBalanceGetContext extends OapiContext {
+export interface TApiV3AccountsAccountIdBalanceGetContext extends Context, OapiContext {
     path: {
         accountId: string;
     };
@@ -255,7 +255,7 @@ export interface StandingChargeTransactionEntity {
 
 export type TApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3> | Promise<TransactionHistoryHttpResponseV3> | Promise<LaminarResponse<TransactionHistoryHttpResponseV3>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
-export interface TApiV3AccountsAccountIdTransactionsGetContext extends OapiContext {
+export interface TApiV3AccountsAccountIdTransactionsGetContext extends Context, OapiContext {
     path: {
         accountId: string;
     };
@@ -268,7 +268,7 @@ export interface TApiV3AccountsAccountIdTransactionsGetContext extends OapiConte
 
 export type TApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
-export interface TApiV3AccountsAccountIdAdjustbalancePostContext extends OapiContext {
+export interface TApiV3AccountsAccountIdAdjustbalancePostContext extends Context, OapiContext {
     path: {
         accountId: string;
     };
@@ -277,7 +277,7 @@ export interface TApiV3AccountsAccountIdAdjustbalancePostContext extends OapiCon
 `;
 
 exports[`Json Schema Ts Test converter.yaml 1`] = `
-"import { LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiConfig, OapiContext } from \\"@ovotech/laminar-oapi\\";
 
@@ -297,12 +297,12 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type TWellknownDocsGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
-export interface TWellknownDocsGetContext extends OapiContext {
+export interface TWellknownDocsGetContext extends Context, OapiContext {
 }
 
 export type TWellknownOpenapiyamlGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
-export interface TWellknownOpenapiyamlGetContext extends OapiContext {
+export interface TWellknownOpenapiyamlGetContext extends Context, OapiContext {
 }
 
 export interface HttpError {
@@ -311,13 +311,13 @@ export interface HttpError {
 
 export type THtmlPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
 
-export interface THtmlPostContext extends OapiContext {
+export interface THtmlPostContext extends Context, OapiContext {
     body: any;
 }"
 `;
 
 exports[`Json Schema Ts Test link-example.yaml 1`] = `
-"import { LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiConfig, OapiContext } from \\"@ovotech/laminar-oapi\\";
 
@@ -352,7 +352,7 @@ export interface user {
 
 export type T20UsersUsernameGetResponse = (user | LaminarResponse<user> | Promise<user> | Promise<LaminarResponse<user>>);
 
-export interface T20UsersUsernameGetContext extends OapiContext {
+export interface T20UsersUsernameGetContext extends Context, OapiContext {
     path: {
         username: string;
     };
@@ -366,7 +366,7 @@ export interface repository {
 
 export type T20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<repository[]> | Promise<repository[]> | Promise<LaminarResponse<repository[]>>);
 
-export interface T20RepositoriesUsernameGetContext extends OapiContext {
+export interface T20RepositoriesUsernameGetContext extends Context, OapiContext {
     path: {
         username: string;
     };
@@ -374,7 +374,7 @@ export interface T20RepositoriesUsernameGetContext extends OapiContext {
 
 export type T20RepositoriesUsernameSlugGetResponse = (repository | LaminarResponse<repository> | Promise<repository> | Promise<LaminarResponse<repository>>);
 
-export interface T20RepositoriesUsernameSlugGetContext extends OapiContext {
+export interface T20RepositoriesUsernameSlugGetContext extends Context, OapiContext {
     path: {
         username: string;
         slug: string;
@@ -391,7 +391,7 @@ export interface pullrequest {
 
 export type T20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<pullrequest[]> | Promise<pullrequest[]> | Promise<LaminarResponse<pullrequest[]>>);
 
-export interface T20RepositoriesUsernameSlugPullrequestsGetContext extends OapiContext {
+export interface T20RepositoriesUsernameSlugPullrequestsGetContext extends Context, OapiContext {
     path: {
         username: string;
         slug: string;
@@ -403,7 +403,7 @@ export interface T20RepositoriesUsernameSlugPullrequestsGetContext extends OapiC
 
 export type T20RepositoriesUsernameSlugPullrequestsPidGetResponse = (pullrequest | LaminarResponse<pullrequest> | Promise<pullrequest> | Promise<LaminarResponse<pullrequest>>);
 
-export interface T20RepositoriesUsernameSlugPullrequestsPidGetContext extends OapiContext {
+export interface T20RepositoriesUsernameSlugPullrequestsPidGetContext extends Context, OapiContext {
     path: {
         username: string;
         slug: string;
@@ -413,7 +413,7 @@ export interface T20RepositoriesUsernameSlugPullrequestsPidGetContext extends Oa
 
 export type T20RepositoriesUsernameSlugPullrequestsPidMergePostResponse = (LaminarResponse | Promise<LaminarResponse>);
 
-export interface T20RepositoriesUsernameSlugPullrequestsPidMergePostContext extends OapiContext {
+export interface T20RepositoriesUsernameSlugPullrequestsPidMergePostContext extends Context, OapiContext {
     path: {
         username: string;
         slug: string;
@@ -423,7 +423,7 @@ export interface T20RepositoriesUsernameSlugPullrequestsPidMergePostContext exte
 `;
 
 exports[`Json Schema Ts Test petstore.yaml 1`] = `
-"import { LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiConfig, OapiContext } from \\"@ovotech/laminar-oapi\\";
 
@@ -456,7 +456,7 @@ export interface Error {
 
 export type TPetsGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsGetContext extends OapiContext {
+export interface TPetsGetContext extends Context, OapiContext {
     query: {
         limit?: number;
     };
@@ -464,12 +464,12 @@ export interface TPetsGetContext extends OapiContext {
 
 export type TPetsPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsPostContext extends OapiContext {
+export interface TPetsPostContext extends Context, OapiContext {
 }
 
 export type TPetsPetIdGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsPetIdGetContext extends OapiContext {
+export interface TPetsPetIdGetContext extends Context, OapiContext {
     path: {
         petId: string;
     };
@@ -477,7 +477,7 @@ export interface TPetsPetIdGetContext extends OapiContext {
 `;
 
 exports[`Json Schema Ts Test petstore-expanded.yaml 1`] = `
-"import { LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiConfig, OapiContext } from \\"@ovotech/laminar-oapi\\";
 
@@ -529,7 +529,7 @@ export interface Error {
 
 export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsGetContext extends OapiContext {
+export interface TPetsGetContext extends Context, OapiContext {
     query: {
         tags?: string[];
         limit?: number;
@@ -538,13 +538,13 @@ export interface TPetsGetContext extends OapiContext {
 
 export type TPetsPostResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsPostContext extends OapiContext {
+export interface TPetsPostContext extends Context, OapiContext {
     body: NewPet;
 }
 
 export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsIdGetContext extends OapiContext {
+export interface TPetsIdGetContext extends Context, OapiContext {
     path: {
         id: number;
     };
@@ -552,15 +552,69 @@ export interface TPetsIdGetContext extends OapiContext {
 
 export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
-export interface TPetsIdDeleteContext extends OapiContext {
+export interface TPetsIdDeleteContext extends Context, OapiContext {
     path: {
         id: number;
     };
 }"
 `;
 
+exports[`Json Schema Ts Test statements.yaml 1`] = `
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+
+import { OapiConfig, OapiContext } from \\"@ovotech/laminar-oapi\\";
+
+export interface Config<C extends {} = {}> extends OapiConfig<C> {
+    paths: {
+        \\"/accounts/{accountId}/meters\\": {
+            get: (context: TAccountsAccountIdMetersGetContext & C) => TAccountsAccountIdMetersGetResponse;
+        };
+    };
+}
+
+export type AccountMeter = AccountMeterElec | AccountMeterGas;
+
+export type AccountMeterElec = AccountMeterBase & {
+    meterType: \\"elec\\";
+    profileClassId: string;
+    meterTimeswitchCode: string;
+    lineLossFactorClassId: string;
+    [key: string]: any;
+};
+
+export interface AccountMeterBase {
+    tariffName: string;
+    plan: string;
+    address: string;
+    postCode: string;
+    mpxn: string;
+    msn: string;
+    startDate: string;
+    endDate: string;
+    [key: string]: any;
+}
+
+export type AccountMeterGas = AccountMeterBase & {
+    meterType: \\"gas\\";
+    ldz: string;
+    [key: string]: any;
+};
+
+export interface HttpError {
+    message?: string;
+}
+
+export type TAccountsAccountIdMetersGetResponse = (AccountMeter[] | LaminarResponse<AccountMeter[]> | Promise<AccountMeter[]> | Promise<LaminarResponse<AccountMeter[]>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
+
+export interface TAccountsAccountIdMetersGetContext extends Context, OapiContext {
+    path: {
+        accountId: string;
+    };
+}"
+`;
+
 exports[`Json Schema Ts Test uspto.yaml 1`] = `
-"import { LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiConfig, OapiContext } from \\"@ovotech/laminar-oapi\\";
 
@@ -610,12 +664,12 @@ export interface dataSetList {
 
 export type TGetResponse = (dataSetList | LaminarResponse<dataSetList> | Promise<dataSetList> | Promise<LaminarResponse<dataSetList>>);
 
-export interface TGetContext extends OapiContext {
+export interface TGetContext extends Context, OapiContext {
 }
 
 export type TDatasetVersionFieldsGetResponse = (string | LaminarResponse<string> | Promise<string> | Promise<LaminarResponse<string>>) | (LaminarResponse<string> | Promise<LaminarResponse<string>>);
 
-export interface TDatasetVersionFieldsGetContext extends OapiContext {
+export interface TDatasetVersionFieldsGetContext extends Context, OapiContext {
     path: {
         dataset: string;
         version: string;
@@ -624,7 +678,7 @@ export interface TDatasetVersionFieldsGetContext extends OapiContext {
 
 export type TDatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]> | Promise<any[]> | Promise<LaminarResponse<any[]>>) | (LaminarResponse | Promise<LaminarResponse>);
 
-export interface TDatasetVersionRecordsPostContext extends OapiContext {
+export interface TDatasetVersionRecordsPostContext extends Context, OapiContext {
     path: {
         version: string;
         dataset: string;

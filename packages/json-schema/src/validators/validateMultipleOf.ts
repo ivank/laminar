@@ -1,7 +1,7 @@
 import { HasError, NoErrors } from '../helpers';
 import { Validator } from '../types';
 
-const getPrecision = (num: number) => {
+const getPrecision = (num: number): number => {
   if (!Number.isFinite(num)) {
     return 0;
   } else {
@@ -15,7 +15,7 @@ const getPrecision = (num: number) => {
   }
 };
 
-const isDivisible = (num: number, divisor: number) => {
+const isDivisible = (num: number, divisor: number): boolean => {
   const multiplier = Math.pow(10, Math.max(getPrecision(num), getPrecision(divisor)));
   return Math.round(num * multiplier) % Math.round(divisor * multiplier) === 0;
 };
