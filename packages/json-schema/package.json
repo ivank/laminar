@@ -22,7 +22,7 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "build": "tsc --outDir dist --declaration",
+    "build": "tsc --declaration",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

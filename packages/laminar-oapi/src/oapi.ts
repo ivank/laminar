@@ -1,4 +1,5 @@
-import { compile, Schema, validate, validateCompiled } from '@ovotech/json-schema';
+import { compile, validate, validateCompiled } from '@ovotech/json-schema';
+import { Schema } from '@ovotech/json-refs';
 import {
   Context,
   HttpError,
@@ -74,6 +75,13 @@ const toRoutes = <C extends {} = {}>(
 export const isAuthInfo = (item: unknown): item is OapiAuthInfo =>
   typeof item == 'object' && item !== null;
 
+export const isResolvedOpenAPIObject = (schema: Schema): schema is ResolvedOpenAPIObject =>
+  typeof schema === 'object' &&
+  schema !== null &&
+  'openapi' in schema &&
+  'info' in schema &&
+  'paths' in schema;
+
 const validateSecurity = async <C extends object = {}>(
   context: C & Context & OapiContext,
   requirements?: SecurityRequirementObject[],
@@ -108,18 +116,22 @@ export const withOapi = async <C extends object = {}>({
   paths,
   security,
 }: OapiConfig<C>): Promise<Resolver<C & Context>> => {
-  const compiled = await compile<ResolvedOpenAPIObject>(api);
+  const { schema, ...schemaOptions } = await compile(api);
 
-  const checkApi = await validate(openapiV3 as Schema, compiled.schema);
+  const checkApi = await validate(openapiV3 as Schema, schema);
   if (!checkApi.valid) {
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
 
-  const schemas = toSchema(compiled.schema);
+  if (!isResolvedOpenAPIObject(schema)) {
+    throw new OapiResolverError('Error validating schema');
+  }
+
+  const schemas = toSchema(schema);
   const routes = toRoutes(schemas.routes, paths);
 
   const checkResolvers = validateCompiled(
-    { ...compiled, schema: schemas.resolvers },
+    { ...schemaOptions, schema: schemas.resolvers },
     { paths, security },
     { name: 'api' },
   );
@@ -138,15 +150,19 @@ export const withOapi = async <C extends object = {}>({
     }
 
     const {
-      route: { resolver, schema },
+      route: { resolver, schema: routeSchema },
       path,
     } = select;
 
     const context: C & Context & OapiContext = { ...ctx, path };
 
-    const checkContext = validateCompiled({ ...compiled, schema: schema.context }, context, {
-      name: 'context',
-    });
+    const checkContext = validateCompiled(
+      { ...schemaOptions, schema: routeSchema.context },
+      context,
+      {
+        name: 'context',
+      },
+    );
 
     if (!checkContext.valid) {
       throw new HttpError(400, {
@@ -157,15 +173,15 @@ export const withOapi = async <C extends object = {}>({
 
     const authInfo = await validateSecurity<C>(
       context,
-      schema.security,
-      compiled.schema.components && compiled.schema.components.securitySchemes,
+      routeSchema.security,
+      schema.components && schema.components.securitySchemes,
       security,
     );
 
     const result = await resolver({ ...context, authInfo });
     const laminarResponse = isResponse(result) ? result : response({ body: result });
     const checkResponse = validateCompiled(
-      { ...compiled, schema: schema.response },
+      { ...schemaOptions, schema: schema.response },
       laminarResponse,
       { name: 'response' },
     );

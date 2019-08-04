@@ -1,4 +1,5 @@
-import { compile, Schema, validate } from '@ovotech/json-schema';
+import { compile, validate } from '@ovotech/json-schema';
+import { Schema } from '@ovotech/json-refs';
 import { Command } from 'commander';
 import * as fs from 'fs';
 import { openapiV3 } from 'openapi-schemas';

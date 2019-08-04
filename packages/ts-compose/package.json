@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest --runInBand",
-    "build": "tsc --outDir dist --declaration",
+    "build": "tsc --declaration",
     "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",
     "lint": "yarn lint:prettier && yarn lint:eslint"

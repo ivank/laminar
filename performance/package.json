@@ -8,7 +8,9 @@
     "preset": "../jest.json"
   },
   "scripts": {
-    "build": "tsc --outDir dist --declaration"
+    "build": "tsc --declaration",
+    "test": "true",
+    "lint": "true"
   },
   "dependencies": {},
   "devDependencies": {

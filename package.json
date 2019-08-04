@@ -7,9 +7,10 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "private": true,
   "scripts": {
-    "test": "lerna run test",
-    "lint": "lerna run lint",
-    "build": "lerna run build"
+    "test": "yarn workspaces run test",
+    "lint": "yarn workspaces run lint",
+    "build": "yarn workspaces run build",
+    "publish": "yarn workspaces run publish"
   },
   "workspaces": [
     "packages/*",
@@ -17,8 +18,5 @@
   ],
   "jest": {
     "preset": "./jest.json"
-  },
-  "devDependencies": {
-    "lerna": "^3.16.4"
   }
 }

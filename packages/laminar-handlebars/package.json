@@ -9,7 +9,7 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsc --outDir dist --declaration",
+    "build": "tsc --declaration",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

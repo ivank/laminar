@@ -7,3 +7,4 @@ export {
   isRefSchema,
 } from './resolve';
 export { Schema, ResolvedSchema, RefMap, RefSchema, JsonSchema } from './types';
+export { ResolveError } from './ResolveError';

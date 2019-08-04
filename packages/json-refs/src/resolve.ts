@@ -13,6 +13,7 @@ import {
   Context,
   ResolvedSchema,
 } from './types';
+import { ResolveError } from './ResolveError';
 
 export const isTraversable = (schema: unknown): schema is TraversableSchema =>
   schema && typeof schema === 'object';
@@ -36,6 +37,9 @@ export const getId = (schema: Schema): string | undefined => {
   return undefined;
 };
 
+export const isSchema = (schema: unknown): schema is Schema =>
+  typeof schema === 'boolean' || (typeof schema === 'object' && schema !== null);
+
 export const isRefSchema = (schema: Schema): schema is RefSchema =>
   isTraversable(schema) &&
   '$ref' in schema &&
@@ -56,7 +60,7 @@ export const currentUrl = (
     return fullUrl;
   } else if (url && cwd) {
     if (!existsSync(join(cwd, url))) {
-      throw new Error(`File ${url} in ${cwd} does not exist`);
+      throw new ResolveError(`File ${url} in ${cwd} does not exist`);
     }
     return url;
   } else {
@@ -201,7 +205,7 @@ export const resolveRefs = async (
   original: Schema,
   fileContext: FileContext = {},
 ): Promise<ResolvedSchema> => {
-  const copy = JSON.parse(JSON.stringify(original));
+  const copy: Schema = JSON.parse(JSON.stringify(original));
   const { refs, uris } = await extractFiles(copy, fileContext);
   const context = { schema: copy, refs, uris };
   const schema = resolveNestedRefs(copy, context, fileContext);
