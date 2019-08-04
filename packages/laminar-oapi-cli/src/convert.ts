@@ -16,7 +16,9 @@ export const isOpenApiObject = (schema: Schema): schema is OpenAPIObject =>
 export const oapiTs = async (api: OpenAPIObject | string): Promise<string> => {
   const { schema, refs } = await compile(api);
   if (!isOpenApiObject(schema)) {
-    throw new OapiValidationError('Schema could not be converted to typescript. Not a json-schema');
+    throw new OapiValidationError('Invalid Schema', [
+      'Schema could not be converted to typescript. Not a json-schema',
+    ]);
   }
 
   const context = { root: schema, refs, identifiers: {}, imports: {} };

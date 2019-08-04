@@ -7,6 +7,7 @@ import {
   ParameterObject,
 } from 'openapi3-ts';
 import * as ts from 'typescript';
+import { OapiValidationError } from './OapiValidationError';
 
 export interface AstRefMap {
   [ref: string]: unknown;
@@ -44,11 +45,11 @@ export const getReferencedObject = <T>(
 ): T => {
   if (isReferenceObject(item)) {
     if (!context.refs[item.$ref]) {
-      throw Error(`Reference [${item.$ref}] not found`);
+      throw new OapiValidationError('Reference Error', [`Reference [${item.$ref}] not found`]);
     }
     const resolved = context.refs[item.$ref];
     if (!guard(resolved)) {
-      throw Error(`Reference [${item.$ref} was not the correct type`);
+      throw new OapiValidationError(`Reference Error`, [`${item.$ref} was not the correct type`]);
     }
     return resolved;
   } else {

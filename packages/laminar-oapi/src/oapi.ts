@@ -181,7 +181,7 @@ export const withOapi = async <C extends object = {}>({
     const result = await resolver({ ...context, authInfo });
     const laminarResponse = isResponse(result) ? result : response({ body: result });
     const checkResponse = validateCompiled(
-      { ...schemaOptions, schema: schema.response },
+      { ...schemaOptions, schema: routeSchema.response },
       laminarResponse,
       { name: 'response' },
     );

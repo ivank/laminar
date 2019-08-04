@@ -87,6 +87,9 @@ describe('Integration', () => {
             if (!isPathWithId(path)) {
               throw new HttpError(400, { message: 'Missing id in path' });
             }
+            if (path.id === '10000') {
+              return JSON.parse(JSON.stringify({ something: 'else' }));
+            }
             return (
               db.find(item => item.id === Number(path.id)) ||
               response({ status: 404, body: { code: 123, message: 'Not Found' } })
@@ -179,6 +182,22 @@ describe('Integration', () => {
       status: 200,
       data: { id: 111, name: 'Catty', tag: 'kitten' },
     });
+
+    await expect(
+      api.get('/pets/10000', { headers: { Authorization: 'Basic 123' } }),
+    ).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 500,
+        data: {
+          message: 'Response Validation Error',
+          errors: [
+            '[response.body] is missing [name] keys',
+            '[response.body] is missing [id] keys',
+          ],
+        },
+      }),
+    );
 
     await expect(
       api.get('/pets/000', { headers: { Authorization: 'Basic 123' } }),

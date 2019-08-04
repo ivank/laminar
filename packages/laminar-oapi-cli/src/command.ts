@@ -1,5 +1,5 @@
 import { compile, validate } from '@ovotech/json-schema';
-import { Schema } from '@ovotech/json-refs';
+import { Schema, ResolveError } from '@ovotech/json-refs';
 import { Command } from 'commander';
 import * as fs from 'fs';
 import { openapiV3 } from 'openapi-schemas';
@@ -19,6 +19,16 @@ export const processFile = async (
   return { content: await oapiTs(fileName), uris };
 };
 
+export const errorMessage = (error: Error): string | Error => {
+  if (error instanceof OapiValidationError) {
+    return `-----\n${error.toString()}`;
+  } else if (error instanceof ResolveError) {
+    return `-----\nError: Cannot resolve api references\n |${error.message}`;
+  } else {
+    return error;
+  }
+};
+
 export const toFiles = (uris: string[]): string[] =>
   uris.filter(uri => uri.startsWith('file://')).map(uri => uri.substring('file://'.length));
 
@@ -27,28 +37,30 @@ new Command()
   .option('-w, --watch', 'Watch for file changes and update live')
   .arguments('<input-file> <output-file>')
   .action(async (inputFile, outputFile, { watch }) => {
-    const { content, uris } = await processFile(inputFile);
-    fs.writeFileSync(outputFile, content);
-    process.stdout.write(`Conterted ${inputFile} -> ${outputFile}\n`);
+    try {
+      const { content, uris } = await processFile(inputFile);
+      fs.writeFileSync(outputFile, content);
+      console.log(`Conterted ${inputFile} -> ${outputFile}`);
 
-    if (watch) {
-      process.stdout.write(`Watching ${toFiles(uris).join(', ')} for changes\n`);
+      if (watch) {
+        console.log(`Watching ${toFiles(uris).join(', ')} for changes`);
 
-      toFiles(uris).forEach(file =>
-        fs.watchFile(file, async () => {
-          try {
-            const update = await processFile(inputFile);
-            fs.writeFileSync(outputFile, update.content);
-            process.stdout.write(`Updated ${inputFile} -> ${outputFile} (trigger ${file})\n`);
-          } catch (error) {
-            if (error instanceof OapiValidationError) {
-              process.stderr.write(`-----\n${error.toString()}`);
-            } else {
-              throw error;
+        toFiles(uris).forEach(file =>
+          fs.watchFile(file, async () => {
+            try {
+              const update = await processFile(inputFile);
+              fs.writeFileSync(outputFile, update.content);
+              console.log(`Updated ${inputFile} -> ${outputFile} (trigger ${file})`);
+            } catch (error) {
+              console.error(errorMessage(error));
+              process.exit(1);
             }
-          }
-        }),
-      );
+          }),
+        );
+      }
+    } catch (error) {
+      console.error(errorMessage(error));
+      process.exit(1);
     }
   })
   .parse(process.argv);
