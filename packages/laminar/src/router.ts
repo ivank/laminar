@@ -1,4 +1,3 @@
-import { HttpError } from './HttpError';
 import {
   Context,
   Method,
@@ -7,7 +6,9 @@ import {
   RouteContext,
   RouteResolver,
   RouteMatcher,
+  DefaultRouteResolver,
 } from './types';
+import { message } from './response';
 
 export const paramRegEx = /\{[^\}]+\}/g;
 
@@ -77,9 +78,7 @@ export const router = <C extends object = {}>(...routes: Route<C>[]): Resolver<C
     const select = selectRoute(ctx, routes as Route[]);
 
     if (!select) {
-      throw new HttpError(404, {
-        message: `Path ${ctx.method} ${ctx.url.pathname} not found`,
-      });
+      return message(404, { message: `Path ${ctx.method} ${ctx.url.pathname} not found` });
     }
     return select.route.resolver({ ...ctx, path: select.path });
   };
@@ -91,3 +90,7 @@ export const del: RouteResolver = (path, resolver) => toRoute(Method.DELETE, pat
 export const patch: RouteResolver = (path, resolver) => toRoute(Method.PATCH, path, resolver);
 export const put: RouteResolver = (path, resolver) => toRoute(Method.PUT, path, resolver);
 export const options: RouteResolver = (path, resolver) => toRoute(Method.OPTIONS, path, resolver);
+export const defaultRoute: DefaultRouteResolver = resolver => ({
+  resolver,
+  matcher: () => ({ path: {} }),
+});

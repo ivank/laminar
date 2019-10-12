@@ -1,21 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { LaminarResponse, Middleware, response } from '@ovotech/laminar';
-import { readdirSync, readFileSync } from 'fs';
+import { readdirSync, readFileSync, existsSync } from 'fs';
 import { compile, RuntimeOptions, TemplateDelegate } from 'handlebars';
 import { join } from 'path';
 
 export interface TemplateConfig {
   helpers?: RuntimeOptions['helpers'];
-  rootDir?: string;
-  partialsDir?: string;
+  dir?: string;
+  partials?: string;
   extension?: string;
-  viewsDir?: string;
+  views?: string;
   headers?: LaminarResponse['headers'];
 }
 
 export interface CompileTemplatesOptions {
-  rootDir: string;
+  childDir: string;
+  dir: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   compileOptions?: any;
   extension: string;
 }
@@ -32,49 +32,55 @@ export interface HandlebarsContext {
   ) => LaminarResponse<string>;
 }
 
-export const deepReaddirSync = (rootDir: string, dir: string, parent: string = ''): string[] =>
-  readdirSync(join(rootDir, dir), { withFileTypes: true }).reduce<string[]>(
+export const deepReaddirSync = (dir: string, childDir: string, parent: string = ''): string[] =>
+  readdirSync(join(dir, childDir), { withFileTypes: true }).reduce<string[]>(
     (all, item) =>
       item.isDirectory()
-        ? [...all, ...deepReaddirSync(rootDir, join(dir, item.name), join(parent, item.name))]
+        ? [...all, ...deepReaddirSync(dir, join(childDir, item.name), join(parent, item.name))]
         : [...all, join(parent, item.name)],
     [],
   );
 
-export const compileTemplates = (
-  dir: string,
-  { rootDir, extension, compileOptions }: CompileTemplatesOptions,
-): Templates =>
-  deepReaddirSync(rootDir, dir)
+export const compileTemplates = ({
+  childDir,
+  dir,
+  extension,
+  compileOptions,
+}: CompileTemplatesOptions): Templates =>
+  deepReaddirSync(dir, childDir)
     .filter(file => file.endsWith(extension))
     .reduce((all, file) => {
       const name = file.slice(0, -(extension.length + 1));
-      const input = readFileSync(join(rootDir, dir, file), 'utf8');
+      const input = readFileSync(join(dir, childDir, file), 'utf8');
       return { ...all, [name]: compile(input, compileOptions) };
     }, {});
 
-export const withHandlebars = ({
+export const createHandlebars = ({
   helpers = {},
-  rootDir = process.cwd(),
+  dir = process.cwd(),
   extension = 'handlebars',
-  partialsDir = './partials',
-  viewsDir = './views',
+  partials = 'partials',
+  views = 'views',
   headers,
 }: TemplateConfig): Middleware<HandlebarsContext> => {
   const defaultHeaders = { 'content-type': 'text/html' };
 
-  const partials = compileTemplates(partialsDir, { rootDir, extension });
-  const views = compileTemplates(viewsDir, { rootDir, extension });
+  const partialTemplates = existsSync(join(dir, partials))
+    ? compileTemplates({ childDir: partials, dir, extension })
+    : {};
+  const viewTemplates = compileTemplates({ childDir: views, dir, extension });
+
+  if (Object.keys(viewTemplates).length === 0) {
+    throw new Error(`No templates with extension ${extension} found in ${join(dir, views)}`);
+  }
 
   const render: HandlebarsContext['render'] = (view, data = {}, options = {}) => {
     return response({
       ...options,
-      body: views[view](data, { helpers, partials }),
+      body: viewTemplates[view](data, { helpers, partials: partialTemplates }),
       headers: { ...defaultHeaders, ...headers, ...options.headers },
     });
   };
 
-  return next => {
-    return ctx => next({ ...ctx, render });
-  };
+  return next => ctx => next({ ...ctx, render });
 };

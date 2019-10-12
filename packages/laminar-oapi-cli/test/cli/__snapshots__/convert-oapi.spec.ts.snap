@@ -18,11 +18,17 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type TGetResponse = (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse | Promise<LaminarResponse>);
 
+/**
+ * List API versions
+ */
 export interface TGetContext extends Context, OapiContext {
 }
 
 export type TV2GetResponse = (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse | Promise<LaminarResponse>);
 
+/**
+ * Show API version details
+ */
 export interface TV2GetContext extends Context, OapiContext {
 }"
 `;
@@ -89,11 +95,18 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type TInternalStatusGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
+/**
+ * Health check endpoint
+ * Returns 200 if the application is up. It does not do deep check. Always gives back 200.
+ */
 export interface TInternalStatusGetContext extends Context, OapiContext {
 }
 
 export type TInternalSwaggeryamlGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
+/**
+ * Returns application swagger definition
+ */
 export interface TInternalSwaggeryamlGetContext extends Context, OapiContext {
 }
 
@@ -121,6 +134,10 @@ export interface HttpErrorResponse {
 
 export type TApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
+/**
+ * DEPRECATED: Find Balance for the given accountId
+ * Returns the balance
+ */
 export interface TApiV2AccountsAccountIdBalanceGetContext extends Context, OapiContext {
     path: {
         accountId: string;
@@ -165,6 +182,10 @@ export interface ChargeTransactionEntity {
 
 export type TApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2> | Promise<TransactionHistoryHttpResponseV2> | Promise<LaminarResponse<TransactionHistoryHttpResponseV2>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
+/**
+ * DEPRECATED: Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
+ * Returns the transaction history
+ */
 export interface TApiV2AccountsAccountIdTransactionsGetContext extends Context, OapiContext {
     path: {
         accountId: string;
@@ -201,6 +222,10 @@ export interface AdjustBalanceRequest {
 
 export type TApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
+/**
+ * DEPRECATED: Adjust balance for a given accountId
+ * Returns with the adjusted balance
+ */
 export interface TApiV2AccountsAccountIdAdjustbalancePostContext extends Context, OapiContext {
     path: {
         accountId: string;
@@ -210,6 +235,10 @@ export interface TApiV2AccountsAccountIdAdjustbalancePostContext extends Context
 
 export type TApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
+/**
+ * Find Balance for the given accountId
+ * Returns the balance
+ */
 export interface TApiV3AccountsAccountIdBalanceGetContext extends Context, OapiContext {
     path: {
         accountId: string;
@@ -255,6 +284,10 @@ export interface StandingChargeTransactionEntity {
 
 export type TApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3> | Promise<TransactionHistoryHttpResponseV3> | Promise<LaminarResponse<TransactionHistoryHttpResponseV3>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
+/**
+ * Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
+ * Returns the transaction history
+ */
 export interface TApiV3AccountsAccountIdTransactionsGetContext extends Context, OapiContext {
     path: {
         accountId: string;
@@ -268,11 +301,1501 @@ export interface TApiV3AccountsAccountIdTransactionsGetContext extends Context, 
 
 export type TApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
 
+/**
+ * Adjust balance for a given accountId
+ * Returns with the adjusted balance
+ */
 export interface TApiV3AccountsAccountIdAdjustbalancePostContext extends Context, OapiContext {
     path: {
         accountId: string;
     };
     body: AdjustBalanceRequest;
+}"
+`;
+
+exports[`Json Schema Ts Test cloudtasks.yaml 1`] = `
+"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+
+import { OapiConfig, OapiContext, OapiSecurityResolver } from \\"@ovotech/laminar-oapi\\";
+
+export interface Config<C extends {} = {}> extends OapiConfig<C> {
+    paths: {
+        \\"/v2/{+name}\\": {
+            /**
+             * Deletes a task.
+             *
+             * A task can be deleted if it is scheduled or dispatched. A task
+             * cannot be deleted if it has executed successfully or permanently
+             * failed.
+             */
+            delete: (context: TV2NameDeleteContext & C) => TV2NameDeleteResponse;
+            /**
+             * Gets a task.
+             */
+            get: (context: TV2NameGetContext & C) => TV2NameGetResponse;
+            /**
+             * Updates a queue.
+             *
+             * This method creates the queue if it does not exist and updates
+             * the queue if it does exist.
+             *
+             * Queues created with this method allow tasks to live for a maximum of 31
+             * days. After a task is 31 days old, the task will be deleted regardless of whether
+             * it was dispatched or not.
+             *
+             * WARNING: Using this method may have unintended side effects if you are
+             * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+             * Read
+             * [Overview of Queue Management and
+             * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+             * this method.
+             */
+            patch: (context: TV2NamePatchContext & C) => TV2NamePatchResponse;
+        };
+        \\"/v2/{+name}/locations\\": {
+            /**
+             * Lists information about the supported locations for this service.
+             */
+            get: (context: TV2NameLocationsGetContext & C) => TV2NameLocationsGetResponse;
+        };
+        \\"/v2/{+name}:pause\\": {
+            /**
+             * Pauses the queue.
+             *
+             * If a queue is paused then the system will stop dispatching tasks
+             * until the queue is resumed via
+             * ResumeQueue. Tasks can still be added
+             * when the queue is paused. A queue is paused if its
+             * state is PAUSED.
+             */
+            post: (context: TV2NamepausePostContext & C) => TV2NamepausePostResponse;
+        };
+        \\"/v2/{+name}:purge\\": {
+            /**
+             * Purges a queue by deleting all of its tasks.
+             *
+             * All tasks created before this method is called are permanently deleted.
+             *
+             * Purge operations can take up to one minute to take effect. Tasks
+             * might be dispatched before the purge takes effect. A purge is irreversible.
+             */
+            post: (context: TV2NamepurgePostContext & C) => TV2NamepurgePostResponse;
+        };
+        \\"/v2/{+name}:resume\\": {
+            /**
+             * Resume a queue.
+             *
+             * This method resumes a queue after it has been
+             * PAUSED or
+             * DISABLED. The state of a queue is stored
+             * in the queue's state; after calling this method it
+             * will be set to RUNNING.
+             *
+             * WARNING: Resuming many high-QPS queues at the same time can
+             * lead to target overloading. If you are resuming high-QPS
+             * queues, follow the 500/50/5 pattern described in
+             * [Managing Cloud Tasks Scaling
+             * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+             */
+            post: (context: TV2NameresumePostContext & C) => TV2NameresumePostResponse;
+        };
+        \\"/v2/{+name}:run\\": {
+            /**
+             * Forces a task to run now.
+             *
+             * When this method is called, Cloud Tasks will dispatch the task, even if
+             * the task is already running, the queue has reached its RateLimits or
+             * is PAUSED.
+             *
+             * This command is meant to be used for manual debugging. For
+             * example, RunTask can be used to retry a failed
+             * task after a fix has been made or to manually force a task to be
+             * dispatched now.
+             *
+             * The dispatched task is returned. That is, the task that is returned
+             * contains the status after the task is dispatched but
+             * before the task is received by its target.
+             *
+             * If Cloud Tasks receives a successful response from the task's
+             * target, then the task will be deleted; otherwise the task's
+             * schedule_time will be reset to the time that
+             * RunTask was called plus the retry delay specified
+             * in the queue's RetryConfig.
+             *
+             * RunTask returns
+             * NOT_FOUND when it is called on a
+             * task that has already succeeded or permanently failed.
+             */
+            post: (context: TV2NamerunPostContext & C) => TV2NamerunPostResponse;
+        };
+        \\"/v2/{+parent}/queues\\": {
+            /**
+             * Lists queues.
+             *
+             * Queues are returned in lexicographical order.
+             */
+            get: (context: TV2ParentQueuesGetContext & C) => TV2ParentQueuesGetResponse;
+            /**
+             * Creates a queue.
+             *
+             * Queues created with this method allow tasks to live for a maximum of 31
+             * days. After a task is 31 days old, the task will be deleted regardless of whether
+             * it was dispatched or not.
+             *
+             * WARNING: Using this method may have unintended side effects if you are
+             * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+             * Read
+             * [Overview of Queue Management and
+             * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+             * this method.
+             */
+            post: (context: TV2ParentQueuesPostContext & C) => TV2ParentQueuesPostResponse;
+        };
+        \\"/v2/{+parent}/tasks\\": {
+            /**
+             * Lists the tasks in a queue.
+             *
+             * By default, only the BASIC view is retrieved
+             * due to performance considerations;
+             * response_view controls the
+             * subset of information which is returned.
+             *
+             * The tasks may be returned in any order. The ordering may change at any
+             * time.
+             */
+            get: (context: TV2ParentTasksGetContext & C) => TV2ParentTasksGetResponse;
+            /**
+             * Creates a task and adds it to a queue.
+             *
+             * Tasks cannot be updated after creation; there is no UpdateTask command.
+             *
+             * * The maximum task size is 100KB.
+             */
+            post: (context: TV2ParentTasksPostContext & C) => TV2ParentTasksPostResponse;
+        };
+        \\"/v2/{+resource}:getIamPolicy\\": {
+            /**
+             * Gets the access control policy for a Queue.
+             * Returns an empty policy if the resource exists and does not have a policy
+             * set.
+             *
+             * Authorization requires the following
+             * [Google IAM](https://cloud.google.com/iam) permission on the specified
+             * resource parent:
+             *
+             * * \`cloudtasks.queues.getIamPolicy\`
+             */
+            post: (context: TV2ResourcegetIamPolicyPostContext & C) => TV2ResourcegetIamPolicyPostResponse;
+        };
+        \\"/v2/{+resource}:setIamPolicy\\": {
+            /**
+             * Sets the access control policy for a Queue. Replaces any existing
+             * policy.
+             *
+             * Note: The Cloud Console does not check queue-level IAM permissions yet.
+             * Project-level permissions are required to use the Cloud Console.
+             *
+             * Authorization requires the following
+             * [Google IAM](https://cloud.google.com/iam) permission on the specified
+             * resource parent:
+             *
+             * * \`cloudtasks.queues.setIamPolicy\`
+             */
+            post: (context: TV2ResourcesetIamPolicyPostContext & C) => TV2ResourcesetIamPolicyPostResponse;
+        };
+        \\"/v2/{+resource}:testIamPermissions\\": {
+            /**
+             * Returns permissions that a caller has on a Queue.
+             * If the resource does not exist, this will return an empty set of
+             * permissions, not a NOT_FOUND error.
+             *
+             * Note: This operation is designed to be used for building permission-aware
+             * UIs and command-line tools, not for authorization checking. This operation
+             * may \\"fail open\\" without warning.
+             */
+            post: (context: TV2ResourcetestIamPermissionsPostContext & C) => TV2ResourcetestIamPermissionsPostResponse;
+        };
+    };
+    security: {
+        Oauth2: OapiSecurityResolver<C>;
+        Oauth2c: OapiSecurityResolver<C>;
+    };
+}
+
+export interface Empty {
+    [key: string]: any;
+}
+
+export type TV2NameDeleteResponse = (Empty | LaminarResponse<Empty> | Promise<Empty> | Promise<LaminarResponse<Empty>>);
+
+/**
+ * Deletes a task.
+ *
+ * A task can be deleted if it is scheduled or dispatched. A task
+ * cannot be deleted if it has executed successfully or permanently
+ * failed.
+ */
+export interface TV2NameDeleteContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        name: string;
+    };
+}
+
+export interface Task {
+    appEngineHttpRequest?: AppEngineHttpRequest;
+    /**
+     * Output only. The time that the task was created.
+     *
+     * \`create_time\` will be truncated to the nearest second.
+     */
+    createTime?: string;
+    /**
+     * Output only. The number of attempts dispatched.
+     *
+     * This count includes attempts which have been dispatched but haven't
+     * received a response.
+     */
+    dispatchCount?: number;
+    /**
+     * The deadline for requests sent to the worker. If the worker does not
+     * respond by this deadline then the request is cancelled and the attempt
+     * is marked as a \`DEADLINE_EXCEEDED\` failure. Cloud Tasks will retry the
+     * task according to the RetryConfig.
+     *
+     * Note that when the request is cancelled, Cloud Tasks will stop listing for
+     * the response, but whether the worker stops processing depends on the
+     * worker. For example, if the worker is stuck, it may not react to cancelled
+     * requests.
+     *
+     * The default and maximum values depend on the type of request:
+     *
+     *
+     * * For App Engine tasks, 0 indicates that the
+     *   request has the default deadline. The default deadline depends on the
+     *   [scaling
+     *   type](https://cloud.google.com/appengine/docs/standard/go/how-instances-are-managed#instance_scaling)
+     *   of the service: 10 minutes for standard apps with automatic scaling, 24
+     *   hours for standard apps with manual and basic scaling, and 60 minutes for
+     *   flex apps. If the request deadline is set, it must be in the interval [15
+     *   seconds, 24 hours 15 seconds]. Regardless of the task's
+     *   \`dispatch_deadline\`, the app handler will not run for longer than than
+     *   the service's timeout. We recommend setting the \`dispatch_deadline\` to
+     *   at most a few seconds more than the app handler's timeout. For more
+     *   information see
+     *   [Timeouts](https://cloud.google.com/tasks/docs/creating-appengine-handlers#timeouts).
+     *
+     * \`dispatch_deadline\` will be truncated to the nearest millisecond. The
+     * deadline is an approximate deadline.
+     */
+    dispatchDeadline?: string;
+    firstAttempt?: Attempt;
+    lastAttempt?: Attempt;
+    /**
+     * Optionally caller-specified in CreateTask.
+     *
+     * The task name.
+     *
+     * The task name must have the following format:
+     * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+     *
+     * * \`PROJECT_ID\` can contain letters ([A-Za-z]), numbers ([0-9]),
+     *    hyphens (-), colons (:), or periods (.).
+     *    For more information, see
+     *    [Identifying
+     *    projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+     * * \`LOCATION_ID\` is the canonical ID for the task's location.
+     *    The list of available locations can be obtained by calling
+     *    ListLocations.
+     *    For more information, see https://cloud.google.com/about/locations/.
+     * * \`QUEUE_ID\` can contain letters ([A-Za-z]), numbers ([0-9]), or
+     *   hyphens (-). The maximum length is 100 characters.
+     * * \`TASK_ID\` can contain only letters ([A-Za-z]), numbers ([0-9]),
+     *   hyphens (-), or underscores (_). The maximum length is 500 characters.
+     */
+    name?: string;
+    /**
+     * Output only. The number of attempts which have received a response.
+     */
+    responseCount?: number;
+    /**
+     * The time when the task is scheduled to be attempted or retried.
+     *
+     * \`schedule_time\` will be truncated to the nearest microsecond.
+     */
+    scheduleTime?: string;
+    /**
+     * Output only. The view specifies which subset of the Task has
+     * been returned.
+     */
+    view?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    [key: string]: any;
+}
+
+export interface AppEngineHttpRequest {
+    appEngineRouting?: AppEngineRouting;
+    /**
+     * HTTP request body.
+     *
+     * A request body is allowed only if the HTTP method is POST or PUT. It is
+     * an error to set a body on a task with an incompatible HttpMethod.
+     */
+    body?: string;
+    /**
+     * HTTP request headers.
+     *
+     * This map contains the header field names and values.
+     * Headers can be set when the
+     * task is created.
+     * Repeated headers are not supported but a header value can contain commas.
+     *
+     * Cloud Tasks sets some headers to default values:
+     *
+     * * \`User-Agent\`: By default, this header is
+     *   \`\\"AppEngine-Google; (+http://code.google.com/appengine)\\"\`.
+     *   This header can be modified, but Cloud Tasks will append
+     *   \`\\"AppEngine-Google; (+http://code.google.com/appengine)\\"\` to the
+     *   modified \`User-Agent\`.
+     *
+     * If the task has a body, Cloud
+     * Tasks sets the following headers:
+     *
+     * * \`Content-Type\`: By default, the \`Content-Type\` header is set to
+     *   \`\\"application/octet-stream\\"\`. The default can be overridden by explicitly
+     *   setting \`Content-Type\` to a particular media type when the
+     *   task is created.
+     *   For example, \`Content-Type\` can be set to \`\\"application/json\\"\`.
+     * * \`Content-Length\`: This is computed by Cloud Tasks. This value is
+     *   output only.   It cannot be changed.
+     *
+     * The headers below cannot be set or overridden:
+     *
+     * * \`Host\`
+     * * \`X-Google-*\`
+     * * \`X-AppEngine-*\`
+     *
+     * In addition, Cloud Tasks sets some headers when the task is dispatched,
+     * such as headers containing information about the task; see
+     * [request
+     * headers](https://cloud.google.com/appengine/docs/python/taskqueue/push/creating-handlers#reading_request_headers).
+     * These headers are set only when the task is dispatched, so they are not
+     * visible when the task is returned in a Cloud Tasks response.
+     *
+     * Although there is no specific limit for the maximum number of headers or
+     * the size, there is a limit on the maximum size of the Task. For more
+     * information, see the CreateTask documentation.
+     */
+    headers?: any;
+    /**
+     * The HTTP method to use for the request. The default is POST.
+     *
+     * The app's request handler for the task's target URL must be able to handle
+     * HTTP requests with this http_method, otherwise the task attempt will fail
+     * with error code 405 (Method Not Allowed). See
+     * [Writing a push task request
+     * handler](https://cloud.google.com/appengine/docs/java/taskqueue/push/creating-handlers#writing_a_push_task_request_handler)
+     * and the documentation for the request handlers in the language your app is
+     * written in e.g.
+     * [Python Request
+     * Handler](https://cloud.google.com/appengine/docs/python/tools/webapp/requesthandlerclass).
+     */
+    httpMethod?: \\"HTTP_METHOD_UNSPECIFIED\\" | \\"POST\\" | \\"GET\\" | \\"HEAD\\" | \\"PUT\\" | \\"DELETE\\" | \\"PATCH\\" | \\"OPTIONS\\";
+    /**
+     * The relative URI.
+     *
+     * The relative URI must begin with \\"/\\" and must be a valid HTTP relative URI.
+     * It can contain a path and query string arguments.
+     * If the relative URI is empty, then the root path \\"/\\" will be used.
+     * No spaces are allowed, and the maximum length allowed is 2083 characters.
+     */
+    relativeUri?: string;
+    [key: string]: any;
+}
+
+export interface AppEngineRouting {
+    /**
+     * Output only. The host that the task is sent to.
+     *
+     * The host is constructed from the domain name of the app associated with
+     * the queue's project ID (for example <app-id>.appspot.com), and the
+     * service, version,
+     * and instance. Tasks which were created using
+     * the App Engine SDK might have a custom domain name.
+     *
+     * For more information, see
+     * [How Requests are
+     * Routed](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed).
+     */
+    host?: string;
+    /**
+     * App instance.
+     *
+     * By default, the task is sent to an instance which is available when
+     * the task is attempted.
+     *
+     * Requests can only be sent to a specific instance if
+     * [manual scaling is used in App Engine
+     * Standard](https://cloud.google.com/appengine/docs/python/an-overview-of-app-engine?hl=en_US#scaling_types_and_instance_classes).
+     * App Engine Flex does not support instances. For more information, see
+     * [App Engine Standard request
+     * routing](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed)
+     * and [App Engine Flex request
+     * routing](https://cloud.google.com/appengine/docs/flexible/python/how-requests-are-routed).
+     */
+    instance?: string;
+    /**
+     * App service.
+     *
+     * By default, the task is sent to the service which is the default
+     * service when the task is attempted.
+     *
+     * For some queues or tasks which were created using the App Engine
+     * Task Queue API, host is not parsable
+     * into service,
+     * version, and
+     * instance. For example, some tasks
+     * which were created using the App Engine SDK use a custom domain
+     * name; custom domains are not parsed by Cloud Tasks. If
+     * host is not parsable, then
+     * service,
+     * version, and
+     * instance are the empty string.
+     */
+    service?: string;
+    /**
+     * App version.
+     *
+     * By default, the task is sent to the version which is the default
+     * version when the task is attempted.
+     *
+     * For some queues or tasks which were created using the App Engine
+     * Task Queue API, host is not parsable
+     * into service,
+     * version, and
+     * instance. For example, some tasks
+     * which were created using the App Engine SDK use a custom domain
+     * name; custom domains are not parsed by Cloud Tasks. If
+     * host is not parsable, then
+     * service,
+     * version, and
+     * instance are the empty string.
+     */
+    version?: string;
+    [key: string]: any;
+}
+
+export interface Attempt {
+    /**
+     * Output only. The time that this attempt was dispatched.
+     *
+     * \`dispatch_time\` will be truncated to the nearest microsecond.
+     */
+    dispatchTime?: string;
+    responseStatus?: Status;
+    /**
+     * Output only. The time that this attempt response was received.
+     *
+     * \`response_time\` will be truncated to the nearest microsecond.
+     */
+    responseTime?: string;
+    /**
+     * Output only. The time that this attempt was scheduled.
+     *
+     * \`schedule_time\` will be truncated to the nearest microsecond.
+     */
+    scheduleTime?: string;
+    [key: string]: any;
+}
+
+export interface Status {
+    /**
+     * The status code, which should be an enum value of google.rpc.Code.
+     */
+    code?: number;
+    /**
+     * A list of messages that carry the error details.  There is a common set of
+     * message types for APIs to use.
+     */
+    details?: any[];
+    /**
+     * A developer-facing error message, which should be in English. Any
+     * user-facing error message should be localized and sent in the
+     * google.rpc.Status.details field, or localized by the client.
+     */
+    message?: string;
+    [key: string]: any;
+}
+
+export type TV2NameGetResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
+
+/**
+ * Gets a task.
+ */
+export interface TV2NameGetContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    };
+    path: {
+        name: string;
+    };
+}
+
+export interface Queue {
+    appEngineRoutingOverride?: AppEngineRouting;
+    /**
+     * Caller-specified and required in CreateQueue,
+     * after which it becomes output only.
+     *
+     * The queue name.
+     *
+     * The queue name must have the following format:
+     * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+     *
+     * * \`PROJECT_ID\` can contain letters ([A-Za-z]), numbers ([0-9]),
+     *    hyphens (-), colons (:), or periods (.).
+     *    For more information, see
+     *    [Identifying
+     *    projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+     * * \`LOCATION_ID\` is the canonical ID for the queue's location.
+     *    The list of available locations can be obtained by calling
+     *    ListLocations.
+     *    For more information, see https://cloud.google.com/about/locations/.
+     * * \`QUEUE_ID\` can contain letters ([A-Za-z]), numbers ([0-9]), or
+     *   hyphens (-). The maximum length is 100 characters.
+     */
+    name?: string;
+    /**
+     * Output only. The last time this queue was purged.
+     *
+     * All tasks that were created before this time
+     * were purged.
+     *
+     * A queue can be purged using PurgeQueue, the
+     * [App Engine Task Queue SDK, or the Cloud
+     * Console](https://cloud.google.com/appengine/docs/standard/python/taskqueue/push/deleting-tasks-and-queues#purging_all_tasks_from_a_queue).
+     *
+     * Purge time will be truncated to the nearest microsecond. Purge
+     * time will be unset if the queue has never been purged.
+     */
+    purgeTime?: string;
+    rateLimits?: RateLimits;
+    retryConfig?: RetryConfig;
+    /**
+     * Output only. The state of the queue.
+     *
+     * \`state\` can only be changed by called
+     * PauseQueue,
+     * ResumeQueue, or uploading
+     * [queue.yaml/xml](https://cloud.google.com/appengine/docs/python/config/queueref).
+     * UpdateQueue cannot be used to change \`state\`.
+     */
+    state?: \\"STATE_UNSPECIFIED\\" | \\"RUNNING\\" | \\"PAUSED\\" | \\"DISABLED\\";
+    [key: string]: any;
+}
+
+export interface RateLimits {
+    /**
+     * Output only. The max burst size.
+     *
+     * Max burst size limits how fast tasks in queue are processed when
+     * many tasks are in the queue and the rate is high. This field
+     * allows the queue to have a high rate so processing starts shortly
+     * after a task is enqueued, but still limits resource usage when
+     * many tasks are enqueued in a short period of time.
+     *
+     * The [token bucket](https://wikipedia.org/wiki/Token_Bucket)
+     * algorithm is used to control the rate of task dispatches. Each
+     * queue has a token bucket that holds tokens, up to the maximum
+     * specified by \`max_burst_size\`. Each time a task is dispatched, a
+     * token is removed from the bucket. Tasks will be dispatched until
+     * the queue's bucket runs out of tokens. The bucket will be
+     * continuously refilled with new tokens based on
+     * max_dispatches_per_second.
+     *
+     * Cloud Tasks will pick the value of \`max_burst_size\` based on the
+     * value of
+     * max_dispatches_per_second.
+     *
+     * For queues that were created or updated using
+     * \`queue.yaml/xml\`, \`max_burst_size\` is equal to
+     * [bucket_size](https://cloud.google.com/appengine/docs/standard/python/config/queueref#bucket_size).
+     * Since \`max_burst_size\` is output only, if
+     * UpdateQueue is called on a queue
+     * created by \`queue.yaml/xml\`, \`max_burst_size\` will be reset based
+     * on the value of
+     * max_dispatches_per_second,
+     * regardless of whether
+     * max_dispatches_per_second
+     * is updated.
+     *
+     */
+    maxBurstSize?: number;
+    /**
+     * The maximum number of concurrent tasks that Cloud Tasks allows
+     * to be dispatched for this queue. After this threshold has been
+     * reached, Cloud Tasks stops dispatching tasks until the number of
+     * concurrent requests decreases.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * The maximum allowed value is 5,000.
+     *
+     *
+     * This field has the same meaning as
+     * [max_concurrent_requests in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#max_concurrent_requests).
+     */
+    maxConcurrentDispatches?: number;
+    /**
+     * The maximum rate at which tasks are dispatched from this queue.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     * * The maximum allowed value is 500.
+     *
+     *
+     * This field has the same meaning as
+     * [rate in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#rate).
+     */
+    maxDispatchesPerSecond?: number;
+    [key: string]: any;
+}
+
+export interface RetryConfig {
+    /**
+     * Number of attempts per task.
+     *
+     * Cloud Tasks will attempt the task \`max_attempts\` times (that is, if the
+     * first attempt fails, then there will be \`max_attempts - 1\` retries). Must
+     * be >= -1.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     * -1 indicates unlimited attempts.
+     *
+     * This field has the same meaning as
+     * [task_retry_limit in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxAttempts?: number;
+    /**
+     * A task will be scheduled for retry between
+     * min_backoff and
+     * max_backoff duration after it fails,
+     * if the queue's RetryConfig specifies that the task should be
+     * retried.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * \`max_backoff\` will be truncated to the nearest second.
+     *
+     * This field has the same meaning as
+     * [max_backoff_seconds in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxBackoff?: string;
+    /**
+     * The time between retries will double \`max_doublings\` times.
+     *
+     * A task's retry interval starts at
+     * min_backoff, then doubles
+     * \`max_doublings\` times, then increases linearly, and finally
+     * retries retries at intervals of
+     * max_backoff up to
+     * max_attempts times.
+     *
+     * For example, if min_backoff is 10s,
+     * max_backoff is 300s, and
+     * \`max_doublings\` is 3, then the a task will first be retried in
+     * 10s. The retry interval will double three times, and then
+     * increase linearly by 2^3 * 10s.  Finally, the task will retry at
+     * intervals of max_backoff until the
+     * task has been attempted max_attempts
+     * times. Thus, the requests will retry at 10s, 20s, 40s, 80s, 160s,
+     * 240s, 300s, 300s, ....
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * This field has the same meaning as
+     * [max_doublings in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxDoublings?: number;
+    /**
+     * If positive, \`max_retry_duration\` specifies the time limit for
+     * retrying a failed task, measured from when the task was first
+     * attempted. Once \`max_retry_duration\` time has passed *and* the
+     * task has been attempted max_attempts
+     * times, no further attempts will be made and the task will be
+     * deleted.
+     *
+     * If zero, then the task age is unlimited.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * \`max_retry_duration\` will be truncated to the nearest second.
+     *
+     * This field has the same meaning as
+     * [task_age_limit in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxRetryDuration?: string;
+    /**
+     * A task will be scheduled for retry between
+     * min_backoff and
+     * max_backoff duration after it fails,
+     * if the queue's RetryConfig specifies that the task should be
+     * retried.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * \`min_backoff\` will be truncated to the nearest second.
+     *
+     * This field has the same meaning as
+     * [min_backoff_seconds in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    minBackoff?: string;
+    [key: string]: any;
+}
+
+export type TV2NamePatchResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+
+/**
+ * Updates a queue.
+ *
+ * This method creates the queue if it does not exist and updates
+ * the queue if it does exist.
+ *
+ * Queues created with this method allow tasks to live for a maximum of 31
+ * days. After a task is 31 days old, the task will be deleted regardless of whether
+ * it was dispatched or not.
+ *
+ * WARNING: Using this method may have unintended side effects if you are
+ * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+ * Read
+ * [Overview of Queue Management and
+ * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+ * this method.
+ */
+export interface TV2NamePatchContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        updateMask?: string;
+    };
+    path: {
+        name: string;
+    };
+    body?: Queue;
+}
+
+export interface ListLocationsResponse {
+    /**
+     * A list of locations that matches the specified filter in the request.
+     */
+    locations?: Location[];
+    /**
+     * The standard List next-page token.
+     */
+    nextPageToken?: string;
+    [key: string]: any;
+}
+
+export interface Location {
+    /**
+     * The friendly name for this location, typically a nearby city name.
+     * For example, \\"Tokyo\\".
+     */
+    displayName?: string;
+    /**
+     * Cross-service attributes for the location. For example
+     *
+     *     {\\"cloud.googleapis.com/region\\": \\"us-east1\\"}
+     */
+    labels?: any;
+    /**
+     * The canonical id for this location. For example: \`\\"us-east1\\"\`.
+     */
+    locationId?: string;
+    /**
+     * Service-specific metadata. For example the available capacity at the given
+     * location.
+     */
+    metadata?: any;
+    /**
+     * Resource name for the location, which may vary between implementations.
+     * For example: \`\\"projects/example-project/locations/us-east1\\"\`
+     */
+    name?: string;
+    [key: string]: any;
+}
+
+export type TV2NameLocationsGetResponse = (ListLocationsResponse | LaminarResponse<ListLocationsResponse> | Promise<ListLocationsResponse> | Promise<LaminarResponse<ListLocationsResponse>>);
+
+/**
+ * Lists information about the supported locations for this service.
+ */
+export interface TV2NameLocationsGetContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        filter?: string;
+        pageSize?: number;
+        pageToken?: string;
+    };
+    path: {
+        name: string;
+    };
+}
+
+export interface PauseQueueRequest {
+    [key: string]: any;
+}
+
+export type TV2NamepausePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+
+/**
+ * Pauses the queue.
+ *
+ * If a queue is paused then the system will stop dispatching tasks
+ * until the queue is resumed via
+ * ResumeQueue. Tasks can still be added
+ * when the queue is paused. A queue is paused if its
+ * state is PAUSED.
+ */
+export interface TV2NamepausePostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        name: string;
+    };
+    body?: PauseQueueRequest;
+}
+
+export interface PurgeQueueRequest {
+    [key: string]: any;
+}
+
+export type TV2NamepurgePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+
+/**
+ * Purges a queue by deleting all of its tasks.
+ *
+ * All tasks created before this method is called are permanently deleted.
+ *
+ * Purge operations can take up to one minute to take effect. Tasks
+ * might be dispatched before the purge takes effect. A purge is irreversible.
+ */
+export interface TV2NamepurgePostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        name: string;
+    };
+    body?: PurgeQueueRequest;
+}
+
+export interface ResumeQueueRequest {
+    [key: string]: any;
+}
+
+export type TV2NameresumePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+
+/**
+ * Resume a queue.
+ *
+ * This method resumes a queue after it has been
+ * PAUSED or
+ * DISABLED. The state of a queue is stored
+ * in the queue's state; after calling this method it
+ * will be set to RUNNING.
+ *
+ * WARNING: Resuming many high-QPS queues at the same time can
+ * lead to target overloading. If you are resuming high-QPS
+ * queues, follow the 500/50/5 pattern described in
+ * [Managing Cloud Tasks Scaling
+ * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+ */
+export interface TV2NameresumePostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        name: string;
+    };
+    body?: ResumeQueueRequest;
+}
+
+export interface RunTaskRequest {
+    /**
+     * The response_view specifies which subset of the Task will be
+     * returned.
+     *
+     * By default response_view is BASIC; not all
+     * information is retrieved by default because some data, such as
+     * payloads, might be desirable to return only when needed because
+     * of its large size or because of the sensitivity of data that it
+     * contains.
+     *
+     * Authorization for FULL requires
+     * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+     * permission on the Task resource.
+     */
+    responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    [key: string]: any;
+}
+
+export type TV2NamerunPostResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
+
+/**
+ * Forces a task to run now.
+ *
+ * When this method is called, Cloud Tasks will dispatch the task, even if
+ * the task is already running, the queue has reached its RateLimits or
+ * is PAUSED.
+ *
+ * This command is meant to be used for manual debugging. For
+ * example, RunTask can be used to retry a failed
+ * task after a fix has been made or to manually force a task to be
+ * dispatched now.
+ *
+ * The dispatched task is returned. That is, the task that is returned
+ * contains the status after the task is dispatched but
+ * before the task is received by its target.
+ *
+ * If Cloud Tasks receives a successful response from the task's
+ * target, then the task will be deleted; otherwise the task's
+ * schedule_time will be reset to the time that
+ * RunTask was called plus the retry delay specified
+ * in the queue's RetryConfig.
+ *
+ * RunTask returns
+ * NOT_FOUND when it is called on a
+ * task that has already succeeded or permanently failed.
+ */
+export interface TV2NamerunPostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        name: string;
+    };
+    body?: RunTaskRequest;
+}
+
+export interface ListQueuesResponse {
+    /**
+     * A token to retrieve next page of results.
+     *
+     * To return the next page of results, call
+     * ListQueues with this value as the
+     * page_token.
+     *
+     * If the next_page_token is empty, there are no more results.
+     *
+     * The page token is valid for only 2 hours.
+     */
+    nextPageToken?: string;
+    /**
+     * The list of queues.
+     */
+    queues?: Queue[];
+    [key: string]: any;
+}
+
+export type TV2ParentQueuesGetResponse = (ListQueuesResponse | LaminarResponse<ListQueuesResponse> | Promise<ListQueuesResponse> | Promise<LaminarResponse<ListQueuesResponse>>);
+
+/**
+ * Lists queues.
+ *
+ * Queues are returned in lexicographical order.
+ */
+export interface TV2ParentQueuesGetContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        filter?: string;
+        pageSize?: number;
+        pageToken?: string;
+    };
+    path: {
+        parent: string;
+    };
+}
+
+export type TV2ParentQueuesPostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+
+/**
+ * Creates a queue.
+ *
+ * Queues created with this method allow tasks to live for a maximum of 31
+ * days. After a task is 31 days old, the task will be deleted regardless of whether
+ * it was dispatched or not.
+ *
+ * WARNING: Using this method may have unintended side effects if you are
+ * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+ * Read
+ * [Overview of Queue Management and
+ * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+ * this method.
+ */
+export interface TV2ParentQueuesPostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        parent: string;
+    };
+    body?: Queue;
+}
+
+export interface ListTasksResponse {
+    /**
+     * A token to retrieve next page of results.
+     *
+     * To return the next page of results, call
+     * ListTasks with this value as the
+     * page_token.
+     *
+     * If the next_page_token is empty, there are no more results.
+     */
+    nextPageToken?: string;
+    /**
+     * The list of tasks.
+     */
+    tasks?: Task[];
+    [key: string]: any;
+}
+
+export type TV2ParentTasksGetResponse = (ListTasksResponse | LaminarResponse<ListTasksResponse> | Promise<ListTasksResponse> | Promise<LaminarResponse<ListTasksResponse>>);
+
+/**
+ * Lists the tasks in a queue.
+ *
+ * By default, only the BASIC view is retrieved
+ * due to performance considerations;
+ * response_view controls the
+ * subset of information which is returned.
+ *
+ * The tasks may be returned in any order. The ordering may change at any
+ * time.
+ */
+export interface TV2ParentTasksGetContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        pageSize?: number;
+        pageToken?: string;
+        responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    };
+    path: {
+        parent: string;
+    };
+}
+
+export interface CreateTaskRequest {
+    /**
+     * The response_view specifies which subset of the Task will be
+     * returned.
+     *
+     * By default response_view is BASIC; not all
+     * information is retrieved by default because some data, such as
+     * payloads, might be desirable to return only when needed because
+     * of its large size or because of the sensitivity of data that it
+     * contains.
+     *
+     * Authorization for FULL requires
+     * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+     * permission on the Task resource.
+     */
+    responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    task?: Task;
+    [key: string]: any;
+}
+
+export type TV2ParentTasksPostResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
+
+/**
+ * Creates a task and adds it to a queue.
+ *
+ * Tasks cannot be updated after creation; there is no UpdateTask command.
+ *
+ * * The maximum task size is 100KB.
+ */
+export interface TV2ParentTasksPostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        parent: string;
+    };
+    body?: CreateTaskRequest;
+}
+
+export interface GetIamPolicyRequest {
+    options?: GetPolicyOptions;
+    [key: string]: any;
+}
+
+export interface GetPolicyOptions {
+    /**
+     * Optional. The policy format version to be returned.
+     * Acceptable values are 0, 1, and 3.
+     * If the value is 0, or the field is omitted, policy format version 1 will be
+     * returned.
+     */
+    requestedPolicyVersion?: number;
+    [key: string]: any;
+}
+
+export interface Policy {
+    /**
+     * Associates a list of \`members\` to a \`role\`.
+     * \`bindings\` with no members will result in an error.
+     */
+    bindings?: Binding[];
+    /**
+     * \`etag\` is used for optimistic concurrency control as a way to help
+     * prevent simultaneous updates of a policy from overwriting each other.
+     * It is strongly suggested that systems make use of the \`etag\` in the
+     * read-modify-write cycle to perform policy updates in order to avoid race
+     * conditions: An \`etag\` is returned in the response to \`getIamPolicy\`, and
+     * systems are expected to put that etag in the request to \`setIamPolicy\` to
+     * ensure that their change will be applied to the same version of the policy.
+     *
+     * If no \`etag\` is provided in the call to \`setIamPolicy\`, then the existing
+     * policy is overwritten.
+     */
+    etag?: string;
+    /**
+     * Deprecated.
+     */
+    version?: number;
+    [key: string]: any;
+}
+
+export interface Binding {
+    condition?: Expr;
+    /**
+     * Specifies the identities requesting access for a Cloud Platform resource.
+     * \`members\` can have the following values:
+     *
+     * * \`allUsers\`: A special identifier that represents anyone who is
+     *    on the internet; with or without a Google account.
+     *
+     * * \`allAuthenticatedUsers\`: A special identifier that represents anyone
+     *    who is authenticated with a Google account or a service account.
+     *
+     * * \`user:{emailid}\`: An email address that represents a specific Google
+     *    account. For example, \`alice@example.com\` .
+     *
+     *
+     * * \`serviceAccount:{emailid}\`: An email address that represents a service
+     *    account. For example, \`my-other-app@appspot.gserviceaccount.com\`.
+     *
+     * * \`group:{emailid}\`: An email address that represents a Google group.
+     *    For example, \`admins@example.com\`.
+     *
+     *
+     * * \`domain:{domain}\`: The G Suite domain (primary) that represents all the
+     *    users of that domain. For example, \`google.com\` or \`example.com\`.
+     *
+     *
+     */
+    members?: string[];
+    /**
+     * Role that is assigned to \`members\`.
+     * For example, \`roles/viewer\`, \`roles/editor\`, or \`roles/owner\`.
+     */
+    role?: string;
+    [key: string]: any;
+}
+
+export interface Expr {
+    /**
+     * An optional description of the expression. This is a longer text which
+     * describes the expression, e.g. when hovered over it in a UI.
+     */
+    description?: string;
+    /**
+     * Textual representation of an expression in
+     * Common Expression Language syntax.
+     *
+     * The application context of the containing message determines which
+     * well-known feature set of CEL is supported.
+     */
+    expression?: string;
+    /**
+     * An optional string indicating the location of the expression for error
+     * reporting, e.g. a file name and a position in the file.
+     */
+    location?: string;
+    /**
+     * An optional title for the expression, i.e. a short string describing
+     * its purpose. This can be used e.g. in UIs which allow to enter the
+     * expression.
+     */
+    title?: string;
+    [key: string]: any;
+}
+
+export type TV2ResourcegetIamPolicyPostResponse = (Policy | LaminarResponse<Policy> | Promise<Policy> | Promise<LaminarResponse<Policy>>);
+
+/**
+ * Gets the access control policy for a Queue.
+ * Returns an empty policy if the resource exists and does not have a policy
+ * set.
+ *
+ * Authorization requires the following
+ * [Google IAM](https://cloud.google.com/iam) permission on the specified
+ * resource parent:
+ *
+ * * \`cloudtasks.queues.getIamPolicy\`
+ */
+export interface TV2ResourcegetIamPolicyPostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        resource: string;
+    };
+    body?: GetIamPolicyRequest;
+}
+
+export interface SetIamPolicyRequest {
+    policy?: Policy;
+    [key: string]: any;
+}
+
+export type TV2ResourcesetIamPolicyPostResponse = (Policy | LaminarResponse<Policy> | Promise<Policy> | Promise<LaminarResponse<Policy>>);
+
+/**
+ * Sets the access control policy for a Queue. Replaces any existing
+ * policy.
+ *
+ * Note: The Cloud Console does not check queue-level IAM permissions yet.
+ * Project-level permissions are required to use the Cloud Console.
+ *
+ * Authorization requires the following
+ * [Google IAM](https://cloud.google.com/iam) permission on the specified
+ * resource parent:
+ *
+ * * \`cloudtasks.queues.setIamPolicy\`
+ */
+export interface TV2ResourcesetIamPolicyPostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        resource: string;
+    };
+    body?: SetIamPolicyRequest;
+}
+
+export interface TestIamPermissionsRequest {
+    /**
+     * The set of permissions to check for the \`resource\`. Permissions with
+     * wildcards (such as '*' or 'storage.*') are not allowed. For more
+     * information see
+     * [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+     */
+    permissions?: string[];
+    [key: string]: any;
+}
+
+export interface TestIamPermissionsResponse {
+    /**
+     * A subset of \`TestPermissionsRequest.permissions\` that the caller is
+     * allowed.
+     */
+    permissions?: string[];
+    [key: string]: any;
+}
+
+export type TV2ResourcetestIamPermissionsPostResponse = (TestIamPermissionsResponse | LaminarResponse<TestIamPermissionsResponse> | Promise<TestIamPermissionsResponse> | Promise<LaminarResponse<TestIamPermissionsResponse>>);
+
+/**
+ * Returns permissions that a caller has on a Queue.
+ * If the resource does not exist, this will return an empty set of
+ * permissions, not a NOT_FOUND error.
+ *
+ * Note: This operation is designed to be used for building permission-aware
+ * UIs and command-line tools, not for authorization checking. This operation
+ * may \\"fail open\\" without warning.
+ */
+export interface TV2ResourcetestIamPermissionsPostContext extends Context, OapiContext {
+    query: {
+        key?: string;
+        access_token?: string;
+        upload_protocol?: string;
+        prettyPrint?: boolean;
+        quotaUser?: string;
+        uploadType?: string;
+        fields?: string;
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        oauth_token?: string;
+        callback?: string;
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        resource: string;
+    };
+    body?: TestIamPermissionsRequest;
 }"
 `;
 
@@ -297,11 +1820,17 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type TWellknownDocsGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
+/**
+ * HTML Docs
+ */
 export interface TWellknownDocsGetContext extends Context, OapiContext {
 }
 
 export type TWellknownOpenapiyamlGetResponse = (LaminarResponse | Promise<LaminarResponse>);
 
+/**
+ * API
+ */
 export interface TWellknownOpenapiyamlGetContext extends Context, OapiContext {
 }
 
@@ -311,6 +1840,9 @@ export interface HttpError {
 
 export type THtmlPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
 
+/**
+ * Generate PDF from html
+ */
 export interface THtmlPostContext extends Context, OapiContext {
     body: any;
 }"
@@ -456,6 +1988,9 @@ export interface Error {
 
 export type TPetsGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
+/**
+ * List all pets
+ */
 export interface TPetsGetContext extends Context, OapiContext {
     query: {
         limit?: number;
@@ -464,11 +1999,17 @@ export interface TPetsGetContext extends Context, OapiContext {
 
 export type TPetsPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
+/**
+ * Create a pet
+ */
 export interface TPetsPostContext extends Context, OapiContext {
 }
 
 export type TPetsPetIdGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
+/**
+ * Info for a specific pet
+ */
 export interface TPetsPetIdGetContext extends Context, OapiContext {
     path: {
         petId: string;
@@ -529,6 +2070,13 @@ export interface Error {
 
 export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
+/**
+ * Returns all pets from the system that the user has access to
+ * Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+ *
+ * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+ *
+ */
 export interface TPetsGetContext extends Context, OapiContext {
     query: {
         tags?: string[];
@@ -538,12 +2086,18 @@ export interface TPetsGetContext extends Context, OapiContext {
 
 export type TPetsPostResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
+/**
+ * Creates a new pet in the store.  Duplicates are allowed
+ */
 export interface TPetsPostContext extends Context, OapiContext {
     body: NewPet;
 }
 
 export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
+/**
+ * Returns a user based on a single ID, if the user does not have access to the pet
+ */
 export interface TPetsIdGetContext extends Context, OapiContext {
     path: {
         id: number;
@@ -552,6 +2106,9 @@ export interface TPetsIdGetContext extends Context, OapiContext {
 
 export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
 
+/**
+ * deletes a single pet based on the ID supplied
+ */
 export interface TPetsIdDeleteContext extends Context, OapiContext {
     path: {
         id: number;
@@ -606,6 +2163,9 @@ export interface HttpError {
 
 export type TAccountsAccountIdMetersGetResponse = (AccountMeter[] | LaminarResponse<AccountMeter[]> | Promise<AccountMeter[]> | Promise<LaminarResponse<AccountMeter[]>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
 
+/**
+ * Get Meters, associated with an account, and its service start and end dates (SSD...SED)
+ */
 export interface TAccountsAccountIdMetersGetContext extends Context, OapiContext {
     path: {
         accountId: string;
@@ -664,11 +2224,18 @@ export interface dataSetList {
 
 export type TGetResponse = (dataSetList | LaminarResponse<dataSetList> | Promise<dataSetList> | Promise<LaminarResponse<dataSetList>>);
 
+/**
+ * List available data sets
+ */
 export interface TGetContext extends Context, OapiContext {
 }
 
 export type TDatasetVersionFieldsGetResponse = (string | LaminarResponse<string> | Promise<string> | Promise<LaminarResponse<string>>) | (LaminarResponse<string> | Promise<LaminarResponse<string>>);
 
+/**
+ * Provides the general information about the API and the list of fields that can be used to query the dataset.
+ * This GET API returns the list of all the searchable field names that are in the oa_citations. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the syntax options shown below.
+ */
 export interface TDatasetVersionFieldsGetContext extends Context, OapiContext {
     path: {
         dataset: string;
@@ -678,6 +2245,10 @@ export interface TDatasetVersionFieldsGetContext extends Context, OapiContext {
 
 export type TDatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]> | Promise<any[]> | Promise<LaminarResponse<any[]>>) | (LaminarResponse | Promise<LaminarResponse>);
 
+/**
+ * Provides search capability for the data set with the given search criteria.
+ * This API is based on Solr/Lucense Search. The data is indexed using SOLR. This GET API returns the list of all the searchable field names that are in the Solr Index. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the Solr/Lucene Syntax. Please refer https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview for the query syntax. List of field names that are searchable can be determined using above GET api.
+ */
 export interface TDatasetVersionRecordsPostContext extends Context, OapiContext {
     path: {
         version: string;

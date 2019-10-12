@@ -1,0 +1,44 @@
+{
+  "name": "@ovotech/laminar-jwt",
+  "version": "0.3.0",
+  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "description": "Laminar json web token middleware",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc --declaration",
+    "pretest": "laminar-oapi test/integration.yaml test/__generated__/integration.ts",
+    "test": "jest test --runInBand",
+    "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
+    "lint:eslint": "eslint '{src,test}/**/*.ts'",
+    "lint": "yarn lint:prettier && yarn lint:eslint"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@ovotech/laminar": "^0.3.0",
+    "@ovotech/laminar-oapi": "^0.3.0",
+    "@ovotech/laminar-oapi-cli": "^0.3.0",
+    "@types/jest": "^24.0.16",
+    "@types/jsonwebtoken": "^8.3.3",
+    "@types/node": "^12.6.9",
+    "@typescript-eslint/eslint-plugin": "^2.3.3",
+    "@typescript-eslint/parser": "^2.3.3",
+    "axios": "^0.19.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.0.0"
+  },
+  "peerDependencies": {
+    "@ovotech/laminar": "*"
+  }
+}

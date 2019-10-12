@@ -1,5 +1,33 @@
 # TS Compose
 
-A simple DSL on top of typescript AST to make it a bit easier to work with.
+A DSL on top of typescript AST to make it a bit more concise.
 
-**EXPERIMENTAL**
+## Running the tests
+
+You can run the tests with:
+
+```bash
+yarn test
+```
+
+### Coding style (linting, etc) tests
+
+Style is maintained with prettier and eslint
+
+```
+yarn lint
+```
+
+## Deployment
+
+Deployment is preferment by lerna automatically on merge / push to master, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
+
+## Contributing
+
+Have a bug? File an issue with a simple example that reproduces this so we can take a look & confirm.
+
+Want to make a change? Submit a PR, explain why it's useful, and make sure you've updated the docs (this file) and the tests (see [test folder](test)).
+
+## License
+
+This project is licensed under Apache 2 - see the [LICENSE](LICENSE) file for details

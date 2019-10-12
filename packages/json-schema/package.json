@@ -1,8 +1,7 @@
 {
   "name": "@ovotech/json-schema",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "dist/index.js",
-  "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "description": "Json Schema implementation",
   "author": "Ivan Kerin <ikerin@gmail.com>",
@@ -11,8 +10,8 @@
   "devDependencies": {
     "@types/jest": "^24.0.16",
     "@types/node": "^12.6.9",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
+    "@typescript-eslint/eslint-plugin": "^2.3.3",
+    "@typescript-eslint/parser": "^2.3.3",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "jest": "^24.8.0",
@@ -32,6 +31,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-refs": "^0.2.0"
+    "@ovotech/json-refs": "^0.3.0"
   }
 }

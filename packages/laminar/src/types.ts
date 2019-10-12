@@ -9,6 +9,7 @@ export const Laminar = '_isLaminar';
 
 export interface LaminarOptions {
   app: Promise<Resolver<Context>> | Resolver<Context>;
+  bodyParser?: Middleware<{}, Context>;
   port?: number;
   hostname?: string;
   http?: ServerOptions;
@@ -19,7 +20,7 @@ export interface LaminarRequest {
   url: UrlWithParsedQuery;
   method: Method;
   headers: IncomingHttpHeaders;
-  query: { [key: string]: any };
+  query: any;
   body: any;
   cookies?: { [key: string]: string };
 }
@@ -82,5 +83,9 @@ export interface RouteContext {
 
 export type RouteResolver = <C extends object = {}>(
   path: string,
+  resolver: Resolver<C & RouteContext & Context>,
+) => Route<C>;
+
+export type DefaultRouteResolver = <C extends object = {}>(
   resolver: Resolver<C & RouteContext & Context>,
 ) => Route<C>;

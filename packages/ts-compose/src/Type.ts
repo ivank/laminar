@@ -1,6 +1,18 @@
 import * as ts from 'typescript';
 import { withJSDoc } from './docs';
 
+const isIdentifierString = (identifier: string): boolean => {
+  for (let i = 0; i < identifier.length; i++) {
+    const char = identifier.charCodeAt(i);
+    const isValid =
+      i === 0 ? ts.isIdentifierStart(char, undefined) : ts.isIdentifierPart(char, undefined);
+    if (!isValid) {
+      return false;
+    }
+  }
+  return true;
+};
+
 export const Any = ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword);
 
 export const Str = ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword);
@@ -97,7 +109,7 @@ export const Prop = ({
         ...Private(isPrivate),
         ...Protected(isProtected),
       ],
-      name,
+      typeof name === 'string' && !isIdentifierString(name) ? ts.createStringLiteral(name) : name,
       Optional(isOptional),
       type,
       initializer,

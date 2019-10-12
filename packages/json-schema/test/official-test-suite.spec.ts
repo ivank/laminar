@@ -1,8 +1,7 @@
 import { readdirSync, readFileSync } from 'fs';
-import nock = require('nock');
+import * as nock from 'nock';
 import { join } from 'path';
-import { validate } from '../src';
-import { Schema } from '@ovotech/json-refs';
+import { validate, Schema } from '../src';
 
 interface Test {
   description: string;

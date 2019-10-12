@@ -4,14 +4,14 @@ import { toArray } from './helpers';
 import { HttpError } from './HttpError';
 import { resolveBody, toResponse } from './response';
 import { Context, LaminarOptions, Resolver } from './types';
-import { withContext } from './middleware/context';
 import { request } from './request';
+import { createBodyParser } from './middleware/bodyParser';
 
 export const laminarRequestListener = (resolver: Resolver<Context>): RequestListener => {
   return async (req, res) => {
     try {
       const { url, method, headers, query, body, cookies } = await request(req);
-      const result = await withContext(resolver)({ url, method, headers, query, body, cookies });
+      const result = await resolver({ url, method, headers, query, body, cookies });
       const laminarResponse = toResponse(result);
       const resolvedBody = resolveBody(laminarResponse.body);
 
@@ -42,9 +42,10 @@ export const laminar = async ({
   app,
   port = 3300,
   hostname = 'localhost',
+  bodyParser = createBodyParser(),
   http = {},
 }: LaminarOptions): Promise<Server> => {
-  const server = createServer(http, laminarRequestListener(await app));
+  const server = createServer(http, laminarRequestListener(bodyParser(await app)));
   await new Promise(resolve => server.listen(port, hostname, resolve));
   return server;
 };

@@ -55,29 +55,43 @@ const toAllowMethods = (methods: CorsConfig['allowMethods']): string =>
 const toAllowCredentials = (credentials: CorsConfig['allowCredentials']): 'true' | undefined =>
   credentials ? 'true' : undefined;
 
-export const withCors = (config: CorsConfig = {}): Middleware<{}, Context> => next => {
-  return ctx => {
-    const headers = {
-      'Access-Control-Allow-Origin': toAllowOrigin(config.allowOrigin, ctx.headers.origin),
-      'Access-Control-Allow-Credentials': toAllowCredentials(config.allowCredentials),
-      'Access-Control-Expose-Headers': toExposeHeaders(config.exposeHeaders),
-    };
+export const createCors = (config: CorsConfig = {}): Middleware<{}, Context> => {
+  const exposeHeaders = toExposeHeaders(config.exposeHeaders);
+  const allowMethods = toAllowMethods(config.allowMethods);
+  const maxAge = toMaxAge(config.maxAge);
+  const allowCredentials = toAllowCredentials(config.allowCredentials);
+  const initialHeaders = {
+    ...(allowCredentials ? { 'Access-Control-Allow-Credentials': allowCredentials } : undefined),
+    ...(exposeHeaders ? { 'Access-Control-Expose-Headers': exposeHeaders } : undefined),
+  };
+  const optionsHeaders = {
+    ...(allowMethods ? { 'Access-Control-Allow-Methods': allowMethods } : undefined),
+    ...(maxAge ? { 'Access-Control-Max-Age': maxAge } : undefined),
+  };
 
-    if (ctx.method === 'OPTIONS') {
-      return response({
-        headers: {
-          ...headers,
-          'Access-Control-Allow-Methods': toAllowMethods(config.allowMethods),
-          'Access-Control-Max-Age': toMaxAge(config.maxAge),
-          'Access-Control-Allow-Headers': toAllowHeaders(
-            config.allowHeaders,
-            ctx.headers['access-control-request-headers'],
-          ),
-        },
-        status: 204,
-      });
-    } else {
-      return extendResponse(next(ctx), { headers });
-    }
+  return next => {
+    return async ctx => {
+      const headers = {
+        'Access-Control-Allow-Origin': toAllowOrigin(config.allowOrigin, ctx.headers.origin),
+        ...initialHeaders,
+      };
+
+      if (ctx.method === 'OPTIONS') {
+        return response({
+          headers: {
+            ...headers,
+            ...optionsHeaders,
+            'Access-Control-Allow-Headers': toAllowHeaders(
+              config.allowHeaders,
+              ctx.headers['access-control-request-headers'],
+            ),
+          },
+          status: 204,
+        });
+      } else {
+        const response = await next(ctx);
+        return extendResponse(response, { headers });
+      }
+    };
   };
 };

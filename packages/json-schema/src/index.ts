@@ -34,6 +34,8 @@ import { validateRequired } from './validators/validateRequired';
 import { validateType } from './validators/validateType';
 import { validateUniqueItems } from './validators/validateUniqueItems';
 
+export { ResolvedSchema, Schema } from '@ovotech/json-refs';
+
 export {
   childOptions,
   isJsonSchema,

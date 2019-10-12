@@ -1,5 +1,6 @@
 import { laminar } from '@ovotech/laminar';
-import { withOapi, OapiConfig } from '@ovotech/laminar-oapi';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { join } from 'path';
 
 interface User {
   id: string;
@@ -8,17 +9,15 @@ interface User {
 
 const findUser = (id: string): User => ({ id, name: 'John' });
 
-const config: OapiConfig = {
-  api: 'simple.yaml',
-  paths: {
-    '/user/{id}': {
-      get: ({ path }) => findUser(path.id),
-    },
-  },
-};
-
 const main = async (): Promise<void> => {
-  const resolver = await withOapi(config);
+  const resolver = await createOapi({
+    api: join(__dirname, 'simple.yaml'),
+    paths: {
+      '/user/{id}': {
+        get: ({ path }) => findUser(path.id),
+      },
+    },
+  });
   const server = await laminar({ app: resolver, port: 8081 });
   console.log('Started', server.address());
 };

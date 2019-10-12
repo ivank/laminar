@@ -3,40 +3,9 @@
 A Library for building OpenApi backed REST APIs. Automatic validation of request / response based on the api schema.
 Generate TypeScript types using a cli.
 
-**EXPERIMENTAL**
-
 ## Usage
 
-```typescript
-import { laminar } from '@ovotech/laminar';
-import { withOapi, OapiConfig } from '@ovotech/laminar-oapi';
-
-interface User {
-  id: string;
-  name: string;
-}
-
-const findUser = (id: string): User => ({ id, name: 'John' });
-
-const config: OapiConfig = {
-  api: 'simple.yaml',
-  paths: {
-    '/user/{id}': {
-      get: ({ path }) => findUser(path.id),
-    },
-  },
-};
-
-const main = async (): Promise<void> => {
-  const resolver = await withOapi(config);
-  const server = await laminar({ app: resolver, port: 8081 });
-  console.log('Started', server.address());
-};
-
-main();
-```
-
-For a OpenApi specification of `simple.yaml`:
+You first define your OpenAPI file:
 
 ```yaml
 openapi: '3.0.0'
@@ -69,6 +38,36 @@ components:
           type: string
         name:
           type: string
+```
+
+And then you can implement it using `@ovotech/laminar-oapi`
+
+```typescript
+import { laminar } from '@ovotech/laminar';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { join } from 'path';
+
+interface User {
+  id: string;
+  name: string;
+}
+
+const findUser = (id: string): User => ({ id, name: 'John' });
+
+const main = async (): Promise<void> => {
+  const resolver = await createOapi({
+    api: join(__dirname, 'simple.yaml'),
+    paths: {
+      '/user/{id}': {
+        get: ({ path }) => findUser(path.id),
+      },
+    },
+  });
+  const server = await laminar({ app: resolver, port: 8081 });
+  console.log('Started', server.address());
+};
+
+main();
 ```
 
 This would validate both the request and the response, making sure your code receives only valid requests and that your clients will only get the responses specified in the schema.
@@ -119,7 +118,8 @@ You can then implement the security with:
 
 ```typescript
 import { laminar, HttpError } from '@ovotech/laminar';
-import { withOapi, OapiConfig } from '@ovotech/laminar-oapi';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { join } from 'path';
 
 interface User {
   id: string;
@@ -133,21 +133,19 @@ const validate = (authorizaitonHeader: string | undefined): void => {
   }
 };
 
-const config: OapiConfig = {
-  api: 'simple.yaml',
-  security: {
-    JWT: ({ headers }) => validate(headers.authorization),
-  },
-  paths: {
-    '/user/{id}': {
-      get: ({ path }) => findUser(path.id),
-    },
-  },
-};
-
 const main = async (): Promise<void> => {
-  const resolver = await withOapi(config);
-  const server = await laminar({ app: resolver, port: 8081 });
+  const app = await createOapi({
+    api: join(__dirname, 'simple.yaml'),
+    security: {
+      JWT: ({ headers }) => validate(headers.authorization),
+    },
+    paths: {
+      '/user/{id}': {
+        get: ({ path }) => findUser(path.id),
+      },
+    },
+  });
+  const server = await laminar({ app, port: 8081 });
   console.log('Started', server.address());
 };
 
@@ -175,18 +173,14 @@ After that you can add the type with `oapi<Config>`, which will add types to bot
 
 ```typescript
 import { laminar } from '@ovotech/laminar';
-import { withOapi } from '@ovotech/laminar-oapi';
-import { Config } from './__generated__/simple';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { Config, UserResponse } from './__generated__/simple';
+import { join } from 'path';
 
-interface User {
-  id: string;
-  name: string;
-}
-
-const findUser = (id: string): User => ({ id, name: 'John' });
+const findUser = (id: string): UserResponse => ({ id, name: 'John' });
 
 const config: Config = {
-  api: 'simple.yaml',
+  api: join(__dirname, 'simple.yaml'),
   paths: {
     '/user/{id}': {
       get: ({ path }) => findUser(path.id),
@@ -195,8 +189,8 @@ const config: Config = {
 };
 
 const main = async (): Promise<void> => {
-  const resolver = await withOapi(config);
-  const server = await laminar({ app: resolver, port: 8081 });
+  const app = await createOapi(config);
+  const server = await laminar({ app, port: 8081 });
   console.log('Started', server.address());
 };
 
@@ -229,89 +223,167 @@ const main = async (): Promise<void> => {
 main();
 ```
 
-## The Middleware
+## It's all about flows
 
-Laminar is built with the concept of nested middlewares, that add / modify the context, and execute the next middleware. Each one can also read the response of the previous and modify it, "wrapping" the whole request / response execution.
+Well it's more about typescript types that automatically apply over middlewares, but we'll get to that in a minute.
 
-Since a middleware is just a wrapper function, the types for the additional context properties will be passed down to the other resolvers.
-In this example, 'logger' is defined by the `withLogging` middleware, but that type propagates all the way to the `get('/users/{id}', ({ path, logger })`.
+Lets see the simplest possible app with laminar, a very simple echo app
 
 ```typescript
-import { get, laminar, Context, Middleware, router } from '@ovotech/laminar';
+import { laminar, Resolver, Context } from '@ovotech/laminar';
 
-interface User {
-  id: string;
-  name: string;
-}
-
-const findUser = (id: string): User => ({ id, name: 'John' });
-
-interface LoggerContext {
-  logger: (message: string) => void;
-}
-
-const withLogging: Middleware<LoggerContext, Context> = resolver => {
-  const logger = console.log;
-
-  return ctx => {
-    logger('Requesting', ctx.url.pathname);
-    const response = resolver({ ...ctx, logger });
-    logger('Response made', response);
-    return response;
-  };
-};
-
-const main = async (): Promise<void> => {
-  const server = await laminar({
-    app: withLogging(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        get('/users/{id}', ({ path, logger }) => {
-          logger('More stuff');
-          return findUser(path.id);
-        }),
-      ),
-    ),
-    port: 8082,
-  });
-  console.log('Started', server.address());
-};
-
-main();
+const main: Resolver<Context> = ctx => ctx.body;
+laminar({ port: 3333, app: main });
 ```
 
-Resolvers in the middleware can be async as well, the default oapi middleware is like that, so middleware for them also has to be async if it wants to process the response in any way. otherwise it can just pass it along.
+It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
+No paths, routes or other complications.
 
-## Key concepts
+Pretty simple, but what if we wanted to add some authentication? This is usually done by having extra code run just before the response processing, to determine if we should execute it or not. Basic stuff I know but bear with me.
 
-### Why "Laminar" ?
-
-Every request is processed as a series of function calls, each one wrapping the previous.
+Lets just assume that if Authorization header is `Me` then it's me and its fine, otherwise it must be someone else.
+We can go ahead and write a middleware, that would do stuff just before passing stuff to the next middleware.
 
 ```typescript
-const someMiddleware = next => {
-  // ...do stuff before initialize
-  return context => {
-    // do stuff before next, using the context
-    const result = next({ ...context, ...other });
-    // do stuff after next, using the result
-    return result;
+import { laminar, Context, message, Resolver } from '@ovotech/laminar';
+
+const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
+  if (ctx.headers.authorization !== 'Me') {
+    return message(403, 'Not Me');
   }
-})
+  return next(ctx);
+};
+
+const main: Resolver<Context> = ctx => ctx.body;
+
+laminar({ port: 3333, app: auth(main) });
 ```
 
-This way you can pipe the middlewares between each other, where each can modify the context of the next, by adding resources, throw exceptions, and process the results.
+Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to stuff before and after whatever follows. For example say we wanted to log what the request and response was.
 
 ```typescript
-const process = middleware1(middleware2(middleware3()));
+import { laminar, Context, message, Resolver } from '@ovotech/laminar';
+
+const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
+  if (ctx.headers.authorization !== 'Me') {
+    return message(403, 'Not Me');
+  }
+  return next(ctx);
+};
+
+const log = (next: Resolver<Context>): Resolver<Context> => ctx => {
+  console.log('Requested', ctx.body);
+  const response = next(ctx);
+  console.log('Responded', response);
+  return response;
+};
+
+const main: Resolver<Context> = ctx => ctx.body;
+
+laminar({ port: 3333, app: log(auth(main)) });
 ```
 
-What's neat about it is that since those are simply nested function calls, all typescript types are preserved, so that if one middleware adds something to the context, all the rest would be aware of that at compile time.
+You can see how we can string those middlewares along `log(auth(main))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
 
-I can picture this as an ordered flow of information through the pipes of the middlewares, thus the name (Laminar).
+A simple example would be access to an external resource, say a database. We want a middleware that creates a connection, passes that connection to all the middlewares downstream that would make use of it like checking users. But we'd like to be sure that middleware has actually executed, so we don't accidentally try to access a connection that's not there.
 
-### Processing Open API
+Lets see how we can go about doing that.
 
-The `oapi` middleware converts the OpenAPI validations to static json-schema for every path/method/response, and then just runs it against the context object. This way a lot of the computation is performed on initialization.
+```typescript
+import { laminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
 
-Both the request _and_ response are validated, this way if your code returns something that's not present in your open api schema, it would actually return an error. Your clients could therefore rely unconditionally that what you have specified in the schema is how your api will behave, without any possibility of drift in the future.
+/**
+ * Its a very simple database, that only has one function:
+ * Return the user that is valid, e.g. Me
+ */
+interface DB {
+  getValidUser: () => string;
+}
+
+interface DBContext {
+  db: DB;
+}
+
+/**
+ * Since any database would need to create a connection first,
+ * We'll need to have a "middleware creator" function that executes
+ * and returns the actual middleware
+ * 
+ * We use the handy Middleware type that has a signature of Middleware<ProvideContext, RequireContext>
+ */
+const createDbMiddleware = (): Middleware<DBContext, Context> => {
+  const db: DB = {
+    getValidUser: () => 'Me',
+  };
+
+  return next => ctx => next({ ...ctx, db });
+};
+
+const auth: Middleware<{}, DBContext & Context> = next => ctx => {
+  if (ctx.db.getValidUser() !== ctx.headers.authorization) {
+    return message(403, 'Not Me');
+  }
+  return next(ctx);
+};
+
+const log: Middleware<{}, Context> = next => ctx => {
+  console.log('Requested', ctx.body);
+  const response = next(ctx);
+  console.log('Responded', response);
+  return response;
+};
+
+/**
+ * We can also get use of the same databse connection in any middleware downstream
+ */
+const main: Resolver<DBContext & Context> = ctx => {
+  return { echo: ctx.body, user: ctx.db.getValidUser() };
+};
+
+const db = createDbMiddleware();
+
+laminar({ port: 3333, app: log(db(auth(main))) });
+```
+
+We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
+
+This allows you to be absolutely sure that the middlewares are executed, and in the right order. If you try to play around with them - you'll see that if for example you put db after auth or remove it altogether, then it won't compile at all.
+
+So its a flow of context down the middlewares, but since its an ordered flow, we call it `laminar`.
+
+### Built In Middlewares
+
+- [cors](packages/laminar/README.md#cors-middleware) for managing cross origin resources
+- [logging](packages/laminar/README.md#logging-middleware) for setting custom loggers, e.g. winstonjs and logging stuff before / after any request
+- [laminar-handlebars](packages/laminar-handlebars/README.md) support for handlebars view templates
+- [laminar-jwt](packages/laminar-jwt/README.md) support for json web tokens 
+
+## Running the tests
+
+You can run the tests with:
+
+```bash
+yarn test
+```
+
+### Coding style (linting, etc) tests
+
+Style is maintained with prettier and eslint
+
+```
+yarn lint
+```
+
+## Deployment
+
+Deployment is preferment by lerna automatically on merge / push to master, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
+
+## Contributing
+
+Have a bug? File an issue with a simple example that reproduces this so we can take a look & confirm.
+
+Want to make a change? Submit a PR, explain why it's useful, and make sure you've updated the docs (this file) and the tests (see [test folder](test)).
+
+## License
+
+This project is licensed under Apache 2 - see the [LICENSE](LICENSE) file for details

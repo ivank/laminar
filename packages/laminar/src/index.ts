@@ -9,11 +9,32 @@ export {
   toResponse,
   extendResponse,
 } from './response';
-export { withCors, CorsConfig } from './middleware/cors';
-export { withResponseTime, ResponseTimeConfig } from './middleware/responseTime';
-export { withLogger, Logger, LoggerContext } from './middleware/logger';
+export { createCors, CorsConfig } from './middleware/cors';
+export {
+  createResponseTime,
+  ResponseTimeConfig,
+  defaultResponseTimeHeader,
+} from './middleware/responseTime';
+export { createLogging, Logger, LoggerContext, LoggerOptions } from './middleware/logging';
+export {
+  createBodyParser,
+  BodyParser,
+  defaultParsers,
+  concatStream,
+} from './middleware/bodyParser';
 export { HttpError } from './HttpError';
-export { selectRoute, toRoute, router, get, post, patch, del, options, put } from './router';
+export {
+  selectRoute,
+  toRoute,
+  router,
+  get,
+  post,
+  patch,
+  del,
+  options,
+  put,
+  defaultRoute,
+} from './router';
 export {
   Context,
   Laminar,

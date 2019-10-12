@@ -2,7 +2,7 @@ import { HttpError, laminar, response } from '@ovotech/laminar';
 import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
-import { withOapi } from '@ovotech/laminar-oapi';
+import { createOapi } from '@ovotech/laminar-oapi';
 import { LoggerContext, withLogger } from './middleware/logger';
 import { Config, Pet } from './__generated__/integration';
 
@@ -76,12 +76,12 @@ describe('Integration', () => {
       },
     };
 
-    const oapi = await withOapi(config);
+    const oapi = await createOapi(config);
     const logger = withLogger(log);
 
-    server = await laminar({ app: logger(oapi), port: 8093 });
+    server = await laminar({ app: logger(oapi), port: 8065 });
 
-    const api = axios.create({ baseURL: 'http://localhost:8093' });
+    const api = axios.create({ baseURL: 'http://localhost:8065' });
 
     await expect(api.get('/unknown-url')).rejects.toHaveProperty(
       'response',

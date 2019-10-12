@@ -87,6 +87,18 @@ describe('TS Compose', () => {
       Type.Interface({ name: 'test', props: [Type.Prop({ name: 'name', type: Type.Str })] }),
     ],
     [
+      'interface test {\n    "11231": string;\n}',
+      Type.Interface({ name: 'test', props: [Type.Prop({ name: '11231', type: Type.Str })] }),
+    ],
+    [
+      'interface test {\n    a11231: string;\n}',
+      Type.Interface({ name: 'test', props: [Type.Prop({ name: 'a11231', type: Type.Str })] }),
+    ],
+    [
+      'interface test {\n    "_.xgafv": string;\n}',
+      Type.Interface({ name: 'test', props: [Type.Prop({ name: '_.xgafv', type: Type.Str })] }),
+    ],
+    [
       'export interface LaminarPaths<TContext extends Context | RouteContext> {\n}',
       Type.Interface({
         name: 'LaminarPaths',

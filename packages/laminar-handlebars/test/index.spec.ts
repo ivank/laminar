@@ -1,11 +1,11 @@
 import { join } from 'path';
 import { compileTemplates, deepReaddirSync } from '../src';
 
-const rootDir = join(__dirname, 'root');
+const dir = join(__dirname, 'root');
 
 describe('Laminar Handlebars', () => {
   it('Test deepReaddirSync', () => {
-    const partials = deepReaddirSync(rootDir, 'partials');
+    const partials = deepReaddirSync(dir, 'partials');
 
     expect(partials).toEqual([
       'inner/condition.handlebars',
@@ -17,7 +17,7 @@ describe('Laminar Handlebars', () => {
   });
 
   it('Test compileTemplates', () => {
-    const partials = compileTemplates('partials', { rootDir, extension: 'handlebars' });
+    const partials = compileTemplates({ dir, childDir: 'partials', extension: 'handlebars' });
 
     expect(partials.list({ list: ['one', 'two'] })).toMatchSnapshot();
     expect(partials.span({ text: 'example' })).toMatchSnapshot();

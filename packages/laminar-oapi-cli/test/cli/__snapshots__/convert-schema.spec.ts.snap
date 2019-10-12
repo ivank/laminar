@@ -1265,14 +1265,12 @@ bar": Object {
     },
   },
   "ts": "{
-    foo
-bar?: number;
-    foo\\"bar?: number;
-    foo\\\\bar?: number;
-    foo
-bar?: number;
-    foo	bar?: number;
-    foobar?: number;
+    \\"foo\\\\nbar\\"?: number;
+    \\"foo\\\\\\"bar\\"?: number;
+    \\"foo\\\\\\\\bar\\"?: number;
+    \\"foo\\\\rbar\\"?: number;
+    \\"foo\\\\tbar\\"?: number;
+    \\"foo\\\\fbar\\"?: number;
     [key: string]: any;
 }",
 }
@@ -1487,7 +1485,7 @@ Object {
     },
   },
   "ts": "{
-    foo\\"bar?: foo%22bar;
+    \\"foo\\\\\\"bar\\"?: foo%22bar;
     [key: string]: any;
 }
 
@@ -3553,14 +3551,12 @@ bar": Object {
     },
   },
   "ts": "{
-    foo
-bar?: number;
-    foo\\"bar?: number;
-    foo\\\\bar?: number;
-    foo
-bar?: number;
-    foo	bar?: number;
-    foobar?: number;
+    \\"foo\\\\nbar\\"?: number;
+    \\"foo\\\\\\"bar\\"?: number;
+    \\"foo\\\\\\\\bar\\"?: number;
+    \\"foo\\\\rbar\\"?: number;
+    \\"foo\\\\tbar\\"?: number;
+    \\"foo\\\\fbar\\"?: number;
     [key: string]: any;
 }",
 }
@@ -3832,7 +3828,7 @@ Object {
     },
   },
   "ts": "{
-    foo\\"bar?: foo%22bar;
+    \\"foo\\\\\\"bar\\"?: foo%22bar;
     [key: string]: any;
 }
 
@@ -6054,14 +6050,12 @@ bar": Object {
     },
   },
   "ts": "{
-    foo
-bar?: number;
-    foo\\"bar?: number;
-    foo\\\\bar?: number;
-    foo
-bar?: number;
-    foo	bar?: number;
-    foobar?: number;
+    \\"foo\\\\nbar\\"?: number;
+    \\"foo\\\\\\"bar\\"?: number;
+    \\"foo\\\\\\\\bar\\"?: number;
+    \\"foo\\\\rbar\\"?: number;
+    \\"foo\\\\tbar\\"?: number;
+    \\"foo\\\\fbar\\"?: number;
     [key: string]: any;
 }",
 }
@@ -6333,7 +6327,7 @@ Object {
     },
   },
   "ts": "{
-    foo\\"bar?: foo%22bar;
+    \\"foo\\\\\\"bar\\"?: foo%22bar;
     [key: string]: any;
 }
 

@@ -1,0 +1,130 @@
+---
+openapi: 3.0.0
+info:
+  title: Cat Facts
+  version: 1.0.0
+servers:
+  - url: http://localhost:8094
+paths:
+  '/session':
+    post:
+      summary: Cerate a new session
+      requestBody:
+        description: The credentials required for a new session
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateSession' }
+      responses:
+        'default': { $ref: '#/components/responses/HttpErrorResponse' }
+        '200':
+          description: A session object
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Session' }
+  '/test-scopes':
+    get:
+      summary: Secured by jwt with scopes
+      security:
+        - JWTSecurity: ['test1']
+      responses:
+        'default': { $ref: '#/components/responses/HttpErrorResponse' }
+        '200':
+          description: A Test Object
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Test' }
+  '/test':
+    get:
+      summary: Secured by jwt without scopes
+      security:
+        - JWTSecurity: []
+      responses:
+        'default': { $ref: '#/components/responses/HttpErrorResponse' }
+        '200':
+          description: A Test Object
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Test' }
+
+components:
+  securitySchemes:
+    JWTSecurity:
+      type: http
+      scheme: bearer
+
+  responses:
+    HttpErrorResponse:
+      description: Error Response
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/HttpError' }
+
+  schemas:
+    HttpError:
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+
+    # Sessions
+    # =======================================
+
+    Session:
+      additionalProperties: false
+      properties:
+        jwt:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        notBefore:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - jwt
+        - user
+    User:
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        picture:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+      required:
+        - email
+
+    CreateSession:
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        other:
+          type: string
+      required:
+        - email
+
+    Test:
+      properties:
+        text:
+          type: string
+        email:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+      required:
+        - text

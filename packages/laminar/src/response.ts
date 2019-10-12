@@ -40,8 +40,8 @@ export const response = <TBody = LaminarResponse['body']>({
   status,
   headers: {
     'content-type': contentType(body),
-    'content-length': body ? contentLength(body) : undefined,
-    'set-cookie': cookies ? setCookie(cookies) : undefined,
+    ...(body ? { 'content-length': contentLength(body) } : undefined),
+    ...(cookies ? { 'set-cookie': setCookie(cookies) } : undefined),
     ...headers,
   },
   cookies,

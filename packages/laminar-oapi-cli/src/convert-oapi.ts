@@ -37,6 +37,10 @@ interface AstParameters {
 }
 
 const title = (str: string): string => str.replace(/^./, first => first.toUpperCase());
+const documentation = (summary?: string, description?: string): string | undefined =>
+  summary || description
+    ? [summary, description].filter(item => item !== undefined).join('\n')
+    : undefined;
 const cleanIdentifierName = (str: string): string => str.replace(/[^0-9a-zA-Z_$]+/g, '');
 
 const pathToIdentifier = (path: string): string =>
@@ -101,12 +105,13 @@ const convertResponse = (
   key: string,
   response: ResponseObject,
 ): Document<ts.UnionTypeNode, AstContext> => {
-  if (
+  const schema =
     response.content &&
-    response.content['application/json'] &&
-    response.content['application/json'].schema
-  ) {
-    const node = convertSchema(context, response.content['application/json'].schema);
+    ((response.content['application/json'] && response.content['application/json'].schema) ||
+      (response.content['*/*'] && response.content['*/*'].schema));
+
+  if (schema) {
+    const node = convertSchema(context, schema);
     const nodeType =
       key === '200' || key === 'default'
         ? Type.Union([
@@ -183,15 +188,20 @@ export const convertOapi = (
     context,
     Object.entries<PathItemObject>(api.paths),
     (pathContext, [path, pathApiOrRef]) => {
-      const pathApi = getReferencedObject(pathApiOrRef, isSchemaObject, context);
+      const { parameters, description, summary, ...methodsApiOrRef } = pathApiOrRef;
+      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, context);
 
       const methods = mapWithContext(
         pathContext,
         Object.entries(pathApi),
         (methodContext, [method, operation]) => {
-          const astParams = operation.parameters
-            ? convertParameters(methodContext, operation.parameters)
-            : document(methodContext, Type.TypeLiteral());
+          const astParams =
+            operation.parameters || parameters
+              ? convertParameters(methodContext, [
+                  ...(parameters ? parameters : []),
+                  ...(operation.parameters ? operation.parameters : []),
+                ])
+              : document(methodContext, Type.TypeLiteral());
 
           const astRequestBody = operation.requestBody
             ? convertRequestBody(astParams.context, operation.requestBody)
@@ -200,9 +210,14 @@ export const convertOapi = (
           const identifier = pathToIdentifier(path) + title(method);
           const contextIdentifier = identifier + 'Context';
           const responseIdentifier = identifier + 'Response';
+          const doc = documentation(
+            operation.summary || summary,
+            operation.description || description,
+          );
           const contextInterface = Type.Interface({
             name: contextIdentifier,
             isExport: true,
+            jsDoc: doc,
             ext: [{ name: 'Context' }, { name: 'OapiContext' }],
             props: astParams.type.members.concat(astRequestBody.type.members),
           });

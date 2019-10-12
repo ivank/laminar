@@ -1,48 +1,14 @@
 import * as cookie from 'cookie';
 import { IncomingMessage } from 'http';
-import { Readable } from 'stream';
-import { parse, URLSearchParams } from 'url';
-import { concatStream, parseQueryObjects } from './helpers';
-import { HttpError } from './HttpError';
+import { parse } from 'url';
+import { parseQueryObjects } from './helpers';
 import { Laminar, LaminarRequest, Method } from './types';
 
-export const parseContentType = (value: string): string | null => {
-  const parts = /^([^\/]+)\/([^\+\;]+)(\+[^;]+)?(\;.*)?/.exec(value);
-  if (!parts) {
-    return null;
-  }
-  const [, type, subtype, suffix] = parts;
-  return `${type.trim()}/${suffix ? suffix.substr(1).trim() : subtype.trim()}`.toLowerCase();
-};
-
-const parseBody = async (stream: Readable, contentType?: string): Promise<unknown> => {
-  if (!contentType) {
-    return stream;
-  }
-  try {
-    const type = parseContentType(contentType);
-    if (type === null) {
-      return stream;
-    } else if (type === 'application/json') {
-      return JSON.parse(String(await concatStream(stream)));
-    } else if (type === 'application/x-www-form-urlencoded') {
-      return new URLSearchParams(String(await concatStream(stream)));
-    } else if (type.match(/^text\/.*/)) {
-      return String(await concatStream(stream));
-    } else {
-      return stream;
-    }
-  } catch (error) {
-    throw new HttpError(400, { message: `Error parsing request body`, error: error.message });
-  }
-};
-
 export const request = async (req: IncomingMessage): Promise<LaminarRequest> => {
-  const body = await parseBody(req, req.headers['content-type']);
   const url = req.url ? parse(req.url, true) : { query: {} };
   return {
     [Laminar]: true,
-    body,
+    body: req,
     url,
     method: req.method as Method,
     query: parseQueryObjects(url.query),

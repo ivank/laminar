@@ -5,7 +5,7 @@ import { ObjectReadableMock } from 'stream-mock';
 import { file, laminar, message, response } from '../src';
 
 let server: Server;
-const api = axios.create({ baseURL: 'http://localhost:8091' });
+const api = axios.create({ baseURL: 'http://localhost:8052' });
 
 describe('Requests', () => {
   afterEach(async () => {
@@ -13,7 +13,7 @@ describe('Requests', () => {
   });
 
   it('Should process response', async () => {
-    server = await laminar({ port: 8091, app: () => 'Test' });
+    server = await laminar({ port: 8052, app: () => 'Test' });
 
     await expect(api.get('/test')).resolves.toMatchObject({
       headers: expect.objectContaining({
@@ -25,7 +25,7 @@ describe('Requests', () => {
   });
 
   it('Should process json', async () => {
-    server = await laminar({ port: 8091, app: () => ({ other: 'stuff' }) });
+    server = await laminar({ port: 8052, app: () => ({ other: 'stuff' }) });
 
     await expect(api.get('/test')).resolves.toMatchObject({
       headers: expect.objectContaining({
@@ -38,7 +38,7 @@ describe('Requests', () => {
 
   it('Should process buffer', async () => {
     server = await laminar({
-      port: 8091,
+      port: 8052,
       app: () => Buffer.from('test-test-maaaany-test'),
     });
 
@@ -53,7 +53,7 @@ describe('Requests', () => {
 
   it('Should process stream', async () => {
     server = await laminar({
-      port: 8091,
+      port: 8052,
       app: () => new ObjectReadableMock(['test-', 'test-', 'maaaany-', 'test']),
     });
 
@@ -66,7 +66,7 @@ describe('Requests', () => {
   });
 
   it('Should process laminar simple response', async () => {
-    server = await laminar({ port: 8091, app: () => response({ status: 201 }) });
+    server = await laminar({ port: 8052, app: () => response({ status: 201 }) });
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 201,
@@ -80,7 +80,7 @@ describe('Requests', () => {
 
   it('Should process laminar response', async () => {
     server = await laminar({
-      port: 8091,
+      port: 8052,
       app: () =>
         response({
           status: 201,
@@ -104,7 +104,7 @@ describe('Requests', () => {
 
   it('Should process laminar message', async () => {
     server = await laminar({
-      port: 8091,
+      port: 8052,
       app: () => message(404, { message: 'test' }),
     });
 
@@ -119,7 +119,7 @@ describe('Requests', () => {
 
   it('Should process laminar text file', async () => {
     server = await laminar({
-      port: 8091,
+      port: 8052,
       app: () => file(join(__dirname, 'test.txt')),
     });
 
@@ -135,7 +135,7 @@ describe('Requests', () => {
 
   it('Should process laminar html file', async () => {
     server = await laminar({
-      port: 8091,
+      port: 8052,
       app: () => file(join(__dirname, 'test.html')),
     });
 
@@ -151,7 +151,7 @@ describe('Requests', () => {
 
   it('Should process laminar file with status', async () => {
     server = await laminar({
-      port: 8091,
+      port: 8052,
       app: () => file(join(__dirname, 'test.txt'), { status: 201 }),
     });
 

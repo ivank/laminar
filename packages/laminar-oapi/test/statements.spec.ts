@@ -2,7 +2,7 @@ import { laminar } from '@ovotech/laminar';
 import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
-import { OapiConfig, withOapi } from '../src';
+import { OapiConfig, createOapi } from '../src';
 
 let server: Server;
 
@@ -48,10 +48,10 @@ describe('Statements', () => {
       },
     };
 
-    const app = await withOapi(config);
-    server = await laminar({ app, port: 8094 });
+    const app = await createOapi(config);
+    server = await laminar({ app, port: 8064 });
 
-    const api = axios.create({ baseURL: 'http://localhost:8094' });
+    const api = axios.create({ baseURL: 'http://localhost:8064' });
     const { data } = await api.get('/accounts/123/meters');
 
     expect(data).toMatchSnapshot();

@@ -1,6 +1,6 @@
 import * as Ajv from 'ajv';
 import fetch from 'node-fetch';
-import { Adapter } from '../json-schema';
+import { Adapter } from '../types';
 
 const ajv = new Ajv({
   loadSchema: async uri => {
@@ -11,6 +11,8 @@ const ajv = new Ajv({
 
 export const adapter: Adapter = {
   name: 'Ajv',
-  compile: schema => ajv.compileAsync(schema) as Promise<Ajv.ValidateFunction>,
-  validate: (compiled, data: any) => compiled(data),
+  compile: async schema => {
+    const compiled = await ajv.compileAsync(schema);
+    return data => compiled(data) as boolean;
+  },
 };

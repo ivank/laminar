@@ -1,4 +1,4 @@
-import nock = require('nock');
+import * as nock from 'nock';
 import { extractFiles, extractNamedRefs, extractUrls, resolveRefs, Schema } from '../src';
 
 describe('json-refs', () => {

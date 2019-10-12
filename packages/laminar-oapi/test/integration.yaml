@@ -81,19 +81,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   /pets/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of pet to delete
+        required: true
+        schema:
+          type: string
+          format: \d+
     get:
       description: Returns a user based on a single ID, if the user does not have access to the pet
       operationId: find pet by id
       security:
         - BasicAuth: []
-      parameters:
-        - name: id
-          in: path
-          description: ID of pet to fetch
-          required: true
-          schema:
-            type: string
-            format: \d+
+      parameters: []
       responses:
         '200':
           description: pet response
@@ -112,14 +113,7 @@ paths:
       operationId: deletePet
       security:
         - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          description: ID of pet to delete
-          required: true
-          schema:
-            type: string
-            format: \d+
+      parameters: []
       responses:
         '204':
           description: pet deleted

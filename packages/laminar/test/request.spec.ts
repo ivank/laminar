@@ -3,20 +3,19 @@ import { Server } from 'http';
 import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
 import { laminar } from '../src';
+import { promisify } from 'util';
 
 const app = jest.fn().mockReturnValue('Test');
-const api = axios.create({ baseURL: 'http://localhost:8090' });
+const api = axios.create({ baseURL: 'http://localhost:8051' });
 
 let server: Server;
 
 describe('Requests', () => {
   beforeAll(async () => {
-    server = await laminar({ app, port: 8090 });
+    server = await laminar({ app, port: 8051 });
   });
 
-  afterAll(async () => {
-    await new Promise(resolve => server.close(resolve));
-  });
+  afterAll(() => promisify(server.close.bind(server))());
 
   beforeEach(() => app.mockClear());
 
@@ -25,7 +24,7 @@ describe('Requests', () => {
     expect(app).toHaveBeenCalledWith(
       expect.objectContaining({
         url: expect.objectContaining({ pathname: '/test2' }),
-        headers: expect.objectContaining({ host: 'localhost:8090' }),
+        headers: expect.objectContaining({ host: 'localhost:8051' }),
         method: 'GET',
       }),
     );
@@ -70,7 +69,7 @@ describe('Requests', () => {
   });
 
   it('Should parse cookies', async () => {
-    const result = await api.get('http://localhost:8090/login', {
+    const result = await api.get('http://localhost:8051/login', {
       headers: { cookie: 'accessToken=1234abc; userId=1234' },
     });
     expect(app).toHaveBeenCalledWith(
@@ -131,7 +130,7 @@ describe('Requests', () => {
   });
 
   it('Should handle malformed content type', async () => {
-    const result = await api.post('http://localhost:8090/post', 'test', {
+    const result = await api.post('http://localhost:8051/post', 'test', {
       headers: { 'Content-Type': '123123' },
     });
 
@@ -143,7 +142,7 @@ describe('Requests', () => {
   });
 
   it('Should handle unknown content type', async () => {
-    const result = await api.post('http://localhost:8090/post', 'test', {
+    const result = await api.post('http://localhost:8051/post', 'test', {
       headers: { 'Content-Type': 'some/other' },
     });
 
@@ -156,7 +155,7 @@ describe('Requests', () => {
 
   it('Should handle malformed json', async () => {
     await expect(
-      api.post('http://localhost:8090/post', '{"test":Date}', {
+      api.post('http://localhost:8051/post', '{"test":Date}', {
         transformRequest: [],
         headers: { 'Content-Type': 'application/json' },
       }),

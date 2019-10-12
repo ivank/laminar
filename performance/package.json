@@ -8,13 +8,14 @@
     "preset": "../jest.json"
   },
   "scripts": {
-    "build": "tsc --declaration",
+    "build": "true",
+    "execute": "ts-node src/index.ts",
     "test": "true",
     "lint": "true"
   },
   "dependencies": {},
   "devDependencies": {
-    "@ovotech/json-schema": "^0.2.0",
+    "@ovotech/json-schema": "^0.3.0",
     "@types/benchmark": "^1.0.31",
     "benchmark": "^2.1.4",
     "node-fetch": "^2.6.0",

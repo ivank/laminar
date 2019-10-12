@@ -1,15 +1,3 @@
-import { Readable } from 'stream';
-
-export const concatStream = async (stream: Readable): Promise<Buffer> => {
-  return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    stream
-      .on('data', chunk => chunks.push(chunk))
-      .on('end', () => resolve(Buffer.concat(chunks)))
-      .on('error', reject);
-  });
-};
-
 export const toArray = (value: unknown): unknown[] =>
   Array.isArray(value) ? value : value ? [value] : [];
 

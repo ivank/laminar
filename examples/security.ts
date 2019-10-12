@@ -1,5 +1,6 @@
 import { laminar, HttpError } from '@ovotech/laminar';
-import { withOapi, OapiConfig } from '@ovotech/laminar-oapi';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { join } from 'path';
 
 interface User {
   id: string;
@@ -13,21 +14,19 @@ const validate = (authorizaitonHeader: string | undefined): void => {
   }
 };
 
-const config: OapiConfig = {
-  api: 'simple.yaml',
-  security: {
-    JWT: ({ headers }) => validate(headers.authorization),
-  },
-  paths: {
-    '/user/{id}': {
-      get: ({ path }) => findUser(path.id),
-    },
-  },
-};
-
 const main = async (): Promise<void> => {
-  const resolver = await withOapi(config);
-  const server = await laminar({ app: resolver, port: 8081 });
+  const app = await createOapi({
+    api: join(__dirname, 'simple.yaml'),
+    security: {
+      JWT: ({ headers }) => validate(headers.authorization),
+    },
+    paths: {
+      '/user/{id}': {
+        get: ({ path }) => findUser(path.id),
+      },
+    },
+  });
+  const server = await laminar({ app, port: 8081 });
   console.log('Started', server.address());
 };
 

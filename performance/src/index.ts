@@ -1,25 +1,19 @@
 import * as Benchmark from 'benchmark';
 import { readdirSync, readFileSync } from 'fs';
-import nock = require('nock');
+import * as nock from 'nock';
 import { join } from 'path';
 import { adapter as ajv } from './adapters/ajv';
 import { adapter as jsonSchema } from './adapters/json-schema';
 
-export interface Adapter<TValidator = any> {
-  name: string;
-  compile: (schema: any) => Promise<TValidator>;
-  validate: (compiled: TValidator, data: any, schema: any) => boolean;
-}
-
 interface Test {
   description: string;
-  data: any;
+  data: unknown;
   valid: boolean;
 }
 
 interface Suite {
   description: string;
-  schema: any;
+  schema: {};
   tests: Test[];
 }
 
@@ -51,14 +45,14 @@ const testFolders = ['draft7'];
 
 const benchmarkSuite = new Benchmark.Suite();
 
-benchmarkSuite.on('cycle', (event: any) => {
+benchmarkSuite.on('cycle', (event: Benchmark.Event) => {
   console.log(String(event.target));
 });
 
 for (const adapter of adapters) {
   benchmarkSuite.add(adapter.name, {
     defer: true,
-    fn: async (deffered: any) => {
+    fn: async (deffered: { resolve: () => void }) => {
       for (const testFolder of testFolders) {
         const testFiles = readdirSync(join(testSuiteFolder, 'tests', testFolder))
           .filter(file => file.endsWith('.json'))
@@ -70,7 +64,7 @@ for (const adapter of adapters) {
           for (const suite of suites) {
             const validator = await adapter.compile(suite.schema);
             for (const test of suite.tests) {
-              const result = adapter.validate(validator, test.data, suite.schema);
+              const result = validator(test.data);
               if (result !== test.valid) {
                 throw new Error(
                   `Invalid test ${testFolder} ${suite.description} ${test.description}`,

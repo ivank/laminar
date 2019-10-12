@@ -11,7 +11,7 @@ interface LoggerContext {
   logger: (message: string) => void;
 }
 
-const withLogging: Middleware<LoggerContext, Context> = next => {
+const logging: Middleware<LoggerContext, Context> = next => {
   const logger = console.log;
 
   return ctx => {
@@ -24,7 +24,7 @@ const withLogging: Middleware<LoggerContext, Context> = next => {
 
 const main = async (): Promise<void> => {
   const server = await laminar({
-    app: withLogging(
+    app: logging(
       router(
         get('/.well-known/health-check', () => ({ health: 'ok' })),
         get('/users/{id}', ({ path, logger }) => {

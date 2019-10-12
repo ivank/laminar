@@ -2,7 +2,7 @@ import { get, laminar, post, router } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
-import { HandlebarsContext, withHandlebars } from '../src';
+import { HandlebarsContext, createHandlebars } from '../src';
 
 let server: Server;
 
@@ -18,11 +18,14 @@ describe('Integration', () => {
   afterEach(() => new Promise(resolve => server.close(resolve)));
 
   it('Should process response', async () => {
-    const hbs = withHandlebars({ rootDir: join(__dirname, 'root'), helpers: { capitalizeName } });
+    const handlebars = createHandlebars({
+      dir: join(__dirname, 'root'),
+      helpers: { capitalizeName },
+    });
 
     server = await laminar({
-      port: 8092,
-      app: hbs(
+      port: 8062,
+      app: handlebars(
         router<HandlebarsContext>(
           get('/', ({ render }) => render('index')),
           post('/result', ({ render, body: { name } }) =>
@@ -32,7 +35,7 @@ describe('Integration', () => {
       ),
     });
 
-    const api = axios.create({ baseURL: 'http://localhost:8092' });
+    const api = axios.create({ baseURL: 'http://localhost:8062' });
 
     expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot);
 

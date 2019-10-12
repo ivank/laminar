@@ -8,6 +8,7 @@ import {
   ResolvedParameterObject,
   ResolvedRequestBodyObject,
   ResolvedResponseObject,
+  ResolvedPathItemObject,
 } from './resolved-openapi-object';
 
 export interface OperationSecurity {
@@ -117,12 +118,19 @@ export const toSecuritySchema = (
 export const toContextSchema = (
   { security: defaultSecurity, components }: ResolvedOpenAPIObject,
   { requestBody, parameters, security: operationSecurity }: ResolvedOperationObject,
+  {
+    parameters: commonParameters,
+  }: Pick<ResolvedPathItemObject, 'summary' | 'parameters' | 'description'>,
 ): Schema => {
   const security = operationSecurity || defaultSecurity;
   const securitySchemes = components && components.securitySchemes;
+  const allParameters = [
+    ...(parameters ? parameters : []),
+    ...(commonParameters ? commonParameters : []),
+  ];
   return {
     allOf: [
-      ...(parameters ? parameters.map(toParameterSchema) : []),
+      ...allParameters.map(toParameterSchema),
       ...(requestBody ? [toRequestBodySchema(requestBody)] : []),
       ...(security && securitySchemes ? [toSecuritySchema(security, securitySchemes)] : []),
     ],
@@ -168,8 +176,9 @@ export const toResponseSchema = ({ responses }: ResolvedOperationObject): {} => 
 export const toOperationSchema = (
   api: ResolvedOpenAPIObject,
   operation: ResolvedOperationObject,
+  common: Pick<ResolvedPathItemObject, 'summary' | 'parameters' | 'description'>,
 ): OperationSchema => ({
-  context: toContextSchema(api, operation),
+  context: toContextSchema(api, operation, common),
   response: toResponseSchema(operation),
   security: operation.security || api.security,
 });
@@ -177,28 +186,29 @@ export const toOperationSchema = (
 export const toSchema = (
   api: ResolvedOpenAPIObject,
 ): { routes: PathsSchema; resolvers: Schema } => ({
-  routes: Object.entries(api.paths).reduce<PathsSchema>(
-    (pathsSchema, [path, methods]) => ({
+  routes: Object.entries(api.paths).reduce<PathsSchema>((pathsSchema, [path, pathParameters]) => {
+    const { parameters, summary, description, ...methods } = pathParameters;
+    return {
       ...pathsSchema,
       [path]: Object.entries(methods).reduce(
         (methodSchema, [method, operation]) => ({
           ...methodSchema,
-          [method]: toOperationSchema(api, operation),
+          [method]: toOperationSchema(api, operation, { parameters, summary, description }),
         }),
         {},
       ),
-    }),
-    {},
-  ),
+    };
+  }, {}),
   resolvers: {
     required: ['paths', ...(api.components && api.components.securitySchemes ? ['security'] : [])],
     properties: {
       paths: {
         required: Object.keys(api.paths),
-        properties: Object.entries(api.paths).reduce(
-          (all, [path, methods]) => ({ ...all, [path]: { required: Object.keys(methods) } }),
-          {},
-        ),
+        properties: Object.entries(api.paths).reduce((all, [path, pathParameters]) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { parameters, summary, description, ...methods } = pathParameters;
+          return { ...all, [path]: { required: Object.keys(methods) } };
+        }, {}),
       },
       ...(api.components && api.components.securitySchemes
         ? { security: { required: Object.keys(api.components.securitySchemes) } }

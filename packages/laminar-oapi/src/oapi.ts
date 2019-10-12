@@ -2,14 +2,14 @@ import { compile, validate, validateCompiled } from '@ovotech/json-schema';
 import { Schema } from '@ovotech/json-refs';
 import {
   Context,
-  HttpError,
-  isResponse,
   Resolver,
-  response,
   Route,
   RouteContext,
   selectRoute,
   toRoute,
+  Middleware,
+  message,
+  toResponse,
 } from '@ovotech/laminar';
 import { openapiV3 } from 'openapi-schemas';
 import { OpenAPIObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
@@ -37,6 +37,7 @@ export interface OapiConfig<C extends object = {}> {
   api: OpenAPIObject | string;
   paths: OapiPaths<C>;
   security?: OapiSecurity<C>;
+  bodyParser?: Middleware<{}, Context>;
 }
 
 export type OapiSecurityResolver<C extends object = {}> = (
@@ -111,7 +112,7 @@ const validateSecurity = async <C extends object = {}>(
   return authInfo;
 };
 
-export const withOapi = async <C extends object = {}>({
+export const createOapi = async <C extends object = {}>({
   api,
   paths,
   security,
@@ -144,7 +145,7 @@ export const withOapi = async <C extends object = {}>({
     const select = selectRoute<object, C, OapiRoute<C & Context>>(ctx, routes);
 
     if (!select) {
-      throw new HttpError(404, {
+      return message(404, {
         message: `Path ${ctx.method} ${ctx.url.pathname} not found`,
       });
     }
@@ -159,13 +160,11 @@ export const withOapi = async <C extends object = {}>({
     const checkContext = validateCompiled(
       { ...schemaOptions, schema: routeSchema.context },
       context,
-      {
-        name: 'context',
-      },
+      { name: 'context' },
     );
 
     if (!checkContext.valid) {
-      throw new HttpError(400, {
+      return message(400, {
         message: `Request Validation Error`,
         errors: checkContext.errors,
       });
@@ -178,8 +177,7 @@ export const withOapi = async <C extends object = {}>({
       security,
     );
 
-    const result = await resolver({ ...context, authInfo });
-    const laminarResponse = isResponse(result) ? result : response({ body: result });
+    const laminarResponse = toResponse(await resolver({ ...context, authInfo }));
     const checkResponse = validateCompiled(
       { ...schemaOptions, schema: routeSchema.response },
       laminarResponse,
@@ -187,7 +185,7 @@ export const withOapi = async <C extends object = {}>({
     );
 
     if (!checkResponse.valid) {
-      throw new HttpError(500, {
+      return message(500, {
         message: `Response Validation Error`,
         errors: checkResponse.errors,
       });
