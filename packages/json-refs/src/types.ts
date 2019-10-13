@@ -1,83 +1,26 @@
-export type PrimitiveType =
-  | 'string'
-  | 'integer'
-  | 'number'
-  | 'boolean'
-  | 'array'
-  | 'object'
-  | 'null';
-
-export interface JsonSchema {
+export interface JsonObject {
   $ref?: string;
   $id?: string;
   id?: string;
-  if?: Schema;
-  then?: Schema;
-  else?: Schema;
-  type?: PrimitiveType | PrimitiveType[];
-  pattern?: string;
-  minLength?: number;
-  maxLength?: number;
-  const?: unknown;
-  format?:
-    | 'date'
-    | 'date-time'
-    | 'password'
-    | 'byte'
-    | 'binary'
-    | 'email'
-    | 'uuid'
-    | 'uri'
-    | 'hostname'
-    | 'ipv4'
-    | 'ipv6'
-    | 'binary'
-    | 'byte'
-    | string;
-  minimum?: number;
-  maximum?: number;
-  exclusiveMinimum?: boolean | number;
-  exclusiveMaximum?: boolean | number;
-  multipleOf?: number;
-  items?: Schema | Schema[];
-  contains?: Schema;
-  additionalItems?: boolean | Schema;
-  uniqueItems?: boolean;
-  minItems?: number;
-  maxItems?: number;
-  properties?: { [key: string]: Schema };
-  required?: string[];
-  additionalProperties?: boolean | Schema;
-  minProperties?: number;
-  maxProperties?: number;
-  propertyNames?: Schema;
-  patternProperties?: { [key: string]: Schema };
-  dependencies?: { [key: string]: string[] | Schema };
-  title?: string;
-  description?: string;
-  enum?: unknown[];
-  oneOf?: Schema[];
-  allOf?: Schema[];
-  anyOf?: Schema[];
   [key: string]: unknown;
 }
 
-export type Schema = JsonSchema | boolean;
+export type JsonPointerObject = JsonObject | boolean;
 
 export interface RefSchema {
   $ref: string;
   [key: string]: unknown;
 }
 export interface RefMap {
-  [ref: string]: Schema;
+  [ref: string]: JsonPointerObject;
 }
 
-export interface TraversableSchema {
-  [key: string]: Schema;
+export interface TraversableJsonObject {
+  [key: string]: JsonPointerObject;
 }
 
 export interface Context {
-  schema: Schema;
+  schema: JsonPointerObject;
   refs: RefMap;
 }
 
@@ -87,14 +30,14 @@ export interface FileContext {
   uris?: string[];
 }
 
-export interface LoadedSchema {
+export interface LoadedJsonObject {
   uri: string;
-  content: Schema;
+  content: JsonPointerObject;
   cwd?: string;
 }
 
-export interface ResolvedSchema {
-  schema: Schema;
+export interface ResolvedJsonObject {
+  schema: JsonPointerObject;
   refs: RefMap;
   uris: string[];
 }

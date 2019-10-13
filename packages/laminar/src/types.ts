@@ -15,16 +15,6 @@ export interface LaminarOptions {
   http?: ServerOptions;
 }
 
-export interface LaminarRequest {
-  [Laminar]: true;
-  url: UrlWithParsedQuery;
-  method: Method;
-  headers: IncomingHttpHeaders;
-  query: any;
-  body: any;
-  cookies?: { [key: string]: string };
-}
-
 export interface LaminarResponse<TBody = string | Readable | Buffer | object> {
   [Laminar]: true;
   body?: TBody;
@@ -49,12 +39,12 @@ export enum Method {
 }
 
 export interface Context {
-  url: LaminarRequest['url'];
-  method: LaminarRequest['method'];
-  headers: LaminarRequest['headers'];
-  query: LaminarRequest['query'];
-  body: LaminarRequest['body'];
-  cookies: LaminarRequest['cookies'];
+  url: UrlWithParsedQuery;
+  method: Method;
+  headers: IncomingHttpHeaders;
+  query: any;
+  body: any;
+  cookies?: { [key: string]: string };
 }
 
 export type Middleware<TProvide extends object = {}, TRequire extends object = {}> = <

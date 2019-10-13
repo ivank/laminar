@@ -4,18 +4,18 @@ import fetch from 'node-fetch';
 import { dirname, join } from 'path';
 import { URL } from 'url';
 import {
-  Schema,
-  TraversableSchema,
+  JsonPointerObject,
+  TraversableJsonObject,
   RefSchema,
   FileContext,
   RefMap,
-  LoadedSchema,
+  LoadedJsonObject,
   Context,
-  ResolvedSchema,
+  ResolvedJsonObject,
 } from './types';
 import { ResolveError } from './ResolveError';
 
-export const isTraversable = (schema: unknown): schema is TraversableSchema =>
+export const isTraversable = (schema: unknown): schema is TraversableJsonObject =>
   schema && typeof schema === 'object';
 
 export const toUrl = (url: string, base?: string): string | undefined => {
@@ -26,7 +26,7 @@ export const toUrl = (url: string, base?: string): string | undefined => {
   }
 };
 
-export const getId = (schema: Schema): string | undefined => {
+export const getId = (schema: JsonPointerObject): string | undefined => {
   if (isTraversable(schema)) {
     if ('$id' in schema && schema.$id && typeof schema.$id === 'string') {
       return schema.$id;
@@ -37,16 +37,16 @@ export const getId = (schema: Schema): string | undefined => {
   return undefined;
 };
 
-export const isSchema = (schema: unknown): schema is Schema =>
+export const isSchema = (schema: unknown): schema is JsonPointerObject =>
   typeof schema === 'boolean' || (typeof schema === 'object' && schema !== null);
 
-export const isRefSchema = (schema: Schema): schema is RefSchema =>
+export const isRefSchema = (schema: JsonPointerObject): schema is RefSchema =>
   isTraversable(schema) &&
   '$ref' in schema &&
   schema.$ref !== undefined &&
   typeof schema.$ref === 'string';
 
-export const currentId = (schema: Schema, parentId?: string): string | undefined => {
+export const currentId = (schema: JsonPointerObject, parentId?: string): string | undefined => {
   const id = getId(schema);
   return id ? toUrl(id, parentId) : parentId;
 };
@@ -68,9 +68,9 @@ export const currentUrl = (
   }
 };
 
-export const reduceSchema = <TResult = Schema>(
-  schema: Schema,
-  cb: (all: TResult, item: Schema, id?: string) => TResult,
+export const reduceSchema = <TResult = JsonPointerObject>(
+  schema: JsonPointerObject,
+  cb: (all: TResult, item: JsonPointerObject, id?: string) => TResult,
   initial: TResult,
   id?: string,
 ): TResult =>
@@ -81,7 +81,7 @@ export const reduceSchema = <TResult = Schema>(
       )
     : cb(initial, schema, id);
 
-export const extractNamedRefs = (document: Schema): RefMap =>
+export const extractNamedRefs = (document: JsonPointerObject): RefMap =>
   reduceSchema(
     document,
     (all, item, id) => {
@@ -93,7 +93,7 @@ export const extractNamedRefs = (document: Schema): RefMap =>
   );
 
 export const extractUrls = (
-  schema: Schema,
+  schema: JsonPointerObject,
   namedRefs: string[] = [],
   fileContext: FileContext = {},
 ): string[] =>
@@ -113,7 +113,10 @@ export const extractUrls = (
     [],
   );
 
-export const loadFile = async (uri: string, { cwd }: FileContext = {}): Promise<LoadedSchema> => {
+export const loadFile = async (
+  uri: string,
+  { cwd }: FileContext = {},
+): Promise<LoadedJsonObject> => {
   const url = toUrl(uri);
   if (url) {
     const result = await fetch(uri);
@@ -138,20 +141,23 @@ export const loadFile = async (uri: string, { cwd }: FileContext = {}): Promise<
 export const parseJsonPointer = (name: string): string =>
   decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
 
-export const getJsonPointer = (document: Schema, pointer: string): Schema | undefined =>
+export const getJsonPointer = (
+  document: JsonPointerObject,
+  pointer: string,
+): JsonPointerObject | undefined =>
   pointer
     .split('/')
-    .reduce<Schema | undefined>(
+    .reduce<JsonPointerObject | undefined>(
       (item, name) =>
         name ? (isTraversable(item) ? item[parseJsonPointer(name)] : undefined) : item,
       document,
     );
 
 export const resolveNestedRefs = (
-  schema: Schema,
+  schema: JsonPointerObject,
   context: Context,
   fileContext: FileContext = {},
-): Schema => {
+): JsonPointerObject => {
   const parentId = currentId(schema, fileContext.parentId);
 
   if (isTraversable(schema)) {
@@ -182,7 +188,7 @@ export const resolveNestedRefs = (
 };
 
 export const extractFiles = async (
-  schema: Schema,
+  schema: JsonPointerObject,
   options: FileContext = {},
 ): Promise<{ refs: RefMap; uris: string[] }> => {
   const initialRefs = extractNamedRefs(schema);
@@ -202,17 +208,17 @@ export const extractFiles = async (
 };
 
 export const resolveRefs = async (
-  original: Schema,
+  original: JsonPointerObject,
   fileContext: FileContext = {},
-): Promise<ResolvedSchema> => {
-  const copy: Schema = JSON.parse(JSON.stringify(original));
+): Promise<ResolvedJsonObject> => {
+  const copy: JsonPointerObject = JSON.parse(JSON.stringify(original));
   const { refs, uris } = await extractFiles(copy, fileContext);
   const context = { schema: copy, refs, uris };
   const schema = resolveNestedRefs(copy, context, fileContext);
   return { schema, refs, uris };
 };
 
-export const resolveRefsFile = async (file: string): Promise<ResolvedSchema> => {
+export const resolveRefsFile = async (file: string): Promise<ResolvedJsonObject> => {
   const { content, cwd, uri } = await loadFile(file);
   const resolved = await resolveRefs(content, { cwd });
   return { ...resolved, uris: [uri, ...resolved.uris] };

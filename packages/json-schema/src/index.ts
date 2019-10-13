@@ -1,7 +1,7 @@
-import { resolveRefs, resolveRefsFile, ResolvedSchema, Schema } from '@ovotech/json-refs';
+import { resolveRefs, resolveRefsFile } from '@ovotech/json-refs';
 import { validateSchema } from './helpers';
 import { messages } from './messages';
-import { ValidateOptions, ValidationResult } from './types';
+import { ValidateOptions, ValidationResult, ResolvedSchema, Schema } from './types';
 import { validateAdditionalProperties } from './validators/validateAdditionalProperties';
 import { validateAllOf } from './validators/validateAllOf';
 import { validateAnyOf } from './validators/validateAnyOf';
@@ -34,8 +34,6 @@ import { validateRequired } from './validators/validateRequired';
 import { validateType } from './validators/validateType';
 import { validateUniqueItems } from './validators/validateUniqueItems';
 
-export { ResolvedSchema, Schema } from '@ovotech/json-refs';
-
 export {
   childOptions,
   isJsonSchema,
@@ -47,7 +45,7 @@ export {
   validateSchema,
 } from './helpers';
 
-export { ValidateOptions, Validator, Messages } from './types';
+export { ValidateOptions, Validator, Messages, ResolvedSchema, Schema } from './types';
 
 export const draft7 = [
   validateRef,

@@ -7,8 +7,7 @@ import {
   validateSchema,
   isObject,
 } from '../helpers';
-import { ValidateOptions, Validator } from '../types';
-import { Schema } from '@ovotech/json-refs';
+import { ValidateOptions, Validator, Schema } from '../types';
 
 const findSchema = (
   schemas: Schema[],

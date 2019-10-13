@@ -1,4 +1,4 @@
-import { Schema } from '@ovotech/json-refs';
+import { Schema } from '@ovotech/json-schema';
 import { SecurityRequirementObject, SecuritySchemeObject, SchemaObject } from 'openapi3-ts';
 import { toMatchPattern } from './helpers';
 import { OapiResolverError } from './OapiResolverError';

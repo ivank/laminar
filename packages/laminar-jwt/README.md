@@ -1,6 +1,6 @@
 # Laminar JSON Web Tokens
 
-A jwt token middleware for laminar
+A json web token middleware for laminar
 
 ### Usage
 

@@ -2,9 +2,8 @@
   "name": "@ovotech/laminar-handlebars",
   "version": "0.3.0",
   "main": "dist/index.js",
-  "source": "src/index.ts",
   "types": "dist/index.d.ts",
-  "description": "Laminar handlebars middleware",
+  "description": "Handlebars implementation for the laminar http server",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
@@ -19,7 +18,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "commander": "^3.0.2",
     "handlebars": "^4.1.2"
   },
   "devDependencies": {

@@ -2,7 +2,6 @@
   "name": "@ovotech/laminar-oapi-cli",
   "version": "0.3.0",
   "main": "dist/index.js",
-  "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar-oapi",
   "author": "Ivan Kerin <ikerin@gmail.com>",

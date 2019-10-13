@@ -50,9 +50,9 @@ Since it would fill in its internal reference library on each pass, circular ref
 **resolveRefs**
 
 ```typescript
-function async resolveRefs(schema: Schema) => Promise<{
-  schema: Schema,
-  refs: { [key: string]: Schema,
+function async resolveRefs(schema: JsonPointerObject) => Promise<{
+  schema: JsonPointerObject,
+  refs: { [key: string]: JsonPointerObject,
   uris: string[]
 }>
 ```
@@ -61,8 +61,8 @@ function async resolveRefs(schema: Schema) => Promise<{
 
 ```typescript
 function async resolveRefsFile(file: string) => Promise<{
-  schema: Schema,
-  refs: { [key: string]: Schema,
+  schema: JsonPointerObject,
+  refs: { [key: string]: JsonPointerObject,
   uris: string[]
 }>
 ```

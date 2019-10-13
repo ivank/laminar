@@ -1,5 +1,5 @@
-import { compile, validate } from '@ovotech/json-schema';
-import { Schema, ResolveError } from '@ovotech/json-refs';
+import { compile, validate, Schema } from '@ovotech/json-schema';
+import { ResolveError } from '@ovotech/json-refs';
 import { Command } from 'commander';
 import * as fs from 'fs';
 import { openapiV3 } from 'openapi-schemas';

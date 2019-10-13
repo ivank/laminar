@@ -32,7 +32,7 @@ export interface HandlebarsContext {
   ) => LaminarResponse<string>;
 }
 
-export const deepReaddirSync = (dir: string, childDir: string, parent: string = ''): string[] =>
+export const deepReaddirSync = (dir: string, childDir: string, parent = ''): string[] =>
   readdirSync(join(dir, childDir), { withFileTypes: true }).reduce<string[]>(
     (all, item) =>
       item.isDirectory()

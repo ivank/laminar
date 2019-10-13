@@ -1,5 +1,5 @@
 export { laminar } from './laminar';
-export { request } from './request';
+export { toContext } from './context';
 export {
   response,
   isResponse,
@@ -39,7 +39,6 @@ export {
   Context,
   Laminar,
   LaminarCookie,
-  LaminarRequest,
   LaminarResponse,
   RouteResolver,
   Method,

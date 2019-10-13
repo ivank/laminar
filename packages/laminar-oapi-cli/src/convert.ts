@@ -1,5 +1,4 @@
-import { compile } from '@ovotech/json-schema';
-import { Schema } from '@ovotech/json-refs';
+import { compile, Schema } from '@ovotech/json-schema';
 import { printDocument } from '@ovotech/ts-compose';
 import { OpenAPIObject, SchemaObject } from 'openapi3-ts';
 import { convertOapi } from './convert-oapi';

@@ -55,7 +55,7 @@ interface User {
 const findUser = (id: string): User => ({ id, name: 'John' });
 
 const main = async (): Promise<void> => {
-  const resolver = await createOapi({
+  const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     paths: {
       '/user/{id}': {
@@ -63,7 +63,7 @@ const main = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ app: resolver, port: 8081 });
+  const server = await laminar({ app, port: 8081 });
   console.log('Started', server.address());
 };
 
@@ -308,7 +308,7 @@ interface DBContext {
  * Since any database would need to create a connection first,
  * We'll need to have a "middleware creator" function that executes
  * and returns the actual middleware
- * 
+ *
  * We use the handy Middleware type that has a signature of Middleware<ProvideContext, RequireContext>
  */
 const createDbMiddleware = (): Middleware<DBContext, Context> => {
@@ -356,7 +356,7 @@ So its a flow of context down the middlewares, but since its an ordered flow, we
 - [cors](packages/laminar/README.md#cors-middleware) for managing cross origin resources
 - [logging](packages/laminar/README.md#logging-middleware) for setting custom loggers, e.g. winstonjs and logging stuff before / after any request
 - [laminar-handlebars](packages/laminar-handlebars/README.md) support for handlebars view templates
-- [laminar-jwt](packages/laminar-jwt/README.md) support for json web tokens 
+- [laminar-jwt](packages/laminar-jwt/README.md) support for json web tokens
 
 ## Running the tests
 

@@ -1,0 +1,62 @@
+version: 2.1
+
+commands:
+  yarn-install:
+    description: Install cached yarn packages
+    steps:
+      - restore_cache:
+          keys: ['v2-{{ checksum "yarn.lock" }}']
+      - run: yarn config set yarn-offline-mirror ~/.cache/yarn
+      - run: yarn install --frozen-lockfile
+
+  yarn-save-cache:
+    description: Save yarn packages cache
+    steps:
+      - save_cache:
+          key: v2-{{ checksum "yarn.lock" }}
+          paths: ['~/.cache']
+
+jobs:
+  test:
+    docker:
+      - image: circleci/node:8.10.0
+    steps:
+      - checkout
+      - run:
+          name: 'Update Submodules'
+          command: |
+            git submodule sync
+            git submodule update --init
+      - yarn-install
+      - yarn-save-cache
+      - run: yarn build
+      - run: yarn test
+
+  publish:
+    docker:
+      - image: circleci/node:8.10.0
+    steps:
+      - checkout
+      - yarn-install
+      - run: yarn build
+      - run: git config user.email "ovotech-ci@ovoenergy.com"
+      - run: git config user.name "Ovotech CI"
+      - run: yarn lerna publish from-package --yes
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore: master
+  deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master
+      - publish:
+          requires:
+            - test

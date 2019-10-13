@@ -1,5 +1,4 @@
-import { Messages, ValidateOptions, Validator, Invalid } from './types';
-import { Schema, JsonSchema } from '@ovotech/json-refs';
+import { Messages, ValidateOptions, Validator, Invalid, Schema, JsonSchema } from './types';
 
 export const childOptions = (name: string | number, options: ValidateOptions): ValidateOptions => ({
   ...options,

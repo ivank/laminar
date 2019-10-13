@@ -2,7 +2,6 @@
   "name": "@ovotech/laminar-oapi",
   "version": "0.3.0",
   "main": "dist/index.js",
-  "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "description": "A middleware for @ovotech/laminar-oapi to handle open-api",
   "author": "Ivan Kerin <ikerin@gmail.com>",

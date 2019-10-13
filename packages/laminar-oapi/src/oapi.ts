@@ -1,5 +1,4 @@
-import { compile, validate, validateCompiled } from '@ovotech/json-schema';
-import { Schema } from '@ovotech/json-refs';
+import { compile, validate, validateCompiled, Schema } from '@ovotech/json-schema';
 import {
   Context,
   Resolver,
