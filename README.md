@@ -40,7 +40,7 @@ components:
           type: string
 ```
 
-And then you can implement it using `@ovotech/laminar-oapi`
+And then you can implement it using [@ovotech/laminar-oapi](packages/laminar-oapi)
 
 ```typescript
 import { laminar } from '@ovotech/laminar';
@@ -154,7 +154,7 @@ main();
 
 ## Generating types
 
-To generate a typescript types out of the OpenApi schema, you need to add the `@ovotech/laminar-oapi-cli` package, and then run the cli command:
+To generate a typescript types out of the OpenApi schema, you need to add the [@ovotech/laminar-oapi-cli](packages/laminar-oapi-cli) package, and then run the cli command:
 
 ```shell
 yarn add --dev @ovotech/laminar-oapi-cli
@@ -168,8 +168,6 @@ yarn laminar-oapi simple.yaml __generated__/simple.ts --watch
 ```
 
 If the schema has references to multiple files and those files are in the local file system, they will be watched for changes as well.
-
-After that you can add the type with `oapi<Config>`, which will add types to both requests and responses.
 
 ```typescript
 import { laminar } from '@ovotech/laminar';
@@ -199,7 +197,7 @@ main();
 
 ## Simple Usage
 
-Laminar can also be used without any spec for a very minimal rest api
+Laminar can also be used without any spec for a very minimal rest api.
 
 ```typescript
 import { get, laminar, router } from '@ovotech/laminar';
@@ -210,13 +208,14 @@ interface User {
 }
 
 const findUser = (id: string): User => ({ id, name: 'John' });
-const resolver = router(
+
+const app = router(
   get('/.well-known/health-check', () => ({ health: 'ok' })),
   get('/users/{id}', ({ path }) => findUser(path.id)),
 );
 
 const main = async (): Promise<void> => {
-  const server = await laminar({ app: resolver, port: 8082 });
+  const server = await laminar({ app, port: 8082 });
   console.log('Started', server.address());
 };
 
@@ -232,8 +231,8 @@ Lets see the simplest possible app with laminar, a very simple echo app
 ```typescript
 import { laminar, Resolver, Context } from '@ovotech/laminar';
 
-const main: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app: main });
+const app: Resolver<Context> = ctx => ctx.body;
+laminar({ port: 3333, app });
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -254,12 +253,12 @@ const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
   return next(ctx);
 };
 
-const main: Resolver<Context> = ctx => ctx.body;
+const app: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: auth(main) });
+laminar({ port: 3333, app: auth(app) });
 ```
 
-Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to stuff before and after whatever follows. For example say we wanted to log what the request and response was.
+Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
 
 ```typescript
 import { laminar, Context, message, Resolver } from '@ovotech/laminar';
@@ -278,12 +277,12 @@ const log = (next: Resolver<Context>): Resolver<Context> => ctx => {
   return response;
 };
 
-const main: Resolver<Context> = ctx => ctx.body;
+const app: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: log(auth(main)) });
+laminar({ port: 3333, app: log(auth(app)) });
 ```
 
-You can see how we can string those middlewares along `log(auth(main))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
+You can see how we can string those middlewares along `log(auth(app))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
 
 A simple example would be access to an external resource, say a database. We want a middleware that creates a connection, passes that connection to all the middlewares downstream that would make use of it like checking users. But we'd like to be sure that middleware has actually executed, so we don't accidentally try to access a connection that's not there.
 
@@ -336,13 +335,13 @@ const log: Middleware<{}, Context> = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const main: Resolver<DBContext & Context> = ctx => {
+const app: Resolver<DBContext & Context> = ctx => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 
 const db = createDbMiddleware();
 
-laminar({ port: 3333, app: log(db(auth(main))) });
+laminar({ port: 3333, app: log(db(auth(app))) });
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.

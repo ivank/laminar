@@ -42,10 +42,10 @@ const log: Middleware<{}, Context> = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const main: Resolver<DBContext & Context> = ctx => {
+const app: Resolver<DBContext & Context> = (ctx: DBContext & Context) => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 
 const db = createDbMiddleware();
 
-laminar({ port: 3333, app: log(db(auth(main))) });
+laminar({ port: 3333, app: log(db(auth(app))) });
