@@ -47,16 +47,16 @@ export interface Context {
   cookies?: { [key: string]: string };
 }
 
-export type Middleware<TProvide extends object = {}, TRequire extends object = {}> = <
+export type Middleware<
+  TProvide extends object = {},
+  TRequire extends object = {},
   TInherit extends object = {}
->(
-  next: Resolver<TProvide & TRequire & TInherit>,
-) => Resolver<TRequire & TInherit>;
+> = (next: Resolver<TProvide & TRequire & TInherit>) => Resolver<TRequire & TInherit>;
 
 export type ResolverResponse = string | Readable | Buffer | LaminarResponse | object;
 
-export type Resolver<C extends object = {}> = (
-  ctx: C,
+export type Resolver<TContext extends object = {}> = (
+  ctx: TContext,
 ) => Promise<ResolverResponse> | ResolverResponse;
 
 export type RouteMatcher<C extends object = {}> = (ctx: Context & C) => RouteContext | false;

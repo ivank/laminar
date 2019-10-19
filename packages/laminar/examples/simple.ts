@@ -1,4 +1,4 @@
-import { get, post, laminar, router } from '../src';
+import { get, post, laminar, router } from '@ovotech/laminar';
 
 const main = async (): Promise<void> => {
   const server = await laminar({

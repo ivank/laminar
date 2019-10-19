@@ -28,6 +28,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.4"
   }
 }
