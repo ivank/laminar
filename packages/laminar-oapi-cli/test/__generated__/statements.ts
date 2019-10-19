@@ -28,6 +28,9 @@ export interface HttpError {
 
 export type TAccountsAccountIdMetersGetResponse = (AccountMeterBase[] | LaminarResponse<AccountMeterBase[]> | Promise<AccountMeterBase[]> | Promise<LaminarResponse<AccountMeterBase[]>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
 
+/**
+ * Get Meters, associated with an account, and its service start and end dates (SSD...SED)
+ */
 export interface TAccountsAccountIdMetersGetContext extends Context, OapiContext {
     path: {
         accountId: string;

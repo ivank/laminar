@@ -1,4 +1,4 @@
-import { Middleware, Context } from '@ovotech/laminar';
+import { Middleware } from '@ovotech/laminar';
 import { sign, verify, decode, SignOptions, NotBeforeError, TokenExpiredError } from 'jsonwebtoken';
 import { JWTAuthenticationError } from './JWTAuthenticationError';
 import { OapiSecurityResolver } from '@ovotech/laminar-oapi';
@@ -132,7 +132,7 @@ export const createJwtSecurity = <TUser extends User = User>(
 
 export const auth = (
   scopes?: string[],
-): Middleware<JWTContextAuthenticated, JWTContext & Context> => next => ctx => {
+): Middleware<JWTContextAuthenticated, JWTContext> => next => ctx => {
   const authInfo = ctx.verifyAuthorization(ctx.headers.authorization, scopes);
   return next({ ...ctx, authInfo });
 };

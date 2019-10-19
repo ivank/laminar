@@ -1,4 +1,4 @@
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
@@ -7,9 +7,7 @@ import { OapiConfig, createOapi } from '../src';
 let server: Server;
 
 describe('Statements', () => {
-  afterEach(async () => {
-    await new Promise(resolve => server.close(resolve));
-  });
+  afterEach(() => new Promise(resolve => server.close(resolve)));
 
   it('Should process response', async () => {
     const config: OapiConfig = {
@@ -49,7 +47,8 @@ describe('Statements', () => {
     };
 
     const app = await createOapi(config);
-    server = await laminar({ app, port: 8064 });
+    const bodyParser = createBodyParser();
+    server = await laminar({ app: bodyParser(app), port: 8064 });
 
     const api = axios.create({ baseURL: 'http://localhost:8064' });
     const { data } = await api.get('/accounts/123/meters');

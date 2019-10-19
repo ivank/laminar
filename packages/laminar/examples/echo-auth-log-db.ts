@@ -17,7 +17,7 @@ interface DBContext {
  * We'll need to have a "middleware creator" function that executes
  * and returns the actual middleware
  */
-const createDbMiddleware = (): Middleware<DBContext, Context> => {
+const createDbMiddleware = (): Middleware<DBContext> => {
   const db: DB = {
     getValidUser: () => 'Me',
   };
@@ -25,14 +25,14 @@ const createDbMiddleware = (): Middleware<DBContext, Context> => {
   return next => ctx => next({ ...ctx, db });
 };
 
-const auth: Middleware<{}, DBContext & Context> = next => ctx => {
+const auth: Middleware<{}, DBContext> = next => ctx => {
   if (ctx.db.getValidUser() !== ctx.headers.authorization) {
     return message(403, 'Not Me');
   }
   return next(ctx);
 };
 
-const log: Middleware<{}, Context> = next => ctx => {
+const log: Middleware = next => ctx => {
   console.log('Requested', ctx.body);
   const response = next(ctx);
   console.log('Responded', response);

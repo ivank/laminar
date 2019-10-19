@@ -1,4 +1,4 @@
-import { get, laminar, Context, Middleware, router } from '@ovotech/laminar';
+import { get, laminar, Middleware, router, createBodyParser } from '@ovotech/laminar';
 
 interface User {
   id: string;
@@ -7,11 +7,11 @@ interface User {
 
 const findUser = (id: string): User => ({ id, name: 'John' });
 
-interface LoggerContext {
+interface LoggingContext {
   logger: (message: string) => void;
 }
 
-const logging: Middleware<LoggerContext, Context> = next => {
+const logging: Middleware<LoggingContext> = next => {
   const logger = console.log;
 
   return ctx => {
@@ -22,15 +22,19 @@ const logging: Middleware<LoggerContext, Context> = next => {
   };
 };
 
+const bodyParser = createBodyParser();
+
 const main = async (): Promise<void> => {
   const server = await laminar({
-    app: logging(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        get('/users/{id}', ({ path, logger }) => {
-          logger('More stuff');
-          return findUser(path.id);
-        }),
+    app: bodyParser(
+      logging(
+        router(
+          get('/.well-known/health-check', () => ({ health: 'ok' })),
+          get('/users/{id}', ({ path, logger }) => {
+            logger('More stuff');
+            return findUser(path.id);
+          }),
+        ),
       ),
     ),
     port: 8082,

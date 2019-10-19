@@ -10,10 +10,12 @@ yarn add @ovotech/laminar
 
 To create an http server that responds to `GET .well-known/health-check`, `GET test` and `POST test`
 
+> [examples/simple.ts](examples/simple.ts)
+
 ```typescript
 import { get, post, laminar, router } from '@ovotech/laminar';
 
-const main = async () => {
+const main = async (): Promise<void> => {
   const server = await laminar({
     port: 3333,
     app: router(
@@ -35,6 +37,8 @@ Well it's more about typescript types that automatically apply over middlewares,
 
 Lets see the simplest possible app with laminar, a very simple echo app
 
+> [examples/echo.ts](examples/echo.ts)
+
 ```typescript
 import { laminar, Resolver, Context } from '@ovotech/laminar';
 
@@ -49,6 +53,8 @@ Pretty simple, but what if we wanted to add some authentication? This is usually
 
 Lets just assume that if Authorization header is `Me` then it's me and its fine, otherwise it must be someone else.
 We can go ahead and write a middleware, that would do stuff just before passing stuff to the next middleware.
+
+> [examples/echo-auth.ts](examples/echo-auth.ts)
 
 ```typescript
 import { laminar, Context, message, Resolver } from '@ovotech/laminar';
@@ -66,6 +72,8 @@ laminar({ port: 3333, app: auth(main) });
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to stuff before and after whatever follows. For example say we wanted to log what the request and response was.
+
+> [examples/echo-auth-log.ts](examples/echo-auth-log.ts)
 
 ```typescript
 import { laminar, Context, message, Resolver } from '@ovotech/laminar';
@@ -95,6 +103,8 @@ A simple example would be access to an external resource, say a database. We wan
 
 Lets see how we can go about doing that.
 
+> [examples/echo-auth-log-db.ts](examples/echo-auth-log-db.ts)
+
 ```typescript
 import { laminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
 
@@ -115,7 +125,7 @@ interface DBContext {
  * We'll need to have a "middleware creator" function that executes
  * and returns the actual middleware
  */
-const createDbMiddleware = (): Middleware<DBContext, Context> => {
+const createDbMiddleware = (): Middleware<DBContext> => {
   const db: DB = {
     getValidUser: () => 'Me',
   };
@@ -123,14 +133,14 @@ const createDbMiddleware = (): Middleware<DBContext, Context> => {
   return next => ctx => next({ ...ctx, db });
 };
 
-const auth: Middleware<{}, DBContext & Context> = next => ctx => {
+const auth: Middleware<{}, DBContext> = next => ctx => {
   if (ctx.db.getValidUser() !== ctx.headers.authorization) {
     return message(403, 'Not Me');
   }
   return next(ctx);
 };
 
-const log: Middleware<{}, Context> = next => ctx => {
+const log: Middleware = next => ctx => {
   console.log('Requested', ctx.body);
   const response = next(ctx);
   console.log('Responded', response);
@@ -140,13 +150,13 @@ const log: Middleware<{}, Context> = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const main: Resolver<DBContext & Context> = ctx => {
+const app: Resolver<DBContext & Context> = (ctx: DBContext & Context) => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 
 const db = createDbMiddleware();
 
-laminar({ port: 3333, app: log(db(auth(main))) });
+laminar({ port: 3333, app: log(db(auth(app))) });
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
@@ -160,6 +170,8 @@ So its a flow of context down the middlewares, but since its an ordered flow, we
 By default bodyParser has parsers for json, urlencoded and plain text. If nothing is matched, the `body` context object would be the actual readable stream IncomingObject.
 
 You can write and add your own parsers. Each one has a 'match' function and a 'parse' function. Parse also gets the raw IncomingObject from node.
+
+> [examples/body-parser.ts](examples/body-parser.ts)
 
 ```typescript
 import {
@@ -180,31 +192,37 @@ const csvParser: BodyParser = {
 const bodyParser = createBodyParser([csvParser, ...defaultParsers]);
 
 const main: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app: main, bodyParser });
+laminar({ port: 3333, app: bodyParser(main) });
 ```
 
 ### Router
 
 The router middleware allows you to respond to requests based on what path was requested, as well as extract information from that path for use in processing your request.
 
+> [examples/router.ts](examples/router.ts)
+
 ```typescript
-import { get, put, laminar, router } from '@ovotech/laminar';
+import { get, put, laminar, router, createBodyParser } from '@ovotech/laminar';
 
 const users: { [key: string]: string } = {
   '1': 'John',
   '2': 'Foo',
 };
 
+const bodyParser = createBodyParser();
+
 laminar({
   port: 3333,
-  app: router(
-    get('/.well-known/health-check', () => ({ health: 'ok' })),
-    get('/users', () => users),
-    get('/users/{id}', ({ path }) => users[path.id]),
-    put('/users/{id}', ({ path, body }) => {
-      users[path.id] = body;
-      return users[path.id];
-    }),
+  app: bodyParser(
+    router(
+      get('/.well-known/health-check', () => ({ health: 'ok' })),
+      get('/users', () => users),
+      get('/users/{id}', ({ path }) => users[path.id]),
+      put('/users/{id}', ({ path, body }) => {
+        users[path.id] = body;
+        return users[path.id];
+      }),
+    ),
   ),
 });
 ```
@@ -212,6 +230,8 @@ laminar({
 Path parameters are written in `{nameOfParameter}` style, and each name is extracted and its value passed in the `path` context property.
 
 If none of the routes match, the router would return a generic 404. You can modify that by using `defaultRoute` at the end of all the matchers. You can also use `response` helper to set custom status code.
+
+> [examples/default-route.ts](examples/default-route.ts)
 
 ```typescript
 import { get, defaultRoute, laminar, router, response } from '@ovotech/laminar';
@@ -243,8 +263,10 @@ A cors handling middleware comes with laminar as well.
 
 For example this would allow only 'example.com' and 'localhost' as origins.
 
+> [examples/cors.ts](examples/cors.ts)
+
 ```typescript
-import { get, put, laminar, router, createCors } from '@ovotech/laminar';
+import { get, put, laminar, router, createCors } from '../src';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -275,8 +297,10 @@ laminar({
 
 There's a simple middleware that allows you to log requests, responses and pass in a your own logger as a context.
 
+> [examples/logging.ts](examples/logging.ts)
+
 ```typescript
-import { get, put, laminar, router, createLogging } from '@ovotech/laminar';
+import { get, put, laminar, router, createLogging, createBodyParser } from '@ovotech/laminar';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -284,19 +308,22 @@ const users: { [key: string]: string } = {
 };
 
 const logging = createLogging(console);
+const bodyParser = createBodyParser();
 
 laminar({
   port: 3333,
-  app: logging(
-    router(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      get('/users', () => users),
-      get('/users/{id}', ({ path }) => users[path.id]),
-      put('/users/{id}', ({ path, body, logger }) => {
-        logger.log('info', 'putting');
-        users[path.id] = body;
-        return users[path.id];
-      }),
+  app: bodyParser(
+    logging(
+      router(
+        get('/.well-known/health-check', () => ({ health: 'ok' })),
+        get('/users', () => users),
+        get('/users/{id}', ({ path }) => users[path.id]),
+        put('/users/{id}', ({ path, body, logger }) => {
+          logger.log('info', 'putting');
+          users[path.id] = body;
+          return users[path.id];
+        }),
+      ),
     ),
   ),
 });

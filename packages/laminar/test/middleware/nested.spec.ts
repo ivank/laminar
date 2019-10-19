@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Server } from 'http';
-import { laminar, Middleware, Resolver, Context } from '../../src';
+import { laminar, Middleware, Resolver, Context, createBodyParser } from '../../src';
 
 interface One {
   one: string;
@@ -12,36 +11,51 @@ interface Three {
   three: boolean;
 }
 
-export const withOne: Middleware<One> = resolver => async ctx => resolver({ ...ctx, one: 'one' });
+const bodyParser = createBodyParser();
+const withOne: Middleware<One> = resolver => async ctx => resolver({ ...ctx, one: 'one' });
 
-export const withTwo: Middleware<Two> = resolver => ctx => resolver({ ...ctx, two: 2 });
+const withTwo: Middleware<Two, One> = resolver => ctx => resolver({ ...ctx, two: 2 });
 
-export const withThree: Middleware<Three> = resolver => async ctx =>
-  resolver({ ...ctx, three: false });
+const withThree: Middleware<Three> = resolver => async ctx => resolver({ ...ctx, three: false });
 
-export const resolver: Resolver<One & Two & Three & Context> = ctx => {
+const resolver: Resolver<One & Two & Three & Context> = ctx => {
   const { one, two, three, url } = ctx;
   return { one, two, three, url: url.pathname };
 };
 
-const app = withOne(withTwo(withThree(resolver)));
+const app = bodyParser(withOne(withTwo(withThree(resolver))));
 
-const api = axios.create({ baseURL: 'http://localhost:8095' });
-
-let server: Server;
+const appWithAutoAssign = bodyParser(
+  withOne(
+    withTwo(
+      withThree(ctx => {
+        const { one, two, three, url } = ctx;
+        return { one, two, three, url: url.pathname };
+      }),
+    ),
+  ),
+);
 
 describe('Nested middleware', () => {
-  beforeAll(async () => {
-    server = await laminar({ app, port: 8095 });
-  });
-
-  afterAll(async () => {
-    await new Promise(resolve => server.close(resolve));
-  });
-
   it('Should propagate multiple middlewarres ', async () => {
+    const server = await laminar({ app, port: 8095 });
+    const api = axios.create({ baseURL: 'http://localhost:8095' });
+
     const result = await api.get('/test2');
 
     expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
+
+    await new Promise(resolve => server.close(resolve));
+  });
+
+  it('Should be able to pass context automatically', async () => {
+    const server = await laminar({ app: appWithAutoAssign, port: 8095 });
+    const api = axios.create({ baseURL: 'http://localhost:8095' });
+
+    const result = await api.get('/test2');
+
+    expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
+
+    await new Promise(resolve => server.close(resolve));
   });
 });

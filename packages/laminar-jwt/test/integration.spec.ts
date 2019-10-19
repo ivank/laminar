@@ -1,4 +1,4 @@
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
@@ -31,6 +31,7 @@ describe('Integration', () => {
       },
     };
 
+    const bodyParser = createBodyParser();
     const oapi = await createOapi(config);
     const jwtMiddleware = createJwtSecurity('123');
 
@@ -39,7 +40,7 @@ describe('Integration', () => {
     const testTokenExpires = sign({ email: 'tester' }, '123', { expiresIn: '1ms' });
     const testTokenNotBefore = sign({ email: 'tester' }, '123', { notBefore: 10000 });
 
-    server = await laminar({ app: jwtMiddleware(oapi), port: 8062 });
+    server = await laminar({ app: bodyParser(jwtMiddleware(oapi)), port: 8062 });
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });
 

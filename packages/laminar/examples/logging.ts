@@ -1,4 +1,4 @@
-import { get, put, laminar, router, createLogging } from '@ovotech/laminar';
+import { get, put, laminar, router, createLogging, createBodyParser } from '@ovotech/laminar';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -6,19 +6,22 @@ const users: { [key: string]: string } = {
 };
 
 const logging = createLogging(console);
+const bodyParser = createBodyParser();
 
 laminar({
   port: 3333,
-  app: logging(
-    router(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      get('/users', () => users),
-      get('/users/{id}', ({ path }) => users[path.id]),
-      put('/users/{id}', ({ path, body, logger }) => {
-        logger.log('info', 'putting');
-        users[path.id] = body;
-        return users[path.id];
-      }),
+  app: bodyParser(
+    logging(
+      router(
+        get('/.well-known/health-check', () => ({ health: 'ok' })),
+        get('/users', () => users),
+        get('/users/{id}', ({ path }) => users[path.id]),
+        put('/users/{id}', ({ path, body, logger }) => {
+          logger.log('info', 'putting');
+          users[path.id] = body;
+          return users[path.id];
+        }),
+      ),
     ),
   ),
 });

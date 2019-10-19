@@ -1,9 +1,10 @@
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import { createJwtSecurity, JWTContext, JWTSecurity } from '@ovotech/laminar-jwt';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const start = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const jwtSecurity = createJwtSecurity('secret');
   const app = await createOapi<JWTContext>({
     api: join(__dirname, 'oapi.yaml'),
@@ -18,7 +19,7 @@ const start = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ port: 3333, app: jwtSecurity(app) });
+  const server = await laminar({ port: 3333, app: bodyParser(jwtSecurity(app)) });
   console.log('Started', server.address());
 };
 

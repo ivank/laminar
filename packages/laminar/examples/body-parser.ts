@@ -16,4 +16,4 @@ const csvParser: BodyParser = {
 const bodyParser = createBodyParser([csvParser, ...defaultParsers]);
 
 const main: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app: main, bodyParser });
+laminar({ port: 3333, app: bodyParser(main) });

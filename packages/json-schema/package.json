@@ -8,6 +8,7 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@ovotech/build-docs": "^0.1.0",
     "@types/jest": "^24.0.16",
     "@types/node": "^12.6.9",
     "@typescript-eslint/eslint-plugin": "^2.3.3",
@@ -22,6 +23,7 @@
   },
   "scripts": {
     "build": "tsc --declaration",
+    "build:docs": "build-docs README.md",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

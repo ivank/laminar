@@ -1,4 +1,4 @@
-import { get, put, laminar, router, createCors } from '@ovotech/laminar';
+import { get, put, laminar, router, createCors } from '../src';
 
 const users: { [key: string]: string } = {
   '1': 'John',

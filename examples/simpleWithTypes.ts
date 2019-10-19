@@ -1,4 +1,4 @@
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { Config, UserResponse } from './__generated__/simple';
 import { join } from 'path';
@@ -15,8 +15,9 @@ const config: Config = {
 };
 
 const main = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const app = await createOapi(config);
-  const server = await laminar({ app, port: 8081 });
+  const server = await laminar({ app: bodyParser(app), port: 8081 });
   console.log('Started', server.address());
 };
 

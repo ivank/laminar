@@ -1,4 +1,4 @@
-import { HttpError, laminar, response } from '@ovotech/laminar';
+import { HttpError, laminar, response, createBodyParser } from '@ovotech/laminar';
 import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
@@ -114,8 +114,9 @@ describe('Integration', () => {
 
     const oapi = await createOapi(config);
     const logger = withLogger(log);
+    const bodyParser = createBodyParser();
 
-    server = await laminar({ app: logger(oapi), port: 8063 });
+    server = await laminar({ app: bodyParser(logger(oapi)), port: 8063 });
 
     const api = axios.create({ baseURL: 'http://localhost:8063' });
 

@@ -1,4 +1,4 @@
-import { extendResponse, Middleware, response, Context } from '..';
+import { extendResponse, Middleware, response } from '..';
 
 export interface CorsConfig {
   allowOrigin?: string[] | string | RegExp | OriginChecker | true;
@@ -55,7 +55,7 @@ const toAllowMethods = (methods: CorsConfig['allowMethods']): string =>
 const toAllowCredentials = (credentials: CorsConfig['allowCredentials']): 'true' | undefined =>
   credentials ? 'true' : undefined;
 
-export const createCors = (config: CorsConfig = {}): Middleware<{}, Context> => {
+export const createCors = (config: CorsConfig = {}): Middleware => {
   const exposeHeaders = toExposeHeaders(config.exposeHeaders);
   const allowMethods = toAllowMethods(config.allowMethods);
   const maxAge = toMaxAge(config.maxAge);

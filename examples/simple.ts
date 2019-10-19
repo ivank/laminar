@@ -1,4 +1,4 @@
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -10,7 +10,8 @@ interface User {
 const findUser = (id: string): User => ({ id, name: 'John' });
 
 const main = async (): Promise<void> => {
-  const resolver = await createOapi({
+  const bodyParser = createBodyParser();
+  const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     paths: {
       '/user/{id}': {
@@ -18,7 +19,8 @@ const main = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ app: resolver, port: 8081 });
+
+  const server = await laminar({ app: bodyParser(app), port: 8081 });
   console.log('Started', server.address());
 };
 

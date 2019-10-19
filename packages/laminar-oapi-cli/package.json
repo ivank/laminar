@@ -29,8 +29,9 @@
   "scripts": {
     "test:build:integration": "laminar-oapi test/integration.yaml test/__generated__/integration.ts",
     "test:build:statements": "laminar-oapi test/statements.yaml test/__generated__/statements.ts",
-    "test:build": "yarn test:build:integration && yarn test:build:statements",
+    "pretest": "yarn test:build:integration && yarn test:build:statements",
     "build": "tsc --declaration",
+    "build:docs": "build-docs README.md",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

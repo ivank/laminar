@@ -9,6 +9,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --declaration",
+    "build:docs": "build-docs README.md",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",
@@ -21,6 +22,7 @@
     "handlebars": "^4.1.2"
   },
   "devDependencies": {
+    "@ovotech/build-docs": "^0.1.0",
     "@ovotech/laminar": "^0.3.0",
     "@types/jest": "^24.0.16",
     "@types/node": "^12.6.9",

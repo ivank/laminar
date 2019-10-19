@@ -4,6 +4,8 @@ A json web token middleware for laminar
 
 ### Usage
 
+> [examples/simple.ts](examples/simple.ts)
+
 ```typescript
 import { get, post, laminar, router, createBodyParser } from '@ovotech/laminar';
 import { createJwtSecurity, auth } from '@ovotech/laminar-jwt';
@@ -22,7 +24,7 @@ laminar({
     jwtSecurity(
       router(
         get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => ({ session: createSession(body) })),
+        post('/session', ({ createSession, body }) => createSession(body)),
         post('/test', onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo }))),
         get('/test', onlyLoggedIn(() => 'index')),
       ),
@@ -117,13 +119,16 @@ components:
 
 And then implement it like this
 
+> [examples/oapi.ts](examples/oapi.ts)
+
 ```typescript
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import { createJwtSecurity, JWTContext, JWTSecurity } from '@ovotech/laminar-jwt';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const start = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const jwtSecurity = createJwtSecurity('secret');
   const app = await createOapi<JWTContext>({
     api: join(__dirname, 'oapi.yaml'),
@@ -138,7 +143,7 @@ const start = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ port: 3333, app: jwtSecurity(app) });
+  const server = await laminar({ port: 3333, app: bodyParser(jwtSecurity(app)) });
   console.log('Started', server.address());
 };
 

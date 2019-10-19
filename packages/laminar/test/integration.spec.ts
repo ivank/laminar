@@ -12,8 +12,10 @@ import {
   response,
   router,
   message,
+  createResponseTime,
+  Middleware,
 } from '../src';
-import { LoggerContext, createLogging } from '../src';
+import { createLogging, createBodyParser } from '../src';
 import { promisify } from 'util';
 
 let server: Server;
@@ -22,73 +24,109 @@ describe('Integration', () => {
   afterEach(() => promisify(server.close.bind(server))());
 
   it('Should process response', async () => {
-    const users: { [key: string]: string } = {
-      10: 'John',
-      20: 'Tom',
-    };
     const loggerMock = { log: jest.fn() };
     const logging = createLogging(loggerMock);
+    const bodyParser = createBodyParser();
+    const responseTime = createResponseTime();
+
+    interface DBContext {
+      getUser: (id: string) => string | undefined;
+      delUser: (id: string) => void;
+      setUser: (id: string, name: string) => void;
+    }
+
+    const db: Middleware<DBContext> = next => {
+      const users: { [key: string]: string } = {
+        10: 'John',
+        20: 'Tom',
+      };
+
+      const dbCtx: DBContext = {
+        getUser: id => users[id],
+        setUser: (id, name) => {
+          users[id] = name;
+        },
+        delUser: id => {
+          delete users[id];
+        },
+      };
+
+      return ctx => {
+        return next({ ...ctx, ...dbCtx });
+      };
+    };
+
     server = await laminar({
       port: 8050,
-      app: logging(
-        router<LoggerContext>(
-          get('/.well-known/health-check', () => ({ health: 'ok' })),
-          get('/link', () => redirect('http://localhost:8050/destination')),
-          get('/link-other', () =>
-            redirect('http://localhost:8050/destination', {
-              headers: { Authorization: 'Bearer 123' },
-            }),
-          ),
-          get('/destination', () => ({ arrived: true })),
-          get('/error', () => {
-            throw new Error('unknown');
-          }),
-          options('/users/{id}', () =>
-            response({
-              headers: {
-                'Access-Control-Allow-Origin': 'http://localhost:8050',
-                'Access-Control-Allow-Methods': 'GET,POST,DELETE',
-              },
-            }),
-          ),
-          get('/users/{id}', ({ path, logger }) => {
-            logger.log('debug', `Getting id ${path.id}`);
+      app: bodyParser(
+        responseTime(
+          db(
+            logging(
+              router(
+                get('/.well-known/health-check', () => ({ health: 'ok' })),
+                get('/link', () => redirect('http://localhost:8050/destination')),
+                get('/link-other', () =>
+                  redirect('http://localhost:8050/destination', {
+                    headers: { Authorization: 'Bearer 123' },
+                  }),
+                ),
+                get('/destination', () => ({ arrived: true })),
+                get('/error', () => {
+                  throw new Error('unknown');
+                }),
+                options('/users/{id}', () =>
+                  response({
+                    headers: {
+                      'Access-Control-Allow-Origin': 'http://localhost:8050',
+                      'Access-Control-Allow-Methods': 'GET,POST,DELETE',
+                    },
+                  }),
+                ),
+                get('/users/{id}', ({ path, logger, getUser }) => {
+                  logger.log('debug', `Getting id ${path.id}`);
+                  const user = getUser(path.id);
 
-            if (users[path.id]) {
-              return Promise.resolve({ id: path.id, name: users[path.id] });
-            } else {
-              return message(404, { message: 'No User Found' });
-            }
-          }),
-          put('/users', ({ body, logger }) => {
-            logger.log('debug', `Test Body ${body.name}`);
-            users[body.id] = body.name;
-            return { added: true };
-          }),
-          patch('/users/{id}', ({ path, body }) => {
-            if (users[path.id]) {
-              users[path.id] = body.name;
-              return { patched: true };
-            } else {
-              return message(404, { message: 'No User Found' });
-            }
-          }),
-          post('/users/{id}', ({ path, body }) => {
-            if (users[path.id]) {
-              users[path.id] = body.name;
-              return { saved: true };
-            } else {
-              return message(404, { message: 'No User Found' });
-            }
-          }),
-          del('/users/{id}', ({ path }) => {
-            if (users[path.id]) {
-              delete users[path.id];
-              return { deleted: true };
-            } else {
-              return message(404, { message: 'No User Found' });
-            }
-          }),
+                  if (user) {
+                    return Promise.resolve({ id: path.id, name: user });
+                  } else {
+                    return message(404, { message: 'No User Found' });
+                  }
+                }),
+                put('/users', ({ body, logger, setUser }) => {
+                  logger.log('debug', `Test Body ${body.name}`);
+                  setUser(body.id, body.name);
+                  return { added: true };
+                }),
+                patch('/users/{id}', ({ path, body, getUser, setUser }) => {
+                  const user = getUser(path.id);
+                  if (user) {
+                    setUser(body.id, body.name);
+                    return { patched: true };
+                  } else {
+                    return message(404, { message: 'No User Found' });
+                  }
+                }),
+                post('/users/{id}', ({ path, body, getUser, setUser }) => {
+                  const user = getUser(path.id);
+                  if (user) {
+                    setUser(path.id, body.name);
+                    return { saved: true };
+                  } else {
+                    return message(404, { message: 'No User Found' });
+                  }
+                }),
+                del('/users/{id}', ({ path, getUser, delUser }) => {
+                  const user = getUser(path.id);
+                  if (user) {
+                    delUser(path.id);
+                    return { deleted: true };
+                  } else {
+                    return message(404, { message: 'No User Found' });
+                  }
+                }),
+              ),
+            ),
+          ),
         ),
       ),
     });

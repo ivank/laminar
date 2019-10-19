@@ -1,4 +1,4 @@
-import { Middleware, Context } from '../types';
+import { Context, Resolver } from '../types';
 import { IncomingMessage } from 'http';
 import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
@@ -42,9 +42,9 @@ export const parseBody = async (body: IncomingMessage, parsers: BodyParser[]): P
   return parser ? parser.parse(body) : body;
 };
 
-export const createBodyParser = (
-  parsers: BodyParser[] = defaultParsers,
-): Middleware<{}, Context> => next => async ctx => {
+export const createBodyParser = (parsers: BodyParser[] = defaultParsers) => (
+  next: Resolver<Context>,
+): Resolver<Context> => async ctx => {
   try {
     const body = await parseBody(ctx.body, parsers);
     return next({ ...ctx, body });

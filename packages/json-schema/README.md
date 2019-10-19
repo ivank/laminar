@@ -8,6 +8,8 @@ A lightweight a json-schema. No external dependencies (one small dependency from
 yarn add @ovotech/json-schema
 ```
 
+> [examples/simple.ts](examples/simple.ts)
+
 ```typescript
 import { validate, Schema } from '@ovotech/json-schema';
 
@@ -18,9 +20,7 @@ const schema: Schema = {
 
 const data = '12horses';
 
-const result = await validate(schema, data);
-console.log(result.valid);
-console.log(result.errors);
+validate(schema, data).then(result => console.log(result.valid, result.errors));
 ```
 
 Should output
@@ -42,11 +42,15 @@ It was made as a lightweight dependency to [@ovotech/laminar](https://github.com
 
 #### Compile and Validate
 
-If we assume we have those 2 http resources at the given URLs:
+If we assume we have those 2 http resources at the given URLs, You can compile the schema once, downloading the relevant URLs, and then use the `CompiledSchema` to perform any further validation without downloading and parsing the files again.
 
-`https://example.com/schema`
+> [examples/compile-urls.ts](examples/compile-urls.ts)
 
-```json
+```typescript
+import { validate, compile } from '@ovotech/json-schema';
+import * as nock from 'nock';
+
+const mainSchema = `
 {
   "type": "object",
   "properties": {
@@ -56,21 +60,20 @@ If we assume we have those 2 http resources at the given URLs:
     "color": { "$ref": "https://example.com/color" }
   }
 }
-```
+`;
 
-`https://example.com/color`
-
-```yaml
+const colorSchema = `
 enum:
   - red
   - green
   - blue
-```
+`;
 
-You can compile the schema once, downloading the relevant URLs, and then use the `CompiledSchema` to perform any further validation without downloading and parsing the files again.
-
-```typescript
-import { validate, compile } from '@ovotech/json-schema';
+nock('https://example.com')
+  .get('/schema')
+  .reply(200, mainSchema, { 'Content-Type': 'application/json' })
+  .get('/color')
+  .reply(200, colorSchema, { 'Content-Type': 'application/yaml' });
 
 compile('https://example.com/schema').then(schema => {
   console.log(schema);
@@ -92,14 +95,22 @@ compile('https://example.com/schema').then(schema => {
 
 You can also provide paths to local files to download the schema from. It it ends with "yaml" or "yml" it would be loaded as YAML, otherwise it would be parsed as JSON.
 
+> [examples/validate-local-schema.ts](examples/validate-local-schema.ts)
+
 ```typescript
 import { validateCompiled, validate, compile } from '@ovotech/json-schema';
 import { join } from 'path';
 
-const schemaFile = join(__dirname, 'examples/color-schema.yaml');
+const schemaFile = join(__dirname, 'color-schema.yaml');
 
 validate(schemaFile, 'orange').then(result => {
   console.log('validate', result.valid, result.errors);
+});
+
+compile(schemaFile).then(schema => {
+  const result = validateCompiled(schema, 'red');
+
+  console.log('compile', result.valid, result.errors);
 });
 ```
 

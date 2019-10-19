@@ -42,8 +42,10 @@ components:
 
 And then you can implement it using [@ovotech/laminar-oapi](packages/laminar-oapi)
 
+> [examples/simple.ts](examples/simple.ts)
+
 ```typescript
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -55,6 +57,7 @@ interface User {
 const findUser = (id: string): User => ({ id, name: 'John' });
 
 const main = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     paths: {
@@ -63,7 +66,8 @@ const main = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ app, port: 8081 });
+
+  const server = await laminar({ app: bodyParser(app), port: 8081 });
   console.log('Started', server.address());
 };
 
@@ -116,8 +120,10 @@ components:
 
 You can then implement the security with:
 
+> [examples/security.ts](examples/security.ts)
+
 ```typescript
-import { laminar, HttpError } from '@ovotech/laminar';
+import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -134,6 +140,7 @@ const validate = (authorizaitonHeader: string | undefined): void => {
 };
 
 const main = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     security: {
@@ -145,7 +152,7 @@ const main = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ app, port: 8081 });
+  const server = await laminar({ app: bodyParser(app), port: 8081 });
   console.log('Started', server.address());
 };
 
@@ -168,6 +175,8 @@ yarn laminar-oapi simple.yaml __generated__/simple.ts --watch
 ```
 
 If the schema has references to multiple files and those files are in the local file system, they will be watched for changes as well.
+
+> [examples/simpleWithTypes.ts](examples/simpleWithTypes.ts)
 
 ```typescript
 import { laminar } from '@ovotech/laminar';
@@ -199,8 +208,10 @@ main();
 
 Laminar can also be used without any spec for a very minimal rest api.
 
+> [examples/routes.ts](examples/routes.ts)
+
 ```typescript
-import { get, laminar, router } from '@ovotech/laminar';
+import { get, laminar, router, createBodyParser } from '@ovotech/laminar';
 
 interface User {
   id: string;
@@ -209,13 +220,17 @@ interface User {
 
 const findUser = (id: string): User => ({ id, name: 'John' });
 
-const app = router(
-  get('/.well-known/health-check', () => ({ health: 'ok' })),
-  get('/users/{id}', ({ path }) => findUser(path.id)),
-);
-
 const main = async (): Promise<void> => {
-  const server = await laminar({ app, port: 8082 });
+  const bodyParser = createBodyParser();
+  const server = await laminar({
+    app: bodyParser(
+      router(
+        get('/.well-known/health-check', () => ({ health: 'ok' })),
+        get('/users/{id}', ({ path }) => findUser(path.id)),
+      ),
+    ),
+    port: 8082,
+  });
   console.log('Started', server.address());
 };
 
@@ -228,11 +243,13 @@ Well it's more about typescript types that automatically apply over middlewares,
 
 Lets see the simplest possible app with laminar, a very simple echo app
 
+> [packages/laminar/examples/echo.ts](packages/laminar/examples/echo.ts)
+
 ```typescript
 import { laminar, Resolver, Context } from '@ovotech/laminar';
 
-const app: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app });
+const main: Resolver<Context> = ctx => ctx.body;
+laminar({ port: 3333, app: main });
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -242,6 +259,8 @@ Pretty simple, but what if we wanted to add some authentication? This is usually
 
 Lets just assume that if Authorization header is `Me` then it's me and its fine, otherwise it must be someone else.
 We can go ahead and write a middleware, that would do stuff just before passing stuff to the next middleware.
+
+> [packages/laminar/examples/echo-auth.ts](packages/laminar/examples/echo-auth.ts)
 
 ```typescript
 import { laminar, Context, message, Resolver } from '@ovotech/laminar';
@@ -253,12 +272,14 @@ const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
   return next(ctx);
 };
 
-const app: Resolver<Context> = ctx => ctx.body;
+const main: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: auth(app) });
+laminar({ port: 3333, app: auth(main) });
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
+
+> [packages/laminar/examples/echo-auth-log.ts](packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
 import { laminar, Context, message, Resolver } from '@ovotech/laminar';
@@ -277,9 +298,9 @@ const log = (next: Resolver<Context>): Resolver<Context> => ctx => {
   return response;
 };
 
-const app: Resolver<Context> = ctx => ctx.body;
+const main: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: log(auth(app)) });
+laminar({ port: 3333, app: log(auth(main)) });
 ```
 
 You can see how we can string those middlewares along `log(auth(app))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -287,6 +308,8 @@ You can see how we can string those middlewares along `log(auth(app))` as just f
 A simple example would be access to an external resource, say a database. We want a middleware that creates a connection, passes that connection to all the middlewares downstream that would make use of it like checking users. But we'd like to be sure that middleware has actually executed, so we don't accidentally try to access a connection that's not there.
 
 Lets see how we can go about doing that.
+
+> [packages/laminar/examples/echo-auth-log-db.ts](packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
 import { laminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
@@ -307,10 +330,8 @@ interface DBContext {
  * Since any database would need to create a connection first,
  * We'll need to have a "middleware creator" function that executes
  * and returns the actual middleware
- *
- * We use the handy Middleware type that has a signature of Middleware<ProvideContext, RequireContext>
  */
-const createDbMiddleware = (): Middleware<DBContext, Context> => {
+const createDbMiddleware = (): Middleware<DBContext> => {
   const db: DB = {
     getValidUser: () => 'Me',
   };
@@ -318,14 +339,14 @@ const createDbMiddleware = (): Middleware<DBContext, Context> => {
   return next => ctx => next({ ...ctx, db });
 };
 
-const auth: Middleware<{}, DBContext & Context> = next => ctx => {
+const auth: Middleware<{}, DBContext> = next => ctx => {
   if (ctx.db.getValidUser() !== ctx.headers.authorization) {
     return message(403, 'Not Me');
   }
   return next(ctx);
 };
 
-const log: Middleware<{}, Context> = next => ctx => {
+const log: Middleware = next => ctx => {
   console.log('Requested', ctx.body);
   const response = next(ctx);
   console.log('Responded', response);
@@ -335,7 +356,7 @@ const log: Middleware<{}, Context> = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const app: Resolver<DBContext & Context> = ctx => {
+const app: Resolver<DBContext & Context> = (ctx: DBContext & Context) => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 

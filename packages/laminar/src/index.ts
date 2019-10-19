@@ -15,7 +15,7 @@ export {
   ResponseTimeConfig,
   defaultResponseTimeHeader,
 } from './middleware/responseTime';
-export { createLogging, Logger, LoggerContext, LoggerOptions } from './middleware/logging';
+export { createLogging, Logger, LoggingContext, LoggerOptions } from './middleware/logging';
 export {
   createBodyParser,
   BodyParser,

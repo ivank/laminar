@@ -5,7 +5,6 @@ import { HttpError } from './HttpError';
 import { resolveBody, toResponse } from './response';
 import { Context, LaminarOptions, Resolver } from './types';
 import { toContext } from './context';
-import { createBodyParser } from './middleware/bodyParser';
 
 export const laminarRequestListener = (resolver: Resolver<Context>): RequestListener => {
   return async (req, res) => {
@@ -42,10 +41,9 @@ export const laminar = async ({
   app,
   port = 3300,
   hostname = 'localhost',
-  bodyParser = createBodyParser(),
   http = {},
 }: LaminarOptions): Promise<Server> => {
-  const server = createServer(http, laminarRequestListener(bodyParser(await app)));
+  const server = createServer(http, laminarRequestListener(await app));
   await new Promise(resolve => server.listen(port, hostname, resolve));
   return server;
 };

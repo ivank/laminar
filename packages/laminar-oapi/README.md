@@ -6,8 +6,10 @@ Open Api implementation for the laminar http server.
 
 Docs for open api itself: https://swagger.io/docs/
 
+> [examples/simple.ts](examples/simple.ts)
+
 ```typescript
-import { laminar } from '@ovotech/laminar';
+import { laminar, createBodyParser } from '@ovotech/laminar';
 import { createOapi, OpenAPIObject } from '@ovotech/laminar-oapi';
 
 const api: OpenAPIObject = {
@@ -64,6 +66,7 @@ const api: OpenAPIObject = {
 };
 
 const start = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const app = await createOapi({
     api,
     paths: {
@@ -73,7 +76,7 @@ const start = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ port: 3333, app });
+  const server = await laminar({ port: 3333, app: bodyParser(app) });
   console.log('Started', server.address());
 };
 
@@ -96,8 +99,10 @@ Validations on the response object shape would also be run, and would result in 
 
 When you define OpenAPI security, you can configure a function that implements that security, and it will be automatically applied to all paths / methods that require it.
 
+> [examples/security.ts](examples/security.ts)
+
 ```typescript
-import { laminar, HttpError } from '@ovotech/laminar';
+import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi, OpenAPIObject } from '@ovotech/laminar-oapi';
 
 const api: OpenAPIObject = {
@@ -113,7 +118,7 @@ const api: OpenAPIObject = {
             'application/json': { schema: { $ref: '#/components/schemas/User' } },
           },
         },
-        security: [{ MySecurity: [] }],
+        security: [{ MySecurity: ['admin'] }],
         responses: {
           '200': {
             description: 'Newly Created User',
@@ -162,6 +167,7 @@ const api: OpenAPIObject = {
 };
 
 const start = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const app = await createOapi({
     api,
     security: {
@@ -179,7 +185,7 @@ const start = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ port: 3333, app });
+  const server = await laminar({ port: 3333, app: bodyParser(app) });
   console.log('Started', server.address());
 };
 

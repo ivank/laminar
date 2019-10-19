@@ -1,8 +1,8 @@
-import { get, laminar, post, router } from '@ovotech/laminar';
+import { get, laminar, post, router, createBodyParser } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
-import { HandlebarsContext, createHandlebars } from '../src';
+import { createHandlebars } from '../src';
 
 let server: Server;
 
@@ -18,6 +18,7 @@ describe('Integration', () => {
   afterEach(() => new Promise(resolve => server.close(resolve)));
 
   it('Should process response', async () => {
+    const bodyParser = createBodyParser();
     const handlebars = createHandlebars({
       dir: join(__dirname, 'root'),
       helpers: { capitalizeName },
@@ -25,11 +26,13 @@ describe('Integration', () => {
 
     server = await laminar({
       port: 8062,
-      app: handlebars(
-        router<HandlebarsContext>(
-          get('/', ({ render }) => render('index')),
-          post('/result', ({ render, body: { name } }) =>
-            render('result', { name }, { status: 201 }),
+      app: bodyParser(
+        handlebars(
+          router(
+            get('/', ({ render }) => render('index')),
+            post('/result', ({ render, body: { name } }) =>
+              render('result', { name }, { status: 201 }),
+            ),
           ),
         ),
       ),

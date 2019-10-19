@@ -4,19 +4,24 @@ Handlebars implementation for the laminar http server.
 
 ### Usage
 
+> [examples/html.ts](examples/html.ts)
+
 ```typescript
-import { laminar, router, get, post } from '@ovotech/laminar';
-import { createHandlebars, HandlebarsContext } from '@ovotech/laminar-handlebars';
+import { laminar, router, get, post, createBodyParser } from '@ovotech/laminar';
+import { createHandlebars } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
+const bodyParser = createBodyParser();
 const handlebars = createHandlebars({ dir: join(__dirname, 'templates-html') });
 
 laminar({
   port: 3333,
-  app: handlebars(
-    router<HandlebarsContext>(
-      get('/', ({ render }) => render('index')),
-      post('/result', ({ render, body: { name } }) => render('result', { name })),
+  app: bodyParser(
+    handlebars(
+      router(
+        get('/', ({ render }) => render('index')),
+        post('/result', ({ render, body: { name } }) => render('result', { name })),
+      ),
     ),
   ),
 });
@@ -26,10 +31,14 @@ When you set `dir`, it will load and compile templates in `views` and `partials`
 
 ### Custom response options
 
+> [examples/yaml.ts](examples/yaml.ts)
+
 ```typescript
-import { laminar, router, get } from '@ovotech/laminar';
-import { createHandlebars, HandlebarsContext } from '@ovotech/laminar-handlebars';
+import { laminar, router, get, createBodyParser } from '@ovotech/laminar';
+import { createHandlebars } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
+
+const bodyParser = createBodyParser();
 
 const handlebars = createHandlebars({
   dir: join(__dirname, 'templates-yaml'),
@@ -40,12 +49,14 @@ const handlebars = createHandlebars({
 
 laminar({
   port: 3333,
-  app: handlebars(
-    router<HandlebarsContext>(
-      get('/', ({ render }) => {
-        return render('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } });
-      }),
-      get('/swagger.yaml', ({ render }) => render('swagger.yaml', { version: 10 })),
+  app: bodyParser(
+    handlebars(
+      router(
+        get('/', ({ render }) => {
+          return render('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } });
+        }),
+        get('/swagger.yaml', ({ render }) => render('swagger.yaml', { version: 10 })),
+      ),
     ),
   ),
 });

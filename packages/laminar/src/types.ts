@@ -47,11 +47,11 @@ export interface Context {
   cookies?: { [key: string]: string };
 }
 
-export type Middleware<
-  TProvide extends object = {},
-  TRequire extends object = {},
-  TInherit extends object = {}
-> = (next: Resolver<TProvide & TRequire & TInherit>) => Resolver<TRequire & TInherit>;
+export type Middleware<TProvide extends object = {}, TRequire extends object = {}> = <
+  TInherit extends Context = Context
+>(
+  next: Resolver<TProvide & TRequire & TInherit>,
+) => Resolver<TRequire & TInherit>;
 
 export type ResolverResponse = string | Readable | Buffer | LaminarResponse | object;
 

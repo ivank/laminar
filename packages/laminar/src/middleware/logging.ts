@@ -11,7 +11,7 @@ export interface Logger {
   log: (level: string, message: string, metadata?: Metadata) => void;
 }
 
-export interface LoggerContext {
+export interface LoggingContext {
   logger: Logger;
 }
 
@@ -37,7 +37,7 @@ export const defaultOptions: LoggerOptions = {
 export const createLogging = (
   logger: Logger = console,
   userOptions: Partial<LoggerOptions> = {},
-): Middleware<LoggerContext, Context> => next => async ctx => {
+): Middleware<LoggingContext> => next => async ctx => {
   const options = { ...defaultOptions, ...userOptions };
 
   try {

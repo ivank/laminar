@@ -1,4 +1,4 @@
-import { laminar, HttpError } from '@ovotech/laminar';
+import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -15,6 +15,7 @@ const validate = (authorizaitonHeader: string | undefined): void => {
 };
 
 const main = async (): Promise<void> => {
+  const bodyParser = createBodyParser();
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     security: {
@@ -26,7 +27,7 @@ const main = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ app, port: 8081 });
+  const server = await laminar({ app: bodyParser(app), port: 8081 });
   console.log('Started', server.address());
 };
 
