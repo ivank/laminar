@@ -9,7 +9,6 @@
     "noUnusedLocals": true,
     "strict": true,
     "module": "commonjs",
-    "moduleResolution": "node",
     "target": "es2018",
     "sourceMap": false,
     "lib": ["es2018"],
