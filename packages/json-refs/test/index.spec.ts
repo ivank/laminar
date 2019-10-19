@@ -1,8 +1,8 @@
 import * as nock from 'nock';
-import { extractFiles, extractNamedRefs, extractUrls, resolveRefs, Schema } from '../src';
+import { extractFiles, extractNamedRefs, extractUrls, resolveRefs, JsonObject } from '../src';
 
 describe('json-refs', () => {
-  it.each<[string, Schema, string[]]>([
+  it.each<[string, JsonObject, string[]]>([
     [
       'no ref',
       {
@@ -73,7 +73,7 @@ describe('json-refs', () => {
     expect(extractUrls(schema)).toEqual(expected);
   });
 
-  it.each<[string, Schema, Schema]>([
+  it.each<[string, JsonObject, JsonObject]>([
     [
       'single id',
       {
@@ -182,7 +182,7 @@ describe('json-refs', () => {
   });
 
   it('Should resolve nested recursive with files', async () => {
-    const schema: Schema = {
+    const schema: JsonObject = {
       $id: 'http://localhost:1234/tree',
       description: 'tree of nodes',
       type: 'object',
@@ -212,7 +212,7 @@ describe('json-refs', () => {
   });
 
   it('Should resolve complex refs', async () => {
-    const schema: Schema = {
+    const schema: JsonObject = {
       type: 'object',
       properties: {
         mangled: { $ref: '#/definitions/unknown/more-unknown' },
