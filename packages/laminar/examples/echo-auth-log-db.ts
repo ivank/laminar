@@ -42,7 +42,7 @@ const log: Middleware = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const app: Resolver<DBContext & Context> = (ctx: DBContext & Context) => {
+const app: Resolver<DBContext & Context> = ctx => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 

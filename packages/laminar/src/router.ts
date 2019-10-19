@@ -4,9 +4,9 @@ import {
   Resolver,
   Route,
   RouteContext,
-  RouteResolver,
+  RouteHelper,
   RouteMatcher,
-  DefaultRouteResolver,
+  DefaultRouteHelper,
 } from './types';
 import { message } from './response';
 
@@ -84,13 +84,13 @@ export const router = <C extends object = {}>(...routes: Route<C>[]): Resolver<C
   };
 };
 
-export const get: RouteResolver = (path, resolver) => toRoute(Method.GET, path, resolver);
-export const post: RouteResolver = (path, resolver) => toRoute(Method.POST, path, resolver);
-export const del: RouteResolver = (path, resolver) => toRoute(Method.DELETE, path, resolver);
-export const patch: RouteResolver = (path, resolver) => toRoute(Method.PATCH, path, resolver);
-export const put: RouteResolver = (path, resolver) => toRoute(Method.PUT, path, resolver);
-export const options: RouteResolver = (path, resolver) => toRoute(Method.OPTIONS, path, resolver);
-export const defaultRoute: DefaultRouteResolver = resolver => ({
+export const get: RouteHelper = (path, resolver) => toRoute(Method.GET, path, resolver);
+export const post: RouteHelper = (path, resolver) => toRoute(Method.POST, path, resolver);
+export const del: RouteHelper = (path, resolver) => toRoute(Method.DELETE, path, resolver);
+export const patch: RouteHelper = (path, resolver) => toRoute(Method.PATCH, path, resolver);
+export const put: RouteHelper = (path, resolver) => toRoute(Method.PUT, path, resolver);
+export const options: RouteHelper = (path, resolver) => toRoute(Method.OPTIONS, path, resolver);
+export const defaultRoute: DefaultRouteHelper = resolver => ({
   resolver,
   matcher: () => ({ path: {} }),
 });

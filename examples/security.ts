@@ -2,19 +2,14 @@ import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
-interface User {
-  id: string;
-  name: string;
-}
-
-const findUser = (id: string): User => ({ id, name: 'John' });
-const validate = (authorizaitonHeader: string | undefined): void => {
+const findUser = (id: string) => ({ id, name: 'John' });
+const validate = (authorizaitonHeader?: string) => {
   if (authorizaitonHeader !== 'Secret Pass') {
     throw new HttpError(403, { message: 'Unkown user' });
   }
 };
 
-const main = async (): Promise<void> => {
+const main = async () => {
   const bodyParser = createBodyParser();
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),

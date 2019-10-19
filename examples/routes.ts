@@ -1,13 +1,8 @@
 import { get, laminar, router, createBodyParser } from '@ovotech/laminar';
 
-interface User {
-  id: string;
-  name: string;
-}
+const findUser = (id: string) => ({ id, name: 'John' });
 
-const findUser = (id: string): User => ({ id, name: 'John' });
-
-const main = async (): Promise<void> => {
+const main = async () => {
   const bodyParser = createBodyParser();
   const server = await laminar({
     app: bodyParser(
@@ -18,6 +13,7 @@ const main = async (): Promise<void> => {
     ),
     port: 8082,
   });
+
   console.log('Started', server.address());
 };
 

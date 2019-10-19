@@ -63,7 +63,7 @@ export type RouteMatcher<C extends object = {}> = (ctx: Context & C) => RouteCon
 
 export interface Route<C extends object = {}> {
   matcher: RouteMatcher;
-  resolver: Resolver<C & RouteContext & Context>;
+  resolver: RouteResolver<C>;
   [key: string]: unknown;
 }
 
@@ -71,11 +71,13 @@ export interface RouteContext {
   path: any;
 }
 
-export type RouteResolver = <C extends object = {}>(
+export type RouteResolver<C extends object = {}> = Resolver<C & RouteContext & Context>;
+
+export type RouteHelper = <C extends object = {}>(
   path: string,
   resolver: Resolver<C & RouteContext & Context>,
 ) => Route<C>;
 
-export type DefaultRouteResolver = <C extends object = {}>(
+export type DefaultRouteHelper = <C extends object = {}>(
   resolver: Resolver<C & RouteContext & Context>,
 ) => Route<C>;

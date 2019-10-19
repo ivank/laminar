@@ -21,7 +21,9 @@
     "preset": "./jest.json"
   },
   "devDependencies": {
+    "@ovotech/build-docs": "^0.1.0",
+    "@types/pg": "^7.11.2",
     "lerna": "^3.16.4",
-    "@ovotech/build-docs": "^0.1.0"
+    "pg": "^7.12.1"
   }
 }

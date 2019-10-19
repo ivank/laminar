@@ -3,6 +3,16 @@
 A Library for building OpenApi backed REST APIs. Automatic validation of request / response based on the api schema.
 Generate TypeScript types using a cli.
 
+Packages:
+
+- [@ovotech/laminar](packages/laminar) - core http server
+- [@ovotech/laminar-oapi](packages/laminar-oapi) - [OpenAPI](https://swagger.io/docs/) middleware
+- [@ovotech/laminar-oapi-cli](packages/laminar-oapi-cli) - [OpenAPI](https://swagger.io/docs/) type generation
+- [@ovotech/laminar-handlebars](packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
+- [@ovotech/laminar-jwt](packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
+- [@ovotech/json-refs](packages/json-refs) - Lightweight json-references resolvers
+- [@ovotech/json-schema](packages/json-schema) - Lightweight json-schema validator
+
 ## Usage
 
 You first define your OpenAPI file:
@@ -49,14 +59,9 @@ import { laminar, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
-interface User {
-  id: string;
-  name: string;
-}
+const findUser = (id: string) => ({ id, name: 'John' });
 
-const findUser = (id: string): User => ({ id, name: 'John' });
-
-const main = async (): Promise<void> => {
+const main = async () => {
   const bodyParser = createBodyParser();
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
@@ -68,6 +73,7 @@ const main = async (): Promise<void> => {
   });
 
   const server = await laminar({ app: bodyParser(app), port: 8081 });
+
   console.log('Started', server.address());
 };
 
@@ -127,19 +133,14 @@ import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
-interface User {
-  id: string;
-  name: string;
-}
-
-const findUser = (id: string): User => ({ id, name: 'John' });
-const validate = (authorizaitonHeader: string | undefined): void => {
+const findUser = (id: string) => ({ id, name: 'John' });
+const validate = (authorizaitonHeader?: string) => {
   if (authorizaitonHeader !== 'Secret Pass') {
     throw new HttpError(403, { message: 'Unkown user' });
   }
 };
 
-const main = async (): Promise<void> => {
+const main = async () => {
   const bodyParser = createBodyParser();
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
@@ -213,14 +214,9 @@ Laminar can also be used without any spec for a very minimal rest api.
 ```typescript
 import { get, laminar, router, createBodyParser } from '@ovotech/laminar';
 
-interface User {
-  id: string;
-  name: string;
-}
+const findUser = (id: string) => ({ id, name: 'John' });
 
-const findUser = (id: string): User => ({ id, name: 'John' });
-
-const main = async (): Promise<void> => {
+const main = async () => {
   const bodyParser = createBodyParser();
   const server = await laminar({
     app: bodyParser(
@@ -231,6 +227,7 @@ const main = async (): Promise<void> => {
     ),
     port: 8082,
   });
+
   console.log('Started', server.address());
 };
 
@@ -371,12 +368,101 @@ This allows you to be absolutely sure that the middlewares are executed, and in 
 
 So its a flow of context down the middlewares, but since its an ordered flow, we call it `laminar`.
 
+That `log(db(auth(app)))` bit is your whole application and it is just converting the request context (body, headers, path, etc) to the appropriate response, it is in effect nothing more than:
+
+```typescript
+const resolver = log(db(auth(app)));
+
+server.on(async (request, response) => {
+  const result = await resolver(request);
+  response.send(result);
+});
+```
+
 ### Built In Middlewares
 
 - [cors](packages/laminar/README.md#cors-middleware) for managing cross origin resources
 - [logging](packages/laminar/README.md#logging-middleware) for setting custom loggers, e.g. winstonjs and logging stuff before / after any request
 - [laminar-handlebars](packages/laminar-handlebars/README.md) support for handlebars view templates
 - [laminar-jwt](packages/laminar-jwt/README.md) support for json web tokens
+
+### Splitting your app
+
+You can split all your middlewares, path handlers, and other parts of the app in different files / modules. If they implement the right interfaces you can be sure about all of your dependencies at compile time.
+
+> [examples/in-parts-with-db.ts](examples/in-parts-with-db.ts)
+
+```typescript
+import { Client } from 'pg';
+import {
+  get,
+  put,
+  router,
+  message,
+  laminar,
+  createBodyParser,
+  createLogging,
+  Middleware,
+  RouteResolver,
+  LoggingContext,
+} from '@ovotech/laminar';
+
+// Middleware to connect to postgres
+// =================================
+interface PGContext {
+  pg: Client;
+}
+
+const createPgClient = async (config: string): Promise<Middleware<PGContext>> => {
+  const pg = new Client(config);
+  await pg.connect();
+  return next => ctx => next({ ...ctx, pg });
+};
+
+// Route Handlers
+// =================================
+const healthCheck: RouteResolver = () => ({ health: 'ok' });
+
+// Finding a user requires a PG connection
+const find: RouteResolver<PGContext> = async ({ path, pg }) => {
+  const { rows } = await pg.query('SELECT id, name FROM users WHERE id $1', path.id);
+
+  return rows[0] || message(404, { message: `No User With id ${path.id} was found` });
+};
+
+// Updating a user requires a PG connection and logging capablilities
+const update: RouteResolver<PGContext & LoggingContext> = async ({ path, pg, body, logger }) => {
+  await pg.query('UPDATE users SET name = $1 WHERE id = $2', body.name, path.id);
+  logger.log('info', 'User Updated');
+
+  return message(200, { message: 'User Updated' });
+};
+
+// Routes
+// =================================
+const routes = router(
+  get('/.well-known/health-check', healthCheck),
+  get('/users/{id}', find),
+  put('/users/{id}', update),
+);
+
+// App
+// ============================
+
+const main = async () => {
+  const bodyParser = createBodyParser();
+  const logging = createLogging();
+  const pgClient = await createPgClient('localhost:5432');
+
+  const app = bodyParser(logging(pgClient(routes)));
+
+  const server = await laminar({ app, port: 8082 });
+
+  console.log('Started', server.address());
+};
+
+main();
+```
 
 ## Running the tests
 

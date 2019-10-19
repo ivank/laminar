@@ -9,6 +9,11 @@ commands:
       - run: yarn config set yarn-offline-mirror ~/.cache/yarn
       - run: yarn install --frozen-lockfile
 
+  npm-login:
+    description: Set npm login
+    steps:
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+
   yarn-save-cache:
     description: Save yarn packages cache
     steps:
@@ -39,6 +44,7 @@ jobs:
       - checkout
       - yarn-install
       - run: yarn build
+      - npm-login
       - run: git config user.email "ovotech-ci@ovoenergy.com"
       - run: git config user.name "Ovotech CI"
       - run: yarn lerna publish from-package --yes
