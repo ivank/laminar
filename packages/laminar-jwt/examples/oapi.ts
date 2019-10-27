@@ -5,7 +5,7 @@ import { join } from 'path';
 
 const start = async (): Promise<void> => {
   const bodyParser = createBodyParser();
-  const jwtSecurity = createJwtSecurity('secret');
+  const jwtSecurity = createJwtSecurity({ secret: 'secret' });
   const app = await createOapi<JWTContext>({
     api: join(__dirname, 'oapi.yaml'),
     security: { JWTSecurity },
