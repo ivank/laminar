@@ -3,14 +3,13 @@ import axios from 'axios';
 import { Server } from 'http';
 import { join } from 'path';
 import { createOapi } from '@ovotech/laminar-oapi';
-import { createJwtSecurity, JWTContext, JWTSecurity, auth } from '../src';
+import { createJwtSecurity, JWTContext, JWTSecurity, auth, jwkPublicKey } from '../src';
 import { Config } from './__generated__/integration';
 import { sign } from 'jsonwebtoken';
 import { generateKeyPair } from 'crypto';
 import { promisify } from 'util';
 import * as nock from 'nock';
 import { readFileSync } from 'fs';
-import * as jwksClient from 'jwks-rsa';
 
 let server: Server;
 
@@ -248,27 +247,24 @@ describe('Integration', () => {
     );
   });
 
-  it('Should process jwk urls', async () => {
+  it('Should process jwk urls, with caching and max age settings', async () => {
     const privateKey = readFileSync(join(__dirname, '../examples/private-key.pem'));
     const jwk = readFileSync(join(__dirname, '../examples/jwk.json'), 'utf8');
+    const publicKey = jwkPublicKey({
+      uri: 'http://example.com/.well-known/jwk.json',
+      maxAge: 100,
+      cache: true,
+    });
 
     nock('http://example.com/')
       .get('/.well-known/jwk.json')
+      .times(2)
       .reply(200, JSON.parse(jwk));
 
     const bodyParser = createBodyParser();
-    const client = jwksClient({ jwksUri: 'http://example.com/.well-known/jwk.json' });
 
     const jwtMiddleware = createJwtSecurity({
-      publicKey: (header, cb) => {
-        if (!header.kid || header.alg !== 'RS256') {
-          cb(new Error('Only RS256 supported'));
-        } else {
-          client.getSigningKey(header.kid, (err, key) => {
-            cb(err, key && ('publicKey' in key ? key.publicKey : key.rsaPublicKey));
-          });
-        }
-      },
+      publicKey,
       privateKey,
       signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
     });
@@ -304,5 +300,13 @@ describe('Integration', () => {
       iat: expect.any(Number),
       scopes: ['test1', 'plus'],
     });
+
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
   });
 });
