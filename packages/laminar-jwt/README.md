@@ -197,7 +197,7 @@ laminar({
 
 ### JWK for public keys
 
-JWK are also supported with the `jwkPublicKey` function.
+JWK are also supported with the `jwkPublicKey` function. It can also cache the jwk request.
 
 > [examples/jwk.ts](examples/jwk.ts)
 
