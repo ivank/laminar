@@ -33,6 +33,7 @@ import { validateRef } from './validators/validateRefs';
 import { validateRequired } from './validators/validateRequired';
 import { validateType } from './validators/validateType';
 import { validateUniqueItems } from './validators/validateUniqueItems';
+import { ValidationError } from './ValidationError';
 
 export {
   childOptions,
@@ -109,4 +110,19 @@ export const validate = async (
   options: Partial<ValidateOptions> = {},
 ): Promise<ValidationResult> => {
   return validateCompiled(isCompiled(schema) ? schema : await compile(schema), value, options);
+};
+
+export const ensureValid = async <T>(
+  schema: Schema | ResolvedSchema | string,
+  value: unknown,
+  options: Partial<ValidateOptions> = {},
+): Promise<T> => {
+  const result = await validate(schema, value, options);
+  const name = options.name || 'Value';
+
+  if (!result.valid) {
+    throw new ValidationError(`Invalid ${name}`, result.errors);
+  }
+
+  return value as T;
 };

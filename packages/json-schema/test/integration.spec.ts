@@ -1,4 +1,4 @@
-import { validate, Schema } from '../src';
+import { validate, Schema, ensureValid } from '../src';
 
 describe('Helper isEqual', () => {
   it('Should validate schema', async () => {
@@ -60,6 +60,35 @@ describe('Helper isEqual', () => {
       '[value.singleWalletBalance.fuelType] should be one of [DualFuel]',
       '[value] has unknown keys [post]',
     ]);
+  });
+
+  it('Should ensureValid', async () => {
+    const animalSchema: Schema = {
+      properties: {
+        animal: { type: 'string', pattern: 'cat|dog' },
+        weight: { type: 'number' },
+      },
+    };
+
+    type AnimalType = {
+      animal: 'cat' | 'dog';
+      weight: number;
+    };
+
+    const value = { animal: 'cat', weight: 12 };
+    const value2 = { animal: 'other', weight: '12' };
+
+    expect(ensureValid<AnimalType>(animalSchema, value)).resolves.toEqual(value);
+    expect(ensureValid<AnimalType>(animalSchema, value2)).rejects.toMatchObject({
+      message:
+        'Invalid Value\n | [value.animal] should match /cat|dog/\n | [value.weight] should be a [number,integer]\n',
+    });
+    expect(
+      ensureValid<AnimalType>(animalSchema, value2, { name: 'MyObject' }),
+    ).rejects.toMatchObject({
+      message:
+        'Invalid MyObject\n | [MyObject.animal] should match /cat|dog/\n | [MyObject.weight] should be a [number,integer]\n',
+    });
   });
 
   it('Should discriminate schema', async () => {

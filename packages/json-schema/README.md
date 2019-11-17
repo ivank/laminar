@@ -142,6 +142,12 @@ function async validateCompiled(schema: CompiledSchema, data: unkown) => {
 }
 ```
 
+**ensureValid** Ensure that a given value is of a typescript type, using json-schema
+
+```typescript
+function async ensureValid<T>(schema: CompiledSchema, data: unkown) => data as T
+```
+
 ### Develop
 
 ```
