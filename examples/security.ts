@@ -1,4 +1,4 @@
-import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -22,8 +22,9 @@ const main = async () => {
       },
     },
   });
-  const server = await laminar({ app: bodyParser(app), port: 8081 });
-  console.log('Started', server.address());
+  const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
+  await laminar.start();
+  console.log('Started', laminar.server.address());
 };
 
 main();

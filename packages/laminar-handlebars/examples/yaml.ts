@@ -1,4 +1,4 @@
-import { laminar, router, get, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, router, get, createBodyParser } from '@ovotech/laminar';
 import { createHandlebars } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
@@ -11,7 +11,7 @@ const handlebars = createHandlebars({
   headers: { 'Content-type': 'text/yaml' },
 });
 
-laminar({
+createLaminar({
   port: 3333,
   app: bodyParser(
     handlebars(
@@ -23,4 +23,4 @@ laminar({
       ),
     ),
   ),
-});
+}).start();

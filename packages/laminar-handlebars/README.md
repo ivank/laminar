@@ -7,14 +7,14 @@ Handlebars implementation for the laminar http server.
 > [examples/html.ts](examples/html.ts)
 
 ```typescript
-import { laminar, router, get, post, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, router, get, post, createBodyParser } from '@ovotech/laminar';
 import { createHandlebars } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
 const bodyParser = createBodyParser();
 const handlebars = createHandlebars({ dir: join(__dirname, 'templates-html') });
 
-laminar({
+createLaminar({
   port: 3333,
   app: bodyParser(
     handlebars(
@@ -24,7 +24,7 @@ laminar({
       ),
     ),
   ),
-});
+}).start();
 ```
 
 When you set `dir`, it will load and compile templates in `views` and `partials` folders.
@@ -34,7 +34,7 @@ When you set `dir`, it will load and compile templates in `views` and `partials`
 > [examples/yaml.ts](examples/yaml.ts)
 
 ```typescript
-import { laminar, router, get, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, router, get, createBodyParser } from '@ovotech/laminar';
 import { createHandlebars } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
@@ -47,7 +47,7 @@ const handlebars = createHandlebars({
   headers: { 'Content-type': 'text/yaml' },
 });
 
-laminar({
+createLaminar({
   port: 3333,
   app: bodyParser(
     handlebars(
@@ -59,7 +59,7 @@ laminar({
       ),
     ),
   ),
-});
+}).start();
 ```
 
 ## Running the tests

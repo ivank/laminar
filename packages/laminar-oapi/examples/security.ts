@@ -1,4 +1,4 @@
-import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi, OpenAPIObject } from '@ovotech/laminar-oapi';
 
 const api: OpenAPIObject = {
@@ -62,7 +62,7 @@ const api: OpenAPIObject = {
   },
 };
 
-const start = async (): Promise<void> => {
+const start = async () => {
   const bodyParser = createBodyParser();
   const app = await createOapi({
     api,
@@ -81,8 +81,9 @@ const start = async (): Promise<void> => {
       },
     },
   });
-  const server = await laminar({ port: 3333, app: bodyParser(app) });
-  console.log('Started', server.address());
+  const laminar = createLaminar({ port: 3333, app: bodyParser(app) });
+  await laminar.start();
+  console.log('Started', laminar.server.address());
 };
 
 start();

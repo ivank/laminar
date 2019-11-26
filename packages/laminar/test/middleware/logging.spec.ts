@@ -1,24 +1,22 @@
 import axios from 'axios';
-import { Server } from 'http';
-import { laminar, createLogging, LoggerOptions } from '../../src';
+import { createLaminar, createLogging, LoggerOptions, Laminar } from '../../src';
 
-let server: Server;
+let server: Laminar;
 
 const api = axios.create({ baseURL: 'http://localhost:8098' });
 
 describe('createLogging middleware', () => {
-  afterEach(async () => {
-    await new Promise(resolve => server.close(resolve));
-  });
+  afterEach(() => server.stop());
 
   it('Should log path and method ', async () => {
     const mockLogger = { log: jest.fn() };
-    server = await laminar({
+    server = createLaminar({
       port: 8098,
       app: createLogging(mockLogger)(() => {
         throw new Error('Test Error');
       }),
     });
+    await server.start();
 
     await expect(api.get('/test/23')).rejects.toMatchObject({
       response: expect.objectContaining({
@@ -39,10 +37,11 @@ describe('createLogging middleware', () => {
 
   it('Should not call error logger on success', async () => {
     const mockLogger = { log: jest.fn() };
-    server = await laminar({
+    server = createLaminar({
       port: 8098,
       app: createLogging(mockLogger)(() => 'OK'),
     });
+    await server.start();
 
     await expect(api.get('/test/23')).resolves.toMatchObject({
       status: 200,
@@ -70,12 +69,13 @@ describe('createLogging middleware', () => {
       };
     };
 
-    server = await laminar({
+    server = createLaminar({
       port: 8098,
       app: createLogging(mockLogger, { error: errorFormatter })(async () => {
         throw new Error('Other Error');
       }),
     });
+    await server.start();
 
     await expect(api.get('/test/23?test=other')).rejects.toMatchObject({
       response: expect.objectContaining({

@@ -1,4 +1,4 @@
-import { laminar, Resolver, Context } from '@ovotech/laminar';
+import { createLaminar, Resolver, Context } from '@ovotech/laminar';
 
 const main: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app: main });
+createLaminar({ port: 3333, app: main }).start();

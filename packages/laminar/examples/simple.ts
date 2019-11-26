@@ -1,7 +1,7 @@
-import { get, post, laminar, router } from '@ovotech/laminar';
+import { get, post, createLaminar, router } from '@ovotech/laminar';
 
-const main = async (): Promise<void> => {
-  const server = await laminar({
+const main = async () => {
+  const laminar = createLaminar({
     port: 3333,
     app: router(
       get('/.well-known/health-check', () => ({ health: 'ok' })),
@@ -9,8 +9,9 @@ const main = async (): Promise<void> => {
       get('/test', () => 'index'),
     ),
   });
+  await laminar.start();
 
-  console.log(server.address());
+  console.log(laminar.server.address());
 };
 
 main();

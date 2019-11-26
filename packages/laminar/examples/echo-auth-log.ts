@@ -1,4 +1,4 @@
-import { laminar, Context, message, Resolver } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
 
 const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
   if (ctx.headers.authorization !== 'Me') {
@@ -16,4 +16,4 @@ const log = (next: Resolver<Context>): Resolver<Context> => ctx => {
 
 const main: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: log(auth(main)) });
+createLaminar({ port: 3333, app: log(auth(main)) }).start();

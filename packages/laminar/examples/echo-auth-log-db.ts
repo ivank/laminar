@@ -1,4 +1,4 @@
-import { laminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -48,4 +48,4 @@ const app: Resolver<DBContext & Context> = ctx => {
 
 const db = createDbMiddleware();
 
-laminar({ port: 3333, app: log(db(auth(app))) });
+createLaminar({ port: 3333, app: log(db(auth(app))) }).start();

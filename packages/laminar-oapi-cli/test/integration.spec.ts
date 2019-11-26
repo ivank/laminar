@@ -1,12 +1,11 @@
-import { HttpError, laminar, response, createBodyParser } from '@ovotech/laminar';
+import { HttpError, createLaminar, Laminar, response, createBodyParser } from '@ovotech/laminar';
 import axios from 'axios';
-import { Server } from 'http';
 import { join } from 'path';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { LoggerContext, withLogger } from './middleware/logger';
 import { Config, Pet } from './__generated__/integration';
 
-let server: Server;
+let server: Laminar;
 
 interface AuthInfo {
   authInfo?: {
@@ -15,7 +14,7 @@ interface AuthInfo {
 }
 
 describe('Integration', () => {
-  afterEach(() => new Promise(resolve => server.close(resolve)));
+  afterEach(() => server.stop());
 
   it('Should process response', async () => {
     const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
@@ -78,7 +77,8 @@ describe('Integration', () => {
     const logger = withLogger(log);
     const bodyParser = createBodyParser();
 
-    server = await laminar({ app: bodyParser(logger(oapi)), port: 8065 });
+    server = createLaminar({ app: bodyParser(logger(oapi)), port: 8065 });
+    await server.start();
 
     const api = axios.create({ baseURL: 'http://localhost:8065' });
 

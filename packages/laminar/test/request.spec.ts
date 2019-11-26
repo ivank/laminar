@@ -1,21 +1,21 @@
 import axios from 'axios';
-import { Server } from 'http';
 import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
-import { laminar, createBodyParser } from '../src';
+import { createBodyParser, createLaminar, Laminar } from '../src';
 
 const bodyParser = createBodyParser();
 const app = jest.fn().mockReturnValue('Test');
 const api = axios.create({ baseURL: 'http://localhost:8051' });
 
-let server: Server;
+let server: Laminar;
 
 describe('Requests', () => {
   beforeAll(async () => {
-    server = await laminar({ app: bodyParser(app), port: 8051 });
+    server = createLaminar({ app: bodyParser(app), port: 8051 });
+    await server.start();
   });
 
-  afterAll(() => new Promise(resolve => server.close(resolve)));
+  afterAll(() => server.stop());
 
   beforeEach(() => app.mockClear());
 

@@ -1,4 +1,4 @@
-import { get, put, laminar, router, createLogging, createBodyParser } from '@ovotech/laminar';
+import { get, put, createLaminar, router, createLogging, createBodyParser } from '@ovotech/laminar';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -8,7 +8,7 @@ const users: { [key: string]: string } = {
 const logging = createLogging(console);
 const bodyParser = createBodyParser();
 
-laminar({
+createLaminar({
   port: 3333,
   app: bodyParser(
     logging(
@@ -24,4 +24,4 @@ laminar({
       ),
     ),
   ),
-});
+}).start();

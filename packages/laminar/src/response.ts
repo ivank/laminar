@@ -2,7 +2,7 @@ import * as cookie from 'cookie';
 import { createReadStream, statSync } from 'fs';
 import { lookup } from 'mime-types';
 import { Readable } from 'stream';
-import { Laminar, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
+import { LaminarObject, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
 
 const contentType = (body: unknown): string => {
   return body instanceof Readable || body instanceof Buffer
@@ -36,7 +36,7 @@ export const response = <TBody = LaminarResponse['body']>({
   headers?: LaminarResponse['headers'];
   cookies?: LaminarResponse['cookies'];
 }): LaminarResponse<TBody> => ({
-  [Laminar]: true,
+  [LaminarObject]: true,
   status,
   headers: {
     'content-type': contentType(body),
@@ -49,7 +49,7 @@ export const response = <TBody = LaminarResponse['body']>({
 });
 
 export const isResponse = (res: ResolverResponse): res is LaminarResponse =>
-  typeof res === 'object' && Laminar in res;
+  typeof res === 'object' && LaminarObject in res;
 
 export const toResponse = (res: ResolverResponse): LaminarResponse =>
   isResponse(res) ? res : response({ body: res });

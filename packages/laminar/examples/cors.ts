@@ -1,4 +1,4 @@
-import { get, put, laminar, router, createCors } from '../src';
+import { get, put, createLaminar, router, createCors } from '../src';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -9,7 +9,7 @@ const cors = createCors({
   allowOrigin: origin => ['example.com', 'localhost'].includes(origin),
 });
 
-laminar({
+createLaminar({
   port: 3333,
   app: cors(
     router(
@@ -22,4 +22,4 @@ laminar({
       }),
     ),
   ),
-});
+}).start();

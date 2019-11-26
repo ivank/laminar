@@ -4,7 +4,7 @@ import {
   put,
   router,
   message,
-  laminar,
+  createLaminar,
   createBodyParser,
   createLogging,
   Middleware,
@@ -61,9 +61,10 @@ const main = async () => {
 
   const app = bodyParser(logging(pgClient(routes)));
 
-  const server = await laminar({ app, port: 8082 });
+  const laminar = createLaminar({ app, port: 8082 });
+  await laminar.start();
 
-  console.log('Started', server.address());
+  console.log('Started', laminar.server.address());
 };
 
 main();

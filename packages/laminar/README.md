@@ -13,10 +13,10 @@ To create an http server that responds to `GET .well-known/health-check`, `GET t
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { get, post, laminar, router } from '@ovotech/laminar';
+import { get, post, createLaminar, router } from '@ovotech/laminar';
 
-const main = async (): Promise<void> => {
-  const server = await laminar({
+const main = async () => {
+  const laminar = createLaminar({
     port: 3333,
     app: router(
       get('/.well-known/health-check', () => ({ health: 'ok' })),
@@ -24,8 +24,9 @@ const main = async (): Promise<void> => {
       get('/test', () => 'index'),
     ),
   });
+  await laminar.start();
 
-  console.log(server.address());
+  console.log(laminar.server.address());
 };
 
 main();
@@ -40,10 +41,10 @@ Lets see the simplest possible app with laminar, a very simple echo app
 > [examples/echo.ts](examples/echo.ts)
 
 ```typescript
-import { laminar, Resolver, Context } from '@ovotech/laminar';
+import { createLaminar, Resolver, Context } from '@ovotech/laminar';
 
 const main: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app: main });
+createLaminar({ port: 3333, app: main }).start();
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -57,7 +58,7 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 > [examples/echo-auth.ts](examples/echo-auth.ts)
 
 ```typescript
-import { laminar, Context, message, Resolver } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
 
 const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
   if (ctx.headers.authorization !== 'Me') {
@@ -68,7 +69,7 @@ const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
 
 const main: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: auth(main) });
+createLaminar({ port: 3333, app: auth(main) }).start();
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to stuff before and after whatever follows. For example say we wanted to log what the request and response was.
@@ -76,7 +77,7 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 > [examples/echo-auth-log.ts](examples/echo-auth-log.ts)
 
 ```typescript
-import { laminar, Context, message, Resolver } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
 
 const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
   if (ctx.headers.authorization !== 'Me') {
@@ -94,7 +95,7 @@ const log = (next: Resolver<Context>): Resolver<Context> => ctx => {
 
 const main: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: log(auth(main)) });
+createLaminar({ port: 3333, app: log(auth(main)) }).start();
 ```
 
 You can see how we can string those middlewares along `log(auth(main))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -106,7 +107,7 @@ Lets see how we can go about doing that.
 > [examples/echo-auth-log-db.ts](examples/echo-auth-log-db.ts)
 
 ```typescript
-import { laminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -150,13 +151,13 @@ const log: Middleware = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const app: Resolver<DBContext & Context> = (ctx: DBContext & Context) => {
+const app: Resolver<DBContext & Context> = ctx => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 
 const db = createDbMiddleware();
 
-laminar({ port: 3333, app: log(db(auth(app))) });
+createLaminar({ port: 3333, app: log(db(auth(app))) }).start();
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
@@ -175,7 +176,7 @@ You can write and add your own parsers. Each one has a 'match' function and a 'p
 
 ```typescript
 import {
-  laminar,
+  createLaminar,
   Resolver,
   Context,
   createBodyParser,
@@ -192,7 +193,7 @@ const csvParser: BodyParser = {
 const bodyParser = createBodyParser([csvParser, ...defaultParsers]);
 
 const main: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app: bodyParser(main) });
+createLaminar({ port: 3333, app: bodyParser(main) }).start();
 ```
 
 ### Router
@@ -202,7 +203,7 @@ The router middleware allows you to respond to requests based on what path was r
 > [examples/router.ts](examples/router.ts)
 
 ```typescript
-import { get, put, laminar, router, createBodyParser } from '@ovotech/laminar';
+import { get, put, createLaminar, router, createBodyParser } from '@ovotech/laminar';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -211,7 +212,7 @@ const users: { [key: string]: string } = {
 
 const bodyParser = createBodyParser();
 
-laminar({
+createLaminar({
   port: 3333,
   app: bodyParser(
     router(
@@ -224,7 +225,7 @@ laminar({
       }),
     ),
   ),
-});
+}).start();
 ```
 
 Path parameters are written in `{nameOfParameter}` style, and each name is extracted and its value passed in the `path` context property.
@@ -234,15 +235,15 @@ If none of the routes match, the router would return a generic 404. You can modi
 > [examples/default-route.ts](examples/default-route.ts)
 
 ```typescript
-import { get, defaultRoute, laminar, router, response } from '@ovotech/laminar';
+import { get, defaultRoute, createLaminar, router, response } from '@ovotech/laminar';
 
-laminar({
+createLaminar({
   port: 3333,
   app: router(
     get('/.well-known/health-check', () => ({ health: 'ok' })),
     defaultRoute(() => response({ status: 404, body: 'Woopsy' })),
   ),
-});
+}).start();
 ```
 
 All the available route matchers are:
@@ -266,7 +267,7 @@ For example this would allow only 'example.com' and 'localhost' as origins.
 > [examples/cors.ts](examples/cors.ts)
 
 ```typescript
-import { get, put, laminar, router, createCors } from '../src';
+import { get, put, createLaminar, router, createCors } from '../src';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -277,7 +278,7 @@ const cors = createCors({
   allowOrigin: origin => ['example.com', 'localhost'].includes(origin),
 });
 
-laminar({
+createLaminar({
   port: 3333,
   app: cors(
     router(
@@ -290,7 +291,7 @@ laminar({
       }),
     ),
   ),
-});
+}).start();
 ```
 
 ### Logging Middleware
@@ -300,7 +301,7 @@ There's a simple middleware that allows you to log requests, responses and pass 
 > [examples/logging.ts](examples/logging.ts)
 
 ```typescript
-import { get, put, laminar, router, createLogging, createBodyParser } from '@ovotech/laminar';
+import { get, put, createLaminar, router, createLogging, createBodyParser } from '@ovotech/laminar';
 
 const users: { [key: string]: string } = {
   '1': 'John',
@@ -310,7 +311,7 @@ const users: { [key: string]: string } = {
 const logging = createLogging(console);
 const bodyParser = createBodyParser();
 
-laminar({
+createLaminar({
   port: 3333,
   app: bodyParser(
     logging(
@@ -326,7 +327,7 @@ laminar({
       ),
     ),
   ),
-});
+}).start();
 ```
 
 ## Running the tests

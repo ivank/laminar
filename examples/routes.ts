@@ -1,10 +1,10 @@
-import { get, laminar, router, createBodyParser } from '@ovotech/laminar';
+import { get, createLaminar, router, createBodyParser } from '@ovotech/laminar';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
 const main = async () => {
   const bodyParser = createBodyParser();
-  const server = await laminar({
+  const laminar = createLaminar({
     app: bodyParser(
       router(
         get('/.well-known/health-check', () => ({ health: 'ok' })),
@@ -14,7 +14,7 @@ const main = async () => {
     port: 8082,
   });
 
-  console.log('Started', server.address());
+  console.log('Started', laminar.server.address());
 };
 
 main();

@@ -1,4 +1,4 @@
-export { laminar } from './laminar';
+export { createLaminar } from './laminar';
 export { toContext } from './context';
 export {
   response,
@@ -37,7 +37,7 @@ export {
 } from './router';
 export {
   Context,
-  Laminar,
+  LaminarObject,
   LaminarCookie,
   LaminarResponse,
   RouteResolver,
@@ -47,4 +47,5 @@ export {
   ResolverResponse,
   Route,
   RouteContext,
+  Laminar,
 } from './types';

@@ -1,4 +1,4 @@
-import { get, post, laminar, router, createBodyParser } from '@ovotech/laminar';
+import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
 import { createJwtSecurity, auth, jwkPublicKey } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -26,7 +26,7 @@ const jwtSecurity = createJwtSecurity({ publicKey, privateKey });
 const onlyLoggedIn = auth();
 const onlyAdmin = auth(['admin']);
 
-laminar({
+createLaminar({
   port: 3333,
   app: bodyParser(
     jwtSecurity(
@@ -38,4 +38,4 @@ laminar({
       ),
     ),
   ),
-});
+}).start();

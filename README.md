@@ -55,7 +55,7 @@ And then you can implement it using [@ovotech/laminar-oapi](packages/laminar-oap
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { laminar, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -72,9 +72,10 @@ const main = async () => {
     },
   });
 
-  const server = await laminar({ app: bodyParser(app), port: 8081 });
+  const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
+  await laminar.start();
 
-  console.log('Started', server.address());
+  console.log('Started', laminar.server.address());
 };
 
 main();
@@ -129,7 +130,7 @@ You can then implement the security with:
 > [examples/security.ts](examples/security.ts)
 
 ```typescript
-import { laminar, HttpError, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, HttpError, createBodyParser } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -153,8 +154,9 @@ const main = async () => {
       },
     },
   });
-  const server = await laminar({ app: bodyParser(app), port: 8081 });
-  console.log('Started', server.address());
+  const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
+  await laminar.start();
+  console.log('Started', laminar.server.address());
 };
 
 main();
@@ -212,13 +214,13 @@ Laminar can also be used without any spec for a very minimal rest api.
 > [examples/routes.ts](examples/routes.ts)
 
 ```typescript
-import { get, laminar, router, createBodyParser } from '@ovotech/laminar';
+import { get, createLaminar, router, createBodyParser } from '@ovotech/laminar';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
 const main = async () => {
   const bodyParser = createBodyParser();
-  const server = await laminar({
+  const laminar = createLaminar({
     app: bodyParser(
       router(
         get('/.well-known/health-check', () => ({ health: 'ok' })),
@@ -228,7 +230,7 @@ const main = async () => {
     port: 8082,
   });
 
-  console.log('Started', server.address());
+  console.log('Started', laminar.server.address());
 };
 
 main();
@@ -243,10 +245,10 @@ Lets see the simplest possible app with laminar, a very simple echo app
 > [packages/laminar/examples/echo.ts](packages/laminar/examples/echo.ts)
 
 ```typescript
-import { laminar, Resolver, Context } from '@ovotech/laminar';
+import { createLaminar, Resolver, Context } from '@ovotech/laminar';
 
 const main: Resolver<Context> = ctx => ctx.body;
-laminar({ port: 3333, app: main });
+createLaminar({ port: 3333, app: main }).start();
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -260,7 +262,7 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 > [packages/laminar/examples/echo-auth.ts](packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { laminar, Context, message, Resolver } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
 
 const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
   if (ctx.headers.authorization !== 'Me') {
@@ -271,7 +273,7 @@ const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
 
 const main: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: auth(main) });
+createLaminar({ port: 3333, app: auth(main) }).start();
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
@@ -279,7 +281,7 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 > [packages/laminar/examples/echo-auth-log.ts](packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { laminar, Context, message, Resolver } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
 
 const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
   if (ctx.headers.authorization !== 'Me') {
@@ -297,7 +299,7 @@ const log = (next: Resolver<Context>): Resolver<Context> => ctx => {
 
 const main: Resolver<Context> = ctx => ctx.body;
 
-laminar({ port: 3333, app: log(auth(main)) });
+createLaminar({ port: 3333, app: log(auth(main)) }).start();
 ```
 
 You can see how we can string those middlewares along `log(auth(app))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -309,7 +311,7 @@ Lets see how we can go about doing that.
 > [packages/laminar/examples/echo-auth-log-db.ts](packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { laminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
+import { createLaminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -353,13 +355,13 @@ const log: Middleware = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const app: Resolver<DBContext & Context> = (ctx: DBContext & Context) => {
+const app: Resolver<DBContext & Context> = ctx => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 
 const db = createDbMiddleware();
 
-laminar({ port: 3333, app: log(db(auth(app))) });
+createLaminar({ port: 3333, app: log(db(auth(app))) }).start();
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
@@ -399,7 +401,7 @@ import {
   put,
   router,
   message,
-  laminar,
+  createLaminar,
   createBodyParser,
   createLogging,
   Middleware,
@@ -456,9 +458,10 @@ const main = async () => {
 
   const app = bodyParser(logging(pgClient(routes)));
 
-  const server = await laminar({ app, port: 8082 });
+  const laminar = createLaminar({ app, port: 8082 });
+  await laminar.start();
 
-  console.log('Started', server.address());
+  console.log('Started', laminar.server.address());
 };
 
 main();

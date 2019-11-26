@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { laminar, Middleware, Resolver, Context, createBodyParser } from '../../src';
+import { createLaminar, Middleware, Resolver, Context, createBodyParser } from '../../src';
 
 interface One {
   one: string;
@@ -38,24 +38,26 @@ const appWithAutoAssign = bodyParser(
 
 describe('Nested middleware', () => {
   it('Should propagate multiple middlewarres ', async () => {
-    const server = await laminar({ app, port: 8095 });
+    const server = createLaminar({ app, port: 8095 });
+    await server.start();
     const api = axios.create({ baseURL: 'http://localhost:8095' });
 
     const result = await api.get('/test2');
 
     expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
 
-    await new Promise(resolve => server.close(resolve));
+    await server.stop();
   });
 
   it('Should be able to pass context automatically', async () => {
-    const server = await laminar({ app: appWithAutoAssign, port: 8095 });
+    const server = createLaminar({ app: appWithAutoAssign, port: 8095 });
+    await server.start();
     const api = axios.create({ baseURL: 'http://localhost:8095' });
 
     const result = await api.get('/test2');
 
     expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
 
-    await new Promise(resolve => server.close(resolve));
+    await server.stop();
   });
 });

@@ -1,6 +1,5 @@
-import { laminar, createBodyParser, router, get, post } from '@ovotech/laminar';
+import { createLaminar, Laminar, createBodyParser, router, get, post } from '@ovotech/laminar';
 import axios from 'axios';
-import { Server } from 'http';
 import { join } from 'path';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { createJwtSecurity, JWTContext, JWTSecurity, auth, jwkPublicKey } from '../src';
@@ -11,12 +10,10 @@ import { promisify } from 'util';
 import * as nock from 'nock';
 import { readFileSync } from 'fs';
 
-let server: Server;
+let server: Laminar;
 
 describe('Integration', () => {
-  afterEach(async () => {
-    await new Promise(resolve => server.close(resolve));
-  });
+  afterEach(() => server.stop());
 
   it('Should process response for secret', async () => {
     const config: Config<JWTContext> = {
@@ -44,9 +41,10 @@ describe('Integration', () => {
     const testTokenExpires = sign({ email: 'tester' }, '123', { expiresIn: '1ms' });
     const testTokenNotBefore = sign({ email: 'tester' }, '123', { notBefore: 10000 });
 
-    server = await laminar({ app: bodyParser(jwtMiddleware(oapi)), port: 8062 });
+    server = createLaminar({ app: bodyParser(jwtMiddleware(oapi)), port: 8064 });
+    await server.start();
 
-    const api = axios.create({ baseURL: 'http://localhost:8062' });
+    const api = axios.create({ baseURL: 'http://localhost:8064' });
 
     const { data: token } = await api.post('/session', {
       email: 'test@example.com',
@@ -182,9 +180,10 @@ describe('Integration', () => {
       get('/test-scopes', auth(['test1'])(({ authInfo }) => ({ text: 'Test', ...authInfo }))),
     );
 
-    server = await laminar({ app: bodyParser(jwtMiddleware(app)), port: 8062 });
+    server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8063 });
+    await server.start();
 
-    const api = axios.create({ baseURL: 'http://localhost:8062' });
+    const api = axios.create({ baseURL: 'http://localhost:8063' });
 
     const { data: token } = await api.post('/session', {
       email: 'test@example.com',
@@ -276,9 +275,10 @@ describe('Integration', () => {
       get('/test', auth()(({ authInfo }) => ({ text: 'Test', ...authInfo }))),
     );
 
-    server = await laminar({ app: bodyParser(jwtMiddleware(app)), port: 8062 });
+    server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8065 });
+    await server.start();
 
-    const api = axios.create({ baseURL: 'http://localhost:8062' });
+    const api = axios.create({ baseURL: 'http://localhost:8065' });
 
     const { data: token } = await api.post('/session', {
       email: 'test@example.com',

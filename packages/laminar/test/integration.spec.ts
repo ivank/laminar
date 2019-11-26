@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { Server } from 'http';
 import {
   del,
   get,
-  laminar,
+  createLaminar,
   options,
   patch,
   post,
@@ -14,14 +13,14 @@ import {
   message,
   createResponseTime,
   Middleware,
+  Laminar,
 } from '../src';
 import { createLogging, createBodyParser } from '../src';
-import { promisify } from 'util';
 
-let server: Server;
+let laminar: Laminar;
 
 describe('Integration', () => {
-  afterEach(() => promisify(server.close.bind(server))());
+  afterEach(() => laminar.stop());
 
   it('Should process response', async () => {
     const loggerMock = { log: jest.fn() };
@@ -56,7 +55,7 @@ describe('Integration', () => {
       };
     };
 
-    server = await laminar({
+    laminar = createLaminar({
       port: 8050,
       app: bodyParser(
         responseTime(
@@ -130,6 +129,8 @@ describe('Integration', () => {
         ),
       ),
     });
+
+    await laminar.start();
 
     const api = axios.create({ baseURL: 'http://localhost:8050' });
 

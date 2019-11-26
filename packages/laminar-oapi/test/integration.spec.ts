@@ -1,11 +1,10 @@
-import { HttpError, laminar, response, createBodyParser } from '@ovotech/laminar';
+import { HttpError, createLaminar, Laminar, response, createBodyParser } from '@ovotech/laminar';
 import axios from 'axios';
-import { Server } from 'http';
 import { join } from 'path';
 import { OapiConfig, createOapi } from '../src';
 import { LoggerContext, withLogger } from './middleware/logger';
 
-let server: Server;
+let server: Laminar;
 
 type Pet = NewPet & {
   id: number;
@@ -35,9 +34,7 @@ const isPathWithId = (path: unknown): path is PathWithId =>
   typeof path === 'object' && path !== null && 'id' in path;
 
 describe('Integration', () => {
-  afterEach(async () => {
-    await new Promise(resolve => server.close(resolve));
-  });
+  afterEach(() => server.stop());
 
   it('Should process response', async () => {
     const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
@@ -116,7 +113,8 @@ describe('Integration', () => {
     const logger = withLogger(log);
     const bodyParser = createBodyParser();
 
-    server = await laminar({ app: bodyParser(logger(oapi)), port: 8063 });
+    server = createLaminar({ app: bodyParser(logger(oapi)), port: 8063 });
+    await server.start();
 
     const api = axios.create({ baseURL: 'http://localhost:8063' });
 

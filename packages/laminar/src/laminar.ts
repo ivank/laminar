@@ -1,9 +1,9 @@
-import { createServer, RequestListener, Server } from 'http';
+import { createServer, RequestListener } from 'http';
 import { Readable } from 'stream';
 import { toArray } from './helpers';
 import { HttpError } from './HttpError';
 import { resolveBody, toResponse } from './response';
-import { Context, LaminarOptions, Resolver } from './types';
+import { Context, LaminarOptions, Resolver, Laminar } from './types';
 import { toContext } from './context';
 
 export const laminarRequestListener = (resolver: Resolver<Context>): RequestListener => {
@@ -37,13 +37,18 @@ export const laminarRequestListener = (resolver: Resolver<Context>): RequestList
   };
 };
 
-export const laminar = async ({
+export const createLaminar = ({
   app,
   port = 3300,
   hostname = 'localhost',
   http = {},
-}: LaminarOptions): Promise<Server> => {
-  const server = createServer(http, laminarRequestListener(await app));
-  await new Promise(resolve => server.listen(port, hostname, resolve));
-  return server;
+}: LaminarOptions): Laminar => {
+  const server = createServer(http, laminarRequestListener(app));
+
+  return {
+    server,
+    start: () => new Promise(resolve => server.listen(port, hostname, resolve)),
+    stop: () =>
+      new Promise((resolve, reject) => server.close(err => (err ? reject(err) : resolve()))),
+  };
 };

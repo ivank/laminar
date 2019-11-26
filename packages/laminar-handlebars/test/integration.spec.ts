@@ -1,10 +1,9 @@
-import { get, laminar, post, router, createBodyParser } from '@ovotech/laminar';
+import { get, createLaminar, post, router, createBodyParser, Laminar } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
-import { Server } from 'http';
 import { join } from 'path';
 import { createHandlebars } from '../src';
 
-let server: Server;
+let server: Laminar;
 
 const axiosSnapshot = {
   config: expect.anything(),
@@ -15,7 +14,7 @@ const axiosSnapshot = {
 const capitalizeName = (name: string): string => name.toUpperCase();
 
 describe('Integration', () => {
-  afterEach(() => new Promise(resolve => server.close(resolve)));
+  afterEach(() => server.stop());
 
   it('Should process response', async () => {
     const bodyParser = createBodyParser();
@@ -24,7 +23,7 @@ describe('Integration', () => {
       helpers: { capitalizeName },
     });
 
-    server = await laminar({
+    server = createLaminar({
       port: 8062,
       app: bodyParser(
         handlebars(
@@ -37,6 +36,7 @@ describe('Integration', () => {
         ),
       ),
     });
+    await server.start();
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });
 

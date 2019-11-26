@@ -1,22 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { CookieSerializeOptions } from 'cookie';
-import { IncomingHttpHeaders, OutgoingHttpHeaders, ServerOptions } from 'http';
+import { IncomingHttpHeaders, OutgoingHttpHeaders, ServerOptions, Server } from 'http';
 import { Readable } from 'stream';
 import { UrlWithParsedQuery } from 'url';
 
-export const Laminar = '_isLaminar';
+export const LaminarObject = '_isLaminar';
 
 export interface LaminarOptions {
-  app: Promise<Resolver<Context>> | Resolver<Context>;
-  bodyParser?: Middleware<{}, Context>;
+  app: Resolver<Context>;
   port?: number;
   hostname?: string;
   http?: ServerOptions;
 }
 
+export interface Laminar {
+  server: Server;
+  start: () => Promise<void>;
+  stop: () => Promise<void>;
+}
+
 export interface LaminarResponse<TBody = string | Readable | Buffer | object> {
-  [Laminar]: true;
+  [LaminarObject]: true;
   body?: TBody;
   status: number;
   cookies?: { [key: string]: string | LaminarCookie };
