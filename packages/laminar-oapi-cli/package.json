@@ -8,8 +8,8 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.3.0",
-    "@ovotech/laminar-oapi": "^0.3.0",
+    "@ovotech/laminar": "^0.4.0",
+    "@ovotech/laminar-oapi": "^0.4.0",
     "@types/jest": "^24.0.16",
     "@types/js-yaml": "^3.12.1",
     "@types/node": "^12.6.9",
