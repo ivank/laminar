@@ -34,7 +34,7 @@ jobs:
             git submodule update --init
       - yarn-install
       - yarn-save-cache
-      - run: yarn build
+      - run: yarn build --concurrency 1
       - run: yarn test
 
   publish:
@@ -43,7 +43,7 @@ jobs:
     steps:
       - checkout
       - yarn-install
-      - run: yarn build
+      - run: yarn build --concurrency 1
       - npm-login
       - run: git config user.email "ovotech-ci@ovoenergy.com"
       - run: git config user.name "Ovotech CI"
