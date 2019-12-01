@@ -1,4 +1,4 @@
-import { createLaminar, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { Config, UserResponse } from './__generated__/simple';
 import { join } from 'path';
@@ -19,7 +19,7 @@ const main = async () => {
   const app = await createOapi(config);
   const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
   await laminar.start();
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();

@@ -122,7 +122,7 @@ And then implement it like this
 > [examples/oapi.ts](examples/oapi.ts)
 
 ```typescript
-import { createLaminar, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
 import { createJwtSecurity, JWTContext, JWTSecurity } from '@ovotech/laminar-jwt';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
@@ -145,7 +145,7 @@ const start = async () => {
   });
   const laminar = createLaminar({ port: 3333, app: bodyParser(jwtSecurity(app)) });
   await laminar.start();
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 start();

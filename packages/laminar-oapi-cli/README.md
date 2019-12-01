@@ -72,7 +72,7 @@ Then you can load the types like this:
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { createLaminar, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 import { Config } from './oapi.yaml';
@@ -91,7 +91,7 @@ const start = async () => {
   const app = await createOapi(config);
   const laminar = createLaminar({ port: 3333, app: bodyParser(app) });
   await laminar.start();
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 start();

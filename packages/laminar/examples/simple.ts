@@ -1,4 +1,4 @@
-import { get, post, createLaminar, router } from '@ovotech/laminar';
+import { get, post, createLaminar, router, describeLaminar } from '@ovotech/laminar';
 
 const main = async () => {
   const laminar = createLaminar({
@@ -11,7 +11,7 @@ const main = async () => {
   });
   await laminar.start();
 
-  console.log(laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();

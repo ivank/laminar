@@ -52,3 +52,13 @@ export const createLaminar = ({
       new Promise((resolve, reject) => server.close(err => (err ? reject(err) : resolve()))),
   };
 };
+
+export const describeLaminar = (laminar: Laminar): string => {
+  const address = laminar.server.address();
+  const url =
+    typeof address === 'object' && address
+      ? `${address.address}:${address.port} (${address.family})`
+      : address;
+
+  return ` ⛲ Laminar: ${laminar.server.listening ? 'Running' : 'Stopped'}, Address: ${url}`;
+};

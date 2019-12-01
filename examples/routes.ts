@@ -1,4 +1,4 @@
-import { get, createLaminar, router, createBodyParser } from '@ovotech/laminar';
+import { get, createLaminar, router, createBodyParser, describeLaminar } from '@ovotech/laminar';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
@@ -14,7 +14,7 @@ const main = async () => {
     port: 8082,
   });
 
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();

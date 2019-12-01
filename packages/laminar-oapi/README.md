@@ -9,7 +9,7 @@ Docs for open api itself: https://swagger.io/docs/
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { createLaminar, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
 import { createOapi, OpenAPIObject } from '@ovotech/laminar-oapi';
 
 const api: OpenAPIObject = {
@@ -78,7 +78,7 @@ const start = async () => {
   });
   const laminar = createLaminar({ port: 3333, app: bodyParser(app) });
   await laminar.start();
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 start();
@@ -103,7 +103,7 @@ When you define OpenAPI security, you can configure a function that implements t
 > [examples/security.ts](examples/security.ts)
 
 ```typescript
-import { createLaminar, HttpError, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, HttpError, createBodyParser, describeLaminar } from '@ovotech/laminar';
 import { createOapi, OpenAPIObject } from '@ovotech/laminar-oapi';
 
 const api: OpenAPIObject = {
@@ -188,7 +188,7 @@ const start = async () => {
   });
   const laminar = createLaminar({ port: 3333, app: bodyParser(app) });
   await laminar.start();
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 start();

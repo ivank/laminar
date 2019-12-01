@@ -1,4 +1,4 @@
-export { createLaminar } from './laminar';
+export { createLaminar, describeLaminar } from './laminar';
 export { toContext } from './context';
 export {
   response,

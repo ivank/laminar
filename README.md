@@ -55,7 +55,7 @@ And then you can implement it using [@ovotech/laminar-oapi](packages/laminar-oap
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { createLaminar, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -75,7 +75,7 @@ const main = async () => {
   const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
   await laminar.start();
 
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();
@@ -130,7 +130,7 @@ You can then implement the security with:
 > [examples/security.ts](examples/security.ts)
 
 ```typescript
-import { createLaminar, HttpError, createBodyParser } from '@ovotech/laminar';
+import { createLaminar, HttpError, createBodyParser, describeLaminar } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -156,7 +156,7 @@ const main = async () => {
   });
   const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
   await laminar.start();
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();
@@ -214,7 +214,7 @@ Laminar can also be used without any spec for a very minimal rest api.
 > [examples/routes.ts](examples/routes.ts)
 
 ```typescript
-import { get, createLaminar, router, createBodyParser } from '@ovotech/laminar';
+import { get, createLaminar, router, createBodyParser, describeLaminar } from '@ovotech/laminar';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
@@ -230,7 +230,7 @@ const main = async () => {
     port: 8082,
   });
 
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();
@@ -407,6 +407,7 @@ import {
   Middleware,
   RouteResolver,
   LoggingContext,
+  describeLaminar,
 } from '@ovotech/laminar';
 
 // Middleware to connect to postgres
@@ -461,7 +462,7 @@ const main = async () => {
   const laminar = createLaminar({ app, port: 8082 });
   await laminar.start();
 
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();

@@ -10,6 +10,7 @@ import {
   Middleware,
   RouteResolver,
   LoggingContext,
+  describeLaminar,
 } from '@ovotech/laminar';
 
 // Middleware to connect to postgres
@@ -64,7 +65,7 @@ const main = async () => {
   const laminar = createLaminar({ app, port: 8082 });
   await laminar.start();
 
-  console.log('Started', laminar.server.address());
+  console.log(describeLaminar(laminar));
 };
 
 main();
