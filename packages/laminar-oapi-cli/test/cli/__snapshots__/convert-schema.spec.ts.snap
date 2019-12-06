@@ -90,7 +90,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -141,7 +141,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -186,10 +186,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } & {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -246,7 +246,7 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -346,10 +346,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } | {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -398,7 +398,7 @@ Object {
   },
   "ts": "{
     bar?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -415,7 +415,7 @@ Object {
   },
   "ts": "{
     foo?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -461,7 +461,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type positiveInteger = number;
@@ -502,7 +502,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -554,7 +554,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type positiveInteger = number;
@@ -595,7 +595,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -716,7 +716,7 @@ Object {
   "ts": "{
     foo?: \\"foo\\";
     bar: \\"bar\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1003,7 +1003,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1093,10 +1093,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } | {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1233,7 +1233,7 @@ Object {
   "ts": "{
     foo?: number;
     bar?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1271,7 +1271,7 @@ bar": Object {
     \\"foo\\\\rbar\\"?: number;
     \\"foo\\\\tbar\\"?: number;
     \\"foo\\\\fbar\\"?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1348,19 +1348,19 @@ Object {
   "ts": "{
     meta: string;
     nodes: node#[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface node# {
     value: number;
     subtree?: tree#;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface tree# {
     meta: string;
     nodes: node#[];
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1393,7 +1393,7 @@ Object {
     tilda?: tilda~0field;
     slash?: slash~1field;
     percent?: percent%25field;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type tilda~0field = number;
@@ -1441,7 +1441,7 @@ Object {
   },
   "ts": "{
     $ref?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1463,7 +1463,7 @@ Object {
   },
   "ts": "{
     foo?: reffed;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type reffed = any;",
@@ -1486,7 +1486,7 @@ Object {
   },
   "ts": "{
     \\"foo\\\\\\"bar\\"?: foo%22bar;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type foo%22bar = number;",
@@ -1526,7 +1526,7 @@ Object {
   "ts": "{
     foo?: number;
     bar?: foo;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type foo = number;",
@@ -1574,7 +1574,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type positiveInteger = number;
@@ -1615,7 +1615,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -1668,7 +1668,7 @@ Object {
   },
   "ts": "{
     list?: baz;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type baz = folderInteger.json#[];
@@ -1703,7 +1703,7 @@ Object {
   },
   "ts": "{
     list?: bar;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type bar = folderInteger.json#[];
@@ -1777,7 +1777,7 @@ Object {
   },
   "ts": "{
     name?: orNull;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type orNull = any | #;
@@ -1795,7 +1795,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -1814,7 +1814,7 @@ Object {
   "ts": "{
     foo: any;
     bar?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2047,7 +2047,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2098,7 +2098,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2143,10 +2143,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } & {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2203,7 +2203,7 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2339,10 +2339,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } | {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2524,7 +2524,7 @@ Object {
   },
   "ts": "{
     bar?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2541,7 +2541,7 @@ Object {
   },
   "ts": "{
     foo?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -2592,7 +2592,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type nonNegativeInteger = number;
@@ -2638,7 +2638,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -2695,7 +2695,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type nonNegativeInteger = number;
@@ -2741,7 +2741,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -2896,7 +2896,7 @@ Object {
   "ts": "{
     foo?: \\"foo\\";
     bar: \\"bar\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3191,7 +3191,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3299,10 +3299,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } | {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3503,7 +3503,7 @@ Object {
   "ts": "{
     foo?: number;
     bar?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3519,7 +3519,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: void;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3557,7 +3557,7 @@ bar": Object {
     \\"foo\\\\rbar\\"?: number;
     \\"foo\\\\tbar\\"?: number;
     \\"foo\\\\fbar\\"?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3691,19 +3691,19 @@ Object {
   "ts": "{
     meta: string;
     nodes: node#[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface node# {
     value: number;
     subtree?: tree#;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface tree# {
     meta: string;
     nodes: node#[];
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3736,7 +3736,7 @@ Object {
     tilda?: tilda~0field;
     slash?: slash~1field;
     percent?: percent%25field;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type tilda~0field = number;
@@ -3784,7 +3784,7 @@ Object {
   },
   "ts": "{
     $ref?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -3806,7 +3806,7 @@ Object {
   },
   "ts": "{
     foo?: reffed;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type reffed = any;",
@@ -3829,7 +3829,7 @@ Object {
   },
   "ts": "{
     \\"foo\\\\\\"bar\\"?: foo%22bar;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type foo%22bar = number;",
@@ -3869,7 +3869,7 @@ Object {
   "ts": "{
     foo?: number;
     bar?: foo;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type foo = number;",
@@ -3922,7 +3922,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type nonNegativeInteger = number;
@@ -3968,7 +3968,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -4021,7 +4021,7 @@ Object {
   },
   "ts": "{
     list?: baz;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type baz = folderInteger.json#[];
@@ -4056,7 +4056,7 @@ Object {
   },
   "ts": "{
     list?: bar;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type bar = folderInteger.json#[];
@@ -4130,7 +4130,7 @@ Object {
   },
   "ts": "{
     name?: orNull;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type orNull = any | #;
@@ -4148,7 +4148,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4167,7 +4167,7 @@ Object {
   "ts": "{
     foo: any;
     bar?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4182,7 +4182,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4415,7 +4415,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4466,7 +4466,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4511,10 +4511,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } & {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4571,7 +4571,7 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4707,10 +4707,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } | {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4892,7 +4892,7 @@ Object {
   },
   "ts": "{
     bar?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4909,7 +4909,7 @@ Object {
   },
   "ts": "{
     foo?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -4967,7 +4967,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type nonNegativeInteger = number;
@@ -5020,7 +5020,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -5084,7 +5084,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type nonNegativeInteger = number;
@@ -5137,7 +5137,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -5292,7 +5292,7 @@ Object {
   "ts": "{
     foo?: \\"foo\\";
     bar: \\"bar\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -5690,7 +5690,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -5798,10 +5798,10 @@ Object {
   },
   "ts": "{
     bar: number;
-    [key: string]: any;
+    [key: string]: unknown;
 } | {
     foo: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6002,7 +6002,7 @@ Object {
   "ts": "{
     foo?: number;
     bar?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6018,7 +6018,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: void;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6056,7 +6056,7 @@ bar": Object {
     \\"foo\\\\rbar\\"?: number;
     \\"foo\\\\tbar\\"?: number;
     \\"foo\\\\fbar\\"?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6190,19 +6190,19 @@ Object {
   "ts": "{
     meta: string;
     nodes: node#[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface node# {
     value: number;
     subtree?: tree#;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface tree# {
     meta: string;
     nodes: node#[];
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6235,7 +6235,7 @@ Object {
     tilda?: tilda~0field;
     slash?: slash~1field;
     percent?: percent%25field;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type tilda~0field = number;
@@ -6283,7 +6283,7 @@ Object {
   },
   "ts": "{
     $ref?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6305,7 +6305,7 @@ Object {
   },
   "ts": "{
     foo?: reffed;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type reffed = any;",
@@ -6328,7 +6328,7 @@ Object {
   },
   "ts": "{
     \\"foo\\\\\\"bar\\"?: foo%22bar;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type foo%22bar = number;",
@@ -6368,7 +6368,7 @@ Object {
   "ts": "{
     foo?: number;
     bar?: foo;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type foo = number;",
@@ -6428,7 +6428,7 @@ export interface schema# {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type nonNegativeInteger = number;
@@ -6481,7 +6481,7 @@ export interface # {
     anyOf?: schemaArray;
     oneOf?: schemaArray;
     not?: #;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type schemaArray = #[];
@@ -6534,7 +6534,7 @@ Object {
   },
   "ts": "{
     list?: baz;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type baz = folderInteger.json#[];
@@ -6569,7 +6569,7 @@ Object {
   },
   "ts": "{
     list?: bar;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type bar = folderInteger.json#[];
@@ -6643,7 +6643,7 @@ Object {
   },
   "ts": "{
     name?: orNull;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type orNull = any | #;
@@ -6661,7 +6661,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6680,7 +6680,7 @@ Object {
   "ts": "{
     foo: any;
     bar?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;
@@ -6695,7 +6695,7 @@ Object {
   },
   "ts": "{
     foo?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }",
 }
 `;

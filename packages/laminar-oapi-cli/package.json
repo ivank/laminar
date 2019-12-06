@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-oapi-cli",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar-oapi",
@@ -29,9 +29,10 @@
   "scripts": {
     "test:build:integration": "laminar-oapi test/integration.yaml test/__generated__/integration.ts",
     "test:build:statements": "laminar-oapi test/statements.yaml test/__generated__/statements.ts",
+    "build:examples": "laminar-oapi examples/oapi.yaml examples/oapi.yaml.ts",
     "pretest": "yarn test:build:integration && yarn test:build:statements",
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md",
+    "build:docs": "yarn build:examples && build-docs README.md",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different {src,test}/**/*.ts",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

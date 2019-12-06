@@ -120,7 +120,7 @@ export interface BalanceSummaryHttpResponse {
      * When balance service updated the balance
      */
     updatedAt?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface HttpErrorResponse {
@@ -129,7 +129,7 @@ export interface HttpErrorResponse {
      */
     errorCode?: string;
     message?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
@@ -150,7 +150,7 @@ export interface TransactionHistoryHttpResponseV2 {
      * List of transactions ordered by transactionDateTime in ascending order.
      */
     transactions?: (GenericTransactionEntity | ChargeTransactionEntity)[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface TransactionHistorySummary {
@@ -158,7 +158,7 @@ export interface TransactionHistorySummary {
      * Number of search hits
      */
     totalSize?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface GenericTransactionEntity {
@@ -169,7 +169,7 @@ export interface GenericTransactionEntity {
      * CamelCased cause why the adjustment is needed, e.g. 'GoodWill', 'WarmHomeDiscount', 'DiscretionaryCredit', 'AppPayment'
      */
     cause?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface ChargeTransactionEntity {
@@ -177,7 +177,7 @@ export interface ChargeTransactionEntity {
     amount?: number;
     transactionDateTime?: string;
     fuelType?: \\"Electricity\\" | \\"Gas\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2> | Promise<TransactionHistoryHttpResponseV2> | Promise<LaminarResponse<TransactionHistoryHttpResponseV2>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
@@ -217,7 +217,7 @@ export interface AdjustBalanceRequest {
      * CamelCased cause why the adjustment is needed, e.g. 'GoodWill', 'WarmHomeDiscount', 'DiscretionaryCredit'
      */
     cause?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
@@ -251,7 +251,7 @@ export interface TransactionHistoryHttpResponseV3 {
      * List of transactions ordered by transactionDateTime in ascending order.
      */
     transactions?: (GenericTransactionEntity | UsageChargeTransactionEntity | StandingChargeTransactionEntity)[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface UsageChargeTransactionEntity {
@@ -271,7 +271,7 @@ export interface UsageChargeTransactionEntity {
      * The consumption amount (kwH) corresponding to this charge.
      */
     consumption?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface StandingChargeTransactionEntity {
@@ -279,7 +279,7 @@ export interface StandingChargeTransactionEntity {
     amount?: number;
     transactionDateTime?: string;
     fuelType?: \\"Electricity\\" | \\"Gas\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3> | Promise<TransactionHistoryHttpResponseV3> | Promise<LaminarResponse<TransactionHistoryHttpResponseV3>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
@@ -523,7 +523,7 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 }
 
 export interface Empty {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NameDeleteResponse = (Empty | LaminarResponse<Empty> | Promise<Empty> | Promise<LaminarResponse<Empty>>);
@@ -641,7 +641,7 @@ export interface Task {
      * been returned.
      */
     view?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface AppEngineHttpRequest {
@@ -721,7 +721,7 @@ export interface AppEngineHttpRequest {
      * No spaces are allowed, and the maximum length allowed is 2083 characters.
      */
     relativeUri?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface AppEngineRouting {
@@ -793,7 +793,7 @@ export interface AppEngineRouting {
      * instance are the empty string.
      */
     version?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Attempt {
@@ -816,7 +816,7 @@ export interface Attempt {
      * \`schedule_time\` will be truncated to the nearest microsecond.
      */
     scheduleTime?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Status {
@@ -835,7 +835,7 @@ export interface Status {
      * google.rpc.Status.details field, or localized by the client.
      */
     message?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NameGetResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
@@ -913,7 +913,7 @@ export interface Queue {
      * UpdateQueue cannot be used to change \`state\`.
      */
     state?: \\"STATE_UNSPECIFIED\\" | \\"RUNNING\\" | \\"PAUSED\\" | \\"DISABLED\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface RateLimits {
@@ -985,7 +985,7 @@ export interface RateLimits {
      * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#rate).
      */
     maxDispatchesPerSecond?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface RetryConfig {
@@ -1092,7 +1092,7 @@ export interface RetryConfig {
      * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
      */
     minBackoff?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NamePatchResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
@@ -1144,7 +1144,7 @@ export interface ListLocationsResponse {
      * The standard List next-page token.
      */
     nextPageToken?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Location {
@@ -1173,7 +1173,7 @@ export interface Location {
      * For example: \`\\"projects/example-project/locations/us-east1\\"\`
      */
     name?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NameLocationsGetResponse = (ListLocationsResponse | LaminarResponse<ListLocationsResponse> | Promise<ListLocationsResponse> | Promise<LaminarResponse<ListLocationsResponse>>);
@@ -1204,7 +1204,7 @@ export interface TV2NameLocationsGetContext extends Context, OapiContext {
 }
 
 export interface PauseQueueRequest {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NamepausePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
@@ -1239,7 +1239,7 @@ export interface TV2NamepausePostContext extends Context, OapiContext {
 }
 
 export interface PurgeQueueRequest {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NamepurgePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
@@ -1273,7 +1273,7 @@ export interface TV2NamepurgePostContext extends Context, OapiContext {
 }
 
 export interface ResumeQueueRequest {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NameresumePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
@@ -1329,7 +1329,7 @@ export interface RunTaskRequest {
      * permission on the Task resource.
      */
     responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2NamerunPostResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
@@ -1397,7 +1397,7 @@ export interface ListQueuesResponse {
      * The list of queues.
      */
     queues?: Queue[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2ParentQueuesGetResponse = (ListQueuesResponse | LaminarResponse<ListQueuesResponse> | Promise<ListQueuesResponse> | Promise<LaminarResponse<ListQueuesResponse>>);
@@ -1480,7 +1480,7 @@ export interface ListTasksResponse {
      * The list of tasks.
      */
     tasks?: Task[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2ParentTasksGetResponse = (ListTasksResponse | LaminarResponse<ListTasksResponse> | Promise<ListTasksResponse> | Promise<LaminarResponse<ListTasksResponse>>);
@@ -1535,7 +1535,7 @@ export interface CreateTaskRequest {
      */
     responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
     task?: Task;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2ParentTasksPostResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
@@ -1569,7 +1569,7 @@ export interface TV2ParentTasksPostContext extends Context, OapiContext {
 
 export interface GetIamPolicyRequest {
     options?: GetPolicyOptions;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface GetPolicyOptions {
@@ -1580,7 +1580,7 @@ export interface GetPolicyOptions {
      * returned.
      */
     requestedPolicyVersion?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Policy {
@@ -1606,7 +1606,7 @@ export interface Policy {
      * Deprecated.
      */
     version?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Binding {
@@ -1643,7 +1643,7 @@ export interface Binding {
      * For example, \`roles/viewer\`, \`roles/editor\`, or \`roles/owner\`.
      */
     role?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Expr {
@@ -1671,7 +1671,7 @@ export interface Expr {
      * expression.
      */
     title?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2ResourcegetIamPolicyPostResponse = (Policy | LaminarResponse<Policy> | Promise<Policy> | Promise<LaminarResponse<Policy>>);
@@ -1709,7 +1709,7 @@ export interface TV2ResourcegetIamPolicyPostContext extends Context, OapiContext
 
 export interface SetIamPolicyRequest {
     policy?: Policy;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2ResourcesetIamPolicyPostResponse = (Policy | LaminarResponse<Policy> | Promise<Policy> | Promise<LaminarResponse<Policy>>);
@@ -1755,7 +1755,7 @@ export interface TestIamPermissionsRequest {
      * [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
      */
     permissions?: string[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface TestIamPermissionsResponse {
@@ -1764,7 +1764,7 @@ export interface TestIamPermissionsResponse {
      * allowed.
      */
     permissions?: string[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TV2ResourcetestIamPermissionsPostResponse = (TestIamPermissionsResponse | LaminarResponse<TestIamPermissionsResponse> | Promise<TestIamPermissionsResponse> | Promise<LaminarResponse<TestIamPermissionsResponse>>);
@@ -1879,7 +1879,7 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 export interface user {
     username?: string;
     uuid?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type T20UsersUsernameGetResponse = (user | LaminarResponse<user> | Promise<user> | Promise<LaminarResponse<user>>);
@@ -1893,7 +1893,7 @@ export interface T20UsersUsernameGetContext extends Context, OapiContext {
 export interface repository {
     slug?: string;
     owner?: user;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type T20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<repository[]> | Promise<repository[]> | Promise<LaminarResponse<repository[]>>);
@@ -1918,7 +1918,7 @@ export interface pullrequest {
     title?: string;
     repository?: repository;
     author?: user;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type T20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<pullrequest[]> | Promise<pullrequest[]> | Promise<LaminarResponse<pullrequest[]>>);
@@ -1977,13 +1977,13 @@ export interface Pet {
     id: number;
     name: string;
     tag?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Error {
     code: number;
     message: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TPetsGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
@@ -2053,19 +2053,19 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type Pet = NewPet & {
     id: number;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 export interface NewPet {
     name: string;
     tag?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Error {
     code: number;
     message: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
@@ -2136,7 +2136,7 @@ export type AccountMeterElec = AccountMeterBase & {
     profileClassId: string;
     meterTimeswitchCode: string;
     lineLossFactorClassId: string;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 export interface AccountMeterBase {
@@ -2148,13 +2148,13 @@ export interface AccountMeterBase {
     msn: string;
     startDate: string;
     endDate: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type AccountMeterGas = AccountMeterBase & {
     meterType: \\"gas\\";
     ldz: string;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 export interface HttpError {
@@ -2217,9 +2217,9 @@ export interface dataSetList {
          * A URL to the API console for each API
          */
         apiDocumentationUrl?: string;
-        [key: string]: any;
+        [key: string]: unknown;
     }[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TGetResponse = (dataSetList | LaminarResponse<dataSetList> | Promise<dataSetList> | Promise<LaminarResponse<dataSetList>>);

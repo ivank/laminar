@@ -14,13 +14,12 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 export interface User {
   email: string;
   scopes?: string[];
-  [key: string]: any;
 }
 
 export interface Test {
   text: string;
   user?: User;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export type TTestPostResponse =

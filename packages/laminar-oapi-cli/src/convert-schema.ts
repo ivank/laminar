@@ -92,7 +92,7 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
     const additional = isSchemaObject(schema.additionalProperties)
       ? convertSchema(context, schema.additionalProperties)
       : schema.additionalProperties !== false
-      ? document(context, Type.Any)
+      ? document(context, Type.Unknown)
       : document(context, Type.Void);
 
     const props = mapWithContext(
@@ -119,7 +119,7 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
       Type.TypeLiteral({
         props: props.items,
         index:
-          additional.type.kind === ts.SyntaxKind.VoidKeyword
+          additional.type === Type.Void
             ? undefined
             : Type.Index({ name: 'key', nameType: Type.Str, type: additional.type }),
       }),

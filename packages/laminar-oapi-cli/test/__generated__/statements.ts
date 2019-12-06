@@ -19,7 +19,7 @@ export interface AccountMeterBase {
     msn: string;
     startDate: string;
     endDate: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface HttpError {

@@ -30,6 +30,7 @@ paths:
 components:
   schemas:
     User:
+      additionalProperties: false
       properties:
         email:
           type: string

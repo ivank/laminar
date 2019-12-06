@@ -38,19 +38,18 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 
 export type Pet = NewPet & {
     id: number;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 export interface NewPet {
     name: string;
     tag?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface Error {
     code: number;
     message: string;
-    [key: string]: any;
 }
 
 export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
@@ -72,7 +71,7 @@ export interface TPetsGetContext extends Context, OapiContext {
 export interface PetCreated {
     pet?: NewPet;
     user?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TPetsPostResponse = (PetCreated | LaminarResponse<PetCreated> | Promise<PetCreated> | Promise<LaminarResponse<PetCreated>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
