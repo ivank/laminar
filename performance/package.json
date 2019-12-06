@@ -12,11 +12,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@ovotech/json-schema": "^0.3.0",
+    "@ovotech/json-schema": "^0.4.0",
     "@types/benchmark": "^1.0.31",
     "benchmark": "^2.1.4",
     "node-fetch": "^2.6.0",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.4"
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
   }
 }

@@ -15,19 +15,19 @@
     "lint": "yarn lint:prettier && yarn lint:eslint"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.16",
-    "@types/node": "^12.6.9",
-    "@typescript-eslint/eslint-plugin": "^2.3.3",
-    "@typescript-eslint/parser": "^2.3.3",
-    "eslint": "^6.1.0",
-    "eslint-config-prettier": "^6.0.0",
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.14",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
     "jest": "^24.8.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.19.1"
   },
   "jest": {
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.3"
   }
 }
