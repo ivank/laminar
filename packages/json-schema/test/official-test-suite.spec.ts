@@ -17,7 +17,7 @@ interface Suite {
 /* eslint-disable @typescript-eslint/no-namespace */
 declare global {
   namespace jest {
-    interface Matchers<R> {
+    interface Matchers<R, T> {
       toValidateAgainstSchema(value: Schema): CustomMatcherResult;
     }
   }
