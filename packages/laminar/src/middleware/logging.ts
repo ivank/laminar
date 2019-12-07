@@ -11,8 +11,8 @@ export interface Logger {
   log: (level: string, message: string, metadata?: Metadata) => void;
 }
 
-export interface LoggingContext {
-  logger: Logger;
+export interface LoggingContext<TLogger extends Logger = Logger> {
+  logger: TLogger;
 }
 
 export interface LoggerOptions {
@@ -34,10 +34,10 @@ export const defaultOptions: LoggerOptions = {
   error: error => ({ message: error.message, stack: error.stack }),
 };
 
-export const createLogging = (
-  logger: Logger = console,
+export const createLogging = <TLogger extends Logger>(
+  logger: TLogger,
   userOptions: Partial<LoggerOptions> = {},
-): Middleware<LoggingContext> => next => async ctx => {
+): Middleware<LoggingContext<TLogger>> => next => async ctx => {
   const options = { ...defaultOptions, ...userOptions };
 
   try {
