@@ -37,7 +37,12 @@ const find: RouteResolver<PGContext> = async ({ path, pg }) => {
 };
 
 // Updating a user requires a PG connection and logging capablilities
-const update: RouteResolver<PGContext & LoggingContext> = async ({ path, pg, body, logger }) => {
+const update: RouteResolver<PGContext & LoggingContext<Console>> = async ({
+  path,
+  pg,
+  body,
+  logger,
+}) => {
   await pg.query('UPDATE users SET name = $1 WHERE id = $2', body.name, path.id);
   logger.log('info', 'User Updated');
 
@@ -57,7 +62,7 @@ const routes = router(
 
 const main = async () => {
   const bodyParser = createBodyParser();
-  const logging = createLogging();
+  const logging = createLogging(console);
   const pgClient = await createPgClient('localhost:5432');
 
   const app = bodyParser(logging(pgClient(routes)));
