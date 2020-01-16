@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-jwt",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A json web token middleware for laminar",
@@ -21,29 +21,29 @@
   },
   "dependencies": {
     "@ovotech/json-schema": "^0.4.0",
-    "axios": "^0.19.0",
+    "axios": "^0.19.1",
     "jsonwebtoken": "^8.5.1",
     "lru-cache": "^5.1.1"
   },
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@ovotech/laminar": "^0.4.2",
+    "@ovotech/laminar": "^0.4.4",
     "@ovotech/laminar-oapi": "^0.4.0",
     "@ovotech/laminar-oapi-cli": "^0.4.0",
-    "@types/jest": "^24.0.23",
+    "@types/jest": "^24.9.0",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/lru-cache": "^5.1.0",
-    "@types/node": "^12.12.14",
-    "@typescript-eslint/eslint-plugin": "^2.10.0",
-    "@typescript-eslint/parser": "^2.10.0",
+    "@types/node": "^13.1.7",
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
     "axios": "^0.19.0",
-    "eslint": "^6.7.2",
-    "eslint-config-prettier": "^6.7.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
     "jest": "^24.8.0",
-    "nock": "^11.7.0",
+    "nock": "^11.7.2",
     "prettier": "^1.19.1",
-    "ts-jest": "^24.2.0",
-    "typescript": "^3.7.3"
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.4"
   },
   "peerDependencies": {
     "@ovotech/laminar": "*"

@@ -5,7 +5,7 @@ import { parseQueryObjects } from './helpers';
 import { Method, Context } from './types';
 
 export const toContext = async (req: IncomingMessage): Promise<Context> => {
-  const url = parse(req.url || '', true);
+  const url = parse(req.url ?? '', true);
   return {
     body: req,
     url,

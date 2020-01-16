@@ -56,7 +56,7 @@ export interface Test {
     text: string;
     email?: string;
     scopes?: string[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export type TTestscopesGetResponse = (Test | LaminarResponse<Test> | Promise<Test> | Promise<LaminarResponse<Test>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);

@@ -172,7 +172,7 @@ export const createOapi = async <C extends object = {}>({
     const authInfo = await validateSecurity<C>(
       context,
       routeSchema.security,
-      schema.components && schema.components.securitySchemes,
+      schema.components?.securitySchemes,
       security,
     );
 

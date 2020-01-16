@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-oapi-cli",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar-oapi",
@@ -8,20 +8,20 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.4.2",
+    "@ovotech/laminar": "^0.4.4",
     "@ovotech/laminar-oapi": "^0.4.0",
-    "@types/jest": "^24.0.23",
+    "@types/jest": "^24.9.0",
     "@types/js-yaml": "^3.12.1",
-    "@types/node": "^12.12.14",
-    "@typescript-eslint/eslint-plugin": "^2.10.0",
-    "@typescript-eslint/parser": "^2.10.0",
-    "axios": "^0.19.0",
-    "eslint": "^6.7.2",
-    "eslint-config-prettier": "^6.7.0",
+    "@types/node": "^13.1.7",
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
+    "axios": "^0.19.1",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
     "jest": "^24.8.0",
     "prettier": "^1.19.1",
-    "ts-jest": "^24.2.0",
-    "typescript": "^3.7.3"
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.4"
   },
   "bin": {
     "laminar-oapi": "./scripts/laminar-oapi"
@@ -45,8 +45,8 @@
     "@ovotech/laminar": "*"
   },
   "dependencies": {
-    "@ovotech/ts-compose": "^0.3.0",
-    "commander": "^4.0.1",
+    "@ovotech/ts-compose": "^0.3.1",
+    "commander": "^4.1.0",
     "openapi-schemas": "^1.0.3",
     "openapi3-ts": "^1.3.0"
   }

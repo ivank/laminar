@@ -90,7 +90,7 @@ export const file = (filename: string, partial?: Partial<LaminarResponse>): Lami
     headers: {
       'content-type': lookup(filename) || 'text/plain',
       'content-length': statSync(filename).size,
-      ...(partial ? partial.headers : undefined),
+      ...partial?.headers,
     },
     ...partial,
   });

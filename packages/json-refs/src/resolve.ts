@@ -179,9 +179,7 @@ export const resolveNestedRefs = (
       }
     }
 
-    return {
-      $ref: fullPointer,
-    };
+    return { $ref: fullPointer };
   }
 
   return schema;
