@@ -21,7 +21,7 @@ describe('createResponseTime middleware', () => {
     const result = await api.get('/test');
     expect(result.status).toBe(200);
     expect(Number(result.headers['x-response-time'])).toBeGreaterThan(15);
-    expect(Number(result.headers['x-response-time'])).toBeLessThan(55);
+    expect(Number(result.headers['x-response-time'])).toBeLessThan(54);
   });
 
   it('Should measure larger response time', async () => {
@@ -37,7 +37,7 @@ describe('createResponseTime middleware', () => {
     const result = await api.get('/test');
 
     expect(result.status).toBe(200);
-    expect(Number(result.headers['x-response-time'])).toBeGreaterThan(55);
+    expect(Number(result.headers['x-response-time'])).toBeGreaterThan(54);
     expect(Number(result.headers['x-response-time'])).toBeLessThan(100);
   });
 
