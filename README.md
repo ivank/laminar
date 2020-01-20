@@ -1,7 +1,7 @@
 # Laminar Open API
 
 A Library for building OpenApi backed REST APIs. Automatic validation of request / response based on the api schema.
-Generate TypeScript types using a cli.
+Generate TypeScript types using a cli. This is an attempt to implement the concepts of [API Design First](https://apisyouwonthate.com/blog/api-design-first-vs-code-first) principles cleanly.
 
 Packages:
 
