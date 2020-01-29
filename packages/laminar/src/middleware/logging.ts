@@ -2,6 +2,7 @@ import { Context, Middleware, ResolverResponse } from '../types';
 import { format } from 'url';
 import { isResponse } from '../response';
 import { IncomingMessage } from 'http';
+import { Readable } from 'stream';
 
 export interface Metadata {
   [key: string]: unknown;
@@ -20,6 +21,10 @@ export interface LoggerOptions {
   response?: (response: ResolverResponse) => Metadata;
   error?: (error: Error) => Metadata;
 }
+export const formatResponseBody = (
+  body: string | Readable | Buffer | object | undefined,
+): string | object | undefined =>
+  Buffer.isBuffer(body) ? '[Buffer]' : body instanceof Readable ? '[Readable]' : body;
 
 export const defaultOptions: LoggerOptions = {
   request: ctx => ({
@@ -28,8 +33,8 @@ export const defaultOptions: LoggerOptions = {
   }),
   response: response => ({
     ...(isResponse(response)
-      ? { status: response.status, body: response.body }
-      : { status: 200, body: response }),
+      ? { status: response.status, body: formatResponseBody(response.body) }
+      : { status: 200, body: formatResponseBody(response) }),
   }),
   error: error => ({ message: error.message, stack: error.stack }),
 };
