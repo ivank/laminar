@@ -31,13 +31,14 @@ describe('Integration', () => {
     const port = 8051;
     const key = readFileSync(join(__dirname, '../examples/key.pem'));
     const cert = readFileSync(join(__dirname, '../examples/cert.pem'));
+    const ca = readFileSync(join(__dirname, '../examples/ca.pem'));
 
     laminar = createLaminar({ port, app: bodyParser(app), https: { key, cert } });
 
     await laminar.start();
 
     const response = await axios.get(`https://localhost:${port}`, {
-      httpsAgent: new Agent({ rejectUnauthorized: false }),
+      httpsAgent: new Agent({ ca }),
     });
     expect(response.data).toEqual('TLS Test');
   });
