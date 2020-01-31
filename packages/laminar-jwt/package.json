@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@ovotech/laminar": "^0.4.4",
+    "@ovotech/laminar": "^0.5.0",
     "@ovotech/laminar-oapi": "^0.4.0",
     "@ovotech/laminar-oapi-cli": "^0.4.0",
     "@types/jest": "^24.9.0",

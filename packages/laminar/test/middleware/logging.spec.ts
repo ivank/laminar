@@ -98,15 +98,15 @@ describe('createLogging middleware', () => {
 
 describe('createLogging middleware functions', () => {
   it.each`
-    title                   | response                                              | expected
-    ${'Buffer response'}    | ${response({ body: new Buffer('123') })}              | ${{ body: '[Buffer]', status: 200 }}
-    ${'Buffer with status'} | ${response({ body: new Buffer('123'), status: 400 })} | ${{ body: '[Buffer]', status: 400 }}
-    ${'Only Buffer'}        | ${new Buffer('123')}                                  | ${{ body: '[Buffer]', status: 200 }}
-    ${'Only Readable'}      | ${new Readable()}                                     | ${{ body: '[Readable]', status: 200 }}
-    ${'Readable response'}  | ${response({ body: new Readable() })}                 | ${{ body: '[Readable]', status: 200 }}
-    ${'Readable status'}    | ${response({ body: new Readable(), status: 400 })}    | ${{ body: '[Readable]', status: 400 }}
-    ${'Object response'}    | ${response({ body: { test: true }, status: 400 })}    | ${{ body: { test: true }, status: 400 }}
-    ${'Only Object'}        | ${{ test: true }}                                     | ${{ body: { test: true }, status: 200 }}
+    title                   | response                                               | expected
+    ${'Buffer response'}    | ${response({ body: Buffer.from('123') })}              | ${{ body: '[Buffer]', status: 200 }}
+    ${'Buffer with status'} | ${response({ body: Buffer.from('123'), status: 400 })} | ${{ body: '[Buffer]', status: 400 }}
+    ${'Only Buffer'}        | ${Buffer.from('123')}                                  | ${{ body: '[Buffer]', status: 200 }}
+    ${'Only Readable'}      | ${new Readable()}                                      | ${{ body: '[Readable]', status: 200 }}
+    ${'Readable response'}  | ${response({ body: new Readable() })}                  | ${{ body: '[Readable]', status: 200 }}
+    ${'Readable status'}    | ${response({ body: new Readable(), status: 400 })}     | ${{ body: '[Readable]', status: 400 }}
+    ${'Object response'}    | ${response({ body: { test: true }, status: 400 })}     | ${{ body: { test: true }, status: 400 }}
+    ${'Only Object'}        | ${{ test: true }}                                      | ${{ body: { test: true }, status: 200 }}
   `('Should process response $title', async ({ response, expected }) => {
     expect(defaultOptions.response && defaultOptions.response(response)).toEqual(expected);
   });

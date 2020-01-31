@@ -16,11 +16,31 @@ import {
   Laminar,
 } from '../src';
 import { createLogging, createBodyParser } from '../src';
+import { join } from 'path';
+import { readFileSync } from 'fs';
+import { Agent } from 'https';
 
 let laminar: Laminar;
 
 describe('Integration', () => {
   afterEach(() => laminar.stop());
+
+  it('Should allow TLS', async () => {
+    const app = jest.fn().mockReturnValue('TLS Test');
+    const bodyParser = createBodyParser();
+    const port = 8051;
+    const key = readFileSync(join(__dirname, '../examples/key.pem'));
+    const cert = readFileSync(join(__dirname, '../examples/cert.pem'));
+
+    laminar = createLaminar({ port, app: bodyParser(app), https: { key, cert } });
+
+    await laminar.start();
+
+    const response = await axios.get(`https://localhost:${port}`, {
+      httpsAgent: new Agent({ rejectUnauthorized: false }),
+    });
+    expect(response.data).toEqual('TLS Test');
+  });
 
   it('Should process response', async () => {
     const loggerMock = { log: jest.fn() };

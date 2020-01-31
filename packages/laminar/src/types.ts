@@ -1,21 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { CookieSerializeOptions } from 'cookie';
-import { IncomingHttpHeaders, OutgoingHttpHeaders, ServerOptions, Server } from 'http';
+import * as http from 'http';
+import * as https from 'https';
 import { Readable } from 'stream';
 import { UrlWithParsedQuery } from 'url';
 
 export const LaminarObject = '_isLaminar';
 
-export interface LaminarOptions {
+interface LaminarOptionsBase {
   app: Resolver<Context>;
   port?: number;
   hostname?: string;
-  http?: ServerOptions;
 }
 
-export interface Laminar {
-  server: Server;
+export interface LaminarOptionsHttp extends LaminarOptionsBase {
+  http?: http.ServerOptions;
+}
+
+export interface LaminarOptionsHttps extends LaminarOptionsBase {
+  https: https.ServerOptions;
+}
+
+export type LaminarOptions = LaminarOptionsHttp | LaminarOptionsHttps;
+
+export interface Laminar<S = http.Server | https.Server> {
+  server: S;
   start: () => Promise<void>;
   stop: () => Promise<void>;
 }
@@ -25,7 +35,7 @@ export interface LaminarResponse<TBody = string | Readable | Buffer | object> {
   body?: TBody;
   status: number;
   cookies?: { [key: string]: string | LaminarCookie };
-  headers: OutgoingHttpHeaders;
+  headers: http.OutgoingHttpHeaders;
 }
 
 export interface LaminarCookie extends CookieSerializeOptions {
@@ -46,7 +56,7 @@ export enum Method {
 export interface Context {
   url: UrlWithParsedQuery;
   method: Method;
-  headers: IncomingHttpHeaders;
+  headers: http.IncomingHttpHeaders;
   query: any;
   body: any;
   cookies?: { [key: string]: string };

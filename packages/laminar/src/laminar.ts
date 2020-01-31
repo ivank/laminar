@@ -1,12 +1,20 @@
-import { createServer, RequestListener } from 'http';
+import * as http from 'http';
+import * as https from 'https';
 import { Readable } from 'stream';
 import { toArray } from './helpers';
 import { HttpError } from './HttpError';
 import { resolveBody, toResponse } from './response';
-import { Context, LaminarOptions, Resolver, Laminar } from './types';
+import {
+  Context,
+  Resolver,
+  Laminar,
+  LaminarOptionsHttp,
+  LaminarOptionsHttps,
+  LaminarOptions,
+} from './types';
 import { toContext } from './context';
 
-export const laminarRequestListener = (resolver: Resolver<Context>): RequestListener => {
+export const laminarRequestListener = (resolver: Resolver<Context>): http.RequestListener => {
   return async (req, res) => {
     try {
       const ctx = await toContext(req);
@@ -37,13 +45,15 @@ export const laminarRequestListener = (resolver: Resolver<Context>): RequestList
   };
 };
 
-export const createLaminar = ({
-  app,
-  port = 3300,
-  hostname = 'localhost',
-  http = {},
-}: LaminarOptions): Laminar => {
-  const server = createServer(http, laminarRequestListener(app));
+export function createLaminar(options: LaminarOptionsHttp): Laminar<http.Server>;
+export function createLaminar(options: LaminarOptionsHttps): Laminar<https.Server>;
+export function createLaminar(options: LaminarOptions): Laminar {
+  const { app, port = 3300, hostname = 'localhost' } = options;
+  const requestListener = laminarRequestListener(app);
+  const server =
+    'https' in options
+      ? https.createServer(options.https, requestListener)
+      : http.createServer(typeof options.http === 'object' ? options.http : {}, requestListener);
 
   return {
     server,
@@ -51,7 +61,7 @@ export const createLaminar = ({
     stop: () =>
       new Promise((resolve, reject) => server.close(err => (err ? reject(err) : resolve()))),
   };
-};
+}
 
 export const describeLaminar = (laminar: Laminar): string => {
   const address = laminar.server.address();

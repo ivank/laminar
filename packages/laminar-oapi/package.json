@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@ovotech/laminar": "^0.4.4",
+    "@ovotech/laminar": "^0.5.0",
     "@types/jest": "^24.9.0",
     "@types/js-yaml": "^3.12.1",
     "@types/node": "^13.1.7",
