@@ -63,7 +63,13 @@ export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> 
  */
 export interface TPetsGetContext extends Context, OapiContext {
     query: {
+        /**
+         * tags to filter by
+         */
         tags?: string[];
+        /**
+         * maximum number of results to return
+         */
         limit?: number;
     };
 }
@@ -80,6 +86,12 @@ export type TPetsPostResponse = (PetCreated | LaminarResponse<PetCreated> | Prom
  * Creates a new pet in the store.  Duplicates are allowed
  */
 export interface TPetsPostContext extends Context, OapiContext {
+    headers: {
+        /**
+         * a trace token to trace posts
+         */
+        "x-trace-token": string;
+    };
     body: NewPet;
 }
 
@@ -90,6 +102,9 @@ export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Pr
  */
 export interface TPetsIdGetContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of pet to fetch
+         */
         id: string;
     };
 }
@@ -101,6 +116,9 @@ export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>)
  */
 export interface TPetsIdDeleteContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of pet to delete
+         */
         id: string;
     };
 }

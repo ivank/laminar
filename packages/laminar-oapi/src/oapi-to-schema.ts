@@ -38,14 +38,21 @@ const toParamLocation = (location: string): string => {
   }
 };
 
-export const toParameterSchema = (param: ResolvedParameterObject): SchemaObject => ({
-  properties: {
-    [toParamLocation(param.in)]: {
-      ...(param.required ? { required: [param.name] } : {}),
-      ...(param.schema ? { properties: { [param.name]: param.schema } } : {}),
+const toParamName = (location: string, name: string): string =>
+  location === 'header' ? name.toLowerCase() : name;
+
+export const toParameterSchema = (param: ResolvedParameterObject): SchemaObject => {
+  const name = toParamName(param.in, param.name);
+
+  return {
+    properties: {
+      [toParamLocation(param.in)]: {
+        ...(param.required ? { required: [name] } : {}),
+        ...(param.schema ? { properties: { [name]: param.schema } } : {}),
+      },
     },
-  },
-});
+  };
+};
 
 export const toRequestBodySchema = (requestBody: ResolvedRequestBodyObject): {} => ({
   ...(requestBody.required ? { required: ['body'] } : {}),

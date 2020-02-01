@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-oapi-cli",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar-oapi",
@@ -8,8 +8,8 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.5.0",
-    "@ovotech/laminar-oapi": "^0.4.0",
+    "@ovotech/laminar": "^0.5.1",
+    "@ovotech/laminar-oapi": "^0.4.1",
     "@types/jest": "^24.9.0",
     "@types/js-yaml": "^3.12.1",
     "@types/node": "^13.1.7",

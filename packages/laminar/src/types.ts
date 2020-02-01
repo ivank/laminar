@@ -56,7 +56,7 @@ export enum Method {
 export interface Context {
   url: UrlWithParsedQuery;
   method: Method;
-  headers: http.IncomingHttpHeaders;
+  headers: any;
   query: any;
   body: any;
   cookies?: { [key: string]: string };

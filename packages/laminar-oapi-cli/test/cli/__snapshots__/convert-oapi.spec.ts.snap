@@ -140,6 +140,9 @@ export type TApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpRespo
  */
 export interface TApiV2AccountsAccountIdBalanceGetContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of the account to return
+         */
         accountId: string;
     };
 }
@@ -188,6 +191,9 @@ export type TApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistory
  */
 export interface TApiV2AccountsAccountIdTransactionsGetContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of the account to return
+         */
         accountId: string;
     };
     headers: {
@@ -197,8 +203,17 @@ export interface TApiV2AccountsAccountIdTransactionsGetContext extends Context, 
         session?: string;
     };
     query: {
+        /**
+         * Start date for the search period (inclusive)
+         */
         fromDate: string;
+        /**
+         * End date for the search period (inclusive)
+         */
         toDate: string;
+        /**
+         * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
+         */
         transactionType?: (\\"TopUp\\" | \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\" | \\"BalanceAdjustment\\")[];
     };
 }
@@ -228,6 +243,9 @@ export type TApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHt
  */
 export interface TApiV2AccountsAccountIdAdjustbalancePostContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of the account
+         */
         accountId: string;
     };
     body: AdjustBalanceRequest;
@@ -241,6 +259,9 @@ export type TApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpRespo
  */
 export interface TApiV3AccountsAccountIdBalanceGetContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of the account to return
+         */
         accountId: string;
     };
 }
@@ -290,11 +311,23 @@ export type TApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistory
  */
 export interface TApiV3AccountsAccountIdTransactionsGetContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of the account to return
+         */
         accountId: string;
     };
     query: {
+        /**
+         * Start date for the search period (inclusive)
+         */
         fromDate: string;
+        /**
+         * End date for the search period (inclusive)
+         */
         toDate: string;
+        /**
+         * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
+         */
         transactionType?: (\\"TopUp\\" | \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\" | \\"BalanceAdjustment\\")[];
     };
 }
@@ -307,6 +340,9 @@ export type TApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHt
  */
 export interface TApiV3AccountsAccountIdAdjustbalancePostContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of the account
+         */
         accountId: string;
     };
     body: AdjustBalanceRequest;
@@ -537,19 +573,56 @@ export type TV2NameDeleteResponse = (Empty | LaminarResponse<Empty> | Promise<Em
  */
 export interface TV2NameDeleteContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * Required. The task name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+         */
         name: string;
     };
 }
@@ -845,20 +918,71 @@ export type TV2NameGetResponse = (Task | LaminarResponse<Task> | Promise<Task> |
  */
 export interface TV2NameGetContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * The response_view specifies which subset of the Task will be
+         * returned.
+         *
+         * By default response_view is BASIC; not all
+         * information is retrieved by default because some data, such as
+         * payloads, might be desirable to return only when needed because
+         * of its large size or because of the sensitivity of data that it
+         * contains.
+         *
+         * Authorization for FULL requires
+         * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+         * permission on the Task resource.
+         */
         responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
     };
     path: {
+        /**
+         * Required. The task name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+         */
         name: string;
     };
 }
@@ -1116,20 +1240,79 @@ export type TV2NamePatchResponse = (Queue | LaminarResponse<Queue> | Promise<Que
  */
 export interface TV2NamePatchContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * A mask used to specify which fields of the queue are being updated.
+         *
+         * If empty, then all fields will be updated.
+         */
         updateMask?: string;
     };
     path: {
+        /**
+         * Caller-specified and required in CreateQueue,
+         * after which it becomes output only.
+         *
+         * The queue name.
+         *
+         * The queue name must have the following format:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+         *
+         * * \`PROJECT_ID\` can contain letters ([A-Za-z]), numbers ([0-9]),
+         *    hyphens (-), colons (:), or periods (.).
+         *    For more information, see
+         *    [Identifying
+         *    projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+         * * \`LOCATION_ID\` is the canonical ID for the queue's location.
+         *    The list of available locations can be obtained by calling
+         *    ListLocations.
+         *    For more information, see https://cloud.google.com/about/locations/.
+         * * \`QUEUE_ID\` can contain letters ([A-Za-z]), numbers ([0-9]), or
+         *   hyphens (-). The maximum length is 100 characters.
+         */
         name: string;
     };
     body?: Queue;
@@ -1183,22 +1366,67 @@ export type TV2NameLocationsGetResponse = (ListLocationsResponse | LaminarRespon
  */
 export interface TV2NameLocationsGetContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * The standard list filter.
+         */
         filter?: string;
+        /**
+         * The standard list page size.
+         */
         pageSize?: number;
+        /**
+         * The standard list page token.
+         */
         pageToken?: string;
     };
     path: {
+        /**
+         * The resource that owns the locations collection, if applicable.
+         */
         name: string;
     };
 }
@@ -1220,19 +1448,56 @@ export type TV2NamepausePostResponse = (Queue | LaminarResponse<Queue> | Promise
  */
 export interface TV2NamepausePostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID\`
+         */
         name: string;
     };
     body?: PauseQueueRequest;
@@ -1254,19 +1519,56 @@ export type TV2NamepurgePostResponse = (Queue | LaminarResponse<Queue> | Promise
  */
 export interface TV2NamepurgePostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID\`
+         */
         name: string;
     };
     body?: PurgeQueueRequest;
@@ -1295,19 +1597,56 @@ export type TV2NameresumePostResponse = (Queue | LaminarResponse<Queue> | Promis
  */
 export interface TV2NameresumePostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID\`
+         */
         name: string;
     };
     body?: ResumeQueueRequest;
@@ -1362,19 +1701,56 @@ export type TV2NamerunPostResponse = (Task | LaminarResponse<Task> | Promise<Tas
  */
 export interface TV2NamerunPostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * Required. The task name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+         */
         name: string;
     };
     body?: RunTaskRequest;
@@ -1409,22 +1785,91 @@ export type TV2ParentQueuesGetResponse = (ListQueuesResponse | LaminarResponse<L
  */
 export interface TV2ParentQueuesGetContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * \`filter\` can be used to specify a subset of queues. Any Queue
+         * field can be used as a filter and several operators as supported.
+         * For example: \`<=, <, >=, >, !=, =, :\`. The filter syntax is the same as
+         * described in
+         * [Stackdriver's Advanced Logs
+         * Filters](https://cloud.google.com/logging/docs/view/advanced_filters).
+         *
+         * Sample filter \\"state: PAUSED\\".
+         *
+         * Note that using filters might cause fewer queues than the
+         * requested page_size to be returned.
+         */
         filter?: string;
+        /**
+         * Requested page size.
+         *
+         * The maximum page size is 9800. If unspecified, the page size will
+         * be the maximum. Fewer queues than requested might be returned,
+         * even if more queues exist; use the
+         * next_page_token in the
+         * response to determine if more queues exist.
+         */
         pageSize?: number;
+        /**
+         * A token identifying the page of results to return.
+         *
+         * To request the first page results, page_token must be empty. To
+         * request the next page of results, page_token must be the value of
+         * next_page_token returned
+         * from the previous call to ListQueues
+         * method. It is an error to switch the value of the
+         * filter while iterating through pages.
+         */
         pageToken?: string;
     };
     path: {
+        /**
+         * Required. The location name.
+         * For example: \`projects/PROJECT_ID/locations/LOCATION_ID\`
+         */
         parent: string;
     };
 }
@@ -1447,19 +1892,60 @@ export type TV2ParentQueuesPostResponse = (Queue | LaminarResponse<Queue> | Prom
  */
 export interface TV2ParentQueuesPostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * Required. The location name in which the queue will be created.
+         * For example: \`projects/PROJECT_ID/locations/LOCATION_ID\`
+         *
+         * The list of allowed locations can be obtained by calling Cloud
+         * Tasks' implementation of
+         * ListLocations.
+         */
         parent: string;
     };
     body?: Queue;
@@ -1498,22 +1984,94 @@ export type TV2ParentTasksGetResponse = (ListTasksResponse | LaminarResponse<Lis
  */
 export interface TV2ParentTasksGetContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * Maximum page size.
+         *
+         * Fewer tasks than requested might be returned, even if more tasks exist; use
+         * next_page_token in the response to
+         * determine if more tasks exist.
+         *
+         * The maximum page size is 1000. If unspecified, the page size will be the
+         * maximum.
+         */
         pageSize?: number;
+        /**
+         * A token identifying the page of results to return.
+         *
+         * To request the first page results, page_token must be empty. To
+         * request the next page of results, page_token must be the value of
+         * next_page_token returned
+         * from the previous call to ListTasks
+         * method.
+         *
+         * The page token is valid for only 2 hours.
+         */
         pageToken?: string;
+        /**
+         * The response_view specifies which subset of the Task will be
+         * returned.
+         *
+         * By default response_view is BASIC; not all
+         * information is retrieved by default because some data, such as
+         * payloads, might be desirable to return only when needed because
+         * of its large size or because of the sensitivity of data that it
+         * contains.
+         *
+         * Authorization for FULL requires
+         * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+         * permission on the Task resource.
+         */
         responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
     };
     path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+         */
         parent: string;
     };
 }
@@ -1549,19 +2107,58 @@ export type TV2ParentTasksPostResponse = (Task | LaminarResponse<Task> | Promise
  */
 export interface TV2ParentTasksPostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+         *
+         * The queue must already exist.
+         */
         parent: string;
     };
     body?: CreateTaskRequest;
@@ -1689,19 +2286,56 @@ export type TV2ResourcegetIamPolicyPostResponse = (Policy | LaminarResponse<Poli
  */
 export interface TV2ResourcegetIamPolicyPostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * REQUIRED: The resource for which the policy is being requested.
+         * See the operation documentation for the appropriate value for this field.
+         */
         resource: string;
     };
     body?: GetIamPolicyRequest;
@@ -1729,19 +2363,56 @@ export type TV2ResourcesetIamPolicyPostResponse = (Policy | LaminarResponse<Poli
  */
 export interface TV2ResourcesetIamPolicyPostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * REQUIRED: The resource for which the policy is being specified.
+         * See the operation documentation for the appropriate value for this field.
+         */
         resource: string;
     };
     body?: SetIamPolicyRequest;
@@ -1780,19 +2451,56 @@ export type TV2ResourcetestIamPermissionsPostResponse = (TestIamPermissionsRespo
  */
 export interface TV2ResourcetestIamPermissionsPostContext extends Context, OapiContext {
     query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
         key?: string;
+        /**
+         * OAuth access token.
+         */
         access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
         upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
         prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
         quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
         uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
         fields?: string;
+        /**
+         * V1 error format.
+         */
         \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
         oauth_token?: string;
+        /**
+         * JSONP
+         */
         callback?: string;
+        /**
+         * Data format for response.
+         */
         alt?: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
+        /**
+         * REQUIRED: The resource for which the policy detail is being requested.
+         * See the operation documentation for the appropriate value for this field.
+         */
         resource: string;
     };
     body?: TestIamPermissionsRequest;
@@ -1993,6 +2701,9 @@ export type TPetsGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | P
  */
 export interface TPetsGetContext extends Context, OapiContext {
     query: {
+        /**
+         * How many items to return at one time (max 100)
+         */
         limit?: number;
     };
 }
@@ -2012,6 +2723,9 @@ export type TPetsPetIdGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets
  */
 export interface TPetsPetIdGetContext extends Context, OapiContext {
     path: {
+        /**
+         * The id of the pet to retrieve
+         */
         petId: string;
     };
 }"
@@ -2079,7 +2793,13 @@ export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> 
  */
 export interface TPetsGetContext extends Context, OapiContext {
     query: {
+        /**
+         * tags to filter by
+         */
         tags?: string[];
+        /**
+         * maximum number of results to return
+         */
         limit?: number;
     };
 }
@@ -2100,6 +2820,9 @@ export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Pr
  */
 export interface TPetsIdGetContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of pet to fetch
+         */
         id: number;
     };
 }
@@ -2111,6 +2834,9 @@ export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>)
  */
 export interface TPetsIdDeleteContext extends Context, OapiContext {
     path: {
+        /**
+         * ID of pet to delete
+         */
         id: number;
     };
 }"
@@ -2238,7 +2964,13 @@ export type TDatasetVersionFieldsGetResponse = (string | LaminarResponse<string>
  */
 export interface TDatasetVersionFieldsGetContext extends Context, OapiContext {
     path: {
+        /**
+         * Name of the dataset.
+         */
         dataset: string;
+        /**
+         * Version of the dataset.
+         */
         version: string;
     };
 }
@@ -2251,7 +2983,13 @@ export type TDatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]>
  */
 export interface TDatasetVersionRecordsPostContext extends Context, OapiContext {
     path: {
+        /**
+         * Version of the dataset.
+         */
         version: string;
+        /**
+         * Name of the dataset. In this case, the default value is oa_citations
+         */
         dataset: string;
     };
     body?: any;

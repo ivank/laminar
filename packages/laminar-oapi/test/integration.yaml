@@ -60,6 +60,14 @@ paths:
     post:
       description: Creates a new pet in the store.  Duplicates are allowed
       operationId: addPet
+      parameters:
+        - name: X-Trace-Token
+          in: header
+          description: a trace token to trace posts
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         description: Pet to add to the store
         required: true

@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-oapi",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A middleware for @ovotech/laminar-oapi to handle open-api",
@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@ovotech/laminar": "^0.5.0",
+    "@ovotech/laminar": "^0.5.1",
     "@types/jest": "^24.9.0",
     "@types/js-yaml": "^3.12.1",
     "@types/node": "^13.1.7",

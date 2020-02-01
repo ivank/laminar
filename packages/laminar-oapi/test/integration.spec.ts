@@ -37,7 +37,10 @@ describe('Integration', () => {
   afterEach(() => server.stop());
 
   it('Should process response', async () => {
-    const db: Pet[] = [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }];
+    const db: Pet[] = [
+      { id: 111, name: 'Catty', tag: 'kitten' },
+      { id: 222, name: 'Doggy' },
+    ];
     const log = jest.fn();
 
     const config: OapiConfig<LoggerContext & AuthInfo> = {
@@ -68,12 +71,12 @@ describe('Integration', () => {
             logger('Get all');
             return Promise.resolve(db);
           },
-          post: ({ body, authInfo, logger }) => {
+          post: ({ body, authInfo, logger, headers }) => {
             if (!isBodyNewPet(body)) {
               throw new HttpError(400, { message: 'Wrong body' });
             }
             const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };
-            logger(`new pet ${pet.name}`);
+            logger(`new pet ${pet.name}, trace token: ${headers['x-trace-token']}`);
 
             db.push(pet);
             return { pet, user: authInfo && authInfo.user };
@@ -128,7 +131,10 @@ describe('Integration', () => {
 
     await expect(api.get('/pets')).resolves.toMatchObject({
       status: 200,
-      data: [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 222, name: 'Doggy' }],
+      data: [
+        { id: 111, name: 'Catty', tag: 'kitten' },
+        { id: 222, name: 'Doggy' },
+      ],
     });
 
     await expect(api.post('/pets', { other: 'New Puppy' })).rejects.toHaveProperty(
@@ -137,6 +143,7 @@ describe('Integration', () => {
         status: 400,
         data: {
           errors: [
+            '[context.headers] is missing [x-trace-token] keys',
             '[context.body] is missing [name] keys',
             '[context.headers] is missing [authorization] keys',
           ],
@@ -146,7 +153,32 @@ describe('Integration', () => {
     );
 
     await expect(
-      api.post('/pets', { name: 'New Puppy' }, { headers: { Authorization: 'Bearer 000' } }),
+      api.post('/pets', { name: 'New Puppy' }, { headers: { 'X-Trace-Token': '123' } }),
+    ).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 400,
+        data: {
+          errors: [
+            '[context.headers.x-trace-token] should match uuid format',
+            '[context.headers] is missing [authorization] keys',
+          ],
+          message: 'Request Validation Error',
+        },
+      }),
+    );
+
+    await expect(
+      api.post(
+        '/pets',
+        { name: 'New Puppy' },
+        {
+          headers: {
+            Authorization: 'Bearer 000',
+            'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+          },
+        },
+      ),
     ).rejects.toHaveProperty(
       'response',
       expect.objectContaining({
@@ -156,7 +188,16 @@ describe('Integration', () => {
     );
 
     await expect(
-      api.post('/pets', { other: 'New Puppy' }, { headers: { Authorization: 'Bearer 123' } }),
+      api.post(
+        '/pets',
+        { other: 'New Puppy' },
+        {
+          headers: {
+            Authorization: 'Bearer 123',
+            'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+          },
+        },
+      ),
     ).rejects.toHaveProperty(
       'response',
       expect.objectContaining({
@@ -169,7 +210,16 @@ describe('Integration', () => {
     );
 
     await expect(
-      api.post('/pets', { name: 'New Puppy' }, { headers: { Authorization: 'Bearer 123' } }),
+      api.post(
+        '/pets',
+        { name: 'New Puppy' },
+        {
+          headers: {
+            Authorization: 'Bearer 123',
+            'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+          },
+        },
+      ),
     ).resolves.toMatchObject({
       status: 200,
       data: { pet: { id: 223, name: 'New Puppy' }, user: 'dinkey' },
@@ -262,12 +312,18 @@ describe('Integration', () => {
 
     await expect(api.get('/pets')).resolves.toMatchObject({
       status: 200,
-      data: [{ id: 111, name: 'Catty', tag: 'kitten' }, { id: 223, name: 'New Puppy' }],
+      data: [
+        { id: 111, name: 'Catty', tag: 'kitten' },
+        { id: 223, name: 'New Puppy' },
+      ],
     });
 
     expect(log).toHaveBeenNthCalledWith(1, 'Get all');
     expect(log).toHaveBeenNthCalledWith(2, 'Auth Successful');
-    expect(log).toHaveBeenNthCalledWith(3, 'new pet New Puppy');
+    expect(log).toHaveBeenNthCalledWith(
+      3,
+      'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
+    );
     expect(log).toHaveBeenNthCalledWith(4, 'Get all');
     expect(log).toHaveBeenNthCalledWith(5, 'Get all');
   });

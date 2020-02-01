@@ -64,6 +64,9 @@ const toParamLocation = (
   }
 };
 
+const toParamName = (location: 'header' | 'cookie' | 'path' | 'query', name: string): string =>
+  location === 'header' ? name.toLowerCase() : name;
+
 const convertParameters = (
   context: AstContext,
   parameters: (ParameterObject | ReferenceObject)[],
@@ -81,7 +84,12 @@ const convertParameters = (
           ...node.in,
           [toParamLocation(param.in)]: [
             ...params,
-            Type.Prop({ name: param.name, type: paramNode.type, isOptional: !param.required }),
+            Type.Prop({
+              name: toParamName(param.in, param.name),
+              jsDoc: documentation(param.description),
+              type: paramNode.type,
+              isOptional: !param.required,
+            }),
           ],
         },
       };
@@ -198,8 +206,8 @@ export const convertOapi = (
           const astParams =
             operation.parameters || parameters
               ? convertParameters(methodContext, [
-                  ...(parameters ? parameters : []),
-                  ...(operation.parameters ? operation.parameters : []),
+                  ...(parameters ?? []),
+                  ...(operation.parameters ?? []),
                 ])
               : document(methodContext, Type.TypeLiteral());
 
