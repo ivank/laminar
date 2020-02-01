@@ -20,7 +20,7 @@ describe('createResponseTime middleware', () => {
 
     const result = await api.get('/test');
     expect(result.status).toBe(200);
-    expect(Number(result.headers['x-response-time'])).toBeGreaterThan(15);
+    expect(Number(result.headers['x-response-time'])).toBeGreaterThan(14);
     expect(Number(result.headers['x-response-time'])).toBeLessThan(54);
   });
 
