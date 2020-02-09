@@ -8,6 +8,7 @@ describe('TS Compose', () => {
     ['boolean', Type.Bool],
     ['void', Type.Void],
     ['null', Type.Null],
+    ['never', Type.Never],
     ['object', Type.Obj],
     ['string', Type.Str],
     ['number', Type.Num],

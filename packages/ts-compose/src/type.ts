@@ -29,6 +29,8 @@ export const Void = ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
 
 export const Unknown = ts.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword);
 
+export const Never = ts.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword);
+
 export const TypeLiteral = ({
   props = [],
   index,
