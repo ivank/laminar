@@ -37,29 +37,38 @@ export const Import = ({
     ts.createStringLiteral(module),
   );
 
-export const NamespaceBlock = ({
-  name,
-  block,
-  isExport,
-  isDefault,
-  jsDoc,
+export type LiteralValue = ObjectLiteralValue | string | number | boolean | null;
+
+export interface ObjectLiteralValue {
+  [key: string]: LiteralValue;
+}
+
+export const Literal = ({
+  value,
+  multiline,
 }: {
-  name: string;
-  block: ts.Statement[];
-  isExport?: boolean;
-  isDefault?: boolean;
-  jsDoc?: string;
-}): ts.ModuleDeclaration =>
-  withJSDoc(
-    ts.createModuleDeclaration(
-      [],
-      Export(isExport, isDefault),
-      ts.createIdentifier(name),
-      ts.createModuleBlock(block),
-      ts.NodeFlags.Namespace,
-    ),
-    jsDoc,
-  );
+  value: LiteralValue;
+  multiline?: boolean;
+}):
+  | ts.ObjectLiteralExpression
+  | ts.StringLiteral
+  | ts.BooleanLiteral
+  | ts.NullLiteral
+  | ts.NumericLiteral
+  | ts.PrimaryExpression => {
+  if (value === null) {
+    return ts.createNull();
+  } else if (typeof value === 'object') {
+    return ts.createObjectLiteral(
+      Object.keys(value).map(key =>
+        ts.createPropertyAssignment(key, Literal({ value: value[key], multiline })),
+      ),
+      multiline,
+    );
+  } else {
+    return ts.createLiteral(value);
+  }
+};
 
 export const Const = ({
   name,
@@ -67,11 +76,13 @@ export const Const = ({
   value,
   isExport,
   isDefault,
+  multiline,
   jsDoc,
 }: {
   name: string | ts.Identifier;
   type?: ts.TypeNode;
-  value?: string | number | boolean;
+  multiline?: boolean;
+  value?: LiteralValue;
   isExport?: boolean;
   isDefault?: boolean;
   jsDoc?: string;
@@ -84,7 +95,7 @@ export const Const = ({
           ts.createVariableDeclaration(
             name,
             type,
-            value === undefined ? undefined : ts.createLiteral(value),
+            value === undefined ? undefined : Literal({ value, multiline }),
           ),
         ],
         ts.NodeFlags.Const,

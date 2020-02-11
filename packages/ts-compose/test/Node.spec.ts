@@ -23,23 +23,20 @@ describe('TS Compose', () => {
         module: 'axios',
       }),
     ],
-    ['namespace a { }', Node.NamespaceBlock({ name: 'a', block: [] })],
-    [
-      'export default namespace a { }',
-      Node.NamespaceBlock({ isExport: true, isDefault: true, name: 'a', block: [] }),
-    ],
-    [
-      'export namespace test {\n    const a = 10;\n    const b = true;\n}',
-      Node.NamespaceBlock({
-        name: 'test',
-        isExport: true,
-        block: [Node.Const({ name: 'a', value: 10 }), Node.Const({ name: 'b', value: true })],
-      }),
-    ],
     ['const a;', Node.Const({ name: 'a' })],
     ['const s = "10";', Node.Const({ name: 's', value: '10' })],
     ['const b = true;', Node.Const({ name: 'b', value: true })],
+    ['const n = null;', Node.Const({ name: 'n', value: null })],
     ['const i = 123;', Node.Const({ name: 'i', value: 123 })],
+    ['const o = { test: 10 };', Node.Const({ name: 'o', value: { test: 10 } })],
+    [
+      'const o2 = {\n    test: 10\n};',
+      Node.Const({ name: 'o2', value: { test: 10 }, multiline: true }),
+    ],
+    [
+      'const o3 = { test: 10, other: { m: { t: true }, k: "123" } };',
+      Node.Const({ name: 'o3', value: { test: 10, other: { m: { t: true }, k: '123' } } }),
+    ],
     ['export const b = false;', Node.Const({ name: 'b', isExport: true, value: false })],
     [
       'export default const b = true;',

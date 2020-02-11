@@ -10,7 +10,8 @@ interface Orange {
 
 type test = string;
 
-namespace other {
-    const a = \\"test1\\";
-}"
+const a = {
+    test1: \\"other\\",
+    k: 12
+};"
 `;

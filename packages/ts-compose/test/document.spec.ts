@@ -15,7 +15,7 @@ describe('Document', () => {
     const context = withImports(
       withIdentifier(
         withIdentifier(initial, Type.Alias({ name: 'test', type: Type.Str })),
-        Node.NamespaceBlock({ name: 'other', block: [Node.Const({ name: 'a', value: 'test1' })] }),
+        Node.Const({ name: 'a', value: { test1: 'other', k: 12 }, multiline: true }),
       ),
       'utils',
       ['inspect', 'tmp'],

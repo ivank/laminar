@@ -3,7 +3,7 @@ import { Import } from './node';
 import { printNode } from './print';
 
 export interface Identifiers {
-  [key: string]: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ModuleDeclaration;
+  [key: string]: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.VariableStatement;
 }
 
 export interface DocumentContext {
@@ -52,10 +52,15 @@ export const mapWithContext = <
 
 export const withIdentifier = <TContext extends DocumentContext = DocumentContext>(
   context: TContext,
-  identifier: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ModuleDeclaration,
+  identifier: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.VariableStatement,
 ): TContext => ({
   ...context,
-  identifiers: { ...context.identifiers, [identifier.name.text]: identifier },
+  identifiers: {
+    ...context.identifiers,
+    ['declarationList' in identifier
+      ? (identifier.declarationList.declarations[0].name as ts.Identifier).text
+      : identifier.name.text]: identifier,
+  },
 });
 
 export const withImports = <TContext extends DocumentContext = DocumentContext>(
