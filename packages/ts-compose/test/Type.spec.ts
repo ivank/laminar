@@ -62,6 +62,10 @@ describe('TS Compose', () => {
       Type.Alias({ name: 'mytype', type: Type.Str, isExport: true }),
     ],
     [
+      'export default type mytype = string;',
+      Type.Alias({ name: 'mytype', type: Type.Str, isExport: true, isDefault: true }),
+    ],
+    [
       'type mytype<Best = any> = number;',
       Type.Alias({
         name: 'mytype',
@@ -110,6 +114,15 @@ describe('TS Compose', () => {
             ext: Type.Union([Type.Ref('Context'), Type.Ref('RouteContext')]),
           }),
         ],
+      }),
+    ],
+    [
+      'export default interface test {\n    name: string;\n}',
+      Type.Interface({
+        name: 'test',
+        isExport: true,
+        isDefault: true,
+        props: [Type.Prop({ name: 'name', type: Type.Str })],
       }),
     ],
     ['interface test {\n}', Type.Interface({ name: 'test' })],

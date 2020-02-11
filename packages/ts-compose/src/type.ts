@@ -76,8 +76,13 @@ export const Readonly = (isReadonly?: boolean): ts.Token<ts.SyntaxKind.ReadonlyK
 export const Private = (isPrivate?: boolean): ts.Token<ts.SyntaxKind.PrivateKeyword>[] =>
   isPrivate ? [ts.createModifier(ts.SyntaxKind.PrivateKeyword)] : [];
 
-export const Export = (isExport?: boolean): ts.Token<ts.SyntaxKind.ExportKeyword>[] =>
-  isExport ? [ts.createModifier(ts.SyntaxKind.ExportKeyword)] : [];
+export const Export = (
+  isExport?: boolean,
+  isDefault?: boolean,
+): ts.Token<ts.SyntaxKind.ExportKeyword | ts.SyntaxKind.DefaultKeyword>[] => [
+  ...(isExport ? [ts.createModifier(ts.SyntaxKind.ExportKeyword)] : []),
+  ...(isDefault ? [ts.createModifier(ts.SyntaxKind.DefaultKeyword)] : []),
+];
 
 export const Protected = (isProtected?: boolean): ts.Token<ts.SyntaxKind.ProtectedKeyword>[] =>
   isProtected ? [ts.createModifier(ts.SyntaxKind.ProtectedKeyword)] : [];
@@ -185,16 +190,18 @@ export const Alias = ({
   type,
   typeArgs,
   isExport,
+  isDefault,
   jsDoc,
 }: {
   name: string | ts.Identifier;
   type: ts.TypeNode;
   isExport?: boolean;
+  isDefault?: boolean;
   typeArgs?: ts.TypeParameterDeclaration[];
   jsDoc?: string;
 }): ts.TypeAliasDeclaration =>
   withJSDoc(
-    ts.createTypeAliasDeclaration(undefined, Export(isExport), name, typeArgs, type),
+    ts.createTypeAliasDeclaration(undefined, Export(isExport, isDefault), name, typeArgs, type),
     jsDoc,
   );
 
@@ -210,6 +217,7 @@ export const Interface = ({
   typeArgs,
   ext,
   isExport,
+  isDefault,
   jsDoc,
 }: {
   name: string | ts.Identifier;
@@ -218,12 +226,13 @@ export const Interface = ({
   typeArgs?: ts.TypeParameterDeclaration[];
   ext?: InterfaceExtend[];
   isExport?: boolean;
+  isDefault?: boolean;
   jsDoc?: string;
 }): ts.InterfaceDeclaration =>
   withJSDoc(
     ts.createInterfaceDeclaration(
       undefined,
-      Export(isExport),
+      Export(isExport, isDefault),
       name,
       typeArgs,
       ext
