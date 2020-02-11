@@ -8,5 +8,9 @@ interface Orange {
     other: test;
 }
 
-type test = string;"
+type test = string;
+
+namespace other {
+    const a = \\"test1\\";
+}"
 `;

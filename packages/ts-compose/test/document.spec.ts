@@ -3,6 +3,7 @@ import {
   DocumentContext,
   printDocument,
   Type,
+  Node,
   withIdentifier,
   withImports,
 } from '../src';
@@ -12,7 +13,10 @@ describe('Document', () => {
     const initial: DocumentContext = { imports: {}, identifiers: {} };
 
     const context = withImports(
-      withIdentifier(initial, Type.Alias({ name: 'test', type: Type.Str })),
+      withIdentifier(
+        withIdentifier(initial, Type.Alias({ name: 'test', type: Type.Str })),
+        Node.NamespaceBlock({ name: 'other', block: [Node.Const({ name: 'a', value: 'test1' })] }),
+      ),
       'utils',
       ['inspect', 'tmp'],
     );
