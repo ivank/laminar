@@ -12,11 +12,15 @@ describe('Document', () => {
   it('Test print document with context', () => {
     const initial: DocumentContext = { imports: {}, identifiers: {} };
 
+    const test = Type.Alias({ name: 'test', type: Type.Str });
+    const a = Node.Const({ name: 'a', value: { test1: 'other', k: 12 }, multiline: true });
+    const b = Node.Enum({
+      name: 'b',
+      members: [Node.EnumMember({ name: 'v1' }), Node.EnumMember({ name: 'v2' })],
+    });
+
     const context = withImports(
-      withIdentifier(
-        withIdentifier(initial, Type.Alias({ name: 'test', type: Type.Str })),
-        Node.Const({ name: 'a', value: { test1: 'other', k: 12 }, multiline: true }),
-      ),
+      withIdentifier(withIdentifier(withIdentifier(initial, test), a), b),
       'utils',
       ['inspect', 'tmp'],
     );

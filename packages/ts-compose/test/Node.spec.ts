@@ -23,6 +23,27 @@ describe('TS Compose', () => {
         module: 'axios',
       }),
     ],
+    ['enum a {\n}', Node.Enum({ name: 'a', members: [] })],
+    [
+      'export enum b {\n    Big,\n    Small\n}',
+      Node.Enum({
+        name: 'b',
+        isExport: true,
+        members: [Node.EnumMember({ name: 'Big' }), Node.EnumMember({ name: 'Small' })],
+      }),
+    ],
+    [
+      'export default enum b {\n    Big = 1,\n    Small = "10"\n}',
+      Node.Enum({
+        name: 'b',
+        isExport: true,
+        isDefault: true,
+        members: [
+          Node.EnumMember({ name: 'Big', value: 1 }),
+          Node.EnumMember({ name: 'Small', value: '10' }),
+        ],
+      }),
+    ],
     ['const a;', Node.Const({ name: 'a' })],
     ['const s = "10";', Node.Const({ name: 's', value: '10' })],
     ['const b = true;', Node.Const({ name: 'b', value: true })],

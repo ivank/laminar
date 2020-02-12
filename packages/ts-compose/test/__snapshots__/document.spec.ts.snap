@@ -13,5 +13,10 @@ type test = string;
 const a = {
     test1: \\"other\\",
     k: 12
-};"
+};
+
+enum b {
+    v1,
+    v2
+}"
 `;

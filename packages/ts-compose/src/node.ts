@@ -70,6 +70,29 @@ export const Literal = ({
   }
 };
 
+export const EnumMember = ({
+  name,
+  value,
+}: {
+  name: string | ts.Identifier;
+  value?: string | number;
+}): ts.EnumMember => ts.createEnumMember(name, value ? ts.createLiteral(value) : undefined);
+
+export const Enum = ({
+  name,
+  members,
+  isExport,
+  isDefault,
+  jsDoc,
+}: {
+  name: string | ts.Identifier;
+  members: ts.EnumMember[];
+  isExport?: boolean;
+  isDefault?: boolean;
+  jsDoc?: string;
+}): ts.EnumDeclaration =>
+  withJSDoc(ts.createEnumDeclaration([], Export(isExport, isDefault), name, members), jsDoc);
+
 export const Const = ({
   name,
   type,
