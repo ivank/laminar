@@ -133,14 +133,23 @@ const convertResponse = (
             Type.Ref('Promise', [Type.Ref('LaminarResponse', [node.type])]),
           ]);
 
-    return document(withImports(node.context, '@ovotech/laminar', ['LaminarResponse']), nodeType);
+    return document(
+      withImports(node.context, {
+        module: '@ovotech/laminar',
+        named: [{ name: 'LaminarResponse' }],
+      }),
+      nodeType,
+    );
   } else {
     const nodeType = Type.Union([
       Type.Ref('LaminarResponse'),
       Type.Ref('Promise', [Type.Ref('LaminarResponse')]),
     ]);
 
-    return document(withImports(context, '@ovotech/laminar', ['LaminarResponse']), nodeType);
+    return document(
+      withImports(context, { module: '@ovotech/laminar', named: [{ name: 'LaminarResponse' }] }),
+      nodeType,
+    );
   }
 };
 
@@ -166,7 +175,7 @@ const convertResponses = (
         Type.Ref(name),
       )
     : document(
-        withImports(context, '@ovotech/laminar', ['ResolverResponse']),
+        withImports(context, { module: '@ovotech/laminar', named: [{ name: 'ResolverResponse' }] }),
         Type.Ref('ResolverResponse'),
       );
 };
@@ -268,13 +277,17 @@ export const convertOapi = (
 
   return document(
     withImports(
-      withImports(paths.context, '@ovotech/laminar-oapi', [
-        'OapiContext',
-        'OapiConfig',
-        ...(api.components && api.components.securitySchemes ? ['OapiSecurityResolver'] : []),
-      ]),
-      '@ovotech/laminar',
-      ['Context'],
+      withImports(paths.context, {
+        module: '@ovotech/laminar-oapi',
+        named: [
+          { name: 'OapiContext' },
+          { name: 'OapiConfig' },
+          ...(api.components && api.components.securitySchemes
+            ? [{ name: 'OapiSecurityResolver' }]
+            : []),
+        ],
+      }),
+      { module: '@ovotech/laminar', named: [{ name: 'Context' }] },
     ),
     Type.Interface({
       name: 'Config',

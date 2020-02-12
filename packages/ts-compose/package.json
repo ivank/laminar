@@ -1,7 +1,7 @@
 {
   "name": "@ovotech/ts-compose",
   "description": "An ts compiler api wrapper",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ivan Kerin <ikerin@gmail.com>",

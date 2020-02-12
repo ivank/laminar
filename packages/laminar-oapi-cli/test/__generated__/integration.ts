@@ -1,6 +1,6 @@
 import { Context, LaminarResponse } from "@ovotech/laminar";
 
-import { OapiConfig, OapiContext, OapiSecurityResolver } from "@ovotech/laminar-oapi";
+import { OapiContext, OapiConfig, OapiSecurityResolver } from "@ovotech/laminar-oapi";
 
 export interface Config<C extends {} = {}> extends OapiConfig<C> {
     paths: {

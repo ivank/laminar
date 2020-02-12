@@ -19,11 +19,20 @@ describe('Document', () => {
       members: [Node.EnumMember({ name: 'v1' }), Node.EnumMember({ name: 'v2' })],
     });
 
-    const context = withImports(
-      withIdentifier(withIdentifier(withIdentifier(initial, test), a), b),
-      'utils',
-      ['inspect', 'tmp'],
-    );
+    const c1 = withImports(initial, {
+      module: 'utils',
+      named: [{ name: 'inspect' }, { name: 'tmp' }],
+    });
+
+    const c2 = withImports(c1, {
+      module: 'utils',
+      named: [{ name: 'inspect' }, { name: 'other', as: 'Other' }],
+    });
+
+    const c3 = withImports(c2, { module: 'utils', defaultAs: 'MyTest' });
+    const c4 = withIdentifier(c3, test);
+    const c5 = withIdentifier(c4, a);
+    const context = withIdentifier(c5, b);
 
     const doc = document(
       context,

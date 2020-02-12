@@ -10,9 +10,21 @@ export interface Identifiers {
     | ts.EnumDeclaration;
 }
 
+export interface ImportNamed {
+  name: string | ts.Identifier;
+  as?: string;
+}
+
+export interface ImportNode {
+  module: string;
+  named?: ImportNamed[];
+  defaultAs?: string | ts.Identifier;
+  allAs?: string;
+}
+
 export interface DocumentContext {
   identifiers: Identifiers;
-  imports: { [key: string]: string[] };
+  imports: { [key: string]: ImportNode };
 }
 
 export interface Document<
@@ -71,30 +83,39 @@ export const withIdentifier = <TContext extends DocumentContext = DocumentContex
   },
 });
 
+const mergeImportNamed = (source: ImportNamed[], destin: ImportNamed[]): ImportNamed[] => [
+  ...source.filter(item => !destin.find(destinItem => destinItem.name === item.name)),
+  ...destin,
+];
+
 export const withImports = <TContext extends DocumentContext = DocumentContext>(
   context: TContext,
-  module: string,
-  names: string[],
+  value: ImportNode,
 ): TContext => {
-  const current = context.imports[module] || [];
+  const current = context.imports[value.module];
 
   return {
     ...context,
     imports: {
       ...context.imports,
-      [module]: current.concat(names.filter(item => !current.includes(item))),
+      [value.module]: {
+        ...current,
+        ...value,
+        named:
+          value.named && current?.named
+            ? mergeImportNamed(value.named, current.named)
+            : value.named ?? current?.named,
+      },
     },
   };
 };
 
 export const printDocument = <T extends ts.Node>(doc: Document<T>): string => {
   const identifiers = Object.values(doc.context.identifiers);
-  const imports = Object.entries(doc.context.imports);
+  const imports = Object.values(doc.context.imports);
 
   return [
-    ...imports.map(([module, names]) =>
-      printNode(Import({ named: [...names].sort().map(item => ({ name: item })), module })),
-    ),
+    ...imports.map(item => printNode(Import(item))),
     printNode(doc.type),
     ...identifiers.map(identifier => printNode(identifier)),
   ].join('\n\n');
