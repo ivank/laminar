@@ -18,5 +18,6 @@ const a = {
 enum b {
     v1,
     v2
-}"
+}
+"
 `;
