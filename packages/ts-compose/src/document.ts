@@ -114,9 +114,11 @@ export const printDocument = <T extends ts.Node>(doc: Document<T>): string => {
   const identifiers = Object.values(doc.context.identifiers);
   const imports = Object.values(doc.context.imports);
 
-  return [
-    ...imports.map(item => printNode(Import(item))),
-    printNode(doc.type),
-    ...identifiers.map(identifier => printNode(identifier)),
-  ].join('\n\n');
+  return (
+    [
+      ...imports.map(item => printNode(Import(item))),
+      printNode(doc.type),
+      ...identifiers.map(identifier => printNode(identifier)),
+    ].join('\n\n') + '\n'
+  );
 };

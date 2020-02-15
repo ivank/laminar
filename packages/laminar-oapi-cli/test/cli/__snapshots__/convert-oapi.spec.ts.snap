@@ -30,7 +30,8 @@ export type TV2GetResponse = (LaminarResponse | Promise<LaminarResponse>) | (Lam
  * Show API version details
  */
 export interface TV2GetContext extends Context, OapiContext {
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test balance-service.yaml 1`] = `
@@ -346,7 +347,8 @@ export interface TApiV3AccountsAccountIdAdjustbalancePostContext extends Context
         accountId: string;
     };
     body: AdjustBalanceRequest;
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test cloudtasks.yaml 1`] = `
@@ -2504,7 +2506,8 @@ export interface TV2ResourcetestIamPermissionsPostContext extends Context, OapiC
         resource: string;
     };
     body?: TestIamPermissionsRequest;
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test converter.yaml 1`] = `
@@ -2553,7 +2556,8 @@ export type THtmlPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (
  */
 export interface THtmlPostContext extends Context, OapiContext {
     body: any;
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test link-example.yaml 1`] = `
@@ -2659,7 +2663,8 @@ export interface T20RepositoriesUsernameSlugPullrequestsPidMergePostContext exte
         slug: string;
         pid: string;
     };
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test petstore.yaml 1`] = `
@@ -2728,7 +2733,8 @@ export interface TPetsPetIdGetContext extends Context, OapiContext {
          */
         petId: string;
     };
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test petstore-expanded.yaml 1`] = `
@@ -2839,7 +2845,8 @@ export interface TPetsIdDeleteContext extends Context, OapiContext {
          */
         id: number;
     };
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test statements.yaml 1`] = `
@@ -2896,7 +2903,8 @@ export interface TAccountsAccountIdMetersGetContext extends Context, OapiContext
     path: {
         accountId: string;
     };
-}"
+}
+"
 `;
 
 exports[`Json Schema Ts Test uspto.yaml 1`] = `
@@ -2993,5 +3001,6 @@ export interface TDatasetVersionRecordsPostContext extends Context, OapiContext 
         dataset: string;
     };
     body?: any;
-}"
+}
+"
 `;

@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-oapi-cli",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar-oapi",
@@ -45,7 +45,7 @@
     "@ovotech/laminar": "*"
   },
   "dependencies": {
-    "@ovotech/ts-compose": "^0.8.0",
+    "@ovotech/ts-compose": "^0.8.1",
     "commander": "^4.1.0",
     "openapi-schemas": "^1.0.3",
     "openapi3-ts": "^1.3.0"

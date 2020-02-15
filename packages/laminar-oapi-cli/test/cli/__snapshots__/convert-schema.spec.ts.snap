@@ -9,7 +9,8 @@ Object {
       },
     ],
   },
-  "ts": "(number)[]",
+  "ts": "(number)[]
+",
 }
 `;
 
@@ -18,7 +19,8 @@ Object {
   "schema": Object {
     "additionalItems": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -32,7 +34,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "(any | number)[]",
+  "ts": "(any | number)[]
+",
 }
 `;
 
@@ -46,7 +49,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "[any, any, any]",
+  "ts": "[any, any, any]
+",
 }
 `;
 
@@ -56,7 +60,8 @@ Object {
     "additionalItems": false,
     "items": Object {},
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -75,7 +80,8 @@ Object {
     foo?: any;
     bar?: any;
     [key: string]: boolean;
-}",
+}
+",
 }
 `;
 
@@ -91,7 +97,8 @@ Object {
     foo?: any;
     bar?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -110,7 +117,8 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-}",
+}
+",
 }
 `;
 
@@ -121,7 +129,8 @@ Object {
       "type": "boolean",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -142,7 +151,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -154,7 +164,8 @@ Object {
       "^á": Object {},
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -190,7 +201,8 @@ Object {
 } & {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -206,7 +218,8 @@ Object {
       },
     ],
   },
-  "ts": "number & number",
+  "ts": "number & number
+",
 }
 `;
 
@@ -247,7 +260,8 @@ Object {
   "ts": "{
     bar: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -258,7 +272,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -272,7 +287,8 @@ Object {
       },
     ],
   },
-  "ts": "any & number",
+  "ts": "any & number
+",
 }
 `;
 
@@ -286,7 +302,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "number & any",
+  "ts": "number & any
+",
 }
 `;
 
@@ -298,7 +315,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "any & any",
+  "ts": "any & any
+",
 }
 `;
 
@@ -314,7 +332,8 @@ Object {
       },
     ],
   },
-  "ts": "number | number",
+  "ts": "number | number
+",
 }
 `;
 
@@ -350,7 +369,8 @@ Object {
 } | {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -367,7 +387,8 @@ Object {
     ],
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -381,7 +402,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "number | any",
+  "ts": "number | any
+",
 }
 `;
 
@@ -399,7 +421,8 @@ Object {
   "ts": "{
     bar?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -416,7 +439,8 @@ Object {
   "ts": "{
     foo?: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -509,7 +533,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -602,7 +627,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -615,7 +641,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -641,7 +668,8 @@ bar",
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -655,7 +683,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -675,7 +704,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -689,7 +719,8 @@ bar",
 bar",
     ],
   },
-  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"",
+  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"
+",
 }
 `;
 
@@ -717,7 +748,8 @@ Object {
     foo?: \\"foo\\";
     bar: \\"bar\\";
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -734,7 +766,8 @@ Object {
       },
     ],
   },
-  "ts": "6 | \\"foo\\" | any | true | any",
+  "ts": "6 | \\"foo\\" | any | true | any
+",
 }
 `;
 
@@ -747,7 +780,8 @@ Object {
       3,
     ],
   },
-  "ts": "1 | 2 | 3",
+  "ts": "1 | 2 | 3
+",
 }
 `;
 
@@ -758,7 +792,8 @@ Object {
       "type": "integer",
     },
   },
-  "ts": "number[]",
+  "ts": "number[]
+",
 }
 `;
 
@@ -774,7 +809,8 @@ Object {
       },
     ],
   },
-  "ts": "(number | string)[]",
+  "ts": "(number | string)[]
+",
 }
 `;
 
@@ -819,7 +855,8 @@ Object {
 
 export type item = [sub-item, sub-item];
 
-export type sub-item = any;",
+export type sub-item = any;
+",
 }
 `;
 
@@ -840,7 +877,8 @@ Object {
     },
     "type": "array",
   },
-  "ts": "number[][][][]",
+  "ts": "number[][][][]
+",
 }
 `;
 
@@ -849,7 +887,8 @@ Object {
   "schema": Object {
     "maxItems": 2,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -858,7 +897,8 @@ Object {
   "schema": Object {
     "maxLength": 2,
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -867,7 +907,8 @@ Object {
   "schema": Object {
     "maxProperties": 2,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -877,7 +918,8 @@ Object {
     "exclusiveMaximum": true,
     "maximum": 3,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -887,7 +929,8 @@ Object {
     "exclusiveMaximum": false,
     "maximum": 3,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -896,7 +939,8 @@ Object {
   "schema": Object {
     "maximum": 3,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -905,7 +949,8 @@ Object {
   "schema": Object {
     "minItems": 1,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -914,7 +959,8 @@ Object {
   "schema": Object {
     "minLength": 2,
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -923,7 +969,8 @@ Object {
   "schema": Object {
     "minProperties": 1,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -933,7 +980,8 @@ Object {
     "exclusiveMinimum": true,
     "minimum": 1.1,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -943,7 +991,8 @@ Object {
     "exclusiveMinimum": false,
     "minimum": 1.1,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -952,7 +1001,8 @@ Object {
   "schema": Object {
     "minimum": 1.1,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -961,7 +1011,8 @@ Object {
   "schema": Object {
     "minimum": -2,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -970,7 +1021,8 @@ Object {
   "schema": Object {
     "multipleOf": 2,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -979,7 +1031,8 @@ Object {
   "schema": Object {
     "multipleOf": 1.5,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -988,7 +1041,8 @@ Object {
   "schema": Object {
     "multipleOf": 0.0001,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1004,7 +1058,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1015,7 +1070,8 @@ Object {
       "type": "integer",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1031,7 +1087,8 @@ Object {
       "type": "object",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1045,7 +1102,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1061,7 +1119,8 @@ Object {
       },
     ],
   },
-  "ts": "number | number",
+  "ts": "number | number
+",
 }
 `;
 
@@ -1097,7 +1156,8 @@ Object {
 } | {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1114,7 +1174,8 @@ Object {
     ],
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -1128,7 +1189,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "number | any",
+  "ts": "number | any
+",
 }
 `;
 
@@ -1151,7 +1213,8 @@ Object {
     ],
     "type": "object",
   },
-  "ts": "any | any",
+  "ts": "any | any
+",
 }
 `;
 
@@ -1160,7 +1223,8 @@ Object {
   "schema": Object {
     "pattern": "a+",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -1169,7 +1233,8 @@ Object {
   "schema": Object {
     "pattern": "^a*$",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -1185,7 +1250,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1198,7 +1264,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1214,7 +1281,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1234,7 +1302,8 @@ Object {
     foo?: number;
     bar?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1272,7 +1341,8 @@ bar": Object {
     \\"foo\\\\tbar\\"?: number;
     \\"foo\\\\fbar\\"?: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1301,7 +1371,8 @@ Object {
     foo?: any[];
     bar?: any;
     [key: string]: number;
-}",
+}
+",
 }
 `;
 
@@ -1361,7 +1432,8 @@ export interface tree# {
     meta: string;
     nodes: node#[];
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1400,7 +1472,8 @@ export type tilda~0field = number;
 
 export type slash~1field = number;
 
-export type percent%25field = number;",
+export type percent%25field = number;
+",
 }
 `;
 
@@ -1426,7 +1499,8 @@ export type c = b;
 
 export type b = a;
 
-export type a = number;",
+export type a = number;
+",
 }
 `;
 
@@ -1442,7 +1516,8 @@ Object {
   "ts": "{
     $ref?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1466,7 +1541,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type reffed = any;",
+export type reffed = any;
+",
 }
 `;
 
@@ -1489,7 +1565,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type foo%22bar = number;",
+export type foo%22bar = number;
+",
 }
 `;
 
@@ -1507,7 +1584,8 @@ Object {
   },
   "ts": "(number | 0)[]
 
-export type 0 = number;",
+export type 0 = number;
+",
 }
 `;
 
@@ -1529,7 +1607,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type foo = number;",
+export type foo = number;
+",
 }
 `;
 
@@ -1622,7 +1701,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -1642,7 +1722,8 @@ Object {
 
 export interface # {
     foo?: #;
-}",
+}
+",
 }
 `;
 
@@ -1673,7 +1754,8 @@ Object {
 
 export type baz = folderInteger.json#[];
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -1708,7 +1790,8 @@ Object {
 
 export type bar = folderInteger.json#[];
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -1725,7 +1808,8 @@ Object {
   },
   "ts": "folderInteger.json#[][]
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -1736,7 +1820,8 @@ Object {
   },
   "ts": "integer
 
-export type integer = number;",
+export type integer = number;
+",
 }
 `;
 
@@ -1749,7 +1834,8 @@ Object {
 
 export type refToInteger = integer;
 
-export type integer = number;",
+export type integer = number;
+",
 }
 `;
 
@@ -1760,7 +1846,8 @@ Object {
   },
   "ts": "integer.json#
 
-export type integer.json# = number;",
+export type integer.json# = number;
+",
 }
 `;
 
@@ -1782,7 +1869,8 @@ Object {
 
 export type orNull = any | #;
 
-export type # = string;",
+export type # = string;
+",
 }
 `;
 
@@ -1796,7 +1884,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1815,7 +1904,8 @@ Object {
     foo: any;
     bar?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -1833,7 +1923,8 @@ bar",
       "foobar",
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1842,7 +1933,8 @@ Object {
   "schema": Object {
     "type": "array",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1851,7 +1943,8 @@ Object {
   "schema": Object {
     "type": "boolean",
   },
-  "ts": "boolean",
+  "ts": "boolean
+",
 }
 `;
 
@@ -1860,7 +1953,8 @@ Object {
   "schema": Object {
     "type": "integer",
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -1872,7 +1966,8 @@ Object {
       "string",
     ],
   },
-  "ts": "number | string",
+  "ts": "number | string
+",
 }
 `;
 
@@ -1881,7 +1976,8 @@ Object {
   "schema": Object {
     "type": "null",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1890,7 +1986,8 @@ Object {
   "schema": Object {
     "type": "number",
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -1899,7 +1996,8 @@ Object {
   "schema": Object {
     "type": "object",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1908,7 +2006,8 @@ Object {
   "schema": Object {
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -1919,7 +2018,8 @@ Object {
       "string",
     ],
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -1931,7 +2031,8 @@ Object {
       "object",
     ],
   },
-  "ts": "any[] | object",
+  "ts": "any[] | object
+",
 }
 `;
 
@@ -1944,7 +2045,8 @@ Object {
       "null",
     ],
   },
-  "ts": "any[] | object | null",
+  "ts": "any[] | object | null
+",
 }
 `;
 
@@ -1953,7 +2055,8 @@ Object {
   "schema": Object {
     "uniqueItems": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1966,7 +2069,8 @@ Object {
       },
     ],
   },
-  "ts": "(number)[]",
+  "ts": "(number)[]
+",
 }
 `;
 
@@ -1975,7 +2079,8 @@ Object {
   "schema": Object {
     "additionalItems": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -1989,7 +2094,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "(any | number)[]",
+  "ts": "(any | number)[]
+",
 }
 `;
 
@@ -2003,7 +2109,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "[any, any, any]",
+  "ts": "[any, any, any]
+",
 }
 `;
 
@@ -2013,7 +2120,8 @@ Object {
     "additionalItems": false,
     "items": Object {},
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -2032,7 +2140,8 @@ Object {
     foo?: any;
     bar?: any;
     [key: string]: boolean;
-}",
+}
+",
 }
 `;
 
@@ -2048,7 +2157,8 @@ Object {
     foo?: any;
     bar?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2067,7 +2177,8 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-}",
+}
+",
 }
 `;
 
@@ -2078,7 +2189,8 @@ Object {
       "type": "boolean",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2099,7 +2211,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2111,7 +2224,8 @@ Object {
       "^á": Object {},
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2147,7 +2261,8 @@ Object {
 } & {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2163,7 +2278,8 @@ Object {
       },
     ],
   },
-  "ts": "number & number",
+  "ts": "number & number
+",
 }
 `;
 
@@ -2204,7 +2320,8 @@ Object {
   "ts": "{
     bar: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2216,7 +2333,8 @@ Object {
       false,
     ],
   },
-  "ts": "void & void",
+  "ts": "void & void
+",
 }
 `;
 
@@ -2228,7 +2346,8 @@ Object {
       true,
     ],
   },
-  "ts": "any & any",
+  "ts": "any & any
+",
 }
 `;
 
@@ -2240,7 +2359,8 @@ Object {
       false,
     ],
   },
-  "ts": "any & void",
+  "ts": "any & void
+",
 }
 `;
 
@@ -2251,7 +2371,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2265,7 +2386,8 @@ Object {
       },
     ],
   },
-  "ts": "any & number",
+  "ts": "any & number
+",
 }
 `;
 
@@ -2279,7 +2401,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "number & any",
+  "ts": "number & any
+",
 }
 `;
 
@@ -2291,7 +2414,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "any & any",
+  "ts": "any & any
+",
 }
 `;
 
@@ -2307,7 +2431,8 @@ Object {
       },
     ],
   },
-  "ts": "number | number",
+  "ts": "number | number
+",
 }
 `;
 
@@ -2343,7 +2468,8 @@ Object {
 } | {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2360,7 +2486,8 @@ Object {
     ],
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -2372,7 +2499,8 @@ Object {
       false,
     ],
   },
-  "ts": "void | void",
+  "ts": "void | void
+",
 }
 `;
 
@@ -2384,7 +2512,8 @@ Object {
       true,
     ],
   },
-  "ts": "any | any",
+  "ts": "any | any
+",
 }
 `;
 
@@ -2396,7 +2525,8 @@ Object {
       false,
     ],
   },
-  "ts": "any | void",
+  "ts": "any | void
+",
 }
 `;
 
@@ -2410,21 +2540,24 @@ Object {
       Object {},
     ],
   },
-  "ts": "number | any",
+  "ts": "number | any
+",
 }
 `;
 
 exports[`draft6 boolean_schema.json Test boolean schema 'false' 1`] = `
 Object {
   "schema": false,
-  "ts": "void",
+  "ts": "void
+",
 }
 `;
 
 exports[`draft6 boolean_schema.json Test boolean schema 'true' 1`] = `
 Object {
   "schema": true,
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2433,7 +2566,8 @@ Object {
   "schema": Object {
     "const": 2,
   },
-  "ts": "2",
+  "ts": "2
+",
 }
 `;
 
@@ -2446,7 +2580,8 @@ Object {
       },
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2455,7 +2590,8 @@ Object {
   "schema": Object {
     "const": null,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2467,7 +2603,8 @@ Object {
       "foo": "bar",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2478,7 +2615,8 @@ Object {
       "minimum": 5,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2487,7 +2625,8 @@ Object {
   "schema": Object {
     "contains": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2496,7 +2635,8 @@ Object {
   "schema": Object {
     "contains": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2507,7 +2647,8 @@ Object {
       "const": 5,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2525,7 +2666,8 @@ Object {
   "ts": "{
     bar?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2542,7 +2684,8 @@ Object {
   "ts": "{
     foo?: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2645,7 +2788,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -2748,7 +2892,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -2761,7 +2906,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2773,7 +2919,8 @@ Object {
       "foo": true,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2784,7 +2931,8 @@ Object {
       "bar": Array [],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2810,7 +2958,8 @@ bar",
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2821,7 +2970,8 @@ Object {
       "foo": Array [],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2835,7 +2985,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2855,7 +3006,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -2869,7 +3021,8 @@ bar",
 bar",
     ],
   },
-  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"",
+  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"
+",
 }
 `;
 
@@ -2897,7 +3050,8 @@ Object {
     foo?: \\"foo\\";
     bar: \\"bar\\";
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -2914,7 +3068,8 @@ Object {
       },
     ],
   },
-  "ts": "6 | \\"foo\\" | any | true | any",
+  "ts": "6 | \\"foo\\" | any | true | any
+",
 }
 `;
 
@@ -2927,7 +3082,8 @@ Object {
       3,
     ],
   },
-  "ts": "1 | 2 | 3",
+  "ts": "1 | 2 | 3
+",
 }
 `;
 
@@ -2936,7 +3092,8 @@ Object {
   "schema": Object {
     "exclusiveMaximum": 3,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -2945,7 +3102,8 @@ Object {
   "schema": Object {
     "exclusiveMinimum": 1.1,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -2956,7 +3114,8 @@ Object {
       "type": "integer",
     },
   },
-  "ts": "number[]",
+  "ts": "number[]
+",
 }
 `;
 
@@ -2972,7 +3131,8 @@ Object {
       },
     ],
   },
-  "ts": "(number | string)[]",
+  "ts": "(number | string)[]
+",
 }
 `;
 
@@ -3017,7 +3177,8 @@ Object {
 
 export type item = [sub-item, sub-item];
 
-export type sub-item = any;",
+export type sub-item = any;
+",
 }
 `;
 
@@ -3026,7 +3187,8 @@ Object {
   "schema": Object {
     "items": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3035,7 +3197,8 @@ Object {
   "schema": Object {
     "items": true,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -3047,7 +3210,8 @@ Object {
       false,
     ],
   },
-  "ts": "(any | void)[]",
+  "ts": "(any | void)[]
+",
 }
 `;
 
@@ -3068,7 +3232,8 @@ Object {
     },
     "type": "array",
   },
-  "ts": "number[][][][]",
+  "ts": "number[][][][]
+",
 }
 `;
 
@@ -3077,7 +3242,8 @@ Object {
   "schema": Object {
     "maxItems": 2,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -3086,7 +3252,8 @@ Object {
   "schema": Object {
     "maxLength": 2,
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -3095,7 +3262,8 @@ Object {
   "schema": Object {
     "maxProperties": 2,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3104,7 +3272,8 @@ Object {
   "schema": Object {
     "maximum": 3,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -3113,7 +3282,8 @@ Object {
   "schema": Object {
     "minItems": 1,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -3122,7 +3292,8 @@ Object {
   "schema": Object {
     "minLength": 2,
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -3131,7 +3302,8 @@ Object {
   "schema": Object {
     "minProperties": 1,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3140,7 +3312,8 @@ Object {
   "schema": Object {
     "minimum": 1.1,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -3149,7 +3322,8 @@ Object {
   "schema": Object {
     "minimum": -2,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -3158,7 +3332,8 @@ Object {
   "schema": Object {
     "multipleOf": 2,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3167,7 +3342,8 @@ Object {
   "schema": Object {
     "multipleOf": 1.5,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3176,7 +3352,8 @@ Object {
   "schema": Object {
     "multipleOf": 0.0001,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3192,7 +3369,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -3203,7 +3381,8 @@ Object {
       "type": "integer",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3219,7 +3398,8 @@ Object {
       "type": "object",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3233,7 +3413,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3242,7 +3423,8 @@ Object {
   "schema": Object {
     "not": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3251,7 +3433,8 @@ Object {
   "schema": Object {
     "not": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3267,7 +3450,8 @@ Object {
       },
     ],
   },
-  "ts": "number | number",
+  "ts": "number | number
+",
 }
 `;
 
@@ -3303,7 +3487,8 @@ Object {
 } | {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -3320,7 +3505,8 @@ Object {
     ],
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -3333,7 +3519,8 @@ Object {
       false,
     ],
   },
-  "ts": "void | void | void",
+  "ts": "void | void | void
+",
 }
 `;
 
@@ -3346,7 +3533,8 @@ Object {
       true,
     ],
   },
-  "ts": "any | any | any",
+  "ts": "any | any | any
+",
 }
 `;
 
@@ -3359,7 +3547,8 @@ Object {
       false,
     ],
   },
-  "ts": "any | any | void",
+  "ts": "any | any | void
+",
 }
 `;
 
@@ -3372,7 +3561,8 @@ Object {
       false,
     ],
   },
-  "ts": "any | void | void",
+  "ts": "any | void | void
+",
 }
 `;
 
@@ -3386,7 +3576,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "number | any",
+  "ts": "number | any
+",
 }
 `;
 
@@ -3409,7 +3600,8 @@ Object {
     ],
     "type": "object",
   },
-  "ts": "any | any",
+  "ts": "any | any
+",
 }
 `;
 
@@ -3418,7 +3610,8 @@ Object {
   "schema": Object {
     "pattern": "a+",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -3427,7 +3620,8 @@ Object {
   "schema": Object {
     "pattern": "^a*$",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -3443,7 +3637,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3456,7 +3651,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3468,7 +3664,8 @@ Object {
       "f.*": true,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3484,7 +3681,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3504,7 +3702,8 @@ Object {
     foo?: number;
     bar?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -3520,7 +3719,8 @@ Object {
     foo?: any;
     bar?: void;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -3558,7 +3758,8 @@ bar": Object {
     \\"foo\\\\tbar\\"?: number;
     \\"foo\\\\fbar\\"?: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -3587,7 +3788,8 @@ Object {
     foo?: any[];
     bar?: any;
     [key: string]: number;
-}",
+}
+",
 }
 `;
 
@@ -3598,7 +3800,8 @@ Object {
       "maxLength": 3,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3607,7 +3810,8 @@ Object {
   "schema": Object {
     "propertyNames": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3616,7 +3820,8 @@ Object {
   "schema": Object {
     "propertyNames": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -3630,7 +3835,8 @@ Object {
   },
   "ts": "bool
 
-export type bool = bool;",
+export type bool = bool;
+",
 }
 `;
 
@@ -3644,7 +3850,8 @@ Object {
   },
   "ts": "bool
 
-export type bool = any;",
+export type bool = any;
+",
 }
 `;
 
@@ -3704,7 +3911,8 @@ export interface tree# {
     meta: string;
     nodes: node#[];
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -3743,7 +3951,8 @@ export type tilda~0field = number;
 
 export type slash~1field = number;
 
-export type percent%25field = number;",
+export type percent%25field = number;
+",
 }
 `;
 
@@ -3769,7 +3978,8 @@ export type c = b;
 
 export type b = a;
 
-export type a = number;",
+export type a = number;
+",
 }
 `;
 
@@ -3785,7 +3995,8 @@ Object {
   "ts": "{
     $ref?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -3809,7 +4020,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type reffed = any;",
+export type reffed = any;
+",
 }
 `;
 
@@ -3832,7 +4044,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type foo%22bar = number;",
+export type foo%22bar = number;
+",
 }
 `;
 
@@ -3850,7 +4063,8 @@ Object {
   },
   "ts": "(number | 0)[]
 
-export type 0 = number;",
+export type 0 = number;
+",
 }
 `;
 
@@ -3872,7 +4086,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type foo = number;",
+export type foo = number;
+",
 }
 `;
 
@@ -3975,7 +4190,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -3995,7 +4211,8 @@ Object {
 
 export interface # {
     foo?: #;
-}",
+}
+",
 }
 `;
 
@@ -4026,7 +4243,8 @@ Object {
 
 export type baz = folderInteger.json#[];
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -4061,7 +4279,8 @@ Object {
 
 export type bar = folderInteger.json#[];
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -4078,7 +4297,8 @@ Object {
   },
   "ts": "folderInteger.json#[][]
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -4089,7 +4309,8 @@ Object {
   },
   "ts": "integer
 
-export type integer = number;",
+export type integer = number;
+",
 }
 `;
 
@@ -4102,7 +4323,8 @@ Object {
 
 export type refToInteger = integer;
 
-export type integer = number;",
+export type integer = number;
+",
 }
 `;
 
@@ -4113,7 +4335,8 @@ Object {
   },
   "ts": "integer.json#
 
-export type integer.json# = number;",
+export type integer.json# = number;
+",
 }
 `;
 
@@ -4135,7 +4358,8 @@ Object {
 
 export type orNull = any | #;
 
-export type # = string;",
+export type # = string;
+",
 }
 `;
 
@@ -4149,7 +4373,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4168,7 +4393,8 @@ Object {
     foo: any;
     bar?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4183,7 +4409,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4201,7 +4428,8 @@ bar",
       "foobar",
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4210,7 +4438,8 @@ Object {
   "schema": Object {
     "type": "array",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4219,7 +4448,8 @@ Object {
   "schema": Object {
     "type": "boolean",
   },
-  "ts": "boolean",
+  "ts": "boolean
+",
 }
 `;
 
@@ -4228,7 +4458,8 @@ Object {
   "schema": Object {
     "type": "integer",
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -4240,7 +4471,8 @@ Object {
       "string",
     ],
   },
-  "ts": "number | string",
+  "ts": "number | string
+",
 }
 `;
 
@@ -4249,7 +4481,8 @@ Object {
   "schema": Object {
     "type": "null",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4258,7 +4491,8 @@ Object {
   "schema": Object {
     "type": "number",
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -4267,7 +4501,8 @@ Object {
   "schema": Object {
     "type": "object",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4276,7 +4511,8 @@ Object {
   "schema": Object {
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -4287,7 +4523,8 @@ Object {
       "string",
     ],
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -4299,7 +4536,8 @@ Object {
       "object",
     ],
   },
-  "ts": "any[] | object",
+  "ts": "any[] | object
+",
 }
 `;
 
@@ -4312,7 +4550,8 @@ Object {
       "null",
     ],
   },
-  "ts": "any[] | object | null",
+  "ts": "any[] | object | null
+",
 }
 `;
 
@@ -4321,7 +4560,8 @@ Object {
   "schema": Object {
     "uniqueItems": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4334,7 +4574,8 @@ Object {
       },
     ],
   },
-  "ts": "(number)[]",
+  "ts": "(number)[]
+",
 }
 `;
 
@@ -4343,7 +4584,8 @@ Object {
   "schema": Object {
     "additionalItems": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4357,7 +4599,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "(any | number)[]",
+  "ts": "(any | number)[]
+",
 }
 `;
 
@@ -4371,7 +4614,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "[any, any, any]",
+  "ts": "[any, any, any]
+",
 }
 `;
 
@@ -4381,7 +4625,8 @@ Object {
     "additionalItems": false,
     "items": Object {},
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -4400,7 +4645,8 @@ Object {
     foo?: any;
     bar?: any;
     [key: string]: boolean;
-}",
+}
+",
 }
 `;
 
@@ -4416,7 +4662,8 @@ Object {
     foo?: any;
     bar?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4435,7 +4682,8 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-}",
+}
+",
 }
 `;
 
@@ -4446,7 +4694,8 @@ Object {
       "type": "boolean",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4467,7 +4716,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4479,7 +4729,8 @@ Object {
       "^á": Object {},
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4515,7 +4766,8 @@ Object {
 } & {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4531,7 +4783,8 @@ Object {
       },
     ],
   },
-  "ts": "number & number",
+  "ts": "number & number
+",
 }
 `;
 
@@ -4572,7 +4825,8 @@ Object {
   "ts": "{
     bar: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4584,7 +4838,8 @@ Object {
       false,
     ],
   },
-  "ts": "void & void",
+  "ts": "void & void
+",
 }
 `;
 
@@ -4596,7 +4851,8 @@ Object {
       true,
     ],
   },
-  "ts": "any & any",
+  "ts": "any & any
+",
 }
 `;
 
@@ -4608,7 +4864,8 @@ Object {
       false,
     ],
   },
-  "ts": "any & void",
+  "ts": "any & void
+",
 }
 `;
 
@@ -4619,7 +4876,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4633,7 +4891,8 @@ Object {
       },
     ],
   },
-  "ts": "any & number",
+  "ts": "any & number
+",
 }
 `;
 
@@ -4647,7 +4906,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "number & any",
+  "ts": "number & any
+",
 }
 `;
 
@@ -4659,7 +4919,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "any & any",
+  "ts": "any & any
+",
 }
 `;
 
@@ -4675,7 +4936,8 @@ Object {
       },
     ],
   },
-  "ts": "number | number",
+  "ts": "number | number
+",
 }
 `;
 
@@ -4711,7 +4973,8 @@ Object {
 } | {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4728,7 +4991,8 @@ Object {
     ],
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -4740,7 +5004,8 @@ Object {
       false,
     ],
   },
-  "ts": "void | void",
+  "ts": "void | void
+",
 }
 `;
 
@@ -4752,7 +5017,8 @@ Object {
       true,
     ],
   },
-  "ts": "any | any",
+  "ts": "any | any
+",
 }
 `;
 
@@ -4764,7 +5030,8 @@ Object {
       false,
     ],
   },
-  "ts": "any | void",
+  "ts": "any | void
+",
 }
 `;
 
@@ -4778,21 +5045,24 @@ Object {
       Object {},
     ],
   },
-  "ts": "number | any",
+  "ts": "number | any
+",
 }
 `;
 
 exports[`draft7 boolean_schema.json Test boolean schema 'false' 1`] = `
 Object {
   "schema": false,
-  "ts": "void",
+  "ts": "void
+",
 }
 `;
 
 exports[`draft7 boolean_schema.json Test boolean schema 'true' 1`] = `
 Object {
   "schema": true,
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4801,7 +5071,8 @@ Object {
   "schema": Object {
     "const": 2,
   },
-  "ts": "2",
+  "ts": "2
+",
 }
 `;
 
@@ -4814,7 +5085,8 @@ Object {
       },
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4823,7 +5095,8 @@ Object {
   "schema": Object {
     "const": null,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4835,7 +5108,8 @@ Object {
       "foo": "bar",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4846,7 +5120,8 @@ Object {
       "minimum": 5,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4855,7 +5130,8 @@ Object {
   "schema": Object {
     "contains": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4864,7 +5140,8 @@ Object {
   "schema": Object {
     "contains": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4875,7 +5152,8 @@ Object {
       "const": 5,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -4893,7 +5171,8 @@ Object {
   "ts": "{
     bar?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -4910,7 +5189,8 @@ Object {
   "ts": "{
     foo?: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -5027,7 +5307,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -5144,7 +5425,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -5157,7 +5439,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5169,7 +5452,8 @@ Object {
       "foo": true,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5180,7 +5464,8 @@ Object {
       "bar": Array [],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5206,7 +5491,8 @@ bar",
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5217,7 +5503,8 @@ Object {
       "foo": Array [],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5231,7 +5518,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5251,7 +5539,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5265,7 +5554,8 @@ bar",
 bar",
     ],
   },
-  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"",
+  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"
+",
 }
 `;
 
@@ -5293,7 +5583,8 @@ Object {
     foo?: \\"foo\\";
     bar: \\"bar\\";
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -5310,7 +5601,8 @@ Object {
       },
     ],
   },
-  "ts": "6 | \\"foo\\" | any | true | any",
+  "ts": "6 | \\"foo\\" | any | true | any
+",
 }
 `;
 
@@ -5323,7 +5615,8 @@ Object {
       3,
     ],
   },
-  "ts": "1 | 2 | 3",
+  "ts": "1 | 2 | 3
+",
 }
 `;
 
@@ -5332,7 +5625,8 @@ Object {
   "schema": Object {
     "exclusiveMaximum": 3,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -5341,7 +5635,8 @@ Object {
   "schema": Object {
     "exclusiveMinimum": 1.1,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -5355,7 +5650,8 @@ Object {
       "exclusiveMaximum": 0,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5369,7 +5665,8 @@ Object {
       "minimum": -10,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5380,7 +5677,8 @@ Object {
       "const": 0,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5391,7 +5689,8 @@ Object {
       "const": 0,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5402,7 +5701,8 @@ Object {
       "const": 0,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5427,7 +5727,8 @@ Object {
       },
     ],
   },
-  "ts": "any & any & any",
+  "ts": "any & any & any
+",
 }
 `;
 
@@ -5444,7 +5745,8 @@ Object {
       "minimum": -10,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5455,7 +5757,8 @@ Object {
       "type": "integer",
     },
   },
-  "ts": "number[]",
+  "ts": "number[]
+",
 }
 `;
 
@@ -5471,7 +5774,8 @@ Object {
       },
     ],
   },
-  "ts": "(number | string)[]",
+  "ts": "(number | string)[]
+",
 }
 `;
 
@@ -5516,7 +5820,8 @@ Object {
 
 export type item = [sub-item, sub-item];
 
-export type sub-item = any;",
+export type sub-item = any;
+",
 }
 `;
 
@@ -5525,7 +5830,8 @@ Object {
   "schema": Object {
     "items": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5534,7 +5840,8 @@ Object {
   "schema": Object {
     "items": true,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -5546,7 +5853,8 @@ Object {
       false,
     ],
   },
-  "ts": "(any | void)[]",
+  "ts": "(any | void)[]
+",
 }
 `;
 
@@ -5567,7 +5875,8 @@ Object {
     },
     "type": "array",
   },
-  "ts": "number[][][][]",
+  "ts": "number[][][][]
+",
 }
 `;
 
@@ -5576,7 +5885,8 @@ Object {
   "schema": Object {
     "maxItems": 2,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -5585,7 +5895,8 @@ Object {
   "schema": Object {
     "maxLength": 2,
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -5594,7 +5905,8 @@ Object {
   "schema": Object {
     "maxProperties": 2,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5603,7 +5915,8 @@ Object {
   "schema": Object {
     "maximum": 3,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -5612,7 +5925,8 @@ Object {
   "schema": Object {
     "minItems": 1,
   },
-  "ts": "any[]",
+  "ts": "any[]
+",
 }
 `;
 
@@ -5621,7 +5935,8 @@ Object {
   "schema": Object {
     "minLength": 2,
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -5630,7 +5945,8 @@ Object {
   "schema": Object {
     "minProperties": 1,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5639,7 +5955,8 @@ Object {
   "schema": Object {
     "minimum": 1.1,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -5648,7 +5965,8 @@ Object {
   "schema": Object {
     "minimum": -2,
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -5657,7 +5975,8 @@ Object {
   "schema": Object {
     "multipleOf": 2,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5666,7 +5985,8 @@ Object {
   "schema": Object {
     "multipleOf": 1.5,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5675,7 +5995,8 @@ Object {
   "schema": Object {
     "multipleOf": 0.0001,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5691,7 +6012,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -5702,7 +6024,8 @@ Object {
       "type": "integer",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5718,7 +6041,8 @@ Object {
       "type": "object",
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5732,7 +6056,8 @@ Object {
       ],
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5741,7 +6066,8 @@ Object {
   "schema": Object {
     "not": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5750,7 +6076,8 @@ Object {
   "schema": Object {
     "not": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5766,7 +6093,8 @@ Object {
       },
     ],
   },
-  "ts": "number | number",
+  "ts": "number | number
+",
 }
 `;
 
@@ -5802,7 +6130,8 @@ Object {
 } | {
     foo: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -5819,7 +6148,8 @@ Object {
     ],
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -5832,7 +6162,8 @@ Object {
       false,
     ],
   },
-  "ts": "void | void | void",
+  "ts": "void | void | void
+",
 }
 `;
 
@@ -5845,7 +6176,8 @@ Object {
       true,
     ],
   },
-  "ts": "any | any | any",
+  "ts": "any | any | any
+",
 }
 `;
 
@@ -5858,7 +6190,8 @@ Object {
       false,
     ],
   },
-  "ts": "any | any | void",
+  "ts": "any | any | void
+",
 }
 `;
 
@@ -5871,7 +6204,8 @@ Object {
       false,
     ],
   },
-  "ts": "any | void | void",
+  "ts": "any | void | void
+",
 }
 `;
 
@@ -5885,7 +6219,8 @@ Object {
       Object {},
     ],
   },
-  "ts": "number | any",
+  "ts": "number | any
+",
 }
 `;
 
@@ -5908,7 +6243,8 @@ Object {
     ],
     "type": "object",
   },
-  "ts": "any | any",
+  "ts": "any | any
+",
 }
 `;
 
@@ -5917,7 +6253,8 @@ Object {
   "schema": Object {
     "pattern": "a+",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -5926,7 +6263,8 @@ Object {
   "schema": Object {
     "pattern": "^a*$",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -5942,7 +6280,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5955,7 +6294,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5967,7 +6307,8 @@ Object {
       "f.*": true,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -5983,7 +6324,8 @@ Object {
       },
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6003,7 +6345,8 @@ Object {
     foo?: number;
     bar?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6019,7 +6362,8 @@ Object {
     foo?: any;
     bar?: void;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6057,7 +6401,8 @@ bar": Object {
     \\"foo\\\\tbar\\"?: number;
     \\"foo\\\\fbar\\"?: number;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6086,7 +6431,8 @@ Object {
     foo?: any[];
     bar?: any;
     [key: string]: number;
-}",
+}
+",
 }
 `;
 
@@ -6097,7 +6443,8 @@ Object {
       "maxLength": 3,
     },
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6106,7 +6453,8 @@ Object {
   "schema": Object {
     "propertyNames": false,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6115,7 +6463,8 @@ Object {
   "schema": Object {
     "propertyNames": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6129,7 +6478,8 @@ Object {
   },
   "ts": "bool
 
-export type bool = bool;",
+export type bool = bool;
+",
 }
 `;
 
@@ -6143,7 +6493,8 @@ Object {
   },
   "ts": "bool
 
-export type bool = any;",
+export type bool = any;
+",
 }
 `;
 
@@ -6203,7 +6554,8 @@ export interface tree# {
     meta: string;
     nodes: node#[];
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6242,7 +6594,8 @@ export type tilda~0field = number;
 
 export type slash~1field = number;
 
-export type percent%25field = number;",
+export type percent%25field = number;
+",
 }
 `;
 
@@ -6268,7 +6621,8 @@ export type c = b;
 
 export type b = a;
 
-export type a = number;",
+export type a = number;
+",
 }
 `;
 
@@ -6284,7 +6638,8 @@ Object {
   "ts": "{
     $ref?: string;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6308,7 +6663,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type reffed = any;",
+export type reffed = any;
+",
 }
 `;
 
@@ -6331,7 +6687,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type foo%22bar = number;",
+export type foo%22bar = number;
+",
 }
 `;
 
@@ -6349,7 +6706,8 @@ Object {
   },
   "ts": "(number | 0)[]
 
-export type 0 = number;",
+export type 0 = number;
+",
 }
 `;
 
@@ -6371,7 +6729,8 @@ Object {
     [key: string]: unknown;
 }
 
-export type foo = number;",
+export type foo = number;
+",
 }
 `;
 
@@ -6488,7 +6847,8 @@ export type schemaArray = #[];
 
 export type stringArray = string[];
 
-export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";",
+export type simpleTypes = \\"array\\" | \\"boolean\\" | \\"integer\\" | \\"null\\" | \\"number\\" | \\"object\\" | \\"string\\";
+",
 }
 `;
 
@@ -6508,7 +6868,8 @@ Object {
 
 export interface # {
     foo?: #;
-}",
+}
+",
 }
 `;
 
@@ -6539,7 +6900,8 @@ Object {
 
 export type baz = folderInteger.json#[];
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -6574,7 +6936,8 @@ Object {
 
 export type bar = folderInteger.json#[];
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -6591,7 +6954,8 @@ Object {
   },
   "ts": "folderInteger.json#[][]
 
-export type folderInteger.json# = number;",
+export type folderInteger.json# = number;
+",
 }
 `;
 
@@ -6602,7 +6966,8 @@ Object {
   },
   "ts": "integer
 
-export type integer = number;",
+export type integer = number;
+",
 }
 `;
 
@@ -6615,7 +6980,8 @@ Object {
 
 export type refToInteger = integer;
 
-export type integer = number;",
+export type integer = number;
+",
 }
 `;
 
@@ -6626,7 +6992,8 @@ Object {
   },
   "ts": "integer.json#
 
-export type integer.json# = number;",
+export type integer.json# = number;
+",
 }
 `;
 
@@ -6648,7 +7015,8 @@ Object {
 
 export type orNull = any | #;
 
-export type # = string;",
+export type # = string;
+",
 }
 `;
 
@@ -6662,7 +7030,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6681,7 +7050,8 @@ Object {
     foo: any;
     bar?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6696,7 +7066,8 @@ Object {
   "ts": "{
     foo?: any;
     [key: string]: unknown;
-}",
+}
+",
 }
 `;
 
@@ -6714,7 +7085,8 @@ bar",
       "foobar",
     ],
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6723,7 +7095,8 @@ Object {
   "schema": Object {
     "type": "array",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6732,7 +7105,8 @@ Object {
   "schema": Object {
     "type": "boolean",
   },
-  "ts": "boolean",
+  "ts": "boolean
+",
 }
 `;
 
@@ -6741,7 +7115,8 @@ Object {
   "schema": Object {
     "type": "integer",
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -6753,7 +7128,8 @@ Object {
       "string",
     ],
   },
-  "ts": "number | string",
+  "ts": "number | string
+",
 }
 `;
 
@@ -6762,7 +7138,8 @@ Object {
   "schema": Object {
     "type": "null",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6771,7 +7148,8 @@ Object {
   "schema": Object {
     "type": "number",
   },
-  "ts": "number",
+  "ts": "number
+",
 }
 `;
 
@@ -6780,7 +7158,8 @@ Object {
   "schema": Object {
     "type": "object",
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
 
@@ -6789,7 +7168,8 @@ Object {
   "schema": Object {
     "type": "string",
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -6800,7 +7180,8 @@ Object {
       "string",
     ],
   },
-  "ts": "string",
+  "ts": "string
+",
 }
 `;
 
@@ -6812,7 +7193,8 @@ Object {
       "object",
     ],
   },
-  "ts": "any[] | object",
+  "ts": "any[] | object
+",
 }
 `;
 
@@ -6825,7 +7207,8 @@ Object {
       "null",
     ],
   },
-  "ts": "any[] | object | null",
+  "ts": "any[] | object | null
+",
 }
 `;
 
@@ -6834,6 +7217,7 @@ Object {
   "schema": Object {
     "uniqueItems": true,
   },
-  "ts": "any",
+  "ts": "any
+",
 }
 `;
