@@ -108,70 +108,46 @@ const convertParameters = (
   };
 };
 
-const convertResponse = (
-  context: AstContext,
-  key: string,
-  response: ResponseObject,
-): Document<ts.UnionTypeNode, AstContext> => {
-  const schema =
-    response.content &&
-    ((response.content['application/json'] && response.content['application/json'].schema) ||
-      (response.content['*/*'] && response.content['*/*'].schema));
-
-  if (schema) {
-    const node = convertSchema(context, schema);
-    const nodeType =
-      key === '200' || key === 'default'
-        ? Type.Union([
-            node.type,
-            Type.Ref('LaminarResponse', [node.type]),
-            Type.Ref('Promise', [node.type]),
-            Type.Ref('Promise', [Type.Ref('LaminarResponse', [node.type])]),
-          ])
-        : Type.Union([
-            Type.Ref('LaminarResponse', [node.type]),
-            Type.Ref('Promise', [Type.Ref('LaminarResponse', [node.type])]),
-          ]);
-
-    return document(
-      withImports(node.context, {
-        module: '@ovotech/laminar',
-        named: [{ name: 'LaminarResponse' }],
-      }),
-      nodeType,
-    );
-  } else {
-    const nodeType = Type.Union([
-      Type.Ref('LaminarResponse'),
-      Type.Ref('Promise', [Type.Ref('LaminarResponse')]),
-    ]);
-
-    return document(
-      withImports(context, { module: '@ovotech/laminar', named: [{ name: 'LaminarResponse' }] }),
-      nodeType,
-    );
-  }
-};
-
 const convertResponses = (
   context: AstContext,
   name: string,
   responses: ResponsesObject,
 ): Document<ts.TypeReferenceNode, AstContext> => {
-  const responseEntries = Object.entries<ResponseObject | ReferenceObject>(responses);
+  const responseEntries = Object.values<ResponseObject | ReferenceObject>(responses);
 
-  const params = responseEntries.reduce<Document<ts.UnionTypeNode, AstContext>>(
-    (responseNode, [key, responseOrRef]) => {
-      const response = getReferencedObject(responseOrRef, isResponseObject, responseNode.context);
-      const node = convertResponse(responseNode.context, key, response);
-      return document(node.context, Type.Union(responseNode.type.types.concat([node.type])));
-    },
-    document(context, Type.Union([])),
-  );
+  const params = mapWithContext(context, responseEntries, (responseContext, responseOrRef) => {
+    const response = getReferencedObject(responseOrRef, isResponseObject, responseContext);
+    const schema =
+      response?.content?.['application/json']?.schema ?? response?.content?.['*/*']?.schema;
 
-  return params.type.types.length
+    const node = schema
+      ? convertSchema(responseContext, schema)
+      : document(responseContext, undefined);
+
+    const nodeContext = withImports(node.context, {
+      module: '@ovotech/laminar',
+      named: [{ name: 'LaminarResponse' }],
+    });
+
+    if (node.type !== undefined) {
+      return document(nodeContext, [Type.Ref('LaminarResponse', [node.type]), node.type]);
+    } else {
+      return document(nodeContext, [Type.Ref('LaminarResponse')]);
+    }
+  });
+
+  const responseTypes = params.items.reduce((acc, item) => [...acc, ...item]);
+
+  return responseTypes.length
     ? document(
-        withIdentifier(params.context, Type.Alias({ name, type: params.type, isExport: true })),
+        withIdentifier(
+          params.context,
+          Type.Alias({
+            name,
+            type: Type.Union([...responseTypes, Type.Ref('Promise', [Type.Union(responseTypes)])]),
+            isExport: true,
+          }),
+        ),
         Type.Ref(name),
       )
     : document(

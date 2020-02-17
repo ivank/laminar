@@ -92,6 +92,24 @@ describe('TS Compose', () => {
       Type.Interface({ name: 'test', props: [Type.Prop({ name: 'name', type: Type.Str })] }),
     ],
     [
+      'interface test {\n    get(T1: number);\n    get<T2>(T3?: string): any;\n}',
+      Type.Interface({
+        name: 'test',
+        props: [
+          Type.Method({
+            name: 'get',
+            params: [Type.Param({ name: 'T1', type: Type.Num })],
+          }),
+          Type.Method({
+            name: 'get',
+            typeArgs: [Type.TypeArg({ name: 'T2' })],
+            params: [Type.Param({ name: 'T3', type: Type.Str, isOptional: true })],
+            type: Type.Any,
+          }),
+        ],
+      }),
+    ],
+    [
       'interface test {\n    "11231": string;\n}',
       Type.Interface({ name: 'test', props: [Type.Prop({ name: '11231', type: Type.Str })] }),
     ],

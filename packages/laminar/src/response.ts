@@ -67,8 +67,8 @@ export const extendResponse = (
   };
 };
 
-export const message = (status: number, body: {} | string): LaminarResponse =>
-  response({ status, body });
+export const message = <T = object | string>(status: number, body: T): LaminarResponse<T> =>
+  response<T>({ status, body });
 
 export const redirect = (url: string, partial?: Partial<LaminarResponse>): LaminarResponse => {
   const { headers, ...rest } = partial || { headers: {} };

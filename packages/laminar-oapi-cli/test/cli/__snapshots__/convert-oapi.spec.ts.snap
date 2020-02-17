@@ -16,7 +16,7 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
     };
 }
 
-export type TGetResponse = (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse | Promise<LaminarResponse>);
+export type TGetResponse = LaminarResponse | LaminarResponse | Promise<LaminarResponse | LaminarResponse>;
 
 /**
  * List API versions
@@ -24,7 +24,7 @@ export type TGetResponse = (LaminarResponse | Promise<LaminarResponse>) | (Lamin
 export interface TGetContext extends Context, OapiContext {
 }
 
-export type TV2GetResponse = (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse | Promise<LaminarResponse>);
+export type TV2GetResponse = LaminarResponse | LaminarResponse | Promise<LaminarResponse | LaminarResponse>;
 
 /**
  * Show API version details
@@ -94,7 +94,7 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
     };
 }
 
-export type TInternalStatusGetResponse = (LaminarResponse | Promise<LaminarResponse>);
+export type TInternalStatusGetResponse = LaminarResponse | Promise<LaminarResponse>;
 
 /**
  * Health check endpoint
@@ -103,7 +103,7 @@ export type TInternalStatusGetResponse = (LaminarResponse | Promise<LaminarRespo
 export interface TInternalStatusGetContext extends Context, OapiContext {
 }
 
-export type TInternalSwaggeryamlGetResponse = (LaminarResponse | Promise<LaminarResponse>);
+export type TInternalSwaggeryamlGetResponse = LaminarResponse | Promise<LaminarResponse>;
 
 /**
  * Returns application swagger definition
@@ -133,7 +133,7 @@ export interface HttpErrorResponse {
     [key: string]: unknown;
 }
 
-export type TApiV2AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
+export type TApiV2AccountsAccountIdBalanceGetResponse = LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | Promise<LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse>;
 
 /**
  * DEPRECATED: Find Balance for the given accountId
@@ -184,7 +184,7 @@ export interface ChargeTransactionEntity {
     [key: string]: unknown;
 }
 
-export type TApiV2AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV2 | LaminarResponse<TransactionHistoryHttpResponseV2> | Promise<TransactionHistoryHttpResponseV2> | Promise<LaminarResponse<TransactionHistoryHttpResponseV2>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
+export type TApiV2AccountsAccountIdTransactionsGetResponse = LaminarResponse<TransactionHistoryHttpResponseV2> | TransactionHistoryHttpResponseV2 | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | Promise<LaminarResponse<TransactionHistoryHttpResponseV2> | TransactionHistoryHttpResponseV2 | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse>;
 
 /**
  * DEPRECATED: Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
@@ -236,7 +236,7 @@ export interface AdjustBalanceRequest {
     [key: string]: unknown;
 }
 
-export type TApiV2AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
+export type TApiV2AccountsAccountIdAdjustbalancePostResponse = LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | Promise<LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse>;
 
 /**
  * DEPRECATED: Adjust balance for a given accountId
@@ -252,7 +252,7 @@ export interface TApiV2AccountsAccountIdAdjustbalancePostContext extends Context
     body: AdjustBalanceRequest;
 }
 
-export type TApiV3AccountsAccountIdBalanceGetResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
+export type TApiV3AccountsAccountIdBalanceGetResponse = LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | Promise<LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse>;
 
 /**
  * Find Balance for the given accountId
@@ -304,7 +304,7 @@ export interface StandingChargeTransactionEntity {
     [key: string]: unknown;
 }
 
-export type TApiV3AccountsAccountIdTransactionsGetResponse = (TransactionHistoryHttpResponseV3 | LaminarResponse<TransactionHistoryHttpResponseV3> | Promise<TransactionHistoryHttpResponseV3> | Promise<LaminarResponse<TransactionHistoryHttpResponseV3>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
+export type TApiV3AccountsAccountIdTransactionsGetResponse = LaminarResponse<TransactionHistoryHttpResponseV3> | TransactionHistoryHttpResponseV3 | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | Promise<LaminarResponse<TransactionHistoryHttpResponseV3> | TransactionHistoryHttpResponseV3 | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse>;
 
 /**
  * Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
@@ -333,7 +333,7 @@ export interface TApiV3AccountsAccountIdTransactionsGetContext extends Context, 
     };
 }
 
-export type TApiV3AccountsAccountIdAdjustbalancePostResponse = (BalanceSummaryHttpResponse | LaminarResponse<BalanceSummaryHttpResponse> | Promise<BalanceSummaryHttpResponse> | Promise<LaminarResponse<BalanceSummaryHttpResponse>>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>) | (LaminarResponse | Promise<LaminarResponse>) | (LaminarResponse<HttpErrorResponse> | Promise<LaminarResponse<HttpErrorResponse>>);
+export type TApiV3AccountsAccountIdAdjustbalancePostResponse = LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | Promise<LaminarResponse<BalanceSummaryHttpResponse> | BalanceSummaryHttpResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse | LaminarResponse | LaminarResponse<HttpErrorResponse> | HttpErrorResponse>;
 
 /**
  * Adjust balance for a given accountId
@@ -564,7 +564,7 @@ export interface Empty {
     [key: string]: unknown;
 }
 
-export type TV2NameDeleteResponse = (Empty | LaminarResponse<Empty> | Promise<Empty> | Promise<LaminarResponse<Empty>>);
+export type TV2NameDeleteResponse = LaminarResponse<Empty> | Empty | Promise<LaminarResponse<Empty> | Empty>;
 
 /**
  * Deletes a task.
@@ -913,7 +913,7 @@ export interface Status {
     [key: string]: unknown;
 }
 
-export type TV2NameGetResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
+export type TV2NameGetResponse = LaminarResponse<Task> | Task | Promise<LaminarResponse<Task> | Task>;
 
 /**
  * Gets a task.
@@ -1221,7 +1221,7 @@ export interface RetryConfig {
     [key: string]: unknown;
 }
 
-export type TV2NamePatchResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+export type TV2NamePatchResponse = LaminarResponse<Queue> | Queue | Promise<LaminarResponse<Queue> | Queue>;
 
 /**
  * Updates a queue.
@@ -1361,7 +1361,7 @@ export interface Location {
     [key: string]: unknown;
 }
 
-export type TV2NameLocationsGetResponse = (ListLocationsResponse | LaminarResponse<ListLocationsResponse> | Promise<ListLocationsResponse> | Promise<LaminarResponse<ListLocationsResponse>>);
+export type TV2NameLocationsGetResponse = LaminarResponse<ListLocationsResponse> | ListLocationsResponse | Promise<LaminarResponse<ListLocationsResponse> | ListLocationsResponse>;
 
 /**
  * Lists information about the supported locations for this service.
@@ -1437,7 +1437,7 @@ export interface PauseQueueRequest {
     [key: string]: unknown;
 }
 
-export type TV2NamepausePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+export type TV2NamepausePostResponse = LaminarResponse<Queue> | Queue | Promise<LaminarResponse<Queue> | Queue>;
 
 /**
  * Pauses the queue.
@@ -1509,7 +1509,7 @@ export interface PurgeQueueRequest {
     [key: string]: unknown;
 }
 
-export type TV2NamepurgePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+export type TV2NamepurgePostResponse = LaminarResponse<Queue> | Queue | Promise<LaminarResponse<Queue> | Queue>;
 
 /**
  * Purges a queue by deleting all of its tasks.
@@ -1580,7 +1580,7 @@ export interface ResumeQueueRequest {
     [key: string]: unknown;
 }
 
-export type TV2NameresumePostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+export type TV2NameresumePostResponse = LaminarResponse<Queue> | Queue | Promise<LaminarResponse<Queue> | Queue>;
 
 /**
  * Resume a queue.
@@ -1673,7 +1673,7 @@ export interface RunTaskRequest {
     [key: string]: unknown;
 }
 
-export type TV2NamerunPostResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
+export type TV2NamerunPostResponse = LaminarResponse<Task> | Task | Promise<LaminarResponse<Task> | Task>;
 
 /**
  * Forces a task to run now.
@@ -1778,7 +1778,7 @@ export interface ListQueuesResponse {
     [key: string]: unknown;
 }
 
-export type TV2ParentQueuesGetResponse = (ListQueuesResponse | LaminarResponse<ListQueuesResponse> | Promise<ListQueuesResponse> | Promise<LaminarResponse<ListQueuesResponse>>);
+export type TV2ParentQueuesGetResponse = LaminarResponse<ListQueuesResponse> | ListQueuesResponse | Promise<LaminarResponse<ListQueuesResponse> | ListQueuesResponse>;
 
 /**
  * Lists queues.
@@ -1876,7 +1876,7 @@ export interface TV2ParentQueuesGetContext extends Context, OapiContext {
     };
 }
 
-export type TV2ParentQueuesPostResponse = (Queue | LaminarResponse<Queue> | Promise<Queue> | Promise<LaminarResponse<Queue>>);
+export type TV2ParentQueuesPostResponse = LaminarResponse<Queue> | Queue | Promise<LaminarResponse<Queue> | Queue>;
 
 /**
  * Creates a queue.
@@ -1971,7 +1971,7 @@ export interface ListTasksResponse {
     [key: string]: unknown;
 }
 
-export type TV2ParentTasksGetResponse = (ListTasksResponse | LaminarResponse<ListTasksResponse> | Promise<ListTasksResponse> | Promise<LaminarResponse<ListTasksResponse>>);
+export type TV2ParentTasksGetResponse = LaminarResponse<ListTasksResponse> | ListTasksResponse | Promise<LaminarResponse<ListTasksResponse> | ListTasksResponse>;
 
 /**
  * Lists the tasks in a queue.
@@ -2098,7 +2098,7 @@ export interface CreateTaskRequest {
     [key: string]: unknown;
 }
 
-export type TV2ParentTasksPostResponse = (Task | LaminarResponse<Task> | Promise<Task> | Promise<LaminarResponse<Task>>);
+export type TV2ParentTasksPostResponse = LaminarResponse<Task> | Task | Promise<LaminarResponse<Task> | Task>;
 
 /**
  * Creates a task and adds it to a queue.
@@ -2273,7 +2273,7 @@ export interface Expr {
     [key: string]: unknown;
 }
 
-export type TV2ResourcegetIamPolicyPostResponse = (Policy | LaminarResponse<Policy> | Promise<Policy> | Promise<LaminarResponse<Policy>>);
+export type TV2ResourcegetIamPolicyPostResponse = LaminarResponse<Policy> | Policy | Promise<LaminarResponse<Policy> | Policy>;
 
 /**
  * Gets the access control policy for a Queue.
@@ -2348,7 +2348,7 @@ export interface SetIamPolicyRequest {
     [key: string]: unknown;
 }
 
-export type TV2ResourcesetIamPolicyPostResponse = (Policy | LaminarResponse<Policy> | Promise<Policy> | Promise<LaminarResponse<Policy>>);
+export type TV2ResourcesetIamPolicyPostResponse = LaminarResponse<Policy> | Policy | Promise<LaminarResponse<Policy> | Policy>;
 
 /**
  * Sets the access control policy for a Queue. Replaces any existing
@@ -2440,7 +2440,7 @@ export interface TestIamPermissionsResponse {
     [key: string]: unknown;
 }
 
-export type TV2ResourcetestIamPermissionsPostResponse = (TestIamPermissionsResponse | LaminarResponse<TestIamPermissionsResponse> | Promise<TestIamPermissionsResponse> | Promise<LaminarResponse<TestIamPermissionsResponse>>);
+export type TV2ResourcetestIamPermissionsPostResponse = LaminarResponse<TestIamPermissionsResponse> | TestIamPermissionsResponse | Promise<LaminarResponse<TestIamPermissionsResponse> | TestIamPermissionsResponse>;
 
 /**
  * Returns permissions that a caller has on a Queue.
@@ -2529,7 +2529,7 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
     };
 }
 
-export type TWellknownDocsGetResponse = (LaminarResponse | Promise<LaminarResponse>);
+export type TWellknownDocsGetResponse = LaminarResponse | Promise<LaminarResponse>;
 
 /**
  * HTML Docs
@@ -2537,7 +2537,7 @@ export type TWellknownDocsGetResponse = (LaminarResponse | Promise<LaminarRespon
 export interface TWellknownDocsGetContext extends Context, OapiContext {
 }
 
-export type TWellknownOpenapiyamlGetResponse = (LaminarResponse | Promise<LaminarResponse>);
+export type TWellknownOpenapiyamlGetResponse = LaminarResponse | Promise<LaminarResponse>;
 
 /**
  * API
@@ -2549,7 +2549,7 @@ export interface HttpError {
     message?: string;
 }
 
-export type THtmlPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
+export type THtmlPostResponse = LaminarResponse | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse | LaminarResponse<HttpError> | HttpError>;
 
 /**
  * Generate PDF from html
@@ -2594,7 +2594,7 @@ export interface user {
     [key: string]: unknown;
 }
 
-export type T20UsersUsernameGetResponse = (user | LaminarResponse<user> | Promise<user> | Promise<LaminarResponse<user>>);
+export type T20UsersUsernameGetResponse = LaminarResponse<user> | user | Promise<LaminarResponse<user> | user>;
 
 export interface T20UsersUsernameGetContext extends Context, OapiContext {
     path: {
@@ -2608,7 +2608,7 @@ export interface repository {
     [key: string]: unknown;
 }
 
-export type T20RepositoriesUsernameGetResponse = (repository[] | LaminarResponse<repository[]> | Promise<repository[]> | Promise<LaminarResponse<repository[]>>);
+export type T20RepositoriesUsernameGetResponse = LaminarResponse<repository[]> | repository[] | Promise<LaminarResponse<repository[]> | repository[]>;
 
 export interface T20RepositoriesUsernameGetContext extends Context, OapiContext {
     path: {
@@ -2616,7 +2616,7 @@ export interface T20RepositoriesUsernameGetContext extends Context, OapiContext 
     };
 }
 
-export type T20RepositoriesUsernameSlugGetResponse = (repository | LaminarResponse<repository> | Promise<repository> | Promise<LaminarResponse<repository>>);
+export type T20RepositoriesUsernameSlugGetResponse = LaminarResponse<repository> | repository | Promise<LaminarResponse<repository> | repository>;
 
 export interface T20RepositoriesUsernameSlugGetContext extends Context, OapiContext {
     path: {
@@ -2633,7 +2633,7 @@ export interface pullrequest {
     [key: string]: unknown;
 }
 
-export type T20RepositoriesUsernameSlugPullrequestsGetResponse = (pullrequest[] | LaminarResponse<pullrequest[]> | Promise<pullrequest[]> | Promise<LaminarResponse<pullrequest[]>>);
+export type T20RepositoriesUsernameSlugPullrequestsGetResponse = LaminarResponse<pullrequest[]> | pullrequest[] | Promise<LaminarResponse<pullrequest[]> | pullrequest[]>;
 
 export interface T20RepositoriesUsernameSlugPullrequestsGetContext extends Context, OapiContext {
     path: {
@@ -2645,7 +2645,7 @@ export interface T20RepositoriesUsernameSlugPullrequestsGetContext extends Conte
     };
 }
 
-export type T20RepositoriesUsernameSlugPullrequestsPidGetResponse = (pullrequest | LaminarResponse<pullrequest> | Promise<pullrequest> | Promise<LaminarResponse<pullrequest>>);
+export type T20RepositoriesUsernameSlugPullrequestsPidGetResponse = LaminarResponse<pullrequest> | pullrequest | Promise<LaminarResponse<pullrequest> | pullrequest>;
 
 export interface T20RepositoriesUsernameSlugPullrequestsPidGetContext extends Context, OapiContext {
     path: {
@@ -2655,7 +2655,7 @@ export interface T20RepositoriesUsernameSlugPullrequestsPidGetContext extends Co
     };
 }
 
-export type T20RepositoriesUsernameSlugPullrequestsPidMergePostResponse = (LaminarResponse | Promise<LaminarResponse>);
+export type T20RepositoriesUsernameSlugPullrequestsPidMergePostResponse = LaminarResponse | Promise<LaminarResponse>;
 
 export interface T20RepositoriesUsernameSlugPullrequestsPidMergePostContext extends Context, OapiContext {
     path: {
@@ -2699,7 +2699,7 @@ export interface Error {
     [key: string]: unknown;
 }
 
-export type TPetsGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsGetResponse = LaminarResponse<Pets> | Pets | LaminarResponse<Error> | Error | Promise<LaminarResponse<Pets> | Pets | LaminarResponse<Error> | Error>;
 
 /**
  * List all pets
@@ -2713,7 +2713,7 @@ export interface TPetsGetContext extends Context, OapiContext {
     };
 }
 
-export type TPetsPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsPostResponse = LaminarResponse | LaminarResponse<Error> | Error | Promise<LaminarResponse | LaminarResponse<Error> | Error>;
 
 /**
  * Create a pet
@@ -2721,7 +2721,7 @@ export type TPetsPostResponse = (LaminarResponse | Promise<LaminarResponse>) | (
 export interface TPetsPostContext extends Context, OapiContext {
 }
 
-export type TPetsPetIdGetResponse = (Pets | LaminarResponse<Pets> | Promise<Pets> | Promise<LaminarResponse<Pets>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsPetIdGetResponse = LaminarResponse<Pets> | Pets | LaminarResponse<Error> | Error | Promise<LaminarResponse<Pets> | Pets | LaminarResponse<Error> | Error>;
 
 /**
  * Info for a specific pet
@@ -2788,7 +2788,7 @@ export interface Error {
     [key: string]: unknown;
 }
 
-export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsGetResponse = LaminarResponse<Pet[]> | Pet[] | LaminarResponse<Error> | Error | Promise<LaminarResponse<Pet[]> | Pet[] | LaminarResponse<Error> | Error>;
 
 /**
  * Returns all pets from the system that the user has access to
@@ -2810,7 +2810,7 @@ export interface TPetsGetContext extends Context, OapiContext {
     };
 }
 
-export type TPetsPostResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsPostResponse = LaminarResponse<Pet> | Pet | LaminarResponse<Error> | Error | Promise<LaminarResponse<Pet> | Pet | LaminarResponse<Error> | Error>;
 
 /**
  * Creates a new pet in the store.  Duplicates are allowed
@@ -2819,7 +2819,7 @@ export interface TPetsPostContext extends Context, OapiContext {
     body: NewPet;
 }
 
-export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsIdGetResponse = LaminarResponse<Pet> | Pet | LaminarResponse<Error> | Error | Promise<LaminarResponse<Pet> | Pet | LaminarResponse<Error> | Error>;
 
 /**
  * Returns a user based on a single ID, if the user does not have access to the pet
@@ -2833,7 +2833,7 @@ export interface TPetsIdGetContext extends Context, OapiContext {
     };
 }
 
-export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsIdDeleteResponse = LaminarResponse | LaminarResponse<Error> | Error | Promise<LaminarResponse | LaminarResponse<Error> | Error>;
 
 /**
  * deletes a single pet based on the ID supplied
@@ -2894,7 +2894,7 @@ export interface HttpError {
     message?: string;
 }
 
-export type TAccountsAccountIdMetersGetResponse = (AccountMeter[] | LaminarResponse<AccountMeter[]> | Promise<AccountMeter[]> | Promise<LaminarResponse<AccountMeter[]>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
+export type TAccountsAccountIdMetersGetResponse = LaminarResponse<AccountMeter[]> | AccountMeter[] | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<AccountMeter[]> | AccountMeter[] | LaminarResponse<HttpError> | HttpError>;
 
 /**
  * Get Meters, associated with an account, and its service start and end dates (SSD...SED)
@@ -2956,7 +2956,7 @@ export interface dataSetList {
     [key: string]: unknown;
 }
 
-export type TGetResponse = (dataSetList | LaminarResponse<dataSetList> | Promise<dataSetList> | Promise<LaminarResponse<dataSetList>>);
+export type TGetResponse = LaminarResponse<dataSetList> | dataSetList | Promise<LaminarResponse<dataSetList> | dataSetList>;
 
 /**
  * List available data sets
@@ -2964,7 +2964,7 @@ export type TGetResponse = (dataSetList | LaminarResponse<dataSetList> | Promise
 export interface TGetContext extends Context, OapiContext {
 }
 
-export type TDatasetVersionFieldsGetResponse = (string | LaminarResponse<string> | Promise<string> | Promise<LaminarResponse<string>>) | (LaminarResponse<string> | Promise<LaminarResponse<string>>);
+export type TDatasetVersionFieldsGetResponse = LaminarResponse<string> | string | LaminarResponse<string> | string | Promise<LaminarResponse<string> | string | LaminarResponse<string> | string>;
 
 /**
  * Provides the general information about the API and the list of fields that can be used to query the dataset.
@@ -2983,7 +2983,7 @@ export interface TDatasetVersionFieldsGetContext extends Context, OapiContext {
     };
 }
 
-export type TDatasetVersionRecordsPostResponse = (any[] | LaminarResponse<any[]> | Promise<any[]> | Promise<LaminarResponse<any[]>>) | (LaminarResponse | Promise<LaminarResponse>);
+export type TDatasetVersionRecordsPostResponse = LaminarResponse<any[]> | any[] | LaminarResponse | Promise<LaminarResponse<any[]> | any[] | LaminarResponse>;
 
 /**
  * Provides search capability for the data set with the given search criteria.

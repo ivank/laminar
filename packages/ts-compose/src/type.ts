@@ -87,6 +87,23 @@ export const Export = (
 export const Protected = (isProtected?: boolean): ts.Token<ts.SyntaxKind.ProtectedKeyword>[] =>
   isProtected ? [ts.createModifier(ts.SyntaxKind.ProtectedKeyword)] : [];
 
+export const Method = ({
+  typeArgs,
+  name,
+  params,
+  type,
+  jsDoc,
+  isOptional,
+}: {
+  typeArgs?: ts.TypeParameterDeclaration[];
+  params: ts.ParameterDeclaration[];
+  name: string | ts.Identifier;
+  isOptional?: boolean;
+  type?: ts.TypeNode;
+  jsDoc?: string;
+}): ts.MethodSignature =>
+  withJSDoc(ts.createMethodSignature(typeArgs, params, type, name, Optional(isOptional)), jsDoc);
+
 export const Prop = ({
   name,
   type,
