@@ -44,6 +44,19 @@ describe('TS Compose', () => {
         ],
       }),
     ],
+    ['namespace a { }', Node.NamespaceBlock({ name: 'a', block: [] })],
+    [
+      'export default namespace a { }',
+      Node.NamespaceBlock({ isExport: true, isDefault: true, name: 'a', block: [] }),
+    ],
+    [
+      'export namespace test {\n    const a = 10;\n    const b = true;\n}',
+      Node.NamespaceBlock({
+        name: 'test',
+        isExport: true,
+        block: [Node.Const({ name: 'a', value: 10 }), Node.Const({ name: 'b', value: true })],
+      }),
+    ],
     ['const a;', Node.Const({ name: 'a' })],
     ['const s = "10";', Node.Const({ name: 's', value: '10' })],
     ['const b = true;', Node.Const({ name: 'b', value: true })],

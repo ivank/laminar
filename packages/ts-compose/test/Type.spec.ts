@@ -92,6 +92,13 @@ describe('TS Compose', () => {
       Type.Interface({ name: 'test', props: [Type.Prop({ name: 'name', type: Type.Str })] }),
     ],
     [
+      'interface test {\n    name: namespace1.MyTpe;\n}',
+      Type.Interface({
+        name: 'test',
+        props: [Type.Prop({ name: 'name', type: Type.Ref('namespace1.MyTpe') })],
+      }),
+    ],
+    [
       'interface test {\n    get(T1: number);\n    get<T2>(T3?: string): any;\n}',
       Type.Interface({
         name: 'test',

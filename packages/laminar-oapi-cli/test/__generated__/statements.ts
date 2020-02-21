@@ -26,7 +26,7 @@ export interface HttpError {
     message?: string;
 }
 
-export type TAccountsAccountIdMetersGetResponse = (AccountMeterBase[] | LaminarResponse<AccountMeterBase[]> | Promise<AccountMeterBase[]> | Promise<LaminarResponse<AccountMeterBase[]>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
+export type TAccountsAccountIdMetersGetResponse = LaminarResponse<AccountMeterBase[]> | AccountMeterBase[] | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<AccountMeterBase[]> | AccountMeterBase[] | LaminarResponse<HttpError> | HttpError>;
 
 /**
  * Get Meters, associated with an account, and its service start and end dates (SSD...SED)

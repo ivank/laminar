@@ -52,7 +52,7 @@ export interface Error {
     message: string;
 }
 
-export type TPetsGetResponse = (Pet[] | LaminarResponse<Pet[]> | Promise<Pet[]> | Promise<LaminarResponse<Pet[]>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsGetResponse = LaminarResponse<Pet[]> | Pet[] | LaminarResponse<Error> | Error | Promise<LaminarResponse<Pet[]> | Pet[] | LaminarResponse<Error> | Error>;
 
 /**
  * Returns all pets from the system that the user has access to
@@ -80,7 +80,7 @@ export interface PetCreated {
     [key: string]: unknown;
 }
 
-export type TPetsPostResponse = (PetCreated | LaminarResponse<PetCreated> | Promise<PetCreated> | Promise<LaminarResponse<PetCreated>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsPostResponse = LaminarResponse<PetCreated> | PetCreated | LaminarResponse<Error> | Error | Promise<LaminarResponse<PetCreated> | PetCreated | LaminarResponse<Error> | Error>;
 
 /**
  * Creates a new pet in the store.  Duplicates are allowed
@@ -95,7 +95,7 @@ export interface TPetsPostContext extends Context, OapiContext {
     body: NewPet;
 }
 
-export type TPetsIdGetResponse = (Pet | LaminarResponse<Pet> | Promise<Pet> | Promise<LaminarResponse<Pet>>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsIdGetResponse = LaminarResponse<Pet> | Pet | LaminarResponse<Error> | Error | Promise<LaminarResponse<Pet> | Pet | LaminarResponse<Error> | Error>;
 
 /**
  * Returns a user based on a single ID, if the user does not have access to the pet
@@ -109,7 +109,7 @@ export interface TPetsIdGetContext extends Context, OapiContext {
     };
 }
 
-export type TPetsIdDeleteResponse = (LaminarResponse | Promise<LaminarResponse>) | (Error | LaminarResponse<Error> | Promise<Error> | Promise<LaminarResponse<Error>>);
+export type TPetsIdDeleteResponse = LaminarResponse | LaminarResponse<Error> | Error | Promise<LaminarResponse | LaminarResponse<Error> | Error>;
 
 /**
  * deletes a single pet based on the ID supplied

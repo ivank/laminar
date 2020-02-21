@@ -126,3 +126,27 @@ export const Const = ({
     ),
     jsDoc,
   );
+
+export const NamespaceBlock = ({
+  name,
+  block,
+  isExport,
+  isDefault,
+  jsDoc,
+}: {
+  name: string;
+  block: ts.Statement[];
+  isExport?: boolean;
+  isDefault?: boolean;
+  jsDoc?: string;
+}): ts.ModuleDeclaration =>
+  withJSDoc(
+    ts.createModuleDeclaration(
+      [],
+      Export(isExport, isDefault),
+      ts.createIdentifier(name),
+      ts.createModuleBlock(block),
+      ts.NodeFlags.Namespace,
+    ),
+    jsDoc,
+  );
