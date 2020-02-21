@@ -45,7 +45,7 @@
     "@ovotech/laminar": "*"
   },
   "dependencies": {
-    "@ovotech/ts-compose": "^0.9.0",
+    "@ovotech/ts-compose": "^0.10.0",
     "commander": "^4.1.0",
     "openapi-schemas": "^1.0.3",
     "openapi3-ts": "^1.3.0"

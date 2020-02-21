@@ -7,12 +7,21 @@ import {
   withIdentifier,
   withImports,
 } from '../src';
+import { withHeader } from '../src/document';
 
 describe('Document', () => {
   it('Test print document with context', () => {
-    const initial: DocumentContext = { imports: {}, identifiers: {} };
+    const initial: DocumentContext = { imports: {}, identifiers: {}, namespaces: {}, headers: [] };
 
     const test = Type.Alias({ name: 'test', type: Type.Str });
+    const test2 = Node.Const({ name: 'z1', value: '123' });
+    const test3 = Type.Interface({
+      name: 'z2',
+      props: [
+        Type.Prop({ name: 'value', type: Type.Num }),
+        Type.Prop({ name: 'other', type: Type.Ref('test') }),
+      ],
+    });
     const a = Node.Const({ name: 'a', value: { test1: 'other', k: 12 }, multiline: true });
     const b = Node.Enum({
       name: 'b',
@@ -32,7 +41,15 @@ describe('Document', () => {
     const c3 = withImports(c2, { module: 'utils', defaultAs: 'MyTest' });
     const c4 = withIdentifier(c3, test);
     const c5 = withIdentifier(c4, a);
-    const context = withIdentifier(c5, b);
+    const c6 = withIdentifier(c5, test2, 'FirstNamespace');
+    const c7 = withIdentifier(c6, test3, 'FirstNamespace');
+    const c8 = withIdentifier(c7, test2, 'OtherNamespace');
+    const c9 = withIdentifier(c8, test3, 'OtherNamespace');
+
+    const c10 = withHeader(c9, '/* test */');
+    const c11 = withHeader(c10, '// other');
+
+    const context = withIdentifier(c11, b);
 
     const doc = document(
       context,

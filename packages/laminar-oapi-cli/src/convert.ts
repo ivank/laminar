@@ -20,7 +20,7 @@ export const oapiTs = async (api: OpenAPIObject | string): Promise<string> => {
     ]);
   }
 
-  const context = { root: schema, refs, identifiers: {}, imports: {} };
+  const context = { root: schema, refs };
 
   return printDocument(convertOapi(context, schema));
 };
@@ -28,7 +28,5 @@ export const oapiTs = async (api: OpenAPIObject | string): Promise<string> => {
 export const schemaTs = async (api: Schema | string): Promise<string> => {
   const { schema, refs } = await compile(api);
 
-  return printDocument(
-    convertSchema({ root: schema as SchemaObject, refs, identifiers: {}, imports: {} }, schema),
-  );
+  return printDocument(convertSchema({ root: schema as SchemaObject, refs }, schema));
 };

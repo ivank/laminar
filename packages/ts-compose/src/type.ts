@@ -185,8 +185,19 @@ export const Index = ({
 }): ts.IndexSignatureDeclaration =>
   ts.createIndexSignature(undefined, Readonly(isReadonly), [Param({ name, type: nameType })], type);
 
-export const Ref = (name: string | ts.Identifier, types?: ts.TypeNode[]): ts.TypeReferenceNode =>
-  ts.createTypeReferenceNode(name, types);
+export const Ref = (
+  name: string | ts.Identifier | string[],
+  types?: ts.TypeNode[],
+): ts.TypeReferenceNode => {
+  const fullName = Array.isArray(name)
+    ? name.reduce<ts.QualifiedName | ts.Identifier | undefined>(
+        (acc, item) => (acc ? ts.createQualifiedName(acc, item) : ts.createIdentifier(item)),
+        undefined,
+      )
+    : name;
+
+  return ts.createTypeReferenceNode(fullName ?? '', types);
+};
 
 export const Tuple = (types: ts.TypeNode[]): ts.TupleTypeNode => ts.createTupleTypeNode(types);
 

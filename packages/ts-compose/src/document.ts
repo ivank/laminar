@@ -1,6 +1,7 @@
 import * as ts from 'typescript';
 import { Import } from './node';
 import { printNode } from './print';
+import { Node } from '.';
 
 export interface Identifiers {
   [key: string]:
@@ -23,8 +24,10 @@ export interface ImportNode {
 }
 
 export interface DocumentContext {
-  identifiers: Identifiers;
-  imports: { [key: string]: ImportNode };
+  identifiers?: Identifiers;
+  headers?: string[];
+  namespaces?: { [namespace: string]: Identifiers };
+  imports?: { [key: string]: ImportNode };
 }
 
 export interface Document<
@@ -73,15 +76,23 @@ export const withIdentifier = <TContext extends DocumentContext = DocumentContex
     | ts.TypeAliasDeclaration
     | ts.VariableStatement
     | ts.EnumDeclaration,
-): TContext => ({
-  ...context,
-  identifiers: {
-    ...context.identifiers,
-    ['declarationList' in identifier
+  namespace?: string,
+): TContext => {
+  const name =
+    'declarationList' in identifier
       ? (identifier.declarationList.declarations[0].name as ts.Identifier).text
-      : identifier.name.text]: identifier,
-  },
-});
+      : identifier.name.text;
+
+  return namespace === undefined
+    ? { ...context, identifiers: { ...context.identifiers, [name]: identifier } }
+    : {
+        ...context,
+        namespaces: {
+          ...context.namespaces,
+          [namespace]: { ...context.namespaces?.[namespace], [name]: identifier },
+        },
+      };
+};
 
 const mergeImportNamed = (source: ImportNamed[], destin: ImportNamed[]): ImportNamed[] => [
   ...source.filter(item => !destin.find(destinItem => destinItem.name === item.name)),
@@ -92,7 +103,7 @@ export const withImports = <TContext extends DocumentContext = DocumentContext>(
   context: TContext,
   value: ImportNode,
 ): TContext => {
-  const current = context.imports[value.module];
+  const current = context.imports?.[value.module];
 
   return {
     ...context,
@@ -110,15 +121,31 @@ export const withImports = <TContext extends DocumentContext = DocumentContext>(
   };
 };
 
+export const withHeader = <TContext extends DocumentContext = DocumentContext>(
+  context: TContext,
+  header: string,
+): TContext => ({
+  ...context,
+  headers: [...(context.headers ?? []), header],
+});
+
 export const printDocument = <T extends ts.Node>(doc: Document<T>): string => {
-  const identifiers = Object.values(doc.context.identifiers);
-  const imports = Object.values(doc.context.imports);
+  const identifiers = doc.context.identifiers ? Object.values(doc.context.identifiers) : [];
+  const headers = doc.context.headers ?? [];
+  const imports = doc.context.imports ? Object.values(doc.context.imports) : [];
+  const namespaces = doc.context.namespaces
+    ? Object.entries(doc.context.namespaces).map(([name, identifiers]) =>
+        Node.NamespaceBlock({ name, isExport: true, block: Object.values(identifiers) }),
+      )
+    : [];
 
   return (
     [
+      ...headers,
       ...imports.map(item => printNode(Import(item))),
       printNode(doc.type),
       ...identifiers.map(identifier => printNode(identifier)),
+      ...namespaces.map(namespace => printNode(namespace)),
     ].join('\n\n') + '\n'
   );
 };
