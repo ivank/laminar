@@ -68,7 +68,7 @@ const convertConst: AstConvert = (context, schema) =>
 const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
   if (isReferenceObject(schema)) {
     const name = schema.$ref.split('/').reverse()[0];
-    if (context.identifiers[name]) {
+    if (context.identifiers?.[name]) {
       return document(context, Type.Ref(name));
     } else {
       const refered = context.refs[schema.$ref] || context.root;
