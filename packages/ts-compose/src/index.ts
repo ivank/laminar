@@ -1,6 +1,5 @@
-import * as Node from './node';
-import * as Type from './type';
-
+export { Node } from './node';
+export { Type } from './type';
 export { printNode } from './print';
 export {
   document,
@@ -13,5 +12,3 @@ export {
   Document,
 } from './document';
 export { addJSDoc } from './docs';
-export { Node };
-export { Type };

@@ -9,5 +9,5 @@ const jsDoc = (doc: string): string =>
 export const addJSDoc = <T extends ts.Node>(node: T, doc: string): T =>
   ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, jsDoc(doc), true);
 
-export const withJSDoc = <T extends ts.Node>(node: T, doc?: string): T =>
+export const withJSDoc = <T extends ts.Node>(doc: string | undefined, node: T): T =>
   doc === undefined ? node : addJSDoc(node, doc);

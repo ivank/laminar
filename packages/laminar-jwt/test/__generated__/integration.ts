@@ -1,6 +1,6 @@
 import { Context, LaminarResponse } from "@ovotech/laminar";
 
-import { OapiConfig, OapiContext, OapiSecurityResolver } from "@ovotech/laminar-oapi";
+import { OapiContext, OapiConfig, OapiSecurityResolver } from "@ovotech/laminar-oapi";
 
 export interface Config<C extends {} = {}> extends OapiConfig<C> {
     paths: {
@@ -43,7 +43,7 @@ export interface HttpError {
     message?: string;
 }
 
-export type TSessionPostResponse = (Session | LaminarResponse<Session> | Promise<Session> | Promise<LaminarResponse<Session>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
+export type TSessionPostResponse = LaminarResponse<Session> | Session | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<Session> | Session | LaminarResponse<HttpError> | HttpError>;
 
 /**
  * Cerate a new session
@@ -59,7 +59,7 @@ export interface Test {
     [key: string]: unknown;
 }
 
-export type TTestscopesGetResponse = (Test | LaminarResponse<Test> | Promise<Test> | Promise<LaminarResponse<Test>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
+export type TTestscopesGetResponse = LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError>;
 
 /**
  * Secured by jwt with scopes
@@ -67,7 +67,7 @@ export type TTestscopesGetResponse = (Test | LaminarResponse<Test> | Promise<Tes
 export interface TTestscopesGetContext extends Context, OapiContext {
 }
 
-export type TTestGetResponse = (Test | LaminarResponse<Test> | Promise<Test> | Promise<LaminarResponse<Test>>) | (HttpError | LaminarResponse<HttpError> | Promise<HttpError> | Promise<LaminarResponse<HttpError>>);
+export type TTestGetResponse = LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError>;
 
 /**
  * Secured by jwt without scopes

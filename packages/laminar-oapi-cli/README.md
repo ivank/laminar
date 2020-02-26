@@ -6,6 +6,8 @@ A CLI for the Open Api implementation for the laminar http server.
 
 Given a OpenAPI config file:
 
+> [examples/oapi.yaml](examples/oapi.yaml)
+
 ```yaml
 ---
 openapi: 3.0.0
@@ -39,6 +41,7 @@ paths:
 components:
   schemas:
     User:
+      additionalProperties: false
       properties:
         email:
           type: string

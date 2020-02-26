@@ -1,41 +1,34 @@
-import { Context, LaminarResponse } from '@ovotech/laminar';
+import { Context, LaminarResponse } from "@ovotech/laminar";
 
-import { OapiConfig, OapiContext } from '@ovotech/laminar-oapi';
+import { OapiContext, OapiConfig } from "@ovotech/laminar-oapi";
 
 export interface Config<C extends {} = {}> extends OapiConfig<C> {
-  paths: {
-    '/test': {
-      post: (context: TTestPostContext & C) => TTestPostResponse;
-      get: (context: TTestGetContext & C) => TTestGetResponse;
+    paths: {
+        "/test": {
+            post: (context: TTestPostContext & C) => TTestPostResponse;
+            get: (context: TTestGetContext & C) => TTestGetResponse;
+        };
     };
-  };
 }
 
 export interface User {
-  email: string;
-  scopes?: string[];
+    email: string;
+    scopes?: string[];
 }
 
 export interface Test {
-  text: string;
-  user?: User;
-  [key: string]: unknown;
+    text: string;
+    user?: User;
+    [key: string]: unknown;
 }
 
-export type TTestPostResponse =
-  | Test
-  | LaminarResponse<Test>
-  | Promise<Test>
-  | Promise<LaminarResponse<Test>>;
+export type TTestPostResponse = LaminarResponse<Test> | Test | Promise<LaminarResponse<Test> | Test>;
 
 export interface TTestPostContext extends Context, OapiContext {
-  body: User;
+    body: User;
 }
 
-export type TTestGetResponse =
-  | Test
-  | LaminarResponse<Test>
-  | Promise<Test>
-  | Promise<LaminarResponse<Test>>;
+export type TTestGetResponse = LaminarResponse<Test> | Test | Promise<LaminarResponse<Test> | Test>;
 
-export interface TTestGetContext extends Context, OapiContext {}
+export interface TTestGetContext extends Context, OapiContext {
+}

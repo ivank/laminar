@@ -130,9 +130,9 @@ const convertResponses = (
     });
 
     if (node.type !== undefined) {
-      return document(nodeContext, [Type.Ref('LaminarResponse', [node.type]), node.type]);
+      return document(nodeContext, [Type.Referance('LaminarResponse', [node.type]), node.type]);
     } else {
-      return document(nodeContext, [Type.Ref('LaminarResponse')]);
+      return document(nodeContext, [Type.Referance('LaminarResponse')]);
     }
   });
 
@@ -144,15 +144,18 @@ const convertResponses = (
           params.context,
           Type.Alias({
             name,
-            type: Type.Union([...responseTypes, Type.Ref('Promise', [Type.Union(responseTypes)])]),
+            type: Type.Union([
+              ...responseTypes,
+              Type.Referance('Promise', [Type.Union(responseTypes)]),
+            ]),
             isExport: true,
           }),
         ),
-        Type.Ref(name),
+        Type.Referance(name),
       )
     : document(
         withImports(context, { module: '@ovotech/laminar', named: [{ name: 'ResolverResponse' }] }),
-        Type.Ref('ResolverResponse'),
+        Type.Referance('ResolverResponse'),
       );
 };
 
@@ -225,7 +228,7 @@ export const convertOapi = (
             [
               Type.Param({
                 name: 'context',
-                type: Type.Intersection([Type.Ref(contextIdentifier), Type.Ref('C')]),
+                type: Type.Intersection([Type.Referance(contextIdentifier), Type.Referance('C')]),
               }),
             ],
             responseAst.type,
@@ -268,7 +271,7 @@ export const convertOapi = (
     Type.Interface({
       name: 'Config',
       isExport: true,
-      ext: [{ name: 'OapiConfig', types: [Type.Ref('C')] }],
+      ext: [{ name: 'OapiConfig', types: [Type.Referance('C')] }],
       typeArgs: [
         Type.TypeArg({
           name: 'C',
@@ -286,7 +289,7 @@ export const convertOapi = (
                   props: Object.keys(api.components.securitySchemes).map(scheme =>
                     Type.Prop({
                       name: scheme,
-                      type: Type.Ref('OapiSecurityResolver', [Type.Ref('C')]),
+                      type: Type.Referance('OapiSecurityResolver', [Type.Referance('C')]),
                     }),
                   ),
                 }),

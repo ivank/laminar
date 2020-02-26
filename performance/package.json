@@ -17,6 +17,6 @@
     "benchmark": "^2.1.4",
     "node-fetch": "^2.6.0",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.2"
   }
 }

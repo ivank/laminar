@@ -13,13 +13,13 @@ describe('Document', () => {
   it('Test print document with context', () => {
     const initial: DocumentContext = { imports: {}, identifiers: {}, namespaces: {}, headers: [] };
 
-    const test = Type.Alias({ name: 'test', type: Type.Str });
+    const test = Type.Alias({ name: 'test', type: Type.String });
     const test2 = Node.Const({ name: 'z1', value: '123' });
     const test3 = Type.Interface({
       name: 'z2',
       props: [
-        Type.Prop({ name: 'value', type: Type.Num }),
-        Type.Prop({ name: 'other', type: Type.Ref('test') }),
+        Type.Prop({ name: 'value', type: Type.Number }),
+        Type.Prop({ name: 'other', type: Type.Referance('test') }),
       ],
     });
     const a = Node.Const({ name: 'a', value: { test1: 'other', k: 12 }, multiline: true });
@@ -56,8 +56,8 @@ describe('Document', () => {
       Type.Interface({
         name: 'Orange',
         props: [
-          Type.Prop({ name: 'value', type: Type.Num }),
-          Type.Prop({ name: 'other', type: Type.Ref('test') }),
+          Type.Prop({ name: 'value', type: Type.Number }),
+          Type.Prop({ name: 'other', type: Type.Referance('test') }),
         ],
       }),
     );

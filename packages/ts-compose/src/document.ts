@@ -1,7 +1,6 @@
 import * as ts from 'typescript';
-import { Import } from './node';
+import { Node } from './node';
 import { printNode } from './print';
-import { Node } from '.';
 
 export interface Identifiers {
   [key: string]:
@@ -142,7 +141,7 @@ export const printDocument = <T extends ts.Node>(doc: Document<T>): string => {
   return (
     [
       ...headers,
-      ...imports.map(item => printNode(Import(item))),
+      ...imports.map(item => printNode(Node.Import(item))),
       printNode(doc.type),
       ...identifiers.map(identifier => printNode(identifier)),
       ...namespaces.map(namespace => printNode(namespace)),

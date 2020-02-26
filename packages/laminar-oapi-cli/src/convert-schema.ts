@@ -10,15 +10,15 @@ const nodeType = (type: string): ts.KeywordTypeNode | ts.ArrayTypeNode => {
       return Type.Null;
     case 'integer':
     case 'number':
-      return Type.Num;
+      return Type.Number;
     case 'string':
-      return Type.Str;
+      return Type.String;
     case 'array':
-      return Type.Arr(Type.Any);
+      return Type.Array(Type.Any);
     case 'object':
-      return Type.Obj;
+      return Type.Object;
     case 'boolean':
-      return Type.Bool;
+      return Type.Boolean;
     default:
       return Type.Any;
   }
@@ -33,7 +33,7 @@ const convertBooleanSchema: AstConvert<ts.KeywordTypeNode> = (context, schema) =
   typeof schema === 'boolean' ? document(context, schema === true ? Type.Any : Type.Void) : null;
 
 const convertBoolean: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
-  isSchemaObject(schema) && schema.type === 'boolean' ? document(context, Type.Bool) : null;
+  isSchemaObject(schema) && schema.type === 'boolean' ? document(context, Type.Boolean) : null;
 
 const convertString: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
   isSchemaObject(schema) &&
@@ -41,7 +41,7 @@ const convertString: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
     schema.pattern !== undefined ||
     schema.minLength !== undefined ||
     schema.maxLength !== undefined)
-    ? document(context, Type.Str)
+    ? document(context, Type.String)
     : null;
 
 const convertNumber: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
@@ -52,7 +52,7 @@ const convertNumber: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
     schema.exclusiveMinimum !== undefined ||
     schema.maximum !== undefined ||
     schema.exclusiveMaximum !== undefined)
-    ? document(context, Type.Num)
+    ? document(context, Type.Number)
     : null;
 
 const convertEnum: AstConvert<ts.UnionTypeNode> = (context, schema) =>
@@ -69,7 +69,7 @@ const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
   if (isReferenceObject(schema)) {
     const name = schema.$ref.split('/').reverse()[0];
     if (context.identifiers?.[name]) {
-      return document(context, Type.Ref(name));
+      return document(context, Type.Referance(name));
     } else {
       const refered = context.refs[schema.$ref] || context.root;
       const node = refered
@@ -80,7 +80,7 @@ const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
         ? Type.Interface({ name, props: [...node.type.members], isExport: true })
         : Type.Alias({ name, type: node.type, isExport: true });
 
-      return document(withIdentifier(node.context, entry), Type.Ref(entry.name));
+      return document(withIdentifier(node.context, entry), Type.Referance(entry.name));
     }
   } else {
     return null;
@@ -121,7 +121,7 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
         index:
           additional.type === Type.Void
             ? undefined
-            : Type.Index({ name: 'key', nameType: Type.Str, type: additional.type }),
+            : Type.Index({ name: 'key', nameType: Type.String, type: additional.type }),
       }),
     );
   } else {
@@ -168,13 +168,13 @@ const convertArray: AstConvert<ts.ArrayTypeNode | ts.TupleTypeNode> = (context, 
         );
         const items = mapWithContext(context, schemaItems, convertSchema);
 
-        return document(items.context, Type.Arr(Type.Union(items.items)));
+        return document(items.context, Type.Array(Type.Union(items.items)));
       }
     } else {
       const value = schema.items
         ? convertSchema(context, schema.items)
         : document(context, Type.Any);
-      return document(value.context, Type.Arr(value.type));
+      return document(value.context, Type.Array(value.type));
     }
   } else {
     return null;
