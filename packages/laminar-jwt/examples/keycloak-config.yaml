@@ -1,0 +1,7 @@
+my-service-name:
+  defineRoles:
+    - admin-role
+
+other-client-service:
+  serviceAccountRoles:
+    - admin-role

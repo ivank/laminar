@@ -1,4 +1,4 @@
-import { JWTData, User, isJWTData, Session } from './types';
+import { User, isJWTData, Session } from './types';
 import { SignOptions, Secret, sign, decode } from 'jsonwebtoken';
 
 export interface JwtCreateSessionOptions<TUser> {
@@ -12,12 +12,7 @@ export const jwtCreateSession = <TUser extends User = User>({
   signOptions,
   user,
 }: JwtCreateSessionOptions<TUser>): Session<TUser> => {
-  const jwtData: JWTData = {
-    email: user.email,
-    scopes: user.scopes,
-  };
-
-  const jwt = sign(jwtData, secretOrPrivateKey, signOptions);
+  const jwt = sign(user, secretOrPrivateKey, signOptions);
   const data = decode(jwt);
   if (!isJWTData(data)) {
     throw new Error('Error generating token, could not extract exp & nbf');

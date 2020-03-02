@@ -7,19 +7,20 @@ import {
 } from 'jsonwebtoken';
 import { JWTData, isJWTData } from './types';
 import { JWTAuthenticationError } from './JWTAuthenticationError';
+import { ValidateJwtData } from './createJwtSecurity';
 
 export interface JwtVerifyOptions {
   secretOrPublicKey: string | Buffer | GetPublicKeyOrSecret;
   verifyOptions?: VerifyOptions;
   header?: string;
-  scopes?: string[];
+  validateJwtData?: ValidateJwtData;
 }
 
 export const jwtVerifyAuthorization = async ({
   secretOrPublicKey,
   verifyOptions,
   header,
-  scopes,
+  validateJwtData,
 }: JwtVerifyOptions): Promise<JWTData> => {
   if (!header) {
     throw new JWTAuthenticationError(401, { message: 'Authorization header missing' });
@@ -44,18 +45,8 @@ export const jwtVerifyAuthorization = async ({
       });
     }
 
-    if (scopes) {
-      const missingScopes = scopes.filter(
-        requiredScope =>
-          !data.scopes || !data.scopes.find(userScope => requiredScope === userScope),
-      );
-
-      if (missingScopes.length !== 0) {
-        const scopes = missingScopes.join(', ');
-        throw new JWTAuthenticationError(401, {
-          message: `Authorization error. User does not have required scopes: [${scopes}]`,
-        });
-      }
+    if (validateJwtData) {
+      validateJwtData(data);
     }
 
     return data;

@@ -1,5 +1,10 @@
 import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
-import { createJwtSecurity, auth, jwkPublicKey } from '@ovotech/laminar-jwt';
+import {
+  createJwtSecurity,
+  auth,
+  jwkPublicKey,
+  validateScopesKeycloak,
+} from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
@@ -19,16 +24,24 @@ nock('http://example.com/')
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
+/**
+ * We add a custom validateScopes function it would recieve the decrypted token as well as the required roles
+ * If the roles given to the client token do not match the required roles we'll throw a 401 error.
+ */
+const validateScopes = validateScopesKeycloak('my-service-name');
+const keyid = JSON.parse(jwkFile).keys[0].kid;
+
 const bodyParser = createBodyParser();
 const jwtSecurity = createJwtSecurity({
   publicKey,
   privateKey,
-  signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
+  validateScopes,
+  signOptions: { algorithm: 'RS256', keyid },
 });
 
 // A middleware that would actually restrict access
 const onlyLoggedIn = auth();
-const onlyAdmin = auth(['admin']);
+const onlyAdmin = auth(['admin-role']);
 
 createLaminar({
   port: 3333,

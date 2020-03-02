@@ -12,6 +12,7 @@ export interface JWTData {
 export interface User {
   email: string;
   scopes?: string[];
+  [key: string]: unknown;
 }
 
 export interface Session<TUser extends User = User> {

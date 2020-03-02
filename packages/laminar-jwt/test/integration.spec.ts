@@ -1,8 +1,16 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { createLaminar, Laminar, createBodyParser, router, get, post } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { createOapi } from '@ovotech/laminar-oapi';
-import { createJwtSecurity, JWTContext, JWTSecurity, auth, jwkPublicKey } from '../src';
+import {
+  createJwtSecurity,
+  JWTContext,
+  JWTSecurity,
+  auth,
+  jwkPublicKey,
+  validateScopesKeycloak,
+} from '../src';
 import { Config } from './__generated__/integration';
 import { sign } from 'jsonwebtoken';
 import { generateKeyPair } from 'crypto';
@@ -176,8 +184,14 @@ describe('Integration', () => {
       post('/session', ({ createSession, body: { email, scopes } }) =>
         createSession({ email, scopes }),
       ),
-      get('/test', auth()(({ authInfo }) => ({ text: 'Test', ...authInfo }))),
-      get('/test-scopes', auth(['test1'])(({ authInfo }) => ({ text: 'Test', ...authInfo }))),
+      get(
+        '/test',
+        auth()(({ authInfo }) => ({ text: 'Test', ...authInfo })),
+      ),
+      get(
+        '/test-scopes',
+        auth(['test1'])(({ authInfo }) => ({ text: 'Test', ...authInfo })),
+      ),
     );
 
     server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8063 });
@@ -272,7 +286,10 @@ describe('Integration', () => {
       post('/session', ({ createSession, body: { email, scopes } }) =>
         createSession({ email, scopes }),
       ),
-      get('/test', auth()(({ authInfo }) => ({ text: 'Test', ...authInfo }))),
+      get(
+        '/test',
+        auth()(({ authInfo }) => ({ text: 'Test', ...authInfo })),
+      ),
     );
 
     server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8065 });
@@ -308,5 +325,120 @@ describe('Integration', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
 
     await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
+  });
+
+  it('Should process response for public / private key and keycloak', async () => {
+    const { publicKey, privateKey } = await promisify(generateKeyPair)('rsa', {
+      modulusLength: 4096,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'pem',
+        cipher: 'aes-256-cbc',
+        passphrase: 'laminar secret',
+      },
+    });
+
+    const bodyParser = createBodyParser();
+
+    const jwtMiddleware = createJwtSecurity({
+      publicKey,
+      verifyOptions: { clockTolerance: 10 },
+      validateScopes: validateScopesKeycloak('test-service'),
+    });
+
+    const testTokenWithoutScopes = sign(
+      { email: 'tester' },
+      { key: privateKey, passphrase: 'laminar secret' },
+      { algorithm: 'RS256' },
+    );
+
+    const testTokenWithOtherServiceRoles = sign(
+      { email: 'tester', resource_access: { 'service-1': { roles: ['test1'] } } },
+      { key: privateKey, passphrase: 'laminar secret' },
+      { algorithm: 'RS256' },
+    );
+
+    const testTokenWithServiceRolesOther = sign(
+      { email: 'tester', resource_access: { 'test-service': { roles: ['test2'] } } },
+      { key: privateKey, passphrase: 'laminar secret' },
+      { algorithm: 'RS256' },
+    );
+
+    const testTokenWithServiceRoles = sign(
+      { email: 'tester', resource_access: { 'test-service': { roles: ['test1'] } } },
+      { key: privateKey, passphrase: 'laminar secret' },
+      { algorithm: 'RS256' },
+    );
+
+    const app = router<JWTContext>(
+      get(
+        '/test',
+        auth()(({ authInfo }) => ({ text: 'Test', ...authInfo })),
+      ),
+      get(
+        '/test-scopes',
+        auth(['test1'])(({ authInfo }) => ({ text: 'Test', ...authInfo })),
+      ),
+    );
+
+    server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8063 });
+    await server.start();
+
+    const api = axios.create({ baseURL: 'http://localhost:8063' });
+
+    const { data: data1 } = await api.get('/test', {
+      headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
+    });
+
+    expect(data1).toEqual({
+      text: 'Test',
+      email: 'tester',
+      iat: expect.any(Number),
+    });
+
+    const result2 = api.get('/test-scopes', {
+      headers: { authorization: `Bearer ${testTokenWithOtherServiceRoles}` },
+    });
+
+    await expect(result2).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 401,
+        data: {
+          message:
+            'Authorization error. User does not have required roles: [test1] for test-service',
+        },
+      }),
+    );
+
+    const result3 = api.get('/test-scopes', {
+      headers: { authorization: `Bearer ${testTokenWithServiceRolesOther}` },
+    });
+
+    await expect(result3).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 401,
+        data: {
+          message:
+            'Authorization error. User does not have required roles: [test1] for test-service',
+        },
+      }),
+    );
+
+    const { data: data4 } = await api.get('/test-scopes', {
+      headers: { authorization: `Bearer ${testTokenWithServiceRoles}` },
+    });
+
+    expect(data4).toEqual({
+      text: 'Test',
+      email: 'tester',
+      resource_access: { 'test-service': { roles: ['test1'] } },
+      iat: expect.any(Number),
+    });
   });
 });

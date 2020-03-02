@@ -225,7 +225,11 @@ const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
 const bodyParser = createBodyParser();
-const jwtSecurity = createJwtSecurity({ publicKey, privateKey });
+const jwtSecurity = createJwtSecurity({
+  publicKey,
+  privateKey,
+  signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
+});
 
 // A middleware that would actually restrict access
 const onlyLoggedIn = auth();
@@ -238,12 +242,125 @@ createLaminar({
       router(
         get('/.well-known/health-check', () => ({ health: 'ok' })),
         post('/session', ({ createSession, body }) => createSession(body)),
-        post('/test', onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo }))),
-        get('/test', onlyLoggedIn(() => 'index')),
+        post(
+          '/test',
+          onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo })),
+        ),
+        get(
+          '/test',
+          onlyLoggedIn(() => 'index'),
+        ),
       ),
     ),
   ),
 }).start();
+```
+
+You can test it by running (requires curl and jq):
+
+> [examples/jwk.sh](examples/jwk.sh)
+
+```bash
+JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","scopes":["admin"]}' | jq '.jwt' -r`
+curl --request POST --header "Authorization: Bearer ${JWT}" http://localhost:3333/test
+```
+
+### Keycloak and custom scope validators
+
+In order to use keycloak as public / private pair you'll need to provide a custom function that will validate the required scopes against the data comming from the keycloak token.
+
+If we had a keycloak config like this:
+
+> [examples/keycloak-config.yaml](examples/keycloak-config.yaml)
+
+```yaml
+my-service-name:
+  defineRoles:
+    - admin-role
+
+other-client-service:
+  serviceAccountRoles:
+    - admin-role
+```
+
+Then we could implement it with this service:
+
+> [examples/keycloak.ts](examples/keycloak.ts)
+
+```typescript
+import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
+import {
+  createJwtSecurity,
+  auth,
+  jwkPublicKey,
+  validateScopesKeycloak,
+} from '@ovotech/laminar-jwt';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import * as nock from 'nock';
+
+/**
+ * Make sure we have some response from a url
+ */
+const jwkFile = readFileSync(join(__dirname, './jwk.json'), 'utf8');
+nock('http://example.com/')
+  .get('/jwk.json')
+  .reply(200, JSON.parse(jwkFile));
+
+/**
+ * The public key is now a function that would attempt to retrieve the jwk from a url
+ * You can also cache it or specify the max age, which by default is 0 and would never expire.
+ */
+const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
+const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
+
+/**
+ * We add a custom validateScopes function it would recieve the decrypted token as well as the required roles
+ * If the roles given to the client token do not match the required roles we'll throw a 401 error.
+ */
+const validateScopes = validateScopesKeycloak('my-service-name');
+const keyid = JSON.parse(jwkFile).keys[0].kid;
+
+const bodyParser = createBodyParser();
+const jwtSecurity = createJwtSecurity({
+  publicKey,
+  privateKey,
+  validateScopes,
+  signOptions: { algorithm: 'RS256', keyid },
+});
+
+// A middleware that would actually restrict access
+const onlyLoggedIn = auth();
+const onlyAdmin = auth(['admin-role']);
+
+createLaminar({
+  port: 3333,
+  app: bodyParser(
+    jwtSecurity(
+      router(
+        get('/.well-known/health-check', () => ({ health: 'ok' })),
+        post('/session', ({ createSession, body }) => createSession(body)),
+        post(
+          '/test',
+          onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo })),
+        ),
+        get(
+          '/test',
+          onlyLoggedIn(() => 'index'),
+        ),
+      ),
+    ),
+  ),
+}).start();
+```
+
+When this is running, you can test it with calls like this (requires curl and jq):
+
+> [examples/keycloak.sh](examples/keycloak.sh)
+
+```bash
+JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin-role"]}}}' | jq '.jwt' -r`
+curl --request POST --header "Authorization: Bearer ${JWT}" http://localhost:3333/test
 ```
 
 ### Docs
