@@ -1,5 +1,5 @@
 import * as cookie from 'cookie';
-import { createReadStream, statSync } from 'fs';
+import { createReadStream, statSync, ReadStream } from 'fs';
 import { lookup } from 'mime-types';
 import { Readable } from 'stream';
 import { LaminarObject, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
@@ -70,7 +70,10 @@ export const extendResponse = (
 export const message = <T = object | string>(status: number, body: T): LaminarResponse<T> =>
   response<T>({ status, body });
 
-export const redirect = (url: string, partial?: Partial<LaminarResponse>): LaminarResponse => {
+export const redirect = (
+  url: string,
+  partial?: Partial<LaminarResponse<string>>,
+): LaminarResponse<string> => {
   const { headers, ...rest } = partial || { headers: {} };
   return response({
     headers: {
@@ -84,7 +87,10 @@ export const redirect = (url: string, partial?: Partial<LaminarResponse>): Lamin
   });
 };
 
-export const file = (filename: string, partial?: Partial<LaminarResponse>): LaminarResponse =>
+export const file = (
+  filename: string,
+  partial?: Partial<LaminarResponse<ReadStream>>,
+): LaminarResponse<ReadStream> =>
   response({
     body: createReadStream(filename),
     headers: {

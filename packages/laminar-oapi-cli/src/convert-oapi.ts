@@ -14,6 +14,7 @@ import {
   RequestBodyObject,
   ResponseObject,
   ResponsesObject,
+  SchemaObject,
 } from 'openapi3-ts';
 import * as ts from 'typescript';
 import { convertSchema } from './convert-schema';
@@ -108,6 +109,29 @@ const convertParameters = (
   };
 };
 
+/**
+ * If root repsponse is string, we allow it to be readable stream as well
+ */
+const convertResponse = (
+  context: AstContext,
+  schemaOrRef?: SchemaObject | ReferenceObject,
+): Document<ts.TypeNode | undefined, AstContext> => {
+  if (schemaOrRef) {
+    const schema = getReferencedObject(schemaOrRef, isSchemaObject, context);
+    const responseDocument = convertSchema(context, schemaOrRef);
+    if (schema.type === 'string') {
+      return document(
+        withImports(responseDocument.context, { module: 'fs', named: [{ name: 'ReadStream' }] }),
+        Type.Union([responseDocument.type, Type.Referance('ReadStream')]),
+      );
+    } else {
+      return responseDocument;
+    }
+  } else {
+    return document(context, undefined);
+  }
+};
+
 const convertResponses = (
   context: AstContext,
   name: string,
@@ -120,9 +144,7 @@ const convertResponses = (
     const schema =
       response?.content?.['application/json']?.schema ?? response?.content?.['*/*']?.schema;
 
-    const node = schema
-      ? convertSchema(responseContext, schema)
-      : document(responseContext, undefined);
+    const node = convertResponse(responseContext, schema);
 
     const nodeContext = withImports(node.context, {
       module: '@ovotech/laminar',
