@@ -2910,7 +2910,7 @@ export interface TAccountsAccountIdMetersGetContext extends Context, OapiContext
 exports[`Json Schema Ts Test uspto.yaml 1`] = `
 "import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
 
-import { ReadStream } from \\"fs\\";
+import { Readable } from \\"stream\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
@@ -2966,7 +2966,7 @@ export type TGetResponse = LaminarResponse<dataSetList> | dataSetList | Promise<
 export interface TGetContext extends Context, OapiContext {
 }
 
-export type TDatasetVersionFieldsGetResponse = LaminarResponse<string | ReadStream> | (string | ReadStream) | LaminarResponse<string | ReadStream> | (string | ReadStream) | Promise<LaminarResponse<string | ReadStream> | (string | ReadStream) | LaminarResponse<string | ReadStream> | (string | ReadStream)>;
+export type TDatasetVersionFieldsGetResponse = LaminarResponse<string | Readable> | (string | Readable) | LaminarResponse<string | Readable> | (string | Readable) | Promise<LaminarResponse<string | Readable> | (string | Readable) | LaminarResponse<string | Readable> | (string | Readable)>;
 
 /**
  * Provides the general information about the API and the list of fields that can be used to query the dataset.

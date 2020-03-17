@@ -1,5 +1,5 @@
 import * as cookie from 'cookie';
-import { createReadStream, statSync, ReadStream } from 'fs';
+import { createReadStream, statSync } from 'fs';
 import { lookup } from 'mime-types';
 import { Readable } from 'stream';
 import { LaminarObject, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
@@ -89,8 +89,8 @@ export const redirect = (
 
 export const file = (
   filename: string,
-  partial?: Partial<LaminarResponse<ReadStream>>,
-): LaminarResponse<ReadStream> =>
+  partial?: Partial<LaminarResponse<Readable>>,
+): LaminarResponse<Readable> =>
   response({
     body: createReadStream(filename),
     headers: {

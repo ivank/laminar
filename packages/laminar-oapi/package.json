@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-oapi",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A middleware for @ovotech/laminar-oapi to handle open-api",

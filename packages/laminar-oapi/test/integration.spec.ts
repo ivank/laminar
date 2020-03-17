@@ -1,4 +1,11 @@
-import { HttpError, createLaminar, Laminar, response, createBodyParser } from '@ovotech/laminar';
+import {
+  HttpError,
+  createLaminar,
+  Laminar,
+  response,
+  createBodyParser,
+  file,
+} from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { OapiConfig, createOapi } from '../src';
@@ -66,6 +73,7 @@ describe('Integration', () => {
         },
       },
       paths: {
+        '/about': { get: () => file(join(__dirname, 'about.html')) },
         '/pets': {
           get: ({ logger }) => {
             logger('Get all');
@@ -128,6 +136,20 @@ describe('Integration', () => {
         data: { message: 'Path GET /unknown-url not found' },
       }),
     );
+
+    await expect(
+      api.get('/about', { headers: { Authorization: 'Bearer 123' } }),
+    ).resolves.toMatchObject({
+      status: 200,
+      headers: {
+        'content-type': 'text/html',
+      },
+      data: `<html>
+  <body>
+    ABOUT TEXT
+  </body>
+</html>`,
+    });
 
     await expect(api.get('/pets')).resolves.toMatchObject({
       status: 200,
@@ -318,14 +340,15 @@ describe('Integration', () => {
       ],
     });
 
-    expect(log).toHaveBeenNthCalledWith(1, 'Get all');
-    expect(log).toHaveBeenNthCalledWith(2, 'Auth Successful');
+    expect(log).toHaveBeenNthCalledWith(1, 'Auth Successful');
+    expect(log).toHaveBeenNthCalledWith(2, 'Get all');
+    expect(log).toHaveBeenNthCalledWith(3, 'Auth Successful');
     expect(log).toHaveBeenNthCalledWith(
-      3,
+      4,
       'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
     );
-    expect(log).toHaveBeenNthCalledWith(4, 'Get all');
     expect(log).toHaveBeenNthCalledWith(5, 'Get all');
+    expect(log).toHaveBeenNthCalledWith(6, 'Get all');
   });
 });
 
@@ -367,9 +390,8 @@ describe('Invalid Schema', () => {
     expect(
       createOapi({
         paths: {
-          '/pets': {
-            get: () => '',
-          },
+          '/about': { get: () => '' },
+          '/pets': { get: () => '' },
         },
         security: {
           BasicAuth: () => ({}),

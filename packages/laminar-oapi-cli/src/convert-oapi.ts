@@ -121,8 +121,8 @@ const convertResponse = (
     const responseDocument = convertSchema(context, schemaOrRef);
     if (schema.type === 'string') {
       return document(
-        withImports(responseDocument.context, { module: 'fs', named: [{ name: 'ReadStream' }] }),
-        Type.Union([responseDocument.type, Type.Referance('ReadStream')]),
+        withImports(responseDocument.context, { module: 'stream', named: [{ name: 'Readable' }] }),
+        Type.Union([responseDocument.type, Type.Referance('Readable')]),
       );
     } else {
       return responseDocument;

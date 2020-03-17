@@ -172,7 +172,15 @@ export const toResponseSchema = ({ responses }: ResolvedOperationObject): {} => 
                   'content-type': { type: 'string', pattern: toMatchPattern(match) },
                 },
               },
-              body: mediaType.schema,
+              body:
+                mediaType.schema?.type === 'string'
+                  ? {
+                      oneOf: [
+                        mediaType.schema,
+                        { type: 'object', properties: { readable: { const: true } } },
+                      ],
+                    }
+                  : mediaType.schema,
             },
           })),
         }

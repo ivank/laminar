@@ -16,6 +16,15 @@ servers:
 security:
   - BearerAuth: []
 paths:
+  /about:
+    get:
+      description: 'About text for the service'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            '*/*':
+              schema: { type: string }
   /pets:
     get:
       description: |
