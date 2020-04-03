@@ -14,7 +14,7 @@ export const paramRegEx = /\{[^\}]+\}/g;
 
 export const toPathKeys = (path: string): string[] => {
   const keys = path.match(paramRegEx);
-  return keys ? keys.map(key => key.slice(1, -1)) : [];
+  return keys ? keys.map((key) => key.slice(1, -1)) : [];
 };
 
 export const toPathRe = (path: string): RegExp =>
@@ -74,7 +74,7 @@ export const selectRoute = <
 };
 
 export const router = <C extends object = {}>(...routes: Route<C>[]): Resolver<C & Context> => {
-  return ctx => {
+  return (ctx) => {
     const select = selectRoute(ctx, routes as Route[]);
 
     if (!select) {
@@ -90,7 +90,7 @@ export const del: RouteHelper = (path, resolver) => toRoute(Method.DELETE, path,
 export const patch: RouteHelper = (path, resolver) => toRoute(Method.PATCH, path, resolver);
 export const put: RouteHelper = (path, resolver) => toRoute(Method.PUT, path, resolver);
 export const options: RouteHelper = (path, resolver) => toRoute(Method.OPTIONS, path, resolver);
-export const defaultRoute: DefaultRouteHelper = resolver => ({
+export const defaultRoute: DefaultRouteHelper = (resolver) => ({
   resolver,
   matcher: () => ({ path: {} }),
 });

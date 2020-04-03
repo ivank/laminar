@@ -65,7 +65,7 @@ describe('createLogging middleware', () => {
 
   it('Should log other things with a custom function', async () => {
     const mockLogger = { log: jest.fn() };
-    const errorFormatter: LoggerOptions['error'] = error => {
+    const errorFormatter: LoggerOptions['error'] = (error) => {
       return {
         message: `MY ${error.message}`,
       };

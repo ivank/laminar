@@ -28,7 +28,7 @@ export const isEqual = (a: unknown, b: unknown): boolean => {
     } else if (isObject(a) && isObject(b)) {
       const aKeys = Object.keys(a).sort();
       const bKeys = Object.keys(a).sort();
-      return isEqual(aKeys, bKeys) && aKeys.every(key => isEqual(a[key], b[key]));
+      return isEqual(aKeys, bKeys) && aKeys.every((key) => isEqual(a[key], b[key]));
     }
   }
   return false;
@@ -47,7 +47,7 @@ export const flatten = <T>(results: T[][]): T[] => {
 export const isUniqueWith = <T = unknown>(compare: (a: T, b: T) => boolean, array: T[]): T[] => {
   const items: T[] = [];
   for (const item of array) {
-    if (!items.some(prev => compare(prev, item))) {
+    if (!items.some((prev) => compare(prev, item))) {
       items.push(item);
     }
   }
@@ -65,7 +65,7 @@ export const validateSchema: Validator<Schema> = (schema, value, options) => {
   } else if (schema === false) {
     return [{ code: 'false', name: options.name, param: false }];
   } else if (schema) {
-    return flatten(options.validators.map(validator => validator(schema, value, options)));
+    return flatten(options.validators.map((validator) => validator(schema, value, options)));
   } else {
     return [];
   }

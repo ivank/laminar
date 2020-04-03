@@ -10,12 +10,12 @@ export const validateAdditionalProperties: Validator = (schema, value, options) 
     const { properties, additionalProperties, patternProperties } = schema;
 
     const additionalKeys = Object.keys(value)
-      .filter(key => !(properties && key in properties))
+      .filter((key) => !(properties && key in properties))
       .filter(
-        key =>
+        (key) =>
           !(
             patternProperties &&
-            Object.keys(patternProperties).some(pattern => RegExp(pattern).test(key))
+            Object.keys(patternProperties).some((pattern) => RegExp(pattern).test(key))
           ),
       );
 
@@ -24,7 +24,7 @@ export const validateAdditionalProperties: Validator = (schema, value, options) 
         return HasError('additionalProperties', options.name, additionalKeys);
       } else if (isObject(additionalProperties)) {
         return flatten(
-          additionalKeys.map(key =>
+          additionalKeys.map((key) =>
             validateSchema(additionalProperties, value[key], childOptions(key, options)),
           ),
         );

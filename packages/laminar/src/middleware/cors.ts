@@ -23,7 +23,7 @@ const toAllowOrigin = (
 
     if (requestOrigin) {
       if (Array.isArray(origin)) {
-        return origin.find(item => item === requestOrigin);
+        return origin.find((item) => item === requestOrigin);
       } else if (origin instanceof RegExp) {
         return origin.test(requestOrigin) ? requestOrigin : undefined;
       } else if (origin instanceof Function) {
@@ -69,8 +69,8 @@ export const createCors = (config: CorsConfig = {}): Middleware => {
     ...(maxAge ? { 'Access-Control-Max-Age': maxAge } : undefined),
   };
 
-  return next => {
-    return async ctx => {
+  return (next) => {
+    return async (ctx) => {
       const headers = {
         'Access-Control-Allow-Origin': toAllowOrigin(config.allowOrigin, ctx.headers.origin),
         ...initialHeaders,

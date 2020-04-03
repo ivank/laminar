@@ -9,8 +9,8 @@ export const defaultResponseTimeHeader = 'x-response-time';
 
 export const createResponseTime = ({
   header = defaultResponseTimeHeader,
-}: ResponseTimeConfig = {}): Middleware => next => {
-  return async ctx => {
+}: ResponseTimeConfig = {}): Middleware => (next) => {
+  return async (ctx) => {
     const startAt = process.hrtime();
     const result = await next(ctx);
     const diff = process.hrtime(startAt);

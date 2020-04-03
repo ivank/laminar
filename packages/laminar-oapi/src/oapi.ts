@@ -93,19 +93,19 @@ const validateSecurity = async <C extends object = {}>(
   }
 
   const checks = requirements
-    .map(async requirement => {
+    .map(async (requirement) => {
       const securityContexts = Object.entries(requirement)
         .map(([name, scopes]) => security[name](context, { scheme: schemes[name], scopes }))
         .filter(isAuthInfo);
       return (await Promise.all(securityContexts)).reduce((a, b) => ({ ...a, ...b }), {});
     })
-    .map(check => check.catch(error => error));
+    .map((check) => check.catch((error) => error));
 
   const results = await Promise.all(checks);
-  const authInfo = results.find(result => !(result instanceof Error));
+  const authInfo = results.find((result) => !(result instanceof Error));
 
   if (!authInfo) {
-    throw results.find(result => result instanceof Error);
+    throw results.find((result) => result instanceof Error);
   }
 
   return authInfo;
@@ -140,7 +140,7 @@ export const createOapi = async <C extends object = {}>({
     throw new OapiResolverError('Invalid Resolvers', checkResolvers.errors);
   }
 
-  return async ctx => {
+  return async (ctx) => {
     const select = selectRoute<object, C, OapiRoute<C & Context>>(ctx, routes);
 
     if (!select) {

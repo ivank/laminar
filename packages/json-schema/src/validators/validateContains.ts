@@ -9,7 +9,7 @@ export const validateContains: Validator = (schema, value, options) => {
     const allItemsResults = value.map((item, index) =>
       validateSchema(contains, item, childOptions(index, options)),
     );
-    if (allItemsResults.every(item => item.length > 0)) {
+    if (allItemsResults.every((item) => item.length > 0)) {
       return flatten([result, ...allItemsResults]);
     }
     return result;

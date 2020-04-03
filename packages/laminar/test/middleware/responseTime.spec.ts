@@ -12,7 +12,7 @@ describe('createResponseTime middleware', () => {
     server = createLaminar({
       port: 8096,
       app: createResponseTime()(async () => {
-        await new Promise(resolve => setTimeout(resolve, 15));
+        await new Promise((resolve) => setTimeout(resolve, 15));
         return 'OK';
       }),
     });
@@ -28,7 +28,7 @@ describe('createResponseTime middleware', () => {
     server = createLaminar({
       port: 8096,
       app: createResponseTime()(async () => {
-        await new Promise(resolve => setTimeout(resolve, 55));
+        await new Promise((resolve) => setTimeout(resolve, 55));
         return 'OK';
       }),
     });

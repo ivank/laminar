@@ -83,7 +83,7 @@ describe('Integration', () => {
             if (!isBodyNewPet(body)) {
               throw new HttpError(400, { message: 'Wrong body' });
             }
-            const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };
+            const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             logger(`new pet ${pet.name}, trace token: ${headers['x-trace-token']}`);
 
             db.push(pet);
@@ -99,7 +99,7 @@ describe('Integration', () => {
               return JSON.parse(JSON.stringify({ something: 'else' }));
             }
             return (
-              db.find(item => item.id === Number(path.id)) ||
+              db.find((item) => item.id === Number(path.id)) ||
               response({ status: 404, body: { code: 123, message: 'Not Found' } })
             );
           },
@@ -108,7 +108,7 @@ describe('Integration', () => {
               throw new HttpError(400, { message: 'Missing id in path' });
             }
 
-            const index = db.findIndex(item => item.id === Number(path.id));
+            const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
               return response({ status: 204 });

@@ -55,23 +55,23 @@ describe('Integration', () => {
       setUser: (id: string, name: string) => void;
     }
 
-    const db: Middleware<DBContext> = next => {
+    const db: Middleware<DBContext> = (next) => {
       const users: { [key: string]: string } = {
         10: 'John',
         20: 'Tom',
       };
 
       const dbCtx: DBContext = {
-        getUser: id => users[id],
+        getUser: (id) => users[id],
         setUser: (id, name) => {
           users[id] = name;
         },
-        delUser: id => {
+        delUser: (id) => {
           delete users[id];
         },
       };
 
-      return ctx => {
+      return (ctx) => {
         return next({ ...ctx, ...dbCtx });
       };
     };

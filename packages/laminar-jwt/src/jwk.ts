@@ -74,7 +74,7 @@ export const jwkPublicKey = ({
       }
 
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      const key = data.keys.find(key => key.kid === header.kid)!;
+      const key = data.keys.find((key) => key.kid === header.kid)!;
       const signingKey = 'x5c' in key ? certToPEM(key.x5c[0]) : rsaPublicKeyToPEM(key.n, key.e);
 
       callback(undefined, signingKey);

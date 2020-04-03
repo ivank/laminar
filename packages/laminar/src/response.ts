@@ -3,6 +3,7 @@ import { createReadStream, statSync } from 'fs';
 import { lookup } from 'mime-types';
 import { Readable } from 'stream';
 import { LaminarObject, LaminarCookie, LaminarResponse, ResolverResponse } from './types';
+import { IncomingHttpHeaders } from 'http';
 
 const contentType = (body: unknown): string => {
   return body instanceof Readable || body instanceof Buffer
@@ -90,16 +91,21 @@ export const redirect = (
 export const file = (
   filename: string,
   partial?: Partial<LaminarResponse<Readable>>,
-): LaminarResponse<Readable> =>
-  response({
+  headers?: IncomingHttpHeaders,
+): LaminarResponse<Readable> => {
+  const stat = statSync(filename);
+  return response({
     body: createReadStream(filename),
     headers: {
       'content-type': lookup(filename) || 'text/plain',
-      'content-length': statSync(filename).size,
+      'content-length': stat.size,
+      'last-modified': stat.mtime.toISOString(),
       ...partial?.headers,
+      ...headers,
     },
     ...partial,
   });
+};
 
 export const resolveBody = (
   body: LaminarResponse['body'],

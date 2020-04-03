@@ -16,7 +16,7 @@ const findSchema = (
   options: ValidateOptions,
 ): Schema | undefined =>
   schemas.find(
-    item =>
+    (item) =>
       isJsonSchema(item) &&
       'type' in item &&
       item.type === 'object' &&
@@ -49,7 +49,7 @@ export const validateOneOf: Validator = (schema, value, options) => {
     const validations = oneOf.map((item, index) =>
       validateSchema(item, value, childOptions(`${index}?`, options)),
     );
-    const matching = validations.filter(item => item.length === 0);
+    const matching = validations.filter((item) => item.length === 0);
 
     if (matching.length !== 1) {
       return [...HasError('oneOf', options.name, matching.length), ...flatten(validations)];

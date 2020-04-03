@@ -7,8 +7,8 @@ export const validatePatternProperties: Validator = (schema, value, options) => 
       Object.entries(schema.patternProperties).map(([pattern, patternSchema]) =>
         flatten(
           Object.keys(value)
-            .filter(key => RegExp(pattern).test(key))
-            .map(key => validateSchema(patternSchema, value[key], childOptions(key, options))),
+            .filter((key) => RegExp(pattern).test(key))
+            .map((key) => validateSchema(patternSchema, value[key], childOptions(key, options))),
         ),
       ),
     );

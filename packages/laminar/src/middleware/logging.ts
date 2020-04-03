@@ -27,22 +27,22 @@ export const formatResponseBody = (
   Buffer.isBuffer(body) ? '[Buffer]' : body instanceof Readable ? '[Readable]' : body;
 
 export const defaultOptions: LoggerOptions = {
-  request: ctx => ({
+  request: (ctx) => ({
     uri: `${ctx.method} ${format(ctx.url)}`,
     body: ctx.body instanceof IncomingMessage ? '[Stream]' : ctx.body,
   }),
-  response: response => ({
+  response: (response) => ({
     ...(isResponse(response)
       ? { status: response.status, body: formatResponseBody(response.body) }
       : { status: 200, body: formatResponseBody(response) }),
   }),
-  error: error => ({ message: error.message, stack: error.stack }),
+  error: (error) => ({ message: error.message, stack: error.stack }),
 };
 
 export const createLogging = <TLogger extends Logger>(
   logger: TLogger,
   userOptions: Partial<LoggerOptions> = {},
-): Middleware<LoggingContext<TLogger>> => next => async ctx => {
+): Middleware<LoggingContext<TLogger>> => (next) => async (ctx) => {
   const options = { ...defaultOptions, ...userOptions };
 
   try {

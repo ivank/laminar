@@ -23,7 +23,7 @@ export const laminarRequestListener = (resolver: Resolver<Context>): http.Reques
       const resolvedBody = resolveBody(laminarResponse.body);
 
       for (const [headerName, headerValue] of Object.entries(laminarResponse.headers)) {
-        const values = toArray(headerValue).map(item => String(item));
+        const values = toArray(headerValue).map((item) => String(item));
         if (values.length) {
           res.setHeader(headerName.toLowerCase(), values);
         }
@@ -57,9 +57,9 @@ export function createLaminar(options: LaminarOptions): Laminar {
 
   return {
     server,
-    start: () => new Promise(resolve => server.listen(port, hostname, resolve)),
+    start: () => new Promise((resolve) => server.listen(port, hostname, resolve)),
     stop: () =>
-      new Promise((resolve, reject) => server.close(err => (err ? reject(err) : resolve()))),
+      new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve()))),
   };
 }
 

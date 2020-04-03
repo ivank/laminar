@@ -119,21 +119,13 @@ describe('json-refs', () => {
       },
     };
 
-    nock('http://one.test')
-      .get('/')
-      .reply(200, { $ref: 'http://three.test#' });
+    nock('http://one.test').get('/').reply(200, { $ref: 'http://three.test#' });
 
-    nock('http://two.test')
-      .get('/folder')
-      .reply(200, { test: 2 });
+    nock('http://two.test').get('/folder').reply(200, { test: 2 });
 
-    nock('http://three.test')
-      .get('/')
-      .reply(200, { $ref: 'http://four.test#/test', test: 3 });
+    nock('http://three.test').get('/').reply(200, { $ref: 'http://four.test#/test', test: 3 });
 
-    nock('http://four.test')
-      .get('/')
-      .reply(200, { test: 4 });
+    nock('http://four.test').get('/').reply(200, { test: 4 });
 
     const expected = {
       refs: {

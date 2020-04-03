@@ -37,20 +37,15 @@ interface AstParameters {
   context: AstContext;
 }
 
-const title = (str: string): string => str.replace(/^./, first => first.toUpperCase());
+const title = (str: string): string => str.replace(/^./, (first) => first.toUpperCase());
 const documentation = (summary?: string, description?: string): string | undefined =>
   summary || description
-    ? [summary, description].filter(item => item !== undefined).join('\n')
+    ? [summary, description].filter((item) => item !== undefined).join('\n')
     : undefined;
 const cleanIdentifierName = (str: string): string => str.replace(/[^0-9a-zA-Z_$]+/g, '');
 
 const pathToIdentifier = (path: string): string =>
-  'T' +
-  path
-    .split('/')
-    .map(cleanIdentifierName)
-    .map(title)
-    .join('');
+  'T' + path.split('/').map(cleanIdentifierName).map(title).join('');
 
 const toParamLocation = (
   location: 'header' | 'cookie' | 'path' | 'query',
@@ -308,7 +303,7 @@ export const convertOapi = (
               Type.Prop({
                 name: 'security',
                 type: Type.TypeLiteral({
-                  props: Object.keys(api.components.securitySchemes).map(scheme =>
+                  props: Object.keys(api.components.securitySchemes).map((scheme) =>
                     Type.Prop({
                       name: scheme,
                       type: Type.Referance('OapiSecurityResolver', [Type.Referance('C')]),

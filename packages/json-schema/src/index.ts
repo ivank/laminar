@@ -100,7 +100,7 @@ export const validateCompiled = (
     refs: schema.refs,
     ...options,
   });
-  const errors = result.map(error => messages[error.code](error));
+  const errors = result.map((error) => messages[error.code](error));
   return { schema, errors, valid: errors.length === 0 };
 };
 

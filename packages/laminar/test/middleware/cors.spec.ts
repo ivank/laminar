@@ -291,7 +291,7 @@ describe('Cors middleware', () => {
   it('Should be able to set origin as function', async () => {
     server = createLaminar({
       port: 8095,
-      app: createCors({ allowOrigin: origin => origin === '127.0.0.3' })(app),
+      app: createCors({ allowOrigin: (origin) => origin === '127.0.0.3' })(app),
     });
     await server.start();
 

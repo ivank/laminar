@@ -48,7 +48,7 @@ export const compileTemplates = ({
   compileOptions,
 }: CompileTemplatesOptions): Templates =>
   deepReaddirSync(dir, childDir)
-    .filter(file => file.endsWith(extension))
+    .filter((file) => file.endsWith(extension))
     .reduce((all, file) => {
       const name = file.slice(0, -(extension.length + 1));
       const input = readFileSync(join(dir, childDir, file), 'utf8');
@@ -82,5 +82,5 @@ export const createHandlebars = ({
     });
   };
 
-  return next => ctx => next({ ...ctx, render });
+  return (next) => (ctx) => next({ ...ctx, render });
 };

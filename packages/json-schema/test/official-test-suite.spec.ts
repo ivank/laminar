@@ -73,8 +73,8 @@ const testFolders = ['draft4', 'draft6', 'draft7'];
 
 for (const testFolder of testFolders) {
   const testFiles = readdirSync(join(testSuiteFolder, 'tests', testFolder))
-    .filter(file => file.endsWith('.json'))
-    .map<[string, Suite[]]>(file => [
+    .filter((file) => file.endsWith('.json'))
+    .map<[string, Suite[]]>((file) => [
       file,
       JSON.parse(String(readFileSync(join(testSuiteFolder, 'tests', testFolder, file)))),
     ]);
@@ -82,7 +82,7 @@ for (const testFolder of testFolders) {
   for (const [name, suites] of testFiles) {
     describe(`${testFolder} ${name}`, () => {
       for (const suite of suites) {
-        const tests = suite.tests.map<[string, unknown, boolean]>(test => [
+        const tests = suite.tests.map<[string, unknown, boolean]>((test) => [
           test.description,
           test.data,
           test.valid,

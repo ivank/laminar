@@ -3,5 +3,5 @@ const escapeRegExp = (str: string): string => str.replace(/[-\/\\^$*+?.()|[\]{}]
 export const toMatchPattern = (match: string): string =>
   match
     .split('/')
-    .map(part => (part === '*' ? '[^\\/]*' : escapeRegExp(part)))
+    .map((part) => (part === '*' ? '[^\\/]*' : escapeRegExp(part)))
     .join('\\/');

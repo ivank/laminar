@@ -7,6 +7,6 @@ export class OapiValidationError extends Error {
   }
 
   public toString(): string {
-    return `Error: ${this.message}\n${this.errors.map(item => ` | ${item}`).join('\n')}\n`;
+    return `Error: ${this.message}\n${this.errors.map((item) => ` | ${item}`).join('\n')}\n`;
   }
 }

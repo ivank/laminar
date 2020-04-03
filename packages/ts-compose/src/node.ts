@@ -30,7 +30,7 @@ export const Node = {
         defaultAs ? Node.Identifier(defaultAs) : undefined,
         named
           ? ts.createNamedImports(
-              named.map(item =>
+              named.map((item) =>
                 ts.createImportSpecifier(
                   item.as ? Node.Identifier(item.name) : undefined,
                   item.as ? Node.Identifier(item.as) : Node.Identifier(item.name),
@@ -61,7 +61,7 @@ export const Node = {
       return ts.createNull();
     } else if (typeof value === 'object') {
       return ts.createObjectLiteral(
-        Object.keys(value).map(key =>
+        Object.keys(value).map((key) =>
           ts.createPropertyAssignment(key, Node.Literal({ value: value[key], multiline })),
         ),
         multiline,

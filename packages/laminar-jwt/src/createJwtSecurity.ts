@@ -28,7 +28,7 @@ export type JwtSecurityOptions =
 
 const toMissing = (userScopes: string[], requiredScopes: string[]): string[] =>
   requiredScopes.filter(
-    requiredScope => !userScopes.find(userScope => requiredScope === userScope),
+    (requiredScope) => !userScopes.find((userScope) => requiredScope === userScope),
   );
 
 export const validateScopesSimple: ValidateJwtData = (data, scopes = []) => {
@@ -74,7 +74,7 @@ export const createJwtSecurity = <TUser extends User = User>(
       }
       return jwtVerifyAuthorization({
         header,
-        validateJwtData: data => validateScopes(data, scopes),
+        validateJwtData: (data) => validateScopes(data, scopes),
         secretOrPublicKey,
         verifyOptions: options.verifyOptions,
       });
@@ -93,5 +93,5 @@ export const createJwtSecurity = <TUser extends User = User>(
     },
   };
 
-  return next => ctx => next({ ...ctx, ...jwtContext });
+  return (next) => (ctx) => next({ ...ctx, ...jwtContext });
 };

@@ -269,10 +269,7 @@ describe('Integration', () => {
       cache: true,
     });
 
-    nock('http://example.com/')
-      .get('/.well-known/jwk.json')
-      .times(2)
-      .reply(200, JSON.parse(jwk));
+    nock('http://example.com/').get('/.well-known/jwk.json').times(2).reply(200, JSON.parse(jwk));
 
     const bodyParser = createBodyParser();
 
@@ -318,11 +315,11 @@ describe('Integration', () => {
       scopes: ['test1', 'plus'],
     });
 
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
 
     await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
   });

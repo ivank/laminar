@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 const jsDoc = (doc: string): string =>
   `*\n${doc
     .split('\n')
-    .map(line => ` * ${line}`)
+    .map((line) => ` * ${line}`)
     .join('\n')}\n `;
 
 export const addJSDoc = <T extends ts.Node>(node: T, doc: string): T =>

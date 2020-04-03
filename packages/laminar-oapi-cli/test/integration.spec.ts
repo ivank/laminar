@@ -52,7 +52,7 @@ describe('Integration', () => {
             return Promise.resolve(db);
           },
           post: ({ body, authInfo, logger, headers }) => {
-            const pet = { ...body, id: Math.max(...db.map(item => item.id)) + 1 };
+            const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             logger(`new pet ${pet.name}, trace token: ${headers['x-trace-token']}`);
 
             db.push(pet);
@@ -61,10 +61,10 @@ describe('Integration', () => {
         },
         '/pets/{id}': {
           get: ({ path }) =>
-            db.find(item => item.id === Number(path.id)) ||
+            db.find((item) => item.id === Number(path.id)) ||
             response({ status: 404, body: { code: 123, message: 'Not Found' } }),
           delete: ({ path }) => {
-            const index = db.findIndex(item => item.id === Number(path.id));
+            const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
               return response({ status: 204 });

@@ -79,7 +79,7 @@ export const toSecuritySchema = (
   security: SecurityRequirementObject[],
   schemes: { [securityScheme: string]: SecuritySchemeObject },
 ): {} => ({
-  anyOf: security.map(item => ({
+  anyOf: security.map((item) => ({
     allOf: Object.entries(item).map(([name]) => {
       const scheme = schemes[name];
 

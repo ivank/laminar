@@ -94,7 +94,7 @@ export const withIdentifier = <TContext extends DocumentContext = DocumentContex
 };
 
 const mergeImportNamed = (source: ImportNamed[], destin: ImportNamed[]): ImportNamed[] => [
-  ...source.filter(item => !destin.find(destinItem => destinItem.name === item.name)),
+  ...source.filter((item) => !destin.find((destinItem) => destinItem.name === item.name)),
   ...destin,
 ];
 
@@ -141,10 +141,10 @@ export const printDocument = <T extends ts.Node>(doc: Document<T>): string => {
   return (
     [
       ...headers,
-      ...imports.map(item => printNode(Node.Import(item))),
+      ...imports.map((item) => printNode(Node.Import(item))),
       printNode(doc.type),
-      ...identifiers.map(identifier => printNode(identifier)),
-      ...namespaces.map(namespace => printNode(namespace)),
+      ...identifiers.map((identifier) => printNode(identifier)),
+      ...namespaces.map((namespace) => printNode(namespace)),
     ].join('\n\n') + '\n'
   );
 };

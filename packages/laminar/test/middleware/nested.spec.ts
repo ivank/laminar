@@ -12,13 +12,14 @@ interface Three {
 }
 
 const bodyParser = createBodyParser();
-const withOne: Middleware<One> = resolver => async ctx => resolver({ ...ctx, one: 'one' });
+const withOne: Middleware<One> = (resolver) => async (ctx) => resolver({ ...ctx, one: 'one' });
 
-const withTwo: Middleware<Two, One> = resolver => ctx => resolver({ ...ctx, two: 2 });
+const withTwo: Middleware<Two, One> = (resolver) => (ctx) => resolver({ ...ctx, two: 2 });
 
-const withThree: Middleware<Three> = resolver => async ctx => resolver({ ...ctx, three: false });
+const withThree: Middleware<Three> = (resolver) => async (ctx) =>
+  resolver({ ...ctx, three: false });
 
-const resolver: Resolver<One & Two & Three & Context> = ctx => {
+const resolver: Resolver<One & Two & Three & Context> = (ctx) => {
   const { one, two, three, url } = ctx;
   return { one, two, three, url: url.pathname };
 };
@@ -28,7 +29,7 @@ const app = bodyParser(withOne(withTwo(withThree(resolver))));
 const appWithAutoAssign = bodyParser(
   withOne(
     withTwo(
-      withThree(ctx => {
+      withThree((ctx) => {
         const { one, two, three, url } = ctx;
         return { one, two, three, url: url.pathname };
       }),
