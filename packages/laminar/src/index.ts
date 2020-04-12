@@ -34,6 +34,7 @@ export {
   options,
   put,
   defaultRoute,
+  staticDirectory,
 } from './router';
 export {
   Context,

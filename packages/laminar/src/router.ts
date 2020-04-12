@@ -8,9 +8,12 @@ import {
   RouteMatcher,
   DefaultRouteHelper,
 } from './types';
-import { message } from './response';
+import { message, file, response } from './response';
+import { resolve, normalize, join } from 'path';
+import { existsSync } from 'fs';
 
 export const paramRegEx = /\{[^\}]+\}/g;
+export const parentPathRegEx = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
 
 export const toPathKeys = (path: string): string[] => {
   const keys = path.match(paramRegEx);
@@ -94,3 +97,28 @@ export const defaultRoute: DefaultRouteHelper = (resolver) => ({
   resolver,
   matcher: () => ({ path: {} }),
 });
+
+export const staticDirectory = <C extends object = {}>(
+  prefixPath: string,
+  root: string,
+): Route<C> => {
+  return {
+    matcher: (context) => {
+      return [Method.GET, Method.HEAD].includes(context.method) &&
+        context.url.pathname?.startsWith(prefixPath)
+        ? { path: context.url.pathname }
+        : false;
+    },
+    resolver: ({ path }) => {
+      const relativePath = join('.', normalize(path).substring(prefixPath.length));
+
+      if (parentPathRegEx.test(relativePath)) {
+        return response({ status: 403 });
+      }
+
+      const filename = resolve(normalize(root), relativePath);
+
+      return existsSync(filename) ? file(filename) : response({ status: 404 });
+    },
+  };
+};

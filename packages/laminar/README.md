@@ -246,17 +246,39 @@ createLaminar({
 }).start();
 ```
 
+You can also configure a route to ba a static folder with assets. Works with nested folders as well, does not support index pages.
+
+> [examples/static-assets.ts](examples/static-assets.ts)
+
+```typescript
+import { get, createLaminar, router, createBodyParser, staticDirectory } from '@ovotech/laminar';
+import { join } from 'path';
+
+const bodyParser = createBodyParser();
+
+createLaminar({
+  port: 3333,
+  app: bodyParser(
+    router(
+      staticDirectory('/my-folder', join(__dirname, 'assets')),
+      get('/', () => ({ health: 'ok' })),
+    ),
+  ),
+}).start();
+```
+
 All the available route matchers are:
 
-| Matcher      | Description                   |
-| ------------ | ----------------------------- |
-| get          | Match path with http `GET`    |
-| put          | Match path with http `PUT`    |
-| post         | Match path with http `POST`   |
-| del          | Match path with http `DELETE` |
-| patch        | Match path with http `PATCH`  |
-| option       | Match path with http `OPTION` |
-| defaultRoute | Match any route or path       |
+| Matcher         | Description                   |
+| --------------- | ----------------------------- |
+| get             | Match path with http `GET`    |
+| put             | Match path with http `PUT`    |
+| post            | Match path with http `POST`   |
+| del             | Match path with http `DELETE` |
+| patch           | Match path with http `PATCH`  |
+| option          | Match path with http `OPTION` |
+| defaultRoute    | Match any route or path       |
+| staticDirectory | Resolve paths to static files |
 
 ### Cors Middleware
 

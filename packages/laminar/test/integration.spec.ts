@@ -19,6 +19,7 @@ import { createLogging, createBodyParser } from '../src';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import { Agent } from 'https';
+import { staticDirectory } from '../src/router';
 
 let laminar: Laminar;
 
@@ -83,6 +84,7 @@ describe('Integration', () => {
           db(
             logging(
               router(
+                staticDirectory('/assets', join(__dirname, '../examples/assets')),
                 get('/.well-known/health-check', () => ({ health: 'ok' })),
                 get('/link', () => redirect('http://localhost:8050/destination')),
                 get('/link-other', () =>
@@ -168,6 +170,45 @@ describe('Integration', () => {
       expect.objectContaining({
         status: 500,
         data: { message: 'unknown' },
+      }),
+    );
+
+    await expect(api.get('/assets/star.svg')).resolves.toMatchObject({
+      status: 200,
+      headers: { 'content-type': 'image/svg+xml' },
+      data: readFileSync(join(__dirname, '../examples/assets/star.svg'), 'utf8'),
+    });
+
+    await expect(api.get('/assets/svg.svg')).resolves.toMatchObject({
+      status: 200,
+      headers: { 'content-type': 'image/svg+xml' },
+      data: readFileSync(join(__dirname, '../examples/assets/svg.svg'), 'utf8'),
+    });
+
+    await expect(api.get('/assets/texts/one.txt')).resolves.toMatchObject({
+      status: 200,
+      headers: { 'content-type': 'text/plain' },
+      data: readFileSync(join(__dirname, '../examples/assets/texts/one.txt'), 'utf8'),
+    });
+
+    await expect(api.get('/assets/texts/other.html')).resolves.toMatchObject({
+      status: 200,
+      headers: { 'content-type': 'text/html' },
+      data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
+    });
+
+    await expect(api.get('/assets/../assets/texts///../texts/./other.html')).resolves.toMatchObject(
+      {
+        status: 200,
+        headers: { 'content-type': 'text/html' },
+        data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
+      },
+    );
+
+    await expect(api.get('/assets/../../test.html')).rejects.toHaveProperty(
+      'response',
+      expect.objectContaining({
+        status: 404,
       }),
     );
 
@@ -268,6 +309,22 @@ describe('Integration', () => {
       ['info', 'Response', { status: 404, body: { message: 'Path GET /unknown-url not found' } }],
       ['info', 'Request', { uri: 'GET /error', body: '[Stream]' }],
       ['error', 'Error', { message: 'unknown', stack: expect.any(String) }],
+      ['info', 'Request', { uri: 'GET /assets/star.svg', body: '[Stream]' }],
+      ['info', 'Response', { status: 200, body: '[Readable]' }],
+      ['info', 'Request', { uri: 'GET /assets/svg.svg', body: '[Stream]' }],
+      ['info', 'Response', { status: 200, body: '[Readable]' }],
+      ['info', 'Request', { uri: 'GET /assets/texts/one.txt', body: '[Stream]' }],
+      ['info', 'Response', { status: 200, body: '[Readable]' }],
+      ['info', 'Request', { uri: 'GET /assets/texts/other.html', body: '[Stream]' }],
+      ['info', 'Response', { status: 200, body: '[Readable]' }],
+      [
+        'info',
+        'Request',
+        { uri: 'GET /assets/../assets/texts///../texts/./other.html', body: '[Stream]' },
+      ],
+      ['info', 'Response', { status: 200, body: '[Readable]' }],
+      ['info', 'Request', { uri: 'GET /assets/../../test.html', body: '[Stream]' }],
+      ['info', 'Response', { status: 404, body: undefined }],
       ['info', 'Request', { uri: 'GET /.well-known/health-check', body: '[Stream]' }],
       ['info', 'Response', { status: 200, body: { health: 'ok' } }],
       ['info', 'Request', { uri: 'GET /.well-known/health-check/', body: '[Stream]' }],
