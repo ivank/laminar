@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
@@ -9,21 +9,21 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@types/cookie": "^0.3.3",
-    "@types/jest": "^25.1.5",
+    "@types/cookie": "^0.4.0",
+    "@types/jest": "^25.2.3",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^13.11.0",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
+    "@types/node": "^14.0.6",
+    "@typescript-eslint/eslint-plugin": "^3.0.2",
+    "@typescript-eslint/parser": "^3.0.2",
     "axios": "^0.19.2",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.1",
-    "jest": "^25.2.6",
-    "prettier": "^2.0.2",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
     "stream-mock": "^2.0.5",
-    "ts-jest": "^25.3.0",
-    "ts-node": "^8.8.1",
-    "typescript": "^3.8.3"
+    "ts-jest": "^26.0.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.3"
   },
   "scripts": {
     "build": "tsc --declaration",
@@ -37,7 +37,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "cookie": "^0.4.0",
-    "mime-types": "^2.1.26"
+    "cookie": "^0.4.1",
+    "mime-types": "^2.1.27"
   }
 }

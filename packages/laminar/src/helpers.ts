@@ -1,13 +1,11 @@
 export const toArray = (value: unknown): unknown[] =>
   Array.isArray(value) ? value : value ? [value] : [];
 
-interface Obj {
-  [key: string]: unknown;
-}
+type Obj = Record<string, unknown>;
 
 const isObj = (obj: unknown): obj is Obj => typeof obj === 'object' && obj !== null;
 
-const setQuery = (path: string[], value: unknown, obj: Obj): {} => {
+const setQuery = (path: string[], value: unknown, obj: Obj): Obj | unknown[] => {
   const [current, ...rest] = path;
   if (current) {
     const currentValue = obj[current];

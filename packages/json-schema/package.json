@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/json-schema",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A lightweight a json-schema. No external dependencies (one small dependency from the same repository).",
@@ -9,16 +9,16 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@types/jest": "^25.1.5",
-    "@types/node": "^13.11.0",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.1",
-    "jest": "^25.2.6",
-    "prettier": "^2.0.2",
-    "ts-jest": "^25.3.0",
-    "typescript": "^3.8.3"
+    "@types/jest": "^25.2.3",
+    "@types/node": "^14.0.6",
+    "@typescript-eslint/eslint-plugin": "^3.0.2",
+    "@typescript-eslint/parser": "^3.0.2",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "ts-jest": "^26.0.0",
+    "typescript": "^3.9.3"
   },
   "scripts": {
     "build": "tsc --declaration",
@@ -32,6 +32,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-refs": "^0.3.0"
+    "@ovotech/json-refs": "^0.3.1"
   }
 }

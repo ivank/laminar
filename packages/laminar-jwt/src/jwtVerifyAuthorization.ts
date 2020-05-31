@@ -5,7 +5,7 @@ import {
   NotBeforeError,
   VerifyOptions,
 } from 'jsonwebtoken';
-import { JWTData, isJWTData } from './types';
+import { JWTData, isJWTData, VerifiedJWTData } from './types';
 import { JWTAuthenticationError } from './JWTAuthenticationError';
 import { ValidateJwtData } from './createJwtSecurity';
 
@@ -33,7 +33,7 @@ export const jwtVerifyAuthorization = async ({
   }
 
   try {
-    const data = await new Promise<string | object>((resolve, reject) =>
+    const data = await new Promise<VerifiedJWTData>((resolve, reject) =>
       verify(match[1], secretOrPublicKey, verifyOptions, (err, data) =>
         err ? reject(err) : resolve(data),
       ),

@@ -9,6 +9,7 @@ import {
   Middleware,
   message,
   toResponse,
+  ContextLike,
 } from '@ovotech/laminar';
 import { openapiV3 } from 'openapi-schemas';
 import { OpenAPIObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
@@ -24,22 +25,22 @@ export interface OapiAuthInfo {
   [key: string]: unknown;
 }
 
-export interface OapiRoute<C extends object = {}> extends Route<C> {
+export interface OapiRoute<C extends ContextLike = ContextLike> extends Route<C> {
   schema: OperationSchema;
 }
 
-export interface OapiPaths<C extends object = {}> {
+export interface OapiPaths<C extends ContextLike = ContextLike> {
   [path: string]: { [method: string]: Resolver<C & OapiContext & Context> };
 }
 
-export interface OapiConfig<C extends object = {}> {
+export interface OapiConfig<C extends ContextLike = ContextLike> {
   api: OpenAPIObject | string;
   paths: OapiPaths<C>;
   security?: OapiSecurity<C>;
-  bodyParser?: Middleware<{}, Context>;
+  bodyParser?: Middleware<ContextLike, Context>;
 }
 
-export type OapiSecurityResolver<C extends object = {}> = (
+export type OapiSecurityResolver<C extends ContextLike = ContextLike> = (
   context: C & Context & OapiContext,
   options: {
     scheme: SecuritySchemeObject;
@@ -47,11 +48,11 @@ export type OapiSecurityResolver<C extends object = {}> = (
   },
 ) => OapiAuthInfo | void | Promise<OapiAuthInfo | void>;
 
-export interface OapiSecurity<C extends object = {}> {
+export interface OapiSecurity<C extends ContextLike = ContextLike> {
   [key: string]: OapiSecurityResolver<C>;
 }
 
-const toRoutes = <C extends {} = {}>(
+const toRoutes = <C extends ContextLike = ContextLike>(
   pathsSchema: PathsSchema,
   paths: {
     [path: string]: { [method: string]: Resolver<C & OapiContext> };
@@ -82,7 +83,7 @@ export const isResolvedOpenAPIObject = (schema: Schema): schema is ResolvedOpenA
   'info' in schema &&
   'paths' in schema;
 
-const validateSecurity = async <C extends object = {}>(
+const validateSecurity = async <C extends ContextLike = ContextLike>(
   context: C & Context & OapiContext,
   requirements?: SecurityRequirementObject[],
   schemes?: { [securityScheme: string]: SecuritySchemeObject },
@@ -111,7 +112,7 @@ const validateSecurity = async <C extends object = {}>(
   return authInfo;
 };
 
-export const createOapi = async <C extends object = {}>({
+export const createOapi = async <C extends ContextLike = ContextLike>({
   api,
   paths,
   security,
@@ -141,7 +142,7 @@ export const createOapi = async <C extends object = {}>({
   }
 
   return async (ctx) => {
-    const select = selectRoute<object, C, OapiRoute<C & Context>>(ctx, routes);
+    const select = selectRoute<ContextLike, C, OapiRoute<C & Context>>(ctx, routes);
 
     if (!select) {
       return message(404, {

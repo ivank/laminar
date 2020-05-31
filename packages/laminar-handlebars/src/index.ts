@@ -27,7 +27,7 @@ export interface Templates {
 export interface HandlebarsContext {
   render: (
     view: string,
-    data?: {},
+    data?: Record<string, unknown>,
     responseOptions?: Partial<Pick<LaminarResponse, 'cookies' | 'headers' | 'status'>>,
   ) => LaminarResponse<string>;
 }

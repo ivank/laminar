@@ -7,6 +7,7 @@ import {
   RouteHelper,
   RouteMatcher,
   DefaultRouteHelper,
+  ContextLike,
 } from './types';
 import { message, file, response } from './response';
 import { resolve, normalize, join } from 'path';
@@ -41,7 +42,7 @@ export const toPathMatcher = (path: string): RouteMatcher => {
   };
 };
 
-export const toRouteMatcher = <C extends object = {}>(
+export const toRouteMatcher = <C extends ContextLike = ContextLike>(
   method: string,
   path: string,
 ): RouteMatcher<C> => {
@@ -50,7 +51,7 @@ export const toRouteMatcher = <C extends object = {}>(
   return (ctx: C & Context) => ctx.method === methodMatcher && pathMatcher(ctx);
 };
 
-export const toRoute = <C extends object = {}>(
+export const toRoute = <C extends ContextLike = ContextLike>(
   method: string,
   path: string,
   resolver: Resolver<C & RouteContext & Context>,
@@ -60,8 +61,8 @@ export const toRoute = <C extends object = {}>(
 });
 
 export const selectRoute = <
-  C extends object = {},
-  CR extends object = {},
+  C extends ContextLike = ContextLike,
+  CR extends ContextLike = ContextLike,
   R extends Route<CR> = Route<CR>
 >(
   ctx: C & Context,
@@ -76,7 +77,9 @@ export const selectRoute = <
   return false;
 };
 
-export const router = <C extends object = {}>(...routes: Route<C>[]): Resolver<C & Context> => {
+export const router = <C extends ContextLike = ContextLike>(
+  ...routes: Route<C>[]
+): Resolver<C & Context> => {
   return (ctx) => {
     const select = selectRoute(ctx, routes as Route[]);
 
@@ -98,7 +101,7 @@ export const defaultRoute: DefaultRouteHelper = (resolver) => ({
   matcher: () => ({ path: {} }),
 });
 
-export const staticDirectory = <C extends object = {}>(
+export const staticDirectory = <C extends ContextLike = ContextLike>(
   prefixPath: string,
   root: string,
 ): Route<C> => {

@@ -1,4 +1,4 @@
-import { Context, Middleware, ResolverResponse } from '../types';
+import { Context, Middleware, ResolverResponse, LaminarResponseBody } from '../types';
 import { format } from 'url';
 import { isResponse } from '../response';
 import { IncomingMessage } from 'http';
@@ -22,7 +22,8 @@ export interface LoggerOptions {
   error?: (error: Error) => Metadata;
 }
 export const formatResponseBody = (
-  body: string | Readable | Buffer | object | undefined,
+  body: LaminarResponseBody | undefined,
+  // eslint-disable-next-line @typescript-eslint/ban-types
 ): string | object | undefined =>
   Buffer.isBuffer(body) ? '[Buffer]' : body instanceof Readable ? '[Readable]' : body;
 

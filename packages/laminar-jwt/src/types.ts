@@ -1,4 +1,4 @@
-import { SignOptions } from 'jsonwebtoken';
+import { SignOptions, VerifyCallback } from 'jsonwebtoken';
 
 export interface JWTData {
   email: string;
@@ -32,5 +32,7 @@ export interface JWTContextAuthenticated<TUser extends User = User> extends JWTC
   authInfo: JWTData;
 }
 
-export const isJWTData = (data: object | string | null): data is JWTData =>
+export type VerifiedJWTData = Parameters<VerifyCallback>[1];
+
+export const isJWTData = (data: VerifiedJWTData | string | null): data is JWTData =>
   data !== null && typeof data === 'object' && 'email' in data;

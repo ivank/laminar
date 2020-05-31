@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { createLaminar, Laminar, createBodyParser, router, get, post } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';

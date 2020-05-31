@@ -1,8 +1,8 @@
-import { Context, LaminarResponse } from "@ovotech/laminar";
+import { Context, ContextLike, LaminarResponse } from "@ovotech/laminar";
 
 import { OapiContext, OapiConfig, OapiSecurityResolver } from "@ovotech/laminar-oapi";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         "/session": {
             post: (context: TSessionPostContext & C) => TSessionPostResponse;

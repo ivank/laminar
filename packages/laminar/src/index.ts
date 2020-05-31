@@ -38,6 +38,7 @@ export {
 } from './router';
 export {
   Context,
+  ContextLike,
   LaminarObject,
   LaminarCookie,
   LaminarResponse,

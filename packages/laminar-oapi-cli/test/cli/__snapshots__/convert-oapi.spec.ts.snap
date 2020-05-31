@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Json Schema Ts Test api-with-examples.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/\\": {
             get: (context: TGetContext & C) => TGetResponse;
@@ -35,11 +35,11 @@ export interface TV2GetContext extends Context, OapiContext {
 `;
 
 exports[`Json Schema Ts Test balance-service.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig, OapiSecurityResolver } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/internal/status\\": {
             /**
@@ -352,11 +352,11 @@ export interface TApiV3AccountsAccountIdAdjustbalancePostContext extends Context
 `;
 
 exports[`Json Schema Ts Test cloudtasks.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig, OapiSecurityResolver } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/v2/{+name}\\": {
             /**
@@ -2511,11 +2511,11 @@ export interface TV2ResourcetestIamPermissionsPostContext extends Context, OapiC
 `;
 
 exports[`Json Schema Ts Test converter.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/.well-known/docs\\": {
             get: (context: TWellknownDocsGetContext & C) => TWellknownDocsGetResponse;
@@ -2561,11 +2561,11 @@ export interface THtmlPostContext extends Context, OapiContext {
 `;
 
 exports[`Json Schema Ts Test link-example.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/2.0/users/{username}\\": {
             get: (context: T20UsersUsernameGetContext & C) => T20UsersUsernameGetResponse;
@@ -2668,11 +2668,11 @@ export interface T20RepositoriesUsernameSlugPullrequestsPidMergePostContext exte
 `;
 
 exports[`Json Schema Ts Test petstore.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/pets\\": {
             get: (context: TPetsGetContext & C) => TPetsGetResponse;
@@ -2738,11 +2738,11 @@ export interface TPetsPetIdGetContext extends Context, OapiContext {
 `;
 
 exports[`Json Schema Ts Test petstore-expanded.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/pets\\": {
             /**
@@ -2850,11 +2850,11 @@ export interface TPetsIdDeleteContext extends Context, OapiContext {
 `;
 
 exports[`Json Schema Ts Test statements.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/accounts/{accountId}/meters\\": {
             get: (context: TAccountsAccountIdMetersGetContext & C) => TAccountsAccountIdMetersGetResponse;
@@ -2908,13 +2908,13 @@ export interface TAccountsAccountIdMetersGetContext extends Context, OapiContext
 `;
 
 exports[`Json Schema Ts Test uspto.yaml 1`] = `
-"import { Context, LaminarResponse } from \\"@ovotech/laminar\\";
+"import { Context, ContextLike, LaminarResponse } from \\"@ovotech/laminar\\";
 
 import { Readable } from \\"stream\\";
 
 import { OapiContext, OapiConfig } from \\"@ovotech/laminar-oapi\\";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
     paths: {
         \\"/\\": {
             get: (context: TGetContext & C) => TGetResponse;

@@ -5,7 +5,7 @@ let server: Laminar;
 
 const api = axios.create({ baseURL: 'http://localhost:8095' });
 
-const app = (): object => ({ health: 'ok' });
+const app = (): Record<string, unknown> => ({ health: 'ok' });
 
 describe('Cors middleware', () => {
   afterEach(() => server.stop());

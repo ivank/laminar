@@ -68,8 +68,10 @@ export const extendResponse = (
   };
 };
 
-export const message = <T = object | string>(status: number, body: T): LaminarResponse<T> =>
-  response<T>({ status, body });
+export const message = <T = Record<string, unknown> | string>(
+  status: number,
+  body: T,
+): LaminarResponse<T> => response<T>({ status, body });
 
 export const redirect = (
   url: string,

@@ -54,7 +54,9 @@ export const toParameterSchema = (param: ResolvedParameterObject): SchemaObject 
   };
 };
 
-export const toRequestBodySchema = (requestBody: ResolvedRequestBodyObject): {} => ({
+export const toRequestBodySchema = (
+  requestBody: ResolvedRequestBodyObject,
+): Record<string, unknown> => ({
   ...(requestBody.required ? { required: ['body'] } : {}),
   ...(requestBody.content
     ? {
@@ -78,7 +80,7 @@ export const toRequestBodySchema = (requestBody: ResolvedRequestBodyObject): {} 
 export const toSecuritySchema = (
   security: SecurityRequirementObject[],
   schemes: { [securityScheme: string]: SecuritySchemeObject },
-): {} => ({
+): Record<string, unknown> => ({
   anyOf: security.map((item) => ({
     allOf: Object.entries(item).map(([name]) => {
       const scheme = schemes[name];
@@ -144,7 +146,9 @@ export const toContextSchema = (
   };
 };
 
-export const toResponseSchema = ({ responses }: ResolvedOperationObject): {} => ({
+export const toResponseSchema = ({
+  responses,
+}: ResolvedOperationObject): Record<string, unknown> => ({
   discriminator: { propertyName: 'status' },
   oneOf: Object.entries<ResolvedResponseObject>(responses).map(([status, response]) => ({
     type: 'object',

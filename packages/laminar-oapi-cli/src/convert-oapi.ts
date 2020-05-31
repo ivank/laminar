@@ -283,7 +283,7 @@ export const convertOapi = (
             : []),
         ],
       }),
-      { module: '@ovotech/laminar', named: [{ name: 'Context' }] },
+      { module: '@ovotech/laminar', named: [{ name: 'Context' }, { name: 'ContextLike' }] },
     ),
     Type.Interface({
       name: 'Config',
@@ -292,8 +292,8 @@ export const convertOapi = (
       typeArgs: [
         Type.TypeArg({
           name: 'C',
-          ext: Type.TypeLiteral(),
-          defaultType: Type.TypeLiteral(),
+          ext: Type.Referance('ContextLike'),
+          defaultType: Type.Referance('ContextLike'),
         }),
       ],
       props: [

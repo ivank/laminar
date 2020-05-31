@@ -30,7 +30,10 @@ export interface Laminar<S = http.Server | https.Server> {
   stop: () => Promise<void>;
 }
 
-export interface LaminarResponse<TBody = string | Readable | Buffer | object> {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type LaminarResponseBody = string | Readable | Buffer | object;
+
+export interface LaminarResponse<TBody = LaminarResponseBody> {
   [LaminarObject]: true;
   body?: TBody;
   status: number;
@@ -53,7 +56,10 @@ export enum Method {
   PATCH = 'PATCH',
 }
 
-export interface Context {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type ContextLike = object;
+
+export interface Context extends ContextLike {
   url: UrlWithParsedQuery;
   method: Method;
   headers: any;
@@ -62,21 +68,24 @@ export interface Context {
   cookies?: { [key: string]: string };
 }
 
-export type Middleware<TProvide extends object = {}, TRequire extends object = {}> = <
-  TInherit extends Context = Context
->(
+export type Middleware<
+  TProvide extends ContextLike = ContextLike,
+  TRequire extends ContextLike = ContextLike
+> = <TInherit extends Context = Context>(
   next: Resolver<TProvide & TRequire & TInherit>,
 ) => Resolver<TRequire & TInherit>;
 
-export type ResolverResponse = string | Readable | Buffer | LaminarResponse | object;
+export type ResolverResponse = LaminarResponseBody | LaminarResponse;
 
-export type Resolver<TContext extends object = {}> = (
+export type Resolver<TContext extends ContextLike = ContextLike> = (
   ctx: TContext,
 ) => Promise<ResolverResponse> | ResolverResponse;
 
-export type RouteMatcher<C extends object = {}> = (ctx: Context & C) => RouteContext | false;
+export type RouteMatcher<C extends ContextLike = ContextLike> = (
+  ctx: Context & C,
+) => RouteContext | false;
 
-export interface Route<C extends object = {}> {
+export interface Route<C extends ContextLike = ContextLike> {
   matcher: RouteMatcher;
   resolver: RouteResolver<C>;
   [key: string]: unknown;
@@ -86,13 +95,15 @@ export interface RouteContext {
   path: any;
 }
 
-export type RouteResolver<C extends object = {}> = Resolver<C & RouteContext & Context>;
+export type RouteResolver<C extends ContextLike = ContextLike> = Resolver<
+  C & RouteContext & Context
+>;
 
-export type RouteHelper = <C extends object = {}>(
+export type RouteHelper = <C extends ContextLike = ContextLike>(
   path: string,
   resolver: Resolver<C & RouteContext & Context>,
 ) => Route<C>;
 
-export type DefaultRouteHelper = <C extends object = {}>(
+export type DefaultRouteHelper = <C extends ContextLike = ContextLike>(
   resolver: Resolver<C & RouteContext & Context>,
 ) => Route<C>;
