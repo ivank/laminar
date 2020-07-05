@@ -37,6 +37,8 @@ export const Type = {
 
   Never: ts.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword),
 
+  Undefined: ts.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
+
   TypeLiteral: ({
     props = [],
     index,

@@ -5,6 +5,7 @@ describe('TS Compose', () => {
   it.each<[string, ts.Node]>([
     ['any', Type.Any],
     ['unknown', Type.Unknown],
+    ['undefined', Type.Undefined],
     ['boolean', Type.Boolean],
     ['void', Type.Void],
     ['null', Type.Null],

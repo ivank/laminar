@@ -5,6 +5,7 @@ export {
   document,
   withIdentifier,
   withImports,
+  withHeader,
   mapWithContext,
   printDocument,
   Identifiers,

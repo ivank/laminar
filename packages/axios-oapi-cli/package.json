@@ -1,15 +1,17 @@
 {
-  "name": "@ovotech/laminar-oapi-cli",
-  "version": "0.5.5",
+  "name": "@ovotech/axios-oapi-cli",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "CLI generating typescript types for @ovotech/laminar-oapi",
+  "description": "CLI generating typescript types for axios",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/laminar": "^0.6.1",
     "@ovotech/laminar-oapi": "^0.4.2",
+    "@ovotech/laminar-oapi-cli": "^0.5.5",
+    "@ovotech/build-docs": "^0.1.0",
     "@types/jest": "^25.2.3",
     "@types/js-yaml": "^3.12.4",
     "@types/node": "^14.0.6",
@@ -19,6 +21,7 @@
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "jest": "^26.0.1",
+    "nock": "^12.0.3",
     "pg": "^8.2.1",
     "prettier": "^2.0.5",
     "ts-jest": "^26.0.0",
@@ -26,14 +29,13 @@
     "typescript": "^3.9.3"
   },
   "bin": {
-    "laminar-oapi": "./scripts/laminar-oapi"
+    "axios-oapi": "./scripts/axios-oapi"
   },
   "scripts": {
-    "laminar-oapi": "node -r ts-node/register src/cli.ts",
-    "test:build:integration": "yarn laminar-oapi test/integration.yaml test/__generated__/integration.ts",
-    "test:build:statements": "yarn laminar-oapi test/statements.yaml test/__generated__/statements.ts",
-    "build:examples": "yarn laminar-oapi examples/oapi.yaml examples/oapi.yaml.ts",
-    "pretest": "yarn test:build:integration && yarn test:build:statements",
+    "axios-oapi": "node -r ts-node/register src/cli.ts",
+    "build:examples": "yarn axios-oapi --file examples/simple.yaml --output examples/simple.types.ts && yarn axios-oapi --file examples/petstore.json --output examples/petstore.types.ts",
+    "test:build:integration": "yarn laminar-oapi test/integration.yaml test/__generated__/integration.ts && yarn axios-oapi --file test/integration.yaml --output test/__generated__/integration.types.ts",
+    "pretest": "yarn test:build:integration",
     "build": "tsc --declaration",
     "build:docs": "yarn build:examples && build-docs README.md",
     "test": "jest test --runInBand",
@@ -45,10 +47,12 @@
     "preset": "../../jest.json"
   },
   "peerDependencies": {
-    "@ovotech/laminar": "*"
+    "axios": "*"
   },
   "dependencies": {
+    "js-yaml": "^3.14.0",
     "@ovotech/ts-compose": "^0.13.0",
+    "@ovotech/json-schema": "^0.4.2",
     "commander": "^5.1.0",
     "openapi-schemas": "^2.0.3",
     "openapi3-ts": "^1.3.0"

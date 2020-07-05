@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/json-schema",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A lightweight a json-schema. No external dependencies (one small dependency from the same repository).",
@@ -32,6 +32,6 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-refs": "^0.3.1"
+    "@ovotech/json-refs": "^0.3.2"
   }
 }

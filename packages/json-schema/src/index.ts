@@ -35,6 +35,8 @@ import { validateType } from './validators/validateType';
 import { validateUniqueItems } from './validators/validateUniqueItems';
 import { ValidationError } from './ValidationError';
 
+export { ValidationError } from './ValidationError';
+
 export {
   childOptions,
   isJsonSchema,

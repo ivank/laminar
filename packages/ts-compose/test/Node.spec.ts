@@ -1,5 +1,5 @@
 import * as ts from 'typescript';
-import { Node, printNode } from '../src';
+import { Node, printNode, Type } from '../src';
 
 describe('TS Compose', () => {
   it.each<[string, ts.Node]>([
@@ -63,6 +63,7 @@ describe('TS Compose', () => {
     ['const n = null;', Node.Const({ name: 'n', value: null })],
     ['const i = 123;', Node.Const({ name: 'i', value: 123 })],
     ['const o = { test: 10 };', Node.Const({ name: 'o', value: { test: 10 } })],
+    ['const o = { "BIG NAME": 10 };', Node.Const({ name: 'o', value: { 'BIG NAME': 10 } })],
     [
       'const o2 = {\n    test: 10\n};',
       Node.Const({ name: 'o2', value: { test: 10 }, multiline: true }),
@@ -75,6 +76,96 @@ describe('TS Compose', () => {
     [
       'export default const b = true;',
       Node.Const({ name: 'b', isExport: true, isDefault: true, value: true }),
+    ],
+    [
+      'this.other<Test>(10, { test: "10" }, someVar)',
+      Node.Call({
+        expression: Node.Identifier('this.other'),
+        typeArgs: [Type.Referance('Test')],
+        args: [
+          Node.Literal({ value: 10 }),
+          Node.Literal({ value: { test: '10' } }),
+          Node.Identifier('someVar'),
+        ],
+      }),
+    ],
+    ['`test${var}`', Node.TemplateString('test${var}')],
+    [
+      `/**
+ * test
+ */
+{
+    /**
+     * number
+     */
+    test: 10,
+    /**
+     * string
+     */
+    "test other": "123"
+}`,
+      Node.ObjectLiteral({
+        jsDoc: 'test',
+        multiline: true,
+        props: [
+          Node.ObjectLiteralProp({ key: 'test', value: 10, jsDoc: 'number' }),
+          Node.ObjectLiteralProp({
+            key: 'test other',
+            value: '123',
+            jsDoc: 'string',
+          }),
+        ],
+      }),
+    ],
+    [
+      `export const myApi = (axiosConfig: AxiosConfig) => {
+    const api = create(axiosConfig);
+    return {
+        getObject: <TData>(data: TData, config?: AxiosConfig) => api.get(data, config)
+    };
+};`,
+
+      Node.Const({
+        name: 'myApi',
+        isExport: true,
+        value: Node.Arrow({
+          args: [Type.Param({ name: 'axiosConfig', type: Type.Referance('AxiosConfig') })],
+          body: Node.Block({
+            statements: [
+              Node.Const({
+                name: 'api',
+                value: Node.Call({
+                  expression: Node.Identifier('create'),
+                  args: [Node.Identifier('axiosConfig')],
+                }),
+              }),
+              Node.Return(
+                Node.Literal({
+                  multiline: true,
+                  value: {
+                    getObject: Node.Arrow({
+                      typeArgs: [Type.TypeArg({ name: 'TData' })],
+                      args: [
+                        Type.Param({ name: 'data', type: Type.Referance('TData') }),
+                        Type.Param({
+                          name: 'config',
+                          isOptional: true,
+                          type: Type.Referance('AxiosConfig'),
+                        }),
+                      ],
+                      body: Node.Call({
+                        expression: Node.Identifier('api.get'),
+                        args: [Node.Identifier('data'), Node.Identifier('config')],
+                      }),
+                    }),
+                  },
+                }),
+              ),
+            ],
+            multiline: true,
+          }),
+        }),
+      }),
     ],
   ])('Test print of %s', async (typescript, result) => {
     expect(printNode(result)).toEqual(typescript);
