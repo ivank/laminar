@@ -180,6 +180,7 @@ export const convertOapi = (
             getReferencedObject<ParameterObject>(item, isParameterObject, methodContext),
           );
 
+          const requestName = `${method.toUpperCase()} ${path}`;
           const pathItems = convertPathParams(methodContext, combinedParameters);
           const configParams = convertConfigParams(pathItems.context, combinedParameters);
 
@@ -205,21 +206,14 @@ export const convertOapi = (
               )
             : responseAst.context;
 
-          const request = Node.ObjectLiteralProp({
-            key: `${method.toUpperCase()} ${path}`,
+          const node = Node.ObjectLiteralProp({
+            key: requestName,
             jsDoc: doc,
             value: Node.Arrow({
               args: [
                 ...pathItems.items,
-                ...(hasData ? [Type.Param({ name: 'data', type: astRequestBody.type })] : []),
-                Type.Param({
-                  name: 'config',
-                  isOptional: true,
-                  type: Type.Intersection([
-                    Type.Referance('AxiosRequestConfig'),
-                    ...(configParams.type.length ? [Type.Referance(configDataIdentifier)] : []),
-                  ]),
-                }),
+                ...(hasData ? [Type.Param({ name: 'data' })] : []),
+                Type.Param({ name: 'config' }),
               ],
               body: Node.Call({
                 expression: Node.Identifier(`api.${method.toLowerCase()}`),
@@ -233,7 +227,29 @@ export const convertOapi = (
             }),
           });
 
-          return document(configDataContext, request);
+          const type = Type.Prop({
+            name: requestName,
+            jsDoc: doc,
+            type: Type.Arrow({
+              args: [
+                ...pathItems.items,
+                ...(hasData ? [Type.Param({ name: 'data', type: astRequestBody.type })] : []),
+                Type.Param({
+                  name: 'config',
+                  isOptional: true,
+                  type: Type.Intersection([
+                    Type.Referance('AxiosRequestConfig'),
+                    ...(configParams.type.length ? [Type.Referance(configDataIdentifier)] : []),
+                  ]),
+                }),
+              ],
+              ret: Type.Referance('Promise', [
+                Type.Referance('AxiosResponse', responseAst.type ? [responseAst.type] : undefined),
+              ]),
+            }),
+          });
+
+          return document(configDataContext, { node, type });
         },
       );
 
@@ -242,19 +258,38 @@ export const convertOapi = (
   );
 
   return document(
-    withImports(paths.context, {
-      module: 'axios',
-      named: [{ name: 'AxiosRequestConfig' }, { name: 'AxiosInstance' }],
-    }),
+    withIdentifier(
+      withImports(paths.context, {
+        module: 'axios',
+        named: [
+          { name: 'AxiosRequestConfig' },
+          { name: 'AxiosInstance' },
+          { name: 'AxiosResponse' },
+        ],
+      }),
+      Type.Interface({
+        name: 'AxiosOapiInstance',
+        props: paths.items
+          .reduce<ts.PropertySignature[]>(
+            (all, path) => all.concat(path.map((item) => item.type)),
+            [],
+          )
+          .concat([Type.Prop({ name: 'api', type: Type.Referance('AxiosInstance') })]),
+      }),
+    ),
     Node.Const({
       name: 'axiosOapi',
       isExport: true,
       value: Node.Arrow({
         args: [Type.Param({ name: 'api', type: Type.Referance('AxiosInstance') })],
+        ret: Type.Referance('AxiosOapiInstance'),
         body: Node.ObjectLiteral({
           multiline: true,
           props: paths.items
-            .reduce((all, path) => all.concat(path))
+            .reduce<ts.PropertyAssignment[]>(
+              (all, path) => all.concat(path.map((item) => item.node)),
+              [],
+            )
             .concat(Node.ObjectLiteralProp({ key: 'api', value: Node.Identifier('api') })),
         }),
       }),

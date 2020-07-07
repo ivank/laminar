@@ -69,8 +69,13 @@ export const Type = {
 
   LiteralString: (value: string): ts.StringLiteral => ts.createLiteral(value),
 
-  Arrow: (args: ts.ParameterDeclaration[], ret: ts.TypeNode): ts.FunctionTypeNode =>
-    ts.createFunctionTypeNode(undefined, args, ret),
+  Arrow: ({
+    args,
+    ret,
+  }: {
+    args: ts.ParameterDeclaration[];
+    ret: ts.TypeNode;
+  }): ts.FunctionTypeNode => ts.createFunctionTypeNode(undefined, args, ret),
 
   Optional: (isOptional?: boolean): ts.Token<ts.SyntaxKind.QuestionToken> | undefined =>
     isOptional ? ts.createToken(ts.SyntaxKind.QuestionToken) : undefined,
@@ -159,7 +164,7 @@ export const Type = {
     isReadonly,
   }: {
     name: string | ts.Identifier;
-    type: ts.TypeNode;
+    type?: ts.TypeNode;
     isOptional?: boolean;
     isReadonly?: boolean;
   }): ts.ParameterDeclaration =>

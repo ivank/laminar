@@ -241,15 +241,15 @@ export const convertOapi = (
             operation.responses,
           );
 
-          const methodCall = Type.Arrow(
-            [
+          const methodCall = Type.Arrow({
+            args: [
               Type.Param({
                 name: 'context',
                 type: Type.Intersection([Type.Referance(contextIdentifier), Type.Referance('C')]),
               }),
             ],
-            responseAst.type,
-          );
+            ret: responseAst.type,
+          });
 
           const methodSignature = Type.Prop({
             name: method,

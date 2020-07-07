@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/axios-oapi-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for axios",
@@ -10,7 +10,7 @@
   "devDependencies": {
     "@ovotech/laminar": "^0.6.1",
     "@ovotech/laminar-oapi": "^0.4.2",
-    "@ovotech/laminar-oapi-cli": "^0.5.5",
+    "@ovotech/laminar-oapi-cli": "^0.5.6",
     "@ovotech/build-docs": "^0.1.0",
     "@types/jest": "^25.2.3",
     "@types/js-yaml": "^3.12.4",
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "js-yaml": "^3.14.0",
-    "@ovotech/ts-compose": "^0.13.0",
+    "@ovotech/ts-compose": "^0.14.0",
     "@ovotech/json-schema": "^0.4.2",
     "commander": "^5.1.0",
     "openapi-schemas": "^2.0.3",
