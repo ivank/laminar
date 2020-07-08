@@ -106,7 +106,7 @@ const convertConfigParams = (
     ...(queryItems.items.length
       ? [
           Type.Prop({
-            name: 'query',
+            name: 'params',
             type: Type.TypeLiteral({ props: queryItems.items }),
             isOptional: true,
           }),
@@ -269,6 +269,7 @@ export const convertOapi = (
       }),
       Type.Interface({
         name: 'AxiosOapiInstance',
+        isExport: true,
         props: paths.items
           .reduce<ts.PropertySignature[]>(
             (all, path) => all.concat(path.map((item) => item.type)),

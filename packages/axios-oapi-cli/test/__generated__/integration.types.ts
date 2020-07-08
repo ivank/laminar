@@ -41,7 +41,7 @@ export interface Error {
 }
 
 export interface GetPets {
-    query?: {
+    params?: {
         /**
          * tags to filter by
          */
@@ -68,7 +68,7 @@ export interface PostPets {
     };
 }
 
-interface AxiosOapiInstance {
+export interface AxiosOapiInstance {
     /**
      * Returns all pets from the system that the user has access to
      * Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.

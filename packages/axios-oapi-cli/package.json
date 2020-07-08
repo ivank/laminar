@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/axios-oapi-cli",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for axios",

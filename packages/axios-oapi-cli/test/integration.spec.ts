@@ -45,9 +45,10 @@ describe('Integration', () => {
       },
       paths: {
         '/pets': {
-          get: () => {
-            return Promise.resolve(db);
-          },
+          get: ({ query }) =>
+            db.filter((pet) =>
+              query.tags ? (pet.tag ? query.tags.includes(pet.tag) : false) : true,
+            ),
           post: ({ body, authInfo }) => {
             const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             db.push(pet);
@@ -152,6 +153,11 @@ describe('Integration', () => {
         { id: 222, name: 'Doggy' },
         { id: 223, name: 'New Puppy' },
       ],
+    });
+
+    await expect(api['GET /pets']({ params: { tags: ['kitten'] } })).resolves.toMatchObject({
+      status: 200,
+      data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
     });
 
     await expect(
