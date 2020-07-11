@@ -1,0 +1,766 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Should generate a correct schema for comms.yaml 1`] = `
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+
+export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
+    /**
+     * Send a communication
+     * Sends a communication to a customer or to an arbitrary address.
+     *
+     * *Note: Foo teams can send by Account Id instead [using the dedicated \`/foo/communication\` endpoint](#operationId/sendCommByAcc).*
+     *
+     * The response is a unique ID (comm ID) for the newly created communication.
+     * This can be used to filter our feedback kafka topic to check for comm's
+     * statuses.
+     *
+     * *Note: This API is asynchronous*
+     *
+     */
+    \\"POST /communication\\": (data, config) => api.post<TriggeredCommunication>(\`/communication\`, data, config),
+    /**
+     * Send by account ID
+     * Sends communication(s) to Foo customers by account ID, for all customers
+     * in account with specified roles.
+     *
+     * If the account has multiple customers, the same comm will be sent out to all customers under this account.
+     *
+     * More details can be found at [http://docs.example.com/docs/brands/foo/](http://docs.example.com/docs/brands/foo/).
+     *
+     * The response is an array of unique ID(s) (comm ID(s)) for the newly
+     * created communication(s). These can be used to filter our feedback kafka
+     * topic to check for comm's statuses.
+     *
+     * *Note: This API is asynchronous*
+     *
+     */
+    \\"POST /foo/communication\\": (data, config) => api.post<TriggeredCommunications>(\`/foo/communication\`, data, config),
+    /**
+     * Retrieve a communication
+     * Returns a communication already processed by the platform.
+     *
+     */
+    \\"GET /communication/{commId}\\": (commId, config) => api.get<Communication>(\`/communication/\${commId}\`, config),
+    /**
+     * Retrieve an original request
+     * Returns the original request which triggers the communication by given comm ID.
+     *
+     * This is useful if you want to resend a communication which previously failed.
+     *
+     */
+    \\"GET /communication/{commId}/request\\": (commId, config) => api.get<CommunicationRequest>(\`/communication/\${commId}/request\`, config),
+    /**
+     * Download an attachment
+     * Attachment which was uploaded to the platform can be redownloaded.
+     *
+     */
+    \\"GET /attachment/{attachmentId}\\": (attachmentId, config) => api.get(\`/attachment/\${attachmentId}\`, config),
+    /**
+     * Upload a file
+     * Upload a file to comms platform for sending comm with attachments.
+     * The request has to be a \`multipart/form-data\` encoding. An ID is
+     * returned as response. This can be used to send communication with
+     * attachement(s).
+     *
+     */
+    \\"POST /attachment\\": (data, config) => api.post<UploadedAttachment>(\`/attachment\`, data, config),
+    /**
+     * Download a fragment
+     * A communication is constructed by fragment(s) i.e: \`subject\`, \`body\`, \`textBody\`.
+     * This API returns the redered fragments which have been sent.
+     *
+     */
+    \\"GET /rendered-fragment/{commId}/{fragmentId}\\": (commId, fragmentId, config) => api.get(\`/rendered-fragment/\${commId}/{fragmentId}\`, config),
+    api: api
+});
+
+export interface CommunicationRequest {
+    templateManifest: TemplateManifest;
+    friendlyDescription: string;
+    deliverTo: DeliverTo;
+    /**
+     * Additional data to render communication's template in key-value JSON format.
+     *
+     */
+    templateData?: any;
+    /**
+     * Schedule a communication to be sent at a specific time in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    deliverAt?: string;
+    /**
+     * Set this if you don't want a communication to be sent out if the
+     * platform cannot handle it until the expireAt value in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    expireAt?: string;
+    preferredChannels?: (\\"Email\\" | \\"SMS\\" | \\"Print\\")[];
+    attachments?: Attachment[];
+    [key: string]: unknown;
+}
+
+export interface TemplateManifest {
+    /**
+     * The template ID.
+     */
+    id: string;
+    /**
+     * The template version. i.e. \`2.0\`
+     */
+    version: string;
+    [key: string]: unknown;
+}
+
+export type DeliverTo = Profile | ContactDetails;
+
+export interface Profile {
+    /**
+     * The id is constructed from \`realm\`:\`customer_id\`|\`account_id\`
+     * i.e. \\"example:053a050e-6b79-4403-b465-37c4e|1234\\"
+     *
+     * Where:
+     * - \`realm\` should be \\"legacy\\" for Bar customers, \\"example\\" for Foo, etc..
+     * - \`customer_id\` is an id representing a customer
+     * - \`account_id\` is an id representing an Foo account
+     *
+     * If an account id is not available you can use \`realm\`:\`customer_id\` where customer_id must be unique.
+     *
+     * It is recommended to always use CustomerAccountId as a CustomerId may be associated with multiple accounts
+     * with different contact details and preferences.
+     *
+     */
+    customer: string;
+    contactDetails?: ContactDetails;
+    [key: string]: unknown;
+}
+
+export type ContactDetails = EmailAddress | PhoneNumber | PostalAddress;
+
+export interface EmailAddress {
+    emailAddress: string;
+    [key: string]: unknown;
+}
+
+export interface PhoneNumber {
+    phoneNumber: string;
+    [key: string]: unknown;
+}
+
+export interface PostalAddress {
+    contactName?: string;
+    company?: string;
+    line1: string;
+    line2?: string;
+    town: string;
+    county?: string;
+    postcode: string;
+    country?: string;
+    [key: string]: unknown;
+}
+
+export interface Attachment {
+    id: string;
+    fileName: string;
+    [key: string]: unknown;
+}
+
+export interface TriggeredCommunication {
+    id: string;
+    [key: string]: unknown;
+}
+
+export interface PostCommunication {
+    headers?: {
+        \\"x-trace-token\\": string;
+    };
+}
+
+export interface SendByAccountRequest {
+    templateManifest: TemplateManifest;
+    friendlyDescription: string;
+    deliverTo: AccountProfile;
+    /**
+     * Additional data to render communication's template in key-value JSON format.
+     *
+     */
+    templateData?: any;
+    /**
+     * Schedule a communication to be sent at a specific time in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    deliverAt?: string;
+    /**
+     * Set this if you don't want a communication to be sent out if the
+     * platform cannot handle it until the expireAt value in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    expireAt?: string;
+    preferredChannels?: (\\"Email\\" | \\"SMS\\" | \\"Print\\")[];
+    attachments?: Attachment[];
+    [key: string]: unknown;
+}
+
+export interface AccountProfile {
+    /**
+     * The account's ID which belongs to customer(s)
+     */
+    account: string;
+    roles: RolesFilter;
+    [key: string]: unknown;
+}
+
+export interface RolesFilter {
+    /**
+     * A list of customer's role to be included
+     */
+    include: (\\"all\\" | \\"primary\\" | \\"financiallyliable\\")[];
+    /**
+     * A list of customer's role to be excluded
+     */
+    exclude?: (\\"all\\" | \\"primary\\" | \\"financiallyliable\\")[];
+    [key: string]: unknown;
+}
+
+export type TriggeredCommunications = TriggeredCommunication[];
+
+export interface PostFooCommunication {
+    headers?: {
+        \\"x-trace-token\\": string;
+    };
+}
+
+export interface Communication {
+    id: string;
+    traceToken: string;
+    brand?: string;
+    template: Template;
+    /**
+     * The current status of the communication:
+     *
+     * - Scheduled: The communication has been scheduled to be sent in the future
+     * - Pending: The communication is being processed
+     * - Delivered: The communication has been delivered
+     * - Failed: The communication has failed. The \`failure\` field will contain the reason and code
+     * - Expired: The communication has been failed to be delivered before the expiration datetime,
+     *            this has been deprecated in favour of \`Failed\` with \`failure.code=CommsExpired\`
+     *
+     */
+    status: \\"Scheduled\\" | \\"Pending\\" | \\"Delivered\\" | \\"Expired\\" | \\"Failed\\";
+    description: string;
+    source: string;
+    isCanary: boolean;
+    /**
+     * Timestamp of when the communication was triggered in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    triggeredAt: string;
+    /**
+     * Timestamp of when the communication was scheduled in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    scheduledAt?: string;
+    /**
+     * Timestamp of when the communication was orchestrated in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    orchestratedAt?: string;
+    /**
+     * Timestamp of when the communication was composed in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    composedAt?: string;
+    /**
+     * Timestamp of when the communication was sent in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    issuedForDeliveryAt?: string;
+    /**
+     * Timestamp of when the communication was delivered in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    deliveredAt?: string;
+    /**
+     * Timestamp of when the communication was not being sent because
+     * the request had specified so in ISO format such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    expireAt?: string;
+    deliverTo: DeliverTo;
+    recipient?: Recipient;
+    channel?: (\\"Email\\" | \\"SMS\\" | \\"Print\\")[];
+    failure?: Failure;
+    content?: Content;
+    attachments: Attachment[];
+    specialRequirements?: SpecialRequirements;
+    [key: string]: unknown;
+}
+
+export interface Template {
+    /**
+     * The template's ID.
+     */
+    id: string;
+    /**
+     * The template's version.
+     */
+    version: string;
+    name?: string;
+    commType?: \\"Service\\" | \\"Marketing\\" | \\"Regulatory\\";
+    [key: string]: unknown;
+}
+
+export type Recipient = EmailAddress | PhoneNumber | PostalAddress;
+
+export interface Failure {
+    /**
+     * Timestamp of when the communication failed in ISO format
+     * such as '2011-12-03T10:15:30Z'.
+     *
+     */
+    at: string;
+    code: string;
+    reason: string;
+    [key: string]: unknown;
+}
+
+export type Content = SmsContent | PrintContent | EmailContent;
+
+export interface SmsContent {
+    sms: {
+        /**
+         * A URL points to a downloadable content's body of which has been sent
+         * as communication
+         *
+         */
+        body?: string;
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+}
+
+export interface PrintContent {
+    print: {
+        /**
+         * A URL points to a downloadable content's body of which has been sent
+         * as communication
+         *
+         */
+        body?: string;
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+}
+
+export interface EmailContent {
+    sender?: string;
+    [key: string]: unknown;
+}
+
+export interface SpecialRequirements {
+    preferences: (\\"BlackWhite\\" | \\"LargePrint\\" | \\"BlackWhiteLargePrint\\" | \\"Braille\\" | \\"Audio\\")[];
+    [key: string]: unknown;
+}
+
+export interface UploadedAttachment {
+    id: string;
+    [key: string]: unknown;
+}
+
+export interface AxiosOapiInstance {
+    /**
+     * Send a communication
+     * Sends a communication to a customer or to an arbitrary address.
+     *
+     * *Note: Foo teams can send by Account Id instead [using the dedicated \`/foo/communication\` endpoint](#operationId/sendCommByAcc).*
+     *
+     * The response is a unique ID (comm ID) for the newly created communication.
+     * This can be used to filter our feedback kafka topic to check for comm's
+     * statuses.
+     *
+     * *Note: This API is asynchronous*
+     *
+     */
+    \\"POST /communication\\": (data: CommunicationRequest, config?: AxiosRequestConfig & PostCommunication) => Promise<AxiosResponse<TriggeredCommunication>>;
+    /**
+     * Send by account ID
+     * Sends communication(s) to Foo customers by account ID, for all customers
+     * in account with specified roles.
+     *
+     * If the account has multiple customers, the same comm will be sent out to all customers under this account.
+     *
+     * More details can be found at [http://docs.example.com/docs/brands/foo/](http://docs.example.com/docs/brands/foo/).
+     *
+     * The response is an array of unique ID(s) (comm ID(s)) for the newly
+     * created communication(s). These can be used to filter our feedback kafka
+     * topic to check for comm's statuses.
+     *
+     * *Note: This API is asynchronous*
+     *
+     */
+    \\"POST /foo/communication\\": (data: SendByAccountRequest, config?: AxiosRequestConfig & PostFooCommunication) => Promise<AxiosResponse<TriggeredCommunications>>;
+    /**
+     * Retrieve a communication
+     * Returns a communication already processed by the platform.
+     *
+     */
+    \\"GET /communication/{commId}\\": (commId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Communication>>;
+    /**
+     * Retrieve an original request
+     * Returns the original request which triggers the communication by given comm ID.
+     *
+     * This is useful if you want to resend a communication which previously failed.
+     *
+     */
+    \\"GET /communication/{commId}/request\\": (commId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<CommunicationRequest>>;
+    /**
+     * Download an attachment
+     * Attachment which was uploaded to the platform can be redownloaded.
+     *
+     */
+    \\"GET /attachment/{attachmentId}\\": (attachmentId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Upload a file
+     * Upload a file to comms platform for sending comm with attachments.
+     * The request has to be a \`multipart/form-data\` encoding. An ID is
+     * returned as response. This can be used to send communication with
+     * attachement(s).
+     *
+     */
+    \\"POST /attachment\\": (data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<UploadedAttachment>>;
+    /**
+     * Download a fragment
+     * A communication is constructed by fragment(s) i.e: \`subject\`, \`body\`, \`textBody\`.
+     * This API returns the redered fragments which have been sent.
+     *
+     */
+    \\"GET /rendered-fragment/{commId}/{fragmentId}\\": (commId: string, fragmentId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    api: AxiosInstance;
+}
+"
+`;
+
+exports[`Integration Should generate a correct schema for petstore.json 1`] = `
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+
+export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
+    /**
+     * Add a new pet to the store
+     */
+    \\"POST /pet\\": (data, config) => api.post(\`/pet\`, data, config),
+    /**
+     * Update an existing pet
+     */
+    \\"PUT /pet\\": (data, config) => api.put<Pet>(\`/pet\`, data, config),
+    /**
+     * Finds Pets by status
+     * Multiple status values can be provided with comma separated strings
+     */
+    \\"GET /pet/findByStatus\\": config => api.get<Pet[]>(\`/pet/findByStatus\`, config),
+    /**
+     * Finds Pets by tags
+     * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
+     */
+    \\"GET /pet/findByTags\\": config => api.get<Pet[]>(\`/pet/findByTags\`, config),
+    /**
+     * Find pet by ID
+     * Returns a single pet
+     */
+    \\"GET /pet/{petId}\\": (petId, config) => api.get<Pet>(\`/pet/\${petId}\`, config),
+    /**
+     * Updates a pet in the store with form data
+     */
+    \\"POST /pet/{petId}\\": (petId, data, config) => api.post(\`/pet/\${petId}\`, data, config),
+    /**
+     * Deletes a pet
+     */
+    \\"DELETE /pet/{petId}\\": (petId, config) => api.delete(\`/pet/\${petId}\`, config),
+    /**
+     * uploads an image
+     */
+    \\"POST /pet/{petId}/uploadImage\\": (petId, data, config) => api.post<ApiResponse>(\`/pet/\${petId}/uploadImage\`, data, config),
+    /**
+     * Returns pet inventories by status
+     * Returns a map of status codes to quantities
+     */
+    \\"GET /store/inventory\\": config => api.get<any>(\`/store/inventory\`, config),
+    /**
+     * Place an order for a pet
+     */
+    \\"POST /store/order\\": (data, config) => api.post<Order>(\`/store/order\`, data, config),
+    /**
+     * Find purchase order by ID
+     * For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
+     */
+    \\"GET /store/order/{orderId}\\": (orderId, config) => api.get<Order>(\`/store/order/\${orderId}\`, config),
+    /**
+     * Delete purchase order by ID
+     * For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
+     */
+    \\"DELETE /store/order/{orderId}\\": (orderId, config) => api.delete(\`/store/order/\${orderId}\`, config),
+    /**
+     * Create user
+     * This can only be done by the logged in user.
+     */
+    \\"POST /user\\": (data, config) => api.post(\`/user\`, data, config),
+    /**
+     * Creates list of users with given input array
+     */
+    \\"POST /user/createWithArray\\": (data, config) => api.post(\`/user/createWithArray\`, data, config),
+    /**
+     * Creates list of users with given input array
+     */
+    \\"POST /user/createWithList\\": (data, config) => api.post(\`/user/createWithList\`, data, config),
+    /**
+     * Logs user into the system
+     */
+    \\"GET /user/login\\": config => api.get<string>(\`/user/login\`, config),
+    /**
+     * Logs out current logged in user session
+     */
+    \\"GET /user/logout\\": config => api.get(\`/user/logout\`, config),
+    /**
+     * Get user by user name
+     */
+    \\"GET /user/{username}\\": (username, config) => api.get<User>(\`/user/\${username}\`, config),
+    /**
+     * Updated user
+     * This can only be done by the logged in user.
+     */
+    \\"PUT /user/{username}\\": (username, data, config) => api.put(\`/user/\${username}\`, data, config),
+    /**
+     * Delete user
+     * This can only be done by the logged in user.
+     */
+    \\"DELETE /user/{username}\\": (username, config) => api.delete(\`/user/\${username}\`, config),
+    api: api
+});
+
+export interface Pet {
+    id?: number;
+    category?: Category;
+    name: string;
+    photoUrls: string[];
+    tags?: Tag[];
+    /**
+     * pet status in the store
+     */
+    status?: \\"available\\" | \\"pending\\" | \\"sold\\";
+    [key: string]: unknown;
+}
+
+export interface Category {
+    id?: number;
+    name?: string;
+    [key: string]: unknown;
+}
+
+export interface Tag {
+    id?: number;
+    name?: string;
+    [key: string]: unknown;
+}
+
+export interface GetPetFindByStatus {
+    params?: {
+        /**
+         * Status values that need to be considered for filter
+         */
+        status: (\\"available\\" | \\"pending\\" | \\"sold\\")[];
+    };
+}
+
+export interface GetPetFindByTags {
+    params?: {
+        /**
+         * Tags to filter by
+         */
+        tags: string[];
+    };
+}
+
+export interface DeletePetPetId {
+    headers?: {
+        api_key?: string;
+    };
+}
+
+export interface ApiResponse {
+    code?: number;
+    type?: string;
+    message?: string;
+    [key: string]: unknown;
+}
+
+export interface Order {
+    id?: number;
+    petId?: number;
+    quantity?: number;
+    shipDate?: string;
+    /**
+     * Order Status
+     */
+    status?: \\"placed\\" | \\"approved\\" | \\"delivered\\";
+    complete?: boolean;
+    [key: string]: unknown;
+}
+
+export interface User {
+    id?: number;
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    phone?: string;
+    /**
+     * User Status
+     */
+    userStatus?: number;
+    [key: string]: unknown;
+}
+
+export interface GetUserLogin {
+    params?: {
+        /**
+         * The user name for login
+         */
+        username: string;
+        /**
+         * The password for login in clear text
+         */
+        password: string;
+    };
+}
+
+export interface AxiosOapiInstance {
+    /**
+     * Add a new pet to the store
+     */
+    \\"POST /pet\\": (data: Pet, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Update an existing pet
+     */
+    \\"PUT /pet\\": (data: Pet, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pet>>;
+    /**
+     * Finds Pets by status
+     * Multiple status values can be provided with comma separated strings
+     */
+    \\"GET /pet/findByStatus\\": (config?: AxiosRequestConfig & GetPetFindByStatus) => Promise<AxiosResponse<Pet[]>>;
+    /**
+     * Finds Pets by tags
+     * Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
+     */
+    \\"GET /pet/findByTags\\": (config?: AxiosRequestConfig & GetPetFindByTags) => Promise<AxiosResponse<Pet[]>>;
+    /**
+     * Find pet by ID
+     * Returns a single pet
+     */
+    \\"GET /pet/{petId}\\": (petId: number, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pet>>;
+    /**
+     * Updates a pet in the store with form data
+     */
+    \\"POST /pet/{petId}\\": (petId: number, data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Deletes a pet
+     */
+    \\"DELETE /pet/{petId}\\": (petId: number, config?: AxiosRequestConfig & DeletePetPetId) => Promise<AxiosResponse>;
+    /**
+     * uploads an image
+     */
+    \\"POST /pet/{petId}/uploadImage\\": (petId: number, data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<ApiResponse>>;
+    /**
+     * Returns pet inventories by status
+     * Returns a map of status codes to quantities
+     */
+    \\"GET /store/inventory\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<any>>;
+    /**
+     * Place an order for a pet
+     */
+    \\"POST /store/order\\": (data: Order, config?: AxiosRequestConfig) => Promise<AxiosResponse<Order>>;
+    /**
+     * Find purchase order by ID
+     * For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
+     */
+    \\"GET /store/order/{orderId}\\": (orderId: number, config?: AxiosRequestConfig) => Promise<AxiosResponse<Order>>;
+    /**
+     * Delete purchase order by ID
+     * For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
+     */
+    \\"DELETE /store/order/{orderId}\\": (orderId: number, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Create user
+     * This can only be done by the logged in user.
+     */
+    \\"POST /user\\": (data: User, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Creates list of users with given input array
+     */
+    \\"POST /user/createWithArray\\": (data: User[], config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Creates list of users with given input array
+     */
+    \\"POST /user/createWithList\\": (data: User[], config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Logs user into the system
+     */
+    \\"GET /user/login\\": (config?: AxiosRequestConfig & GetUserLogin) => Promise<AxiosResponse<string>>;
+    /**
+     * Logs out current logged in user session
+     */
+    \\"GET /user/logout\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Get user by user name
+     */
+    \\"GET /user/{username}\\": (username: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<User>>;
+    /**
+     * Updated user
+     * This can only be done by the logged in user.
+     */
+    \\"PUT /user/{username}\\": (username: string, data: User, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Delete user
+     * This can only be done by the logged in user.
+     */
+    \\"DELETE /user/{username}\\": (username: string, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    api: AxiosInstance;
+}
+"
+`;
+
+exports[`Integration Should generate a correct schema for simple.yaml 1`] = `
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+
+export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
+    \\"POST /test/{id}\\": (id, data, config) => api.post<Test>(\`/test/\${id}\`, data, config),
+    \\"GET /test/{id}\\": (id, config) => api.get<Test>(\`/test/\${id}\`, config),
+    api: api
+});
+
+export interface User {
+    email: string;
+    scopes?: string[];
+}
+
+export interface Test {
+    text: string;
+    user?: User;
+    [key: string]: unknown;
+}
+
+export interface AxiosOapiInstance {
+    \\"POST /test/{id}\\": (id: string, data: User, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
+    \\"GET /test/{id}\\": (id: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
+    api: AxiosInstance;
+}
+"
+`;

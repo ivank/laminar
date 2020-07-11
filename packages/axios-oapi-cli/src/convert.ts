@@ -1,4 +1,4 @@
-import { compile, Schema, ResolvedSchema } from '@ovotech/json-schema';
+import { Schema, ResolvedSchema } from '@ovotech/json-schema';
 import { printDocument } from '@ovotech/ts-compose';
 import { OpenAPIObject, SchemaObject } from 'openapi3-ts';
 import { convertOapi } from './convert-oapi';
@@ -11,7 +11,7 @@ export const isOpenApiObject = (schema: Schema): schema is OpenAPIObject =>
   'info' in schema &&
   'paths' in schema;
 
-export const oapiTs = async ({ schema, refs }: ResolvedSchema): Promise<string> => {
+export const oapiTs = ({ schema, refs }: ResolvedSchema): string => {
   if (!isOpenApiObject(schema)) {
     throw new Error(
       'Invalid Schema: Schema could not be converted to typescript. Not a json-schema',
@@ -23,8 +23,5 @@ export const oapiTs = async ({ schema, refs }: ResolvedSchema): Promise<string> 
   return printDocument(convertOapi(context, schema));
 };
 
-export const schemaTs = async (api: Schema | string): Promise<string> => {
-  const { schema, refs } = await compile(api);
-
-  return printDocument(convertSchema({ root: schema as SchemaObject, refs }, schema));
-};
+export const schemaTs = ({ schema, refs }: ResolvedSchema): string =>
+  printDocument(convertSchema({ root: schema as SchemaObject, refs }, schema));

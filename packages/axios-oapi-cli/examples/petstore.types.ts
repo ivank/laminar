@@ -23,19 +23,19 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Find pet by ID
      * Returns a single pet
      */
-    "GET /pet/{petId}": (petId: number, config) => api.get<Pet>(`/pet/${petId}`, config),
+    "GET /pet/{petId}": (petId, config) => api.get<Pet>(`/pet/${petId}`, config),
     /**
      * Updates a pet in the store with form data
      */
-    "POST /pet/{petId}": (petId: number, data, config) => api.post(`/pet/${petId}`, data, config),
+    "POST /pet/{petId}": (petId, data, config) => api.post(`/pet/${petId}`, data, config),
     /**
      * Deletes a pet
      */
-    "DELETE /pet/{petId}": (petId: number, config) => api.delete(`/pet/${petId}`, config),
+    "DELETE /pet/{petId}": (petId, config) => api.delete(`/pet/${petId}`, config),
     /**
      * uploads an image
      */
-    "POST /pet/{petId}/uploadImage": (petId: number, data, config) => api.post<ApiResponse>(`/pet/${petId}/uploadImage`, data, config),
+    "POST /pet/{petId}/uploadImage": (petId, data, config) => api.post<ApiResponse>(`/pet/${petId}/uploadImage`, data, config),
     /**
      * Returns pet inventories by status
      * Returns a map of status codes to quantities
@@ -49,12 +49,12 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Find purchase order by ID
      * For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
      */
-    "GET /store/order/{orderId}": (orderId: number, config) => api.get<Order>(`/store/order/${orderId}`, config),
+    "GET /store/order/{orderId}": (orderId, config) => api.get<Order>(`/store/order/${orderId}`, config),
     /**
      * Delete purchase order by ID
      * For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
      */
-    "DELETE /store/order/{orderId}": (orderId: number, config) => api.delete(`/store/order/${orderId}`, config),
+    "DELETE /store/order/{orderId}": (orderId, config) => api.delete(`/store/order/${orderId}`, config),
     /**
      * Create user
      * This can only be done by the logged in user.
@@ -79,17 +79,17 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * Get user by user name
      */
-    "GET /user/{username}": (username: string, config) => api.get<User>(`/user/${username}`, config),
+    "GET /user/{username}": (username, config) => api.get<User>(`/user/${username}`, config),
     /**
      * Updated user
      * This can only be done by the logged in user.
      */
-    "PUT /user/{username}": (username: string, data, config) => api.put(`/user/${username}`, data, config),
+    "PUT /user/{username}": (username, data, config) => api.put(`/user/${username}`, data, config),
     /**
      * Delete user
      * This can only be done by the logged in user.
      */
-    "DELETE /user/{username}": (username: string, config) => api.delete(`/user/${username}`, config),
+    "DELETE /user/{username}": (username, config) => api.delete(`/user/${username}`, config),
     api: api
 });
 
@@ -119,7 +119,7 @@ export interface Tag {
 }
 
 export interface GetPetFindByStatus {
-    query?: {
+    params?: {
         /**
          * Status values that need to be considered for filter
          */
@@ -128,7 +128,7 @@ export interface GetPetFindByStatus {
 }
 
 export interface GetPetFindByTags {
-    query?: {
+    params?: {
         /**
          * Tags to filter by
          */
@@ -178,7 +178,7 @@ export interface User {
 }
 
 export interface GetUserLogin {
-    query?: {
+    params?: {
         /**
          * The user name for login
          */
@@ -190,7 +190,7 @@ export interface GetUserLogin {
     };
 }
 
-interface AxiosOapiInstance {
+export interface AxiosOapiInstance {
     /**
      * Add a new pet to the store
      */

@@ -16,11 +16,11 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * Returns a user based on a single ID, if the user does not have access to the pet
      */
-    "GET /pets/{id}": (id: string, config) => api.get<Pet | Error>(`/pets/${id}`, config),
+    "GET /pets/{id}": (id, config) => api.get<Pet | Error>(`/pets/${id}`, config),
     /**
      * deletes a single pet based on the ID supplied
      */
-    "DELETE /pets/{id}": (id: string, config) => api.delete<Error>(`/pets/${id}`, config),
+    "DELETE /pets/{id}": (id, config) => api.delete<Error>(`/pets/${id}`, config),
     api: api
 });
 

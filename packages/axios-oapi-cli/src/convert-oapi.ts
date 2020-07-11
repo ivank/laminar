@@ -39,23 +39,34 @@ const cleanIdentifierName = (str: string): string => str.replace(/[^0-9a-zA-Z_$]
 const pathToIdentifier = (method: string, path: string): string =>
   title(method) + path.split('/').map(cleanIdentifierName).map(title).join('');
 
+const pathRegEx = /\{[^\}]+\}/g;
+
+const pathToImplicitParams = (path: string): ParameterObject[] =>
+  path.match(pathRegEx)?.map((name) => ({
+    in: 'path',
+    name: name.slice(1, -1),
+    required: true,
+    schema: { type: 'string' },
+  })) ?? [];
+
 const convertPathParams = (
   context: AstContext,
+  path: string,
   parameters: ParameterObject[],
-): { items: ts.ParameterDeclaration[]; context: AstContext } => {
-  const pathParams = parameters.filter((param) => param.in === 'path');
-  return mapWithContext(context, pathParams, (context, param) => {
+): { items: { name: string; type: ts.TypeNode }[]; context: AstContext } => {
+  const implicitParams = pathToImplicitParams(path).map(
+    (item) => parameters.find((param) => param.in === 'path' && param.name === item.name) ?? item,
+  );
+
+  return mapWithContext(context, implicitParams, (context, param) => {
     const astParams = param.schema
       ? convertSchema(context, param.schema)
       : document(context, Type.Unknown);
 
-    return document(
-      astParams?.context ?? context,
-      Type.Param({
-        name: param.name,
-        type: param.required ? astParams.type : Type.Union([astParams.type, Type.Undefined]),
-      }),
-    );
+    return document(astParams?.context ?? context, {
+      name: param.name,
+      type: param.required ? astParams.type : Type.Union([astParams.type, Type.Undefined]),
+    });
   });
 };
 
@@ -181,7 +192,7 @@ export const convertOapi = (
           );
 
           const requestName = `${method.toUpperCase()} ${path}`;
-          const pathItems = convertPathParams(methodContext, combinedParameters);
+          const pathItems = convertPathParams(methodContext, path, combinedParameters);
           const configParams = convertConfigParams(pathItems.context, combinedParameters);
 
           const astRequestBody = convertRequestBody(configParams.context, operation.requestBody);
@@ -211,7 +222,7 @@ export const convertOapi = (
             jsDoc: doc,
             value: Node.Arrow({
               args: [
-                ...pathItems.items,
+                ...pathItems.items.map(({ name }) => Type.Param({ name })),
                 ...(hasData ? [Type.Param({ name: 'data' })] : []),
                 Type.Param({ name: 'config' }),
               ],
@@ -232,7 +243,7 @@ export const convertOapi = (
             jsDoc: doc,
             type: Type.Arrow({
               args: [
-                ...pathItems.items,
+                ...pathItems.items.map(Type.Param),
                 ...(hasData ? [Type.Param({ name: 'data', type: astRequestBody.type })] : []),
                 Type.Param({
                   name: 'config',

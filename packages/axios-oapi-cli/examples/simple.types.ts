@@ -1,8 +1,8 @@
 import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
-    "POST /test/{id}": (id: string, data, config) => api.post<Test>(`/test/${id}`, data, config),
-    "GET /test/{id}": (id: string, config) => api.get<Test>(`/test/${id}`, config),
+    "POST /test/{id}": (id, data, config) => api.post<Test>(`/test/${id}`, data, config),
+    "GET /test/{id}": (id, config) => api.get<Test>(`/test/${id}`, config),
     api: api
 });
 
@@ -17,7 +17,7 @@ export interface Test {
     [key: string]: unknown;
 }
 
-interface AxiosOapiInstance {
+export interface AxiosOapiInstance {
     "POST /test/{id}": (id: string, data: User, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
     "GET /test/{id}": (id: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
     api: AxiosInstance;
