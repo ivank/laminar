@@ -1,5 +1,13 @@
 import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
+/**
+ * Swagger Petstore
+ *
+ * Version: 1.0.0
+ *
+ * Description:
+ * A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification
+ */
 export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * Returns all pets from the system that the user has access to

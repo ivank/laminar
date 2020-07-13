@@ -292,6 +292,11 @@ export const convertOapi = (
     Node.Const({
       name: 'axiosOapi',
       isExport: true,
+      jsDoc: [
+        api.info.title,
+        api.info.version ? `\n\nVersion: ${api.info.version}` : '',
+        api.info.description ? `\n\nDescription:\n${api.info.description}` : '',
+      ].join(''),
       value: Node.Arrow({
         args: [Type.Param({ name: 'api', type: Type.Referance('AxiosInstance') })],
         ret: Type.Referance('AxiosOapiInstance'),

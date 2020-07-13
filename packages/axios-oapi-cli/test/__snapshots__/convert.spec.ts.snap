@@ -3,6 +3,25 @@
 exports[`Integration Should generate a correct schema for comms.yaml 1`] = `
 "import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
 
+/**
+ * Comms Platform API
+ *
+ * Version: v3
+ *
+ * Description:
+ * # Introduction
+ * Welcome to the _Comms Platform API_ Documentation. The _Comms Platform API_
+ * allows you to send communication via HTTP from your services to customers.
+ *
+ * # Authentication
+ * The Comms API uses OAuth 2.0 for authenticating *all* API requests by using
+ * the Identity platform.
+ *
+ * To find out more about obtaining an access token visit the documentation of
+ * the [Identity platform](https://sites.google.com/example.com/identity).
+ * <security-definitions />
+ *
+ */
 export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * Send a communication
@@ -452,6 +471,14 @@ export interface AxiosOapiInstance {
 exports[`Integration Should generate a correct schema for petstore.json 1`] = `
 "import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
 
+/**
+ * Swagger Petstore
+ *
+ * Version: 1.0.0
+ *
+ * Description:
+ * This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key \`special-key\` to test the authorization filters.
+ */
 export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * Add a new pet to the store
@@ -740,6 +767,11 @@ export interface AxiosOapiInstance {
 exports[`Integration Should generate a correct schema for simple.yaml 1`] = `
 "import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
 
+/**
+ * Test
+ *
+ * Version: 1.0.0
+ */
 export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     \\"POST /test/{id}\\": (id, data, config) => api.post<Test>(\`/test/\${id}\`, data, config),
     \\"GET /test/{id}\\": (id, config) => api.get<Test>(\`/test/\${id}\`, config),
