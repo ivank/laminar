@@ -6,6 +6,7 @@
   "description": "A lightweight a json-schema. No external dependencies (one small dependency from the same repository).",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/json-schema#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",

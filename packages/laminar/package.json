@@ -6,6 +6,7 @@
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",

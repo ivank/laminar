@@ -6,6 +6,7 @@
   "description": "A json web token middleware for laminar",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt#readme",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --declaration",

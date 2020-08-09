@@ -6,6 +6,7 @@
   "description": "CLI generating typescript types for @ovotech/laminar-oapi",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar-oapi-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/laminar": "^0.6.1",

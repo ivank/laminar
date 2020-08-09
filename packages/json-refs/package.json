@@ -6,6 +6,7 @@
   "description": "Json Refs Resolver",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/json-refs#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^25.2.3",
