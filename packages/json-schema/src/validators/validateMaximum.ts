@@ -1,5 +1,4 @@
-import { HasError, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
 import { validateExclusiveMaximum } from './validateExclusiveMaximum';
 
 export const validateMaximum: Validator = (schema, value, options) => {
@@ -7,8 +6,8 @@ export const validateMaximum: Validator = (schema, value, options) => {
     if (schema.exclusiveMaximum === true) {
       return validateExclusiveMaximum({ exclusiveMaximum: schema.maximum }, value, options);
     } else if (typeof value === 'number' && value > schema.maximum) {
-      return HasError('maximum', options.name, schema.maximum);
+      return error('maximum', options.name, schema.maximum);
     }
   }
-  return NoErrors;
+  return empty;
 };

@@ -10,7 +10,6 @@ Packages:
 - [@ovotech/laminar-oapi-cli](packages/laminar-oapi-cli) - [OpenAPI](https://swagger.io/docs/) type generation
 - [@ovotech/laminar-handlebars](packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
 - [@ovotech/laminar-jwt](packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
-- [@ovotech/json-refs](packages/json-refs) - Lightweight json-references resolvers
 - [@ovotech/json-schema](packages/json-schema) - Lightweight json-schema validator
 
 ## Usage
@@ -247,7 +246,7 @@ Lets see the simplest possible app with laminar, a very simple echo app
 ```typescript
 import { createLaminar, Resolver, Context } from '@ovotech/laminar';
 
-const main: Resolver<Context> = ctx => ctx.body;
+const main: Resolver<Context> = (ctx) => ctx.body;
 createLaminar({ port: 3333, app: main }).start();
 ```
 
@@ -264,14 +263,14 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 ```typescript
 import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
 
-const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
+const auth = (next: Resolver<Context>): Resolver<Context> => (ctx) => {
   if (ctx.headers.authorization !== 'Me') {
     return message(403, 'Not Me');
   }
   return next(ctx);
 };
 
-const main: Resolver<Context> = ctx => ctx.body;
+const main: Resolver<Context> = (ctx) => ctx.body;
 
 createLaminar({ port: 3333, app: auth(main) }).start();
 ```
@@ -283,21 +282,21 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 ```typescript
 import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
 
-const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
+const auth = (next: Resolver<Context>): Resolver<Context> => (ctx) => {
   if (ctx.headers.authorization !== 'Me') {
     return message(403, 'Not Me');
   }
   return next(ctx);
 };
 
-const log = (next: Resolver<Context>): Resolver<Context> => ctx => {
+const log = (next: Resolver<Context>): Resolver<Context> => (ctx) => {
   console.log('Requested', ctx.body);
   const response = next(ctx);
   console.log('Responded', response);
   return response;
 };
 
-const main: Resolver<Context> = ctx => ctx.body;
+const main: Resolver<Context> = (ctx) => ctx.body;
 
 createLaminar({ port: 3333, app: log(auth(main)) }).start();
 ```
@@ -335,17 +334,17 @@ const createDbMiddleware = (): Middleware<DBContext> => {
     getValidUser: () => 'Me',
   };
 
-  return next => ctx => next({ ...ctx, db });
+  return (next) => (ctx) => next({ ...ctx, db });
 };
 
-const auth: Middleware<{}, DBContext> = next => ctx => {
+const auth: Middleware<{}, DBContext> = (next) => (ctx) => {
   if (ctx.db.getValidUser() !== ctx.headers.authorization) {
     return message(403, 'Not Me');
   }
   return next(ctx);
 };
 
-const log: Middleware = next => ctx => {
+const log: Middleware = (next) => (ctx) => {
   console.log('Requested', ctx.body);
   const response = next(ctx);
   console.log('Responded', response);
@@ -355,7 +354,7 @@ const log: Middleware = next => ctx => {
 /**
  * We can also get use of the same databse connection in any middleware downstream
  */
-const app: Resolver<DBContext & Context> = ctx => {
+const app: Resolver<DBContext & Context> = (ctx) => {
   return { echo: ctx.body, user: ctx.db.getValidUser() };
 };
 
@@ -419,7 +418,7 @@ interface PGContext {
 const createPgClient = async (config: string): Promise<Middleware<PGContext>> => {
   const pg = new Client(config);
   await pg.connect();
-  return next => ctx => next({ ...ctx, pg });
+  return (next) => (ctx) => next({ ...ctx, pg });
 };
 
 // Route Handlers

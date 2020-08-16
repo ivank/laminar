@@ -25,21 +25,42 @@ nock('http://localhost:1234')
   .replyWithFile(200, join(testSuiteFolder, 'remotes/integer.json'))
   .get('/subSchemas.json')
   .replyWithFile(200, join(testSuiteFolder, 'remotes/subSchemas.json'))
+  .get('/subSchemas-defs.json')
+  .replyWithFile(200, join(testSuiteFolder, 'remotes/subSchemas-defs.json'))
   .get('/folder/folderInteger.json')
   .replyWithFile(200, join(testSuiteFolder, 'remotes/folder/folderInteger.json'))
   .get('/name.json')
-  .replyWithFile(200, join(testSuiteFolder, 'remotes/name.json'));
+  .replyWithFile(200, join(testSuiteFolder, 'remotes/name.json'))
+  .get('/name-defs.json')
+  .replyWithFile(200, join(testSuiteFolder, 'remotes/name-defs.json'));
 
 nock('http://json-schema.org')
   .persist()
   .get('/draft-04/schema')
-  .replyWithFile(200, join(draftsFolder, 'draft-4-schema.json'))
+  .replyWithFile(200, join(draftsFolder, 'draft-4/schema.json'))
   .get('/draft-06/schema')
-  .replyWithFile(200, join(draftsFolder, 'draft-6-schema.json'))
+  .replyWithFile(200, join(draftsFolder, 'draft-6/schema.json'))
   .get('/draft-07/schema')
-  .replyWithFile(200, join(draftsFolder, 'draft-7-schema.json'));
+  .replyWithFile(200, join(draftsFolder, 'draft-7/schema.json'));
 
-const testFolders = ['draft4', 'draft6', 'draft7'];
+nock('https://json-schema.org')
+  .persist()
+  .get('/draft/2019-09/schema')
+  .replyWithFile(200, join(draftsFolder, 'draft/2019-09/schema.json'))
+  .get('/draft/2019-09/meta/core')
+  .replyWithFile(200, join(draftsFolder, 'draft/2019-09/meta/core.json'))
+  .get('/draft/2019-09/meta/applicator')
+  .replyWithFile(200, join(draftsFolder, 'draft/2019-09/meta/applicator.json'))
+  .get('/draft/2019-09/meta/validation')
+  .replyWithFile(200, join(draftsFolder, 'draft/2019-09/meta/validation.json'))
+  .get('/draft/2019-09/meta/meta-data')
+  .replyWithFile(200, join(draftsFolder, 'draft/2019-09/meta/meta-data.json'))
+  .get('/draft/2019-09/meta/format')
+  .replyWithFile(200, join(draftsFolder, 'draft/2019-09/meta/format.json'))
+  .get('/draft/2019-09/meta/content')
+  .replyWithFile(200, join(draftsFolder, 'draft/2019-09/meta/content.json'));
+
+const testFolders = ['draft4', 'draft6', 'draft7', 'draft2019-09'];
 
 for (const testFolder of testFolders) {
   const testFiles = readdirSync(join(testSuiteFolder, 'tests', testFolder))

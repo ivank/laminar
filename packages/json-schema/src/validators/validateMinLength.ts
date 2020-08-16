@@ -1,7 +1,6 @@
-import { HasError, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
 
 export const validateMinLength: Validator = (schema, value, { name }) =>
   schema.minLength && typeof value === 'string' && [...value].length < schema.minLength
-    ? HasError('minLength', name, schema.minLength)
-    : NoErrors;
+    ? error('minLength', name, schema.minLength)
+    : empty;

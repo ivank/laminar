@@ -1,12 +1,12 @@
-import { HasError, isObject, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { isObject } from '../helpers';
+import { Validator, empty, error } from '../validation';
 
-export const validateRequired: Validator = (schema, value, { name }) => {
-  if (schema.required && schema.required.length && isObject(value)) {
-    const missingKeys = schema.required.filter((key) => !Object.keys(value).includes(key));
+export const validateRequired: Validator = ({ required }, value, { name }) => {
+  if (required && required.length && isObject(value)) {
+    const missingKeys = required.filter((key) => !Object.keys(value).includes(key));
     if (missingKeys.length > 0) {
-      return HasError('required', name, missingKeys);
+      return error('required', name, missingKeys);
     }
   }
-  return NoErrors;
+  return empty;
 };

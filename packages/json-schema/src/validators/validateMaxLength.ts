@@ -1,7 +1,6 @@
-import { HasError, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
 
 export const validateMaxLength: Validator = (schema, value, { name }) =>
   schema.maxLength && typeof value === 'string' && [...value].length > schema.maxLength
-    ? HasError('maxLength', name, schema.maxLength)
-    : NoErrors;
+    ? error('maxLength', name, schema.maxLength)
+    : empty;

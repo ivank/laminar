@@ -1,5 +1,4 @@
-import { HasError, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
 
 const getType = (
   value: unknown,
@@ -21,17 +20,17 @@ const getType = (
   }
 };
 
-export const validateType: Validator = (schema, value, { name }) => {
-  if (schema.type) {
+export const validateType: Validator = ({ type }, value, { name }) => {
+  if (type) {
     const valueType = getType(value);
-    const allowed = Array.isArray(schema.type) ? schema.type : [schema.type];
+    const allowed = Array.isArray(type) ? type : [type];
     if (allowed.includes('number') && !allowed.includes('integer')) {
       allowed.push('integer');
     }
 
     if (!valueType || !allowed.includes(valueType)) {
-      return HasError('type', name, allowed);
+      return error('type', name, allowed);
     }
   }
-  return NoErrors;
+  return empty;
 };

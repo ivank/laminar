@@ -1,19 +1,21 @@
+import { isJsonSchema, isObject } from '../helpers';
+import { Schema } from '../schema';
 import {
+  Validator,
+  hasErrors,
+  error,
+  empty,
   childOptions,
-  flatten,
-  HasError,
-  isJsonSchema,
-  NoErrors,
   validateSchema,
-  isObject,
-} from '../helpers';
-import { ValidateOptions, Validator, Schema } from '../types';
+  combine,
+  Options,
+} from '../validation';
 
 const findSchema = (
   schemas: Schema[],
   name: string,
   value: unknown,
-  options: ValidateOptions,
+  options: Options,
 ): Schema | undefined =>
   schemas.find(
     (item) =>
@@ -21,7 +23,7 @@ const findSchema = (
       'type' in item &&
       item.type === 'object' &&
       !!item.properties &&
-      validateSchema(item.properties[name], value, options).length === 0,
+      !hasErrors(validateSchema(item.properties[name], value, options)),
   );
 
 export const validateOneOf: Validator = (schema, value, options) => {
@@ -49,11 +51,13 @@ export const validateOneOf: Validator = (schema, value, options) => {
     const validations = oneOf.map((item, index) =>
       validateSchema(item, value, childOptions(`${index}?`, options)),
     );
-    const matching = validations.filter((item) => item.length === 0);
+    const matching = validations.filter((item) => !hasErrors(item));
 
     if (matching.length !== 1) {
-      return [...HasError('oneOf', options.name, matching.length), ...flatten(validations)];
+      return combine([error('oneOf', options.name, matching.length), ...validations]);
+    } else {
+      return combine(matching);
     }
   }
-  return NoErrors;
+  return empty;
 };

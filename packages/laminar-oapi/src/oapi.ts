@@ -76,7 +76,7 @@ const toRoutes = <C extends ContextLike = ContextLike>(
 export const isAuthInfo = (item: unknown): item is OapiAuthInfo =>
   typeof item == 'object' && item !== null;
 
-export const isResolvedOpenAPIObject = (schema: Schema): schema is ResolvedOpenAPIObject =>
+export const isResolvedOpenAPIObject = (schema: unknown): schema is ResolvedOpenAPIObject =>
   typeof schema === 'object' &&
   schema !== null &&
   'openapi' in schema &&
@@ -119,7 +119,7 @@ export const createOapi = async <C extends ContextLike = ContextLike>({
 }: OapiConfig<C>): Promise<Resolver<C & Context>> => {
   const { schema, ...schemaOptions } = await compile(api);
 
-  const checkApi = await validate(openapiV3 as Schema, schema);
+  const checkApi = await validate({ schema: openapiV3 as Schema, value: schema });
   if (!checkApi.valid) {
     throw new OapiResolverError('Invalid API Definition', checkApi.errors);
   }
@@ -131,11 +131,11 @@ export const createOapi = async <C extends ContextLike = ContextLike>({
   const schemas = toSchema(schema);
   const routes = toRoutes(schemas.routes, paths);
 
-  const checkResolvers = validateCompiled(
-    { ...schemaOptions, schema: schemas.resolvers },
-    { paths, security },
-    { name: 'api' },
-  );
+  const checkResolvers = validateCompiled({
+    schema: { ...schemaOptions, schema: schemas.resolvers },
+    name: 'api',
+    value: { paths, security },
+  });
 
   if (!checkResolvers.valid) {
     throw new OapiResolverError('Invalid Resolvers', checkResolvers.errors);
@@ -157,11 +157,11 @@ export const createOapi = async <C extends ContextLike = ContextLike>({
 
     const context: C & Context & OapiContext = { ...ctx, path };
 
-    const checkContext = validateCompiled(
-      { ...schemaOptions, schema: routeSchema.context },
-      context,
-      { name: 'context' },
-    );
+    const checkContext = validateCompiled({
+      schema: { ...schemaOptions, schema: routeSchema.context },
+      name: 'context',
+      value: context,
+    });
 
     if (!checkContext.valid) {
       return message(400, {
@@ -178,11 +178,11 @@ export const createOapi = async <C extends ContextLike = ContextLike>({
     );
 
     const laminarResponse = toResponse(await resolver({ ...context, authInfo }));
-    const checkResponse = validateCompiled(
-      { ...schemaOptions, schema: routeSchema.response },
-      laminarResponse,
-      { name: 'response' },
-    );
+    const checkResponse = validateCompiled({
+      schema: { ...schemaOptions, schema: routeSchema.response },
+      value: laminarResponse,
+      name: 'response',
+    });
 
     if (!checkResponse.valid) {
       return message(500, {

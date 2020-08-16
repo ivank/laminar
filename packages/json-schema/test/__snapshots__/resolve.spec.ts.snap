@@ -3,63 +3,63 @@
 exports[`json-refs Should resolve complex refs 1`] = `
 Object {
   "refs": Object {
-    "#/definitions/address": Object {
+    "#/$defs/address": Object {
       "properties": Object {
         "id": Object {
-          "$ref": "#/definitions/id",
+          "$ref": "#/$defs/id",
         },
         "num": Object {
-          "$ref": "#/definitions/test%25percent",
+          "$ref": "#/$defs/test%25percent",
         },
         "price": Object {
-          "$ref": "#/definitions/test~1slash",
+          "$ref": "#/$defs/test~1slash",
         },
         "street": Object {
-          "$ref": "#/definitions/title",
+          "$ref": "#/$defs/title",
         },
         "town": Object {
-          "$ref": "#/definitions/test~0tilde",
+          "$ref": "#/$defs/test~0tilde",
         },
       },
       "type": "object",
     },
-    "#/definitions/id": Object {
+    "#/$defs/id": Object {
       "maxLength": 4,
       "minLength": 3,
       "type": "string",
     },
-    "#/definitions/test%25percent": Object {
+    "#/$defs/test%25percent": Object {
       "type": "integer",
     },
-    "#/definitions/test~0tilde": Object {
+    "#/$defs/test~0tilde": Object {
       "type": "string",
     },
-    "#/definitions/test~1slash": Object {
+    "#/$defs/test~1slash": Object {
       "type": "number",
     },
-    "#/definitions/title": Object {
+    "#/$defs/title": Object {
       "pattern": "^[A-Z]",
       "type": "string",
     },
   },
   "schema": Object {
-    "definitions": Object {
+    "$defs": Object {
       "address": Object {
         "properties": Object {
           "id": Object {
-            "$ref": "#/definitions/id",
+            "$ref": "#/$defs/id",
           },
           "num": Object {
-            "$ref": "#/definitions/test%25percent",
+            "$ref": "#/$defs/test%25percent",
           },
           "price": Object {
-            "$ref": "#/definitions/test~1slash",
+            "$ref": "#/$defs/test~1slash",
           },
           "street": Object {
-            "$ref": "#/definitions/title",
+            "$ref": "#/$defs/title",
           },
           "town": Object {
-            "$ref": "#/definitions/test~0tilde",
+            "$ref": "#/$defs/test~0tilde",
           },
         },
         "type": "object",
@@ -85,18 +85,18 @@ Object {
     },
     "properties": Object {
       "mangled": Object {
-        "$ref": "#/definitions/unknown/more-unknown",
+        "$ref": "#/$defs/unknown/more-unknown",
       },
       "user": Object {
         "properties": Object {
           "address": Object {
-            "$ref": "#/definitions/address",
+            "$ref": "#/$defs/address",
           },
           "id": Object {
-            "$ref": "#/definitions/id",
+            "$ref": "#/$defs/id",
           },
           "name": Object {
-            "$ref": "#/definitions/title",
+            "$ref": "#/$defs/title",
           },
         },
         "type": "object",
@@ -144,8 +144,7 @@ Object {
       "type": "object",
     },
     "http://localhost:1234/tree": Object {
-      "$id": "http://localhost:1234/tree",
-      "definitions": Object {
+      "$defs": Object {
         "node": Object {
           "$id": "http://localhost:1234/node",
           "description": "node",
@@ -163,6 +162,7 @@ Object {
           "type": "object",
         },
       },
+      "$id": "http://localhost:1234/tree",
       "description": "tree of nodes",
       "properties": Object {
         "meta": Object {
@@ -182,8 +182,7 @@ Object {
       "type": "object",
     },
     "http://localhost:1234/tree#": Object {
-      "$id": "http://localhost:1234/tree",
-      "definitions": Object {
+      "$defs": Object {
         "node": Object {
           "$id": "http://localhost:1234/node",
           "description": "node",
@@ -201,6 +200,7 @@ Object {
           "type": "object",
         },
       },
+      "$id": "http://localhost:1234/tree",
       "description": "tree of nodes",
       "properties": Object {
         "meta": Object {
@@ -221,8 +221,7 @@ Object {
     },
   },
   "schema": Object {
-    "$id": "http://localhost:1234/tree",
-    "definitions": Object {
+    "$defs": Object {
       "node": Object {
         "$id": "http://localhost:1234/node",
         "description": "node",
@@ -240,6 +239,7 @@ Object {
         "type": "object",
       },
     },
+    "$id": "http://localhost:1234/tree",
     "description": "tree of nodes",
     "properties": Object {
       "meta": Object {

@@ -1,7 +1,6 @@
-import { HasError, NoErrors, validateSchema } from '../helpers';
-import { Validator } from '../types';
+import { Validator, hasErrors, error, empty, validateSchema } from '../validation';
 
 export const validateNot: Validator = (schema, value, options) =>
-  schema.not && validateSchema(schema.not, value, options).length === 0
-    ? HasError('not', options.name)
-    : NoErrors;
+  schema.not && !hasErrors(validateSchema(schema.not, value, options))
+    ? error('not', options.name)
+    : empty;

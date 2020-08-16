@@ -1,9 +1,8 @@
-import { HasError, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
 
 export const validateExclusiveMinimum: Validator = (schema, value, { name }) =>
   typeof schema.exclusiveMinimum === 'number' &&
   typeof value === 'number' &&
   value <= schema.exclusiveMinimum
-    ? HasError('exclusiveMinimum', name, schema.exclusiveMinimum)
-    : NoErrors;
+    ? error('exclusiveMinimum', name, schema.exclusiveMinimum)
+    : empty;

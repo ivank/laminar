@@ -1,7 +1,6 @@
-import { flatten, NoErrors, validateSchema } from '../helpers';
-import { Validator } from '../types';
+import { Validator, empty, validateSchema, combine } from '../validation';
 
 export const validateAllOf: Validator = (schema, value, options) =>
   schema.allOf
-    ? flatten(schema.allOf.map((item) => validateSchema(item, value, options)))
-    : NoErrors;
+    ? combine(schema.allOf.map((item) => validateSchema(item, value, options), schema.allOf))
+    : empty;

@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import { Adapter } from '../types';
 
 const ajv = new Ajv({
-  loadSchema: async uri => {
+  loadSchema: async (uri) => {
     const result = await fetch(uri);
     return await result.json();
   },
@@ -11,8 +11,8 @@ const ajv = new Ajv({
 
 export const adapter: Adapter = {
   name: 'Ajv',
-  compile: async schema => {
+  compile: async (schema) => {
     const compiled = await ajv.compileAsync(schema);
-    return data => compiled(data) as boolean;
+    return (data) => compiled(data) as boolean;
   },
 };

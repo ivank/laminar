@@ -64,7 +64,7 @@ export const jwkPublicKey = ({
       let data = cache && lru.get(header.kid);
       if (!data) {
         data = (await axios.get<JWK>(uri)).data;
-        const result = await validate(jwkSchema(header.kid), data, { name: 'JWK' });
+        const result = await validate({ schema: jwkSchema(header.kid), value: data, name: 'JWK' });
         if (!result.valid) {
           throw new JWTInternalError(`JWK invalid, errors: ${result.errors}`);
         }

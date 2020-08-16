@@ -21,7 +21,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.4.1",
+    "@ovotech/json-schema": "^0.5.0",
     "axios": "^0.19.2",
     "jsonwebtoken": "^8.5.1",
     "lru-cache": "^5.1.1"
@@ -40,7 +40,7 @@
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "jest": "^26.0.1",
-    "nock": "^12.0.3",
+    "nock": "^13.0.4",
     "prettier": "^2.0.5",
     "ts-jest": "^26.0.0",
     "typescript": "^3.9.3"

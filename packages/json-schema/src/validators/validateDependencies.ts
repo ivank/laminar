@@ -1,22 +1,22 @@
-import { childOptions, flatten, HasError, isObject, NoErrors, validateSchema } from '../helpers';
-import { Validator } from '../types';
+import { validateSchema, Validator, error, empty, combine, childOptions } from '../validation';
+import { isObject } from '../helpers';
 
-export const validateDependencies: Validator = (schema, value, options) => {
-  if (schema.dependencies && isObject(value)) {
-    return flatten(
-      Object.entries(schema.dependencies)
+export const validateDependencies: Validator = ({ dependencies }, value, options) => {
+  if (dependencies && isObject(value)) {
+    return combine(
+      Object.entries(dependencies)
         .filter(([key]) => key in value)
         .map(([key, dependency]) => {
           if (Array.isArray(dependency)) {
             const missing = dependency.filter((item) => !Object.keys(value).includes(item));
             return missing.length > 0
-              ? HasError('dependencies', `${options.name}.${key}`, missing)
-              : NoErrors;
+              ? error('dependencies', `${options.name}.${key}`, missing)
+              : empty;
           } else {
             return validateSchema(dependency, value, childOptions(key, options));
           }
         }),
     );
   }
-  return NoErrors;
+  return empty;
 };

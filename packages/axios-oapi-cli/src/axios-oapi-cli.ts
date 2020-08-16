@@ -7,7 +7,7 @@ import { oapiTs } from './convert';
 
 export const processFile = async (file: string): Promise<string> => {
   const resolvedSchema = await compile(file);
-  await ensureValid(openapiV3 as Schema, resolvedSchema.schema);
+  await ensureValid({ schema: openapiV3 as Schema, value: resolvedSchema.schema });
   return oapiTs(resolvedSchema);
 };
 

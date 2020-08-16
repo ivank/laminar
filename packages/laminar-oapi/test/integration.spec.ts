@@ -370,7 +370,7 @@ describe('Invalid Schema', () => {
         '[value.paths./pets.get.parameters.0.0?.2?.in] should be one of [header]',
         '[value.paths./pets.get.parameters.0.0?.3?.in] should be one of [cookie]',
         '[value.paths./pets.get.parameters.0.1?] is missing [$ref] keys',
-        '[value.paths./pets.get.responses] has unknown keys [wrong status]',
+        '[value.paths./pets.get.responses] has unknown key [wrong status]',
       ],
     });
   });

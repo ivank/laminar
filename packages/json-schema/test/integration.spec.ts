@@ -19,7 +19,7 @@ describe('Helper isEqual', () => {
                         'The value of the balance. 1/1000ths of a penny. eg. 1000=1p, 100000=£1',
                       type: 'integer',
                       format: 'int32',
-                      example: 123000,
+                      example: '123000',
                     },
                     effectiveAt: {
                       description: 'The last transaction date-time that updated the balance.',
@@ -54,11 +54,14 @@ describe('Helper isEqual', () => {
       ],
     };
 
-    const result = await validate(schema, { post: true, singleWalletBalance: { fuelType: '111' } });
+    const result = await validate({
+      schema,
+      value: { post: true, singleWalletBalance: { fuelType: '111' } },
+    });
     expect(result.errors).toEqual([
+      '[value] has unknown key [post]',
       '[value.singleWalletBalance] is missing [value] keys',
       '[value.singleWalletBalance.fuelType] should be one of [DualFuel]',
-      '[value] has unknown keys [post]',
     ]);
   });
 
@@ -78,13 +81,17 @@ describe('Helper isEqual', () => {
     const value = { animal: 'cat', weight: 12 };
     const value2 = { animal: 'other', weight: '12' };
 
-    expect(ensureValid<AnimalType>(animalSchema, value)).resolves.toEqual(value);
-    expect(ensureValid<AnimalType>(animalSchema, value2)).rejects.toMatchObject({
+    expect(
+      ensureValid<AnimalType>({ schema: animalSchema, value: value }),
+    ).resolves.toEqual(value);
+    expect(
+      ensureValid<AnimalType>({ schema: animalSchema, value: value2 }),
+    ).rejects.toMatchObject({
       message:
-        'Invalid Value\n | [value.animal] should match /cat|dog/\n | [value.weight] should be a [number,integer]\n',
+        'Invalid value\n | [value.animal] should match /cat|dog/\n | [value.weight] should be a [number,integer]\n',
     });
     expect(
-      ensureValid<AnimalType>(animalSchema, value2, { name: 'MyObject' }),
+      ensureValid<AnimalType>({ schema: animalSchema, value: value2, name: 'MyObject' }),
     ).rejects.toMatchObject({
       message:
         'Invalid MyObject\n | [MyObject.animal] should match /cat|dog/\n | [MyObject.weight] should be a [number,integer]\n',
@@ -119,7 +126,7 @@ describe('Helper isEqual', () => {
       },
     };
 
-    const result = await validate(schema, { type: 'cat', size: 'big' });
+    const result = await validate({ schema, value: { type: 'cat', size: 'big' } });
     expect(result.errors).toEqual(['[value.size] should be a [integer]']);
   });
 
@@ -140,7 +147,7 @@ describe('Helper isEqual', () => {
       ],
     };
 
-    const result = await validate(schema, { type: 'cat', size: 'big' });
+    const result = await validate({ schema, value: { type: 'cat', size: 'big' } });
     expect(result.errors).toEqual(['[value.size] should be a [integer]']);
   });
 
@@ -164,7 +171,7 @@ describe('Helper isEqual', () => {
       ],
     };
 
-    const result = await validate(schema, 123);
+    const result = await validate({ schema, value: 123 });
     expect(result.errors).toEqual([
       '[value] should match only 1 schema, matching 0',
       '[value.0?] should be a [string]',
@@ -175,8 +182,8 @@ describe('Helper isEqual', () => {
   it('Should protect multipleOf', async () => {
     const schema: Schema = { multipleOf: 2 };
 
-    const infinityResult = await validate(schema, Infinity);
-    const nanResult = await validate(schema, NaN);
+    const infinityResult = await validate({ schema, value: Infinity });
+    const nanResult = await validate({ schema, value: NaN });
     expect(infinityResult.errors).toEqual(['[value] should be a multiple of 2']);
     expect(nanResult.errors).toEqual(['[value] should be a multiple of 2']);
   });
@@ -224,7 +231,7 @@ describe('Helper isEqual', () => {
     ['ipv4', '127.0.0.1', true],
     ['ipv4', 'aa.0.0.1', false],
   ])('Should validate format %s for %s is %s', async (format, value, expected) => {
-    const result = await validate({ format }, value);
+    const result = await validate({ schema: { format }, value });
     expect(result.valid).toBe(expected);
   });
 });

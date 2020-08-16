@@ -1,7 +1,9 @@
-import { HasError, isObject, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
+import { isObject } from '../helpers';
 
 export const validateMinProperties: Validator = (schema, value, { name }) =>
-  schema.minProperties && isObject(value) && Object.keys(value).length < schema.minProperties
-    ? HasError('minProperties', name, schema.minProperties)
-    : NoErrors;
+  schema.minProperties !== undefined &&
+  isObject(value) &&
+  Object.keys(value).length < schema.minProperties
+    ? error('minProperties', name, schema.minProperties)
+    : empty;

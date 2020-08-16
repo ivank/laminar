@@ -39,6 +39,56 @@ Object {
 }
 `;
 
+exports[`draft4 additionalItems.json Test additionalItems should not look in applicators, invalid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+          Object {
+            "type": "string",
+          },
+        ],
+      },
+    ],
+    "items": Array [
+      Object {
+        "type": "integer",
+      },
+    ],
+  },
+  "ts": "(number | string)[]
+",
+}
+`;
+
+exports[`draft4 additionalItems.json Test additionalItems should not look in applicators, valid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(number)[]
+",
+}
+`;
+
 exports[`draft4 additionalItems.json Test array of items with no additionalItems 1`] = `
 Object {
   "schema": Object {
@@ -206,6 +256,30 @@ Object {
 }
 `;
 
+exports[`draft4 allOf.json Test allOf combined with anyOf, oneOf 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "multipleOf": 2,
+      },
+    ],
+    "anyOf": Array [
+      Object {
+        "multipleOf": 3,
+      },
+    ],
+    "oneOf": Array [
+      Object {
+        "multipleOf": 5,
+      },
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
 exports[`draft4 allOf.json Test allOf simple types 1`] = `
 Object {
   "schema": Object {
@@ -320,6 +394,24 @@ Object {
 }
 `;
 
+exports[`draft4 allOf.json Test nested allOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "allOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft4 anyOf.json Test anyOf 1`] = `
 Object {
   "schema": Object {
@@ -403,6 +495,42 @@ Object {
     ],
   },
   "ts": "number | any
+",
+}
+`;
+
+exports[`draft4 anyOf.json Test nested anyOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "anyOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
+exports[`draft4 anyOf.json Test nested anyOf, to check validation semantics 2`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "anyOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
 ",
 }
 `;
@@ -709,6 +837,30 @@ Object {
 }
 `;
 
+exports[`draft4 enum.json Test enum with 0 does not match false 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      0,
+    ],
+  },
+  "ts": "0
+",
+}
+`;
+
+exports[`draft4 enum.json Test enum with 1 does not match true 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      1,
+    ],
+  },
+  "ts": "1
+",
+}
+`;
+
 exports[`draft4 enum.json Test enum with escaped characters 1`] = `
 Object {
   "schema": Object {
@@ -720,6 +872,30 @@ bar",
     ],
   },
   "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"
+",
+}
+`;
+
+exports[`draft4 enum.json Test enum with false does not match 0 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      false,
+    ],
+  },
+  "ts": "false
+",
+}
+`;
+
+exports[`draft4 enum.json Test enum with true does not match 1 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      true,
+    ],
+  },
+  "ts": "true
 ",
 }
 `;
@@ -771,6 +947,31 @@ Object {
 }
 `;
 
+exports[`draft4 enum.json Test heterogeneous enum-with-null validation 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      6,
+      null,
+    ],
+  },
+  "ts": "6 | any
+",
+}
+`;
+
+exports[`draft4 enum.json Test nul characters in strings 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "hello there",
+    ],
+  },
+  "ts": "\\"hello\\\\0there\\"
+",
+}
+`;
+
 exports[`draft4 enum.json Test simple enum validation 1`] = `
 Object {
   "schema": Object {
@@ -781,6 +982,66 @@ Object {
     ],
   },
   "ts": "1 | 2 | 3
+",
+}
+`;
+
+exports[`draft4 format.json Test validation of IP addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv4",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft4 format.json Test validation of IPv6 addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv6",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft4 format.json Test validation of URIs 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft4 format.json Test validation of date-time strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "date-time",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft4 format.json Test validation of e-mail addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "email",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft4 format.json Test validation of hostnames 1`] = `
+Object {
+  "schema": Object {
+    "format": "hostname",
+  },
+  "ts": "any
 ",
 }
 `;
@@ -902,6 +1163,16 @@ Object {
 }
 `;
 
+exports[`draft4 maxProperties.json Test maxProperties = 0 means the object is empty 1`] = `
+Object {
+  "schema": Object {
+    "maxProperties": 0,
+  },
+  "ts": "any
+",
+}
+`;
+
 exports[`draft4 maxProperties.json Test maxProperties validation 1`] = `
 Object {
   "schema": Object {
@@ -938,6 +1209,16 @@ exports[`draft4 maximum.json Test maximum validation 1`] = `
 Object {
   "schema": Object {
     "maximum": 3,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft4 maximum.json Test maximum validation with unsigned integer 1`] = `
+Object {
+  "schema": Object {
+    "maximum": 300,
   },
   "ts": "number
 ",
@@ -1107,6 +1388,24 @@ Object {
 }
 `;
 
+exports[`draft4 oneOf.json Test nested oneOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "oneOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft4 oneOf.json Test oneOf 1`] = `
 Object {
   "schema": Object {
@@ -1190,6 +1489,41 @@ Object {
     ],
   },
   "ts": "number | any
+",
+}
+`;
+
+exports[`draft4 oneOf.json Test oneOf with missing optional property 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "properties": Object {
+          "bar": Object {},
+          "baz": Object {},
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "foo": Object {},
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+    ],
+  },
+  "ts": "{
+    bar: any;
+    baz?: any;
+    [key: string]: unknown;
+} | {
+    foo: any;
+    [key: string]: unknown;
+}
 ",
 }
 `;
@@ -1376,6 +1710,78 @@ Object {
 }
 `;
 
+exports[`draft4 ref.json Test Location-independent identifier 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "$ref": "#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "id": "#foo",
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "#foo
+
+export type #foo = number;
+",
+}
+`;
+
+exports[`draft4 ref.json Test Location-independent identifier with absolute URI 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "$ref": "http://localhost:1234/bar#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "id": "http://localhost:1234/bar#foo",
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "bar#foo
+
+export type bar#foo = number;
+",
+}
+`;
+
+exports[`draft4 ref.json Test Location-independent identifier with base URI change in subschema 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "$ref": "http://localhost:1234/nested.json#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "definitions": Object {
+          "B": Object {
+            "id": "#foo",
+            "type": "integer",
+          },
+        },
+        "id": "nested.json",
+      },
+    },
+    "id": "http://localhost:1234/root",
+  },
+  "ts": "nested.json#foo
+
+export type nested.json#foo = number;
+",
+}
+`;
+
 exports[`draft4 ref.json Test Recursive references between schemas 1`] = `
 Object {
   "schema": Object {
@@ -1450,25 +1856,25 @@ Object {
       "slash": Object {
         "$ref": "#/slash~1field",
       },
-      "tilda": Object {
-        "$ref": "#/tilda~0field",
+      "tilde": Object {
+        "$ref": "#/tilde~0field",
       },
     },
     "slash/field": Object {
       "type": "integer",
     },
-    "tilda~field": Object {
+    "tilde~field": Object {
       "type": "integer",
     },
   },
   "ts": "{
-    tilda?: tilda~0field;
+    tilde?: tilde~0field;
     slash?: slash~1field;
     percent?: percent%25field;
     [key: string]: unknown;
 }
 
-export type tilda~0field = number;
+export type tilde~0field = number;
 
 export type slash~1field = number;
 
@@ -1517,6 +1923,30 @@ Object {
     $ref?: string;
     [key: string]: unknown;
 }
+",
+}
+`;
+
+exports[`draft4 ref.json Test property named $ref, containing an actual $ref 1`] = `
+Object {
+  "schema": Object {
+    "definitions": Object {
+      "is-string": Object {
+        "type": "string",
+      },
+    },
+    "properties": Object {
+      "$ref": Object {
+        "$ref": "#/definitions/is-string",
+      },
+    },
+  },
+  "ts": "{
+    $ref?: is-string;
+    [key: string]: unknown;
+}
+
+export type is-string = string;
 ",
 }
 `;
@@ -2060,6 +2490,90 @@ Object {
 }
 `;
 
+exports[`draft4 uniqueItems.json Test uniqueItems with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft4 uniqueItems.json Test uniqueItems with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "[boolean, boolean]
+",
+}
+`;
+
+exports[`draft4 uniqueItems.json Test uniqueItems=false validation 1`] = `
+Object {
+  "schema": Object {
+    "uniqueItems": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft4 uniqueItems.json Test uniqueItems=false with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft4 uniqueItems.json Test uniqueItems=false with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "[boolean, boolean]
+",
+}
+`;
+
 exports[`draft6 additionalItems.json Test additionalItems are allowed by default 1`] = `
 Object {
   "schema": Object {
@@ -2095,6 +2609,56 @@ Object {
     ],
   },
   "ts": "(any | number)[]
+",
+}
+`;
+
+exports[`draft6 additionalItems.json Test additionalItems should not look in applicators, invalid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+          Object {
+            "type": "string",
+          },
+        ],
+      },
+    ],
+    "items": Array [
+      Object {
+        "type": "integer",
+      },
+    ],
+  },
+  "ts": "(number | string)[]
+",
+}
+`;
+
+exports[`draft6 additionalItems.json Test additionalItems should not look in applicators, valid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(number)[]
 ",
 }
 `;
@@ -2266,6 +2830,30 @@ Object {
 }
 `;
 
+exports[`draft6 allOf.json Test allOf combined with anyOf, oneOf 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "multipleOf": 2,
+      },
+    ],
+    "anyOf": Array [
+      Object {
+        "multipleOf": 3,
+      },
+    ],
+    "oneOf": Array [
+      Object {
+        "multipleOf": 5,
+      },
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
 exports[`draft6 allOf.json Test allOf simple types 1`] = `
 Object {
   "schema": Object {
@@ -2419,6 +3007,24 @@ Object {
 }
 `;
 
+exports[`draft6 allOf.json Test nested allOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "allOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft6 anyOf.json Test anyOf 1`] = `
 Object {
   "schema": Object {
@@ -2545,6 +3151,42 @@ Object {
 }
 `;
 
+exports[`draft6 anyOf.json Test nested anyOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "anyOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
+exports[`draft6 anyOf.json Test nested anyOf, to check validation semantics 2`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "anyOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft6 boolean_schema.json Test boolean schema 'false' 1`] = `
 Object {
   "schema": false,
@@ -2571,6 +3213,84 @@ Object {
 }
 `;
 
+exports[`draft6 const.json Test const with [false] does not match [0] 1`] = `
+Object {
+  "schema": Object {
+    "const": Array [
+      false,
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 const.json Test const with [true] does not match [1] 1`] = `
+Object {
+  "schema": Object {
+    "const": Array [
+      true,
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 const.json Test const with {"a": false} does not match {"a": 0}] 1`] = `
+Object {
+  "schema": Object {
+    "const": Object {
+      "a": false,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 const.json Test const with {"a": true} does not match {"a": 1}] 1`] = `
+Object {
+  "schema": Object {
+    "const": Object {
+      "a": true,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 const.json Test const with -2.0 matches integer and float types 1`] = `
+Object {
+  "schema": Object {
+    "const": -2,
+  },
+  "ts": "-2
+",
+}
+`;
+
+exports[`draft6 const.json Test const with 0 does not match other zero-like types 1`] = `
+Object {
+  "schema": Object {
+    "const": 0,
+  },
+  "ts": "0
+",
+}
+`;
+
+exports[`draft6 const.json Test const with 1 does not match true 1`] = `
+Object {
+  "schema": Object {
+    "const": 1,
+  },
+  "ts": "1
+",
+}
+`;
+
 exports[`draft6 const.json Test const with array 1`] = `
 Object {
   "schema": Object {
@@ -2581,6 +3301,16 @@ Object {
     ],
   },
   "ts": "any
+",
+}
+`;
+
+exports[`draft6 const.json Test const with false does not match 0 1`] = `
+Object {
+  "schema": Object {
+    "const": false,
+  },
+  "ts": "false
 ",
 }
 `;
@@ -2604,6 +3334,36 @@ Object {
     },
   },
   "ts": "any
+",
+}
+`;
+
+exports[`draft6 const.json Test const with true does not match 1 1`] = `
+Object {
+  "schema": Object {
+    "const": true,
+  },
+  "ts": "true
+",
+}
+`;
+
+exports[`draft6 const.json Test float and integers are equal up to 64-bit representation limits 1`] = `
+Object {
+  "schema": Object {
+    "const": 9007199254740992,
+  },
+  "ts": "9007199254740992
+",
+}
+`;
+
+exports[`draft6 const.json Test nul characters in strings 1`] = `
+Object {
+  "schema": Object {
+    "const": "hello there",
+  },
+  "ts": "\\"hello\\\\0there\\"
 ",
 }
 `;
@@ -2648,6 +3408,21 @@ Object {
     },
   },
   "ts": "any
+",
+}
+`;
+
+exports[`draft6 contains.json Test items + contains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "multipleOf": 3,
+    },
+    "items": Object {
+      "multipleOf": 2,
+    },
+  },
+  "ts": "any[]
 ",
 }
 `;
@@ -2963,18 +3738,6 @@ bar",
 }
 `;
 
-exports[`draft6 dependencies.json Test empty array of dependencies 1`] = `
-Object {
-  "schema": Object {
-    "dependencies": Object {
-      "foo": Array [],
-    },
-  },
-  "ts": "any
-",
-}
-`;
-
 exports[`draft6 dependencies.json Test multiple dependencies 1`] = `
 Object {
   "schema": Object {
@@ -3011,6 +3774,30 @@ Object {
 }
 `;
 
+exports[`draft6 enum.json Test enum with 0 does not match false 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      0,
+    ],
+  },
+  "ts": "0
+",
+}
+`;
+
+exports[`draft6 enum.json Test enum with 1 does not match true 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      1,
+    ],
+  },
+  "ts": "1
+",
+}
+`;
+
 exports[`draft6 enum.json Test enum with escaped characters 1`] = `
 Object {
   "schema": Object {
@@ -3022,6 +3809,30 @@ bar",
     ],
   },
   "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"
+",
+}
+`;
+
+exports[`draft6 enum.json Test enum with false does not match 0 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      false,
+    ],
+  },
+  "ts": "false
+",
+}
+`;
+
+exports[`draft6 enum.json Test enum with true does not match 1 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      true,
+    ],
+  },
+  "ts": "true
 ",
 }
 `;
@@ -3073,6 +3884,31 @@ Object {
 }
 `;
 
+exports[`draft6 enum.json Test heterogeneous enum-with-null validation 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      6,
+      null,
+    ],
+  },
+  "ts": "6 | any
+",
+}
+`;
+
+exports[`draft6 enum.json Test nul characters in strings 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "hello there",
+    ],
+  },
+  "ts": "\\"hello\\\\0there\\"
+",
+}
+`;
+
 exports[`draft6 enum.json Test simple enum validation 1`] = `
 Object {
   "schema": Object {
@@ -3103,6 +3939,96 @@ Object {
     "exclusiveMinimum": 1.1,
   },
   "ts": "number
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of IP addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv4",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of IPv6 addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv6",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of JSON pointers 1`] = `
+Object {
+  "schema": Object {
+    "format": "json-pointer",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of URI references 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri-reference",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of URI templates 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri-template",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of URIs 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of date-time strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "date-time",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of e-mail addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "email",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 format.json Test validation of hostnames 1`] = `
+Object {
+  "schema": Object {
+    "format": "hostname",
+  },
+  "ts": "any
 ",
 }
 `;
@@ -3257,6 +4183,16 @@ Object {
 }
 `;
 
+exports[`draft6 maxProperties.json Test maxProperties = 0 means the object is empty 1`] = `
+Object {
+  "schema": Object {
+    "maxProperties": 0,
+  },
+  "ts": "any
+",
+}
+`;
+
 exports[`draft6 maxProperties.json Test maxProperties validation 1`] = `
 Object {
   "schema": Object {
@@ -3271,6 +4207,16 @@ exports[`draft6 maximum.json Test maximum validation 1`] = `
 Object {
   "schema": Object {
     "maximum": 3,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft6 maximum.json Test maximum validation with unsigned integer 1`] = `
+Object {
+  "schema": Object {
+    "maximum": 300,
   },
   "ts": "number
 ",
@@ -3438,6 +4384,24 @@ Object {
 }
 `;
 
+exports[`draft6 oneOf.json Test nested oneOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "oneOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft6 oneOf.json Test oneOf 1`] = `
 Object {
   "schema": Object {
@@ -3577,6 +4541,41 @@ Object {
     ],
   },
   "ts": "number | any
+",
+}
+`;
+
+exports[`draft6 oneOf.json Test oneOf with missing optional property 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "properties": Object {
+          "bar": true,
+          "baz": true,
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "foo": true,
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+    ],
+  },
+  "ts": "{
+    bar: any;
+    baz?: any;
+    [key: string]: unknown;
+} | {
+    foo: any;
+    [key: string]: unknown;
+}
 ",
 }
 `;
@@ -3855,6 +4854,78 @@ export type bool = any;
 }
 `;
 
+exports[`draft6 ref.json Test Location-independent identifier 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "$ref": "#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "$id": "#foo",
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "#foo
+
+export type #foo = number;
+",
+}
+`;
+
+exports[`draft6 ref.json Test Location-independent identifier with absolute URI 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "$ref": "http://localhost:1234/bar#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "$id": "http://localhost:1234/bar#foo",
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "bar#foo
+
+export type bar#foo = number;
+",
+}
+`;
+
+exports[`draft6 ref.json Test Location-independent identifier with base URI change in subschema 1`] = `
+Object {
+  "schema": Object {
+    "$id": "http://localhost:1234/root",
+    "allOf": Array [
+      Object {
+        "$ref": "http://localhost:1234/nested.json#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "$id": "nested.json",
+        "definitions": Object {
+          "B": Object {
+            "$id": "#foo",
+            "type": "integer",
+          },
+        },
+      },
+    },
+  },
+  "ts": "nested.json#foo
+
+export type nested.json#foo = number;
+",
+}
+`;
+
 exports[`draft6 ref.json Test Recursive references between schemas 1`] = `
 Object {
   "schema": Object {
@@ -3929,25 +5000,25 @@ Object {
       "slash": Object {
         "$ref": "#/slash~1field",
       },
-      "tilda": Object {
-        "$ref": "#/tilda~0field",
+      "tilde": Object {
+        "$ref": "#/tilde~0field",
       },
     },
     "slash/field": Object {
       "type": "integer",
     },
-    "tilda~field": Object {
+    "tilde~field": Object {
       "type": "integer",
     },
   },
   "ts": "{
-    tilda?: tilda~0field;
+    tilde?: tilde~0field;
     slash?: slash~1field;
     percent?: percent%25field;
     [key: string]: unknown;
 }
 
-export type tilda~0field = number;
+export type tilde~0field = number;
 
 export type slash~1field = number;
 
@@ -3996,6 +5067,30 @@ Object {
     $ref?: string;
     [key: string]: unknown;
 }
+",
+}
+`;
+
+exports[`draft6 ref.json Test property named $ref, containing an actual $ref 1`] = `
+Object {
+  "schema": Object {
+    "definitions": Object {
+      "is-string": Object {
+        "type": "string",
+      },
+    },
+    "properties": Object {
+      "$ref": Object {
+        "$ref": "#/definitions/is-string",
+      },
+    },
+  },
+  "ts": "{
+    $ref?: is-string;
+    [key: string]: unknown;
+}
+
+export type is-string = string;
 ",
 }
 `;
@@ -4565,6 +5660,90 @@ Object {
 }
 `;
 
+exports[`draft6 uniqueItems.json Test uniqueItems with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft6 uniqueItems.json Test uniqueItems with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "[boolean, boolean]
+",
+}
+`;
+
+exports[`draft6 uniqueItems.json Test uniqueItems=false validation 1`] = `
+Object {
+  "schema": Object {
+    "uniqueItems": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft6 uniqueItems.json Test uniqueItems=false with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft6 uniqueItems.json Test uniqueItems=false with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "[boolean, boolean]
+",
+}
+`;
+
 exports[`draft7 additionalItems.json Test additionalItems are allowed by default 1`] = `
 Object {
   "schema": Object {
@@ -4600,6 +5779,56 @@ Object {
     ],
   },
   "ts": "(any | number)[]
+",
+}
+`;
+
+exports[`draft7 additionalItems.json Test additionalItems should not look in applicators, invalid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+          Object {
+            "type": "string",
+          },
+        ],
+      },
+    ],
+    "items": Array [
+      Object {
+        "type": "integer",
+      },
+    ],
+  },
+  "ts": "(number | string)[]
+",
+}
+`;
+
+exports[`draft7 additionalItems.json Test additionalItems should not look in applicators, valid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(number)[]
 ",
 }
 `;
@@ -4771,6 +6000,30 @@ Object {
 }
 `;
 
+exports[`draft7 allOf.json Test allOf combined with anyOf, oneOf 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "multipleOf": 2,
+      },
+    ],
+    "anyOf": Array [
+      Object {
+        "multipleOf": 3,
+      },
+    ],
+    "oneOf": Array [
+      Object {
+        "multipleOf": 5,
+      },
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
 exports[`draft7 allOf.json Test allOf simple types 1`] = `
 Object {
   "schema": Object {
@@ -4924,6 +6177,24 @@ Object {
 }
 `;
 
+exports[`draft7 allOf.json Test nested allOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "allOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft7 anyOf.json Test anyOf 1`] = `
 Object {
   "schema": Object {
@@ -5050,6 +6321,42 @@ Object {
 }
 `;
 
+exports[`draft7 anyOf.json Test nested anyOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "anyOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
+exports[`draft7 anyOf.json Test nested anyOf, to check validation semantics 2`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "anyOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft7 boolean_schema.json Test boolean schema 'false' 1`] = `
 Object {
   "schema": false,
@@ -5076,6 +6383,84 @@ Object {
 }
 `;
 
+exports[`draft7 const.json Test const with [false] does not match [0] 1`] = `
+Object {
+  "schema": Object {
+    "const": Array [
+      false,
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 const.json Test const with [true] does not match [1] 1`] = `
+Object {
+  "schema": Object {
+    "const": Array [
+      true,
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 const.json Test const with {"a": false} does not match {"a": 0}] 1`] = `
+Object {
+  "schema": Object {
+    "const": Object {
+      "a": false,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 const.json Test const with {"a": true} does not match {"a": 1}] 1`] = `
+Object {
+  "schema": Object {
+    "const": Object {
+      "a": true,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 const.json Test const with -2.0 matches integer and float types 1`] = `
+Object {
+  "schema": Object {
+    "const": -2,
+  },
+  "ts": "-2
+",
+}
+`;
+
+exports[`draft7 const.json Test const with 0 does not match other zero-like types 1`] = `
+Object {
+  "schema": Object {
+    "const": 0,
+  },
+  "ts": "0
+",
+}
+`;
+
+exports[`draft7 const.json Test const with 1 does not match true 1`] = `
+Object {
+  "schema": Object {
+    "const": 1,
+  },
+  "ts": "1
+",
+}
+`;
+
 exports[`draft7 const.json Test const with array 1`] = `
 Object {
   "schema": Object {
@@ -5086,6 +6471,16 @@ Object {
     ],
   },
   "ts": "any
+",
+}
+`;
+
+exports[`draft7 const.json Test const with false does not match 0 1`] = `
+Object {
+  "schema": Object {
+    "const": false,
+  },
+  "ts": "false
 ",
 }
 `;
@@ -5109,6 +6504,36 @@ Object {
     },
   },
   "ts": "any
+",
+}
+`;
+
+exports[`draft7 const.json Test const with true does not match 1 1`] = `
+Object {
+  "schema": Object {
+    "const": true,
+  },
+  "ts": "true
+",
+}
+`;
+
+exports[`draft7 const.json Test float and integers are equal up to 64-bit representation limits 1`] = `
+Object {
+  "schema": Object {
+    "const": 9007199254740992,
+  },
+  "ts": "9007199254740992
+",
+}
+`;
+
+exports[`draft7 const.json Test nul characters in strings 1`] = `
+Object {
+  "schema": Object {
+    "const": "hello there",
+  },
+  "ts": "\\"hello\\\\0there\\"
 ",
 }
 `;
@@ -5153,6 +6578,21 @@ Object {
     },
   },
   "ts": "any
+",
+}
+`;
+
+exports[`draft7 contains.json Test items + contains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "multipleOf": 3,
+    },
+    "items": Object {
+      "multipleOf": 2,
+    },
+  },
+  "ts": "any[]
 ",
 }
 `;
@@ -5496,18 +6936,6 @@ bar",
 }
 `;
 
-exports[`draft7 dependencies.json Test empty array of dependencies 1`] = `
-Object {
-  "schema": Object {
-    "dependencies": Object {
-      "foo": Array [],
-    },
-  },
-  "ts": "any
-",
-}
-`;
-
 exports[`draft7 dependencies.json Test multiple dependencies 1`] = `
 Object {
   "schema": Object {
@@ -5544,6 +6972,30 @@ Object {
 }
 `;
 
+exports[`draft7 enum.json Test enum with 0 does not match false 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      0,
+    ],
+  },
+  "ts": "0
+",
+}
+`;
+
+exports[`draft7 enum.json Test enum with 1 does not match true 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      1,
+    ],
+  },
+  "ts": "1
+",
+}
+`;
+
 exports[`draft7 enum.json Test enum with escaped characters 1`] = `
 Object {
   "schema": Object {
@@ -5555,6 +7007,30 @@ bar",
     ],
   },
   "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"
+",
+}
+`;
+
+exports[`draft7 enum.json Test enum with false does not match 0 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      false,
+    ],
+  },
+  "ts": "false
+",
+}
+`;
+
+exports[`draft7 enum.json Test enum with true does not match 1 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      true,
+    ],
+  },
+  "ts": "true
 ",
 }
 `;
@@ -5606,6 +7082,31 @@ Object {
 }
 `;
 
+exports[`draft7 enum.json Test heterogeneous enum-with-null validation 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      6,
+      null,
+    ],
+  },
+  "ts": "6 | any
+",
+}
+`;
+
+exports[`draft7 enum.json Test nul characters in strings 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "hello there",
+    ],
+  },
+  "ts": "\\"hello\\\\0there\\"
+",
+}
+`;
+
 exports[`draft7 enum.json Test simple enum validation 1`] = `
 Object {
   "schema": Object {
@@ -5640,6 +7141,176 @@ Object {
 }
 `;
 
+exports[`draft7 format.json Test validation of IDN e-mail addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "idn-email",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of IDN hostnames 1`] = `
+Object {
+  "schema": Object {
+    "format": "idn-hostname",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of IP addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv4",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of IPv6 addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv6",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of IRI references 1`] = `
+Object {
+  "schema": Object {
+    "format": "iri-reference",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of IRIs 1`] = `
+Object {
+  "schema": Object {
+    "format": "iri",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of JSON pointers 1`] = `
+Object {
+  "schema": Object {
+    "format": "json-pointer",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of URI references 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri-reference",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of URI templates 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri-template",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of URIs 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of date strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "date",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of date-time strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "date-time",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of e-mail addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "email",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of hostnames 1`] = `
+Object {
+  "schema": Object {
+    "format": "hostname",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of regexes 1`] = `
+Object {
+  "schema": Object {
+    "format": "regex",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of relative JSON pointers 1`] = `
+Object {
+  "schema": Object {
+    "format": "relative-json-pointer",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 format.json Test validation of time strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "time",
+  },
+  "ts": "any
+",
+}
+`;
+
 exports[`draft7 if-then-else.json Test if and else without then 1`] = `
 Object {
   "schema": Object {
@@ -5663,6 +7334,38 @@ Object {
     },
     "then": Object {
       "minimum": -10,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 if-then-else.json Test if with boolean schema false 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "const": "else",
+    },
+    "if": false,
+    "then": Object {
+      "const": "then",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 if-then-else.json Test if with boolean schema true 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "const": "else",
+    },
+    "if": true,
+    "then": Object {
+      "const": "then",
     },
   },
   "ts": "any
@@ -5900,6 +7603,16 @@ Object {
 }
 `;
 
+exports[`draft7 maxProperties.json Test maxProperties = 0 means the object is empty 1`] = `
+Object {
+  "schema": Object {
+    "maxProperties": 0,
+  },
+  "ts": "any
+",
+}
+`;
+
 exports[`draft7 maxProperties.json Test maxProperties validation 1`] = `
 Object {
   "schema": Object {
@@ -5914,6 +7627,16 @@ exports[`draft7 maximum.json Test maximum validation 1`] = `
 Object {
   "schema": Object {
     "maximum": 3,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft7 maximum.json Test maximum validation with unsigned integer 1`] = `
+Object {
+  "schema": Object {
+    "maximum": 300,
   },
   "ts": "number
 ",
@@ -6081,6 +7804,24 @@ Object {
 }
 `;
 
+exports[`draft7 oneOf.json Test nested oneOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "oneOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
 exports[`draft7 oneOf.json Test oneOf 1`] = `
 Object {
   "schema": Object {
@@ -6220,6 +7961,41 @@ Object {
     ],
   },
   "ts": "number | any
+",
+}
+`;
+
+exports[`draft7 oneOf.json Test oneOf with missing optional property 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "properties": Object {
+          "bar": true,
+          "baz": true,
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "foo": true,
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+    ],
+  },
+  "ts": "{
+    bar: any;
+    baz?: any;
+    [key: string]: unknown;
+} | {
+    foo: any;
+    [key: string]: unknown;
+}
 ",
 }
 `;
@@ -6498,6 +8274,78 @@ export type bool = any;
 }
 `;
 
+exports[`draft7 ref.json Test Location-independent identifier 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "$ref": "#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "$id": "#foo",
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "#foo
+
+export type #foo = number;
+",
+}
+`;
+
+exports[`draft7 ref.json Test Location-independent identifier with absolute URI 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "$ref": "http://localhost:1234/bar#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "$id": "http://localhost:1234/bar#foo",
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "bar#foo
+
+export type bar#foo = number;
+",
+}
+`;
+
+exports[`draft7 ref.json Test Location-independent identifier with base URI change in subschema 1`] = `
+Object {
+  "schema": Object {
+    "$id": "http://localhost:1234/root",
+    "allOf": Array [
+      Object {
+        "$ref": "http://localhost:1234/nested.json#foo",
+      },
+    ],
+    "definitions": Object {
+      "A": Object {
+        "$id": "nested.json",
+        "definitions": Object {
+          "B": Object {
+            "$id": "#foo",
+            "type": "integer",
+          },
+        },
+      },
+    },
+  },
+  "ts": "nested.json#foo
+
+export type nested.json#foo = number;
+",
+}
+`;
+
 exports[`draft7 ref.json Test Recursive references between schemas 1`] = `
 Object {
   "schema": Object {
@@ -6572,25 +8420,25 @@ Object {
       "slash": Object {
         "$ref": "#/slash~1field",
       },
-      "tilda": Object {
-        "$ref": "#/tilda~0field",
+      "tilde": Object {
+        "$ref": "#/tilde~0field",
       },
     },
     "slash/field": Object {
       "type": "integer",
     },
-    "tilda~field": Object {
+    "tilde~field": Object {
       "type": "integer",
     },
   },
   "ts": "{
-    tilda?: tilda~0field;
+    tilde?: tilde~0field;
     slash?: slash~1field;
     percent?: percent%25field;
     [key: string]: unknown;
 }
 
-export type tilda~0field = number;
+export type tilde~0field = number;
 
 export type slash~1field = number;
 
@@ -6639,6 +8487,30 @@ Object {
     $ref?: string;
     [key: string]: unknown;
 }
+",
+}
+`;
+
+exports[`draft7 ref.json Test property named $ref, containing an actual $ref 1`] = `
+Object {
+  "schema": Object {
+    "definitions": Object {
+      "is-string": Object {
+        "type": "string",
+      },
+    },
+    "properties": Object {
+      "$ref": Object {
+        "$ref": "#/definitions/is-string",
+      },
+    },
+  },
+  "ts": "{
+    $ref?: is-string;
+    [key: string]: unknown;
+}
+
+export type is-string = string;
 ",
 }
 `;
@@ -7218,6 +9090,4380 @@ Object {
     "uniqueItems": true,
   },
   "ts": "any
+",
+}
+`;
+
+exports[`draft7 uniqueItems.json Test uniqueItems with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft7 uniqueItems.json Test uniqueItems with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "[boolean, boolean]
+",
+}
+`;
+
+exports[`draft7 uniqueItems.json Test uniqueItems=false validation 1`] = `
+Object {
+  "schema": Object {
+    "uniqueItems": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft7 uniqueItems.json Test uniqueItems=false with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft7 uniqueItems.json Test uniqueItems=false with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "[boolean, boolean]
+",
+}
+`;
+
+exports[`draft2019-09 additionalItems.json Test additionalItems are allowed by default 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "integer",
+      },
+    ],
+  },
+  "ts": "(number)[]
+",
+}
+`;
+
+exports[`draft2019-09 additionalItems.json Test additionalItems as false without items 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 additionalItems.json Test additionalItems as schema 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "integer",
+    },
+    "items": Array [
+      Object {},
+    ],
+  },
+  "ts": "(any | number)[]
+",
+}
+`;
+
+exports[`draft2019-09 additionalItems.json Test additionalItems should not look in applicators, invalid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+          Object {
+            "type": "string",
+          },
+        ],
+      },
+    ],
+    "items": Array [
+      Object {
+        "type": "integer",
+      },
+    ],
+  },
+  "ts": "(number | string)[]
+",
+}
+`;
+
+exports[`draft2019-09 additionalItems.json Test additionalItems should not look in applicators, valid case 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "integer",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(number)[]
+",
+}
+`;
+
+exports[`draft2019-09 additionalItems.json Test array of items with no additionalItems 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {},
+      Object {},
+      Object {},
+    ],
+  },
+  "ts": "[any, any, any]
+",
+}
+`;
+
+exports[`draft2019-09 additionalItems.json Test items is schema, no additionalItems 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Object {},
+  },
+  "ts": "any[]
+",
+}
+`;
+
+exports[`draft2019-09 additionalProperties.json Test additionalProperties allows a schema which should validate 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": Object {
+      "type": "boolean",
+    },
+    "properties": Object {
+      "bar": Object {},
+      "foo": Object {},
+    },
+  },
+  "ts": "{
+    foo?: any;
+    bar?: any;
+    [key: string]: boolean;
+}
+",
+}
+`;
+
+exports[`draft2019-09 additionalProperties.json Test additionalProperties are allowed by default 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "bar": Object {},
+      "foo": Object {},
+    },
+  },
+  "ts": "{
+    foo?: any;
+    bar?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 additionalProperties.json Test additionalProperties being false does not allow other properties 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": false,
+    "patternProperties": Object {
+      "^v": Object {},
+    },
+    "properties": Object {
+      "bar": Object {},
+      "foo": Object {},
+    },
+  },
+  "ts": "{
+    foo?: any;
+    bar?: any;
+}
+",
+}
+`;
+
+exports[`draft2019-09 additionalProperties.json Test additionalProperties can exist by itself 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": Object {
+      "type": "boolean",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 additionalProperties.json Test additionalProperties should not look in applicators 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": Object {
+      "type": "boolean",
+    },
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "foo": Object {},
+        },
+      },
+    ],
+  },
+  "ts": "{
+    foo?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 additionalProperties.json Test non-ASCII pattern with additionalProperties 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": false,
+    "patternProperties": Object {
+      "^á": Object {},
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "bar": Object {
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+    ],
+  },
+  "ts": "{
+    bar: number;
+    [key: string]: unknown;
+} & {
+    foo: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf combined with anyOf, oneOf 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "multipleOf": 2,
+      },
+    ],
+    "anyOf": Array [
+      Object {
+        "multipleOf": 3,
+      },
+    ],
+    "oneOf": Array [
+      Object {
+        "multipleOf": 5,
+      },
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf simple types 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "maximum": 30,
+      },
+      Object {
+        "minimum": 20,
+      },
+    ],
+  },
+  "ts": "number & number
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with base schema 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "baz": Object {
+            "type": "null",
+          },
+        },
+        "required": Array [
+          "baz",
+        ],
+      },
+    ],
+    "properties": Object {
+      "bar": Object {
+        "type": "integer",
+      },
+    },
+    "required": Array [
+      "bar",
+    ],
+  },
+  "ts": "{
+    bar: number;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with boolean schemas, all false 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      false,
+      false,
+    ],
+  },
+  "ts": "void & void
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with boolean schemas, all true 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      true,
+      true,
+    ],
+  },
+  "ts": "any & any
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with boolean schemas, some false 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      true,
+      false,
+    ],
+  },
+  "ts": "any & void
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with one empty schema 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {},
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with the first empty schema 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {},
+      Object {
+        "type": "number",
+      },
+    ],
+  },
+  "ts": "any & number
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with the last empty schema 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "type": "number",
+      },
+      Object {},
+    ],
+  },
+  "ts": "number & any
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test allOf with two empty schemas 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {},
+      Object {},
+    ],
+  },
+  "ts": "any & any
+",
+}
+`;
+
+exports[`draft2019-09 allOf.json Test nested allOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "allOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
+exports[`draft2019-09 anchor.json Test Location-independent identifier 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "A": Object {
+        "$anchor": "foo",
+        "type": "integer",
+      },
+    },
+    "$ref": "#foo",
+  },
+  "ts": "#foo
+
+export type #foo = number;
+",
+}
+`;
+
+exports[`draft2019-09 anchor.json Test Location-independent identifier with absolute URI 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "A": Object {
+        "$anchor": "foo",
+        "$id": "http://localhost:1234/bar",
+        "type": "integer",
+      },
+    },
+    "$ref": "http://localhost:1234/bar#foo",
+  },
+  "ts": "bar#foo
+
+export type bar#foo = number;
+",
+}
+`;
+
+exports[`draft2019-09 anchor.json Test Location-independent identifier with base URI change in subschema 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "A": Object {
+        "$defs": Object {
+          "B": Object {
+            "$anchor": "foo",
+            "type": "integer",
+          },
+        },
+        "$id": "nested.json",
+      },
+    },
+    "$id": "http://localhost:1234/root",
+    "$ref": "http://localhost:1234/nested.json#foo",
+  },
+  "ts": "nested.json#foo
+
+export type nested.json#foo = number;
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test anyOf 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "type": "integer",
+      },
+      Object {
+        "minimum": 2,
+      },
+    ],
+  },
+  "ts": "number | number
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test anyOf complex types 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "properties": Object {
+          "bar": Object {
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+    ],
+  },
+  "ts": "{
+    bar: number;
+    [key: string]: unknown;
+} | {
+    foo: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test anyOf with base schema 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "maxLength": 2,
+      },
+      Object {
+        "minLength": 4,
+      },
+    ],
+    "type": "string",
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test anyOf with boolean schemas, all false 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      false,
+      false,
+    ],
+  },
+  "ts": "void | void
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test anyOf with boolean schemas, all true 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      true,
+      true,
+    ],
+  },
+  "ts": "any | any
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test anyOf with boolean schemas, some true 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      true,
+      false,
+    ],
+  },
+  "ts": "any | void
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test anyOf with one empty schema 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "type": "number",
+      },
+      Object {},
+    ],
+  },
+  "ts": "number | any
+",
+}
+`;
+
+exports[`draft2019-09 anyOf.json Test nested anyOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "anyOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
+exports[`draft2019-09 boolean_schema.json Test boolean schema 'false' 1`] = `
+Object {
+  "schema": false,
+  "ts": "void
+",
+}
+`;
+
+exports[`draft2019-09 boolean_schema.json Test boolean schema 'true' 1`] = `
+Object {
+  "schema": true,
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const validation 1`] = `
+Object {
+  "schema": Object {
+    "const": 2,
+  },
+  "ts": "2
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with [false] does not match [0] 1`] = `
+Object {
+  "schema": Object {
+    "const": Array [
+      false,
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with [true] does not match [1] 1`] = `
+Object {
+  "schema": Object {
+    "const": Array [
+      true,
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with {"a": false} does not match {"a": 0}] 1`] = `
+Object {
+  "schema": Object {
+    "const": Object {
+      "a": false,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with {"a": true} does not match {"a": 1}] 1`] = `
+Object {
+  "schema": Object {
+    "const": Object {
+      "a": true,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with -2.0 matches integer and float types 1`] = `
+Object {
+  "schema": Object {
+    "const": -2,
+  },
+  "ts": "-2
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with 0 does not match other zero-like types 1`] = `
+Object {
+  "schema": Object {
+    "const": 0,
+  },
+  "ts": "0
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with 1 does not match true 1`] = `
+Object {
+  "schema": Object {
+    "const": 1,
+  },
+  "ts": "1
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with array 1`] = `
+Object {
+  "schema": Object {
+    "const": Array [
+      Object {
+        "foo": "bar",
+      },
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with false does not match 0 1`] = `
+Object {
+  "schema": Object {
+    "const": false,
+  },
+  "ts": "false
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with null 1`] = `
+Object {
+  "schema": Object {
+    "const": null,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with object 1`] = `
+Object {
+  "schema": Object {
+    "const": Object {
+      "baz": "bax",
+      "foo": "bar",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test const with true does not match 1 1`] = `
+Object {
+  "schema": Object {
+    "const": true,
+  },
+  "ts": "true
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test float and integers are equal up to 64-bit representation limits 1`] = `
+Object {
+  "schema": Object {
+    "const": 9007199254740992,
+  },
+  "ts": "9007199254740992
+",
+}
+`;
+
+exports[`draft2019-09 const.json Test nul characters in strings 1`] = `
+Object {
+  "schema": Object {
+    "const": "hello there",
+  },
+  "ts": "\\"hello\\\\0there\\"
+",
+}
+`;
+
+exports[`draft2019-09 contains.json Test contains keyword validation 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "minimum": 5,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 contains.json Test contains keyword with boolean schema false 1`] = `
+Object {
+  "schema": Object {
+    "contains": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 contains.json Test contains keyword with boolean schema true 1`] = `
+Object {
+  "schema": Object {
+    "contains": true,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 contains.json Test contains keyword with const keyword 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 5,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 contains.json Test items + contains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "multipleOf": 3,
+    },
+    "items": Object {
+      "multipleOf": 2,
+    },
+  },
+  "ts": "any[]
+",
+}
+`;
+
+exports[`draft2019-09 default.json Test invalid string value for default 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "bar": Object {
+        "default": "bad",
+        "minLength": 4,
+        "type": "string",
+      },
+    },
+  },
+  "ts": "{
+    bar?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 default.json Test invalid type for default 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo": Object {
+        "default": Array [],
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "{
+    foo?: number;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 defs.json Test invalid definition 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "https://json-schema.org/draft/2019-09/schema",
+  },
+  "ts": "schema#
+
+export interface schema# {
+    $defs?: any;
+    definitions?: any;
+    dependencies?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 defs.json Test valid definition 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "https://json-schema.org/draft/2019-09/schema",
+  },
+  "ts": "schema#
+
+export interface schema# {
+    $defs?: any;
+    definitions?: any;
+    dependencies?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 dependentRequired.json Test dependencies with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "dependentRequired": Object {
+      "foo
+bar": Array [
+        "foo
+bar",
+      ],
+      "foo\\"bar": Array [
+        "foo'bar",
+      ],
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 dependentRequired.json Test empty dependents 1`] = `
+Object {
+  "schema": Object {
+    "dependentRequired": Object {
+      "bar": Array [],
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 dependentRequired.json Test multiple dependents required 1`] = `
+Object {
+  "schema": Object {
+    "dependentRequired": Object {
+      "quux": Array [
+        "foo",
+        "bar",
+      ],
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 dependentRequired.json Test single dependency 1`] = `
+Object {
+  "schema": Object {
+    "dependentRequired": Object {
+      "bar": Array [
+        "foo",
+      ],
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 dependentSchemas.json Test boolean subschemas 1`] = `
+Object {
+  "schema": Object {
+    "dependentSchemas": Object {
+      "bar": false,
+      "foo": true,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 dependentSchemas.json Test dependencies with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "dependentSchemas": Object {
+      "foo	bar": Object {
+        "minProperties": 4,
+      },
+      "foo'bar": Object {
+        "required": Array [
+          "foo\\"bar",
+        ],
+      },
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 dependentSchemas.json Test single dependency 1`] = `
+Object {
+  "schema": Object {
+    "dependentSchemas": Object {
+      "bar": Object {
+        "properties": Object {
+          "bar": Object {
+            "type": "integer",
+          },
+          "foo": Object {
+            "type": "integer",
+          },
+        },
+      },
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test enum with 0 does not match false 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      0,
+    ],
+  },
+  "ts": "0
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test enum with 1 does not match true 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      1,
+    ],
+  },
+  "ts": "1
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test enum with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "foo
+bar",
+      "foo
+bar",
+    ],
+  },
+  "ts": "\\"foo\\\\nbar\\" | \\"foo\\\\rbar\\"
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test enum with false does not match 0 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      false,
+    ],
+  },
+  "ts": "false
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test enum with true does not match 1 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      true,
+    ],
+  },
+  "ts": "true
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test enums in properties 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "bar": Object {
+        "enum": Array [
+          "bar",
+        ],
+      },
+      "foo": Object {
+        "enum": Array [
+          "foo",
+        ],
+      },
+    },
+    "required": Array [
+      "bar",
+    ],
+    "type": "object",
+  },
+  "ts": "{
+    foo?: \\"foo\\";
+    bar: \\"bar\\";
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test heterogeneous enum validation 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      6,
+      "foo",
+      Array [],
+      true,
+      Object {
+        "foo": 12,
+      },
+    ],
+  },
+  "ts": "6 | \\"foo\\" | any | true | any
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test heterogeneous enum-with-null validation 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      6,
+      null,
+    ],
+  },
+  "ts": "6 | any
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test nul characters in strings 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      "hello there",
+    ],
+  },
+  "ts": "\\"hello\\\\0there\\"
+",
+}
+`;
+
+exports[`draft2019-09 enum.json Test simple enum validation 1`] = `
+Object {
+  "schema": Object {
+    "enum": Array [
+      1,
+      2,
+      3,
+    ],
+  },
+  "ts": "1 | 2 | 3
+",
+}
+`;
+
+exports[`draft2019-09 exclusiveMaximum.json Test exclusiveMaximum validation 1`] = `
+Object {
+  "schema": Object {
+    "exclusiveMaximum": 3,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 exclusiveMinimum.json Test exclusiveMinimum validation 1`] = `
+Object {
+  "schema": Object {
+    "exclusiveMinimum": 1.1,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of IDN e-mail addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "idn-email",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of IDN hostnames 1`] = `
+Object {
+  "schema": Object {
+    "format": "idn-hostname",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of IP addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv4",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of IPv6 addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "ipv6",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of IRI references 1`] = `
+Object {
+  "schema": Object {
+    "format": "iri-reference",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of IRIs 1`] = `
+Object {
+  "schema": Object {
+    "format": "iri",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of JSON pointers 1`] = `
+Object {
+  "schema": Object {
+    "format": "json-pointer",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of URI references 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri-reference",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of URI templates 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri-template",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of URIs 1`] = `
+Object {
+  "schema": Object {
+    "format": "uri",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of UUIDs 1`] = `
+Object {
+  "schema": Object {
+    "format": "uuid",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of date strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "date",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of date-time strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "date-time",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of durations 1`] = `
+Object {
+  "schema": Object {
+    "format": "duration",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of e-mail addresses 1`] = `
+Object {
+  "schema": Object {
+    "format": "email",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of hostnames 1`] = `
+Object {
+  "schema": Object {
+    "format": "hostname",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of regexes 1`] = `
+Object {
+  "schema": Object {
+    "format": "regex",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of relative JSON pointers 1`] = `
+Object {
+  "schema": Object {
+    "format": "relative-json-pointer",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 format.json Test validation of time strings 1`] = `
+Object {
+  "schema": Object {
+    "format": "time",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 id.json Test Invalid use of fragments in location-independent $id 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "https://json-schema.org/draft/2019-09/schema",
+  },
+  "ts": "schema#
+
+export interface schema# {
+    $defs?: any;
+    definitions?: any;
+    dependencies?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 id.json Test Unnormalized $ids are allowed but discouraged 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "https://json-schema.org/draft/2019-09/schema",
+  },
+  "ts": "schema#
+
+export interface schema# {
+    $defs?: any;
+    definitions?: any;
+    dependencies?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 id.json Test Valid use of empty fragments in location-independent $id 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "https://json-schema.org/draft/2019-09/schema",
+  },
+  "ts": "schema#
+
+export interface schema# {
+    $defs?: any;
+    definitions?: any;
+    dependencies?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test if and else without then 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "multipleOf": 2,
+    },
+    "if": Object {
+      "exclusiveMaximum": 0,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test if and then without else 1`] = `
+Object {
+  "schema": Object {
+    "if": Object {
+      "exclusiveMaximum": 0,
+    },
+    "then": Object {
+      "minimum": -10,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test if with boolean schema false 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "const": "else",
+    },
+    "if": false,
+    "then": Object {
+      "const": "then",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test if with boolean schema true 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "const": "else",
+    },
+    "if": true,
+    "then": Object {
+      "const": "then",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test ignore else without if 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "const": 0,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test ignore if without then or else 1`] = `
+Object {
+  "schema": Object {
+    "if": Object {
+      "const": 0,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test ignore then without if 1`] = `
+Object {
+  "schema": Object {
+    "then": Object {
+      "const": 0,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test non-interference across combined schemas 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "if": Object {
+          "exclusiveMaximum": 0,
+        },
+      },
+      Object {
+        "then": Object {
+          "minimum": -10,
+        },
+      },
+      Object {
+        "else": Object {
+          "multipleOf": 2,
+        },
+      },
+    ],
+  },
+  "ts": "any & any & any
+",
+}
+`;
+
+exports[`draft2019-09 if-then-else.json Test validate against correct branch, then vs else 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "multipleOf": 2,
+    },
+    "if": Object {
+      "exclusiveMaximum": 0,
+    },
+    "then": Object {
+      "minimum": -10,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 items.json Test a schema given for items 1`] = `
+Object {
+  "schema": Object {
+    "items": Object {
+      "type": "integer",
+    },
+  },
+  "ts": "number[]
+",
+}
+`;
+
+exports[`draft2019-09 items.json Test an array of schemas for items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "integer",
+      },
+      Object {
+        "type": "string",
+      },
+    ],
+  },
+  "ts": "(number | string)[]
+",
+}
+`;
+
+exports[`draft2019-09 items.json Test items and subitems 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "item": Object {
+        "additionalItems": false,
+        "items": Array [
+          Object {
+            "$ref": "#/$defs/sub-item",
+          },
+          Object {
+            "$ref": "#/$defs/sub-item",
+          },
+        ],
+        "type": "array",
+      },
+      "sub-item": Object {
+        "required": Array [
+          "foo",
+        ],
+        "type": "object",
+      },
+    },
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "$ref": "#/$defs/item",
+      },
+      Object {
+        "$ref": "#/$defs/item",
+      },
+      Object {
+        "$ref": "#/$defs/item",
+      },
+    ],
+    "type": "array",
+  },
+  "ts": "[item, item, item]
+
+export type item = [sub-item, sub-item];
+
+export type sub-item = any;
+",
+}
+`;
+
+exports[`draft2019-09 items.json Test items with boolean schema (false) 1`] = `
+Object {
+  "schema": Object {
+    "items": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 items.json Test items with boolean schema (true) 1`] = `
+Object {
+  "schema": Object {
+    "items": true,
+  },
+  "ts": "any[]
+",
+}
+`;
+
+exports[`draft2019-09 items.json Test items with boolean schemas 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      true,
+      false,
+    ],
+  },
+  "ts": "(any | void)[]
+",
+}
+`;
+
+exports[`draft2019-09 items.json Test nested items 1`] = `
+Object {
+  "schema": Object {
+    "items": Object {
+      "items": Object {
+        "items": Object {
+          "items": Object {
+            "type": "number",
+          },
+          "type": "array",
+        },
+        "type": "array",
+      },
+      "type": "array",
+    },
+    "type": "array",
+  },
+  "ts": "number[][][][]
+",
+}
+`;
+
+exports[`draft2019-09 maxContains.json Test maxContains with contains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 1,
+    },
+    "maxContains": 1,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 maxContains.json Test maxContains without contains is ignored 1`] = `
+Object {
+  "schema": Object {
+    "maxContains": 1,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 maxContains.json Test minContains < maxContains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 1,
+    },
+    "maxContains": 3,
+    "minContains": 1,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 maxItems.json Test maxItems validation 1`] = `
+Object {
+  "schema": Object {
+    "maxItems": 2,
+  },
+  "ts": "any[]
+",
+}
+`;
+
+exports[`draft2019-09 maxLength.json Test maxLength validation 1`] = `
+Object {
+  "schema": Object {
+    "maxLength": 2,
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 maxProperties.json Test maxProperties = 0 means the object is empty 1`] = `
+Object {
+  "schema": Object {
+    "maxProperties": 0,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 maxProperties.json Test maxProperties validation 1`] = `
+Object {
+  "schema": Object {
+    "maxProperties": 2,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 maximum.json Test maximum validation 1`] = `
+Object {
+  "schema": Object {
+    "maximum": 3,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 maximum.json Test maximum validation with unsigned integer 1`] = `
+Object {
+  "schema": Object {
+    "maximum": 300,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 minContains.json Test maxContains < minContains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 1,
+    },
+    "maxContains": 1,
+    "minContains": 3,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 minContains.json Test maxContains = minContains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 1,
+    },
+    "maxContains": 2,
+    "minContains": 2,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 minContains.json Test minContains = 0 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 1,
+    },
+    "minContains": 0,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 minContains.json Test minContains without contains is ignored 1`] = `
+Object {
+  "schema": Object {
+    "minContains": 1,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 minContains.json Test minContains=1 with contains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 1,
+    },
+    "minContains": 1,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 minContains.json Test minContains=2 with contains 1`] = `
+Object {
+  "schema": Object {
+    "contains": Object {
+      "const": 1,
+    },
+    "minContains": 2,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 minItems.json Test minItems validation 1`] = `
+Object {
+  "schema": Object {
+    "minItems": 1,
+  },
+  "ts": "any[]
+",
+}
+`;
+
+exports[`draft2019-09 minLength.json Test minLength validation 1`] = `
+Object {
+  "schema": Object {
+    "minLength": 2,
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 minProperties.json Test minProperties validation 1`] = `
+Object {
+  "schema": Object {
+    "minProperties": 1,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 minimum.json Test minimum validation 1`] = `
+Object {
+  "schema": Object {
+    "minimum": 1.1,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 minimum.json Test minimum validation with signed integer 1`] = `
+Object {
+  "schema": Object {
+    "minimum": -2,
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 multipleOf.json Test by int 1`] = `
+Object {
+  "schema": Object {
+    "multipleOf": 2,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 multipleOf.json Test by number 1`] = `
+Object {
+  "schema": Object {
+    "multipleOf": 1.5,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 multipleOf.json Test by small number 1`] = `
+Object {
+  "schema": Object {
+    "multipleOf": 0.0001,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 not.json Test forbidden property 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo": Object {
+        "not": Object {},
+      },
+    },
+  },
+  "ts": "{
+    foo?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 not.json Test not 1`] = `
+Object {
+  "schema": Object {
+    "not": Object {
+      "type": "integer",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 not.json Test not more complex schema 1`] = `
+Object {
+  "schema": Object {
+    "not": Object {
+      "properties": Object {
+        "foo": Object {
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 not.json Test not multiple types 1`] = `
+Object {
+  "schema": Object {
+    "not": Object {
+      "type": Array [
+        "integer",
+        "boolean",
+      ],
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 not.json Test not with boolean schema false 1`] = `
+Object {
+  "schema": Object {
+    "not": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 not.json Test not with boolean schema true 1`] = `
+Object {
+  "schema": Object {
+    "not": true,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test nested oneOf, to check validation semantics 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "oneOf": Array [
+          Object {
+            "type": "null",
+          },
+        ],
+      },
+    ],
+  },
+  "ts": "(any)
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "type": "integer",
+      },
+      Object {
+        "minimum": 2,
+      },
+    ],
+  },
+  "ts": "number | number
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf complex types 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "properties": Object {
+          "bar": Object {
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+    ],
+  },
+  "ts": "{
+    bar: number;
+    [key: string]: unknown;
+} | {
+    foo: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with base schema 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "minLength": 2,
+      },
+      Object {
+        "maxLength": 4,
+      },
+    ],
+    "type": "string",
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with boolean schemas, all false 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      false,
+      false,
+      false,
+    ],
+  },
+  "ts": "void | void | void
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with boolean schemas, all true 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      true,
+      true,
+      true,
+    ],
+  },
+  "ts": "any | any | any
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with boolean schemas, more than one true 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      true,
+      true,
+      false,
+    ],
+  },
+  "ts": "any | any | void
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with boolean schemas, one true 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      true,
+      false,
+      false,
+    ],
+  },
+  "ts": "any | void | void
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with empty schema 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "type": "number",
+      },
+      Object {},
+    ],
+  },
+  "ts": "number | any
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with missing optional property 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "properties": Object {
+          "bar": true,
+          "baz": true,
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "foo": true,
+        },
+        "required": Array [
+          "foo",
+        ],
+      },
+    ],
+  },
+  "ts": "{
+    bar: any;
+    baz?: any;
+    [key: string]: unknown;
+} | {
+    foo: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 oneOf.json Test oneOf with required 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "required": Array [
+          "foo",
+          "bar",
+        ],
+      },
+      Object {
+        "required": Array [
+          "foo",
+          "baz",
+        ],
+      },
+    ],
+    "type": "object",
+  },
+  "ts": "any | any
+",
+}
+`;
+
+exports[`draft2019-09 pattern.json Test pattern is not anchored 1`] = `
+Object {
+  "schema": Object {
+    "pattern": "a+",
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 pattern.json Test pattern validation 1`] = `
+Object {
+  "schema": Object {
+    "pattern": "^a*$",
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 patternProperties.json Test multiple simultaneous patternProperties are validated 1`] = `
+Object {
+  "schema": Object {
+    "patternProperties": Object {
+      "a*": Object {
+        "type": "integer",
+      },
+      "aaa*": Object {
+        "maximum": 20,
+      },
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 patternProperties.json Test patternProperties validates properties matching a regex 1`] = `
+Object {
+  "schema": Object {
+    "patternProperties": Object {
+      "f.*o": Object {
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 patternProperties.json Test patternProperties with boolean schemas 1`] = `
+Object {
+  "schema": Object {
+    "patternProperties": Object {
+      "b.*": false,
+      "f.*": true,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 patternProperties.json Test regexes are not anchored by default and are case sensitive 1`] = `
+Object {
+  "schema": Object {
+    "patternProperties": Object {
+      "X_": Object {
+        "type": "string",
+      },
+      "[0-9]{2,}": Object {
+        "type": "boolean",
+      },
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 properties.json Test object properties validation 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "bar": Object {
+        "type": "string",
+      },
+      "foo": Object {
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "{
+    foo?: number;
+    bar?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 properties.json Test properties with boolean schema 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "bar": false,
+      "foo": true,
+    },
+  },
+  "ts": "{
+    foo?: any;
+    bar?: void;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 properties.json Test properties with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo	bar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foobar": Object {
+        "type": "number",
+      },
+      "foo
+bar": Object {
+        "type": "number",
+      },
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+      "foo\\\\bar": Object {
+        "type": "number",
+      },
+    },
+  },
+  "ts": "{
+    \\"foo\\\\nbar\\"?: number;
+    \\"foo\\\\\\"bar\\"?: number;
+    \\"foo\\\\\\\\bar\\"?: number;
+    \\"foo\\\\rbar\\"?: number;
+    \\"foo\\\\tbar\\"?: number;
+    \\"foo\\\\fbar\\"?: number;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 properties.json Test properties, patternProperties, additionalProperties interaction 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": Object {
+      "type": "integer",
+    },
+    "patternProperties": Object {
+      "f.o": Object {
+        "minItems": 2,
+      },
+    },
+    "properties": Object {
+      "bar": Object {
+        "type": "array",
+      },
+      "foo": Object {
+        "maxItems": 3,
+        "type": "array",
+      },
+    },
+  },
+  "ts": "{
+    foo?: any[];
+    bar?: any;
+    [key: string]: number;
+}
+",
+}
+`;
+
+exports[`draft2019-09 propertyNames.json Test propertyNames validation 1`] = `
+Object {
+  "schema": Object {
+    "propertyNames": Object {
+      "maxLength": 3,
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 propertyNames.json Test propertyNames with boolean schema false 1`] = `
+Object {
+  "schema": Object {
+    "propertyNames": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 propertyNames.json Test propertyNames with boolean schema true 1`] = `
+Object {
+  "schema": Object {
+    "propertyNames": true,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test $ref to boolean schema false 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "bool": false,
+    },
+    "$ref": "#/$defs/bool",
+  },
+  "ts": "bool
+
+export type bool = bool;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test $ref to boolean schema true 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "bool": true,
+    },
+    "$ref": "#/$defs/bool",
+  },
+  "ts": "bool
+
+export type bool = any;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test Recursive references between schemas 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "node": Object {
+        "$id": "http://localhost:1234/node",
+        "description": "node",
+        "properties": Object {
+          "subtree": Object {
+            "$ref": "tree",
+          },
+          "value": Object {
+            "type": "number",
+          },
+        },
+        "required": Array [
+          "value",
+        ],
+        "type": "object",
+      },
+    },
+    "$id": "http://localhost:1234/tree",
+    "description": "tree of nodes",
+    "properties": Object {
+      "meta": Object {
+        "type": "string",
+      },
+      "nodes": Object {
+        "items": Object {
+          "$ref": "node",
+        },
+        "type": "array",
+      },
+    },
+    "required": Array [
+      "meta",
+      "nodes",
+    ],
+    "type": "object",
+  },
+  "ts": "{
+    meta: string;
+    nodes: node#[];
+    [key: string]: unknown;
+}
+
+export interface node# {
+    value: number;
+    subtree?: tree#;
+    [key: string]: unknown;
+}
+
+export interface tree# {
+    meta: string;
+    nodes: node#[];
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test escaped pointer ref 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "percent%field": Object {
+        "type": "integer",
+      },
+      "slash/field": Object {
+        "type": "integer",
+      },
+      "tilde~field": Object {
+        "type": "integer",
+      },
+    },
+    "properties": Object {
+      "percent": Object {
+        "$ref": "#/$defs/percent%25field",
+      },
+      "slash": Object {
+        "$ref": "#/$defs/slash~1field",
+      },
+      "tilde": Object {
+        "$ref": "#/$defs/tilde~0field",
+      },
+    },
+  },
+  "ts": "{
+    tilde?: tilde~0field;
+    slash?: slash~1field;
+    percent?: percent%25field;
+    [key: string]: unknown;
+}
+
+export type tilde~0field = number;
+
+export type slash~1field = number;
+
+export type percent%25field = number;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test nested refs 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "a": Object {
+        "type": "integer",
+      },
+      "b": Object {
+        "$ref": "#/$defs/a",
+      },
+      "c": Object {
+        "$ref": "#/$defs/b",
+      },
+    },
+    "$ref": "#/$defs/c",
+  },
+  "ts": "c
+
+export type c = b;
+
+export type b = a;
+
+export type a = number;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test property named $ref that is not a reference 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "$ref": Object {
+        "type": "string",
+      },
+    },
+  },
+  "ts": "{
+    $ref?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test property named $ref, containing an actual $ref 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "is-string": Object {
+        "type": "string",
+      },
+    },
+    "properties": Object {
+      "$ref": Object {
+        "$ref": "#/$defs/is-string",
+      },
+    },
+  },
+  "ts": "{
+    $ref?: is-string;
+    [key: string]: unknown;
+}
+
+export type is-string = string;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test ref applies alongside sibling keywords 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "reffed": Object {
+        "type": "array",
+      },
+    },
+    "properties": Object {
+      "foo": Object {
+        "$ref": "#/$defs/reffed",
+        "maxItems": 2,
+      },
+    },
+  },
+  "ts": "{
+    foo?: reffed;
+    [key: string]: unknown;
+}
+
+export type reffed = any;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test ref creates new scope when adjacent to keywords 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "A": Object {
+        "unevaluatedProperties": false,
+      },
+    },
+    "$ref": "#/$defs/A",
+    "properties": Object {
+      "prop1": Object {
+        "type": "string",
+      },
+    },
+  },
+  "ts": "A
+
+export type A = any;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test refs with quote 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "foo\\"bar": Object {
+        "type": "number",
+      },
+    },
+    "properties": Object {
+      "foo\\"bar": Object {
+        "$ref": "#/$defs/foo%22bar",
+      },
+    },
+  },
+  "ts": "{
+    \\"foo\\\\\\"bar\\"?: foo%22bar;
+    [key: string]: unknown;
+}
+
+export type foo%22bar = number;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test relative pointer ref to array 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "integer",
+      },
+      Object {
+        "$ref": "#/items/0",
+      },
+    ],
+  },
+  "ts": "(number | 0)[]
+
+export type 0 = number;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test relative pointer ref to object 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "bar": Object {
+        "$ref": "#/properties/foo",
+      },
+      "foo": Object {
+        "type": "integer",
+      },
+    },
+  },
+  "ts": "{
+    foo?: number;
+    bar?: foo;
+    [key: string]: unknown;
+}
+
+export type foo = number;
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test remote ref, containing refs itself 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "https://json-schema.org/draft/2019-09/schema",
+  },
+  "ts": "schema#
+
+export interface schema# {
+    $defs?: any;
+    definitions?: any;
+    dependencies?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 ref.json Test root pointer ref 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": false,
+    "properties": Object {
+      "foo": Object {
+        "$ref": "#",
+      },
+    },
+  },
+  "ts": "{
+    foo?: #;
+}
+
+export interface # {
+    foo?: #;
+}
+",
+}
+`;
+
+exports[`draft2019-09 refRemote.json Test base URI change - change folder 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "baz": Object {
+        "$id": "folder/",
+        "items": Object {
+          "$ref": "folderInteger.json",
+        },
+        "type": "array",
+      },
+    },
+    "$id": "http://localhost:1234/scope_change_defs1.json",
+    "properties": Object {
+      "list": Object {
+        "$ref": "folder/",
+      },
+    },
+    "type": "object",
+  },
+  "ts": "{
+    list?: #;
+    [key: string]: unknown;
+}
+
+export type # = folderInteger.json#[];
+
+export type folderInteger.json# = number;
+",
+}
+`;
+
+exports[`draft2019-09 refRemote.json Test base URI change - change folder in subschema 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "baz": Object {
+        "$defs": Object {
+          "bar": Object {
+            "items": Object {
+              "$ref": "folderInteger.json",
+            },
+            "type": "array",
+          },
+        },
+        "$id": "folder/",
+      },
+    },
+    "$id": "http://localhost:1234/scope_change_defs2.json",
+    "properties": Object {
+      "list": Object {
+        "$ref": "folder/#/$defs/bar",
+      },
+    },
+    "type": "object",
+  },
+  "ts": "{
+    list?: bar;
+    [key: string]: unknown;
+}
+
+export type bar = folderInteger.json#[];
+
+export type folderInteger.json# = number;
+",
+}
+`;
+
+exports[`draft2019-09 refRemote.json Test base URI change 1`] = `
+Object {
+  "schema": Object {
+    "$id": "http://localhost:1234/",
+    "items": Object {
+      "$id": "folder/",
+      "items": Object {
+        "$ref": "folderInteger.json",
+      },
+    },
+  },
+  "ts": "folderInteger.json#[][]
+
+export type folderInteger.json# = number;
+",
+}
+`;
+
+exports[`draft2019-09 refRemote.json Test fragment within remote ref 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "http://localhost:1234/subSchemas-defs.json#/$defs/integer",
+  },
+  "ts": "integer
+
+export type integer = number;
+",
+}
+`;
+
+exports[`draft2019-09 refRemote.json Test ref within remote ref 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "http://localhost:1234/subSchemas-defs.json#/$defs/refToInteger",
+  },
+  "ts": "refToInteger
+
+export type refToInteger = integer;
+
+export type integer = number;
+",
+}
+`;
+
+exports[`draft2019-09 refRemote.json Test remote ref 1`] = `
+Object {
+  "schema": Object {
+    "$ref": "http://localhost:1234/integer.json",
+  },
+  "ts": "integer.json#
+
+export type integer.json# = number;
+",
+}
+`;
+
+exports[`draft2019-09 refRemote.json Test root ref in remote ref 1`] = `
+Object {
+  "schema": Object {
+    "$id": "http://localhost:1234/object",
+    "properties": Object {
+      "name": Object {
+        "$ref": "name-defs.json#/$defs/orNull",
+      },
+    },
+    "type": "object",
+  },
+  "ts": "{
+    name?: orNull;
+    [key: string]: unknown;
+}
+
+export type orNull = any | #;
+
+export type # = string;
+",
+}
+`;
+
+exports[`draft2019-09 required.json Test required default validation 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo": Object {},
+    },
+  },
+  "ts": "{
+    foo?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 required.json Test required validation 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "bar": Object {},
+      "foo": Object {},
+    },
+    "required": Array [
+      "foo",
+    ],
+  },
+  "ts": "{
+    foo: any;
+    bar?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 required.json Test required with empty array 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo": Object {},
+    },
+    "required": Array [],
+  },
+  "ts": "{
+    foo?: any;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 required.json Test required with escaped characters 1`] = `
+Object {
+  "schema": Object {
+    "required": Array [
+      "foo
+bar",
+      "foo\\"bar",
+      "foo\\\\bar",
+      "foo
+bar",
+      "foo	bar",
+      "foobar",
+    ],
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test array type matches arrays 1`] = `
+Object {
+  "schema": Object {
+    "type": "array",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test boolean type matches booleans 1`] = `
+Object {
+  "schema": Object {
+    "type": "boolean",
+  },
+  "ts": "boolean
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test integer type matches integers 1`] = `
+Object {
+  "schema": Object {
+    "type": "integer",
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test multiple types can be specified in an array 1`] = `
+Object {
+  "schema": Object {
+    "type": Array [
+      "integer",
+      "string",
+    ],
+  },
+  "ts": "number | string
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test null type matches only the null object 1`] = `
+Object {
+  "schema": Object {
+    "type": "null",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test number type matches numbers 1`] = `
+Object {
+  "schema": Object {
+    "type": "number",
+  },
+  "ts": "number
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test object type matches objects 1`] = `
+Object {
+  "schema": Object {
+    "type": "object",
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test string type matches strings 1`] = `
+Object {
+  "schema": Object {
+    "type": "string",
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test type as array with one item 1`] = `
+Object {
+  "schema": Object {
+    "type": Array [
+      "string",
+    ],
+  },
+  "ts": "string
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test type: array or object 1`] = `
+Object {
+  "schema": Object {
+    "type": Array [
+      "array",
+      "object",
+    ],
+  },
+  "ts": "any[] | object
+",
+}
+`;
+
+exports[`draft2019-09 type.json Test type: array, object or null 1`] = `
+Object {
+  "schema": Object {
+    "type": Array [
+      "array",
+      "object",
+      "null",
+    ],
+  },
+  "ts": "any[] | object | null
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems as schema 1`] = `
+Object {
+  "schema": Object {
+    "type": "array",
+    "unevaluatedItems": Object {
+      "type": "string",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems can't see inside cousins 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "items": Array [
+          true,
+        ],
+      },
+      Object {
+        "unevaluatedItems": false,
+      },
+    ],
+  },
+  "ts": "(any)[] & any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems false 1`] = `
+Object {
+  "schema": Object {
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems true 1`] = `
+Object {
+  "schema": Object {
+    "type": "array",
+    "unevaluatedItems": true,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with $ref 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "bar": Object {
+        "items": Array [
+          true,
+          Object {
+            "type": "string",
+          },
+        ],
+      },
+    },
+    "$ref": "#/$defs/bar",
+    "items": Array [
+      Object {
+        "type": "string",
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "bar
+
+export type bar = (any | string)[];
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with additionalItems 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": true,
+    "items": Array [
+      Object {
+        "type": "string",
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(string)[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with anyOf 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "items": Array [
+          true,
+          Object {
+            "const": "bar",
+          },
+        ],
+      },
+      Object {
+        "items": Array [
+          true,
+          true,
+          Object {
+            "const": "baz",
+          },
+        ],
+      },
+    ],
+    "items": Array [
+      Object {
+        "const": "foo",
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(any | \\"bar\\")[] | (any | any | \\"baz\\")[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with boolean schemas 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      true,
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with if/then/else 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "items": Array [
+        true,
+        true,
+        true,
+        Object {
+          "const": "else",
+        },
+      ],
+    },
+    "if": Object {
+      "items": Array [
+        true,
+        Object {
+          "const": "bar",
+        },
+      ],
+    },
+    "items": Array [
+      Object {
+        "const": "foo",
+      },
+    ],
+    "then": Object {
+      "items": Array [
+        true,
+        true,
+        Object {
+          "const": "then",
+        },
+      ],
+    },
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(\\"foo\\")[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with nested additionalItems 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "additionalItems": true,
+        "items": Array [
+          Object {
+            "type": "string",
+          },
+        ],
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(string)[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with nested tuple 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "items": Array [
+          true,
+          Object {
+            "type": "number",
+          },
+        ],
+      },
+    ],
+    "items": Array [
+      Object {
+        "type": "string",
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(any | number)[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with nested unevaluatedItems 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "items": Array [
+          Object {
+            "type": "string",
+          },
+        ],
+      },
+      Object {
+        "unevaluatedItems": true,
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(string)[] & any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with not 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "const": "foo",
+      },
+    ],
+    "not": Object {
+      "not": Object {
+        "items": Array [
+          true,
+          Object {
+            "const": "bar",
+          },
+        ],
+      },
+    },
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(\\"foo\\")[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with oneOf 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "const": "foo",
+      },
+    ],
+    "oneOf": Array [
+      Object {
+        "items": Array [
+          true,
+          Object {
+            "const": "bar",
+          },
+        ],
+      },
+      Object {
+        "items": Array [
+          true,
+          Object {
+            "const": "baz",
+          },
+        ],
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(any | \\"bar\\")[] | (any | \\"baz\\")[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with tuple 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "string",
+      },
+    ],
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "(string)[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedItems.json Test unevaluatedItems with uniform items 1`] = `
+Object {
+  "schema": Object {
+    "items": Object {
+      "type": "string",
+    },
+    "type": "array",
+    "unevaluatedItems": false,
+  },
+  "ts": "string[]
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test cousin unevaluatedProperties, true and false, false with properties 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "unevaluatedProperties": true,
+      },
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "unevaluatedProperties": false,
+      },
+    ],
+    "type": "object",
+  },
+  "ts": "any & {
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test cousin unevaluatedProperties, true and false, true with properties 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "unevaluatedProperties": true,
+      },
+      Object {
+        "unevaluatedProperties": false,
+      },
+    ],
+    "type": "object",
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+} & any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test nested unevaluatedProperties, outer false, inner true, properties inside 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "unevaluatedProperties": true,
+      },
+    ],
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test nested unevaluatedProperties, outer false, inner true, properties outside 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "unevaluatedProperties": true,
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test nested unevaluatedProperties, outer true, inner false, properties inside 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "foo": Object {
+            "type": "string",
+          },
+        },
+        "unevaluatedProperties": false,
+      },
+    ],
+    "type": "object",
+    "unevaluatedProperties": true,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test nested unevaluatedProperties, outer true, inner false, properties outside 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "unevaluatedProperties": false,
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": true,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties can't see inside cousins 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "foo": true,
+        },
+      },
+      Object {
+        "unevaluatedProperties": false,
+      },
+    ],
+  },
+  "ts": "{
+    foo?: any;
+    [key: string]: unknown;
+} & any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties false 1`] = `
+Object {
+  "schema": Object {
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties schema 1`] = `
+Object {
+  "schema": Object {
+    "type": "object",
+    "unevaluatedProperties": Object {
+      "minLength": 3,
+      "type": "string",
+    },
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties true 1`] = `
+Object {
+  "schema": Object {
+    "type": "object",
+    "unevaluatedProperties": true,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with $ref 1`] = `
+Object {
+  "schema": Object {
+    "$defs": Object {
+      "bar": Object {
+        "properties": Object {
+          "bar": Object {
+            "type": "string",
+          },
+        },
+      },
+    },
+    "$ref": "#/$defs/bar",
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "bar
+
+export interface bar {
+    bar?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with adjacent additionalProperties 1`] = `
+Object {
+  "schema": Object {
+    "additionalProperties": true,
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with adjacent patternProperties 1`] = `
+Object {
+  "schema": Object {
+    "patternProperties": Object {
+      "^foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with adjacent properties 1`] = `
+Object {
+  "schema": Object {
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with anyOf 1`] = `
+Object {
+  "schema": Object {
+    "anyOf": Array [
+      Object {
+        "properties": Object {
+          "bar": Object {
+            "const": "bar",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "baz": Object {
+            "const": "baz",
+          },
+        },
+        "required": Array [
+          "baz",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "quux": Object {
+            "const": "quux",
+          },
+        },
+        "required": Array [
+          "quux",
+        ],
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with boolean schemas 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      true,
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with dependentSchemas 1`] = `
+Object {
+  "schema": Object {
+    "dependentSchemas": Object {
+      "foo": Object {
+        "properties": Object {
+          "bar": Object {
+            "const": "bar",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+    },
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with if/then/else 1`] = `
+Object {
+  "schema": Object {
+    "else": Object {
+      "properties": Object {
+        "baz": Object {
+          "type": "string",
+        },
+      },
+      "required": Array [
+        "baz",
+      ],
+    },
+    "if": Object {
+      "properties": Object {
+        "foo": Object {
+          "const": "then",
+        },
+      },
+      "required": Array [
+        "foo",
+      ],
+    },
+    "then": Object {
+      "properties": Object {
+        "bar": Object {
+          "type": "string",
+        },
+      },
+      "required": Array [
+        "bar",
+      ],
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with nested additionalProperties 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "additionalProperties": true,
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with nested patternProperties 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "patternProperties": Object {
+          "^bar": Object {
+            "type": "string",
+          },
+        },
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with nested properties 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "properties": Object {
+          "bar": Object {
+            "type": "string",
+          },
+        },
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with nested unevaluatedProperties 1`] = `
+Object {
+  "schema": Object {
+    "allOf": Array [
+      Object {
+        "unevaluatedProperties": true,
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": Object {
+      "maxLength": 2,
+      "type": "string",
+    },
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with not 1`] = `
+Object {
+  "schema": Object {
+    "not": Object {
+      "not": Object {
+        "properties": Object {
+          "bar": Object {
+            "const": "bar",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+    },
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 unevaluatedProperties.json Test unevaluatedProperties with oneOf 1`] = `
+Object {
+  "schema": Object {
+    "oneOf": Array [
+      Object {
+        "properties": Object {
+          "bar": Object {
+            "const": "bar",
+          },
+        },
+        "required": Array [
+          "bar",
+        ],
+      },
+      Object {
+        "properties": Object {
+          "baz": Object {
+            "const": "baz",
+          },
+        },
+        "required": Array [
+          "baz",
+        ],
+      },
+    ],
+    "properties": Object {
+      "foo": Object {
+        "type": "string",
+      },
+    },
+    "type": "object",
+    "unevaluatedProperties": false,
+  },
+  "ts": "{
+    foo?: string;
+    [key: string]: unknown;
+}
+",
+}
+`;
+
+exports[`draft2019-09 uniqueItems.json Test uniqueItems validation 1`] = `
+Object {
+  "schema": Object {
+    "uniqueItems": true,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 uniqueItems.json Test uniqueItems with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft2019-09 uniqueItems.json Test uniqueItems with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": true,
+  },
+  "ts": "[boolean, boolean]
+",
+}
+`;
+
+exports[`draft2019-09 uniqueItems.json Test uniqueItems=false validation 1`] = `
+Object {
+  "schema": Object {
+    "uniqueItems": false,
+  },
+  "ts": "any
+",
+}
+`;
+
+exports[`draft2019-09 uniqueItems.json Test uniqueItems=false with an array of items 1`] = `
+Object {
+  "schema": Object {
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "(boolean | boolean)[]
+",
+}
+`;
+
+exports[`draft2019-09 uniqueItems.json Test uniqueItems=false with an array of items and additionalItems=false 1`] = `
+Object {
+  "schema": Object {
+    "additionalItems": false,
+    "items": Array [
+      Object {
+        "type": "boolean",
+      },
+      Object {
+        "type": "boolean",
+      },
+    ],
+    "uniqueItems": false,
+  },
+  "ts": "[boolean, boolean]
 ",
 }
 `;

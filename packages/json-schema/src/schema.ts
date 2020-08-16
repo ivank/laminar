@@ -1,44 +1,3 @@
-import { RefMap, JsonObject, ResolvedJsonObject } from '@ovotech/json-refs';
-
-export interface Discriminator {
-  propertyName: string;
-}
-
-export interface Invalid<TParam = unknown> {
-  code: keyof Messages;
-  name: string;
-  param: TParam;
-}
-
-export interface ValidateOptions {
-  name: string;
-  validators: Validator[];
-  refs: RefMap;
-}
-
-export interface OapiJsonSchema extends JsonSchema {
-  not?: Schema;
-  discriminator?: {
-    propertyName?: string;
-  };
-}
-
-export type Validator<TSchema = OapiJsonSchema, TValue = unknown> = (
-  schema: TSchema,
-  value: TValue,
-  options: ValidateOptions,
-) => Invalid[];
-
-export interface Messages {
-  [key: string]: (error: Invalid) => string;
-}
-
-export interface ValidationResult {
-  schema: ResolvedSchema;
-  errors: string[];
-  valid: boolean;
-}
-
 // JSON SCHEMA
 
 export type PrimitiveType =
@@ -50,7 +9,14 @@ export type PrimitiveType =
   | 'object'
   | 'null';
 
-export interface JsonSchema extends JsonObject {
+export interface JsonSchema {
+  $ref?: string;
+  $recursiveRef?: string;
+  $recursiveAnchor?: boolean;
+  $id?: string;
+  $anchor?: string;
+  $defs?: { [key: string]: JsonSchema };
+  id?: string;
   if?: Schema;
   then?: Schema;
   else?: Schema;
@@ -88,21 +54,27 @@ export interface JsonSchema extends JsonObject {
   properties?: { [key: string]: Schema };
   required?: string[];
   additionalProperties?: boolean | Schema;
+  unevaluatedProperties?: boolean | Schema;
+  unevaluatedItems?: boolean | Schema;
+  maxContains?: number;
+  minContains?: number;
   minProperties?: number;
   maxProperties?: number;
   propertyNames?: Schema;
   patternProperties?: { [key: string]: Schema };
   dependencies?: { [key: string]: string[] | Schema };
+  dependentSchemas?: { [key: string]: Schema };
+  dependentRequired?: { [key: string]: string[] };
   title?: string;
   description?: string;
+  example?: string;
   enum?: unknown[];
   oneOf?: Schema[];
   allOf?: Schema[];
   anyOf?: Schema[];
+  not?: Schema;
+  discriminator?: { propertyName?: string };
+  [key: string]: unknown;
 }
 
 export type Schema = JsonSchema | boolean;
-
-export interface ResolvedSchema extends ResolvedJsonObject {
-  schema: Schema;
-}

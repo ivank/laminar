@@ -1,13 +1,15 @@
-import { NoErrors, validateSchema } from '../helpers';
-import { Validator } from '../types';
+import { Validator, combine, hasErrors, empty, validateSchema } from '../validation';
 
 export const validateConditionals: Validator = (schema, value, options) => {
   if (schema.if !== undefined && (schema.then !== undefined || schema.else !== undefined)) {
-    if (validateSchema(schema.if, value, options).length === 0) {
-      return schema.then ? validateSchema(schema.then, value, options) : NoErrors;
+    const ifResponse = validateSchema(schema.if, value, options);
+    if (!hasErrors(ifResponse)) {
+      return schema.then
+        ? combine([ifResponse, validateSchema(schema.then, value, options)])
+        : ifResponse;
     } else {
-      return schema.else ? validateSchema(schema.else, value, options) : NoErrors;
+      return schema.else ? validateSchema(schema.else, value, options) : empty;
     }
   }
-  return NoErrors;
+  return empty;
 };

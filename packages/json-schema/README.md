@@ -1,6 +1,18 @@
 # JSON Schema
 
-A lightweight a json-schema. No external dependencies (one small dependency from the same repository).
+A lightweight a json-schema.
+
+Dependencies:
+
+- js-yaml
+- node-fetch
+
+Supported JSON Schema drafts
+
+- draft-4
+- draft-5
+- draft-7
+- draft-2019-09
 
 ### Usage
 
@@ -20,7 +32,7 @@ const schema: Schema = {
 
 const data = '12horses';
 
-validate(schema, data).then(result => console.log(result.valid, result.errors));
+validate(schema, data).then((result) => console.log(result.valid, result.errors));
 ```
 
 Should output
@@ -34,7 +46,7 @@ false
 
 It is comparatively slower than the venerable [Ajv](https://github.com/epoberezkin/ajv) but is a lot simpler and smaller. It also passes the official [json-schema-org/JSON-Schema-Test-Suite](https://github.com/json-schema-org/JSON-Schema-Test-Suite).
 
-It is also does not rely on any shared state or static parameters returning all the errors for a given validation operation in one result. Which was one of the reasons to develop an alternative to Ajv in the first place.
+It does not rely on any shared state or static parameters returning all the errors for a given validation operation in one result. Which was one of the reasons to develop an alternative to Ajv in the first place.
 
 It was made as a lightweight dependency to [@ovotech/laminar](https://github.com/ovotech/laminar) framework with nice error messages.
 
@@ -75,17 +87,17 @@ nock('https://example.com')
   .get('/color')
   .reply(200, colorSchema, { 'Content-Type': 'application/yaml' });
 
-compile('https://example.com/schema').then(schema => {
+compile('https://example.com/schema').then((schema) => {
   console.log(schema);
 
   const correctData = { size: 10, color: 'red' };
   const incorrectData = { size: 'big', color: 'orange' };
 
-  validate(schema, correctData).then(result => {
+  validate(schema, correctData).then((result) => {
     console.log(result.valid, result.errors);
   });
 
-  validate(schema, incorrectData).then(result => {
+  validate(schema, incorrectData).then((result) => {
     console.log(result.valid, result.errors);
   });
 });
@@ -103,11 +115,11 @@ import { join } from 'path';
 
 const schemaFile = join(__dirname, 'color-schema.yaml');
 
-validate(schemaFile, 'orange').then(result => {
+validate(schemaFile, 'orange').then((result) => {
   console.log('validate', result.valid, result.errors);
 });
 
-compile(schemaFile).then(schema => {
+compile(schemaFile).then((schema) => {
   const result = validateCompiled(schema, 'red');
 
   console.log('compile', result.valid, result.errors);

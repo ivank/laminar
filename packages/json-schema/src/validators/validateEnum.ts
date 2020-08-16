@@ -1,7 +1,7 @@
-import { HasError, isEqual, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
+import { isEqual } from '../helpers';
 
 export const validateEnum: Validator = (schema, value, { name }) =>
   schema.enum && !schema.enum.some((item) => isEqual(item, value))
-    ? HasError('enum', name, schema.enum)
-    : NoErrors;
+    ? error('enum', name, schema.enum)
+    : empty;

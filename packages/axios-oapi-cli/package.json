@@ -6,6 +6,7 @@
   "description": "CLI generating typescript types for axios",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/axios-oapi-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/laminar": "^0.6.1",
@@ -21,7 +22,7 @@
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "jest": "^26.0.1",
-    "nock": "^12.0.3",
+    "nock": "^13.0.4",
     "pg": "^8.2.1",
     "prettier": "^2.0.5",
     "ts-jest": "^26.0.0",
@@ -52,7 +53,7 @@
   "dependencies": {
     "js-yaml": "^3.14.0",
     "@ovotech/ts-compose": "^0.14.0",
-    "@ovotech/json-schema": "^0.4.2",
+    "@ovotech/json-schema": "^0.5.0",
     "commander": "^5.1.0",
     "openapi-schemas": "^2.0.3",
     "openapi3-ts": "^1.3.0"

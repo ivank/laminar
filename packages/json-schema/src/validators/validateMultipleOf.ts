@@ -1,5 +1,4 @@
-import { HasError, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
 
 const getPrecision = (num: number): number => {
   if (!Number.isFinite(num)) {
@@ -22,5 +21,5 @@ const isDivisible = (num: number, divisor: number): boolean => {
 
 export const validateMultipleOf: Validator = (schema, value, { name }) =>
   schema.multipleOf && typeof value === 'number' && !isDivisible(value, schema.multipleOf)
-    ? HasError('multipleOf', name, schema.multipleOf)
-    : NoErrors;
+    ? error('multipleOf', name, schema.multipleOf)
+    : empty;

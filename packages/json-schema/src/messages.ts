@@ -1,6 +1,6 @@
-import { Messages } from './types';
+import { Messages, errors, Validation } from './validation';
 
-export const messages: Messages = {
+const messages: Messages = {
   not: ({ name }) => `[${name}] should not match`,
   enum: ({ name, param }) =>
     `[${name}] should be one of [${Array.isArray(param) ? param.join(', ') : param}]`,
@@ -14,9 +14,11 @@ export const messages: Messages = {
   format: ({ name, param }) => `[${name}] should match ${param} format`,
   maxLength: ({ name, param }) => `[${name}] should have length <= ${param}`,
   minLength: ({ name, param }) => `[${name}] should have length >= ${param}`,
+  contains: ({ name }) => `[${name}] should contain items`,
   false: ({ name }) => `[${name}] should not exist`,
-  additionalProperties: ({ name, param }) =>
-    `[${name}] has unknown keys [${Array.isArray(param) ? param.join(', ') : param}]`,
+  additionalProperties: ({ name, param }) => `[${name}] has unknown key [${param}]`,
+  unevaluatedProperties: ({ name, param }) => `[${name}] has unevaluated keys [${param}]`,
+  unevaluatedItems: ({ name, param }) => `[${name}] has unevaluated item [${param}]`,
   required: ({ name, param }) =>
     `[${name}] is missing [${Array.isArray(param) ? param.join(', ') : param}] keys`,
   minProperties: ({ name, param }) => `[${name}] should have >= ${param} keys`,
@@ -30,3 +32,6 @@ export const messages: Messages = {
   oneOf: ({ name, param }) => `[${name}] should match only 1 schema, matching ${param}`,
   anyOf: ({ name }) => `[${name}] should match at least 1 schema`,
 };
+
+export const formatErrors = (validation: Validation): string[] =>
+  errors(validation).map((error) => messages[error.code](error));

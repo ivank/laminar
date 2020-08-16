@@ -1,5 +1,4 @@
-import { HasError, NoErrors } from '../helpers';
-import { Validator } from '../types';
+import { Validator, error, empty } from '../validation';
 
 const formats: { [key: string]: RegExp } = {
   'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d:\d\d)$/i,
@@ -18,6 +17,9 @@ const formats: { [key: string]: RegExp } = {
 };
 
 export const validateFormat: Validator = (schema, value, { name }) =>
-  schema.format && schema.format in formats && !formats[schema.format].test(String(value))
-    ? HasError('format', name, schema.format)
-    : NoErrors;
+  typeof value === 'string' &&
+  schema.format &&
+  schema.format in formats &&
+  !formats[schema.format].test(String(value))
+    ? error('format', name, schema.format)
+    : empty;

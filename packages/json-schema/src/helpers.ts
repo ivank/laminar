@@ -1,9 +1,4 @@
-import { Messages, ValidateOptions, Validator, Invalid, Schema, JsonSchema } from './types';
-
-export const childOptions = (name: string | number, options: ValidateOptions): ValidateOptions => ({
-  ...options,
-  name: `${options.name}.${name}`,
-});
+import { Schema, JsonSchema } from './schema';
 
 export const isJsonSchema = (schema: Schema): schema is JsonSchema =>
   schema && typeof schema === 'object';
@@ -34,16 +29,6 @@ export const isEqual = (a: unknown, b: unknown): boolean => {
   return false;
 };
 
-export const flatten = <T>(results: T[][]): T[] => {
-  const combined: T[] = [];
-  for (const result of results) {
-    for (const error of result) {
-      combined.push(error);
-    }
-  }
-  return combined;
-};
-
 export const isUniqueWith = <T = unknown>(compare: (a: T, b: T) => boolean, array: T[]): T[] => {
   const items: T[] = [];
   for (const item of array) {
@@ -52,21 +37,4 @@ export const isUniqueWith = <T = unknown>(compare: (a: T, b: T) => boolean, arra
     }
   }
   return items;
-};
-
-export const NoErrors = [];
-export const HasError = (code: keyof Messages, name: string, param?: unknown): [Invalid] => [
-  { code, name, param },
-];
-
-export const validateSchema: Validator<Schema> = (schema, value, options) => {
-  if (schema === true) {
-    return [];
-  } else if (schema === false) {
-    return [{ code: 'false', name: options.name, param: false }];
-  } else if (schema) {
-    return flatten(options.validators.map((validator) => validator(schema, value, options)));
-  } else {
-    return [];
-  }
 };
