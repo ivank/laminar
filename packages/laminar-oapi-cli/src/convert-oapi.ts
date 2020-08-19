@@ -73,7 +73,7 @@ const convertParameters = (
       const paramNode = param.schema
         ? convertSchema(node.context, param.schema)
         : document(node.context, Type.Any);
-      const params = node.in[toParamLocation(param.in)] || [];
+      const params = node.in[toParamLocation(param.in)] ?? [];
       return {
         context: paramNode.context,
         in: {
