@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/axios-oapi-cli",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for axios",
@@ -9,25 +9,25 @@
   "homepage": "https://github.com/ovotech/laminar/tree/master/packages/axios-oapi-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@ovotech/build-docs": "^0.1.0",
     "@ovotech/laminar": "^0.6.1",
     "@ovotech/laminar-oapi": "^0.4.2",
     "@ovotech/laminar-oapi-cli": "^0.5.6",
-    "@ovotech/build-docs": "^0.1.0",
     "@types/jest": "^26.0.10",
     "@types/js-yaml": "^3.12.4",
     "@types/node": "^14.0.6",
-    "@typescript-eslint/eslint-plugin": "^3.0.2",
-    "@typescript-eslint/parser": "^3.0.2",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
     "axios": "^0.19.2",
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
-    "jest": "^26.0.1",
+    "jest": "^26.4.2",
     "nock": "^13.0.4",
     "pg": "^8.2.1",
-    "prettier": "^2.0.5",
-    "ts-jest": "^26.0.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.3"
+    "prettier": "^2.1.1",
+    "ts-jest": "^26.3.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   },
   "bin": {
     "axios-oapi": "./scripts/axios-oapi"
@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "js-yaml": "^3.14.0",
-    "@ovotech/ts-compose": "^0.14.0",
+    "@ovotech/ts-compose": "^0.15.0",
     "@ovotech/json-schema": "^0.5.0",
     "commander": "^6.0.0",
     "openapi-schemas": "^2.0.3",

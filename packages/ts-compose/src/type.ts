@@ -19,25 +19,25 @@ export interface InterfaceExtend {
 }
 
 export const Type = {
-  Any: ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+  Any: ts.factory.createToken(ts.SyntaxKind.AnyKeyword),
 
-  String: ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+  String: ts.factory.createToken(ts.SyntaxKind.StringKeyword),
 
-  Number: ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+  Number: ts.factory.createToken(ts.SyntaxKind.NumberKeyword),
 
-  Null: ts.createKeywordTypeNode(ts.SyntaxKind.NullKeyword),
+  Null: ts.factory.createLiteralTypeNode(ts.factory.createToken(ts.SyntaxKind.NullKeyword)),
 
-  Boolean: ts.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
+  Boolean: ts.factory.createToken(ts.SyntaxKind.BooleanKeyword),
 
-  Object: ts.createKeywordTypeNode(ts.SyntaxKind.ObjectKeyword),
+  Object: ts.factory.createToken(ts.SyntaxKind.ObjectKeyword),
 
-  Void: ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
+  Void: ts.factory.createToken(ts.SyntaxKind.VoidKeyword),
 
-  Unknown: ts.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+  Unknown: ts.factory.createToken(ts.SyntaxKind.UnknownKeyword),
 
-  Never: ts.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword),
+  Never: ts.factory.createToken(ts.SyntaxKind.NeverKeyword),
 
-  Undefined: ts.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
+  Undefined: ts.factory.createToken(ts.SyntaxKind.UndefinedKeyword),
 
   TypeLiteral: ({
     props = [],
@@ -45,29 +45,32 @@ export const Type = {
   }: {
     props?: ts.TypeElement[];
     index?: ts.IndexSignatureDeclaration;
-  } = {}): ts.TypeLiteralNode => ts.createTypeLiteralNode([...props, ...(index ? [index] : [])]),
+  } = {}): ts.TypeLiteralNode =>
+    ts.factory.createTypeLiteralNode([...props, ...(index ? [index] : [])]),
 
-  Array: (type: ts.TypeNode): ts.ArrayTypeNode => ts.createArrayTypeNode(type),
+  Array: (type: ts.TypeNode): ts.ArrayTypeNode => ts.factory.createArrayTypeNode(type),
 
-  Union: (types: ts.TypeNode[]): ts.UnionTypeNode => ts.createUnionTypeNode(types),
+  Union: (types: ts.TypeNode[]): ts.UnionTypeNode => ts.factory.createUnionTypeNode(types),
 
   Intersection: (types: ts.TypeNode[]): ts.IntersectionTypeNode =>
-    ts.createIntersectionTypeNode(types),
+    ts.factory.createIntersectionTypeNode(types),
 
   Literal: (value: unknown): ts.LiteralTypeNode | ts.KeywordTypeNode => {
     switch (typeof value) {
       case 'number':
-        return ts.createLiteralTypeNode(ts.createLiteral(value));
+        return ts.factory.createLiteralTypeNode(ts.factory.createNumericLiteral(value));
       case 'string':
-        return ts.createLiteralTypeNode(ts.createLiteral(value));
+        return ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(value));
       case 'boolean':
-        return ts.createLiteralTypeNode(ts.createLiteral(value));
+        return ts.factory.createLiteralTypeNode(
+          value === true ? ts.factory.createTrue() : ts.factory.createFalse(),
+        );
       default:
-        return ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword);
+        return ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword);
     }
   },
 
-  LiteralString: (value: string): ts.StringLiteral => ts.createLiteral(value),
+  LiteralString: (value: string): ts.StringLiteral => ts.factory.createStringLiteral(value),
 
   Arrow: ({
     args,
@@ -75,30 +78,30 @@ export const Type = {
   }: {
     args: ts.ParameterDeclaration[];
     ret: ts.TypeNode;
-  }): ts.FunctionTypeNode => ts.createFunctionTypeNode(undefined, args, ret),
+  }): ts.FunctionTypeNode => ts.factory.createFunctionTypeNode(undefined, args, ret),
 
   Optional: (isOptional?: boolean): ts.Token<ts.SyntaxKind.QuestionToken> | undefined =>
-    isOptional ? ts.createToken(ts.SyntaxKind.QuestionToken) : undefined,
+    isOptional ? ts.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined,
 
   Public: (isPublic?: boolean): ts.Token<ts.SyntaxKind.PublicKeyword>[] =>
-    isPublic ? [ts.createModifier(ts.SyntaxKind.PublicKeyword)] : [],
+    isPublic ? [ts.factory.createModifier(ts.SyntaxKind.PublicKeyword)] : [],
 
   Readonly: (isReadonly?: boolean): ts.Token<ts.SyntaxKind.ReadonlyKeyword>[] =>
-    isReadonly ? [ts.createModifier(ts.SyntaxKind.ReadonlyKeyword)] : [],
+    isReadonly ? [ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)] : [],
 
   Private: (isPrivate?: boolean): ts.Token<ts.SyntaxKind.PrivateKeyword>[] =>
-    isPrivate ? [ts.createModifier(ts.SyntaxKind.PrivateKeyword)] : [],
+    isPrivate ? [ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)] : [],
 
   Export: (
     isExport?: boolean,
     isDefault?: boolean,
   ): ts.Token<ts.SyntaxKind.ExportKeyword | ts.SyntaxKind.DefaultKeyword>[] => [
-    ...(isExport ? [ts.createModifier(ts.SyntaxKind.ExportKeyword)] : []),
-    ...(isDefault ? [ts.createModifier(ts.SyntaxKind.DefaultKeyword)] : []),
+    ...(isExport ? [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)] : []),
+    ...(isDefault ? [ts.factory.createModifier(ts.SyntaxKind.DefaultKeyword)] : []),
   ],
 
   Protected: (isProtected?: boolean): ts.Token<ts.SyntaxKind.ProtectedKeyword>[] =>
-    isProtected ? [ts.createModifier(ts.SyntaxKind.ProtectedKeyword)] : [],
+    isProtected ? [ts.factory.createModifier(ts.SyntaxKind.ProtectedKeyword)] : [],
 
   Method: ({
     typeArgs,
@@ -117,7 +120,14 @@ export const Type = {
   }): ts.MethodSignature =>
     withJSDoc(
       jsDoc,
-      ts.createMethodSignature(typeArgs, params, type, name, Type.Optional(isOptional)),
+      ts.factory.createMethodSignature(
+        undefined,
+        name,
+        Type.Optional(isOptional),
+        typeArgs,
+        params,
+        type,
+      ),
     ),
 
   Prop: ({
@@ -150,7 +160,9 @@ export const Type = {
           ...Type.Private(isPrivate),
           ...Type.Protected(isProtected),
         ],
-        typeof name === 'string' && !isIdentifierString(name) ? ts.createStringLiteral(name) : name,
+        typeof name === 'string' && !isIdentifierString(name)
+          ? ts.factory.createStringLiteral(name)
+          : name,
         Type.Optional(isOptional),
         type,
         initializer,
@@ -168,7 +180,7 @@ export const Type = {
     isOptional?: boolean;
     isReadonly?: boolean;
   }): ts.ParameterDeclaration =>
-    ts.createParameter(
+    ts.factory.createParameterDeclaration(
       undefined,
       Type.Readonly(isReadonly),
       undefined,
@@ -186,7 +198,8 @@ export const Type = {
     name: string | ts.Identifier;
     ext?: ts.TypeNode;
     defaultType?: ts.TypeNode;
-  }): ts.TypeParameterDeclaration => ts.createTypeParameterDeclaration(name, ext, defaultType),
+  }): ts.TypeParameterDeclaration =>
+    ts.factory.createTypeParameterDeclaration(name, ext, defaultType),
 
   Index: ({
     name,
@@ -199,7 +212,7 @@ export const Type = {
     type: ts.TypeNode;
     isReadonly?: boolean;
   }): ts.IndexSignatureDeclaration =>
-    ts.createIndexSignature(
+    ts.factory.createIndexSignature(
       undefined,
       Type.Readonly(isReadonly),
       [Type.Param({ name, type: nameType })],
@@ -212,15 +225,16 @@ export const Type = {
   ): ts.TypeReferenceNode => {
     const fullName = Array.isArray(name)
       ? name.reduce<ts.QualifiedName | ts.Identifier | undefined>(
-          (acc, item) => (acc ? ts.createQualifiedName(acc, item) : ts.createIdentifier(item)),
+          (acc, item) =>
+            acc ? ts.factory.createQualifiedName(acc, item) : ts.factory.createIdentifier(item),
           undefined,
         )
       : name;
 
-    return ts.createTypeReferenceNode(fullName ?? '', types);
+    return ts.factory.createTypeReferenceNode(fullName ?? '', types);
   },
 
-  Tuple: (types: ts.TypeNode[]): ts.TupleTypeNode => ts.createTupleTypeNode(types),
+  Tuple: (types: ts.TypeNode[]): ts.TupleTypeNode => ts.factory.createTupleTypeNode(types),
 
   TypeExpression: ({
     name,
@@ -229,9 +243,9 @@ export const Type = {
     name: string | ts.Identifier;
     types?: ts.TypeNode[];
   }): ts.ExpressionWithTypeArguments =>
-    ts.createExpressionWithTypeArguments(
-      types,
+    ts.factory.createExpressionWithTypeArguments(
       typeof name === 'string' ? ts.createIdentifier(name) : name,
+      types,
     ),
 
   Alias: ({
@@ -251,7 +265,7 @@ export const Type = {
   }): ts.TypeAliasDeclaration =>
     withJSDoc(
       jsDoc,
-      ts.createTypeAliasDeclaration(
+      ts.factory.createTypeAliasDeclaration(
         undefined,
         Type.Export(isExport, isDefault),
         name,
@@ -281,13 +295,18 @@ export const Type = {
   }): ts.InterfaceDeclaration =>
     withJSDoc(
       jsDoc,
-      ts.createInterfaceDeclaration(
+      ts.factory.createInterfaceDeclaration(
         undefined,
         Type.Export(isExport, isDefault),
         name,
         typeArgs,
         ext
-          ? [ts.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, ext.map(Type.TypeExpression))]
+          ? [
+              ts.factory.createHeritageClause(
+                ts.SyntaxKind.ExtendsKeyword,
+                ext.map(Type.TypeExpression),
+              ),
+            ]
           : undefined,
         [...props, ...(index ? [index] : [])],
       ),

@@ -16,7 +16,7 @@ const isIdentiferString = (item: string): boolean => /^[0-9a-zA-Z_$]+$/.test(ite
 
 export const Node = {
   Identifier: (name: string | ts.Identifier): ts.Identifier =>
-    typeof name === 'string' ? ts.createIdentifier(name) : name,
+    typeof name === 'string' ? ts.factory.createIdentifier(name) : name,
 
   Arrow: ({
     typeArgs,
@@ -28,7 +28,8 @@ export const Node = {
     args: ts.ParameterDeclaration[];
     ret?: ts.TypeNode;
     body: ts.ConciseBody;
-  }): ts.ArrowFunction => ts.createArrowFunction(undefined, typeArgs, args, ret, undefined, body),
+  }): ts.ArrowFunction =>
+    ts.factory.createArrowFunction(undefined, typeArgs, args, ret, undefined, body),
 
   Block: ({
     statements,
@@ -36,9 +37,10 @@ export const Node = {
   }: {
     statements: ts.Statement[];
     multiline?: boolean;
-  }): ts.Block => ts.createBlock(statements, multiline),
+  }): ts.Block => ts.factory.createBlock(statements, multiline),
 
-  Return: (expression: ts.Expression): ts.ReturnStatement => ts.createReturn(expression),
+  Return: (expression: ts.Expression): ts.ReturnStatement =>
+    ts.factory.createReturnStatement(expression),
 
   Call: ({
     expression,
@@ -48,7 +50,7 @@ export const Node = {
     expression: ts.LeftHandSideExpression;
     args?: ts.Expression[];
     typeArgs?: ts.TypeNode[];
-  }): ts.CallExpression => ts.createCall(expression, typeArgs, args),
+  }): ts.CallExpression => ts.factory.createCallExpression(expression, typeArgs, args),
 
   Import: ({
     named,
@@ -61,28 +63,28 @@ export const Node = {
     allAs?: string;
     module: string;
   }): ts.ImportDeclaration =>
-    ts.createImportDeclaration(
+    ts.factory.createImportDeclaration(
       undefined,
       undefined,
       ts.createImportClause(
         defaultAs ? Node.Identifier(defaultAs) : undefined,
         named
-          ? ts.createNamedImports(
+          ? ts.factory.createNamedImports(
               named.map((item) =>
-                ts.createImportSpecifier(
+                ts.factory.createImportSpecifier(
                   item.as ? Node.Identifier(item.name) : undefined,
                   item.as ? Node.Identifier(item.as) : Node.Identifier(item.name),
                 ),
               ),
             )
           : allAs
-          ? ts.createNamespaceImport(Node.Identifier(allAs))
+          ? ts.factory.createNamespaceImport(Node.Identifier(allAs))
           : undefined,
       ),
-      ts.createStringLiteral(module),
+      ts.factory.createStringLiteral(module),
     ),
   TemplateString: (text: string): ts.TemplateLiteral =>
-    ts.createNoSubstitutionTemplateLiteral(text, text),
+    ts.factory.createNoSubstitutionTemplateLiteral(text, text),
 
   ObjectLiteral: ({
     jsDoc,
@@ -92,7 +94,7 @@ export const Node = {
     jsDoc?: string;
     props: ts.PropertyAssignment[];
     multiline?: boolean;
-  }) => withJSDoc(jsDoc, ts.createObjectLiteral(props, multiline)),
+  }) => withJSDoc(jsDoc, ts.factory.createObjectLiteralExpression(props, multiline)),
 
   ObjectLiteralProp: ({
     key,
@@ -108,7 +110,7 @@ export const Node = {
     const escapedKey = isIdentiferString(key) ? key : Type.LiteralString(key);
     return withJSDoc(
       jsDoc,
-      ts.createPropertyAssignment(escapedKey, Node.Literal({ value, multiline })),
+      ts.factory.createPropertyAssignment(escapedKey, Node.Literal({ value, multiline })),
     );
   },
   Literal: ({
@@ -126,16 +128,16 @@ export const Node = {
     | ts.NumericLiteral
     | ts.PrimaryExpression => {
     if (value === null) {
-      return ts.createNull();
+      return ts.factory.createNull();
     } else if (typeof value === 'object') {
       if (isTsNode(value)) {
         return value;
       } else {
-        return ts.createObjectLiteral(
+        return ts.factory.createObjectLiteralExpression(
           Object.keys(value).map((key) => {
             const escapedKey = isIdentiferString(key) ? key : Type.LiteralString(key);
 
-            return ts.createPropertyAssignment(
+            return ts.factory.createPropertyAssignment(
               escapedKey,
               Node.Literal({ value: value[key], multiline }),
             );
@@ -143,8 +145,14 @@ export const Node = {
           multiline,
         );
       }
+    } else if (typeof value === 'string') {
+      return ts.factory.createStringLiteral(value);
+    } else if (value === true) {
+      return ts.factory.createTrue();
+    } else if (value === false) {
+      return ts.factory.createFalse();
     } else {
-      return ts.createLiteral(value);
+      return ts.factory.createNumericLiteral(value);
     }
   },
 
@@ -154,7 +162,15 @@ export const Node = {
   }: {
     name: string | ts.Identifier;
     value?: string | number;
-  }): ts.EnumMember => ts.createEnumMember(name, value ? ts.createLiteral(value) : undefined),
+  }): ts.EnumMember =>
+    ts.factory.createEnumMember(
+      name,
+      value
+        ? typeof value === 'string'
+          ? ts.factory.createStringLiteral(value)
+          : ts.factory.createNumericLiteral(value)
+        : undefined,
+    ),
 
   Enum: ({
     name,
@@ -169,7 +185,10 @@ export const Node = {
     isDefault?: boolean;
     jsDoc?: string;
   }): ts.EnumDeclaration =>
-    withJSDoc(jsDoc, ts.createEnumDeclaration([], Type.Export(isExport, isDefault), name, members)),
+    withJSDoc(
+      jsDoc,
+      ts.factory.createEnumDeclaration([], Type.Export(isExport, isDefault), name, members),
+    ),
 
   Const: ({
     name,
@@ -190,12 +209,13 @@ export const Node = {
   }): ts.VariableStatement =>
     withJSDoc(
       jsDoc,
-      ts.createVariableStatement(
+      ts.factory.createVariableStatement(
         Type.Export(isExport, isDefault),
-        ts.createVariableDeclarationList(
+        ts.factory.createVariableDeclarationList(
           [
-            ts.createVariableDeclaration(
+            ts.factory.createVariableDeclaration(
               name,
+              undefined,
               type,
               value === undefined ? undefined : Node.Literal({ value, multiline }),
             ),
@@ -220,11 +240,11 @@ export const Node = {
   }): ts.ModuleDeclaration =>
     withJSDoc(
       jsDoc,
-      ts.createModuleDeclaration(
+      ts.factory.createModuleDeclaration(
         [],
         Type.Export(isExport, isDefault),
-        ts.createIdentifier(name),
-        ts.createModuleBlock(block),
+        ts.factory.createIdentifier(name),
+        ts.factory.createModuleBlock(block),
         ts.NodeFlags.Namespace,
       ),
     ),

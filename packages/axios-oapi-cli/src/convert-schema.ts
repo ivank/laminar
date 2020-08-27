@@ -4,7 +4,7 @@ import { document, Document, mapWithContext, Type, withIdentifier } from '@ovote
 import * as ts from 'typescript';
 import { AstContext, AstConvert, isSchemaObject, isReferenceObject } from './traverse';
 
-const nodeType = (type: string): ts.KeywordTypeNode | ts.ArrayTypeNode => {
+const nodeType = (type: string): ts.LiteralTypeNode | ts.KeywordTypeNode | ts.ArrayTypeNode => {
   switch (type) {
     case 'null':
       return Type.Null;

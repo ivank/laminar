@@ -99,7 +99,11 @@ Object {
       Object {},
     ],
   },
-  "ts": "[any, any, any]
+  "ts": "[
+    any,
+    any,
+    any
+]
 ",
 }
 `;
@@ -1112,9 +1116,16 @@ Object {
     ],
     "type": "array",
   },
-  "ts": "[item, item, item]
+  "ts": "[
+    item,
+    item,
+    item
+]
 
-export type item = [sub-item, sub-item];
+export type item = [
+    sub-item,
+    sub-item
+];
 
 export type sub-item = any;
 ",
@@ -2522,7 +2533,10 @@ Object {
     ],
     "uniqueItems": true,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;
@@ -2569,7 +2583,10 @@ Object {
     ],
     "uniqueItems": false,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;
@@ -2673,7 +2690,11 @@ Object {
       Object {},
     ],
   },
-  "ts": "[any, any, any]
+  "ts": "[
+    any,
+    any,
+    any
+]
 ",
 }
 `;
@@ -4099,9 +4120,16 @@ Object {
     ],
     "type": "array",
   },
-  "ts": "[item, item, item]
+  "ts": "[
+    item,
+    item,
+    item
+]
 
-export type item = [sub-item, sub-item];
+export type item = [
+    sub-item,
+    sub-item
+];
 
 export type sub-item = any;
 ",
@@ -5692,7 +5720,10 @@ Object {
     ],
     "uniqueItems": true,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;
@@ -5739,7 +5770,10 @@ Object {
     ],
     "uniqueItems": false,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;
@@ -5843,7 +5877,11 @@ Object {
       Object {},
     ],
   },
-  "ts": "[any, any, any]
+  "ts": "[
+    any,
+    any,
+    any
+]
 ",
 }
 `;
@@ -7519,9 +7557,16 @@ Object {
     ],
     "type": "array",
   },
-  "ts": "[item, item, item]
+  "ts": "[
+    item,
+    item,
+    item
+]
 
-export type item = [sub-item, sub-item];
+export type item = [
+    sub-item,
+    sub-item
+];
 
 export type sub-item = any;
 ",
@@ -9126,7 +9171,10 @@ Object {
     ],
     "uniqueItems": true,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;
@@ -9173,7 +9221,10 @@ Object {
     ],
     "uniqueItems": false,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;
@@ -9277,7 +9328,11 @@ Object {
       Object {},
     ],
   },
-  "ts": "[any, any, any]
+  "ts": "[
+    any,
+    any,
+    any
+]
 ",
 }
 `;
@@ -10876,9 +10931,16 @@ Object {
     ],
     "type": "array",
   },
-  "ts": "[item, item, item]
+  "ts": "[
+    item,
+    item,
+    item
+]
 
-export type item = [sub-item, sub-item];
+export type item = [
+    sub-item,
+    sub-item
+];
 
 export type sub-item = any;
 ",
@@ -13416,7 +13478,10 @@ Object {
     ],
     "uniqueItems": true,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;
@@ -13463,7 +13528,10 @@ Object {
     ],
     "uniqueItems": false,
   },
-  "ts": "[boolean, boolean]
+  "ts": "[
+    boolean,
+    boolean
+]
 ",
 }
 `;

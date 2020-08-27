@@ -19,7 +19,7 @@ describe('TS Compose', () => {
     ['123', Type.Literal(123)],
     ['123.23', Type.Literal(123.23)],
     ['string[]', Type.Array(Type.String)],
-    ['[string, number]', Type.Tuple([Type.String, Type.Number])],
+    ['[\n    string,\n    number\n]', Type.Tuple([Type.String, Type.Number])],
     ['number[][]', Type.Array(Type.Array(Type.Number))],
     ['Test', Type.Referance('Test')],
     ['Test.Other', Type.Referance(['Test', 'Other'])],
@@ -31,6 +31,7 @@ describe('TS Compose', () => {
     ],
     ['Test.Other<Me>', Type.Referance(['Test', 'Other'], [Type.Referance('Me')])],
     ['number | string', Type.Union([Type.Number, Type.String])],
+    ['null | false', Type.Union([Type.Null, Type.Literal(false)])],
     ['number | string | string[]', Type.Union([Type.Number, Type.String, Type.Array(Type.String)])],
     ['number & string', Type.Intersection([Type.Number, Type.String])],
     [
