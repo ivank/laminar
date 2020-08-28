@@ -1,0 +1,939 @@
+openapi: 3.0.0
+info:
+  title: Statements Api
+  version: '1.0'
+  description: Generates final statements for customers
+  contact:
+    name: Example Team
+servers:
+  - url: 'http://localhost:3000'
+    description: Local Development
+  - url: 'https://nonprod.example.com'
+    description: Nonprod instance for testing
+  - url: 'https://prod.example.com'
+    description: Prod instance for testing
+paths:
+  /.well-known/health-check:
+    get:
+      summary: Health Check
+      description: Health check endpoint
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+  /.well-known/openapi.yaml:
+    get:
+      summary: API Docs YAML
+      description: The open api spec for the service. OpenAPI v3.
+      responses:
+        '200':
+          $ref: '#/components/responses/OpenApiResponse'
+  /.well-known/openapi.html:
+    get:
+      summary: API Docs
+      description: The open api spec for the service. OpenAPI v3.
+      responses:
+        '200':
+          $ref: '#/components/responses/HtmlResponse'
+  /v2/statements:
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/accountIdQuery'
+      summary: Account Statements
+      description: 'A full history of statements generated for an account, including invalid statements'
+      responses:
+        '200':
+          $ref: '#/components/responses/StatementsListResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    post:
+      summary: Generate a Statement
+      description: Manually start generating a statement for a given account
+      requestBody:
+        $ref: '#/components/requestBodies/GenerateStatementRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ManualStatementResponse'
+        '409':
+          $ref: '#/components/responses/StatementAlreadySentResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  '/v2/statements/{id}/data':
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+      - $ref: '#/components/parameters/statementId'
+    get:
+      summary: Statement Data
+      description: 'Raw data used to generate a statement for an account, at the point of generation.'
+      responses:
+        '200':
+          $ref: '#/components/responses/StatementDataResponse'
+        '404':
+          $ref: '#/components/responses/StatementNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  '/v2/statements/{id}/approval':
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+      - $ref: '#/components/parameters/statementId'
+    post:
+      summary: Approve a statement
+      description: Approve a given statement to be sent to the customer
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/StatementNotReadyResponse'
+        '404':
+          $ref: '#/components/responses/StatementNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  '/v2/statements/{id}/modifications':
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+      - $ref: '#/components/parameters/statementId'
+    post:
+      summary: Apply modifications
+      description: Save modificaitons for the current statement
+      requestBody:
+        $ref: '#/components/requestBodies/ApplyStatementDataModification'
+      responses:
+        '200':
+          $ref: '#/components/responses/StatementDataResponse'
+        '400':
+          $ref: '#/components/responses/StatementNotReadyResponse'
+        '404':
+          $ref: '#/components/responses/StatementNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  '/v2/statements/{id}/pdf':
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+      - $ref: '#/components/parameters/statementId'
+    get:
+      summary: Statement PDF
+      description: Retrieve the pdf of a generated statement
+      responses:
+        '200':
+          $ref: '#/components/responses/PdfResponse'
+        '400':
+          $ref: '#/components/responses/StatementNotReadyResponse'
+        '404':
+          $ref: '#/components/responses/StatementNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  '/v2/statements/{id}/html':
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+      - $ref: '#/components/parameters/statementId'
+    get:
+      summary: Statement Html
+      description: 'Retrieve the html, used to generate the statement pdf'
+      responses:
+        '200':
+          $ref: '#/components/responses/HtmlResponse'
+        '404':
+          $ref: '#/components/responses/StatementNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  /v2/reports/daily:
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+    post:
+      summary: Generate Daily Reports
+      description: Generate all daily reports for the day. Should be called by a cron service
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  '/v2/reports/{type}':
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+      - $ref: '#/components/parameters/reportType'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/offsetQuery'
+      summary: Report list
+      description: Return a list of reports for a specific type
+      responses:
+        '200':
+          $ref: '#/components/responses/ReportListResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    post:
+      summary: Generate a Report
+      description: 'Trigger report generation for a specific type, you can pick the date range, but by default it would use the current day'
+      requestBody:
+        $ref: '#/components/requestBodies/ReportRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  '/v2/reports/{type}/{filename}':
+    parameters:
+      - $ref: '#/components/parameters/traceToken'
+      - $ref: '#/components/parameters/reportType'
+      - $ref: '#/components/parameters/reportFilename'
+    get:
+      summary: Report file
+      description: A report file in CSV format
+      responses:
+        '200':
+          $ref: '#/components/responses/CsvResponse'
+        '404':
+          $ref: '#/components/responses/ReportNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+components:
+  responses:
+    HttpErrorResponse:
+      description: Unkown Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    StatementNotFoundResponse:
+      description: No statement with that id has been found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    StatementNotReadyResponse:
+      description: Statement does not have the needed data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    StatementAlreadySentResponse:
+      description: 'This statement has already been generated and sent to the customer, you can use force to regenerate anyway.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    ReportNotFoundResponse:
+      description: The report file that name has been found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    SuccessResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              success:
+                type: boolean
+            required:
+              - success
+    OpenApiResponse:
+      description: Yaml File
+      content:
+        '*/*':
+          schema:
+            type: string
+    HtmlResponse:
+      description: Html File
+      content:
+        '*/*':
+          schema:
+            type: string
+    CsvResponse:
+      description: Csv File
+      content:
+        text/csv:
+          schema:
+            type: string
+    PdfResponse:
+      description: Statement PDF
+      content:
+        application/pdf:
+          schema:
+            type: string
+            format: binary
+    ReportListResponse:
+      description: A list of reports
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReportsList'
+    StatementsListResponse:
+      description: A list of statements
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StatementsList'
+    StatementDataResponse:
+      description: Raw statement data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StatementData'
+    StatementDataModificationsResponse:
+      description: Modifications that apply to this statement
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/StatementDataModification'
+    ManualStatementResponse:
+      description: Manual Statement generation response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StatementsListItem'
+  requestBodies:
+    GenerateStatementRequest:
+      description: Manual Statement generation response
+      required: true
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              accountId:
+                type: string
+              force:
+                type: boolean
+              forceLossType:
+                $ref: '#/components/schemas/LossType'
+              forceLossDate:
+                type: string
+                format: date
+            required:
+              - accountId
+    ApplyStatementDataModification:
+      description: 'Apply data modification to a statement, replace the previous modifications'
+      required: true
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              modification:
+                $ref: '#/components/schemas/StatementDataModification'
+              dryRun:
+                type: boolean
+            required:
+              - modification
+    ReportRequest:
+      description: Options for generating the report
+      required: true
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - additionalProperties: false
+                properties:
+                  date:
+                    type: string
+                    format: date-time
+                required:
+                  - date
+              - additionalProperties: false
+                properties:
+                  fromDate:
+                    type: string
+                    format: date-time
+                  toDate:
+                    type: string
+                    format: date-time
+                required:
+                  - fromDate
+                  - toDate
+  parameters:
+    statementId:
+      name: id
+      in: path
+      description: Statement Id number
+      schema:
+        type: string
+        pattern: "\\d+"
+      required: true
+    reportType:
+      name: type
+      in: path
+      description: Report type
+      schema:
+        type: string
+        enum:
+          - errors
+          - foundation
+          - statements
+          - memos
+          - refunds
+      required: true
+    reportFilename:
+      name: filename
+      in: path
+      description: Report filename
+      schema:
+        type: string
+      required: true
+    accountIdQuery:
+      name: accountId
+      in: query
+      description: Gentrack Id for the account
+      schema:
+        type: string
+        pattern: "\\d+"
+      required: true
+    offsetQuery:
+      name: offset
+      in: query
+      description: Start from this id
+      schema:
+        type: string
+        pattern: "\\d+"
+    traceToken:
+      name: X-Trace-Token
+      in: header
+      description: An optional trace token to be passed to the service and used for logging
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    HttpError:
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+    LossType:
+      enum:
+        - ChangeOfTenancy
+        - EstimatedLoss
+        - SupplyLoss
+    StatementsListItem:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        ref:
+          type: string
+        accountId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        isModified:
+          type: boolean
+        errors:
+          items:
+            $ref: '#/components/schemas/StatementError'
+        state:
+          $ref: '#/components/schemas/StatementState'
+      required:
+        - id
+        - ref
+        - createdAt
+        - accountId
+        - errors
+        - isModified
+        - state
+    StatementsList:
+      items:
+        $ref: '#/components/schemas/StatementsListItem'
+    ModificationTransactionRemove:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - BillyTransactionRemove
+            - FinanceTransactionRemove
+            - QuantumTopUpRemove
+            - D188Remove
+            - SiemensTopUpRemove
+            - BitTransactionRemove
+        id:
+          type: string
+      required:
+        - type
+        - id
+    ModificationMeterTransactionRemove:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - VendTransactionRemove
+            - S2TopUpRemove
+        id:
+          type: string
+        meterType:
+          enum:
+            - gas
+            - elec
+      required:
+        - type
+        - meterType
+        - id
+    ModificationTransactionAdd:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - AddManualTransaction
+            - AddManualTopUp
+        description:
+          type: string
+        dateTime:
+          type: string
+          format: date-time
+        amount:
+          type: number
+      required:
+        - type
+        - description
+        - dateTime
+        - amount
+    Modification:
+      oneOf:
+        - $ref: '#/components/schemas/ModificationTransactionRemove'
+        - $ref: '#/components/schemas/ModificationMeterTransactionRemove'
+        - $ref: '#/components/schemas/ModificationTransactionAdd'
+    StatementDataModification:
+      additionalProperties: false
+      properties:
+        note:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        modifications:
+          items:
+            $ref: '#/components/schemas/Modification'
+      required:
+        - createdAt
+        - modifications
+    Address:
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        town:
+          type: string
+        postcode:
+          type: string
+        address:
+          type: string
+      required:
+        - firstName
+        - lastName
+        - town
+        - postcode
+        - address
+    DateInterval:
+      additionalProperties: false
+      properties:
+        from:
+          type: string
+          format: date
+        to:
+          type: string
+          format: date
+    Transaction:
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          enum:
+            - Billy
+            - Siemens
+            - Bit
+            - Finance
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        amount:
+          type: number
+        balance:
+          type: number
+        included:
+          type: boolean
+      required:
+        - id
+        - type
+        - date
+        - description
+        - amount
+    MeterTransaction:
+      additionalProperties: false
+      type: object
+      properties:
+        msn:
+          type: string
+        id:
+          type: string
+        type:
+          enum:
+            - Vend
+            - S2
+            - Quantum
+            - D188
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        amount:
+          type: number
+        balance:
+          type: number
+        included:
+          type: boolean
+      required:
+        - msn
+        - id
+        - type
+        - date
+        - description
+        - amount
+    Projection:
+      additionalProperties: false
+      properties:
+        source:
+          type: string
+        plan:
+          type: string
+        from:
+          type: string
+          format: date-time
+        value:
+          type: number
+        valueAdditional:
+          type: number
+      required:
+        - source
+    Rate:
+      additionalProperties: false
+      properties:
+        dates:
+          $ref: '#/components/schemas/DateInterval'
+        plan:
+          type: string
+        unit:
+          type: number
+        unitAdditional:
+          type: number
+        standing:
+          type: number
+      required:
+        - dates
+        - plan
+    RegisterValue:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        value:
+          type: number
+      required:
+        - id
+        - value
+    FlowElec:
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+        msn:
+          type: string
+        date:
+          type: string
+          format: date-time
+        registers:
+          items:
+            $ref: '#/components/schemas/RegisterValue'
+        details:
+          type: string
+      required:
+        - type
+        - msn
+        - registers
+        - date
+        - details
+    FlowGas:
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+        msn:
+          type: string
+        date:
+          type: string
+          format: date-time
+        value:
+          type: number
+        details:
+          type: string
+      required:
+        - type
+        - msn
+        - value
+        - date
+        - details
+    MsdElec:
+      additionalProperties: false
+      properties:
+        msn:
+          type: string
+        balance:
+          type: number
+        date:
+          type: string
+          format: date-time
+        register1:
+          type: number
+        register2:
+          type: number
+        totalRegister:
+          type: number
+      required:
+        - type
+        - msn
+        - register1
+        - totalRegister
+        - date
+    MsdGas:
+      additionalProperties: false
+      properties:
+        msn:
+          type: string
+        date:
+          type: string
+          format: date-time
+        value:
+          type: number
+        balance:
+          type: number
+      required:
+        - type
+        - msn
+        - value
+    StatementDataAccount:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        globalId:
+          type: string
+        lossType:
+          $ref: '#/components/schemas/LossType'
+        isEconomyEnergy:
+          type: boolean
+        address:
+          $ref: '#/components/schemas/Address'
+        transactions:
+          items:
+            $ref: '#/components/schemas/Transaction'
+      required:
+        - id
+        - transactions
+    StatementDataSupplyElec:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - elec
+        mpxn:
+          type: string
+        service:
+          $ref: '#/components/schemas/DateInterval'
+        ownership:
+          $ref: '#/components/schemas/DateInterval'
+        flows:
+          items:
+            $ref: '#/components/schemas/FlowElec'
+        msds:
+          items:
+            $ref: '#/components/schemas/MsdElec'
+        rates:
+          items:
+            $ref: '#/components/schemas/Rate'
+        projection:
+          $ref: '#/components/schemas/Projection'
+        address:
+          type: string
+        transactions:
+          items:
+            $ref: '#/components/schemas/MeterTransaction'
+      required:
+        - type
+        - mpxn
+        - service
+        - ownership
+        - flows
+        - msds
+        - rates
+        - projection
+        - transactions
+    StatementDataSupplyGas:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - gas
+        mpxn:
+          type: string
+        service:
+          $ref: '#/components/schemas/DateInterval'
+        ownership:
+          $ref: '#/components/schemas/DateInterval'
+        flows:
+          items:
+            $ref: '#/components/schemas/FlowGas'
+        msds:
+          items:
+            $ref: '#/components/schemas/MsdGas'
+        rates:
+          items:
+            $ref: '#/components/schemas/Rate'
+        projection:
+          $ref: '#/components/schemas/Projection'
+        address:
+          type: string
+        transactions:
+          items:
+            $ref: '#/components/schemas/MeterTransaction'
+      required:
+        - type
+        - mpxn
+        - service
+        - ownership
+        - flows
+        - msds
+        - rates
+        - projection
+        - transactions
+    StatementError:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+    StatementState:
+      enum:
+        - CREATED
+        - GENERATING_QUEUED
+        - IDENTIFICATION_STARTED
+        - IDENTIFICATION_COMPLETED
+        - IDENTIFICATION_FAILED
+        - GATHERING_DATA_STARTED
+        - GATHERING_DATA_COMPLETED
+        - GENERATING_STATEMENT_STARTED
+        - GENERATING_STATEMENT_COMPLETED
+        - GENERATING_ASSETS_STARTED
+        - GENERATING_ASSETS_COMPLETED
+        - PENDING_APPROVAL
+        - SENDING_COMM_QUEUED
+        - SENDING_COMM_STARTED
+        - SENDING_COMM_COMPLETED
+        - SENDING_DATA_TO_REFUND_TEAM
+        - INVALID
+        - TESTING_ONLY
+        - SENDING_COMM_RETRY_POSTAL
+        - SENDING_COMM_FAILED
+        - COMPLETED
+    StatementComm:
+      oneOf:
+        - additionalProperties: false
+          properties:
+            id:
+              type: string
+            status:
+              type: string
+            sentAt:
+              type: string
+              format: date-time
+          required:
+            - id
+        - additionalProperties: false
+          properties:
+            queuedAt:
+              type: string
+              format: date-time
+          required:
+            - queuedAt
+    StatementMoney:
+      additionalProperties: false
+      properties:
+        totalIn:
+          type: number
+        totalOut:
+          type: number
+        balance:
+          type: number
+      required:
+        - totalIn
+        - totalOut
+        - balance
+    StatementData:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        ref:
+          type: string
+        state:
+          $ref: '#/components/schemas/StatementState'
+        errors:
+          items:
+            $ref: '#/components/schemas/StatementError'
+        account:
+          $ref: '#/components/schemas/StatementDataAccount'
+        html:
+          type: boolean
+        pdf:
+          type: boolean
+        comm:
+          $ref: '#/components/schemas/StatementComm'
+        modification:
+          $ref: '#/components/schemas/StatementDataModification'
+        money:
+          $ref: '#/components/schemas/StatementMoney'
+        supplies:
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/StatementDataSupplyGas'
+              - $ref: '#/components/schemas/StatementDataSupplyElec'
+      required:
+        - id
+        - ref
+        - state
+        - account
+        - supplies
+    ReportsListItem:
+      additionalProperties: false
+      properties:
+        filename:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - filename
+        - createdAt
+    ReportsList:
+      additionalProperties: false
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ReportsListItem'
+        total:
+          type: integer
+      required:
+        - items
+        - total

@@ -89,7 +89,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * This API returns the redered fragments which have been sent.
      *
      */
-    \\"GET /rendered-fragment/{commId}/{fragmentId}\\": (commId, fragmentId, config) => api.get(\`/rendered-fragment/\${commId}/{fragmentId}\`, config),
+    \\"GET /rendered-fragment/{commId}/{fragmentId}\\": (commId, fragmentId, config) => api.get(\`/rendered-fragment/\${commId}/\${fragmentId}\`, config),
     api: api
 });
 
@@ -792,6 +792,515 @@ export interface Test {
 export interface AxiosOapiInstance {
     \\"POST /test/{id}\\": (id: string, data: User, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
     \\"GET /test/{id}\\": (id: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
+    api: AxiosInstance;
+}
+"
+`;
+
+exports[`Integration Should generate a correct schema for statements-api.yaml 1`] = `
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+
+/**
+ * Statements Api
+ *
+ * Version: 1.0
+ *
+ * Description:
+ * Generates final statements for customers
+ */
+export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
+    /**
+     * Health Check
+     * Health check endpoint
+     */
+    \\"GET /.well-known/health-check\\": config => api.get<{
+        success: boolean;
+    }>(\`/.well-known/health-check\`, config),
+    /**
+     * API Docs YAML
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.yaml\\": config => api.get<string>(\`/.well-known/openapi.yaml\`, config),
+    /**
+     * API Docs
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.html\\": config => api.get<string>(\`/.well-known/openapi.html\`, config),
+    /**
+     * Account Statements
+     * A full history of statements generated for an account, including invalid statements
+     */
+    \\"GET /v2/statements\\": config => api.get<StatementsList>(\`/v2/statements\`, config),
+    /**
+     * Generate a Statement
+     * Manually start generating a statement for a given account
+     */
+    \\"POST /v2/statements\\": (data, config) => api.post<StatementsListItem>(\`/v2/statements\`, data, config),
+    /**
+     * Statement Data
+     * Raw data used to generate a statement for an account, at the point of generation.
+     */
+    \\"GET /v2/statements/{id}/data\\": (id, config) => api.get<StatementData>(\`/v2/statements/\${id}/data\`, config),
+    /**
+     * Approve a statement
+     * Approve a given statement to be sent to the customer
+     */
+    \\"POST /v2/statements/{id}/approval\\": (id, data, config) => api.post<{
+        success: boolean;
+    }>(\`/v2/statements/\${id}/approval\`, data, config),
+    /**
+     * Apply modifications
+     * Save modificaitons for the current statement
+     */
+    \\"POST /v2/statements/{id}/modifications\\": (id, data, config) => api.post<StatementData>(\`/v2/statements/\${id}/modifications\`, data, config),
+    /**
+     * Statement PDF
+     * Retrieve the pdf of a generated statement
+     */
+    \\"GET /v2/statements/{id}/pdf\\": (id, config) => api.get(\`/v2/statements/\${id}/pdf\`, config),
+    /**
+     * Statement Html
+     * Retrieve the html, used to generate the statement pdf
+     */
+    \\"GET /v2/statements/{id}/html\\": (id, config) => api.get<string>(\`/v2/statements/\${id}/html\`, config),
+    /**
+     * Generate Daily Reports
+     * Generate all daily reports for the day. Should be called by a cron service
+     */
+    \\"POST /v2/reports/daily\\": (data, config) => api.post<{
+        success: boolean;
+    }>(\`/v2/reports/daily\`, data, config),
+    /**
+     * Report list
+     * Return a list of reports for a specific type
+     */
+    \\"GET /v2/reports/{type}\\": (type, config) => api.get<ReportsList>(\`/v2/reports/\${type}\`, config),
+    /**
+     * Generate a Report
+     * Trigger report generation for a specific type, you can pick the date range, but by default it would use the current day
+     */
+    \\"POST /v2/reports/{type}\\": (type, data, config) => api.post<{
+        success: boolean;
+    }>(\`/v2/reports/\${type}\`, data, config),
+    /**
+     * Report file
+     * A report file in CSV format
+     */
+    \\"GET /v2/reports/{type}/{filename}\\": (type, filename, config) => api.get(\`/v2/reports/\${type}/\${filename}\`, config),
+    api: api
+});
+
+export type StatementsList = StatementsListItem[];
+
+export interface StatementsListItem {
+    id: string;
+    ref: string;
+    accountId: string;
+    createdAt: string;
+    isModified: boolean;
+    errors: StatementError[];
+    state: StatementState;
+}
+
+export interface StatementError {
+    id: string;
+    title?: string;
+    description?: string;
+}
+
+export type StatementState = \\"CREATED\\" | \\"GENERATING_QUEUED\\" | \\"IDENTIFICATION_STARTED\\" | \\"IDENTIFICATION_COMPLETED\\" | \\"IDENTIFICATION_FAILED\\" | \\"GATHERING_DATA_STARTED\\" | \\"GATHERING_DATA_COMPLETED\\" | \\"GENERATING_STATEMENT_STARTED\\" | \\"GENERATING_STATEMENT_COMPLETED\\" | \\"GENERATING_ASSETS_STARTED\\" | \\"GENERATING_ASSETS_COMPLETED\\" | \\"PENDING_APPROVAL\\" | \\"SENDING_COMM_QUEUED\\" | \\"SENDING_COMM_STARTED\\" | \\"SENDING_COMM_COMPLETED\\" | \\"SENDING_DATA_TO_REFUND_TEAM\\" | \\"INVALID\\" | \\"TESTING_ONLY\\" | \\"SENDING_COMM_RETRY_POSTAL\\" | \\"SENDING_COMM_FAILED\\" | \\"COMPLETED\\";
+
+export interface GetV2Statements {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * Gentrack Id for the account
+         */
+        accountId: string;
+    };
+}
+
+export type LossType = \\"ChangeOfTenancy\\" | \\"EstimatedLoss\\" | \\"SupplyLoss\\";
+
+export interface PostV2Statements {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface StatementData {
+    id: string;
+    ref: string;
+    state: StatementState;
+    errors?: StatementError[];
+    account: StatementDataAccount;
+    html?: boolean;
+    pdf?: boolean;
+    comm?: StatementComm;
+    modification?: StatementDataModification;
+    money?: StatementMoney;
+    supplies: (StatementDataSupplyGas | StatementDataSupplyElec)[];
+}
+
+export interface StatementDataAccount {
+    id: string;
+    globalId?: string;
+    lossType?: LossType;
+    isEconomyEnergy?: boolean;
+    address?: Address;
+    transactions: Transaction[];
+}
+
+export interface Address {
+    firstName: string;
+    lastName: string;
+    town: string;
+    postcode: string;
+    address: string;
+}
+
+export interface Transaction {
+    id: string;
+    type: \\"Billy\\" | \\"Siemens\\" | \\"Bit\\" | \\"Finance\\";
+    date: string;
+    description: string;
+    amount: number;
+    balance?: number;
+    included?: boolean;
+}
+
+export type StatementComm = {
+    id: string;
+    status?: string;
+    sentAt?: string;
+} | {
+    queuedAt: string;
+};
+
+export interface StatementDataModification {
+    note?: string;
+    createdAt: string;
+    modifications: Modification[];
+}
+
+export type Modification = ModificationTransactionRemove | ModificationMeterTransactionRemove | ModificationTransactionAdd;
+
+export interface ModificationTransactionRemove {
+    type: \\"BillyTransactionRemove\\" | \\"FinanceTransactionRemove\\" | \\"QuantumTopUpRemove\\" | \\"D188Remove\\" | \\"SiemensTopUpRemove\\" | \\"BitTransactionRemove\\";
+    id: string;
+}
+
+export interface ModificationMeterTransactionRemove {
+    type: \\"VendTransactionRemove\\" | \\"S2TopUpRemove\\";
+    id: string;
+    meterType: \\"gas\\" | \\"elec\\";
+}
+
+export interface ModificationTransactionAdd {
+    type: \\"AddManualTransaction\\" | \\"AddManualTopUp\\";
+    description: string;
+    dateTime: string;
+    amount: number;
+}
+
+export interface StatementMoney {
+    totalIn: number;
+    totalOut: number;
+    balance: number;
+}
+
+export interface StatementDataSupplyGas {
+    type: \\"gas\\";
+    mpxn: string;
+    service: DateInterval;
+    ownership: DateInterval;
+    flows: FlowGas[];
+    msds: MsdGas[];
+    rates: Rate[];
+    projection: Projection;
+    address?: string;
+    transactions: MeterTransaction[];
+}
+
+export interface DateInterval {
+    from?: string;
+    to?: string;
+}
+
+export interface FlowGas {
+    type: string;
+    msn: string;
+    date: string;
+    value: number;
+    details: string;
+}
+
+export interface MsdGas {
+    msn: string;
+    date?: string;
+    value: number;
+    balance?: number;
+}
+
+export interface Rate {
+    dates: DateInterval;
+    plan: string;
+    unit?: number;
+    unitAdditional?: number;
+    standing?: number;
+}
+
+export interface Projection {
+    source: string;
+    plan?: string;
+    from?: string;
+    value?: number;
+    valueAdditional?: number;
+}
+
+export interface MeterTransaction {
+    msn: string;
+    id: string;
+    type: \\"Vend\\" | \\"S2\\" | \\"Quantum\\" | \\"D188\\";
+    date: string;
+    description: string;
+    amount: number;
+    balance?: number;
+    included?: boolean;
+}
+
+export interface StatementDataSupplyElec {
+    type: \\"elec\\";
+    mpxn: string;
+    service: DateInterval;
+    ownership: DateInterval;
+    flows: FlowElec[];
+    msds: MsdElec[];
+    rates: Rate[];
+    projection: Projection;
+    address?: string;
+    transactions: MeterTransaction[];
+}
+
+export interface FlowElec {
+    type: string;
+    msn: string;
+    date: string;
+    registers: RegisterValue[];
+    details: string;
+}
+
+export interface RegisterValue {
+    id: string;
+    value: number;
+}
+
+export interface MsdElec {
+    msn: string;
+    balance?: number;
+    date: string;
+    register1: number;
+    register2?: number;
+    totalRegister: number;
+}
+
+export interface GetV2StatementsIdData {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface PostV2StatementsIdApproval {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface PostV2StatementsIdModifications {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV2StatementsIdPdf {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV2StatementsIdHtml {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface PostV2ReportsDaily {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface ReportsList {
+    items: ReportsListItem[];
+    total: number;
+}
+
+export interface ReportsListItem {
+    filename: string;
+    createdAt: string;
+}
+
+export interface GetV2ReportsType {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * Start from this id
+         */
+        offset?: string;
+    };
+}
+
+export interface PostV2ReportsType {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV2ReportsTypeFilename {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface AxiosOapiInstance {
+    /**
+     * Health Check
+     * Health check endpoint
+     */
+    \\"GET /.well-known/health-check\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<{
+        success: boolean;
+    }>>;
+    /**
+     * API Docs YAML
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    /**
+     * API Docs
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.html\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    /**
+     * Account Statements
+     * A full history of statements generated for an account, including invalid statements
+     */
+    \\"GET /v2/statements\\": (config?: AxiosRequestConfig & GetV2Statements) => Promise<AxiosResponse<StatementsList>>;
+    /**
+     * Generate a Statement
+     * Manually start generating a statement for a given account
+     */
+    \\"POST /v2/statements\\": (data: {
+        accountId: string;
+        force?: boolean;
+        forceLossType?: LossType;
+        forceLossDate?: string;
+    }, config?: AxiosRequestConfig & PostV2Statements) => Promise<AxiosResponse<StatementsListItem>>;
+    /**
+     * Statement Data
+     * Raw data used to generate a statement for an account, at the point of generation.
+     */
+    \\"GET /v2/statements/{id}/data\\": (id: string, config?: AxiosRequestConfig & GetV2StatementsIdData) => Promise<AxiosResponse<StatementData>>;
+    /**
+     * Approve a statement
+     * Approve a given statement to be sent to the customer
+     */
+    \\"POST /v2/statements/{id}/approval\\": (id: string, data: unknown, config?: AxiosRequestConfig & PostV2StatementsIdApproval) => Promise<AxiosResponse<{
+        success: boolean;
+    }>>;
+    /**
+     * Apply modifications
+     * Save modificaitons for the current statement
+     */
+    \\"POST /v2/statements/{id}/modifications\\": (id: string, data: {
+        modification: StatementDataModification;
+        dryRun?: boolean;
+    }, config?: AxiosRequestConfig & PostV2StatementsIdModifications) => Promise<AxiosResponse<StatementData>>;
+    /**
+     * Statement PDF
+     * Retrieve the pdf of a generated statement
+     */
+    \\"GET /v2/statements/{id}/pdf\\": (id: string, config?: AxiosRequestConfig & GetV2StatementsIdPdf) => Promise<AxiosResponse>;
+    /**
+     * Statement Html
+     * Retrieve the html, used to generate the statement pdf
+     */
+    \\"GET /v2/statements/{id}/html\\": (id: string, config?: AxiosRequestConfig & GetV2StatementsIdHtml) => Promise<AxiosResponse<string>>;
+    /**
+     * Generate Daily Reports
+     * Generate all daily reports for the day. Should be called by a cron service
+     */
+    \\"POST /v2/reports/daily\\": (data: unknown, config?: AxiosRequestConfig & PostV2ReportsDaily) => Promise<AxiosResponse<{
+        success: boolean;
+    }>>;
+    /**
+     * Report list
+     * Return a list of reports for a specific type
+     */
+    \\"GET /v2/reports/{type}\\": (type: \\"errors\\" | \\"foundation\\" | \\"statements\\" | \\"memos\\" | \\"refunds\\", config?: AxiosRequestConfig & GetV2ReportsType) => Promise<AxiosResponse<ReportsList>>;
+    /**
+     * Generate a Report
+     * Trigger report generation for a specific type, you can pick the date range, but by default it would use the current day
+     */
+    \\"POST /v2/reports/{type}\\": (type: \\"errors\\" | \\"foundation\\" | \\"statements\\" | \\"memos\\" | \\"refunds\\", data: {
+        date: string;
+    } | {
+        fromDate: string;
+        toDate: string;
+    }, config?: AxiosRequestConfig & PostV2ReportsType) => Promise<AxiosResponse<{
+        success: boolean;
+    }>>;
+    /**
+     * Report file
+     * A report file in CSV format
+     */
+    \\"GET /v2/reports/{type}/{filename}\\": (type: \\"errors\\" | \\"foundation\\" | \\"statements\\" | \\"memos\\" | \\"refunds\\", filename: string, config?: AxiosRequestConfig & GetV2ReportsTypeFilename) => Promise<AxiosResponse>;
     api: AxiosInstance;
 }
 "

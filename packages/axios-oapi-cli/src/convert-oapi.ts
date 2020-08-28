@@ -230,7 +230,7 @@ export const convertOapi = (
                 expression: Node.Identifier(`api.${method.toLowerCase()}`),
                 typeArgs: responseAst.type ? [responseAst.type] : undefined,
                 args: [
-                  Node.TemplateString(path.replace('{', '${')),
+                  Node.TemplateString(path.replace(/\{/g, '${')),
                   ...(hasData ? [Node.Identifier('data')] : []),
                   Node.Identifier('config'),
                 ],
