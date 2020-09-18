@@ -22,6 +22,7 @@ import {
   RequestLogging,
   jsonNotFound,
   file,
+  HttpError,
 } from '../src';
 import { join } from 'path';
 import { readFileSync, createReadStream } from 'fs';
@@ -83,6 +84,13 @@ describe('Integration', () => {
       directory('/assets', join(__dirname, '../examples/assets')),
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
       get('/link', () => redirect('http://localhost:8050/destination')),
+      get('/http-error', () => {
+        throw new HttpError(
+          302,
+          { message: 'Redirect to http://localhost:8050/destination' },
+          { location: 'http://localhost:8050/destination' },
+        );
+      }),
       get('/link-other', () =>
         redirect('http://localhost:8050/destination', { headers: { Authorization: 'Bearer 123' } }),
       ),
@@ -236,6 +244,18 @@ describe('Integration', () => {
     ).resolves.toMatchObject({
       status: 302,
       data: 'Redirecting to http://localhost:8050/destination.',
+    });
+
+    await expect(api.get('/http-error')).resolves.toMatchObject({
+      status: 200,
+      data: { arrived: true },
+    });
+
+    await expect(
+      api.get('/http-error', { maxRedirects: 0 }).catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 302,
+      data: { message: 'Redirect to http://localhost:8050/destination' },
     });
 
     await expect(api.get('/link-other')).resolves.toMatchObject({

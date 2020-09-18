@@ -50,7 +50,7 @@ export const responseParserComponent = (parsers = defaultResponseParsers): Compo
     return parseResponse(await next(req), parsers);
   } catch (error) {
     return error instanceof HttpError
-      ? response({ body: JSON.stringify(error.body), status: error.code })
+      ? response({ body: JSON.stringify(error.body), headers: error.headers, status: error.code })
       : response({ body: JSON.stringify({ message: error.message }), status: 500 });
   }
 };
