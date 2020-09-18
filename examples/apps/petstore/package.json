@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@ovotech/laminar": "^0.7.0",
-    "@ovotech/laminar-jwt": "^0.7.2",
+    "@ovotech/laminar-jwt": "^0.8.0",
     "@ovotech/laminar-oapi": "^0.5.0",
     "pg": "^8.2.1"
   }
