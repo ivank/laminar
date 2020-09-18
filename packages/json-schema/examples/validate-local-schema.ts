@@ -1,14 +1,14 @@
 import { validateCompiled, validate, compile } from '@ovotech/json-schema';
 import { join } from 'path';
 
-const schemaFile = join(__dirname, 'color-schema.yaml');
+const schema = join(__dirname, 'color-schema.yaml');
 
-validate(schemaFile, 'orange').then(result => {
+validate({ schema, value: 'orange' }).then((result) => {
   console.log('validate', result.valid, result.errors);
 });
 
-compile(schemaFile).then(schema => {
-  const result = validateCompiled(schema, 'red');
+compile({ schema }).then((compiledSchema) => {
+  const result = validateCompiled({ schema: compiledSchema, value: 'red' });
 
   console.log('compile', result.valid, result.errors);
 });

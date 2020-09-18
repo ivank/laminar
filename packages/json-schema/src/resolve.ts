@@ -10,8 +10,8 @@ export interface RefMap {
   [ref: string]: Schema;
 }
 
-export interface ResolvedSchema {
-  schema: Schema;
+export interface ResolvedSchema<T extends Schema = Schema> {
+  schema: T;
   refs: RefMap;
   uris: string[];
 }

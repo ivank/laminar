@@ -1,15 +1,41 @@
 import { Schema, JsonSchema } from './schema';
 import { RefMap } from './resolve';
 
+export type InvalidCode =
+  | 'not'
+  | 'enum'
+  | 'type'
+  | 'multipleOf'
+  | 'minimum'
+  | 'exclusiveMinimum'
+  | 'maximum'
+  | 'exclusiveMaximum'
+  | 'pattern'
+  | 'format'
+  | 'false'
+  | 'maxLength'
+  | 'minLength'
+  | 'contains'
+  | 'additionalProperties'
+  | 'unevaluatedProperties'
+  | 'unevaluatedItems'
+  | 'required'
+  | 'minProperties'
+  | 'maxProperties'
+  | 'dependencies'
+  | 'uniqueItems'
+  | 'minItems'
+  | 'maxItems'
+  | 'oneOf'
+  | 'anyOf';
+
 export interface Invalid<TParam = unknown> {
-  code: keyof Messages;
+  code: InvalidCode;
   name: string;
   param: TParam;
 }
 
-export interface Messages {
-  [key: string]: (error: Invalid) => string;
-}
+export type Messages = Record<InvalidCode, (error: Invalid) => string>;
 
 export interface Options {
   name: string;

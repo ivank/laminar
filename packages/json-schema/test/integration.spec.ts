@@ -59,9 +59,9 @@ describe('Helper isEqual', () => {
       value: { post: true, singleWalletBalance: { fuelType: '111' } },
     });
     expect(result.errors).toEqual([
-      '[value] has unknown key [post]',
-      '[value.singleWalletBalance] is missing [value] keys',
-      '[value.singleWalletBalance.fuelType] should be one of [DualFuel]',
+      '[value] (additionalProperties) has unknown key post',
+      '[value.singleWalletBalance] (required) is missing [value] keys',
+      '[value.singleWalletBalance.fuelType] (enum) should be one of [DualFuel]',
     ]);
   });
 
@@ -81,20 +81,20 @@ describe('Helper isEqual', () => {
     const value = { animal: 'cat', weight: 12 };
     const value2 = { animal: 'other', weight: '12' };
 
-    expect(
+    await expect(
       ensureValid<AnimalType>({ schema: animalSchema, value: value }),
-    ).resolves.toEqual(value);
-    expect(
+    ).resolves.toMatchObject({ value });
+    await expect(
       ensureValid<AnimalType>({ schema: animalSchema, value: value2 }),
     ).rejects.toMatchObject({
       message:
-        'Invalid value\n | [value.animal] should match /cat|dog/\n | [value.weight] should be a [number,integer]\n',
+        'Invalid value\n[value.animal] (pattern) should match /cat|dog/\n[value.weight] (type) should be of type number,integer\n',
     });
-    expect(
+    await expect(
       ensureValid<AnimalType>({ schema: animalSchema, value: value2, name: 'MyObject' }),
     ).rejects.toMatchObject({
       message:
-        'Invalid MyObject\n | [MyObject.animal] should match /cat|dog/\n | [MyObject.weight] should be a [number,integer]\n',
+        'Invalid MyObject\n[MyObject.animal] (pattern) should match /cat|dog/\n[MyObject.weight] (type) should be of type number,integer\n',
     });
   });
 
@@ -127,7 +127,7 @@ describe('Helper isEqual', () => {
     };
 
     const result = await validate({ schema, value: { type: 'cat', size: 'big' } });
-    expect(result.errors).toEqual(['[value.size] should be a [integer]']);
+    expect(result.errors).toEqual(['[value.size] (type) should be of type integer']);
   });
 
   it('Should optimize one anyOf', async () => {
@@ -148,7 +148,7 @@ describe('Helper isEqual', () => {
     };
 
     const result = await validate({ schema, value: { type: 'cat', size: 'big' } });
-    expect(result.errors).toEqual(['[value.size] should be a [integer]']);
+    expect(result.errors).toEqual(['[value.size] (type) should be of type integer']);
   });
 
   it('Should display errors for oneOf', async () => {
@@ -173,9 +173,7 @@ describe('Helper isEqual', () => {
 
     const result = await validate({ schema, value: 123 });
     expect(result.errors).toEqual([
-      '[value] should match only 1 schema, matching 0',
-      '[value.0?] should be a [string]',
-      '[value.1?] should be a [object]',
+      '[value] (oneOf) should satisfy exactly only 1 schema\n  | Schema 1:\n  |   [] (type) should be of type string\n  | Schema 2:\n  |   [] (type) should be of type object',
     ]);
   });
 
@@ -184,8 +182,8 @@ describe('Helper isEqual', () => {
 
     const infinityResult = await validate({ schema, value: Infinity });
     const nanResult = await validate({ schema, value: NaN });
-    expect(infinityResult.errors).toEqual(['[value] should be a multiple of 2']);
-    expect(nanResult.errors).toEqual(['[value] should be a multiple of 2']);
+    expect(infinityResult.errors).toEqual(['[value] (multipleOf) should be a multiple of 2']);
+    expect(nanResult.errors).toEqual(['[value] (multipleOf) should be a multiple of 2']);
   });
 
   it.each<[string, string, boolean]>([

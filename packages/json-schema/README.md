@@ -30,9 +30,9 @@ const schema: Schema = {
   format: 'email',
 };
 
-const data = '12horses';
+const value = '12horses';
 
-validate(schema, data).then((result) => console.log(result.valid, result.errors));
+validate({ schema, value }).then((result) => console.log(result.valid, result.errors));
 ```
 
 Should output
@@ -90,14 +90,14 @@ nock('https://example.com')
 compile('https://example.com/schema').then((schema) => {
   console.log(schema);
 
-  const correctData = { size: 10, color: 'red' };
-  const incorrectData = { size: 'big', color: 'orange' };
+  const correct = { size: 10, color: 'red' };
+  const incorrect = { size: 'big', color: 'orange' };
 
-  validate(schema, correctData).then((result) => {
+  validate({ schema, value: correct }).then((result) => {
     console.log(result.valid, result.errors);
   });
 
-  validate(schema, incorrectData).then((result) => {
+  validate({ schema, value: incorrect }).then((result) => {
     console.log(result.valid, result.errors);
   });
 });
@@ -113,14 +113,14 @@ You can also provide paths to local files to download the schema from. It it end
 import { validateCompiled, validate, compile } from '@ovotech/json-schema';
 import { join } from 'path';
 
-const schemaFile = join(__dirname, 'color-schema.yaml');
+const schema = join(__dirname, 'color-schema.yaml');
 
-validate(schemaFile, 'orange').then((result) => {
+validate({ schema, value: 'orange' }).then((result) => {
   console.log('validate', result.valid, result.errors);
 });
 
-compile(schemaFile).then((schema) => {
-  const result = validateCompiled(schema, 'red');
+compile({ schema }).then((compiledSchema) => {
+  const result = validateCompiled({ schema: compiledSchema, value: 'red' });
 
   console.log('compile', result.valid, result.errors);
 });

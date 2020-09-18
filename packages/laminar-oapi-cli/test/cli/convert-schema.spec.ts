@@ -2,7 +2,7 @@ import { Schema } from '@ovotech/json-schema';
 import { readdirSync, readFileSync } from 'fs';
 import nock = require('nock');
 import { join } from 'path';
-import { schemaTs } from '../../src';
+import { schemaTs } from '../../src/convert-schema';
 
 interface Test {
   description: string;

@@ -1,13 +1,18 @@
+import { compile, Schema } from '@ovotech/json-schema';
 import {
   document,
   Document,
   mapWithContext,
+  printDocument,
   Type,
   withIdentifier,
   withImports,
 } from '@ovotech/ts-compose';
 import {
+  MediaTypeObject,
   OpenAPIObject,
+  OperationObject,
+  ParameterLocation,
   ParameterObject,
   PathItemObject,
   ReferenceObject,
@@ -15,6 +20,7 @@ import {
   ResponseObject,
   ResponsesObject,
   SchemaObject,
+  SecuritySchemeObject,
 } from 'openapi3-ts';
 import * as ts from 'typescript';
 import { convertSchema } from './convert-schema';
@@ -25,6 +31,8 @@ import {
   getReferencedObject,
   isRequestBodyObject,
   isParameterObject,
+  isMediaTypeObject,
+  isSecuritySchemaObject,
 } from './traverse';
 
 interface AstParameters {
@@ -45,7 +53,7 @@ const documentation = (summary?: string, description?: string): string | undefin
 const cleanIdentifierName = (str: string): string => str.replace(/[^0-9a-zA-Z_$]+/g, '');
 
 const pathToIdentifier = (path: string): string =>
-  'T' + path.split('/').map(cleanIdentifierName).map(title).join('');
+  path.split('/').map(cleanIdentifierName).map(title).join('');
 
 const toParamLocation = (
   location: 'header' | 'cookie' | 'path' | 'query',
@@ -59,6 +67,9 @@ const toParamLocation = (
       return location;
   }
 };
+
+const isParamLocation = (location: string): location is ParameterLocation =>
+  ['header', 'cookie', 'path', 'query'].includes(location);
 
 const toParamName = (location: 'header' | 'cookie' | 'path' | 'query', name: string): string =>
   location === 'header' ? name.toLowerCase() : name;
@@ -104,6 +115,97 @@ const convertParameters = (
   };
 };
 
+const convertSecuritySchema = (
+  context: AstContext,
+  name: string,
+  securitySchemaOrRef: SecuritySchemeObject | ReferenceObject,
+): ts.InterfaceDeclaration | undefined => {
+  const security = getReferencedObject(securitySchemaOrRef, isSecuritySchemaObject, context);
+  switch (security.type) {
+    case 'http':
+      return Type.Interface({
+        name,
+        ext: [{ name: 'RequestOapi' }],
+        props: [
+          Type.Prop({
+            name: 'headers',
+            type: Type.TypeLiteral({
+              props: [Type.Prop({ name: 'authorization', type: Type.String })],
+            }),
+          }),
+        ],
+      });
+    case 'apiKey':
+      return security.in && security.name && isParamLocation(security.in)
+        ? Type.Interface({
+            name,
+            ext: [{ name: 'RequestOapi' }],
+            props: [
+              Type.Prop({
+                name: toParamLocation(security.in),
+                type: Type.TypeLiteral({
+                  props: [Type.Prop({ name: security.name.toLowerCase(), type: Type.String })],
+                }),
+              }),
+            ],
+          })
+        : undefined;
+  }
+  return undefined;
+};
+
+const convertSecuritySchemas = (
+  context: AstContext,
+  securitySchemas: {
+    [securityScheme: string]: SecuritySchemeObject | ReferenceObject;
+  },
+): Document<ts.PropertySignature, AstContext> => {
+  const securityEntries = Object.entries<SecuritySchemeObject | ReferenceObject>(securitySchemas);
+
+  const security = mapWithContext(
+    context,
+    securityEntries,
+    (securityContext, [name, securitySchemaOrRef]) => {
+      const securitySchemaName = `${title(name)}SecuritySchema`;
+      const securityType = convertSecuritySchema(
+        securityContext,
+        securitySchemaName,
+        securitySchemaOrRef,
+      );
+
+      if (securityType) {
+        return document(
+          withIdentifier(securityContext, securityType),
+          Type.Prop({
+            name,
+            type: Type.Referance('OapiSecurityResolver', [
+              Type.Referance('R'),
+              Type.Referance('TAuthInfo'),
+              Type.Referance(securitySchemaName),
+            ]),
+          }),
+        );
+      } else {
+        return document(
+          securityContext,
+          Type.Prop({
+            name,
+            type: Type.Referance('OapiSecurityResolver', [
+              Type.Referance('R'),
+              Type.Referance('TAuthInfo'),
+            ]),
+          }),
+        );
+      }
+    },
+  );
+
+  return document(
+    security.context,
+    Type.Prop({ name: 'security', type: Type.TypeLiteral({ props: security.items }) }),
+  );
+};
+
 /**
  * If root repsponse is string, we allow it to be readable stream as well
  */
@@ -117,7 +219,7 @@ const convertResponse = (
     if (schema.type === 'string') {
       return document(
         withImports(responseDocument.context, { module: 'stream', named: [{ name: 'Readable' }] }),
-        Type.Union([responseDocument.type, Type.Referance('Readable')]),
+        Type.Union([responseDocument.type, Type.Referance('Readable'), Type.Referance('Buffer')]),
       );
     } else {
       return responseDocument;
@@ -132,26 +234,49 @@ const convertResponses = (
   name: string,
   responses: ResponsesObject,
 ): Document<ts.TypeReferenceNode, AstContext> => {
-  const responseEntries = Object.values<ResponseObject | ReferenceObject>(responses);
+  const responseEntries = Object.entries<ResponseObject | ReferenceObject>(responses);
 
-  const params = mapWithContext(context, responseEntries, (responseContext, responseOrRef) => {
-    const response = getReferencedObject(responseOrRef, isResponseObject, responseContext);
-    const schema =
-      response?.content?.['application/json']?.schema ?? response?.content?.['*/*']?.schema;
+  const params = mapWithContext(
+    context,
+    responseEntries,
+    (responseContext, [status, responseOrRef]) => {
+      const response = getReferencedObject(responseOrRef, isResponseObject, responseContext);
+      const responseMediaTypes = Object.entries<MediaTypeObject | ReferenceObject>(
+        response.content ?? { '*': {} },
+      );
 
-    const node = convertResponse(responseContext, schema);
+      const { items, context: mediaTypesContext } = mapWithContext(
+        responseContext,
+        responseMediaTypes,
+        (mediaTypeContext, [type, mediaTypeOrRef]) => {
+          const mediaType = getReferencedObject(
+            mediaTypeOrRef,
+            isMediaTypeObject,
+            mediaTypeContext,
+          );
+          const typeString = type.includes('*') ? Type.String : Type.Literal(type);
+          const typeStatus = status === 'default' ? Type.Number : Type.Literal(Number(status));
 
-    const nodeContext = withImports(node.context, {
-      module: '@ovotech/laminar',
-      named: [{ name: 'LaminarResponse' }],
-    });
+          const typeSchema = convertResponse(mediaTypeContext, mediaType.schema);
 
-    if (node.type !== undefined) {
-      return document(nodeContext, [Type.Referance('LaminarResponse', [node.type]), node.type]);
-    } else {
-      return document(nodeContext, [Type.Referance('LaminarResponse')]);
-    }
-  });
+          const typeContext = withImports(typeSchema.context, {
+            module: '@ovotech/laminar-oapi',
+            named: [{ name: 'ResponseOapi' }],
+          });
+
+          return document(
+            typeContext,
+            Type.Referance('ResponseOapi', [
+              typeSchema.type ?? Type.Unknown,
+              typeStatus,
+              typeString,
+            ]),
+          );
+        },
+      );
+      return document(mediaTypesContext, items);
+    },
+  );
 
   const responseTypes = params.items.reduce((acc, item) => [...acc, ...item]);
 
@@ -159,20 +284,16 @@ const convertResponses = (
     ? document(
         withIdentifier(
           params.context,
-          Type.Alias({
-            name,
-            type: Type.Union([
-              ...responseTypes,
-              Type.Referance('Promise', [Type.Union(responseTypes)]),
-            ]),
-            isExport: true,
-          }),
+          Type.Alias({ name, type: Type.Union(responseTypes), isExport: true }),
         ),
         Type.Referance(name),
       )
     : document(
-        withImports(context, { module: '@ovotech/laminar', named: [{ name: 'ResolverResponse' }] }),
-        Type.Referance('ResolverResponse'),
+        withImports(context, {
+          module: '@ovotech/laminar-oapi',
+          named: [{ name: 'ResponseOapi' }],
+        }),
+        Type.Referance('ResponseOapi'),
       );
 };
 
@@ -206,7 +327,7 @@ export const convertOapi = (
 
       const methods = mapWithContext(
         pathContext,
-        Object.entries(pathApi),
+        Object.entries<OperationObject>(pathApi),
         (methodContext, [method, operation]) => {
           const astParams =
             operation.parameters || parameters
@@ -221,19 +342,31 @@ export const convertOapi = (
             : document(methodContext, Type.TypeLiteral());
 
           const identifier = pathToIdentifier(path) + title(method);
-          const contextIdentifier = identifier + 'Context';
-          const responseIdentifier = identifier + 'Response';
+          const requestIdentifier = 'Request' + identifier;
+          const responseIdentifier = 'Response' + identifier;
+          const pathIdentifier = 'Path' + identifier;
           const doc = documentation(
             operation.summary || summary,
             operation.description || description,
           );
-          const contextInterface = Type.Interface({
-            name: contextIdentifier,
-            isExport: true,
-            jsDoc: doc,
-            ext: [{ name: 'Context' }, { name: 'OapiContext' }],
-            props: astParams.type.members.concat(astRequestBody.type.members),
-          });
+          const security = operation.security || api.security;
+
+          const requestProps = astParams.type.members
+            .concat(astRequestBody.type.members)
+            .concat(
+              security ? Type.Prop({ name: 'authInfo', type: Type.Referance('TAuthInfo') }) : [],
+            );
+
+          const requestInterface = requestProps.length
+            ? Type.Interface({
+                name: requestIdentifier,
+                isExport: true,
+                jsDoc: doc,
+                typeArgs: security ? [Type.TypeArg({ name: 'TAuthInfo' })] : undefined,
+                ext: [{ name: 'RequestOapi' }],
+                props: requestProps,
+              })
+            : undefined;
 
           const responseAst = convertResponses(
             astRequestBody.context,
@@ -241,23 +374,65 @@ export const convertOapi = (
             operation.responses,
           );
 
-          const methodCall = Type.Arrow({
-            args: [
-              Type.Param({
-                name: 'context',
-                type: Type.Intersection([Type.Referance(contextIdentifier), Type.Referance('C')]),
+          const pathType = Type.Alias({
+            name: pathIdentifier,
+            isExport: true,
+            jsDoc: operation.description,
+            typeArgs: [
+              Type.TypeArg({
+                name: 'R',
+                ext: Type.Referance('Empty'),
+                defaultType: Type.Referance('Empty'),
               }),
+              ...(security
+                ? [
+                    Type.TypeArg({
+                      name: 'TAuthInfo',
+                      ext: Type.Referance('OapiAuthInfo'),
+                      defaultType: Type.Referance('OapiAuthInfo'),
+                    }),
+                  ]
+                : []),
             ],
-            ret: responseAst.type,
+            type: Type.Arrow({
+              args: [
+                Type.Param({
+                  name: 'req',
+                  type: Type.Intersection([
+                    ...(requestInterface
+                      ? [
+                          Type.Referance(
+                            requestIdentifier,
+                            security ? [Type.Referance('TAuthInfo')] : undefined,
+                          ),
+                        ]
+                      : [Type.Referance('RequestOapi')]),
+                    Type.Referance('R'),
+                  ]),
+                }),
+              ],
+              ret: Type.Union([responseAst.type, Type.Referance('Promise', [responseAst.type])]),
+            }),
           });
 
           const methodSignature = Type.Prop({
             name: method,
-            type: methodCall,
+            type: Type.Referance(pathIdentifier, [
+              Type.Referance('R'),
+              ...(security ? [Type.Referance('TAuthInfo')] : []),
+            ]),
             jsDoc: operation.description,
           });
 
-          return document(withIdentifier(responseAst.context, contextInterface), methodSignature);
+          return document(
+            withIdentifier(
+              requestInterface
+                ? withIdentifier(responseAst.context, requestInterface)
+                : responseAst.context,
+              pathType,
+            ),
+            methodSignature,
+          );
         },
       );
 
@@ -271,49 +446,60 @@ export const convertOapi = (
     },
   );
 
+  const security = api.components?.securitySchemes
+    ? convertSecuritySchemas(paths.context, api.components?.securitySchemes)
+    : undefined;
+
+  const finalContext = security?.context ?? paths.context;
+
   return document(
     withImports(
-      withImports(paths.context, {
+      withImports(finalContext, {
         module: '@ovotech/laminar-oapi',
         named: [
-          { name: 'OapiContext' },
+          { name: 'RequestOapi' },
           { name: 'OapiConfig' },
-          ...(api.components && api.components.securitySchemes
-            ? [{ name: 'OapiSecurityResolver' }]
-            : []),
+          ...(security ? [{ name: 'OapiSecurityResolver' }, { name: 'OapiAuthInfo' }] : []),
         ],
       }),
-      { module: '@ovotech/laminar', named: [{ name: 'Context' }, { name: 'ContextLike' }] },
+      { module: '@ovotech/laminar', named: [{ name: 'Empty' }] },
     ),
     Type.Interface({
       name: 'Config',
       isExport: true,
-      ext: [{ name: 'OapiConfig', types: [Type.Referance('C')] }],
+      ext: [
+        {
+          name: 'OapiConfig',
+          types: [Type.Referance('R')],
+        },
+      ],
       typeArgs: [
         Type.TypeArg({
-          name: 'C',
-          ext: Type.Referance('ContextLike'),
-          defaultType: Type.Referance('ContextLike'),
+          name: 'R',
+          ext: Type.Referance('Empty'),
+          defaultType: Type.Referance('Empty'),
         }),
-      ],
-      props: [
-        Type.Prop({ name: 'paths', type: Type.TypeLiteral({ props: paths.items }) }),
-        ...(api.components && api.components.securitySchemes
+        ...(security
           ? [
-              Type.Prop({
-                name: 'security',
-                type: Type.TypeLiteral({
-                  props: Object.keys(api.components.securitySchemes).map((scheme) =>
-                    Type.Prop({
-                      name: scheme,
-                      type: Type.Referance('OapiSecurityResolver', [Type.Referance('C')]),
-                    }),
-                  ),
-                }),
+              Type.TypeArg({
+                name: 'TAuthInfo',
+                ext: Type.Referance('OapiAuthInfo'),
+                defaultType: Type.Referance('OapiAuthInfo'),
               }),
             ]
           : []),
       ],
+      props: [
+        Type.Prop({ name: 'paths', type: Type.TypeLiteral({ props: paths.items }) }),
+        ...(security ? [security.type] : []),
+      ],
     }),
+  );
+};
+
+export const oapiTs = async (api: Schema | string): Promise<string> => {
+  const { schema, refs } = await compile(api);
+  return printDocument(
+    convertOapi({ root: schema as OpenAPIObject, refs }, schema as OpenAPIObject),
   );
 };

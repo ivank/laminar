@@ -82,6 +82,12 @@ paths:
         required: true
         content:
           application/json:
+            examples:
+              simple:
+                summary: A simple example
+                value:
+                  name: Charlie
+                  type: dog
             schema:
               $ref: '#/components/schemas/NewPet'
       responses:

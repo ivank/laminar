@@ -1,17 +1,17 @@
-import { get, post, createLaminar, router, describeLaminar } from '@ovotech/laminar';
+import { get, post, laminar, start, router, describe, jsonOk, textOk } from '@ovotech/laminar';
 
 const main = async () => {
-  const laminar = createLaminar({
+  const server = laminar({
     port: 3333,
     app: router(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      post('/test', () => 'submited'),
-      get('/test', () => 'index'),
+      get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+      post('/test', () => textOk('submited')),
+      get('/test', () => textOk('index')),
     ),
   });
-  await laminar.start();
+  await start(server);
 
-  console.log(describeLaminar(laminar));
+  console.log(describe(server));
 };
 
 main();

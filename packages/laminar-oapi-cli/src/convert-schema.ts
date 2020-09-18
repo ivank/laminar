@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-
-import { document, Document, mapWithContext, Type, withIdentifier } from '@ovotech/ts-compose';
+import { compile, Schema } from '@ovotech/json-schema';
+import {
+  document,
+  Document,
+  mapWithContext,
+  printDocument,
+  Type,
+  withIdentifier,
+} from '@ovotech/ts-compose';
+import { SchemaObject } from 'openapi3-ts';
 import * as ts from 'typescript';
 import { AstContext, AstConvert, isSchemaObject, isReferenceObject } from './traverse';
 
@@ -205,3 +213,9 @@ export const convertSchema = (
     (node, converter) => node || converter(context, schema),
     null,
   ) || document(context, Type.Any);
+
+export const schemaTs = async (api: Schema | string): Promise<string> => {
+  const { schema, refs } = await compile(api);
+
+  return printDocument(convertSchema({ root: schema as SchemaObject, refs }, schema));
+};

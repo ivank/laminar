@@ -1,23 +1,23 @@
-import { get, put, createLaminar, router, createBodyParser } from '@ovotech/laminar';
+import { get, put, laminar, router, start, jsonOk, jsonNotFound, describe } from '@ovotech/laminar';
 
-const users: { [key: string]: string } = {
+const users: Record<string, string> = {
   '1': 'John',
   '2': 'Foo',
 };
 
-const bodyParser = createBodyParser();
-
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    router(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      get('/users', () => users),
-      get('/users/{id}', ({ path }) => users[path.id]),
-      put('/users/{id}', ({ path, body }) => {
-        users[path.id] = body;
-        return users[path.id];
-      }),
-    ),
+  app: router(
+    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+    get('/users', () => jsonOk(users)),
+    get('/users/{id}', ({ path }) => jsonOk(users[path.id])),
+    put('/users/{id}', ({ path, body }) => {
+      users[path.id] = body;
+      return jsonOk(users[path.id]);
+    }),
+    // Default URL handler
+    ({ url }) => jsonNotFound({ message: `This url ${url} was not found` }),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));

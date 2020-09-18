@@ -1,21 +1,20 @@
 import axios from 'axios';
 import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
-import { createBodyParser, createLaminar, Laminar } from '../src';
+import { laminar, start, stop, textOk, Laminar } from '../src';
 
-const bodyParser = createBodyParser();
-const app = jest.fn().mockReturnValue('Test');
+const app = jest.fn().mockReturnValue(textOk('Test'));
 const api = axios.create({ baseURL: 'http://localhost:8051' });
 
 let server: Laminar;
 
 describe('Requests', () => {
   beforeAll(async () => {
-    server = createLaminar({ app: bodyParser(app), port: 8051 });
-    await server.start();
+    server = laminar({ app, port: 8051 });
+    await start(server);
   });
 
-  afterAll(() => server.stop());
+  afterAll(() => stop(server));
 
   beforeEach(() => app.mockClear());
 
@@ -43,6 +42,14 @@ describe('Requests', () => {
         method: 'GET',
       }),
     );
+    expect(result.data).toEqual('Test');
+  });
+
+  it('Should parse search params', async () => {
+    const result = await api.get('/me', {
+      params: { this: 'other', last: 'new' },
+    });
+    expect(app.mock.calls[0][0].url.searchParams.toString()).toEqual('this=other&last=new');
     expect(result.data).toEqual('Test');
   });
 
@@ -155,20 +162,19 @@ describe('Requests', () => {
 
   it('Should handle malformed json', async () => {
     await expect(
-      api.post('http://localhost:8051/post', '{"test":Date}', {
-        transformRequest: [],
-        headers: { 'Content-Type': 'application/json' },
-      }),
-    ).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 400,
-        data: {
-          message: 'Error parsing request body',
-          error: 'Unexpected token D in JSON at position 8',
-        },
-      }),
-    );
+      api
+        .post('http://localhost:8051/post', '{"test":Date}', {
+          transformRequest: [],
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 400,
+      data: {
+        message: 'Error parsing request body',
+        error: 'Unexpected token D in JSON at position 8',
+      },
+    });
 
     expect(app).not.toHaveBeenCalled();
   });

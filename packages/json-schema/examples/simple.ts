@@ -5,6 +5,6 @@ const schema: Schema = {
   format: 'email',
 };
 
-const data = '12horses';
+const value = '12horses';
 
-validate(schema, data).then(result => console.log(result.valid, result.errors));
+validate({ schema, value }).then((result) => console.log(result.valid, result.errors));

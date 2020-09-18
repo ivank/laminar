@@ -1,14 +1,16 @@
-import { get, createLaminar, router, createBodyParser, staticDirectory } from '@ovotech/laminar';
+import { get, laminar, router, directory, start, jsonOk, describe } from '@ovotech/laminar';
 import { join } from 'path';
 
-const bodyParser = createBodyParser();
-
-createLaminar({
-  port: 3333,
-  app: bodyParser(
-    router(
-      staticDirectory('/my-folder', join(__dirname, 'assets')),
-      get('/', () => ({ health: 'ok' })),
+const main = async () => {
+  const server = laminar({
+    port: 3333,
+    app: router(
+      directory('/my-folder', join(__dirname, 'assets')),
+      get('/', () => jsonOk({ health: 'ok' })),
     ),
-  ),
-}).start();
+  });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();

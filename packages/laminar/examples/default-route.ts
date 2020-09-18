@@ -1,9 +1,11 @@
-import { get, defaultRoute, createLaminar, router, response } from '@ovotech/laminar';
+import { get, laminar, router, jsonOk, textNotFound, start, describe } from '@ovotech/laminar';
 
-createLaminar({
+const server = laminar({
   port: 3333,
   app: router(
-    get('/.well-known/health-check', () => ({ health: 'ok' })),
-    defaultRoute(() => response({ status: 404, body: 'Woopsy' })),
+    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+    () => textNotFound('Woopsy'),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));

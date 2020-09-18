@@ -1,17 +1,9 @@
-import { createLaminar, Laminar, createBodyParser, router, get, post } from '@ovotech/laminar';
+import { laminar, start, Laminar, router, get, post, stop, jsonOk } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { createOapi } from '@ovotech/laminar-oapi';
-import {
-  createJwtSecurity,
-  JWTContext,
-  JWTSecurity,
-  auth,
-  jwkPublicKey,
-  validateScopesKeycloak,
-} from '../src';
+import { jwtSecurityResolver, authMiddleware, jwkPublicKey, createSession } from '../src';
 import { Config } from './__generated__/integration';
-import { sign } from 'jsonwebtoken';
 import { generateKeyPair } from 'crypto';
 import { promisify } from 'util';
 import * as nock from 'nock';
@@ -20,36 +12,47 @@ import { readFileSync } from 'fs';
 let server: Laminar;
 
 describe('Integration', () => {
-  afterEach(() => server.stop());
+  afterEach(() => stop(server));
 
   it('Should process response for secret', async () => {
-    const config: Config<JWTContext> = {
+    const secret = '123';
+    const jwtSecurity = jwtSecurityResolver({ secret });
+
+    const config: Config = {
       api: join(__dirname, 'integration.yaml'),
-      security: { JWTSecurity },
+      security: { JWTSecurity: jwtSecurity },
       paths: {
         '/session': {
-          post: ({ createSession, body: { email, scopes } }) => createSession({ email, scopes }),
+          post: ({ body: { email, scopes } }) =>
+            jsonOk(createSession({ secret }, { email, scopes })),
         },
         '/test': {
-          get: ({ authInfo }) => ({ text: 'Test', ...authInfo }),
+          get: ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
         },
         '/test-scopes': {
-          get: ({ authInfo }) => ({ text: 'Test', ...authInfo }),
+          get: ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
         },
       },
     };
 
-    const bodyParser = createBodyParser();
-    const oapi = await createOapi(config);
-    const jwtMiddleware = createJwtSecurity({ secret: '123' });
+    const app = await createOapi(config);
 
-    const testTokenWithoutScopes = sign({ email: 'tester' }, '123');
-    const testTokenWithOtherScopes = sign({ email: 'tester', scopes: ['other'] }, '123');
-    const testTokenExpires = sign({ email: 'tester' }, '123', { expiresIn: '1ms' });
-    const testTokenNotBefore = sign({ email: 'tester' }, '123', { notBefore: 10000 });
+    const testTokenWithoutScopes = createSession({ secret }, { email: 'tester' }).jwt;
+    const testTokenWithOtherScopes = createSession(
+      { secret },
+      { email: 'tester', scopes: ['other'] },
+    ).jwt;
+    const testTokenExpires = createSession(
+      { secret, options: { expiresIn: '1ms' } },
+      { email: 'tester' },
+    ).jwt;
+    const testTokenNotBefore = createSession(
+      { secret, options: { notBefore: 10000 } },
+      { email: 'tester' },
+    ).jwt;
 
-    server = createLaminar({ app: bodyParser(jwtMiddleware(oapi)), port: 8064 });
-    await server.start();
+    server = laminar({ app, port: 8064 });
+    await start(server);
 
     const api = axios.create({ baseURL: 'http://localhost:8064' });
 
@@ -88,59 +91,43 @@ describe('Integration', () => {
       headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
     });
 
-    await expect(result3).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          message: 'Authorization error. User does not have required scopes: [test1]',
-        },
-      }),
-    );
+    await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
+      status: 403,
+      data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
+    });
 
     const result4 = api.get('/test-scopes', {
       headers: { authorization: `Bearer ${testTokenWithOtherScopes}` },
     });
 
-    await expect(result4).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          message: 'Authorization error. User does not have required scopes: [test1]',
-        },
-      }),
-    );
+    await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
+      status: 403,
+      data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
+    });
 
     const result5 = api.get('/test', {
       headers: { authorization: `Bearer ${testTokenExpires}` },
     });
 
-    await expect(result5).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          expiredAt: expect.any(String),
-          message: 'Authorization error. jwt expired',
-        },
-      }),
-    );
+    await expect(result5.catch((error) => error.response)).resolves.toMatchObject({
+      status: 403,
+      data: {
+        expiredAt: expect.any(String),
+        message: 'Unauthorized. jwt expired',
+      },
+    });
 
     const result6 = api.get('/test', {
       headers: { authorization: `Bearer ${testTokenNotBefore}` },
     });
 
-    await expect(result6).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          date: expect.any(String),
-          message: 'Authorization error. jwt not active',
-        },
-      }),
-    );
+    await expect(result6.catch((error) => error.response)).resolves.toMatchObject({
+      status: 403,
+      data: {
+        date: expect.any(String),
+        message: 'Unauthorized. jwt not active',
+      },
+    });
   });
 
   it('Should process response for public / private key pair and multiple options', async () => {
@@ -158,43 +145,36 @@ describe('Integration', () => {
       },
     });
 
-    const bodyParser = createBodyParser();
+    const signOptions = {
+      secret: { key: privateKey, passphrase: 'laminar secret' },
+      options: { audience: 'test audience', algorithm: 'RS256' as const },
+    };
 
-    const jwtMiddleware = createJwtSecurity({
-      publicKey,
-      privateKey: { key: privateKey, passphrase: 'laminar secret' },
-      verifyOptions: { clockTolerance: 10 },
-      signOptions: { audience: 'test audience', algorithm: 'RS256' },
-    });
+    const auth = authMiddleware({ secret: publicKey });
 
-    const testTokenWithoutScopes = sign(
-      { email: 'tester' },
-      { key: privateKey, passphrase: 'laminar secret' },
-      { algorithm: 'RS256' },
-    );
+    const testTokenWithoutScopes = createSession(signOptions, { email: 'tester' }).jwt;
 
-    const testTokenWithOtherScopes = sign(
-      { email: 'tester', scopes: ['other'] },
-      { key: privateKey, passphrase: 'laminar secret' },
-      { algorithm: 'RS256' },
-    );
+    const testTokenWithOtherScopes = createSession(signOptions, {
+      email: 'tester',
+      scopes: ['other'],
+    }).jwt;
 
-    const app = router<JWTContext>(
-      post('/session', ({ createSession, body: { email, scopes } }) =>
-        createSession({ email, scopes }),
+    const app = router(
+      post('/session', ({ body: { email, scopes } }) =>
+        jsonOk(createSession(signOptions, { email, scopes })),
       ),
       get(
         '/test',
-        auth()(({ authInfo }) => ({ text: 'Test', ...authInfo })),
+        auth()(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
       ),
       get(
         '/test-scopes',
-        auth(['test1'])(({ authInfo }) => ({ text: 'Test', ...authInfo })),
+        auth(['test1'])(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
       ),
     );
 
-    server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8063 });
-    await server.start();
+    server = laminar({ app, port: 8063 });
+    await start(server);
 
     const api = axios.create({ baseURL: 'http://localhost:8063' });
 
@@ -225,6 +205,7 @@ describe('Integration', () => {
     });
 
     expect(data2).toEqual({
+      aud: 'test audience',
       text: 'Test',
       email: 'tester',
       iat: expect.any(Number),
@@ -234,29 +215,23 @@ describe('Integration', () => {
       headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
     });
 
-    await expect(result3).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          message: 'Authorization error. User does not have required scopes: [test1]',
-        },
-      }),
-    );
+    await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
+      status: 403,
+      data: {
+        message: 'Unauthorized. User does not have required scopes: [test1]',
+      },
+    });
 
     const result4 = api.get('/test-scopes', {
       headers: { authorization: `Bearer ${testTokenWithOtherScopes}` },
     });
 
-    await expect(result4).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          message: 'Authorization error. User does not have required scopes: [test1]',
-        },
-      }),
-    );
+    await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
+      status: 403,
+      data: {
+        message: 'Unauthorized. User does not have required scopes: [test1]',
+      },
+    });
   });
 
   it('Should process jwk urls, with caching and max age settings', async () => {
@@ -270,26 +245,25 @@ describe('Integration', () => {
 
     nock('http://example.com/').get('/.well-known/jwk.json').times(2).reply(200, JSON.parse(jwk));
 
-    const bodyParser = createBodyParser();
+    const signOptions = {
+      secret: privateKey,
+      options: { algorithm: 'RS256' as const, keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
+    };
+    const auth = authMiddleware({ secret: publicKey });
 
-    const jwtMiddleware = createJwtSecurity({
-      publicKey,
-      privateKey,
-      signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
+    server = laminar({
+      app: router(
+        post('/session', ({ body: { email, scopes } }) =>
+          jsonOk(createSession(signOptions, { email, scopes })),
+        ),
+        get(
+          '/test',
+          auth()(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
+        ),
+      ),
+      port: 8065,
     });
-
-    const app = router<JWTContext>(
-      post('/session', ({ createSession, body: { email, scopes } }) =>
-        createSession({ email, scopes }),
-      ),
-      get(
-        '/test',
-        auth()(({ authInfo }) => ({ text: 'Test', ...authInfo })),
-      ),
-    );
-
-    server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8065 });
-    await server.start();
+    await start(server);
 
     const api = axios.create({ baseURL: 'http://localhost:8065' });
 
@@ -321,120 +295,5 @@ describe('Integration', () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
-  });
-
-  it('Should process response for public / private key and keycloak', async () => {
-    const { publicKey, privateKey } = await promisify(generateKeyPair)('rsa', {
-      modulusLength: 4096,
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'pem',
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'pem',
-        cipher: 'aes-256-cbc',
-        passphrase: 'laminar secret',
-      },
-    });
-
-    const bodyParser = createBodyParser();
-
-    const jwtMiddleware = createJwtSecurity({
-      publicKey,
-      verifyOptions: { clockTolerance: 10 },
-      validateScopes: validateScopesKeycloak('test-service'),
-    });
-
-    const testTokenWithoutScopes = sign(
-      { email: 'tester' },
-      { key: privateKey, passphrase: 'laminar secret' },
-      { algorithm: 'RS256' },
-    );
-
-    const testTokenWithOtherServiceRoles = sign(
-      { email: 'tester', resource_access: { 'service-1': { roles: ['test1'] } } },
-      { key: privateKey, passphrase: 'laminar secret' },
-      { algorithm: 'RS256' },
-    );
-
-    const testTokenWithServiceRolesOther = sign(
-      { email: 'tester', resource_access: { 'test-service': { roles: ['test2'] } } },
-      { key: privateKey, passphrase: 'laminar secret' },
-      { algorithm: 'RS256' },
-    );
-
-    const testTokenWithServiceRoles = sign(
-      { email: 'tester', resource_access: { 'test-service': { roles: ['test1'] } } },
-      { key: privateKey, passphrase: 'laminar secret' },
-      { algorithm: 'RS256' },
-    );
-
-    const app = router<JWTContext>(
-      get(
-        '/test',
-        auth()(({ authInfo }) => ({ text: 'Test', ...authInfo })),
-      ),
-      get(
-        '/test-scopes',
-        auth(['test1'])(({ authInfo }) => ({ text: 'Test', ...authInfo })),
-      ),
-    );
-
-    server = createLaminar({ app: bodyParser(jwtMiddleware(app)), port: 8063 });
-    await server.start();
-
-    const api = axios.create({ baseURL: 'http://localhost:8063' });
-
-    const { data: data1 } = await api.get('/test', {
-      headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
-    });
-
-    expect(data1).toEqual({
-      text: 'Test',
-      email: 'tester',
-      iat: expect.any(Number),
-    });
-
-    const result2 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithOtherServiceRoles}` },
-    });
-
-    await expect(result2).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          message:
-            'Authorization error. User does not have required roles: [test1] for test-service',
-        },
-      }),
-    );
-
-    const result3 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithServiceRolesOther}` },
-    });
-
-    await expect(result3).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: {
-          message:
-            'Authorization error. User does not have required roles: [test1] for test-service',
-        },
-      }),
-    );
-
-    const { data: data4 } = await api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithServiceRoles}` },
-    });
-
-    expect(data4).toEqual({
-      text: 'Test',
-      email: 'tester',
-      resource_access: { 'test-service': { roles: ['test1'] } },
-      iat: expect.any(Number),
-    });
   });
 });

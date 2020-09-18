@@ -1,24 +1,24 @@
-import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
+import { laminar, start, describe, jsonOk, loggingMiddleware } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
 const main = async () => {
-  const bodyParser = createBodyParser();
+  const logging = loggingMiddleware(console);
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     paths: {
       '/user/{id}': {
-        get: ({ path }) => findUser(path.id),
+        get: ({ path }) => jsonOk(findUser(path.id)),
       },
     },
   });
 
-  const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
-  await laminar.start();
+  const server = laminar({ app: logging(app), port: 3300 });
+  await start(server);
 
-  console.log(describeLaminar(laminar));
+  console.log(describe(server));
 };
 
 main();

@@ -1,12 +1,9 @@
-import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
+import { laminar, start, textForbidden, textOk, App, Middleware, describe } from '@ovotech/laminar';
 
-const auth = (next: Resolver<Context>): Resolver<Context> => ctx => {
-  if (ctx.headers.authorization !== 'Me') {
-    return message(403, 'Not Me');
-  }
-  return next(ctx);
-};
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
-const main: Resolver<Context> = ctx => ctx.body;
+const app: App = (req) => textOk(req.url.toString());
 
-createLaminar({ port: 3333, app: auth(main) }).start();
+const server = laminar({ port: 3333, app: auth(app) });
+
+start(server).then(() => console.log(describe(server)));

@@ -1,0 +1,57 @@
+---
+openapi: 3.0.0
+info:
+  title: Simple API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/user':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/User'
+      security:
+        - MySecurity:
+            - admin
+      responses:
+        '200':
+          description: Newly Created User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/NewUser'
+    get:
+      security:
+        - MySecurity: []
+      responses:
+        '200':
+          description: Loaded User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/User'
+components:
+  securitySchemes:
+    MySecurity:
+      type: http
+      scheme: bearer
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    NewUser:
+      properties:
+        result:
+          type: string
+        user:
+          '$ref': '#/components/schemas/User'
+      required:
+        - result
+        - user

@@ -1,17 +1,31 @@
 import axios from 'axios';
 import { join } from 'path';
 import { ObjectReadableMock } from 'stream-mock';
-import { file, createLaminar, message, response, Laminar } from '../src';
+import {
+  file,
+  laminar,
+  start,
+  text,
+  textOk,
+  stop,
+  Laminar,
+  json,
+  jsonOk,
+  binary,
+  ok,
+  setCookie,
+  jsonNotFound,
+} from '../src';
 
 let server: Laminar;
 const api = axios.create({ baseURL: 'http://localhost:8052' });
 
 describe('Requests', () => {
-  afterEach(() => server.stop());
+  afterEach(() => stop(server));
 
   it('Should process response', async () => {
-    server = createLaminar({ port: 8052, app: () => 'Test' });
-    await server.start();
+    server = laminar({ port: 8052, app: () => textOk('Test') });
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       headers: expect.objectContaining({
@@ -23,8 +37,8 @@ describe('Requests', () => {
   });
 
   it('Should process json', async () => {
-    server = createLaminar({ port: 8052, app: () => ({ other: 'stuff' }) });
-    await server.start();
+    server = laminar({ port: 8052, app: () => jsonOk({ other: 'stuff' }) });
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       headers: expect.objectContaining({
@@ -36,11 +50,11 @@ describe('Requests', () => {
   });
 
   it('Should process buffer', async () => {
-    server = createLaminar({
+    server = laminar({
       port: 8052,
-      app: () => Buffer.from('test-test-maaaany-test'),
+      app: () => binary(ok({ body: Buffer.from('test-test-maaaany-test') })),
     });
-    await server.start();
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       headers: expect.objectContaining({
@@ -52,23 +66,23 @@ describe('Requests', () => {
   });
 
   it('Should process stream', async () => {
-    server = createLaminar({
+    server = laminar({
       port: 8052,
-      app: () => new ObjectReadableMock(['test-', 'test-', 'maaaany-', 'test']),
+      app: () => textOk(new ObjectReadableMock(['test-', 'test-', 'maaaany-', 'test'])),
     });
-    await server.start();
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       headers: expect.objectContaining({
-        'content-type': 'application/octet-stream',
+        'content-type': 'text/plain',
       }),
       data: 'test-test-maaaany-test',
     });
   });
 
   it('Should process laminar simple response', async () => {
-    server = createLaminar({ port: 8052, app: () => response({ status: 201 }) });
-    await server.start();
+    server = laminar({ port: 8052, app: () => text({ body: '', status: 201 }) });
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 201,
@@ -81,17 +95,15 @@ describe('Requests', () => {
   });
 
   it('Should process laminar response', async () => {
-    server = createLaminar({
+    server = laminar({
       port: 8052,
       app: () =>
-        response({
-          status: 201,
-          body: { some: 'stuff' },
-          headers: { 'X-Response': 'other' },
-          cookies: { me: { value: 'test', httpOnly: true, maxAge: 1000 }, other: 'test2' },
-        }),
+        setCookie(
+          { me: { value: 'test', httpOnly: true, maxAge: 1000 }, other: 'test2' },
+          json({ body: { some: 'stuff' }, status: 201, headers: { 'X-Response': 'other' } }),
+        ),
     });
-    await server.start();
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 201,
@@ -106,27 +118,24 @@ describe('Requests', () => {
   });
 
   it('Should process laminar message', async () => {
-    server = createLaminar({
+    server = laminar({
       port: 8052,
-      app: () => message(404, { message: 'test' }),
+      app: () => jsonNotFound({ message: 'test' }),
     });
-    await server.start();
+    await start(server);
 
-    await expect(api.get('/test')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: { message: 'test' },
-      }),
-    );
+    await expect(api.get('/test').catch((error) => error.response)).resolves.toMatchObject({
+      status: 404,
+      data: { message: 'test' },
+    });
   });
 
   it('Should process laminar text file', async () => {
-    server = createLaminar({
+    server = laminar({
       port: 8052,
       app: () => file(join(__dirname, 'test.txt')),
     });
-    await server.start();
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 200,
@@ -139,11 +148,11 @@ describe('Requests', () => {
   });
 
   it('Should process laminar html file', async () => {
-    server = await createLaminar({
+    server = laminar({
       port: 8052,
       app: () => file(join(__dirname, 'test.html')),
     });
-    await server.start();
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 200,
@@ -156,11 +165,11 @@ describe('Requests', () => {
   });
 
   it('Should process laminar file with status', async () => {
-    server = createLaminar({
+    server = laminar({
       port: 8052,
       app: () => file(join(__dirname, 'test.txt'), { status: 201 }),
     });
-    await server.start();
+    await start(server);
 
     await expect(api.get('/test')).resolves.toMatchObject({
       status: 201,

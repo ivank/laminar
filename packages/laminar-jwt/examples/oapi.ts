@@ -1,27 +1,26 @@
-import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
-import { createJwtSecurity, JWTContext, JWTSecurity } from '@ovotech/laminar-jwt';
+import { laminar, start, describe, jsonOk } from '@ovotech/laminar';
+import { createSession, jwtSecurityResolver } from '@ovotech/laminar-jwt';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
-const start = async () => {
-  const bodyParser = createBodyParser();
-  const jwtSecurity = createJwtSecurity({ secret: 'secret' });
-  const app = await createOapi<JWTContext>({
+const main = async () => {
+  const secret = '123';
+  const app = await createOapi({
     api: join(__dirname, 'oapi.yaml'),
-    security: { JWTSecurity },
+    security: { JWTSecurity: jwtSecurityResolver({ secret }) },
     paths: {
       '/session': {
-        post: ({ createSession, body }) => createSession(body),
+        post: ({ body }) => jsonOk(createSession({ secret }, body)),
       },
       '/test': {
-        get: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
-        post: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
+        get: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        post: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
       },
     },
   });
-  const laminar = createLaminar({ port: 3333, app: bodyParser(jwtSecurity(app)) });
-  await laminar.start();
-  console.log(describeLaminar(laminar));
+  const server = laminar({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
 };
 
-start();
+main();

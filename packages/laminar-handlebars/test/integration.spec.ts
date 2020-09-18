@@ -1,7 +1,7 @@
-import { get, createLaminar, post, router, createBodyParser, Laminar } from '@ovotech/laminar';
+import { get, post, router, Laminar, laminar, start, stop } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
 import { join } from 'path';
-import { createHandlebars } from '../src';
+import { handlebarsMiddleware } from '../src';
 
 let server: Laminar;
 
@@ -14,29 +14,26 @@ const axiosSnapshot = {
 const capitalizeName = (name: string): string => name.toUpperCase();
 
 describe('Integration', () => {
-  afterEach(() => server.stop());
+  afterEach(() => stop(server));
 
   it('Should process response', async () => {
-    const bodyParser = createBodyParser();
-    const handlebars = createHandlebars({
+    const handlebars = handlebarsMiddleware({
       dir: join(__dirname, 'root'),
       helpers: { capitalizeName },
     });
 
-    server = createLaminar({
+    server = laminar({
       port: 8062,
-      app: bodyParser(
-        handlebars(
-          router(
-            get('/', ({ render }) => render('index')),
-            post('/result', ({ render, body: { name } }) =>
-              render('result', { name }, { status: 201 }),
-            ),
+      app: handlebars(
+        router(
+          get('/', ({ render }) => render('index')),
+          post('/result', ({ render, body: { name } }) =>
+            render('result', { name }, { status: 201 }),
           ),
         ),
       ),
     });
-    await server.start();
+    await start(server);
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });
 

@@ -1,5 +1,5 @@
-import { validateSchema, hasErrors, Validator } from './validation';
-import { formatErrors } from './messages';
+import { validateSchema, hasErrors, Validator, Validation } from './validation';
+import { messages, toMessages } from './messages';
 import { Schema } from './schema';
 import { ValidationError } from './ValidationError';
 import { draft4 } from './drafts/draft4';
@@ -15,18 +15,30 @@ export interface Drafts {
   'draft2019-09': Validator[];
 }
 
-export interface ValidateResult {
+export interface ResultSuccess<T> {
   schema: ResolvedSchema;
   name: string;
+  value: T;
   errors: string[];
-  valid: boolean;
+  valid: true;
 }
+
+export interface ResultError {
+  schema: ResolvedSchema;
+  value: unknown;
+  name: string;
+  errors: string[];
+  valid: false;
+}
+
+export type Result<T> = ResultSuccess<T> | ResultError;
 
 export interface ValidateOptions {
   schema: Schema | ResolvedSchema | string;
   value: unknown;
   name?: string;
   draft?: keyof Drafts;
+  formatErrors?: (errors: Validation) => string[];
 }
 
 export interface ValidateCompiledOptions extends ValidateOptions {
@@ -43,29 +55,40 @@ const drafts: Drafts = {
 export const compile = async (schema: Schema | string): Promise<ResolvedSchema> =>
   typeof schema === 'string' ? resolveFile(schema) : resolve(schema);
 
+export const toSchemaObject = <T extends Schema = Schema>(schema: ResolvedSchema<T>): T =>
+  schema.schema;
+
+export const compileInContext = <T extends Schema = Schema>(
+  schema: T,
+  { schema: compiledSchema, ...context }: ResolvedSchema,
+): ResolvedSchema<T> => ({ schema, ...context });
+
 export const isCompiled = (schema: Schema | ResolvedSchema | string): schema is ResolvedSchema =>
   typeof schema === 'object' && 'schema' in schema && 'refs' in schema && 'uris' in schema;
 
-export const validateCompiled = ({
+export const validateCompiled = <T>({
   schema,
   value,
   name = 'value',
   draft = 'draft2019-09',
-}: ValidateCompiledOptions): ValidateResult => {
+  formatErrors = toMessages(messages),
+}: ValidateCompiledOptions): Result<T> => {
   const validators = drafts[draft];
   const validation = validateSchema(schema.schema, value, { validators, refs: schema.refs, name });
-  return { schema, name, errors: formatErrors(validation), valid: !hasErrors(validation) };
+  return hasErrors(validation)
+    ? { schema, value, name, errors: formatErrors(validation), valid: false }
+    : { schema, value: value as T, name, errors: [], valid: true };
 };
 
-export const validate = async ({ schema, ...rest }: ValidateOptions): Promise<ValidateResult> =>
+export const validate = async <T>({ schema, ...rest }: ValidateOptions): Promise<Result<T>> =>
   validateCompiled({ ...rest, schema: isCompiled(schema) ? schema : await compile(schema) });
 
-export const ensureValid = async <T>(options: ValidateOptions): Promise<T> => {
-  const result = await validate(options);
+export const ensureValid = async <T>(options: ValidateOptions): Promise<ResultSuccess<T>> => {
+  const result = await validate<T>(options);
 
   if (!result.valid) {
     throw new ValidationError(`Invalid ${result.name}`, result.errors);
   }
 
-  return options.value as T;
+  return result;
 };

@@ -15,7 +15,8 @@
   },
   "workspaces": [
     "packages/*",
-    "performance"
+    "performance",
+    "examples/apps/*"
   ],
   "jest": {
     "preset": "./jest.json"

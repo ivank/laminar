@@ -1,19 +1,16 @@
-import {
-  createLaminar,
-  Resolver,
-  Context,
-  createBodyParser,
-  defaultParsers,
-  BodyParser,
-  concatStream,
-} from '@ovotech/laminar';
+import { laminar, App, start, textOk, BodyParser, concatStream, defaultBodyParsers, describe } from '@ovotech/laminar';
 
 const csvParser: BodyParser = {
-  match: contentType => contentType === 'text/csv',
-  parse: async body => String(await concatStream(body)).split(','),
+  match: (contentType) => contentType === 'text/csv',
+  parse: async (body) => String(await concatStream(body)).split(','),
 };
 
-const bodyParser = createBodyParser([csvParser, ...defaultParsers]);
+const app: App = ({ body }) => textOk(JSON.stringify(body));
 
-const main: Resolver<Context> = ctx => ctx.body;
-createLaminar({ port: 3333, app: bodyParser(main) }).start();
+const server = laminar({
+  port: 3333,
+  app,
+  options: { bodyParsers: [csvParser, ...defaultBodyParsers] },
+});
+
+start(server).then(() => console.log(describe(server)));

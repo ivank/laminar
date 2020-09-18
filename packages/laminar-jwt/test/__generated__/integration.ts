@@ -1,21 +1,21 @@
-import { Context, ContextLike, LaminarResponse } from "@ovotech/laminar";
+import { RequestOapi, OapiConfig, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@ovotech/laminar-oapi";
 
-import { OapiContext, OapiConfig, OapiSecurityResolver } from "@ovotech/laminar-oapi";
+import { Empty } from "@ovotech/laminar";
 
-export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
+export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
     paths: {
         "/session": {
-            post: (context: TSessionPostContext & C) => TSessionPostResponse;
+            post: PathSessionPost<R>;
         };
         "/test-scopes": {
-            get: (context: TTestscopesGetContext & C) => TTestscopesGetResponse;
+            get: PathTestscopesGet<R, TAuthInfo>;
         };
         "/test": {
-            get: (context: TTestGetContext & C) => TTestGetResponse;
+            get: PathTestGet<R, TAuthInfo>;
         };
     };
     security: {
-        JWTSecurity: OapiSecurityResolver<C>;
+        JWTSecurity: OapiSecurityResolver<R, TAuthInfo, JWTSecuritySecuritySchema>;
     };
 }
 
@@ -43,14 +43,16 @@ export interface HttpError {
     message?: string;
 }
 
-export type TSessionPostResponse = LaminarResponse<Session> | Session | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<Session> | Session | LaminarResponse<HttpError> | HttpError>;
+export type ResponseSessionPost = ResponseOapi<Session, 200, "application/json"> | ResponseOapi<HttpError, number, "application/json">;
 
 /**
  * Cerate a new session
  */
-export interface TSessionPostContext extends Context, OapiContext {
+export interface RequestSessionPost extends RequestOapi {
     body: CreateSession;
 }
+
+export type PathSessionPost<R extends Empty = Empty> = (req: RequestSessionPost & R) => ResponseSessionPost | Promise<ResponseSessionPost>;
 
 export interface Test {
     text: string;
@@ -59,18 +61,30 @@ export interface Test {
     [key: string]: unknown;
 }
 
-export type TTestscopesGetResponse = LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError>;
+export type ResponseTestscopesGet = ResponseOapi<Test, 200, "application/json"> | ResponseOapi<HttpError, number, "application/json">;
 
 /**
  * Secured by jwt with scopes
  */
-export interface TTestscopesGetContext extends Context, OapiContext {
+export interface RequestTestscopesGet<TAuthInfo> extends RequestOapi {
+    authInfo: TAuthInfo;
 }
 
-export type TTestGetResponse = LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError | Promise<LaminarResponse<Test> | Test | LaminarResponse<HttpError> | HttpError>;
+export type PathTestscopesGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestTestscopesGet<TAuthInfo> & R) => ResponseTestscopesGet | Promise<ResponseTestscopesGet>;
+
+export type ResponseTestGet = ResponseOapi<Test, 200, "application/json"> | ResponseOapi<HttpError, number, "application/json">;
 
 /**
  * Secured by jwt without scopes
  */
-export interface TTestGetContext extends Context, OapiContext {
+export interface RequestTestGet<TAuthInfo> extends RequestOapi {
+    authInfo: TAuthInfo;
+}
+
+export type PathTestGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestTestGet<TAuthInfo> & R) => ResponseTestGet | Promise<ResponseTestGet>;
+
+interface JWTSecuritySecuritySchema extends RequestOapi {
+    headers: {
+        authorization: string;
+    };
 }

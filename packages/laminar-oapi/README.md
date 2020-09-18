@@ -6,82 +6,84 @@ Open Api implementation for the laminar http server.
 
 Docs for open api itself: https://swagger.io/docs/
 
+> [examples/simple.yaml](examples/simple.yaml)
+
+```yaml
+---
+openapi: 3.0.0
+info:
+  title: Simple API
+  version: 1.0.0
+servers:
+  - url: 'http: //localhost:3333'
+paths:
+  '/user':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/User'
+      responses:
+        '200':
+          description: Newly Created User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/NewUser'
+    get:
+      responses:
+        '200':
+          description: Loaded User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    NewUser:
+      properties:
+        result:
+          type: string
+        user:
+          '$ref': '#/components/schemas/User'
+      required:
+        - result
+        - user
+```
+
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
-import { createOapi, OpenAPIObject } from '@ovotech/laminar-oapi';
+import { laminar, start, describe, jsonOk } from '@ovotech/laminar';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { join } from 'path';
 
-const api: OpenAPIObject = {
-  openapi: '3.0.0',
-  info: { title: 'Simple API', version: '1.0.0' },
-  servers: [{ url: 'http://localhost:3333' }],
-  paths: {
-    '/user': {
-      post: {
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': { schema: { $ref: '#/components/schemas/User' } },
-          },
-        },
-        responses: {
-          '200': {
-            description: 'Newly Created User',
-            content: {
-              'application/json': { schema: { $ref: '#/components/schemas/NewUser' } },
-            },
-          },
-        },
-      },
-      get: {
-        responses: {
-          '200': {
-            description: 'Loaded User',
-            content: {
-              'application/json': { schema: { $ref: '#/components/schemas/User' } },
-            },
-          },
-        },
-      },
-    },
-  },
-  components: {
-    schemas: {
-      User: {
-        properties: {
-          email: { type: 'string' },
-        },
-        required: ['email'],
-      },
-      NewUser: {
-        properties: {
-          result: { type: 'string' },
-          user: { $ref: '#/components/schemas/User' },
-        },
-        required: ['result', 'user'],
-      },
-    },
-  },
-};
+const api = join(__dirname, 'simple.yaml');
 
-const start = async () => {
-  const bodyParser = createBodyParser();
+const main = async () => {
   const app = await createOapi({
     api,
     paths: {
       '/user': {
-        post: ({ body }) => ({ result: 'ok', user: body }),
-        get: () => ({ email: 'me@example.com' }),
+        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: () => jsonOk({ email: 'me@example.com' }),
       },
     },
   });
-  const laminar = createLaminar({ port: 3333, app: bodyParser(app) });
-  await laminar.start();
-  console.log(describeLaminar(laminar));
+  const server = laminar({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
 };
 
-start();
+main();
 ```
 
 ### Additional options
@@ -100,75 +102,78 @@ Validations on the response object shape would also be run, and would result in 
 
 When you define OpenAPI security, you can configure a function that implements that security, and it will be automatically applied to all paths / methods that require it.
 
+> [examples/security.yaml](examples/security.yaml)
+
+```yaml
+---
+openapi: 3.0.0
+info:
+  title: Simple API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/user':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/User'
+      security:
+        - MySecurity:
+            - admin
+      responses:
+        '200':
+          description: Newly Created User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/NewUser'
+    get:
+      security:
+        - MySecurity: []
+      responses:
+        '200':
+          description: Loaded User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/User'
+components:
+  securitySchemes:
+    MySecurity:
+      type: http
+      scheme: bearer
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    NewUser:
+      properties:
+        result:
+          type: string
+        user:
+          '$ref': '#/components/schemas/User'
+      required:
+        - result
+        - user
+```
+
 > [examples/security.ts](examples/security.ts)
 
 ```typescript
-import { createLaminar, HttpError, createBodyParser, describeLaminar } from '@ovotech/laminar';
-import { createOapi, OpenAPIObject } from '@ovotech/laminar-oapi';
+import { laminar, HttpError, describe, jsonOk, start } from '@ovotech/laminar';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { join } from 'path';
 
-const api: OpenAPIObject = {
-  openapi: '3.0.0',
-  info: { title: 'Simple API', version: '1.0.0' },
-  servers: [{ url: 'http://localhost:3333' }],
-  paths: {
-    '/user': {
-      post: {
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': { schema: { $ref: '#/components/schemas/User' } },
-          },
-        },
-        security: [{ MySecurity: ['admin'] }],
-        responses: {
-          '200': {
-            description: 'Newly Created User',
-            content: {
-              'application/json': { schema: { $ref: '#/components/schemas/NewUser' } },
-            },
-          },
-        },
-      },
-      get: {
-        security: [{ MySecurity: [] }],
-        responses: {
-          '200': {
-            description: 'Loaded User',
-            content: {
-              'application/json': { schema: { $ref: '#/components/schemas/User' } },
-            },
-          },
-        },
-      },
-    },
-  },
-  components: {
-    securitySchemes: {
-      MySecurity: {
-        type: 'http',
-        scheme: 'bearer',
-      },
-    },
-    schemas: {
-      User: {
-        properties: {
-          email: { type: 'string' },
-        },
-        required: ['email'],
-      },
-      NewUser: {
-        properties: {
-          result: { type: 'string' },
-          user: { $ref: '#/components/schemas/User' },
-        },
-        required: ['result', 'user'],
-      },
-    },
-  },
-};
+const api = join(__dirname, 'simple.yaml');
 
-const start = async () => {
-  const bodyParser = createBodyParser();
+const main = async () => {
   const app = await createOapi({
     api,
     security: {
@@ -181,17 +186,17 @@ const start = async () => {
     },
     paths: {
       '/user': {
-        post: ({ body }) => ({ result: 'ok', user: body }),
-        get: () => ({ email: 'me@example.com' }),
+        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: () => jsonOk({ email: 'me@example.com' }),
       },
     },
   });
-  const laminar = createLaminar({ port: 3333, app: bodyParser(app) });
-  await laminar.start();
-  console.log(describeLaminar(laminar));
+  const server = laminar({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
 };
 
-start();
+main();
 ```
 
 The security function would also receive the scopes defined in OpenAPI in the second argument, so you can make the authentication more specific
@@ -204,7 +209,46 @@ const MySecurity = ({ headers }, { scopes }) => {
 
 ### Generating types
 
-You can use `@ovotech/laminar-oapi-cli` package to generate types.
+You can use [@ovotech/laminar-oapi-cli](../laminar-oapi-cli) package to generate types.
+
+### Undocumented types
+
+You can define additional types that are not defined by openapi schema. You can use the laminar router for that, by placing the routes before the app, so they take precedence.
+
+> [examples/undocumented-routes.ts](examples/undocumented-routes.ts)
+
+```typescript
+import { laminar, start, describe, jsonOk, router, get, redirect } from '@ovotech/laminar';
+import { createOapi } from '@ovotech/laminar-oapi';
+import { join } from 'path';
+
+const api = join(__dirname, 'simple.yaml');
+
+const main = async () => {
+  const app = await createOapi({
+    api,
+    paths: {
+      '/user': {
+        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: () => jsonOk({ email: 'me@example.com' }),
+      },
+    },
+  });
+
+  const server = laminar({
+    port: 3333,
+    app: router(
+      get('/old/{id}', ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
+      get('/old/{id}/pdf', ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
+      app,
+    ),
+  });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();
+```
 
 ## Running the tests
 

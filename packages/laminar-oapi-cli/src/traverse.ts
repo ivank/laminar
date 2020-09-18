@@ -5,9 +5,10 @@ import {
   ResponseObject,
   RequestBodyObject,
   ParameterObject,
+  MediaTypeObject,
+  SecuritySchemeObject,
 } from 'openapi3-ts';
 import * as ts from 'typescript';
-import { OapiValidationError } from './OapiValidationError';
 
 export interface AstRefMap {
   [ref: string]: unknown;
@@ -29,11 +30,17 @@ export const isReferenceObject = (item: unknown): item is ReferenceObject =>
 export const isResponseObject = (item: unknown): item is ResponseObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'description' in item;
 
+export const isMediaTypeObject = (item: unknown): item is MediaTypeObject =>
+  !isReferenceObject(item) && typeof item === 'object' && !!item && 'schema' in item;
+
 export const isRequestBodyObject = (item: unknown): item is RequestBodyObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'content' in item;
 
 export const isParameterObject = (item: unknown): item is ParameterObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'in' in item && 'name' in item;
+
+export const isSecuritySchemaObject = (item: unknown): item is SecuritySchemeObject =>
+  !isReferenceObject(item) && typeof item === 'object' && !!item && 'type' in item;
 
 export const isSchemaObject = (item: unknown): item is SchemaObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item;
@@ -45,11 +52,11 @@ export const getReferencedObject = <T>(
 ): T => {
   if (isReferenceObject(item)) {
     if (!context.refs[item.$ref]) {
-      throw new OapiValidationError('Reference Error', [`Reference [${item.$ref}] not found`]);
+      throw new Error(`Reference Error [${item.$ref}] not found`);
     }
     const resolved = context.refs[item.$ref];
     if (!guard(resolved)) {
-      throw new OapiValidationError(`Reference Error`, [`${item.$ref} was not the correct type`]);
+      throw new Error(`Reference Error [${item.$ref}] was not the correct type`);
     }
     return resolved;
   } else {

@@ -1,9 +1,9 @@
-import { get, post, createLaminar, router, describeLaminar } from '@ovotech/laminar';
+import { get, post, laminar, router, start, textOk, jsonOk, describe } from '@ovotech/laminar';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 const main = async () => {
-  const laminar = createLaminar({
+  const server = laminar({
     port: 8443,
     https: {
       key: readFileSync(join(__dirname, 'key.pem')),
@@ -11,14 +11,14 @@ const main = async () => {
     },
 
     app: router(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      post('/test', () => 'submited'),
-      get('/test', () => 'index'),
+      get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+      post('/test', () => textOk('submited')),
+      get('/test', () => textOk('index')),
     ),
   });
-  await laminar.start();
+  await start(server);
 
-  console.log(describeLaminar(laminar));
+  console.log(describe(server));
 };
 
 main();

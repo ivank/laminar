@@ -1,25 +1,26 @@
-import { get, put, createLaminar, router, createCors } from '../src';
+import { start, jsonOk, get, put, laminar, router, corsMiddleware, describe } from '@ovotech/laminar';
 
-const users: { [key: string]: string } = {
+const users: Record<string, string> = {
   '1': 'John',
   '2': 'Foo',
 };
 
-const cors = createCors({
-  allowOrigin: origin => ['example.com', 'localhost'].includes(origin),
+const cors = corsMiddleware({
+  allowOrigin: (origin) => ['http://example.com', 'http://localhost'].includes(origin),
 });
 
-createLaminar({
+const server = laminar({
   port: 3333,
   app: cors(
     router(
-      get('/.well-known/health-check', () => ({ health: 'ok' })),
-      get('/users', () => users),
-      get('/users/{id}', ({ path }) => users[path.id]),
+      get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+      get('/users', () => jsonOk(users)),
+      get('/users/{id}', ({ path }) => jsonOk(users[path.id])),
       put('/users/{id}', ({ path, body }) => {
         users[path.id] = body;
-        return users[path.id];
+        return jsonOk(users[path.id]);
       }),
     ),
   ),
-}).start();
+});
+start(server).then(() => console.log(describe(server)));

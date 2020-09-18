@@ -1,26 +1,24 @@
-import { createLaminar, router, get, createBodyParser } from '@ovotech/laminar';
-import { createHandlebars } from '@ovotech/laminar-handlebars';
+import { start, router, get, laminar, describe } from '@ovotech/laminar';
+import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
-const bodyParser = createBodyParser();
-
-const handlebars = createHandlebars({
+const handlebars = handlebarsMiddleware({
   dir: join(__dirname, 'templates-yaml'),
   views: 'yaml',
   extension: 'hbr',
   headers: { 'Content-type': 'text/yaml' },
 });
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    handlebars(
-      router(
-        get('/', ({ render }) => {
-          return render('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } });
-        }),
-        get('/swagger.yaml', ({ render }) => render('swagger.yaml', { version: 10 })),
+  app: handlebars(
+    router(
+      get('/', ({ render }) =>
+        render('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } }),
       ),
+      get('/swagger.yaml', ({ render }) => render('swagger.yaml', { version: 10 })),
     ),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));

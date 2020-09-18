@@ -1,0 +1,45 @@
+{
+  "name": "@examples/petstore",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "This is a simple but functional example of building a petstore api.",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/examples/apps/petstore#readme",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@ovotech/laminar-oapi-cli": "^0.6.0",
+    "@types/node": "^14.0.6",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "axios": "^0.19.2",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "prettier": "^2.1.1",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2",
+    "@types/jest": "^26.0.10",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.3.0"
+  },
+  "jest": {
+    "preset": "../../../jest.json"
+  },
+  "scripts": {
+    "build": "tsc --declaration",
+    "start": " SECRET=123 PG=postgres://petstore-admin:petstore-pass@localhost:5001/petstore ts-node src/index.ts",
+    "build:types": "laminar-oapi petstore.yaml src/__generated__/petstore.ts",
+    "test:integration": "jest test --runInBand",
+    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
+    "lint:eslint": "eslint '{src,test}/**/*.ts'",
+    "lint": "yarn lint:prettier && yarn lint:eslint"
+  },
+  "dependencies": {
+    "@ovotech/laminar": "^0.7.0",
+    "@ovotech/laminar-jwt": "^0.7.2",
+    "@ovotech/laminar-oapi": "^0.5.0",
+    "pg": "^8.2.1"
+  }
+}

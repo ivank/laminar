@@ -1,93 +1,32 @@
-import { compile, validate, validateCompiled, Schema } from '@ovotech/json-schema';
 import {
-  Context,
-  Resolver,
-  Route,
-  RouteContext,
-  selectRoute,
-  toRoute,
-  Middleware,
-  message,
-  toResponse,
-  ContextLike,
+  validateCompiled,
+  toSchemaObject,
+  compileInContext,
+  ResultError,
+} from '@ovotech/json-schema';
+import {
+  App,
+  AppRequest,
+  Empty,
+  jsonBadRequest,
+  jsonInternalServerError,
+  jsonNotFound,
+  Response,
 } from '@ovotech/laminar';
-import { openapiV3 } from 'openapi-schemas';
-import { OpenAPIObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
-import { OperationSchema, PathsSchema, toSchema } from './oapi-to-schema';
-import { OapiResolverError } from './OapiResolverError';
-import { ResolvedOpenAPIObject } from './resolved-openapi-object';
+import { RequestOapi, OapiSecurity, OapiConfig, OapiAuthInfo, Route } from './types';
+import { SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
+import { toResolvedOpenAPIObject } from './resolve';
+import { toRoutes, selectRoute } from './routes';
+import { toMatchPattern } from './helpers';
 
-export interface OapiContext extends RouteContext {
-  authInfo?: OapiAuthInfo;
-}
-
-export interface OapiAuthInfo {
-  [key: string]: unknown;
-}
-
-export interface OapiRoute<C extends ContextLike = ContextLike> extends Route<C> {
-  schema: OperationSchema;
-}
-
-export interface OapiPaths<C extends ContextLike = ContextLike> {
-  [path: string]: { [method: string]: Resolver<C & OapiContext & Context> };
-}
-
-export interface OapiConfig<C extends ContextLike = ContextLike> {
-  api: OpenAPIObject | string;
-  paths: OapiPaths<C>;
-  security?: OapiSecurity<C>;
-  bodyParser?: Middleware<ContextLike, Context>;
-}
-
-export type OapiSecurityResolver<C extends ContextLike = ContextLike> = (
-  context: C & Context & OapiContext,
-  options: {
-    scheme: SecuritySchemeObject;
-    scopes: string[];
-  },
-) => OapiAuthInfo | void | Promise<OapiAuthInfo | void>;
-
-export interface OapiSecurity<C extends ContextLike = ContextLike> {
-  [key: string]: OapiSecurityResolver<C>;
-}
-
-const toRoutes = <C extends ContextLike = ContextLike>(
-  pathsSchema: PathsSchema,
-  paths: {
-    [path: string]: { [method: string]: Resolver<C & OapiContext> };
-  },
-): OapiRoute<C>[] =>
-  Object.entries(paths).reduce<OapiRoute<C>[]>(
-    (allPaths, [path, methods]) =>
-      Object.entries(methods).reduce(
-        (all, [method, resolver]) => [
-          ...all,
-          {
-            ...toRoute<C & OapiContext>(method, path, resolver),
-            schema: pathsSchema[path][method],
-          },
-        ],
-        allPaths,
-      ),
-    [],
-  );
-
-export const isAuthInfo = (item: unknown): item is OapiAuthInfo =>
+const isAuthInfo = (item: unknown): item is OapiAuthInfo =>
   typeof item == 'object' && item !== null;
 
-export const isResolvedOpenAPIObject = (schema: unknown): schema is ResolvedOpenAPIObject =>
-  typeof schema === 'object' &&
-  schema !== null &&
-  'openapi' in schema &&
-  'info' in schema &&
-  'paths' in schema;
-
-const validateSecurity = async <C extends ContextLike = ContextLike>(
-  context: C & Context & OapiContext,
+const validateSecurity = async <T extends Empty = Empty>(
+  req: T & AppRequest & RequestOapi,
   requirements?: SecurityRequirementObject[],
   schemes?: { [securityScheme: string]: SecuritySchemeObject },
-  security?: OapiSecurity<C>,
+  security?: OapiSecurity<T>,
 ): Promise<unknown> => {
   if (!requirements || requirements.length === 0 || !security || !schemes) {
     return undefined;
@@ -96,7 +35,7 @@ const validateSecurity = async <C extends ContextLike = ContextLike>(
   const checks = requirements
     .map(async (requirement) => {
       const securityContexts = Object.entries(requirement)
-        .map(([name, scopes]) => security[name](context, { scheme: schemes[name], scopes }))
+        .map(([name, scopes]) => security[name]({ ...req, securityScheme: schemes[name], scopes }))
         .filter(isAuthInfo);
       return (await Promise.all(securityContexts)).reduce((a, b) => ({ ...a, ...b }), {});
     })
@@ -112,85 +51,78 @@ const validateSecurity = async <C extends ContextLike = ContextLike>(
   return authInfo;
 };
 
-export const createOapi = async <C extends ContextLike = ContextLike>({
-  api,
-  paths,
-  security,
-}: OapiConfig<C>): Promise<Resolver<C & Context>> => {
-  const { schema, ...schemaOptions } = await compile(api);
+export const toRequestError = <T>(
+  result: ResultError,
+  route: Route<T>,
+  req: AppRequest,
+): Response => {
+  const contentMediaTypes = Object.entries(route.operation.requestBody?.content ?? {});
+  const mediaType =
+    contentMediaTypes.find(([mimeType]) =>
+      new RegExp(toMatchPattern(mimeType)).test(req.headers['content-type'] ?? ''),
+    )?.[1] ?? route.operation.requestBody?.content['default'];
 
-  const checkApi = await validate({ schema: openapiV3 as Schema, value: schema });
-  if (!checkApi.valid) {
-    throw new OapiResolverError('Invalid API Definition', checkApi.errors);
-  }
-
-  if (!isResolvedOpenAPIObject(schema)) {
-    throw new OapiResolverError('Error validating schema');
-  }
-
-  const schemas = toSchema(schema);
-  const routes = toRoutes(schemas.routes, paths);
-
-  const checkResolvers = validateCompiled({
-    schema: { ...schemaOptions, schema: schemas.resolvers },
-    name: 'api',
-    value: { paths, security },
+  return jsonBadRequest({
+    message: `Request for "${req.method} ${req.url.pathname}" does not match OpenApi Schema`,
+    schema: route.request,
+    errors: result.errors,
+    ...(route.operation.summary ? { summary: route.operation.summary } : {}),
+    ...(route.operation.description ? { description: route.operation.description } : {}),
+    ...(route.operation.deprecated ? { deprecated: route.operation.deprecated } : {}),
+    ...(mediaType ? { requestBody: mediaType } : {}),
   });
+};
 
-  if (!checkResolvers.valid) {
-    throw new OapiResolverError('Invalid Resolvers', checkResolvers.errors);
-  }
+export const createOapi = async <T extends Empty>(config: OapiConfig<T>): Promise<App<T>> => {
+  const oapi = await toResolvedOpenAPIObject(config);
+  const routes = toRoutes<T>(toSchemaObject(oapi), config.paths);
 
-  return async (ctx) => {
-    const select = selectRoute<ContextLike, C, OapiRoute<C & Context>>(ctx, routes);
+  return async (req) => {
+    const select = selectRoute<T>(req, routes);
 
     if (!select) {
-      return message(404, {
-        message: `Path ${ctx.method} ${ctx.url.pathname} not found`,
+      return jsonNotFound({
+        message: `Request for "${req.method} ${req.url.pathname}" did not match any of the paths defined in the OpenApi Schema`,
       });
     }
 
-    const {
-      route: { resolver, schema: routeSchema },
-      path,
-    } = select;
+    const reqOapi: AppRequest & RequestOapi & T = {
+      ...req,
+      authInfo: undefined,
+      path: select.path,
+    };
 
-    const context: C & Context & OapiContext = { ...ctx, path };
-
-    const checkContext = validateCompiled({
-      schema: { ...schemaOptions, schema: routeSchema.context },
-      name: 'context',
-      value: context,
+    const checkRequest = validateCompiled({
+      schema: compileInContext(select.route.request, oapi),
+      name: 'request',
+      value: reqOapi,
     });
 
-    if (!checkContext.valid) {
-      return message(400, {
-        message: `Request Validation Error`,
-        errors: checkContext.errors,
-      });
+    if (!checkRequest.valid) {
+      return toRequestError<T>(checkRequest, select.route, req);
     }
 
-    const authInfo = await validateSecurity<C>(
-      context,
-      routeSchema.security,
-      schema.components?.securitySchemes,
-      security,
+    const authInfo = await validateSecurity<T>(
+      reqOapi,
+      select.route.security,
+      oapi.schema.components?.securitySchemes,
+      config.security,
     );
 
-    const laminarResponse = toResponse(await resolver({ ...context, authInfo }));
+    const res = await select.route.resolver({ ...reqOapi, authInfo });
     const checkResponse = validateCompiled({
-      schema: { ...schemaOptions, schema: routeSchema.response },
-      value: laminarResponse,
+      schema: compileInContext(select.route.response, oapi),
+      value: res,
       name: 'response',
     });
 
     if (!checkResponse.valid) {
-      return message(500, {
-        message: `Response Validation Error`,
+      return jsonInternalServerError({
+        message: `Server response for "${req.method} ${req.url.pathname}" does not match OpenApi Schema`,
         errors: checkResponse.errors,
       });
     }
 
-    return laminarResponse;
+    return res;
   };
 };

@@ -1,11 +1,11 @@
-import { Context, LaminarResponse } from "@ovotech/laminar";
+import { RequestOapi, OapiConfig, ResponseOapi } from "@ovotech/laminar-oapi";
 
-import { OapiConfig, OapiContext } from "@ovotech/laminar-oapi";
+import { Empty } from "@ovotech/laminar";
 
-export interface Config<C extends {} = {}> extends OapiConfig<C> {
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
     paths: {
         "/user/{id}": {
-            get: (context: TUserIdGetContext & C) => TUserIdGetResponse;
+            get: (req: RequestUserIdGet & R) => ResponseUserIdGet | Promise<ResponseUserIdGet>;
         };
     };
 }
@@ -13,12 +13,12 @@ export interface Config<C extends {} = {}> extends OapiConfig<C> {
 export interface UserResponse {
     id?: string;
     name?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
-export type TUserIdGetResponse = (UserResponse | LaminarResponse<UserResponse> | Promise<UserResponse> | Promise<LaminarResponse<UserResponse>>);
+export type ResponseUserIdGet = ResponseOapi<UserResponse, 200, "application/json">;
 
-export interface TUserIdGetContext extends Context, OapiContext {
+export interface RequestUserIdGet extends RequestOapi {
     path: {
         id: string;
     };

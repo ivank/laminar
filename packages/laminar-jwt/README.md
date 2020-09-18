@@ -7,30 +7,30 @@ A json web token middleware for laminar
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { get, post, laminar, router, createBodyParser } from '@ovotech/laminar';
-import { createJwtSecurity, auth } from '@ovotech/laminar-jwt';
+import { get, post, start, laminar, jsonOk, router, App } from '@ovotech/laminar';
+import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 
-const bodyParser = createBodyParser();
-// This middleware would only add security related functions to the context, without restricting any access
-const jwtSecurity = createJwtSecurity({ secret: 'secret' });
+const secret = '123';
+const auth = authMiddleware({ secret });
 
 // A middleware that would actually restrict access
-const onlyLoggedIn = auth();
-const onlyAdmin = auth(['admin']);
+const loggedIn = auth();
+const admin = auth(['admin']);
 
-laminar({
-  port: 3333,
-  app: bodyParser(
-    jwtSecurity(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => createSession(body)),
-        post('/test', onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo }))),
-        get('/test', onlyLoggedIn(() => 'index')),
-      ),
-    ),
+const app: App = router(
+  get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+  post('/session', ({ body }) => jsonOk(createSession({ secret }, body))),
+  post(
+    '/test',
+    admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
   ),
-});
+  get(
+    '/test',
+    loggedIn(() => jsonOk('index')),
+  ),
+);
+
+start(laminar({ port: 3333, app }));
 ```
 
 ### Usage with oapi
@@ -122,33 +122,32 @@ And then implement it like this
 > [examples/oapi.ts](examples/oapi.ts)
 
 ```typescript
-import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
-import { createJwtSecurity, JWTContext, JWTSecurity } from '@ovotech/laminar-jwt';
+import { laminar, start, describe, jsonOk } from '@ovotech/laminar';
+import { createSession, jwtSecurityResolver } from '@ovotech/laminar-jwt';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
-const start = async () => {
-  const bodyParser = createBodyParser();
-  const jwtSecurity = createJwtSecurity({ secret: 'secret' });
-  const app = await createOapi<JWTContext>({
+const main = async () => {
+  const secret = '123';
+  const app = await createOapi({
     api: join(__dirname, 'oapi.yaml'),
-    security: { JWTSecurity },
+    security: { JWTSecurity: jwtSecurityResolver({ secret }) },
     paths: {
       '/session': {
-        post: ({ createSession, body }) => createSession(body),
+        post: ({ body }) => jsonOk(createSession({ secret }, body)),
       },
       '/test': {
-        get: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
-        post: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
+        get: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        post: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
       },
     },
   });
-  const laminar = createLaminar({ port: 3333, app: bodyParser(jwtSecurity(app)) });
-  await laminar.start();
-  console.log(describeLaminar(laminar));
+  const server = laminar({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
 };
 
-start();
+main();
 ```
 
 ### Public / Private keys
@@ -158,42 +157,38 @@ You can specify public / private key pair (where the private key is used for sig
 > [examples/keypair.ts](examples/keypair.ts)
 
 ```typescript
-import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
-import { createJwtSecurity, auth } from '@ovotech/laminar-jwt';
+import { get, post, laminar, router, start, jsonOk, App, describe } from '@ovotech/laminar';
+import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 const publicKey = readFileSync(join(__dirname, './public-key.pem'), 'utf8');
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-const bodyParser = createBodyParser();
-
 // This middleware would only add security related functions to the context, without restricting any access
-// You can specify public and private keys, as well as verify / sign options
+// You can specify public and private keys, as well as verify options
 // to be passed down to the underlying jsonwebtoken package
-const jwtSecurity = createJwtSecurity({
-  publicKey,
-  privateKey,
-  verifyOptions: { clockTolerance: 2 },
-});
+const auth = authMiddleware({ secret: publicKey, options: { clockTolerance: 2 } });
 
 // A middleware that would actually restrict access
 const onlyLoggedIn = auth();
 const onlyAdmin = auth(['admin']);
 
-createLaminar({
-  port: 3333,
-  app: bodyParser(
-    jwtSecurity(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => createSession(body)),
-        post('/test', onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo }))),
-        get('/test', onlyLoggedIn(() => 'index')),
-      ),
-    ),
+const app: App = router(
+  get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+  post('/session', ({ body }) => jsonOk(createSession({ secret: privateKey }, body))),
+  post(
+    '/test',
+    onlyAdmin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
   ),
-}).start();
+  get(
+    '/test',
+    onlyLoggedIn(() => jsonOk('index')),
+  ),
+);
+
+const server = laminar({ port: 3333, app });
+start(server).then(() => console.log(describe(server)));
 ```
 
 ### JWK for public keys
@@ -203,19 +198,18 @@ JWK are also supported with the `jwkPublicKey` function. It can also cache the j
 > [examples/jwk.ts](examples/jwk.ts)
 
 ```typescript
-import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
-import { createJwtSecurity, auth, jwkPublicKey } from '@ovotech/laminar-jwt';
+import { get, post, start, router, laminar, jsonOk, describe } from '@ovotech/laminar';
+import { jwkPublicKey, createSession, JWTSign, JWTVerify } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
+import { authMiddleware } from '@ovotech/laminar-jwt/src';
 
 /**
  * Make sure we have some response from a url
  */
-const jwkFile = readFileSync(join(__dirname, './jwk.json'), 'utf8');
-nock('http://example.com/')
-  .get('/jwk.json')
-  .reply(200, JSON.parse(jwkFile));
+const jwkFile = JSON.parse(readFileSync(join(__dirname, './jwk.json'), 'utf8'));
+nock('http://example.com/').get('/jwk.json').reply(200, jwkFile);
 
 /**
  * The public key is now a function that would attempt to retrieve the jwk from a url
@@ -224,36 +218,35 @@ nock('http://example.com/')
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-const bodyParser = createBodyParser();
-const jwtSecurity = createJwtSecurity({
-  publicKey,
-  privateKey,
-  signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
-});
+const signOptions: JWTSign = {
+  secret: privateKey,
+  options: { algorithm: 'RS256', keyid: jwkFile.keys[0].kid },
+};
+const verifyOptions: JWTVerify = { secret: publicKey };
+
+const auth = authMiddleware(verifyOptions);
 
 // A middleware that would actually restrict access
-const onlyLoggedIn = auth();
-const onlyAdmin = auth(['admin']);
+const loggedIn = auth();
+const admin = auth(['admin']);
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    jwtSecurity(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => createSession(body)),
-        post(
-          '/test',
-          onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo })),
-        ),
-        get(
-          '/test',
-          onlyLoggedIn(() => 'index'),
-        ),
-      ),
+  app: router(
+    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+    post('/session', ({ body }) => jsonOk(createSession(signOptions, body))),
+    post(
+      '/test',
+      admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+    ),
+    get(
+      '/test',
+      loggedIn(() => jsonOk('index')),
     ),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));
 ```
 
 You can test it by running (requires curl and jq):
@@ -276,11 +269,11 @@ If we had a keycloak config like this:
 ```yaml
 my-service-name:
   defineRoles:
-    - admin-role
+    - admin
 
 other-client-service:
   serviceAccountRoles:
-    - admin-role
+    - admin
 ```
 
 Then we could implement it with this service:
@@ -288,24 +281,18 @@ Then we could implement it with this service:
 > [examples/keycloak.ts](examples/keycloak.ts)
 
 ```typescript
-import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
-import {
-  createJwtSecurity,
-  auth,
-  jwkPublicKey,
-  validateScopesKeycloak,
-} from '@ovotech/laminar-jwt';
+import { get, post, laminar, router, start, jsonOk, describe } from '@ovotech/laminar';
+import { jwkPublicKey, createSession } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
+import { keycloakAuthMiddleware } from '@ovotech/laminar-jwt/src';
 
 /**
  * Make sure we have some response from a url
  */
 const jwkFile = readFileSync(join(__dirname, './jwk.json'), 'utf8');
-nock('http://example.com/')
-  .get('/jwk.json')
-  .reply(200, JSON.parse(jwkFile));
+nock('http://example.com/').get('/jwk.json').reply(200, JSON.parse(jwkFile));
 
 /**
  * The public key is now a function that would attempt to retrieve the jwk from a url
@@ -314,44 +301,31 @@ nock('http://example.com/')
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-/**
- * We add a custom validateScopes function it would recieve the decrypted token as well as the required roles
- * If the roles given to the client token do not match the required roles we'll throw a 401 error.
- */
-const validateScopes = validateScopesKeycloak('my-service-name');
 const keyid = JSON.parse(jwkFile).keys[0].kid;
+const sessionOptions = { secret: privateKey, options: { algorithm: 'RS256' as const, keyid } };
 
-const bodyParser = createBodyParser();
-const jwtSecurity = createJwtSecurity({
-  publicKey,
-  privateKey,
-  validateScopes,
-  signOptions: { algorithm: 'RS256', keyid },
-});
+const auth = keycloakAuthMiddleware({ secret: publicKey, service: 'my-service-name' });
 
 // A middleware that would actually restrict access
-const onlyLoggedIn = auth();
-const onlyAdmin = auth(['admin-role']);
+const loggedIn = auth();
+const admin = auth(['admin']);
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    jwtSecurity(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => createSession(body)),
-        post(
-          '/test',
-          onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo })),
-        ),
-        get(
-          '/test',
-          onlyLoggedIn(() => 'index'),
-        ),
-      ),
+  app: router(
+    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+    post('/session', ({ body }) => jsonOk(createSession(sessionOptions, body))),
+    post(
+      '/test',
+      admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+    ),
+    get(
+      '/test',
+      loggedIn(() => jsonOk('index')),
     ),
   ),
-}).start();
+});
+start(server).then(() => console.log(describe(server)));
 ```
 
 When this is running, you can test it with calls like this (requires curl and jq):
@@ -359,7 +333,7 @@ When this is running, you can test it with calls like this (requires curl and jq
 > [examples/keycloak.sh](examples/keycloak.sh)
 
 ```bash
-JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin-role"]}}}' | jq '.jwt' -r`
+JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
 curl --request POST --header "Authorization: Bearer ${JWT}" http://localhost:3333/test
 ```
 
@@ -368,14 +342,8 @@ With oapi it is the same concempt - we use the scopes that are defined by the op
 > [examples/oapi-keycloak.ts](examples/oapi-keycloak.ts)
 
 ```typescript
-import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
-import {
-  createJwtSecurity,
-  JWTContext,
-  JWTSecurity,
-  jwkPublicKey,
-  validateScopesKeycloak,
-} from '@ovotech/laminar-jwt';
+import { start, laminar, describe, jsonOk } from '@ovotech/laminar';
+import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@ovotech/laminar-jwt';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 import { readFileSync } from 'fs';
@@ -385,9 +353,7 @@ import * as nock from 'nock';
  * Make sure we have some response from a url
  */
 const jwkFile = readFileSync(join(__dirname, './jwk.json'), 'utf8');
-nock('http://example.com/')
-  .get('/jwk.json')
-  .reply(200, JSON.parse(jwkFile));
+nock('http://example.com/').get('/jwk.json').reply(200, JSON.parse(jwkFile));
 
 /**
  * The public key is now a function that would attempt to retrieve the jwk from a url
@@ -396,34 +362,34 @@ nock('http://example.com/')
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-const start = async () => {
-  const bodyParser = createBodyParser();
-  const jwtSecurity = createJwtSecurity({
-    publicKey,
-    privateKey,
-    signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
-    validateScopes: validateScopesKeycloak('my-service-name'),
+const keyid = JSON.parse(jwkFile).keys[0].kid;
+const jwtSign = { secret: privateKey, options: { algorithm: 'RS256' as const, keyid } };
+
+const main = async () => {
+  const jwtSecurity = keycloakJwtSecurityResolver({
+    secret: publicKey,
+    service: 'my-service-name',
   });
 
-  const app = await createOapi<JWTContext>({
+  const app = await createOapi({
     api: join(__dirname, 'oapi.yaml'),
-    security: { JWTSecurity },
+    security: { JWTSecurity: jwtSecurity },
     paths: {
       '/session': {
-        post: ({ createSession, body }) => createSession(body),
+        post: ({ body }) => jsonOk(createSession(jwtSign, body)),
       },
       '/test': {
-        get: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
-        post: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
+        get: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        post: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
       },
     },
   });
-  const laminar = createLaminar({ port: 3333, app: bodyParser(jwtSecurity(app)) });
-  await laminar.start();
-  console.log(describeLaminar(laminar));
+  const server = laminar({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
 };
 
-start();
+main();
 ```
 
 When this is running, this can be again test with (requires curl and jq):

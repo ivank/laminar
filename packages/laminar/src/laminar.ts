@@ -2,68 +2,71 @@ import * as http from 'http';
 import * as https from 'https';
 import { Readable } from 'stream';
 import { toArray } from './helpers';
-import { HttpError } from './HttpError';
-import { resolveBody, toResponse } from './response';
-import {
-  Context,
-  Resolver,
-  Laminar,
-  LaminarOptionsHttp,
-  LaminarOptionsHttps,
-  LaminarOptions,
-} from './types';
-import { toContext } from './context';
+import { appComponent, AppOptions, App } from './components/app.component';
+import { Resolver } from './types';
 
-export const laminarRequestListener = (resolver: Resolver<Context>): http.RequestListener => {
-  return async (req, res) => {
-    try {
-      const ctx = await toContext(req);
-      const result = await resolver(ctx);
-      const laminarResponse = toResponse(result);
-      const resolvedBody = resolveBody(laminarResponse.body);
+export const laminarRequestListener = (resolver: Resolver): http.RequestListener => {
+  return async (incommingMessage, serverResponse) => {
+    const response = await resolver({ incommingMessage });
 
-      for (const [headerName, headerValue] of Object.entries(laminarResponse.headers)) {
-        const values = toArray(headerValue).map((item) => String(item));
-        if (values.length) {
-          res.setHeader(headerName.toLowerCase(), values);
-        }
-      }
-
-      res.statusCode = laminarResponse.status;
-      resolvedBody instanceof Readable ? resolvedBody.pipe(res) : res.end(resolvedBody);
-    } catch (error) {
-      res.setHeader('content-type', 'application/json');
-
-      if (error instanceof HttpError) {
-        res.statusCode = error.code;
-        res.end(JSON.stringify(error.body));
-      } else {
-        res.statusCode = 500;
-        res.end(JSON.stringify({ message: error.message }));
+    for (const [headerName, headerValue] of Object.entries(response.headers)) {
+      const values = toArray(headerValue).map((item) => String(item));
+      if (values.length) {
+        serverResponse.setHeader(headerName.toLowerCase(), values);
       }
     }
+
+    serverResponse.statusCode = response.status;
+
+    response.body instanceof Readable
+      ? response.body.pipe(serverResponse)
+      : serverResponse.end(response.body);
   };
 };
 
-export function createLaminar(options: LaminarOptionsHttp): Laminar<http.Server>;
-export function createLaminar(options: LaminarOptionsHttps): Laminar<https.Server>;
-export function createLaminar(options: LaminarOptions): Laminar {
-  const { app, port = 3300, hostname = 'localhost' } = options;
-  const requestListener = laminarRequestListener(app);
+export interface OptionsBase {
+  app: App;
+  options?: AppOptions;
+  port?: number;
+  hostname?: string;
+}
+
+export interface OptionsHttp extends OptionsBase {
+  http?: http.ServerOptions;
+}
+
+export interface OptionsHttps extends OptionsBase {
+  https: https.ServerOptions;
+}
+
+export type Options = OptionsHttp | OptionsHttps;
+
+export interface Laminar<S = http.Server | https.Server> {
+  port: number;
+  hostname: string;
+  server: S;
+}
+
+export function laminar(options: OptionsHttp): Laminar<http.Server>;
+export function laminar(options: OptionsHttps): Laminar<https.Server>;
+export function laminar(options: Options): Laminar {
+  const { port = 3300, hostname = 'localhost' } = options;
+  const requestListener = laminarRequestListener(appComponent(options.options)(options.app));
+
   const server =
     'https' in options
       ? https.createServer(options.https, requestListener)
       : http.createServer(typeof options.http === 'object' ? options.http : {}, requestListener);
-
-  return {
-    server,
-    start: () => new Promise((resolve) => server.listen(port, hostname, resolve)),
-    stop: () =>
-      new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve()))),
-  };
+  return { server, port, hostname };
 }
 
-export const describeLaminar = (laminar: Laminar): string => {
+export const start = ({ server, port, hostname }: Laminar): Promise<void> =>
+  new Promise((resolve) => server.listen(port, hostname, resolve));
+
+export const stop = ({ server }: Laminar): Promise<void> =>
+  new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
+
+export const describe = (laminar: Laminar): string => {
   const address = laminar.server.address();
   const url =
     typeof address === 'object' && address

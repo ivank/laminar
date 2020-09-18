@@ -1,4 +1,4 @@
-import { createLaminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
+import { Middleware, App, textForbidden, jsonOk, start, laminar, describe } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -8,7 +8,7 @@ interface DB {
   getValidUser: () => string;
 }
 
-interface DBContext {
+interface RequestDB {
   db: DB;
 }
 
@@ -17,35 +17,27 @@ interface DBContext {
  * We'll need to have a "middleware creator" function that executes
  * and returns the actual middleware
  */
-const createDbMiddleware = (): Middleware<DBContext> => {
-  const db: DB = {
-    getValidUser: () => 'Me',
-  };
-
-  return next => ctx => next({ ...ctx, db });
+const createDbMiddleware = (): Middleware<RequestDB> => {
+  const db: DB = { getValidUser: () => 'Me' };
+  return (next) => (req) => next({ ...req, db });
 };
 
-const auth: Middleware<{}, DBContext> = next => ctx => {
-  if (ctx.db.getValidUser() !== ctx.headers.authorization) {
-    return message(403, 'Not Me');
-  }
-  return next(ctx);
-};
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
-const log: Middleware = next => ctx => {
-  console.log('Requested', ctx.body);
-  const response = next(ctx);
+const log: Middleware = (next) => (req) => {
+  console.log('Requested', req.body);
+  const response = next(req);
   console.log('Responded', response);
   return response;
 };
 
 /**
- * We can also get use of the same databse connection in any middleware downstream
+ * We can now require this app to have the middleware.
+ * If the propper ones are not executed later, TypeScript will inform us at compile time.
  */
-const app: Resolver<DBContext & Context> = ctx => {
-  return { echo: ctx.body, user: ctx.db.getValidUser() };
-};
+const app: App<RequestDB> = (req) => jsonOk({ url: req.url, user: req.db.getValidUser() });
 
 const db = createDbMiddleware();
 
-createLaminar({ port: 3333, app: log(db(auth(app))) }).start();
+const server = laminar({ port: 3333, app: log(db(auth(app))) });
+start(server).then(() => console.log(describe(server)));

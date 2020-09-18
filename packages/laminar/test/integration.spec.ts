@@ -2,41 +2,46 @@ import axios from 'axios';
 import {
   del,
   get,
-  createLaminar,
+  laminar,
+  start,
+  stop,
   options,
   patch,
   post,
   put,
   redirect,
-  response,
   router,
-  message,
-  createResponseTime,
+  responseTimeMiddleware,
   Middleware,
   Laminar,
+  loggingMiddleware,
+  directory,
+  jsonOk,
+  textOk,
+  Logger,
+  RequestLogging,
+  jsonNotFound,
+  file,
 } from '../src';
-import { createLogging, createBodyParser } from '../src';
 import { join } from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, createReadStream } from 'fs';
 import { Agent } from 'https';
-import { staticDirectory } from '../src/router';
 
-let laminar: Laminar;
+let server: Laminar;
 
 describe('Integration', () => {
-  afterEach(() => laminar.stop());
+  afterEach(() => stop(server));
 
   it('Should allow TLS', async () => {
-    const app = jest.fn().mockReturnValue('TLS Test');
-    const bodyParser = createBodyParser();
+    const app = jest.fn().mockReturnValue(textOk('TLS Test'));
     const port = 8051;
     const key = readFileSync(join(__dirname, '../examples/key.pem'));
     const cert = readFileSync(join(__dirname, '../examples/cert.pem'));
     const ca = readFileSync(join(__dirname, '../examples/ca.pem'));
 
-    laminar = createLaminar({ port, app: bodyParser(app), https: { key, cert } });
+    server = laminar({ port, app, https: { key, cert } });
 
-    await laminar.start();
+    await start(server);
 
     const response = await axios.get(`https://localhost:${port}`, {
       httpsAgent: new Agent({ ca }),
@@ -45,24 +50,23 @@ describe('Integration', () => {
   });
 
   it('Should process response', async () => {
-    const loggerMock = { log: jest.fn() };
-    const logging = createLogging(loggerMock);
-    const bodyParser = createBodyParser();
-    const responseTime = createResponseTime();
+    const loggerMock = { info: jest.fn(), error: jest.fn() };
+    const logging = loggingMiddleware(loggerMock as Logger);
+    const responseTime = responseTimeMiddleware();
 
-    interface DBContext {
+    interface DBRequest {
       getUser: (id: string) => string | undefined;
       delUser: (id: string) => void;
       setUser: (id: string, name: string) => void;
     }
 
-    const db: Middleware<DBContext> = (next) => {
+    const db: Middleware<DBRequest> = (next) => {
       const users: { [key: string]: string } = {
         10: 'John',
         20: 'Tom',
       };
 
-      const dbCtx: DBContext = {
+      const dbReq: DBRequest = {
         getUser: (id) => users[id],
         setUser: (id, name) => {
           users[id] = name;
@@ -72,106 +76,102 @@ describe('Integration', () => {
         },
       };
 
-      return (ctx) => {
-        return next({ ...ctx, ...dbCtx });
-      };
+      return (req) => next({ ...req, ...dbReq });
     };
 
-    laminar = createLaminar({
-      port: 8050,
-      app: bodyParser(
-        responseTime(
-          db(
-            logging(
-              router(
-                staticDirectory('/assets', join(__dirname, '../examples/assets')),
-                get('/.well-known/health-check', () => ({ health: 'ok' })),
-                get('/link', () => redirect('http://localhost:8050/destination')),
-                get('/link-other', () =>
-                  redirect('http://localhost:8050/destination', {
-                    headers: { Authorization: 'Bearer 123' },
-                  }),
-                ),
-                get('/destination', () => ({ arrived: true })),
-                get('/error', () => {
-                  throw new Error('unknown');
-                }),
-                options('/users/{id}', () =>
-                  response({
-                    headers: {
-                      'Access-Control-Allow-Origin': 'http://localhost:8050',
-                      'Access-Control-Allow-Methods': 'GET,POST,DELETE',
-                    },
-                  }),
-                ),
-                get('/users/{id}', ({ path, logger, getUser }) => {
-                  logger.log('debug', `Getting id ${path.id}`);
-                  const user = getUser(path.id);
-
-                  if (user) {
-                    return Promise.resolve({ id: path.id, name: user });
-                  } else {
-                    return message(404, { message: 'No User Found' });
-                  }
-                }),
-                put('/users', ({ body, logger, setUser }) => {
-                  logger.log('debug', `Test Body ${body.name}`);
-                  setUser(body.id, body.name);
-                  return { added: true };
-                }),
-                patch('/users/{id}', ({ path, body, getUser, setUser }) => {
-                  const user = getUser(path.id);
-                  if (user) {
-                    setUser(body.id, body.name);
-                    return { patched: true };
-                  } else {
-                    return message(404, { message: 'No User Found' });
-                  }
-                }),
-                post('/users/{id}', ({ path, body, getUser, setUser }) => {
-                  const user = getUser(path.id);
-                  if (user) {
-                    setUser(path.id, body.name);
-                    return { saved: true };
-                  } else {
-                    return message(404, { message: 'No User Found' });
-                  }
-                }),
-                del('/users/{id}', ({ path, getUser, delUser }) => {
-                  const user = getUser(path.id);
-                  if (user) {
-                    delUser(path.id);
-                    return { deleted: true };
-                  } else {
-                    return message(404, { message: 'No User Found' });
-                  }
-                }),
-              ),
-            ),
-          ),
-        ),
+    const app = router<RequestLogging & DBRequest>(
+      directory('/assets', join(__dirname, '../examples/assets')),
+      get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+      get('/link', () => redirect('http://localhost:8050/destination')),
+      get('/link-other', () =>
+        redirect('http://localhost:8050/destination', { headers: { Authorization: 'Bearer 123' } }),
       ),
-    });
+      get('/destination', () => jsonOk({ arrived: true })),
+      get('/stream-file', () =>
+        textOk(createReadStream(join(__dirname, '../examples/assets/texts/one.txt'))),
+      ),
+      get('/return-file', () => file(join(__dirname, '../examples/assets/texts/one.txt'), {})),
+      get('/error', () => {
+        throw new Error('unknown');
+      }),
+      options('/users/{id}', () =>
+        textOk('', {
+          'Access-Control-Allow-Origin': 'http://localhost:8050',
+          'Access-Control-Allow-Methods': 'GET,POST,DELETE',
+        }),
+      ),
+      get('/users/{id}', ({ path, logger, getUser }) => {
+        logger.info(`Getting id ${path.id}`);
+        const user = getUser(path.id);
 
-    await laminar.start();
+        if (user) {
+          return Promise.resolve(jsonOk({ id: path.id, name: user }));
+        } else {
+          return jsonNotFound({ message: 'No User Found' });
+        }
+      }),
+      put('/users', ({ body, logger, setUser }) => {
+        logger.info(`Test Body ${body.name}`);
+        setUser(body.id, body.name);
+        return jsonOk({ added: true });
+      }),
+      patch('/users/{id}', ({ path, body, getUser, setUser }) => {
+        const user = getUser(path.id);
+        if (user) {
+          setUser(body.id, body.name);
+          return jsonOk({ patched: true });
+        } else {
+          return jsonNotFound({ message: 'No User Found' });
+        }
+      }),
+      post('/users/{id}', ({ path, body, getUser, setUser }) => {
+        const user = getUser(path.id);
+        if (user) {
+          setUser(path.id, body.name);
+          return jsonOk({ saved: true });
+        } else {
+          return jsonNotFound({ message: 'No User Found' });
+        }
+      }),
+      del('/users/{id}', ({ path, getUser, delUser }) => {
+        const user = getUser(path.id);
+        if (user) {
+          delUser(path.id);
+          return jsonOk({ deleted: true });
+        } else {
+          return jsonNotFound({ message: 'No User Found' });
+        }
+      }),
+      ({ url }) => jsonNotFound(`Test url ${url.pathname} not found`),
+    );
+
+    server = laminar({ port: 8050, app: responseTime(db(logging(app))) });
+
+    await start(server);
 
     const api = axios.create({ baseURL: 'http://localhost:8050' });
 
-    await expect(api.get('/unknown-url')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: { message: 'Path GET /unknown-url not found' },
-      }),
-    );
+    await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
+      status: 404,
+      data: 'Test url /unknown-url not found',
+    });
 
-    await expect(api.get('/error')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 500,
-        data: { message: 'unknown' },
-      }),
-    );
+    await expect(api.get('/error').catch((error) => error.response)).resolves.toMatchObject({
+      status: 500,
+      data: { message: 'unknown' },
+    });
+
+    await expect(api.get('/return-file')).resolves.toMatchObject({
+      status: 200,
+      headers: { 'content-type': 'text/plain' },
+      data: 'one\n',
+    });
+
+    await expect(api.get('/stream-file')).resolves.toMatchObject({
+      status: 200,
+      headers: { 'content-type': 'text/plain' },
+      data: 'one\n',
+    });
 
     await expect(api.get('/assets/star.svg')).resolves.toMatchObject({
       status: 200,
@@ -197,20 +197,17 @@ describe('Integration', () => {
       data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
     });
 
-    await expect(api.get('/assets/../assets/texts///../texts/./other.html')).resolves.toMatchObject(
-      {
-        status: 200,
-        headers: { 'content-type': 'text/html' },
-        data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
-      },
-    );
+    await expect(api.get('/assets/../assets/texts/../texts/./other.html')).resolves.toMatchObject({
+      status: 200,
+      headers: { 'content-type': 'text/html' },
+      data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
+    });
 
-    await expect(api.get('/assets/../../test.html')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-      }),
-    );
+    await expect(
+      api.get('/assets/../../test.html').catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 404,
+    });
 
     await expect(api.get('/.well-known/health-check')).resolves.toMatchObject({
       status: 200,
@@ -222,17 +219,23 @@ describe('Integration', () => {
       data: { health: 'ok' },
     });
 
-    await expect(api.get('/.well-known/health-check/other')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: { message: 'Path GET /.well-known/health-check/other not found' },
-      }),
-    );
+    await expect(
+      api.get('/.well-known/health-check/other').catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 404,
+      data: 'Test url /.well-known/health-check/other not found',
+    });
 
     await expect(api.get('/link')).resolves.toMatchObject({
       status: 200,
       data: { arrived: true },
+    });
+
+    await expect(
+      api.get('/link', { maxRedirects: 0 }).catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 302,
+      data: 'Redirecting to http://localhost:8050/destination.',
     });
 
     await expect(api.get('/link-other')).resolves.toMatchObject({
@@ -258,13 +261,10 @@ describe('Integration', () => {
       data: { id: '20', name: 'Tom' },
     });
 
-    await expect(api.get('/users/30')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: { message: 'No User Found' },
-      }),
-    );
+    await expect(api.get('/users/30').catch((error) => error.response)).resolves.toMatchObject({
+      status: 404,
+      data: { message: 'No User Found' },
+    });
 
     await expect(api.post('/users/10', { name: 'Kostas' })).resolves.toMatchObject({
       status: 200,
@@ -286,13 +286,10 @@ describe('Integration', () => {
       data: { deleted: true },
     });
 
-    await expect(api.get('/users/10')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: { message: 'No User Found' },
-      }),
-    );
+    await expect(api.get('/users/10').catch((error) => error.response)).resolves.toMatchObject({
+      status: 404,
+      data: { message: 'No User Found' },
+    });
 
     await expect(api.put('/users', { id: 30, name: 'Added' })).resolves.toMatchObject({
       status: 200,
@@ -304,86 +301,18 @@ describe('Integration', () => {
       data: { id: '30', name: 'Added' },
     });
 
-    const expectedLog = [
-      ['info', 'Request', { uri: 'GET /unknown-url', body: '[Stream]' }],
-      ['info', 'Response', { status: 404, body: { message: 'Path GET /unknown-url not found' } }],
-      ['info', 'Request', { uri: 'GET /error', body: '[Stream]' }],
-      ['error', 'Error', { message: 'unknown', stack: expect.any(String) }],
-      ['info', 'Request', { uri: 'GET /assets/star.svg', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: '[Readable]' }],
-      ['info', 'Request', { uri: 'GET /assets/svg.svg', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: '[Readable]' }],
-      ['info', 'Request', { uri: 'GET /assets/texts/one.txt', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: '[Readable]' }],
-      ['info', 'Request', { uri: 'GET /assets/texts/other.html', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: '[Readable]' }],
-      [
-        'info',
-        'Request',
-        { uri: 'GET /assets/../assets/texts///../texts/./other.html', body: '[Stream]' },
-      ],
-      ['info', 'Response', { status: 200, body: '[Readable]' }],
-      ['info', 'Request', { uri: 'GET /assets/../../test.html', body: '[Stream]' }],
-      ['info', 'Response', { status: 404, body: undefined }],
-      ['info', 'Request', { uri: 'GET /.well-known/health-check', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: { health: 'ok' } }],
-      ['info', 'Request', { uri: 'GET /.well-known/health-check/', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: { health: 'ok' } }],
-      ['info', 'Request', { uri: 'GET /.well-known/health-check/other', body: '[Stream]' }],
-      [
-        'info',
-        'Response',
-        { status: 404, body: { message: 'Path GET /.well-known/health-check/other not found' } },
-      ],
-      ['info', 'Request', { uri: 'GET /link', body: '[Stream]' }],
-      [
-        'info',
-        'Response',
-        { status: 302, body: 'Redirecting to http://localhost:8050/destination.' },
-      ],
-      ['info', 'Request', { uri: 'GET /destination', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: { arrived: true } }],
-      ['info', 'Request', { uri: 'GET /link-other', body: '[Stream]' }],
-      [
-        'info',
-        'Response',
-        { status: 302, body: 'Redirecting to http://localhost:8050/destination.' },
-      ],
-      ['info', 'Request', { uri: 'GET /destination', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: { arrived: true } }],
-      ['info', 'Request', { uri: 'OPTIONS /users/10', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: undefined }],
-      ['info', 'Request', { uri: 'GET /users/10', body: '[Stream]' }],
-      ['debug', 'Getting id 10'],
-      ['info', 'Response', { status: 200, body: { id: '10', name: 'John' } }],
-      ['info', 'Request', { uri: 'GET /users/20', body: '[Stream]' }],
-      ['debug', 'Getting id 20'],
-      ['info', 'Response', { status: 200, body: { id: '20', name: 'Tom' } }],
-      ['info', 'Request', { uri: 'GET /users/30', body: '[Stream]' }],
-      ['debug', 'Getting id 30'],
-      ['info', 'Response', { status: 404, body: { message: 'No User Found' } }],
-      ['info', 'Request', { uri: 'POST /users/10', body: { name: 'Kostas' } }],
-      ['info', 'Response', { status: 200, body: { saved: true } }],
-      ['info', 'Request', { uri: 'PATCH /users/20', body: { name: 'Pathing' } }],
-      ['info', 'Response', { status: 200, body: { patched: true } }],
-      ['info', 'Request', { uri: 'GET /users/10', body: '[Stream]' }],
-      ['debug', 'Getting id 10'],
-      ['info', 'Response', { status: 200, body: { id: '10', name: 'Kostas' } }],
-      ['info', 'Request', { uri: 'DELETE /users/10', body: '[Stream]' }],
-      ['info', 'Response', { status: 200, body: { deleted: true } }],
-      ['info', 'Request', { uri: 'GET /users/10', body: '[Stream]' }],
-      ['debug', 'Getting id 10'],
-      ['info', 'Response', { status: 404, body: { message: 'No User Found' } }],
-      ['info', 'Request', { uri: 'PUT /users', body: { id: 30, name: 'Added' } }],
-      ['debug', 'Test Body Added'],
-      ['info', 'Response', { status: 200, body: { added: true } }],
-      ['info', 'Request', { uri: 'GET /users/30', body: '[Stream]' }],
-      ['debug', 'Getting id 30'],
-      ['info', 'Response', { status: 200, body: { id: '30', name: 'Added' } }],
-    ];
-
-    expectedLog.forEach((item, index) => {
-      expect(loggerMock.log).toHaveBeenNthCalledWith(index + 1, ...item);
+    expect(loggerMock.info).toHaveBeenNthCalledWith(1, 'Request', {
+      request: 'GET /unknown-url',
+    });
+    expect(loggerMock.info).toHaveBeenNthCalledWith(2, 'Response', {
+      request: 'GET /unknown-url',
+      status: 404,
+      contentType: 'application/json',
+    });
+    expect(loggerMock.error).toHaveBeenNthCalledWith(1, 'Error', {
+      request: 'GET /error',
+      message: 'unknown',
+      stack: expect.any(String),
     });
   });
 });

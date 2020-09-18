@@ -7,24 +7,23 @@ Handlebars implementation for the laminar http server.
 > [examples/html.ts](examples/html.ts)
 
 ```typescript
-import { createLaminar, router, get, post, createBodyParser } from '@ovotech/laminar';
-import { createHandlebars } from '@ovotech/laminar-handlebars';
+import { start, router, get, post, laminar, describe } from '@ovotech/laminar';
+import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
-const bodyParser = createBodyParser();
-const handlebars = createHandlebars({ dir: join(__dirname, 'templates-html') });
+const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html') });
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    handlebars(
-      router(
-        get('/', ({ render }) => render('index')),
-        post('/result', ({ render, body: { name } }) => render('result', { name })),
-      ),
+  app: handlebars(
+    router(
+      get('/', ({ render }) => render('index')),
+      post('/result', ({ render, body: { name } }) => render('result', { name })),
     ),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));
 ```
 
 When you set `dir`, it will load and compile templates in `views` and `partials` folders.
@@ -34,32 +33,30 @@ When you set `dir`, it will load and compile templates in `views` and `partials`
 > [examples/yaml.ts](examples/yaml.ts)
 
 ```typescript
-import { createLaminar, router, get, createBodyParser } from '@ovotech/laminar';
-import { createHandlebars } from '@ovotech/laminar-handlebars';
+import { start, router, get, laminar, describe } from '@ovotech/laminar';
+import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
-const bodyParser = createBodyParser();
-
-const handlebars = createHandlebars({
+const handlebars = handlebarsMiddleware({
   dir: join(__dirname, 'templates-yaml'),
   views: 'yaml',
   extension: 'hbr',
   headers: { 'Content-type': 'text/yaml' },
 });
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    handlebars(
-      router(
-        get('/', ({ render }) => {
-          return render('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } });
-        }),
-        get('/swagger.yaml', ({ render }) => render('swagger.yaml', { version: 10 })),
+  app: handlebars(
+    router(
+      get('/', ({ render }) =>
+        render('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } }),
       ),
+      get('/swagger.yaml', ({ render }) => render('swagger.yaml', { version: 10 })),
     ),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));
 ```
 
 ## Running the tests

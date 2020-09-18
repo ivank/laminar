@@ -1,4 +1,13 @@
-import { HttpError, createLaminar, Laminar, response, createBodyParser } from '@ovotech/laminar';
+import {
+  HttpError,
+  laminar,
+  start,
+  stop,
+  Laminar,
+  jsonOk,
+  jsonNoContent,
+  jsonNotFound,
+} from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { createOapi } from '@ovotech/laminar-oapi';
@@ -14,7 +23,7 @@ interface AuthInfo {
 }
 
 describe('Integration', () => {
-  afterEach(() => server.stop());
+  afterEach(() => stop(server));
 
   it('Should process response', async () => {
     const db: Pet[] = [
@@ -46,47 +55,50 @@ describe('Integration', () => {
       paths: {
         '/pets': {
           get: ({ query }) =>
-            db.filter((pet) =>
-              query.tags ? (pet.tag ? query.tags.includes(pet.tag) : false) : true,
+            jsonOk(
+              db.filter((pet) =>
+                query.tags ? (pet.tag ? query.tags.includes(pet.tag) : false) : true,
+              ),
             ),
           post: ({ body, authInfo }) => {
             const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             db.push(pet);
-            return { pet, user: authInfo && authInfo.user };
+            return jsonOk({ pet, user: authInfo && authInfo.user });
           },
         },
         '/pets/{id}': {
-          get: ({ path }) =>
-            db.find((item) => item.id === Number(path.id)) ||
-            response({ status: 404, body: { code: 123, message: 'Not Found' } }),
+          get: ({ path }) => {
+            const pet = db.find((item) => item.id === Number(path.id));
+            return pet ? jsonOk(pet) : jsonNotFound({ code: 123, message: 'Not Found' });
+          },
           delete: ({ path }) => {
             const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
-              return response({ status: 204 });
+              return jsonNoContent({ status: 204 });
             } else {
-              return response({ status: 404, body: { code: 12, message: 'Item not found' } });
+              return jsonNotFound({ code: 12, message: 'Item not found' });
             }
           },
         },
       },
     };
 
-    const oapi = await createOapi(config);
-    const bodyParser = createBodyParser();
-
-    server = createLaminar({ app: bodyParser(oapi), port: 8065 });
-    await server.start();
+    const app = await createOapi(config);
+    server = laminar({ app, port: 8065 });
+    await start(server);
 
     const api = axiosOapi(axios.create({ baseURL: 'http://localhost:8065' }));
 
-    await expect(api.api.get('/unknown-url')).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: { message: 'Path GET /unknown-url not found' },
-      }),
-    );
+    await expect(
+      api.api.get('/unknown-url').catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 404,
+      data: {
+        message:
+          'Request for "GET /unknown-url" did not match any of the paths defined in the OpenApi Schema',
+      },
+    });
 
     await expect(api['GET /pets']()).resolves.toMatchObject({
       status: 200,
@@ -100,14 +112,11 @@ describe('Integration', () => {
       api['POST /pets'](
         { name: 'New Puppy' },
         { headers: { Authorization: 'Bearer 000', 'x-trace-token': '123' } },
-      ),
-    ).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 401,
-        data: { message: 'Unathorized user' },
-      }),
-    );
+      ).catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 401,
+      data: { message: 'Unathorized user' },
+    });
 
     await expect(
       api['POST /pets'](
@@ -127,17 +136,16 @@ describe('Integration', () => {
     });
 
     await expect(
-      api['GET /pets/{id}']('000', { headers: { Authorization: 'Basic 123' } }),
-    ).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: {
-          code: 123,
-          message: 'Not Found',
-        },
-      }),
-    );
+      api['GET /pets/{id}']('000', { headers: { Authorization: 'Basic 123' } }).catch(
+        (error) => error.response,
+      ),
+    ).resolves.toMatchObject({
+      status: 404,
+      data: {
+        code: 123,
+        message: 'Not Found',
+      },
+    });
 
     await expect(
       api['GET /pets/{id}']('223', { headers: { Authorization: 'Basic 123' } }),
@@ -161,30 +169,28 @@ describe('Integration', () => {
     });
 
     await expect(
-      api['DELETE /pets/{id}']('228', { headers: { 'X-API-KEY': 'Me' } }),
-    ).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 404,
-        data: {
-          code: 12,
-          message: 'Item not found',
-        },
-      }),
-    );
+      api['DELETE /pets/{id}']('228', { headers: { 'X-API-KEY': 'Me' } }).catch(
+        (error) => error.response,
+      ),
+    ).resolves.toMatchObject({
+      status: 404,
+      data: {
+        code: 12,
+        message: 'Item not found',
+      },
+    });
 
     await expect(
-      api['DELETE /pets/{id}']('222', { headers: { 'X-API-missing': 'Me' } }),
-    ).rejects.toHaveProperty(
-      'response',
-      expect.objectContaining({
-        status: 400,
-        data: {
-          errors: ['[context.headers] is missing [x-api-key] keys'],
-          message: 'Request Validation Error',
-        },
-      }),
-    );
+      api['DELETE /pets/{id}']('222', { headers: { 'X-API-missing': 'Me' } }).catch(
+        (error) => error.response,
+      ),
+    ).resolves.toMatchObject({
+      status: 400,
+      data: {
+        errors: ['[request.headers] (required) is missing [x-api-key] keys'],
+        message: 'Request for "DELETE /pets/222" does not match OpenApi Schema',
+      },
+    });
 
     await expect(
       api['DELETE /pets/{id}']('222', { headers: { 'X-API-KEY': 'Me' } }),

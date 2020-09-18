@@ -26,17 +26,17 @@ nock('https://example.com')
   .get('/color')
   .reply(200, colorSchema, { 'Content-Type': 'application/yaml' });
 
-compile('https://example.com/schema').then(schema => {
+compile('https://example.com/schema').then((schema) => {
   console.log(schema);
 
-  const correctData = { size: 10, color: 'red' };
-  const incorrectData = { size: 'big', color: 'orange' };
+  const correct = { size: 10, color: 'red' };
+  const incorrect = { size: 'big', color: 'orange' };
 
-  validate(schema, correctData).then(result => {
+  validate({ schema, value: correct }).then((result) => {
     console.log(result.valid, result.errors);
   });
 
-  validate(schema, incorrectData).then(result => {
+  validate({ schema, value: incorrect }).then((result) => {
     console.log(result.valid, result.errors);
   });
 });

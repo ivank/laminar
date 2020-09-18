@@ -3,12 +3,18 @@ import * as commander from 'commander';
 import * as fs from 'fs';
 import * as YAML from 'js-yaml';
 import { openapiV3 } from 'openapi-schemas';
-import { oapiTs } from './convert';
+import { OpenAPIObject } from 'openapi3-ts';
+import { printDocument } from '@ovotech/ts-compose';
+import { convertOapi } from './convert-oapi';
 
 export const processFile = async (file: string): Promise<string> => {
-  const resolvedSchema = await compile(file);
-  await ensureValid({ schema: openapiV3 as Schema, value: resolvedSchema.schema });
-  return oapiTs(resolvedSchema);
+  const { schema, refs } = await compile(file);
+  const { value } = await ensureValid<OpenAPIObject>({
+    schema: openapiV3 as Schema,
+    value: schema,
+    name: 'OpenAPI',
+  });
+  return printDocument(convertOapi({ root: value, refs }, value));
 };
 
 export interface Logger {
@@ -40,7 +46,7 @@ const parseSchema = (type: string, content: string): Schema => {
 export const axiosOapiCli = (logger: Logger = console): commander.Command =>
   commander
     .createCommand('axios-oapi')
-    .version('0.1.0')
+    .version('0.4.1')
     .description('Convert openapi schemas to typescript types for axios')
     .option('-f, --file <file>', 'Filename to process, uses STDIN if not specified')
     .option('-t, --stdin-type <type>', 'Type of STDIN data: "json" or "yaml"', 'json')

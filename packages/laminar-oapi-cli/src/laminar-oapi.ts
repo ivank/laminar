@@ -1,31 +1,26 @@
-import { compile, validate, Schema, ResolveError } from '@ovotech/json-schema';
+import { compile, Schema, ensureValid } from '@ovotech/json-schema';
+import { green, red, yellow } from 'chalk';
 import * as commander from 'commander';
 import * as fs from 'fs';
 import { openapiV3 } from 'openapi-schemas';
-import { oapiTs } from './convert';
-import { OapiValidationError } from './OapiValidationError';
+import { OpenAPIObject } from 'openapi3-ts';
+import { convertOapi } from './convert-oapi';
+import { printDocument } from '@ovotech/ts-compose';
 
 export const processFile = async (
   fileName: string,
 ): Promise<{ content: string; uris: string[] }> => {
-  const { schema, uris } = await compile(fileName);
-  const check = await validate({ schema: openapiV3 as Schema, value: schema });
+  const { schema, uris, refs } = await compile(fileName);
+  const { value } = await ensureValid<OpenAPIObject>({
+    schema: openapiV3 as Schema,
+    value: schema,
+    name: 'OpenAPI',
+  });
 
-  if (!check.valid) {
-    throw new OapiValidationError('Invalid API Definition', check.errors);
-  }
-
-  return { content: await oapiTs(fileName), uris };
-};
-
-export const formatErrorMessage = (error: Error): string | Error => {
-  if (error instanceof OapiValidationError) {
-    return new Error(`-----\n${error.toString()}`);
-  } else if (error instanceof ResolveError) {
-    return new Error(`-----\nError: Cannot resolve api references\n |${error.message}`);
-  } else {
-    return error;
-  }
+  return {
+    content: printDocument(convertOapi({ root: value, refs }, value)),
+    uris,
+  };
 };
 
 export const toFiles = (uris: string[]): string[] =>
@@ -39,7 +34,7 @@ export interface Logger {
 export const laminarOapi = (logger: Logger = console): commander.Command =>
   commander
     .createCommand('laminar-oapi')
-    .version('0.5.4')
+    .version('0.6.0')
     .description('Convert openapi schemas to typescript types')
     .option('-w, --watch', 'Watch for file changes and update live')
     .arguments('<input-file> <output-file>')
@@ -47,7 +42,7 @@ export const laminarOapi = (logger: Logger = console): commander.Command =>
       try {
         const { content, uris } = await processFile(inputFile);
         fs.writeFileSync(outputFile, content);
-        logger.info(`Conterted ${inputFile} -> ${outputFile}`);
+        logger.info(`Conterted ${green(inputFile)} -> ${yellow(outputFile)}`);
 
         if (watch) {
           logger.info(`Watching ${toFiles(uris).join(', ')} for changes`);
@@ -57,14 +52,16 @@ export const laminarOapi = (logger: Logger = console): commander.Command =>
               try {
                 const update = await processFile(inputFile);
                 fs.writeFileSync(outputFile, update.content);
-                logger.info(`Updated ${inputFile} -> ${outputFile} (trigger ${file})`);
+                logger.info(
+                  `Updated ${green(inputFile)} -> ${yellow(outputFile)} (trigger ${file})`,
+                );
               } catch (error) {
-                throw formatErrorMessage(error);
+                logger.error(red(error.message));
               }
             }),
           );
         }
       } catch (error) {
-        throw formatErrorMessage(error);
+        logger.error(red(error.message));
       }
     });

@@ -1,15 +1,6 @@
 import { isJsonSchema, isObject } from '../helpers';
 import { Schema } from '../schema';
-import {
-  Validator,
-  hasErrors,
-  error,
-  empty,
-  childOptions,
-  validateSchema,
-  combine,
-  Options,
-} from '../validation';
+import { Validator, hasErrors, error, empty, validateSchema, Options, errors } from '../validation';
 
 const findSchema = (
   schemas: Schema[],
@@ -48,16 +39,12 @@ export const validateOneOf: Validator = (schema, value, options) => {
       }
     }
 
-    const validations = oneOf.map((item, index) =>
-      validateSchema(item, value, childOptions(`${index}?`, options)),
-    );
+    const validations = oneOf.map((item) => validateSchema(item, value, options));
     const matching = validations.filter((item) => !hasErrors(item));
 
-    if (matching.length !== 1) {
-      return combine([error('oneOf', options.name, matching.length), ...validations]);
-    } else {
-      return combine(matching);
-    }
+    return matching.length === 1
+      ? matching[0]
+      : error('oneOf', options.name, validations.map(errors));
   }
   return empty;
 };

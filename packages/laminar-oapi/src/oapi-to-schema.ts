@@ -1,6 +1,6 @@
 import { Schema } from '@ovotech/json-schema';
 import { SecurityRequirementObject, SecuritySchemeObject, SchemaObject } from 'openapi3-ts';
-import { toMatchPattern } from './helpers';
+import { toMatchPattern, title } from './helpers';
 import { OapiResolverError } from './OapiResolverError';
 import {
   ResolvedOpenAPIObject,
@@ -86,11 +86,9 @@ export const toSecuritySchema = (
       const scheme = schemes[name];
 
       if (!scheme) {
-        if (!schemes || !schemes[name]) {
-          throw new OapiResolverError(
-            `Security scheme ${name} not defined in components.securitySchemes`,
-          );
-        }
+        throw new OapiResolverError(
+          `Security scheme ${name} not defined in components.securitySchemes in the OpenApi Schema`,
+        );
       }
 
       switch (scheme.type) {
@@ -98,11 +96,9 @@ export const toSecuritySchema = (
           return {
             properties: {
               headers: {
-                properties: {
-                  authorization: {
-                    format: new RegExp(`^${scheme.scheme}`, 'i'),
-                  },
-                },
+                ...(scheme.scheme
+                  ? { properties: { authorization: { pattern: `^${title(scheme.scheme)}` } } }
+                  : {}),
                 required: ['authorization'],
               },
             },
@@ -111,9 +107,7 @@ export const toSecuritySchema = (
           return scheme.in && scheme.name
             ? {
                 properties: {
-                  [toParamLocation(scheme.in)]: {
-                    required: [scheme.name.toLowerCase()],
-                  },
+                  [toParamLocation(scheme.in)]: { required: [scheme.name.toLowerCase()] },
                 },
               }
             : {};
@@ -124,7 +118,7 @@ export const toSecuritySchema = (
   })),
 });
 
-export const toContextSchema = (
+export const toRequestSchema = (
   { security: defaultSecurity, components }: ResolvedOpenAPIObject,
   { requestBody, parameters, security: operationSecurity }: ResolvedOperationObject,
   {
@@ -172,9 +166,7 @@ export const toResponseSchema = ({
               headers: {
                 type: 'object',
                 required: ['content-type'],
-                properties: {
-                  'content-type': { type: 'string', pattern: toMatchPattern(match) },
-                },
+                properties: { 'content-type': { type: 'string', pattern: toMatchPattern(match) } },
               },
               body:
                 mediaType.schema?.type === 'string'
@@ -190,48 +182,4 @@ export const toResponseSchema = ({
         }
       : {}),
   })),
-});
-
-export const toOperationSchema = (
-  api: ResolvedOpenAPIObject,
-  operation: ResolvedOperationObject,
-  common: Pick<ResolvedPathItemObject, 'summary' | 'parameters' | 'description'>,
-): OperationSchema => ({
-  context: toContextSchema(api, operation, common),
-  response: toResponseSchema(operation),
-  security: operation.security || api.security,
-});
-
-export const toSchema = (
-  api: ResolvedOpenAPIObject,
-): { routes: PathsSchema; resolvers: Schema } => ({
-  routes: Object.entries(api.paths).reduce<PathsSchema>((pathsSchema, [path, pathParameters]) => {
-    const { parameters, summary, description, ...methods } = pathParameters;
-    return {
-      ...pathsSchema,
-      [path]: Object.entries(methods).reduce(
-        (methodSchema, [method, operation]) => ({
-          ...methodSchema,
-          [method]: toOperationSchema(api, operation, { parameters, summary, description }),
-        }),
-        {},
-      ),
-    };
-  }, {}),
-  resolvers: {
-    required: ['paths', ...(api.components && api.components.securitySchemes ? ['security'] : [])],
-    properties: {
-      paths: {
-        required: Object.keys(api.paths),
-        properties: Object.entries(api.paths).reduce((all, [path, pathParameters]) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { parameters, summary, description, ...methods } = pathParameters;
-          return { ...all, [path]: { required: Object.keys(methods) } };
-        }, {}),
-      },
-      ...(api.components && api.components.securitySchemes
-        ? { security: { required: Object.keys(api.components.securitySchemes) } }
-        : {}),
-    },
-  },
 });

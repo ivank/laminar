@@ -16,6 +16,8 @@ Packages:
 
 You first define your OpenAPI file:
 
+> [examples/simple.yaml](examples/simple.yaml)
+
 ```yaml
 openapi: '3.0.0'
 info:
@@ -54,27 +56,27 @@ And then you can implement it using [@ovotech/laminar-oapi](packages/laminar-oap
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
+import { laminar, start, describe, jsonOk, loggingMiddleware } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
 const main = async () => {
-  const bodyParser = createBodyParser();
+  const logging = loggingMiddleware(console);
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     paths: {
       '/user/{id}': {
-        get: ({ path }) => findUser(path.id),
+        get: ({ path }) => jsonOk(findUser(path.id)),
       },
     },
   });
 
-  const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
-  await laminar.start();
+  const server = laminar({ app: logging(app), port: 3300 });
+  await start(server);
 
-  console.log(describeLaminar(laminar));
+  console.log(describe(server));
 };
 
 main();
@@ -85,6 +87,8 @@ This would validate both the request and the response, making sure your code rec
 ## Security
 
 If you have this schema:
+
+> [examples/security.yaml](examples/security.yaml)
 
 ```yaml
 openapi: '3.0.0'
@@ -129,7 +133,7 @@ You can then implement the security with:
 > [examples/security.ts](examples/security.ts)
 
 ```typescript
-import { createLaminar, HttpError, createBodyParser, describeLaminar } from '@ovotech/laminar';
+import { laminar, start, jsonOk, HttpError, describe, loggingMiddleware } from '@ovotech/laminar';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
@@ -141,7 +145,7 @@ const validate = (authorizaitonHeader?: string) => {
 };
 
 const main = async () => {
-  const bodyParser = createBodyParser();
+  const logging = loggingMiddleware(console);
   const app = await createOapi({
     api: join(__dirname, 'simple.yaml'),
     security: {
@@ -149,13 +153,13 @@ const main = async () => {
     },
     paths: {
       '/user/{id}': {
-        get: ({ path }) => findUser(path.id),
+        get: ({ path }) => jsonOk(findUser(path.id)),
       },
     },
   });
-  const laminar = createLaminar({ app: bodyParser(app), port: 8081 });
-  await laminar.start();
-  console.log(describeLaminar(laminar));
+  const server = laminar({ app: logging(app), port: 3300 });
+  await start(server);
+  console.log(describe(server));
 };
 
 main();
@@ -167,7 +171,7 @@ To generate a typescript types out of the OpenApi schema, you need to add the [@
 
 ```shell
 yarn add --dev @ovotech/laminar-oapi-cli
-yarn laminar-oapi simple.yaml __generated__/simple.ts
+yarn laminar-oapi examples/simple.yaml examples/__generated__/simple.ts
 ```
 
 You also have the option of running a watcher that will auto-generate on file update.
@@ -178,7 +182,7 @@ yarn laminar-oapi simple.yaml __generated__/simple.ts --watch
 
 If the schema has references to multiple files and those files are in the local file system, they will be watched for changes as well.
 
-> [examples/simpleWithTypes.ts](examples/simpleWithTypes.ts)
+> [examples/simple-types.ts](examples/simple-types.ts)
 
 ```typescript
 import { laminar } from '@ovotech/laminar';
@@ -213,27 +217,28 @@ Laminar can also be used without any spec for a very minimal rest api.
 > [examples/routes.ts](examples/routes.ts)
 
 ```typescript
-import { get, createLaminar, router, createBodyParser, describeLaminar } from '@ovotech/laminar';
+import { get, jsonOk, router, laminar, describe } from '@ovotech/laminar';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
 const main = async () => {
-  const bodyParser = createBodyParser();
-  const laminar = createLaminar({
-    app: bodyParser(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        get('/users/{id}', ({ path }) => findUser(path.id)),
-      ),
+  const server = laminar({
+    app: router(
+      get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+      get('/users/{id}', ({ path }) => jsonOk(findUser(path.id))),
     ),
     port: 8082,
   });
 
-  console.log(describeLaminar(laminar));
+  console.log(describe(server));
 };
 
 main();
 ```
+
+## An in-depth example
+
+You can explore an example of a running laminar petstore app in the examples directory: [examples/apps/petstore](examples/apps/petstore)
 
 ## It's all about flows
 
@@ -244,10 +249,9 @@ Lets see the simplest possible app with laminar, a very simple echo app
 > [packages/laminar/examples/echo.ts](packages/laminar/examples/echo.ts)
 
 ```typescript
-import { createLaminar, Resolver, Context } from '@ovotech/laminar';
+import { laminar, start, response } from '@ovotech/laminar';
 
-const main: Resolver<Context> = (ctx) => ctx.body;
-createLaminar({ port: 3333, app: main }).start();
+start(laminar({ port: 3333, app: ({ body }) => response({ body }) }));
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -261,18 +265,14 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 > [packages/laminar/examples/echo-auth.ts](packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
+import { laminar, start, textForbidden, textOk, App, Middleware } from '@ovotech/laminar';
 
-const auth = (next: Resolver<Context>): Resolver<Context> => (ctx) => {
-  if (ctx.headers.authorization !== 'Me') {
-    return message(403, 'Not Me');
-  }
-  return next(ctx);
-};
+const auth: Middleware = (next) => (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
-const main: Resolver<Context> = (ctx) => ctx.body;
+const app: App = (req) => textOk(req.url.toString());
 
-createLaminar({ port: 3333, app: auth(main) }).start();
+start(laminar({ port: 3333, app: auth(app) }));
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
@@ -280,25 +280,21 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 > [packages/laminar/examples/echo-auth-log.ts](packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { createLaminar, Context, message, Resolver } from '@ovotech/laminar';
+import { Middleware, App, textForbidden, textOk, start, laminar } from '@ovotech/laminar';
 
-const auth = (next: Resolver<Context>): Resolver<Context> => (ctx) => {
-  if (ctx.headers.authorization !== 'Me') {
-    return message(403, 'Not Me');
-  }
-  return next(ctx);
-};
+const auth: Middleware = (next) => (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
-const log = (next: Resolver<Context>): Resolver<Context> => (ctx) => {
-  console.log('Requested', ctx.body);
-  const response = next(ctx);
+const log: Middleware = (next) => (req) => {
+  console.log('Requested', req.body);
+  const response = next(req);
   console.log('Responded', response);
   return response;
 };
 
-const main: Resolver<Context> = (ctx) => ctx.body;
+const app: App = (req) => textOk(req.body);
 
-createLaminar({ port: 3333, app: log(auth(main)) }).start();
+start(laminar({ port: 3333, app: log(auth(app)) }));
 ```
 
 You can see how we can string those middlewares along `log(auth(app))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -310,7 +306,7 @@ Lets see how we can go about doing that.
 > [packages/laminar/examples/echo-auth-log-db.ts](packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { createLaminar, Context, message, Resolver, Middleware } from '@ovotech/laminar';
+import { Middleware, App, textForbidden, jsonOk, start, laminar } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -320,7 +316,7 @@ interface DB {
   getValidUser: () => string;
 }
 
-interface DBContext {
+interface RequestDB {
   db: DB;
 }
 
@@ -329,38 +325,30 @@ interface DBContext {
  * We'll need to have a "middleware creator" function that executes
  * and returns the actual middleware
  */
-const createDbMiddleware = (): Middleware<DBContext> => {
-  const db: DB = {
-    getValidUser: () => 'Me',
-  };
-
-  return (next) => (ctx) => next({ ...ctx, db });
+const createDbMiddleware = (): Middleware<RequestDB> => {
+  const db: DB = { getValidUser: () => 'Me' };
+  return (next) => (req) => next({ ...req, db });
 };
 
-const auth: Middleware<{}, DBContext> = (next) => (ctx) => {
-  if (ctx.db.getValidUser() !== ctx.headers.authorization) {
-    return message(403, 'Not Me');
-  }
-  return next(ctx);
-};
+const auth: Middleware = (next) => (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
-const log: Middleware = (next) => (ctx) => {
-  console.log('Requested', ctx.body);
-  const response = next(ctx);
+const log: Middleware = (next) => (req) => {
+  console.log('Requested', req.body);
+  const response = next(req);
   console.log('Responded', response);
   return response;
 };
 
 /**
- * We can also get use of the same databse connection in any middleware downstream
+ * We can now require this app to have the middleware.
+ * If the propper ones are not executed later, TypeScript will inform us at compile time.
  */
-const app: Resolver<DBContext & Context> = (ctx) => {
-  return { echo: ctx.body, user: ctx.db.getValidUser() };
-};
+const app: App<RequestDB> = (req) => jsonOk({ url: req.url, user: req.db.getValidUser() });
 
 const db = createDbMiddleware();
 
-createLaminar({ port: 3333, app: log(db(auth(app))) }).start();
+start(laminar({ port: 3333, app: log(db(auth(app))) }));
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
@@ -399,45 +387,53 @@ import {
   get,
   put,
   router,
-  message,
-  createLaminar,
-  createBodyParser,
-  createLogging,
+  jsonOk,
+  jsonNotFound,
+  loggingMiddleware,
   Middleware,
-  RouteResolver,
-  LoggingContext,
-  describeLaminar,
+  AppRoute,
+  RequestLogging,
+  describe,
+  laminar,
+  start,
 } from '@ovotech/laminar';
 
 // Middleware to connect to postgres
 // =================================
-interface PGContext {
+interface RequestPg {
   pg: Client;
 }
 
-const createPgClient = async (config: string): Promise<Middleware<PGContext>> => {
+const createPgClient = async (config: string): Promise<Middleware<RequestPg>> => {
   const pg = new Client(config);
   await pg.connect();
   return (next) => (ctx) => next({ ...ctx, pg });
 };
 
-// Route Handlers
-// =================================
-const healthCheck: RouteResolver = () => ({ health: 'ok' });
+// Route Handlers, each can be in a different file
+// ================================================
+const healthCheck: AppRoute = () => jsonOk({ health: 'ok' });
 
 // Finding a user requires a PG connection
-const find: RouteResolver<PGContext> = async ({ path, pg }) => {
-  const { rows } = await pg.query('SELECT id, name FROM users WHERE id $1', path.id);
+const find: AppRoute<RequestPg> = async ({ path, pg }) => {
+  const { rows } = await pg.query('SELECT id, name FROM users WHERE id $1', [path.id]);
 
-  return rows[0] || message(404, { message: `No User With id ${path.id} was found` });
+  return rows[0]
+    ? jsonOk(rows[0])
+    : jsonNotFound({ message: `No User With id ${path.id} was found` });
 };
 
 // Updating a user requires a PG connection and logging capablilities
-const update: RouteResolver<PGContext & LoggingContext> = async ({ path, pg, body, logger }) => {
-  await pg.query('UPDATE users SET name = $1 WHERE id = $2', body.name, path.id);
+const update: AppRoute<RequestPg & RequestLogging<Console>> = async ({
+  path,
+  pg,
+  body,
+  logger,
+}) => {
+  await pg.query('UPDATE users SET name = $1 WHERE id = $2', [body.name, path.id]);
   logger.log('info', 'User Updated');
 
-  return message(200, { message: 'User Updated' });
+  return jsonOk({ message: 'User Updated' });
 };
 
 // Routes
@@ -452,16 +448,15 @@ const routes = router(
 // ============================
 
 const main = async () => {
-  const bodyParser = createBodyParser();
-  const logging = createLogging();
+  const logging = loggingMiddleware(console);
   const pgClient = await createPgClient('localhost:5432');
 
-  const app = bodyParser(logging(pgClient(routes)));
+  const app = logging(pgClient(routes));
 
-  const laminar = createLaminar({ app, port: 8082 });
-  await laminar.start();
+  const server = laminar({ app, port: 8082 });
+  await start(server);
 
-  console.log(describeLaminar(laminar));
+  console.log(describe(server));
 };
 
 main();

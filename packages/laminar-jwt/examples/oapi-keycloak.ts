@@ -1,11 +1,5 @@
-import { createLaminar, createBodyParser, describeLaminar } from '@ovotech/laminar';
-import {
-  createJwtSecurity,
-  JWTContext,
-  JWTSecurity,
-  jwkPublicKey,
-  validateScopesKeycloak,
-} from '@ovotech/laminar-jwt';
+import { start, laminar, describe, jsonOk } from '@ovotech/laminar';
+import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@ovotech/laminar-jwt';
 import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 import { readFileSync } from 'fs';
@@ -15,9 +9,7 @@ import * as nock from 'nock';
  * Make sure we have some response from a url
  */
 const jwkFile = readFileSync(join(__dirname, './jwk.json'), 'utf8');
-nock('http://example.com/')
-  .get('/jwk.json')
-  .reply(200, JSON.parse(jwkFile));
+nock('http://example.com/').get('/jwk.json').reply(200, JSON.parse(jwkFile));
 
 /**
  * The public key is now a function that would attempt to retrieve the jwk from a url
@@ -26,31 +18,31 @@ nock('http://example.com/')
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-const start = async () => {
-  const bodyParser = createBodyParser();
-  const jwtSecurity = createJwtSecurity({
-    publicKey,
-    privateKey,
-    signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
-    validateScopes: validateScopesKeycloak('my-service-name'),
+const keyid = JSON.parse(jwkFile).keys[0].kid;
+const jwtSign = { secret: privateKey, options: { algorithm: 'RS256' as const, keyid } };
+
+const main = async () => {
+  const jwtSecurity = keycloakJwtSecurityResolver({
+    secret: publicKey,
+    service: 'my-service-name',
   });
 
-  const app = await createOapi<JWTContext>({
+  const app = await createOapi({
     api: join(__dirname, 'oapi.yaml'),
-    security: { JWTSecurity },
+    security: { JWTSecurity: jwtSecurity },
     paths: {
       '/session': {
-        post: ({ createSession, body }) => createSession(body),
+        post: ({ body }) => jsonOk(createSession(jwtSign, body)),
       },
       '/test': {
-        get: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
-        post: ({ authInfo }) => ({ text: 'ok', user: authInfo }),
+        get: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        post: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
       },
     },
   });
-  const laminar = createLaminar({ port: 3333, app: bodyParser(jwtSecurity(app)) });
-  await laminar.start();
-  console.log(describeLaminar(laminar));
+  const server = laminar({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
 };
 
-start();
+main();

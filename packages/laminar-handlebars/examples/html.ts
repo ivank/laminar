@@ -1,18 +1,17 @@
-import { createLaminar, router, get, post, createBodyParser } from '@ovotech/laminar';
-import { createHandlebars } from '@ovotech/laminar-handlebars';
+import { start, router, get, post, laminar, describe } from '@ovotech/laminar';
+import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
-const bodyParser = createBodyParser();
-const handlebars = createHandlebars({ dir: join(__dirname, 'templates-html') });
+const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html') });
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    handlebars(
-      router(
-        get('/', ({ render }) => render('index')),
-        post('/result', ({ render, body: { name } }) => render('result', { name })),
-      ),
+  app: handlebars(
+    router(
+      get('/', ({ render }) => render('index')),
+      post('/result', ({ render, body: { name } }) => render('result', { name })),
     ),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));

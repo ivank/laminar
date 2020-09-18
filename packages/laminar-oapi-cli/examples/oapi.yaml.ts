@@ -1,12 +1,12 @@
-import { Context, ContextLike, LaminarResponse } from "@ovotech/laminar";
+import { RequestOapi, OapiConfig, ResponseOapi } from "@ovotech/laminar-oapi";
 
-import { OapiContext, OapiConfig } from "@ovotech/laminar-oapi";
+import { Empty } from "@ovotech/laminar";
 
-export interface Config<C extends ContextLike = ContextLike> extends OapiConfig<C> {
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
     paths: {
         "/test": {
-            post: (context: TTestPostContext & C) => TTestPostResponse;
-            get: (context: TTestGetContext & C) => TTestGetResponse;
+            post: PathTestPost<R>;
+            get: PathTestGet<R>;
         };
     };
 }
@@ -22,13 +22,14 @@ export interface Test {
     [key: string]: unknown;
 }
 
-export type TTestPostResponse = LaminarResponse<Test> | Test | Promise<LaminarResponse<Test> | Test>;
+export type ResponseTestPost = ResponseOapi<Test, 200, "application/json">;
 
-export interface TTestPostContext extends Context, OapiContext {
+export interface RequestTestPost extends RequestOapi {
     body: User;
 }
 
-export type TTestGetResponse = LaminarResponse<Test> | Test | Promise<LaminarResponse<Test> | Test>;
+export type PathTestPost<R extends Empty = Empty> = (req: RequestTestPost & R) => ResponseTestPost | Promise<ResponseTestPost>;
 
-export interface TTestGetContext extends Context, OapiContext {
-}
+export type ResponseTestGet = ResponseOapi<Test, 200, "application/json">;
+
+export type PathTestGet<R extends Empty = Empty> = (req: RequestOapi & R) => ResponseTestGet | Promise<ResponseTestGet>;

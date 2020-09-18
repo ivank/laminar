@@ -1,21 +1,15 @@
-import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
-import {
-  createJwtSecurity,
-  auth,
-  jwkPublicKey,
-  validateScopesKeycloak,
-} from '@ovotech/laminar-jwt';
+import { get, post, laminar, router, start, jsonOk, describe } from '@ovotech/laminar';
+import { jwkPublicKey, createSession } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
+import { keycloakAuthMiddleware } from '@ovotech/laminar-jwt/src';
 
 /**
  * Make sure we have some response from a url
  */
 const jwkFile = readFileSync(join(__dirname, './jwk.json'), 'utf8');
-nock('http://example.com/')
-  .get('/jwk.json')
-  .reply(200, JSON.parse(jwkFile));
+nock('http://example.com/').get('/jwk.json').reply(200, JSON.parse(jwkFile));
 
 /**
  * The public key is now a function that would attempt to retrieve the jwk from a url
@@ -24,41 +18,28 @@ nock('http://example.com/')
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-/**
- * We add a custom validateScopes function it would recieve the decrypted token as well as the required roles
- * If the roles given to the client token do not match the required roles we'll throw a 401 error.
- */
-const validateScopes = validateScopesKeycloak('my-service-name');
 const keyid = JSON.parse(jwkFile).keys[0].kid;
+const sessionOptions = { secret: privateKey, options: { algorithm: 'RS256' as const, keyid } };
 
-const bodyParser = createBodyParser();
-const jwtSecurity = createJwtSecurity({
-  publicKey,
-  privateKey,
-  validateScopes,
-  signOptions: { algorithm: 'RS256', keyid },
-});
+const auth = keycloakAuthMiddleware({ secret: publicKey, service: 'my-service-name' });
 
 // A middleware that would actually restrict access
-const onlyLoggedIn = auth();
-const onlyAdmin = auth(['admin-role']);
+const loggedIn = auth();
+const admin = auth(['admin']);
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    jwtSecurity(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => createSession(body)),
-        post(
-          '/test',
-          onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo })),
-        ),
-        get(
-          '/test',
-          onlyLoggedIn(() => 'index'),
-        ),
-      ),
+  app: router(
+    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+    post('/session', ({ body }) => jsonOk(createSession(sessionOptions, body))),
+    post(
+      '/test',
+      admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+    ),
+    get(
+      '/test',
+      loggedIn(() => jsonOk('index')),
     ),
   ),
-}).start();
+});
+start(server).then(() => console.log(describe(server)));

@@ -1,16 +1,15 @@
-import { get, post, createLaminar, router, createBodyParser } from '@ovotech/laminar';
-import { createJwtSecurity, auth, jwkPublicKey } from '@ovotech/laminar-jwt';
+import { get, post, start, router, laminar, jsonOk, describe } from '@ovotech/laminar';
+import { jwkPublicKey, createSession, JWTSign, JWTVerify } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
+import { authMiddleware } from '@ovotech/laminar-jwt/src';
 
 /**
  * Make sure we have some response from a url
  */
-const jwkFile = readFileSync(join(__dirname, './jwk.json'), 'utf8');
-nock('http://example.com/')
-  .get('/jwk.json')
-  .reply(200, JSON.parse(jwkFile));
+const jwkFile = JSON.parse(readFileSync(join(__dirname, './jwk.json'), 'utf8'));
+nock('http://example.com/').get('/jwk.json').reply(200, jwkFile);
 
 /**
  * The public key is now a function that would attempt to retrieve the jwk from a url
@@ -19,33 +18,32 @@ nock('http://example.com/')
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-const bodyParser = createBodyParser();
-const jwtSecurity = createJwtSecurity({
-  publicKey,
-  privateKey,
-  signOptions: { algorithm: 'RS256', keyid: '54eb0f68-bbf5-44ae-a345-fbd56c50e1e8' },
-});
+const signOptions: JWTSign = {
+  secret: privateKey,
+  options: { algorithm: 'RS256', keyid: jwkFile.keys[0].kid },
+};
+const verifyOptions: JWTVerify = { secret: publicKey };
+
+const auth = authMiddleware(verifyOptions);
 
 // A middleware that would actually restrict access
-const onlyLoggedIn = auth();
-const onlyAdmin = auth(['admin']);
+const loggedIn = auth();
+const admin = auth(['admin']);
 
-createLaminar({
+const server = laminar({
   port: 3333,
-  app: bodyParser(
-    jwtSecurity(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => createSession(body)),
-        post(
-          '/test',
-          onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo })),
-        ),
-        get(
-          '/test',
-          onlyLoggedIn(() => 'index'),
-        ),
-      ),
+  app: router(
+    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+    post('/session', ({ body }) => jsonOk(createSession(signOptions, body))),
+    post(
+      '/test',
+      admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+    ),
+    get(
+      '/test',
+      loggedIn(() => jsonOk('index')),
     ),
   ),
-}).start();
+});
+
+start(server).then(() => console.log(describe(server)));

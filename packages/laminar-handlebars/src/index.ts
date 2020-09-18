@@ -1,7 +1,8 @@
-import { LaminarResponse, Middleware, response } from '@ovotech/laminar';
+import { Middleware, Response, response } from '@ovotech/laminar';
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { compile, RuntimeOptions, TemplateDelegate } from 'handlebars';
 import { join } from 'path';
+import { OutgoingHttpHeaders } from 'http';
 
 export interface TemplateConfig {
   helpers?: RuntimeOptions['helpers'];
@@ -9,7 +10,7 @@ export interface TemplateConfig {
   partials?: string;
   extension?: string;
   views?: string;
-  headers?: LaminarResponse['headers'];
+  headers?: OutgoingHttpHeaders;
 }
 
 export interface CompileTemplatesOptions {
@@ -24,12 +25,14 @@ export interface Templates {
   [key: string]: TemplateDelegate;
 }
 
-export interface HandlebarsContext {
-  render: (
-    view: string,
-    data?: Record<string, unknown>,
-    responseOptions?: Partial<Pick<LaminarResponse, 'cookies' | 'headers' | 'status'>>,
-  ) => LaminarResponse<string>;
+export type HandlebarsRender = (
+  view: string,
+  data?: Record<string, unknown>,
+  options?: Partial<Response>,
+) => Response;
+
+export interface RequestHandlebars {
+  render: HandlebarsRender;
 }
 
 export const deepReaddirSync = (dir: string, childDir: string, parent = ''): string[] =>
@@ -55,15 +58,15 @@ export const compileTemplates = ({
       return { ...all, [name]: compile(input, compileOptions) };
     }, {});
 
-export const createHandlebars = ({
+export const handlebarsMiddleware = ({
   helpers = {},
   dir = process.cwd(),
   extension = 'handlebars',
   partials = 'partials',
   views = 'views',
   headers,
-}: TemplateConfig): Middleware<HandlebarsContext> => {
-  const defaultHeaders = { 'content-type': 'text/html' };
+}: TemplateConfig): Middleware<RequestHandlebars> => {
+  const defaultHeaders = { 'content-type': 'text/html', ...headers };
 
   const partialTemplates = existsSync(join(dir, partials))
     ? compileTemplates({ childDir: partials, dir, extension })
@@ -74,13 +77,13 @@ export const createHandlebars = ({
     throw new Error(`No templates with extension ${extension} found in ${join(dir, views)}`);
   }
 
-  const render: HandlebarsContext['render'] = (view, data = {}, options = {}) => {
-    return response({
-      ...options,
+  const render: HandlebarsRender = (view, data = {}, options = {}) =>
+    response({
       body: viewTemplates[view](data, { helpers, partials: partialTemplates }),
-      headers: { ...defaultHeaders, ...headers, ...options.headers },
+      status: 200 as const,
+      ...options,
+      headers: { ...defaultHeaders, ...options.headers },
     });
-  };
 
-  return (next) => (ctx) => next({ ...ctx, render });
+  return (next) => (req) => next({ ...req, render });
 };

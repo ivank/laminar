@@ -1,24 +1,24 @@
-import { get, post, laminar, router, createBodyParser } from '@ovotech/laminar';
-import { createJwtSecurity, auth } from '@ovotech/laminar-jwt';
+import { get, post, start, laminar, jsonOk, router, App } from '@ovotech/laminar';
+import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 
-const bodyParser = createBodyParser();
-// This middleware would only add security related functions to the context, without restricting any access
-const jwtSecurity = createJwtSecurity({ secret: 'secret' });
+const secret = '123';
+const auth = authMiddleware({ secret });
 
 // A middleware that would actually restrict access
-const onlyLoggedIn = auth();
-const onlyAdmin = auth(['admin']);
+const loggedIn = auth();
+const admin = auth(['admin']);
 
-laminar({
-  port: 3333,
-  app: bodyParser(
-    jwtSecurity(
-      router(
-        get('/.well-known/health-check', () => ({ health: 'ok' })),
-        post('/session', ({ createSession, body }) => createSession(body)),
-        post('/test', onlyAdmin(({ authInfo }) => ({ result: 'ok', user: authInfo }))),
-        get('/test', onlyLoggedIn(() => 'index')),
-      ),
-    ),
+const app: App = router(
+  get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
+  post('/session', ({ body }) => jsonOk(createSession({ secret }, body))),
+  post(
+    '/test',
+    admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
   ),
-});
+  get(
+    '/test',
+    loggedIn(() => jsonOk('index')),
+  ),
+);
+
+start(laminar({ port: 3333, app }));
