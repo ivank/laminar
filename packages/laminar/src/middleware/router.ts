@@ -1,6 +1,6 @@
 import { resolve, normalize, join } from 'path';
 import { existsSync } from 'fs';
-import { jsonForbidden, file, jsonNotFound } from '../response';
+import { jsonForbidden, file, jsonNotFound, FileOptions } from '../response';
 import { AppRequest, App } from '../components/app.component';
 import { Empty } from '../types';
 
@@ -105,6 +105,7 @@ export const options: Method = (path, resolver) =>
 export const directory = <T extends Empty = Empty>(
   prefixPath: string,
   root: string,
+  options?: FileOptions,
 ): PathRoute<T> => {
   const allwoedMethods = ['GET', 'HEAD'];
 
@@ -128,7 +129,7 @@ export const directory = <T extends Empty = Empty>(
       const filename = resolve(normalize(root), relativePath);
 
       return existsSync(filename)
-        ? file(filename)
+        ? file(filename, options)
         : jsonNotFound({ message: 'File not found' }, { status: 404 });
     },
   };

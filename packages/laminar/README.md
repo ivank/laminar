@@ -347,17 +347,18 @@ Helpers that set the status code are as follows:
 
 Helpers that set the content type header are:
 
-| Helper | Content Type Header        |
-| ------ | -------------------------- |
-| json   | `application/json`         |
-| yaml   | `application/yaml`         |
-| binary | `application/octet-stream` |
-| pdf    | `application/pdf`          |
-| xml    | `application/xml`          |
-| text   | `text/plain`               |
-| html   | `text/html`                |
-| css    | `text/css`                 |
-| csv    | `text/csv`                 |
+| Helper | Content Type Header                 |
+| ------ | ----------------------------------- |
+| json   | `application/json`                  |
+| yaml   | `application/yaml`                  |
+| binary | `application/octet-stream`          |
+| form   | `application/x-www-form-urlencoded` |
+| pdf    | `application/pdf`                   |
+| xml    | `application/xml`                   |
+| text   | `text/plain`                        |
+| html   | `text/html`                         |
+| css    | `text/css`                          |
+| csv    | `text/csv`                          |
 
 You can combine them any way you like:
 
@@ -368,6 +369,19 @@ internalServerError(yaml('message: error'));
 ```
 
 Since they are used often, there are combined shelpers for text, json and html - `jsonOk`, `jsonBadRequest`, `textNotFound`, `htmlNotModified` ...
+
+There are also 2 special helpers: redirect and file
+
+redirect(location, options);
+
+> Create a response object that will redirect to a given location.
+> Sets the 'Location' header.
+
+file(filename, options);
+
+> Return a file response.
+> Setting the 'content-type', 'content-length', 'last-modified' headers based on the file itself.
+> Supports content ranges as well, if you pass the incommingMessage from the request, so it can determine the range.
 
 ### Cors Middleware
 

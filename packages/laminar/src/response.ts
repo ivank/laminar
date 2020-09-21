@@ -2,9 +2,10 @@
 
 import { lookup } from 'mime-types';
 import { Response } from './types';
-import { OutgoingHttpHeaders } from 'http';
+import { IncomingMessage, OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { createReadStream, statSync } from 'fs';
+import { parseRange } from './helpers';
 
 export type StringResponse = string | Buffer | Readable;
 
@@ -14,6 +15,10 @@ export const response = <T>({
   headers = { 'content-type': 'application/json' },
 }: Partial<Response<T>> = {}) => ({ body, status, headers });
 
+/**
+ * Create a response object that will redirect to a given location.
+ * Sets the 'Location' header.
+ */
 export const redirect = (
   location: string,
   { status = 302, headers, body = `Redirecting to ${location}` }: Partial<Response> = {},
@@ -23,21 +28,61 @@ export const redirect = (
   headers: { 'content-type': 'text/plain; charset=utf-8', location, ...headers },
 });
 
+export interface FileOptions {
+  incommingMessage?: IncomingMessage;
+}
+
+/**
+ * Return a file response.
+ * Setting the 'content-type', 'content-length', 'last-modified' headers based on the file itself.
+ * Supports content ranges as well, if you pass the incommingMessage from the request, so it can determine the range.
+ */
 export const file = (
   filename: string,
-  { headers, status = 200 }: Partial<Response> = {},
+  { headers, status = 200, incommingMessage }: Partial<Response> & FileOptions = {},
 ): Response => {
   const stat = statSync(filename);
-  return {
-    status,
-    body: createReadStream(filename),
-    headers: {
-      'content-type': lookup(filename) || 'text/plain',
-      'content-length': stat.size,
-      'last-modified': stat.mtime.toISOString(),
-      ...headers,
-    },
-  };
+  const contentType = lookup(filename) || 'text/plain';
+  const lastModified = stat.mtime.toISOString();
+  const hasRange = incommingMessage?.headers.range?.match(/^bytes=/);
+
+  if (hasRange) {
+    const range = incommingMessage?.headers.range
+      ? parseRange(incommingMessage.headers.range, stat.size)
+      : undefined;
+
+    if (range) {
+      return {
+        status: 206,
+        body: createReadStream(filename, range),
+        headers: {
+          'content-type': contentType,
+          'accept-ranges': 'bytes',
+          'last-modified': lastModified,
+          'content-range': `bytes ${range.start}-${range.end}/${stat.size}`,
+          ...headers,
+        },
+      };
+    } else {
+      return {
+        status: 416,
+        headers: { 'accept-ranges': 'bytes', 'Content-Range': `bytes */${stat.size}` },
+        body: '',
+      };
+    }
+  } else {
+    return {
+      status,
+      body: createReadStream(filename),
+      headers: {
+        'accept-ranges': 'bytes',
+        'content-type': contentType,
+        'content-length': stat.size,
+        'last-modified': lastModified,
+        ...headers,
+      },
+    };
+  }
 };
 
 /**

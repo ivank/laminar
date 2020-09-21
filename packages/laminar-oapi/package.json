@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@ovotech/json-schema": "^0.5.3",
-    "@ovotech/laminar": "0.7.1",
+    "@ovotech/laminar": "0.7.2",
     "cookie": "^0.4.1",
     "openapi-schemas": "^2.0.3",
     "openapi3-ts": "^2.0.0"

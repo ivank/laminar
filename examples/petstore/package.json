@@ -37,7 +37,7 @@
     "lint": "yarn lint:prettier && yarn lint:eslint"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.7.1",
+    "@ovotech/laminar": "^0.7.2",
     "@ovotech/laminar-jwt": "^0.9.1",
     "@ovotech/laminar-oapi": "^0.6.1",
     "pg": "^8.3.3"

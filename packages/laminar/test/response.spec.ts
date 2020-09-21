@@ -310,4 +310,38 @@ describe('Requests', () => {
       data: 'some stuff\n',
     });
   });
+
+  it('Should process laminar file with range', async () => {
+    server = laminar({
+      port: 8052,
+      app: ({ incommingMessage }) => file(join(__dirname, 'test.txt'), { incommingMessage }),
+    });
+    await start(server);
+
+    await expect(api.get('/test', { headers: { Range: 'bytes=0-3' } })).resolves.toMatchObject({
+      status: 206,
+      headers: expect.objectContaining({
+        'content-range': 'bytes 0-3/11',
+      }),
+      data: 'some',
+    });
+
+    await expect(api.get('/test', { headers: { Range: 'bytes=5-9' } })).resolves.toMatchObject({
+      status: 206,
+      headers: expect.objectContaining({
+        'content-range': 'bytes 5-9/11',
+      }),
+      data: 'stuff',
+    });
+
+    await expect(
+      api.get('/test', { headers: { Range: 'bytes=9-12' } }).catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 416,
+      headers: expect.objectContaining({
+        'content-range': 'bytes */11',
+      }),
+      data: '',
+    });
+  });
 });

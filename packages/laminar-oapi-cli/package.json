@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar-oapi-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.7.1",
+    "@ovotech/laminar": "^0.7.2",
     "@ovotech/laminar-oapi": "^0.6.1",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.1",

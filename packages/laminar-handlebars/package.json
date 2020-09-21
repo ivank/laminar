@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@ovotech/laminar": "^0.7.1",
+    "@ovotech/laminar": "^0.7.2",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.1",
     "@typescript-eslint/eslint-plugin": "^4.1.1",

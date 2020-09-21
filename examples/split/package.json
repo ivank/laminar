@@ -28,7 +28,7 @@
     "test": "jest test --runInBand"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.7.1",
+    "@ovotech/laminar": "^0.7.2",
     "pg": "^8.3.3"
   }
 }
