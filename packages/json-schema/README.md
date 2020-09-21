@@ -4,7 +4,7 @@ A lightweight a json-schema.
 
 Dependencies:
 
-- js-yaml
+- yaml
 - node-fetch
 
 Supported JSON Schema drafts

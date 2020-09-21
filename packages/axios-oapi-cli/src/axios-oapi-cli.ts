@@ -1,7 +1,7 @@
 import { ensureValid, compile, Schema } from '@ovotech/json-schema';
 import * as commander from 'commander';
 import * as fs from 'fs';
-import * as YAML from 'js-yaml';
+import * as YAML from 'yaml';
 import { openapiV3 } from 'openapi-schemas';
 import { OpenAPIObject } from 'openapi3-ts';
 import { printDocument } from '@ovotech/ts-compose';
@@ -39,7 +39,7 @@ const parseSchema = (type: string, content: string): Schema => {
     case 'json':
       return JSON.parse(content);
     case 'yaml':
-      return YAML.load(content);
+      return YAML.parse(content);
     default:
       throw new Error(`Unknown STDIN type: ${type}, accepts only "json" and "yaml"`);
   }

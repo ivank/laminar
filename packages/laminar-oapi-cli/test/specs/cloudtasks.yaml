@@ -2,30 +2,30 @@ openapi: 3.0.0
 info:
   contact:
     name: Google
-    url: "https://google.com"
+    url: 'https://google.com'
   description: Manages the execution of large numbers of distributed requests.
   license:
     name: Creative Commons Attribution 3.0
-    url: "http://creativecommons.org/licenses/by/3.0/"
-  termsOfService: "https://developers.google.com/terms/"
+    url: 'http://creativecommons.org/licenses/by/3.0/'
+  termsOfService: 'https://developers.google.com/terms/'
   title: Cloud Tasks API
   version: v2
 servers:
-  - url: "https://cloudtasks.googleapis.com/"
+  - url: 'https://cloudtasks.googleapis.com/'
 paths:
-  "/v2/{+name}":
+  '/v2/{+name}':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     delete:
       parameters:
         - description: >-
@@ -38,17 +38,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Empty"
+                $ref: '#/components/schemas/Empty'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -101,17 +101,17 @@ paths:
               - FULL
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Task"
+                $ref: '#/components/schemas/Task'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: Gets a task.
@@ -152,17 +152,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Queue"
+                $ref: '#/components/schemas/Queue'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: >-
@@ -199,23 +199,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Queue"
-  "/v2/{+name}/locations":
+              $ref: '#/components/schemas/Queue'
+  '/v2/{+name}/locations':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     get:
       parameters:
-        - description: "The resource that owns the locations collection, if applicable."
+        - description: 'The resource that owns the locations collection, if applicable.'
           in: path
           name: name
           required: true
@@ -237,34 +237,34 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/ListLocationsResponse"
+                $ref: '#/components/schemas/ListLocationsResponse'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: Lists information about the supported locations for this service.
       operationId: cloudtasks.projects.locations.list
-  "/v2/{+name}:pause":
+  '/v2/{+name}:pause':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     post:
       parameters:
         - description: |-
@@ -276,17 +276,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Queue"
+                $ref: '#/components/schemas/Queue'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -302,20 +302,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PauseQueueRequest"
-  "/v2/{+name}:purge":
+              $ref: '#/components/schemas/PauseQueueRequest'
+  '/v2/{+name}:purge':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     post:
       parameters:
         - description: |-
@@ -327,17 +327,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Queue"
+                $ref: '#/components/schemas/Queue'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: >-
@@ -356,20 +356,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PurgeQueueRequest"
-  "/v2/{+name}:resume":
+              $ref: '#/components/schemas/PurgeQueueRequest'
+  '/v2/{+name}:resume':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     post:
       parameters:
         - description: |-
@@ -381,17 +381,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Queue"
+                $ref: '#/components/schemas/Queue'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -413,20 +413,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ResumeQueueRequest"
-  "/v2/{+name}:run":
+              $ref: '#/components/schemas/ResumeQueueRequest'
+  '/v2/{+name}:run':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     post:
       parameters:
         - description: >-
@@ -439,17 +439,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Task"
+                $ref: '#/components/schemas/Task'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -482,20 +482,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RunTaskRequest"
-  "/v2/{+parent}/queues":
+              $ref: '#/components/schemas/RunTaskRequest'
+  '/v2/{+parent}/queues':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     get:
       parameters:
         - description: |-
@@ -557,17 +557,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/ListQueuesResponse"
+                $ref: '#/components/schemas/ListQueuesResponse'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -590,17 +590,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Queue"
+                $ref: '#/components/schemas/Queue'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: >-
@@ -632,20 +632,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Queue"
-  "/v2/{+parent}/tasks":
+              $ref: '#/components/schemas/Queue'
+  '/v2/{+parent}/tasks':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     get:
       parameters:
         - description: |-
@@ -722,17 +722,17 @@ paths:
               - FULL
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/ListTasksResponse"
+                $ref: '#/components/schemas/ListTasksResponse'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -759,17 +759,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Task"
+                $ref: '#/components/schemas/Task'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -783,20 +783,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateTaskRequest"
-  "/v2/{+resource}:getIamPolicy":
+              $ref: '#/components/schemas/CreateTaskRequest'
+  '/v2/{+resource}:getIamPolicy':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     post:
       parameters:
         - description: >-
@@ -810,17 +810,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Policy"
+                $ref: '#/components/schemas/Policy'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: >-
@@ -845,20 +845,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetIamPolicyRequest"
-  "/v2/{+resource}:setIamPolicy":
+              $ref: '#/components/schemas/GetIamPolicyRequest'
+  '/v2/{+resource}:setIamPolicy':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     post:
       parameters:
         - description: >-
@@ -872,17 +872,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Policy"
+                $ref: '#/components/schemas/Policy'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: |-
@@ -902,20 +902,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SetIamPolicyRequest"
-  "/v2/{+resource}:testIamPermissions":
+              $ref: '#/components/schemas/SetIamPolicyRequest'
+  '/v2/{+resource}:testIamPermissions':
     parameters:
-      - $ref: "#/components/parameters/key"
-      - $ref: "#/components/parameters/access_token"
-      - $ref: "#/components/parameters/upload_protocol"
-      - $ref: "#/components/parameters/prettyPrint"
-      - $ref: "#/components/parameters/quotaUser"
-      - $ref: "#/components/parameters/uploadType"
-      - $ref: "#/components/parameters/fields"
-      - $ref: "#/components/parameters/_.xgafv"
-      - $ref: "#/components/parameters/oauth_token"
-      - $ref: "#/components/parameters/callback"
-      - $ref: "#/components/parameters/alt"
+      - $ref: '#/components/parameters/key'
+      - $ref: '#/components/parameters/access_token'
+      - $ref: '#/components/parameters/upload_protocol'
+      - $ref: '#/components/parameters/prettyPrint'
+      - $ref: '#/components/parameters/quotaUser'
+      - $ref: '#/components/parameters/uploadType'
+      - $ref: '#/components/parameters/fields'
+      - $ref: '#/components/parameters/_.xgafv'
+      - $ref: '#/components/parameters/oauth_token'
+      - $ref: '#/components/parameters/callback'
+      - $ref: '#/components/parameters/alt'
     post:
       parameters:
         - description: >-
@@ -930,17 +930,17 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/TestIamPermissionsResponse"
+                $ref: '#/components/schemas/TestIamPermissionsResponse'
           description: Successful response
       security:
         - Oauth2:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
           Oauth2c:
-            - "https://www.googleapis.com/auth/cloud-platform"
+            - 'https://www.googleapis.com/auth/cloud-platform'
       tags:
         - projects
       description: >-
@@ -963,7 +963,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TestIamPermissionsRequest"
+              $ref: '#/components/schemas/TestIamPermissionsRequest'
 components:
   parameters:
     _.xgafv:
@@ -972,8 +972,8 @@ components:
       name: $.xgafv
       schema:
         enum:
-          - "1"
-          - "2"
+          - '1'
+          - '2'
         type: string
     access_token:
       description: OAuth access token.
@@ -1052,7 +1052,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Queue"
+            $ref: '#/components/schemas/Queue'
   schemas:
     AppEngineHttpRequest:
       description: >-
@@ -1171,7 +1171,7 @@ components:
         control to throttle the queue.
       properties:
         appEngineRouting:
-          $ref: "#/components/schemas/AppEngineRouting"
+          $ref: '#/components/schemas/AppEngineRouting'
           description: |-
             Task-level setting for App Engine routing.
 
@@ -1453,7 +1453,7 @@ components:
           format: google-datetime
           type: string
         responseStatus:
-          $ref: "#/components/schemas/Status"
+          $ref: '#/components/schemas/Status'
           description: >-
             Output only. The response from the worker for this attempt.
 
@@ -1481,7 +1481,7 @@ components:
       description: Associates `members` with a `role`.
       properties:
         condition:
-          $ref: "#/components/schemas/Expr"
+          $ref: '#/components/schemas/Expr'
           description: >-
             The condition that is associated with this binding.
 
@@ -1493,7 +1493,7 @@ components:
 
             independently.
         members:
-          description: >+
+          description: >-
             Specifies the identities requesting access for a Cloud Platform
             resource.
 
@@ -1567,7 +1567,7 @@ components:
             - FULL
           type: string
         task:
-          $ref: "#/components/schemas/Task"
+          $ref: '#/components/schemas/Task'
           description: >-
             Required. The task to add.
 
@@ -1690,7 +1690,7 @@ components:
       description: Request message for `GetIamPolicy` method.
       properties:
         options:
-          $ref: "#/components/schemas/GetPolicyOptions"
+          $ref: '#/components/schemas/GetPolicyOptions'
           description: |-
             OPTIONAL: A `GetPolicyOptions` object for specifying options to
             `GetIamPolicy`. This field is only used by Cloud IAM.
@@ -1719,7 +1719,7 @@ components:
             A list of locations that matches the specified filter in the
             request.
           items:
-            $ref: "#/components/schemas/Location"
+            $ref: '#/components/schemas/Location'
           type: array
         nextPageToken:
           description: The standard List next-page token.
@@ -1743,7 +1743,7 @@ components:
         queues:
           description: The list of queues.
           items:
-            $ref: "#/components/schemas/Queue"
+            $ref: '#/components/schemas/Queue'
           type: array
       type: object
     ListTasksResponse:
@@ -1762,7 +1762,7 @@ components:
         tasks:
           description: The list of tasks.
           items:
-            $ref: "#/components/schemas/Task"
+            $ref: '#/components/schemas/Task'
           type: array
       type: object
     Location:
@@ -1867,7 +1867,7 @@ components:
             Associates a list of `members` to a `role`.
             `bindings` with no members will result in an error.
           items:
-            $ref: "#/components/schemas/Binding"
+            $ref: '#/components/schemas/Binding'
           type: array
         etag:
           description: >-
@@ -1916,7 +1916,7 @@ components:
         retry options, queue types, and others.
       properties:
         appEngineRoutingOverride:
-          $ref: "#/components/schemas/AppEngineRouting"
+          $ref: '#/components/schemas/AppEngineRouting'
           description: |-
             Overrides for
             task-level app_engine_routing.
@@ -1972,7 +1972,7 @@ components:
           format: google-datetime
           type: string
         rateLimits:
-          $ref: "#/components/schemas/RateLimits"
+          $ref: '#/components/schemas/RateLimits'
           description: >-
             Rate limits for task dispatches.
 
@@ -2007,7 +2007,7 @@ components:
               Unavailable) responses from the worker, high error rates, or to smooth
               sudden large traffic spikes.
         retryConfig:
-          $ref: "#/components/schemas/RetryConfig"
+          $ref: '#/components/schemas/RetryConfig'
           description: >-
             Settings that determine the retry behavior.
 
@@ -2392,7 +2392,7 @@ components:
       description: Request message for `SetIamPolicy` method.
       properties:
         policy:
-          $ref: "#/components/schemas/Policy"
+          $ref: '#/components/schemas/Policy'
           description: >-
             REQUIRED: The complete policy to be applied to the `resource`. The
             size of
@@ -2421,7 +2421,7 @@ components:
         [API Design Guide](https://cloud.google.com/apis/design/errors).
       properties:
         code:
-          description: "The status code, which should be an enum value of google.rpc.Code."
+          description: 'The status code, which should be an enum value of google.rpc.Code.'
           format: int32
           type: integer
         details:
@@ -2446,7 +2446,7 @@ components:
       description: A unit of scheduled work.
       properties:
         appEngineHttpRequest:
-          $ref: "#/components/schemas/AppEngineHttpRequest"
+          $ref: '#/components/schemas/AppEngineHttpRequest'
           description: |-
             HTTP request that is sent to the App Engine app handler.
 
@@ -2515,14 +2515,14 @@ components:
           format: google-duration
           type: string
         firstAttempt:
-          $ref: "#/components/schemas/Attempt"
+          $ref: '#/components/schemas/Attempt'
           description: |-
             Output only. The status of the task's first attempt.
 
             Only dispatch_time will be set.
             The other Attempt information is not retained by Cloud Tasks.
         lastAttempt:
-          $ref: "#/components/schemas/Attempt"
+          $ref: '#/components/schemas/Attempt'
           description: Output only. The status of the task's last attempt.
         name:
           description: >-
@@ -2605,20 +2605,20 @@ components:
       description: Oauth 2.0 implicit authentication
       flows:
         implicit:
-          authorizationUrl: "https://accounts.google.com/o/oauth2/auth"
+          authorizationUrl: 'https://accounts.google.com/o/oauth2/auth'
           scopes:
-            "https://www.googleapis.com/auth/cloud-platform": View and manage your data across Google Cloud Platform services
+            'https://www.googleapis.com/auth/cloud-platform': View and manage your data across Google Cloud Platform services
       type: oauth2
     Oauth2c:
       description: Oauth 2.0 accessCode authentication
       flows:
         authorizationCode:
-          authorizationUrl: "https://accounts.google.com/o/oauth2/auth"
+          authorizationUrl: 'https://accounts.google.com/o/oauth2/auth'
           scopes:
-            "https://www.googleapis.com/auth/cloud-platform": View and manage your data across Google Cloud Platform services
-          tokenUrl: "https://accounts.google.com/o/oauth2/token"
+            'https://www.googleapis.com/auth/cloud-platform': View and manage your data across Google Cloud Platform services
+          tokenUrl: 'https://accounts.google.com/o/oauth2/token'
       type: oauth2
 tags:
   - name: projects
 externalDocs:
-  url: "https://cloud.google.com/tasks/"
+  url: 'https://cloud.google.com/tasks/'

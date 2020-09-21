@@ -26,6 +26,7 @@ export {
   internalServerError,
   json,
   yaml,
+  form,
   binary,
   pdf,
   xml,

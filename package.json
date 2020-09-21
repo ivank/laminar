@@ -23,8 +23,6 @@
   },
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@types/pg": "^7.14.3",
-    "lerna": "^3.22.0",
-    "pg": "^8.2.1"
+    "lerna": "^3.22.0"
   }
 }

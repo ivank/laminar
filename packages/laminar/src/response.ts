@@ -226,6 +226,14 @@ export const csv = <T, R extends Partial<Response<T>>>(res: R) => ({
 });
 
 /**
+ * Content Type: application/x-www-form-urlencoded
+ */
+export const form = <T, R extends Partial<Response<T>>>(res: R) => ({
+  ...res,
+  headers: { ...res.headers, 'content-type': 'application/x-www-form-urlencoded' as const },
+});
+
+/**
  * JSON
  * ===========================================================================================
  */

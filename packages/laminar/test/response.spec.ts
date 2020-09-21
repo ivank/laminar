@@ -8,6 +8,7 @@ import {
   text,
   textOk,
   stop,
+  form,
   Laminar,
   json,
   jsonOk,
@@ -15,6 +16,12 @@ import {
   ok,
   setCookie,
   jsonNotFound,
+  csv,
+  css,
+  html,
+  xml,
+  pdf,
+  yaml,
 } from '../src';
 
 let server: Laminar;
@@ -161,6 +168,133 @@ describe('Requests', () => {
         'content-type': 'text/html',
       }),
       data: '<html></html>\n',
+    });
+  });
+
+  it('Should process laminar file with status', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => file(join(__dirname, 'test.txt'), { status: 201 }),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      status: 201,
+      data: 'some stuff\n',
+    });
+  });
+
+  it('Should process response type csv', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => csv(ok({ body: 'one,two' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'text/csv' }),
+      data: 'one,two',
+    });
+  });
+
+  it('Should process response type css', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => css(ok({ body: 'html { backgroun: red; }' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'text/css' }),
+      data: 'html { backgroun: red; }',
+    });
+  });
+
+  it('Should process response type html', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => html(ok({ body: '<html></html>' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'text/html' }),
+      data: '<html></html>',
+    });
+  });
+
+  it('Should process response type text', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => text(ok({ body: 'txt' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'text/plain' }),
+      data: 'txt',
+    });
+  });
+
+  it('Should process response type form', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => form(ok({ body: { one: 'foo', two: 'bar' } })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'application/x-www-form-urlencoded' }),
+      data: 'one=foo&two=bar',
+    });
+  });
+
+  it('Should process response type xml', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => xml(ok({ body: '<xml></xml>' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'application/xml' }),
+      data: '<xml></xml>',
+    });
+  });
+
+  it('Should process response type pdf', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => pdf(ok({ body: 'tmp' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'application/pdf' }),
+    });
+  });
+
+  it('Should process response type binary', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => binary(ok({ body: 'tmp' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'application/octet-stream' }),
+    });
+  });
+
+  it('Should process response type yaml', async () => {
+    server = laminar({
+      port: 8052,
+      app: () => yaml(ok({ body: 'tmp' })),
+    });
+    await start(server);
+
+    await expect(api.get('/test')).resolves.toMatchObject({
+      headers: expect.objectContaining({ 'content-type': 'application/yaml' }),
     });
   });
 

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'fs';
-import * as YAML from 'js-yaml';
+import * as YAML from 'yaml';
 import fetch from 'node-fetch';
 import { dirname, join } from 'path';
 import { URL } from 'url';
@@ -164,7 +164,7 @@ const loadFile = async (uri: string, { cwd }: FileContext = {}): Promise<LoadedJ
   if (url) {
     const result = await fetch(uri);
     if (result.headers.get('content-type') === 'application/yaml') {
-      return { uri, content: YAML.load(await result.text()) };
+      return { uri, content: YAML.parse(await result.text()) };
     } else {
       return { uri, content: await result.json() };
     }
@@ -174,7 +174,7 @@ const loadFile = async (uri: string, { cwd }: FileContext = {}): Promise<LoadedJ
     const newCwd = dirname(file);
 
     if (uri.endsWith('.yaml') || uri.endsWith('.yml')) {
-      return { uri: `file://${file}`, content: YAML.load(content), cwd: newCwd };
+      return { uri: `file://${file}`, content: YAML.parse(content), cwd: newCwd };
     } else {
       return { uri: `file://${file}`, content: JSON.parse(content), cwd: newCwd };
     }
