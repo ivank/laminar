@@ -243,7 +243,7 @@ describe('Integration', () => {
       api.get('/link', { maxRedirects: 0 }).catch((error) => error.response),
     ).resolves.toMatchObject({
       status: 302,
-      data: 'Redirecting to http://localhost:8050/destination.',
+      data: 'Redirecting to http://localhost:8050/destination',
     });
 
     await expect(api.get('/http-error')).resolves.toMatchObject({

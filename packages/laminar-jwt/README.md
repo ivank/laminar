@@ -7,7 +7,7 @@ A json web token middleware for laminar
 > [examples/simple.ts](examples/simple.ts)
 
 ```typescript
-import { get, post, start, laminar, jsonOk, router, App } from '@ovotech/laminar';
+import { get, post, start, laminar, jsonOk, router, App, describe } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 
 const secret = '123';
@@ -30,7 +30,9 @@ const app: App = router(
   ),
 );
 
-start(laminar({ port: 3333, app }));
+const server = laminar({ port: 3333, app });
+
+start(server).then(() => console.log(describe(server)));
 ```
 
 ### Usage with oapi
@@ -176,7 +178,9 @@ const onlyAdmin = auth(['admin']);
 
 const app: App = router(
   get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-  post('/session', ({ body }) => jsonOk(createSession({ secret: privateKey }, body))),
+  post('/session', ({ body }) =>
+    jsonOk(createSession({ secret: privateKey, options: { algorithm: 'RS256' } }, body)),
+  ),
   post(
     '/test',
     onlyAdmin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),

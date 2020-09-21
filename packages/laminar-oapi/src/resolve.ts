@@ -43,7 +43,7 @@ export const toResolvedOpenAPIObject = async <T extends Empty>({
 
   await ensureValid({
     schema: compileInContext(schema, compiledApi),
-    name: 'OpenApi',
+    name: 'createOapiOptions',
     value: { paths, security },
   });
 

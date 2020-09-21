@@ -80,9 +80,9 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
         };
     };
     security: {
-        BasicAuth: OapiSecurityResolver<R, TAuthInfo, BasicAuthSecuritySchema>;
-        BearerAuth: OapiSecurityResolver<R, TAuthInfo, BearerAuthSecuritySchema>;
-        ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo, ApiKeyAuthSecuritySchema>;
+        BasicAuth: OapiSecurityResolver<R, TAuthInfo>;
+        BearerAuth: OapiSecurityResolver<R, TAuthInfo>;
+        ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo>;
     };
 }
 
@@ -385,24 +385,6 @@ export interface RequestApiV3AccountsAccountIdAdjustbalancePost<TAuthInfo> exten
  * Returns with the adjusted balance
  */
 export type PathApiV3AccountsAccountIdAdjustbalancePost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestApiV3AccountsAccountIdAdjustbalancePost<TAuthInfo> & R) => ResponseApiV3AccountsAccountIdAdjustbalancePost | Promise<ResponseApiV3AccountsAccountIdAdjustbalancePost>;
-
-interface BasicAuthSecuritySchema extends RequestOapi {
-    headers: {
-        authorization: string;
-    };
-}
-
-interface BearerAuthSecuritySchema extends RequestOapi {
-    headers: {
-        authorization: string;
-    };
-}
-
-interface ApiKeyAuthSecuritySchema extends RequestOapi {
-    headers: {
-        \\"x-api-key\\": string;
-    };
-}
 "
 `;
 

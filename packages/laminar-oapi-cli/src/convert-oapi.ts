@@ -12,7 +12,6 @@ import {
   MediaTypeObject,
   OpenAPIObject,
   OperationObject,
-  ParameterLocation,
   ParameterObject,
   PathItemObject,
   ReferenceObject,
@@ -32,7 +31,6 @@ import {
   isRequestBodyObject,
   isParameterObject,
   isMediaTypeObject,
-  isSecuritySchemaObject,
 } from './traverse';
 
 interface AstParameters {
@@ -67,9 +65,6 @@ const toParamLocation = (
       return location;
   }
 };
-
-const isParamLocation = (location: string): location is ParameterLocation =>
-  ['header', 'cookie', 'path', 'query'].includes(location);
 
 const toParamName = (location: 'header' | 'cookie' | 'path' | 'query', name: string): string =>
   location === 'header' ? name.toLowerCase() : name;
@@ -115,88 +110,26 @@ const convertParameters = (
   };
 };
 
-const convertSecuritySchema = (
-  context: AstContext,
-  name: string,
-  securitySchemaOrRef: SecuritySchemeObject | ReferenceObject,
-): ts.InterfaceDeclaration | undefined => {
-  const security = getReferencedObject(securitySchemaOrRef, isSecuritySchemaObject, context);
-  switch (security.type) {
-    case 'http':
-      return Type.Interface({
-        name,
-        ext: [{ name: 'RequestOapi' }],
-        props: [
-          Type.Prop({
-            name: 'headers',
-            type: Type.TypeLiteral({
-              props: [Type.Prop({ name: 'authorization', type: Type.String })],
-            }),
-          }),
-        ],
-      });
-    case 'apiKey':
-      return security.in && security.name && isParamLocation(security.in)
-        ? Type.Interface({
-            name,
-            ext: [{ name: 'RequestOapi' }],
-            props: [
-              Type.Prop({
-                name: toParamLocation(security.in),
-                type: Type.TypeLiteral({
-                  props: [Type.Prop({ name: security.name.toLowerCase(), type: Type.String })],
-                }),
-              }),
-            ],
-          })
-        : undefined;
-  }
-  return undefined;
-};
-
 const convertSecuritySchemas = (
   context: AstContext,
   securitySchemas: {
     [securityScheme: string]: SecuritySchemeObject | ReferenceObject;
   },
 ): Document<ts.PropertySignature, AstContext> => {
-  const securityEntries = Object.entries<SecuritySchemeObject | ReferenceObject>(securitySchemas);
-
   const security = mapWithContext(
     context,
-    securityEntries,
-    (securityContext, [name, securitySchemaOrRef]) => {
-      const securitySchemaName = `${title(name)}SecuritySchema`;
-      const securityType = convertSecuritySchema(
+    Object.keys(securitySchemas),
+    (securityContext, name) => {
+      return document(
         securityContext,
-        securitySchemaName,
-        securitySchemaOrRef,
+        Type.Prop({
+          name,
+          type: Type.Referance('OapiSecurityResolver', [
+            Type.Referance('R'),
+            Type.Referance('TAuthInfo'),
+          ]),
+        }),
       );
-
-      if (securityType) {
-        return document(
-          withIdentifier(securityContext, securityType),
-          Type.Prop({
-            name,
-            type: Type.Referance('OapiSecurityResolver', [
-              Type.Referance('R'),
-              Type.Referance('TAuthInfo'),
-              Type.Referance(securitySchemaName),
-            ]),
-          }),
-        );
-      } else {
-        return document(
-          securityContext,
-          Type.Prop({
-            name,
-            type: Type.Referance('OapiSecurityResolver', [
-              Type.Referance('R'),
-              Type.Referance('TAuthInfo'),
-            ]),
-          }),
-        );
-      }
     },
   );
 

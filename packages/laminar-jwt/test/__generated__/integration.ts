@@ -15,7 +15,7 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
         };
     };
     security: {
-        JWTSecurity: OapiSecurityResolver<R, TAuthInfo, JWTSecuritySecuritySchema>;
+        JWTSecurity: OapiSecurityResolver<R, TAuthInfo>;
     };
 }
 
@@ -82,9 +82,3 @@ export interface RequestTestGet<TAuthInfo> extends RequestOapi {
 }
 
 export type PathTestGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestTestGet<TAuthInfo> & R) => ResponseTestGet | Promise<ResponseTestGet>;
-
-interface JWTSecuritySecuritySchema extends RequestOapi {
-    headers: {
-        authorization: string;
-    };
-}

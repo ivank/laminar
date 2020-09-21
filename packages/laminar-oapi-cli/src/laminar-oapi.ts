@@ -6,6 +6,7 @@ import { openapiV3 } from 'openapi-schemas';
 import { OpenAPIObject } from 'openapi3-ts';
 import { convertOapi } from './convert-oapi';
 import { printDocument } from '@ovotech/ts-compose';
+import { dirname } from 'path';
 
 export const processFile = async (
   fileName: string,
@@ -41,8 +42,11 @@ export const laminarOapi = (logger: Logger = console): commander.Command =>
     .action(async (inputFile, outputFile, { watch }) => {
       try {
         const { content, uris } = await processFile(inputFile);
+        fs.mkdirSync(dirname(outputFile), { recursive: true });
         fs.writeFileSync(outputFile, content);
-        logger.info(`Conterted ${green(inputFile)} -> ${yellow(outputFile)}`);
+        logger.info(
+          `OpenAPI Schema ${green(inputFile)} -> ${yellow(outputFile)} laminar-oapi Types`,
+        );
 
         if (watch) {
           logger.info(`Watching ${toFiles(uris).join(', ')} for changes`);
@@ -53,7 +57,9 @@ export const laminarOapi = (logger: Logger = console): commander.Command =>
                 const update = await processFile(inputFile);
                 fs.writeFileSync(outputFile, update.content);
                 logger.info(
-                  `Updated ${green(inputFile)} -> ${yellow(outputFile)} (trigger ${file})`,
+                  `Updated OpenAPI Schema ${green(inputFile)} -> ${yellow(
+                    outputFile,
+                  )} (trigger ${file})`,
                 );
               } catch (error) {
                 logger.error(red(error.message));

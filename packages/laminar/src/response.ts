@@ -16,7 +16,7 @@ export const response = <T>({
 
 export const redirect = (
   location: string,
-  { status = 302, headers, body = `Redirecting to ${location}.` }: Partial<Response> = {},
+  { status = 302, headers, body = `Redirecting to ${location}` }: Partial<Response> = {},
 ): Response => ({
   body,
   status,

@@ -1,14 +1,14 @@
 version: '3.1'
 
 services:
-  petstore-db:
+  example-petstore-db:
     image: postgres:11
     restart: always
     ports:
-      - 5001:5432
+      - 5432:5432
     environment:
-      POSTGRES_DB: petstore
-      POSTGRES_USER: petstore-admin
-      POSTGRES_PASSWORD: petstore-pass
+      POSTGRES_DB: example
+      POSTGRES_USER: example-admin
+      POSTGRES_PASSWORD: example-pass
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql

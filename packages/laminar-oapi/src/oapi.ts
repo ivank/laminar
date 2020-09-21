@@ -13,43 +13,11 @@ import {
   jsonNotFound,
   Response,
 } from '@ovotech/laminar';
-import { RequestOapi, OapiSecurity, OapiConfig, OapiAuthInfo, Route } from './types';
-import { SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
+import { RequestOapi, OapiConfig, Route } from './types';
 import { toResolvedOpenAPIObject } from './resolve';
 import { toRoutes, selectRoute } from './routes';
 import { toMatchPattern } from './helpers';
-
-const isAuthInfo = (item: unknown): item is OapiAuthInfo =>
-  typeof item == 'object' && item !== null;
-
-const validateSecurity = async <T extends Empty = Empty>(
-  req: T & AppRequest & RequestOapi,
-  requirements?: SecurityRequirementObject[],
-  schemes?: { [securityScheme: string]: SecuritySchemeObject },
-  security?: OapiSecurity<T>,
-): Promise<unknown> => {
-  if (!requirements || requirements.length === 0 || !security || !schemes) {
-    return undefined;
-  }
-
-  const checks = requirements
-    .map(async (requirement) => {
-      const securityContexts = Object.entries(requirement)
-        .map(([name, scopes]) => security[name]({ ...req, securityScheme: schemes[name], scopes }))
-        .filter(isAuthInfo);
-      return (await Promise.all(securityContexts)).reduce((a, b) => ({ ...a, ...b }), {});
-    })
-    .map((check) => check.catch((error) => error));
-
-  const results = await Promise.all(checks);
-  const authInfo = results.find((result) => !(result instanceof Error));
-
-  if (!authInfo) {
-    throw results.find((result) => result instanceof Error);
-  }
-
-  return authInfo;
-};
+import { isSecurityResponse, validateSecurity } from './security';
 
 export const toRequestError = <T>(
   result: ResultError,
@@ -102,14 +70,18 @@ export const createOapi = async <T extends Empty>(config: OapiConfig<T>): Promis
       return toRequestError<T>(checkRequest, select.route, req);
     }
 
-    const authInfo = await validateSecurity<T>(
+    const security = await validateSecurity<T>(
       reqOapi,
       select.route.security,
       oapi.schema.components?.securitySchemes,
       config.security,
     );
 
-    const res = await select.route.resolver({ ...reqOapi, authInfo });
+    if (security && isSecurityResponse(security)) {
+      return security;
+    }
+
+    const res = await select.route.resolver({ ...reqOapi, ...security });
     const checkResponse = validateCompiled({
       schema: compileInContext(select.route.response, oapi),
       value: res,

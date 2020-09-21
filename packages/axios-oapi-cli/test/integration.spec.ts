@@ -1,5 +1,4 @@
 import {
-  HttpError,
   laminar,
   start,
   stop,
@@ -7,10 +6,11 @@ import {
   jsonOk,
   jsonNoContent,
   jsonNotFound,
+  jsonUnauthorized,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
-import { createOapi } from '@ovotech/laminar-oapi';
+import { createOapi, securityOk } from '@ovotech/laminar-oapi';
 import { Config, Pet } from './__generated__/integration';
 import { axiosOapi } from './__generated__/integration.types';
 
@@ -34,23 +34,19 @@ describe('Integration', () => {
     const config: Config<AuthInfo> = {
       api: join(__dirname, 'integration.yaml'),
       security: {
-        BearerAuth: ({ headers }) => {
-          if (headers.authorization === 'Bearer 123') {
-            return { user: 'dinkey' };
-          } else {
-            throw new HttpError(401, { message: 'Unathorized user' });
-          }
-        },
-        BasicAuth: ({ headers }) => {
-          if (headers.authorization !== 'Basic 123') {
-            throw new HttpError(401, { message: 'Unathorized user' });
-          }
-        },
-        ApiKeyAuth: ({ headers }) => {
-          if (headers['x-api-key'] !== 'Me') {
-            throw new HttpError(401, { message: 'Unathorized user' });
-          }
-        },
+        BearerAuth: ({ headers }) =>
+          headers.authorization === 'Bearer 123'
+            ? securityOk({ user: 'dinkey' })
+            : jsonUnauthorized({ message: 'Unathorized user' }),
+        BasicAuth: ({ headers }) =>
+          headers.authorization === 'Basic 123'
+            ? securityOk({ user: 'basickey' })
+            : jsonUnauthorized({ message: 'Unathorized user' }),
+
+        ApiKeyAuth: ({ headers }) =>
+          headers['x-api-key'] === 'Me'
+            ? securityOk({ user: 'apikey' })
+            : jsonUnauthorized({ message: 'Unathorized user' }),
       },
       paths: {
         '/pets': {
@@ -185,11 +181,8 @@ describe('Integration', () => {
         (error) => error.response,
       ),
     ).resolves.toMatchObject({
-      status: 400,
-      data: {
-        errors: ['[request.headers] (required) is missing [x-api-key] keys'],
-        message: 'Request for "DELETE /pets/222" does not match OpenApi Schema',
-      },
+      status: 401,
+      data: { message: 'Unathorized user' },
     });
 
     await expect(

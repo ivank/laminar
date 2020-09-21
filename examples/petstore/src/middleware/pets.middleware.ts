@@ -10,7 +10,7 @@ import { RequestPgPool } from './pg-pool.middleware';
 export class PetsDb {
   public constructor(private db: PoolClient) {}
 
-  public async all({ tags, limit = 20 }: { tags?: string[]; limit?: number }): Promise<Pet[]> {
+  public async all({ tags, limit = '20' }: { tags?: string[]; limit?: string }): Promise<Pet[]> {
     const query = tags
       ? {
           text: 'SELECT id, name, tag FROM pets WHERE tag = ANY($1::text[]) LIMIT $2',

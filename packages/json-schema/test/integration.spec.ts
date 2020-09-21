@@ -65,6 +65,61 @@ describe('Helper isEqual', () => {
     ]);
   });
 
+  it('Should validate complex allOf anyOf', async () => {
+    const schema: Schema = {
+      allOf: [
+        {
+          properties: {
+            headers: {
+              required: ['x-trace-token'],
+              properties: { 'x-trace-token': { type: 'string', format: 'uuid' } },
+            },
+          },
+          required: ['headers'],
+        },
+        {
+          anyOf: [
+            {
+              allOf: [
+                {
+                  properties: {
+                    headers: {
+                      properties: { authorization: { pattern: '^Bearer' } },
+                      required: ['authorization'],
+                    },
+                  },
+                  required: ['headers'],
+                },
+                {
+                  properties: { headers: { required: ['x-api-key'] } },
+                  required: ['headers'],
+                },
+              ],
+            },
+            {
+              properties: { cookies: { required: ['auth'] } },
+              required: ['cookies'],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = await validate({
+      schema,
+      value: { headers: { 'x-trace-token': '123e4567-e89b-12d3-a456-426614174000' } },
+    });
+
+    expect(result.errors).toEqual([
+      '[value] (anyOf) should match at least 1 schema\n' +
+        '  | Schema 1:\n' +
+        '  |   [.headers] (required) is missing [authorization] keys\n' +
+        '  |   [.headers] (required) is missing [x-api-key] keys\n' +
+        '  | Schema 2:\n' +
+        '  |   [] (required) is missing [cookies] keys',
+    ]);
+  });
+
   it('Should ensureValid', async () => {
     const animalSchema: Schema = {
       properties: {

@@ -1,0 +1,87 @@
+---
+openapi: 3.0.0
+info:
+  title: Simple API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/oauth.access':
+    get:
+      parameters:
+        - name: 'code'
+          in: 'query'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '302':
+          description: Sign In Redirect
+          headers:
+            Location:
+              required: true
+              schema:
+                format: uri
+        '401':
+          description: Invalid Code
+
+  '/user':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/User'
+      security:
+        - SlackSecurity:
+            - users:write
+      responses:
+        '200':
+          description: Newly Created User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/NewUser'
+    get:
+      security:
+        - SlackSecurity:
+            - users:read
+      responses:
+        '200':
+          description: Loaded User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/User'
+components:
+  securitySchemes:
+    SlackSecurity:
+      type: oauth2
+      description: For more information, see https://api.slack.com/docs/oauth
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8068/oauth/authorize
+          tokenUrl: /oauth.access
+          scopes:
+            users:read: Read user information
+            users:write: Modify user information
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    JWT:
+      type: string
+    NewUser:
+      properties:
+        result:
+          type: string
+        user:
+          '$ref': '#/components/schemas/User'
+      required:
+        - result
+        - user

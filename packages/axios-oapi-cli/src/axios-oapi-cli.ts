@@ -6,6 +6,8 @@ import { openapiV3 } from 'openapi-schemas';
 import { OpenAPIObject } from 'openapi3-ts';
 import { printDocument } from '@ovotech/ts-compose';
 import { convertOapi } from './convert-oapi';
+import { green, yellow } from 'chalk';
+import { dirname } from 'path';
 
 export const processFile = async (file: string): Promise<string> => {
   const { schema, refs } = await compile(file);
@@ -56,7 +58,10 @@ export const axiosOapiCli = (logger: Logger = console): commander.Command =>
       const result = await processFile(input);
 
       if (output) {
-        logger.info(`Conterted ${file ? file : 'STDIN'} to ${output}`);
+        fs.mkdirSync(dirname(output), { recursive: true });
+        logger.info(
+          `OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} axios types`,
+        );
         fs.writeFileSync(output, result);
       } else {
         process.stdout.write(result);

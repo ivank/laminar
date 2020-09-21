@@ -30,10 +30,10 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
         };
     };
     security: {
-        BearerAuth: OapiSecurityResolver<R, TAuthInfo, BearerAuthSecuritySchema>;
-        ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo, ApiKeyAuthSecuritySchema>;
-        CookieAuth: OapiSecurityResolver<R, TAuthInfo, CookieAuthSecuritySchema>;
-        QueryAuth: OapiSecurityResolver<R, TAuthInfo, QueryAuthSecuritySchema>;
+        BearerAuth: OapiSecurityResolver<R, TAuthInfo>;
+        ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo>;
+        CookieAuth: OapiSecurityResolver<R, TAuthInfo>;
+        QueryAuth: OapiSecurityResolver<R, TAuthInfo>;
     };
 }
 
@@ -71,7 +71,7 @@ export interface RequestPetsGet<TAuthInfo> extends RequestOapi {
         /**
          * maximum number of results to return
          */
-        limit?: number;
+        limit?: string;
     };
     authInfo: TAuthInfo;
 }
@@ -151,27 +151,3 @@ export interface RequestPetsIdDelete<TAuthInfo> extends RequestOapi {
  * deletes a single pet based on the ID supplied
  */
 export type PathPetsIdDelete<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdDelete<TAuthInfo> & R) => ResponsePetsIdDelete | Promise<ResponsePetsIdDelete>;
-
-interface BearerAuthSecuritySchema extends RequestOapi {
-    headers: {
-        authorization: string;
-    };
-}
-
-interface ApiKeyAuthSecuritySchema extends RequestOapi {
-    headers: {
-        "x-api-key": string;
-    };
-}
-
-interface CookieAuthSecuritySchema extends RequestOapi {
-    cookies: {
-        auth: string;
-    };
-}
-
-interface QueryAuthSecuritySchema extends RequestOapi {
-    query: {
-        token: string;
-    };
-}

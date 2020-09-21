@@ -1,0 +1,33 @@
+{
+  "name": "@examples/split",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "This is a simple example of a laminar app split into files",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/examples/split#readme",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^14.0.6",
+    "axios": "^0.19.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2",
+    "@types/jest": "^26.0.10",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.3.0"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "scripts": {
+    "build": "tsc --declaration",
+    "start": "PORT=8821 PG=postgres://example-admin:example-pass@localhost:5432/example ts-node src/index.ts",
+    "test": "jest test --runInBand"
+  },
+  "dependencies": {
+    "@ovotech/laminar": "^0.7.1",
+    "pg": "^8.2.1"
+  }
+}

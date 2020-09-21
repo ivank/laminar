@@ -16,7 +16,7 @@ Packages:
 
 You first define your OpenAPI file:
 
-> [examples/simple.yaml](examples/simple.yaml)
+> [examples/simple/simple.yaml](examples/simple/simple.yaml)
 
 ```yaml
 openapi: '3.0.0'
@@ -53,7 +53,7 @@ components:
 
 And then you can implement it using [@ovotech/laminar-oapi](packages/laminar-oapi)
 
-> [examples/simple.ts](examples/simple.ts)
+> [examples/simple/simple.ts](examples/simple/simple.ts)
 
 ```typescript
 import { laminar, start, describe, jsonOk, loggingMiddleware } from '@ovotech/laminar';
@@ -88,7 +88,7 @@ This would validate both the request and the response, making sure your code rec
 
 If you have this schema:
 
-> [examples/security.yaml](examples/security.yaml)
+> [examples/security/security.yaml](examples/security/security.yaml)
 
 ```yaml
 openapi: '3.0.0'
@@ -130,19 +130,25 @@ components:
 
 You can then implement the security with:
 
-> [examples/security.ts](examples/security.ts)
+> [examples/security/security.ts](examples/security/security.ts)
 
 ```typescript
-import { laminar, start, jsonOk, HttpError, describe, loggingMiddleware } from '@ovotech/laminar';
-import { createOapi } from '@ovotech/laminar-oapi';
+import {
+  laminar,
+  start,
+  jsonOk,
+  describe,
+  loggingMiddleware,
+  jsonForbidden,
+} from '@ovotech/laminar';
+import { createOapi, securityOk } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });
-const validate = (authorizaitonHeader?: string) => {
-  if (authorizaitonHeader !== 'Secret Pass') {
-    throw new HttpError(403, { message: 'Unkown user' });
-  }
-};
+const validate = (authorizaitonHeader?: string) =>
+  authorizaitonHeader === 'Secret Pass'
+    ? securityOk({ email: 'me@example.com' })
+    : jsonForbidden({ message: 'Unkown user' });
 
 const main = async () => {
   const logging = loggingMiddleware(console);
@@ -182,39 +188,43 @@ yarn laminar-oapi simple.yaml __generated__/simple.ts --watch
 
 If the schema has references to multiple files and those files are in the local file system, they will be watched for changes as well.
 
-> [examples/simple-types.ts](examples/simple-types.ts)
+> [examples/simple-types/simple-types.ts](examples/simple-types/simple-types.ts)
 
 ```typescript
-import { laminar } from '@ovotech/laminar';
-import { createOapi } from '@ovotech/laminar-oapi';
-import { Config, UserResponse } from './__generated__/simple';
-import { join } from 'path';
+import { RequestOapi, OapiConfig, ResponseOapi } from "@ovotech/laminar-oapi";
 
-const findUser = (id: string): UserResponse => ({ id, name: 'John' });
+import { Empty } from "@ovotech/laminar";
 
-const config: Config = {
-  api: join(__dirname, 'simple.yaml'),
-  paths: {
-    '/user/{id}': {
-      get: ({ path }) => findUser(path.id),
-    },
-  },
-};
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        "/user/{id}": {
+            get: PathUserIdGet<R>;
+        };
+    };
+}
 
-const main = async (): Promise<void> => {
-  const app = await createOapi(config);
-  const server = await laminar({ app, port: 8081 });
-  console.log('Started', server.address());
-};
+export interface UserResponse {
+    id?: string;
+    name?: string;
+    [key: string]: unknown;
+}
 
-main();
+export type ResponseUserIdGet = ResponseOapi<UserResponse, 200, "application/json">;
+
+export interface RequestUserIdGet extends RequestOapi {
+    path: {
+        id: string;
+    };
+}
+
+export type PathUserIdGet<R extends Empty = Empty> = (req: RequestUserIdGet & R) => ResponseUserIdGet | Promise<ResponseUserIdGet>;
 ```
 
 ## Simple Usage
 
 Laminar can also be used without any spec for a very minimal rest api.
 
-> [examples/routes.ts](examples/routes.ts)
+> [examples/routes/routes.ts](examples/routes/routes.ts)
 
 ```typescript
 import { get, jsonOk, router, laminar, describe } from '@ovotech/laminar';
@@ -249,9 +259,11 @@ Lets see the simplest possible app with laminar, a very simple echo app
 > [packages/laminar/examples/echo.ts](packages/laminar/examples/echo.ts)
 
 ```typescript
-import { laminar, start, response } from '@ovotech/laminar';
+import { laminar, start, response, describe } from '@ovotech/laminar';
 
-start(laminar({ port: 3333, app: ({ body }) => response({ body }) }));
+const server = laminar({ port: 3333, app: ({ body }) => response({ body }) });
+
+start(server).then(() => console.log(describe(server)));
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -265,14 +277,15 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 > [packages/laminar/examples/echo-auth.ts](packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { laminar, start, textForbidden, textOk, App, Middleware } from '@ovotech/laminar';
+import { laminar, start, textForbidden, textOk, App, Middleware, describe } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) =>
-  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
 const app: App = (req) => textOk(req.url.toString());
 
-start(laminar({ port: 3333, app: auth(app) }));
+const server = laminar({ port: 3333, app: auth(app) });
+
+start(server).then(() => console.log(describe(server)));
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
@@ -280,10 +293,9 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 > [packages/laminar/examples/echo-auth-log.ts](packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { Middleware, App, textForbidden, textOk, start, laminar } from '@ovotech/laminar';
+import { Middleware, App, textForbidden, textOk, start, laminar, describe } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) =>
-  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -294,7 +306,8 @@ const log: Middleware = (next) => (req) => {
 
 const app: App = (req) => textOk(req.body);
 
-start(laminar({ port: 3333, app: log(auth(app)) }));
+const server = laminar({ port: 3333, app: log(auth(app)) });
+start(server).then(() => console.log(describe(server)));
 ```
 
 You can see how we can string those middlewares along `log(auth(app))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -306,7 +319,7 @@ Lets see how we can go about doing that.
 > [packages/laminar/examples/echo-auth-log-db.ts](packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { Middleware, App, textForbidden, jsonOk, start, laminar } from '@ovotech/laminar';
+import { Middleware, App, textForbidden, jsonOk, start, laminar, describe } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -330,8 +343,7 @@ const createDbMiddleware = (): Middleware<RequestDB> => {
   return (next) => (req) => next({ ...req, db });
 };
 
-const auth: Middleware = (next) => (req) =>
-  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -348,7 +360,8 @@ const app: App<RequestDB> = (req) => jsonOk({ url: req.url, user: req.db.getVali
 
 const db = createDbMiddleware();
 
-start(laminar({ port: 3333, app: log(db(auth(app))) }));
+const server = laminar({ port: 3333, app: log(db(auth(app))) });
+start(server).then(() => console.log(describe(server)));
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
@@ -379,81 +392,112 @@ server.on(async (request, response) => {
 
 You can split all your middlewares, path handlers, and other parts of the app in different files / modules. If they implement the right interfaces you can be sure about all of your dependencies at compile time.
 
-> [examples/in-parts-with-db.ts](examples/in-parts-with-db.ts)
+You can inspect the whole app in [examples/split](examples/split)
+
+> [examples/split/src/db.middleware.ts](examples/split/src/db.middleware.ts)
 
 ```typescript
+import { Middleware } from '@ovotech/laminar';
 import { Client } from 'pg';
-import {
-  get,
-  put,
-  router,
-  jsonOk,
-  jsonNotFound,
-  loggingMiddleware,
-  Middleware,
-  AppRoute,
-  RequestLogging,
-  describe,
-  laminar,
-  start,
-} from '@ovotech/laminar';
 
-// Middleware to connect to postgres
-// =================================
-interface RequestPg {
+export interface RequestPg {
   pg: Client;
 }
 
-const createPgClient = async (config: string): Promise<Middleware<RequestPg>> => {
+/**
+ * Creat a pg connection and pass to each request (simple but not production ready)
+ */
+export const createPgClient = async (config: string): Promise<Middleware<RequestPg>> => {
   const pg = new Client(config);
   await pg.connect();
   return (next) => (ctx) => next({ ...ctx, pg });
 };
+```
 
-// Route Handlers, each can be in a different file
-// ================================================
-const healthCheck: AppRoute = () => jsonOk({ health: 'ok' });
+> [examples/split/src/health-check.route.ts](examples/split/src/health-check.route.ts)
 
-// Finding a user requires a PG connection
-const find: AppRoute<RequestPg> = async ({ path, pg }) => {
-  const { rows } = await pg.query('SELECT id, name FROM users WHERE id $1', [path.id]);
+```typescript
+import { AppRoute, jsonOk } from '@ovotech/laminar';
+
+export const healthCheck: AppRoute = () => jsonOk({ health: 'ok' });
+```
+
+> [examples/split/src/find.route.ts](examples/split/src/find.route.ts)
+
+```typescript
+import { AppRoute, jsonOk, jsonNotFound } from '@ovotech/laminar';
+import { RequestPg } from './db.middleware';
+
+/**
+ * Finding a user requires a PG connection
+ */
+export type FindRoute = AppRoute<RequestPg>;
+
+export const find: FindRoute = async ({ path, pg }) => {
+  const { rows } = await pg.query('SELECT id, name FROM users WHERE id = $1', [path.id]);
 
   return rows[0]
     ? jsonOk(rows[0])
     : jsonNotFound({ message: `No User With id ${path.id} was found` });
 };
+```
 
-// Updating a user requires a PG connection and logging capablilities
-const update: AppRoute<RequestPg & RequestLogging<Console>> = async ({
-  path,
-  pg,
-  body,
-  logger,
-}) => {
+> [examples/split/src/update.route.ts](examples/split/src/update.route.ts)
+
+```typescript
+import { AppRoute, RequestLogging, jsonOk } from '@ovotech/laminar';
+import { RequestPg } from './db.middleware';
+
+/**
+ * Updating a user requires a PG connection and logging capablilities
+ */
+export type UpdateRoute = AppRoute<RequestPg & RequestLogging<Console>>;
+
+export const update: UpdateRoute = async ({ path, pg, body, logger }) => {
   await pg.query('UPDATE users SET name = $1 WHERE id = $2', [body.name, path.id]);
   logger.log('info', 'User Updated');
 
   return jsonOk({ message: 'User Updated' });
 };
+```
 
-// Routes
-// =================================
-const routes = router(
+> [examples/split/src/routes.ts](examples/split/src/routes.ts)
+
+```typescript
+import { router, get, put } from '@ovotech/laminar';
+import { find } from './find.route';
+import { healthCheck } from './health-check.route';
+import { update } from './update.route';
+
+export const routes = router(
   get('/.well-known/health-check', healthCheck),
   get('/users/{id}', find),
   put('/users/{id}', update),
 );
+```
 
-// App
-// ============================
+> [examples/split/src/index.ts](examples/split/src/index.ts)
+
+```typescript
+import { loggingMiddleware, laminar, start, describe } from '@ovotech/laminar';
+import { createPgClient } from './db.middleware';
+import { routes } from './routes';
 
 const main = async () => {
+  if (process.env.PG === undefined) {
+    throw new Error('Need PG env variable');
+  }
+
+  if (process.env.PORT === undefined) {
+    throw new Error('Need PORT env variable');
+  }
+
   const logging = loggingMiddleware(console);
-  const pgClient = await createPgClient('localhost:5432');
+  const pgClient = await createPgClient(process.env.PG);
 
   const app = logging(pgClient(routes));
 
-  const server = laminar({ app, port: 8082 });
+  const server = laminar({ app, port: Number(process.env.PORT) });
   await start(server);
 
   console.log(describe(server));
@@ -464,9 +508,15 @@ main();
 
 ## Running the tests
 
-You can run the tests with:
+You'll need to start a postgres instance to run the tests for some of the exmaples
 
-```bash
+```shell
+docker-compose -f examples/docker-compose.yaml
+```
+
+You can then run the tests with:
+
+```shell
 yarn test
 ```
 
@@ -480,7 +530,7 @@ yarn lint
 
 ## Deployment
 
-Deployment is preferment by lerna automatically on merge / push to master, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
+Deployment is done by lerna automatically on merge / push to master, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
 
 ## Contributing
 

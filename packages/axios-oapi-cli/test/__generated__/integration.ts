@@ -30,9 +30,9 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
         };
     };
     security: {
-        BasicAuth: OapiSecurityResolver<R, TAuthInfo, BasicAuthSecuritySchema>;
-        BearerAuth: OapiSecurityResolver<R, TAuthInfo, BearerAuthSecuritySchema>;
-        ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo, ApiKeyAuthSecuritySchema>;
+        BasicAuth: OapiSecurityResolver<R, TAuthInfo>;
+        BearerAuth: OapiSecurityResolver<R, TAuthInfo>;
+        ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo>;
     };
 }
 
@@ -150,21 +150,3 @@ export interface RequestPetsIdDelete<TAuthInfo> extends RequestOapi {
  * deletes a single pet based on the ID supplied
  */
 export type PathPetsIdDelete<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdDelete<TAuthInfo> & R) => ResponsePetsIdDelete | Promise<ResponsePetsIdDelete>;
-
-interface BasicAuthSecuritySchema extends RequestOapi {
-    headers: {
-        authorization: string;
-    };
-}
-
-interface BearerAuthSecuritySchema extends RequestOapi {
-    headers: {
-        authorization: string;
-    };
-}
-
-interface ApiKeyAuthSecuritySchema extends RequestOapi {
-    headers: {
-        "x-api-key": string;
-    };
-}

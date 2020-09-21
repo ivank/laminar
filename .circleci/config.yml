@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  postgres: onehq/postgres@1.1.0
+
 commands:
   yarn-install:
     description: Install cached yarn packages
@@ -25,6 +28,11 @@ jobs:
   test:
     docker:
       - image: circleci/node:10
+      - image: postgres:11
+        environment:
+          POSTGRES_DB: example
+          POSTGRES_USER: example-admin
+          POSTGRES_PASSWORD: example-pass
     steps:
       - checkout
       - run:
@@ -35,6 +43,12 @@ jobs:
       - yarn-install
       - yarn-save-cache
       - run: yarn build --concurrency 1
+      - postgres/install_postgres_client
+      - run:
+          name: 'Run install scripts for examples'
+          command: |
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/petstore/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/split/init.sql
       - run: yarn test
 
   publish:

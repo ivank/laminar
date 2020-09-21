@@ -10,9 +10,16 @@ import {
   VerifiedJWTData,
 } from './types';
 import * as jsonwebtoken from 'jsonwebtoken';
-import { JWTAuthenticationError } from './JWTAuthenticationError';
-import { Middleware, Empty } from '@ovotech/laminar';
-import { OapiSecurityResolver } from '@ovotech/laminar-oapi';
+import {
+  Middleware,
+  Empty,
+  jsonUnauthorized,
+  jsonBadRequest,
+  Response,
+  jsonForbidden,
+  jsonInternalServerError,
+} from '@ovotech/laminar';
+import { isSecurityOk, OapiSecurityResolver, Security, securityOk } from '@ovotech/laminar-oapi';
 
 const isJWTData = (data: VerifiedJWTData | string | null): data is JWTData =>
   data !== null && typeof data === 'object' && 'email' in data;
@@ -52,7 +59,7 @@ export const verifyToken = async <TUser extends JWTData = JWTData>(
   { secret, options, scopeError = simpleScopeError }: JWTVerify,
   token: string,
   scopes?: string[],
-): Promise<TUser> => {
+): Promise<Security<TUser> | Response> => {
   try {
     const data = await new Promise<VerifiedJWTData>((resolve, reject) =>
       jsonwebtoken.verify(token, secret, options, (err, data) =>
@@ -61,7 +68,7 @@ export const verifyToken = async <TUser extends JWTData = JWTData>(
     );
 
     if (!isJWTData(data)) {
-      throw new JWTAuthenticationError(401, {
+      return jsonUnauthorized({
         message:
           'Authorization token malformed, needs to be an object like { email: "...", scopes: ["...","..."] }',
       });
@@ -69,26 +76,26 @@ export const verifyToken = async <TUser extends JWTData = JWTData>(
 
     const error = scopeError(data, scopes);
     if (error !== undefined) {
-      throw new JWTAuthenticationError(403, {
+      return jsonForbidden({
         message: `Unauthorized. ${error}`,
       });
     }
 
-    return data as TUser;
+    return securityOk(data as TUser);
   } catch (error) {
     if (error instanceof jsonwebtoken.TokenExpiredError) {
-      throw new JWTAuthenticationError(403, {
+      return jsonForbidden({
         message: `Unauthorized. ${error.message}`,
         expiredAt: error.expiredAt,
       });
     } else if (error instanceof jsonwebtoken.NotBeforeError) {
-      throw new JWTAuthenticationError(403, {
+      return jsonForbidden({
         message: `Unauthorized. ${error.message}`,
         date: error.date,
       });
     }
 
-    throw error;
+    return jsonInternalServerError({ message: error.message });
   }
 };
 
@@ -96,13 +103,13 @@ export const verifyBearer = async <TUser extends JWTData = JWTData>(
   options: JWTVerify,
   authorization?: string,
   scopes?: string[],
-): Promise<TUser> => {
+): Promise<Security<TUser> | Response> => {
   if (!authorization) {
-    throw new JWTAuthenticationError(401, { message: 'Authorization header missing' });
+    return jsonBadRequest({ message: 'Authorization header missing' });
   }
   const token = authorization.match(/^Bearer (.*)$/)?.[1];
   if (!token) {
-    throw new JWTAuthenticationError(401, {
+    return jsonUnauthorized(401, {
       message: 'Authorization header is invalid. Needs to be "Bearer ${token}"',
     });
   }
@@ -114,11 +121,14 @@ export const authMiddleware = <TUser extends JWTData = JWTData>(
   options: JWTVerify,
 ): ((scopes?: string[]) => Middleware<RequestAuthInfo<TUser>>) => (scopes) => (next) => async (
   req,
-) =>
-  next({
-    ...req,
-    authInfo: await verifyBearer(options, req.incommingMessage.headers.authorization, scopes),
-  });
+) => {
+  const result = await verifyBearer<TUser>(
+    options,
+    req.incommingMessage.headers.authorization,
+    scopes,
+  );
+  return isSecurityOk(result) ? next({ ...req, ...result }) : result;
+};
 
 export const jwtSecurityResolver = <TUser extends JWTData = JWTData>(
   options: JWTVerify,

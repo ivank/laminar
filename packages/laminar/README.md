@@ -41,9 +41,11 @@ Lets see the simplest possible app with laminar, a very simple echo app
 > [examples/echo.ts](examples/echo.ts)
 
 ```typescript
-import { laminar, start, response } from '@ovotech/laminar';
+import { laminar, start, response, describe } from '@ovotech/laminar';
 
-start(laminar({ port: 3333, app: ({ body }) => response({ body }) }));
+const server = laminar({ port: 3333, app: ({ body }) => response({ body }) });
+
+start(server).then(() => console.log(describe(server)));
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.

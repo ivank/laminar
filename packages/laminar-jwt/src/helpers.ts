@@ -1,9 +1,7 @@
-import { JWTInternalError } from './JWTInternalError';
-
 export const certToPEM = (cert: string): string => {
   const formatted = cert.match(/.{1,64}/g);
   if (!formatted) {
-    throw new JWTInternalError('Cannot parse cert, not the correct format');
+    throw new Error('Cannot parse cert, not the correct format');
   }
   return `-----BEGIN CERTIFICATE-----\n${formatted.join('\n')}\n-----END CERTIFICATE-----\n`;
 };

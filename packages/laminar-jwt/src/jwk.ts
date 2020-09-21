@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { JWTInternalError } from './JWTInternalError';
 import * as LRU from 'lru-cache';
 import { validate, Schema } from '@ovotech/json-schema';
 import { GetPublicKeyOrSecret } from 'jsonwebtoken';
@@ -56,17 +55,17 @@ export const jwkPublicKey = ({
   return async (header, callback) => {
     try {
       if (!header.kid) {
-        throw new JWTInternalError('Missing kid from token header');
+        throw new Error('Missing kid from token header');
       }
       if (header.alg !== 'RS256') {
-        throw new JWTInternalError('Only support RS256 algorithm');
+        throw new Error('Only support RS256 algorithm');
       }
       let data = cache && lru.get(header.kid);
       if (!data) {
         data = (await axios.get<JWK>(uri)).data;
         const result = await validate({ schema: jwkSchema(header.kid), value: data, name: 'JWK' });
         if (!result.valid) {
-          throw new JWTInternalError(`JWK invalid, errors: ${result.errors}`);
+          throw new Error(`JWK invalid, errors: ${result.errors}`);
         }
         if (cache) {
           lru.set(header.kid, data);

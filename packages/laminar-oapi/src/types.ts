@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Schema } from '@ovotech/json-schema';
 import { Empty, AppRequest, App, Response } from '@ovotech/laminar';
 import { ResolvedOperationObject } from './resolved-openapi-object';
@@ -10,13 +10,29 @@ export interface OapiPath {
 
 export type OapiAuthInfo = any;
 
-export interface RequestAuthInfo {
-  authInfo: OapiAuthInfo;
+export interface SecurityOk<T extends OapiAuthInfo = OapiAuthInfo> {
+  authInfo: T;
 }
+
+export type Security<T extends OapiAuthInfo = OapiAuthInfo> = SecurityOk<T> | Response;
 
 export interface RequestSecurityResolver {
   scopes?: string[];
   securityScheme: SecuritySchemeObject;
+}
+
+export type OapiSecurityResolver<
+  T extends Empty = Empty,
+  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
+> = (
+  req: T & AppRequest & RequestOapi & RequestSecurityResolver,
+) => Security<TOapiAuthInfo> | Response | Promise<Security<TOapiAuthInfo> | Response>;
+
+export interface OapiSecurity<
+  T extends Empty = Empty,
+  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
+> {
+  [key: string]: OapiSecurityResolver<T, TOapiAuthInfo>;
 }
 
 export interface RequestOapi {
@@ -26,7 +42,7 @@ export interface RequestOapi {
   query: any;
 }
 
-export type AppRouteOapi<T extends Empty = Empty> = App<T & RequestOapi & RequestAuthInfo>;
+export type AppRouteOapi<T extends Empty = Empty> = App<T & RequestOapi & SecurityOk>;
 
 export interface ResponseOapi<Content, Status, Type> {
   body: Content;
@@ -34,26 +50,17 @@ export interface ResponseOapi<Content, Status, Type> {
   headers: { 'content-type': Type } & Response['headers'];
 }
 
-export type OapiSecurityResolver<
-  T extends Empty,
-  TAuthInfo = OapiAuthInfo,
-  TRequest extends RequestOapi = RequestOapi
-> = (
-  req: T & AppRequest & TRequest & RequestSecurityResolver,
-) => TAuthInfo | void | Promise<TAuthInfo | void>;
-
-export interface OapiSecurity<T extends Empty> {
-  [key: string]: OapiSecurityResolver<T>;
-}
-
 export interface OapiPaths<T extends Empty> {
   [path: string]: { [method: string]: AppRouteOapi<T> };
 }
 
-export interface OapiConfig<T extends Empty = Empty> {
+export interface OapiConfig<
+  T extends Empty = Empty,
+  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
+> {
   api: OpenAPIObject | string;
   paths: OapiPaths<T>;
-  security?: OapiSecurity<T>;
+  security?: OapiSecurity<T, TOapiAuthInfo>;
 }
 
 export type Matcher = (req: AppRequest) => OapiPath | false;
@@ -64,5 +71,5 @@ export interface Route<T extends Empty> {
   response: Schema;
   operation: ResolvedOperationObject;
   security?: SecurityRequirementObject[];
-  resolver: App<T & RequestOapi & RequestAuthInfo>;
+  resolver: App<T & RequestOapi & SecurityOk>;
 }

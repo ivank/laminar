@@ -67,6 +67,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
+      security:
+        - BearerAuth: []
+          ApiKeyAuth: []
+        - CookieAuth: []
       description: Creates a new pet in the store.  Duplicates are allowed
       operationId: addPet
       parameters:
@@ -136,6 +140,7 @@ paths:
       operationId: deletePet
       security:
         - ApiKeyAuth: []
+        - BasicAuth: []
       parameters: []
       responses:
         '204':
@@ -158,6 +163,10 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth
   schemas:
     PetCreated:
       properties:

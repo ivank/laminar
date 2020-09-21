@@ -19,5 +19,5 @@ yarn start
 Or you can run the integration tests. (A runnning postgres instance is required for the tests as well)
 
 ```shell
-yarn test:integration
+yarn test
 ```

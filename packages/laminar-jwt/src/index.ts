@@ -1,4 +1,3 @@
-export { JWTAuthenticationError } from './JWTAuthenticationError';
 export { RequestAuthInfo, RequestSign, User, Session, JWTData, JWTSign, JWTVerify } from './types';
 export { jwkPublicKey } from './jwk';
 export {

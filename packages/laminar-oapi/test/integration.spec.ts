@@ -1,5 +1,4 @@
 import {
-  HttpError,
   Laminar,
   file,
   stop,
@@ -9,10 +8,12 @@ import {
   jsonOk,
   jsonBadRequest,
   jsonNotFound,
+  jsonUnauthorized,
+  jsonForbidden,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
-import { OapiConfig, createOapi } from '../src';
+import { OapiConfig, createOapi, securityOk } from '../src';
 import { LoggerContext, withLogger } from './middleware/logger';
 
 let server: Laminar;
@@ -60,21 +61,23 @@ describe('Integration', () => {
         BearerAuth: ({ headers, logger }) => {
           if (headers.authorization === 'Bearer 123') {
             logger('Auth Successful');
-            return { user: 'dinkey' };
+            return securityOk({ user: 'dinkey' });
           } else {
-            throw new HttpError(401, { message: 'Unathorized user' });
+            return jsonUnauthorized({ message: 'Unathorized user' });
           }
         },
-        BasicAuth: ({ headers }) => {
-          if (headers.authorization !== 'Basic 123') {
-            throw new HttpError(401, { message: 'Unathorized user' });
-          }
-        },
-        ApiKeyAuth: ({ headers }) => {
-          if (headers['x-api-key'] !== 'Me') {
-            throw new HttpError(401, { message: 'Unathorized user' });
-          }
-        },
+        BasicAuth: ({ headers }) =>
+          headers.authorization === 'Basic 123'
+            ? securityOk({ user: 'apikey' })
+            : jsonUnauthorized({ message: 'Unathorized user' }),
+        ApiKeyAuth: ({ headers }) =>
+          headers['x-api-key'] === 'Me'
+            ? securityOk({ user: 'apikey' })
+            : jsonUnauthorized({ message: 'Unathorized user' }),
+        CookieAuth: ({ cookies, securityScheme: { name } }) =>
+          name && cookies?.[name] === 'Me'
+            ? securityOk({ user: 'cookie' })
+            : jsonForbidden({ message: 'Forbidden user' }),
       },
       paths: {
         '/about': { get: () => file(join(__dirname, 'about.html')) },
@@ -168,7 +171,6 @@ describe('Integration', () => {
         errors: [
           '[request.headers] (required) is missing [x-trace-token] keys',
           '[request.body] (required) is missing [name] keys',
-          '[request.headers] (required) is missing [authorization] keys',
         ],
         requestBody: {
           examples: {
@@ -196,10 +198,7 @@ describe('Integration', () => {
     ).resolves.toMatchObject({
       status: 400,
       data: {
-        errors: [
-          '[request.headers.x-trace-token] (format) should match uuid format',
-          '[request.headers] (required) is missing [authorization] keys',
-        ],
+        errors: ['[request.headers.x-trace-token] (format) should match uuid format'],
         message: 'Request for "POST /pets" does not match OpenApi Schema',
       },
     });
@@ -211,10 +210,7 @@ describe('Integration', () => {
     ).resolves.toMatchObject({
       status: 400,
       data: {
-        errors: [
-          '[request.headers] (required) is missing [x-trace-token] keys',
-          '[request.headers.authorization] (pattern) should match /^Bearer/',
-        ],
+        errors: ['[request.headers] (required) is missing [x-trace-token] keys'],
         message: 'Request for "POST /pets" does not match OpenApi Schema',
       },
     });
@@ -259,12 +255,50 @@ describe('Integration', () => {
     });
 
     await expect(
+      api
+        .post(
+          '/pets',
+          { name: 'New Puppy' },
+          {
+            headers: {
+              Authorization: 'Bearer 123',
+              'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+            },
+          },
+        )
+        .catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 401,
+      data: { message: 'Unathorized user' },
+    });
+
+    await expect(
+      api
+        .post(
+          '/pets',
+          { name: 'New Puppy' },
+          {
+            headers: {
+              Authorization: 'Bearer 123',
+              'X-API-KEY': 'Not Me',
+              'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+            },
+          },
+        )
+        .catch((error) => error.response),
+    ).resolves.toMatchObject({
+      status: 401,
+      data: { message: 'Unathorized user' },
+    });
+
+    await expect(
       api.post(
         '/pets',
         { name: 'New Puppy' },
         {
           headers: {
             Authorization: 'Bearer 123',
+            'X-API-KEY': 'Me',
             'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
           },
         },
@@ -275,11 +309,22 @@ describe('Integration', () => {
     });
 
     await expect(
-      api.get('/pets/111', { headers: { Authorization: 'Basic 123' } }),
+      api.post(
+        '/pets',
+        { name: 'Cookie Puppy' },
+        {
+          headers: { Cookie: 'auth=Me', 'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000' },
+          withCredentials: true,
+        },
+      ),
     ).resolves.toMatchObject({
       status: 200,
-      data: { id: 111, name: 'Catty', tag: 'kitten' },
+      data: { pet: { id: 224, name: 'Cookie Puppy' }, user: 'cookie' },
     });
+
+    await expect(
+      api.get('/pets/111', { headers: { Authorization: 'Basic 123' } }),
+    ).resolves.toMatchObject({ status: 200, data: { id: 111, name: 'Catty', tag: 'kitten' } });
 
     await expect(
       api
@@ -300,13 +345,7 @@ describe('Integration', () => {
       api
         .get('/pets/000', { headers: { Authorization: 'Basic 123' } })
         .catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 404,
-      data: {
-        code: 123,
-        message: 'Not Found',
-      },
-    });
+    ).resolves.toMatchObject({ status: 404, data: { code: 123, message: 'Not Found' } });
 
     await expect(
       api.get('/pets/223', { headers: { Authorization: 'Basic 123' } }),
@@ -321,30 +360,19 @@ describe('Integration', () => {
         { id: 111, name: 'Catty', tag: 'kitten' },
         { id: 222, name: 'Doggy' },
         { id: 223, name: 'New Puppy' },
+        { id: 224, name: 'Cookie Puppy' },
       ],
     });
 
     await expect(
       api.delete('/pets/228', { headers: { 'X-API-KEY': 'Me' } }).catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 404,
-      data: {
-        code: 12,
-        message: 'Item not found',
-      },
-    });
+    ).resolves.toMatchObject({ status: 404, data: { code: 12, message: 'Item not found' } });
 
     await expect(
       api
         .delete('/pets/222', { headers: { 'X-API-missing': 'Me' } })
         .catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 400,
-      data: {
-        errors: ['[request.headers] (required) is missing [x-api-key] keys'],
-        message: 'Request for "DELETE /pets/222" does not match OpenApi Schema',
-      },
-    });
+    ).resolves.toMatchObject({ status: 401, data: { message: 'Unathorized user' } });
 
     await expect(
       api.delete('/pets/222', { headers: { 'X-API-KEY': 'Me' } }),
@@ -358,18 +386,25 @@ describe('Integration', () => {
       data: [
         { id: 111, name: 'Catty', tag: 'kitten' },
         { id: 223, name: 'New Puppy' },
+        { id: 224, name: 'Cookie Puppy' },
       ],
     });
 
     expect(log).toHaveBeenNthCalledWith(1, 'Auth Successful');
     expect(log).toHaveBeenNthCalledWith(2, 'Get all');
     expect(log).toHaveBeenNthCalledWith(3, 'Auth Successful');
+    expect(log).toHaveBeenNthCalledWith(4, 'Auth Successful');
+    expect(log).toHaveBeenNthCalledWith(5, 'Auth Successful');
     expect(log).toHaveBeenNthCalledWith(
-      4,
+      6,
       'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
     );
-    expect(log).toHaveBeenNthCalledWith(5, 'Get all');
-    expect(log).toHaveBeenNthCalledWith(6, 'Get all');
+    expect(log).toHaveBeenNthCalledWith(
+      7,
+      'new pet Cookie Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
+    );
+    expect(log).toHaveBeenNthCalledWith(8, 'Get all');
+    expect(log).toHaveBeenNthCalledWith(9, 'Get all');
   });
 });
 
@@ -411,15 +446,15 @@ describe('Invalid Schema', () => {
           '/pets': { get: () => response() },
         },
         security: {
-          BasicAuth: () => ({}),
+          BasicAuth: () => securityOk({}),
         },
         api: join(__dirname, 'integration.yaml'),
       }),
     ).rejects.toMatchObject({
       errors: [
-        '[OpenApi.paths./pets] (required) is missing [post] keys',
-        '[OpenApi.paths] (required) is missing [/pets/{id}] keys',
-        '[OpenApi.security] (required) is missing [BearerAuth, ApiKeyAuth] keys',
+        '[createOapiOptions.paths./pets] (required) is missing [post] keys',
+        '[createOapiOptions.paths] (required) is missing [/pets/{id}] keys',
+        '[createOapiOptions.security] (required) is missing [BearerAuth, ApiKeyAuth, CookieAuth] keys',
       ],
     });
   });

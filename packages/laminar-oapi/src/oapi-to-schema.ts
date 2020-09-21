@@ -1,6 +1,6 @@
 import { Schema } from '@ovotech/json-schema';
 import { SecurityRequirementObject, SecuritySchemeObject, SchemaObject } from 'openapi3-ts';
-import { toMatchPattern, title } from './helpers';
+import { toMatchPattern } from './helpers';
 import { OapiResolverError } from './OapiResolverError';
 import {
   ResolvedOpenAPIObject,
@@ -80,9 +80,9 @@ export const toRequestBodySchema = (
 export const toSecuritySchema = (
   security: SecurityRequirementObject[],
   schemes: { [securityScheme: string]: SecuritySchemeObject },
-): Record<string, unknown> => ({
-  anyOf: security.map((item) => ({
-    allOf: Object.entries(item).map(([name]) => {
+): void => {
+  security.map((item) =>
+    Object.entries(item).map(([name]) => {
       const scheme = schemes[name];
 
       if (!scheme) {
@@ -90,33 +90,9 @@ export const toSecuritySchema = (
           `Security scheme ${name} not defined in components.securitySchemes in the OpenApi Schema`,
         );
       }
-
-      switch (scheme.type) {
-        case 'http':
-          return {
-            properties: {
-              headers: {
-                ...(scheme.scheme
-                  ? { properties: { authorization: { pattern: `^${title(scheme.scheme)}` } } }
-                  : {}),
-                required: ['authorization'],
-              },
-            },
-          };
-        case 'apiKey':
-          return scheme.in && scheme.name
-            ? {
-                properties: {
-                  [toParamLocation(scheme.in)]: { required: [scheme.name.toLowerCase()] },
-                },
-              }
-            : {};
-        default:
-          return {};
-      }
     }),
-  })),
-});
+  );
+};
 
 export const toRequestSchema = (
   { security: defaultSecurity, components }: ResolvedOpenAPIObject,
@@ -131,11 +107,13 @@ export const toRequestSchema = (
     ...(parameters ? parameters : []),
     ...(commonParameters ? commonParameters : []),
   ];
+  if (security && securitySchemes) {
+    toSecuritySchema(security, securitySchemes);
+  }
   return {
     allOf: [
       ...allParameters.map(toParameterSchema),
       ...(requestBody ? [toRequestBodySchema(requestBody)] : []),
-      ...(security && securitySchemes ? [toSecuritySchema(security, securitySchemes)] : []),
     ],
   };
 };

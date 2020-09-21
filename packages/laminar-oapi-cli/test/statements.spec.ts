@@ -3,7 +3,6 @@ import {
   start,
   stop,
   Laminar,
-  HttpError,
   htmlOk,
   jsonOk,
   ok,
@@ -11,10 +10,11 @@ import {
   yaml,
   pdf,
   jsonNotFound,
+  jsonUnauthorized,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
-import { createOapi } from '@ovotech/laminar-oapi';
+import { createOapi, securityOk } from '@ovotech/laminar-oapi';
 import { Config } from './__generated__/statements';
 import { LoggerContext, withLogger } from './middleware/logger';
 import { createReadStream } from 'fs';
@@ -38,9 +38,9 @@ describe('Statements', () => {
       security: {
         BearerAuth: ({ headers }) => {
           if (headers.authorization !== 'Bearer Me') {
-            throw new HttpError(401, { message: 'Unauthorized' });
+            return jsonUnauthorized({ message: 'Unauthorized' });
           }
-          return { email: 'me@example.com' };
+          return securityOk({ email: 'me@example.com' });
         },
       },
       paths: {

@@ -88,7 +88,7 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
         };
     };
     security: {
-        BearerAuth: OapiSecurityResolver<R, TAuthInfo, BearerAuthSecuritySchema>;
+        BearerAuth: OapiSecurityResolver<R, TAuthInfo>;
     };
 }
 
@@ -651,9 +651,3 @@ export interface RequestV2ReportsTypeFilenameGet<TAuthInfo> extends RequestOapi 
  * A report file in CSV format
  */
 export type PathV2ReportsTypeFilenameGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ReportsTypeFilenameGet<TAuthInfo> & R) => ResponseV2ReportsTypeFilenameGet | Promise<ResponseV2ReportsTypeFilenameGet>;
-
-interface BearerAuthSecuritySchema extends RequestOapi {
-    headers: {
-        authorization: string;
-    };
-}

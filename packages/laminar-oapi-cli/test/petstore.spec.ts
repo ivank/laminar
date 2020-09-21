@@ -3,14 +3,14 @@ import {
   start,
   stop,
   Laminar,
-  HttpError,
+  jsonUnauthorized,
   jsonNotFound,
   jsonOk,
   jsonNoContent,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
-import { createOapi } from '@ovotech/laminar-oapi';
+import { createOapi, securityOk } from '@ovotech/laminar-oapi';
 import { LoggerContext, withLogger } from './middleware/logger';
 import { Config, Pet } from './__generated__/petstore';
 
@@ -36,19 +36,23 @@ describe('Petstore', () => {
         BearerAuth: ({ headers, logger }) => {
           if (headers.authorization === 'Bearer 123') {
             logger('Auth Successful');
-            return { user: 'dinkey' };
+            return securityOk({ user: 'dinkey' });
           } else {
-            throw new HttpError(401, { message: 'Unathorized user' });
+            return jsonUnauthorized({ message: 'Unathorized user' });
           }
         },
         BasicAuth: ({ headers }) => {
-          if (headers.authorization !== 'Basic 123') {
-            throw new HttpError(401, { message: 'Unathorized user' });
+          if (headers.authorization === 'Basic 123') {
+            return securityOk({ user: 'dinkey' });
+          } else {
+            return jsonUnauthorized({ message: 'Unathorized user' });
           }
         },
         ApiKeyAuth: ({ headers }) => {
-          if (headers['x-api-key'] !== 'Me') {
-            throw new HttpError(401, { message: 'Unathorized user' });
+          if (headers['x-api-key'] === 'Me') {
+            return securityOk({ user: 'dinkey' });
+          } else {
+            return jsonUnauthorized({ message: 'Unathorized user' });
           }
         },
       },
@@ -116,7 +120,6 @@ describe('Petstore', () => {
         errors: [
           '[request.headers] (required) is missing [x-trace-token] keys',
           '[request.body] (required) is missing [name] keys',
-          '[request.headers] (required) is missing [authorization] keys',
         ],
         message: 'Request for "POST /pets" does not match OpenApi Schema',
       },
@@ -212,10 +215,9 @@ describe('Petstore', () => {
         .delete('/pets/222', { headers: { 'X-API-missing': 'Me' } })
         .catch((error) => error.response),
     ).resolves.toMatchObject({
-      status: 400,
+      status: 401,
       data: {
-        errors: ['[request.headers] (required) is missing [x-api-key] keys'],
-        message: 'Request for "DELETE /pets/222" does not match OpenApi Schema',
+        message: 'Unathorized user',
       },
     });
 

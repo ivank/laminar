@@ -1,13 +1,19 @@
-import { laminar, start, jsonOk, HttpError, describe, loggingMiddleware } from '@ovotech/laminar';
-import { createOapi } from '@ovotech/laminar-oapi';
+import {
+  laminar,
+  start,
+  jsonOk,
+  describe,
+  loggingMiddleware,
+  jsonForbidden,
+} from '@ovotech/laminar';
+import { createOapi, securityOk } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });
-const validate = (authorizaitonHeader?: string) => {
-  if (authorizaitonHeader !== 'Secret Pass') {
-    throw new HttpError(403, { message: 'Unkown user' });
-  }
-};
+const validate = (authorizaitonHeader?: string) =>
+  authorizaitonHeader === 'Secret Pass'
+    ? securityOk({ email: 'me@example.com' })
+    : jsonForbidden({ message: 'Unkown user' });
 
 const main = async () => {
   const logging = loggingMiddleware(console);

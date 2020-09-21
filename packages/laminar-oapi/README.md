@@ -167,8 +167,8 @@ components:
 > [examples/security.ts](examples/security.ts)
 
 ```typescript
-import { laminar, HttpError, describe, jsonOk, start } from '@ovotech/laminar';
-import { createOapi } from '@ovotech/laminar-oapi';
+import { laminar, describe, jsonOk, start, jsonUnauthorized } from '@ovotech/laminar';
+import { createOapi, securityOk } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const api = join(__dirname, 'simple.yaml');
@@ -177,12 +177,10 @@ const main = async () => {
   const app = await createOapi({
     api,
     security: {
-      MySecurity: ({ headers }) => {
-        if (headers.authorization !== 'Bearer my-secret-token') {
-          throw new HttpError(401, { message: 'Unauthorized user' });
-        }
-        return { email: 'me@example.com' };
-      },
+      MySecurity: ({ headers }) =>
+        headers.authorization === 'Bearer my-secret-token'
+          ? securityOk({ email: 'me@example.com' })
+          : jsonUnauthorized({ message: 'Unauthorized user' }),
     },
     paths: {
       '/user': {

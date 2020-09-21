@@ -6,5 +6,10 @@
   "private": true,
   "bin": {
     "build-docs": "scripts/build-docs"
+  },
+  "scripts": {
+    "lint": "true",
+    "build": "true",
+    "test": "true"
   }
 }
