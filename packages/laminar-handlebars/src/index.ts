@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module @ovotech/laminar-handlebars
+ */
+
 import { Middleware, Response, response } from '@ovotech/laminar';
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { compile, RuntimeOptions, TemplateDelegate } from 'handlebars';
@@ -32,7 +37,7 @@ export type HandlebarsRender = (
 ) => Response;
 
 export interface RequestHandlebars {
-  render: HandlebarsRender;
+  hbs: HandlebarsRender;
 }
 
 export const deepReaddirSync = (dir: string, childDir: string, parent = ''): string[] =>
@@ -58,14 +63,14 @@ export const compileTemplates = ({
       return { ...all, [name]: compile(input, compileOptions) };
     }, {});
 
-export const handlebarsMiddleware = ({
+export const handlebars = ({
   helpers = {},
   dir = process.cwd(),
   extension = 'handlebars',
   partials = 'partials',
   views = 'views',
   headers,
-}: TemplateConfig): Middleware<RequestHandlebars> => {
+}: TemplateConfig): HandlebarsRender => {
   const defaultHeaders = { 'content-type': 'text/html', ...headers };
 
   const partialTemplates = existsSync(join(dir, partials))
@@ -77,13 +82,16 @@ export const handlebarsMiddleware = ({
     throw new Error(`No templates with extension ${extension} found in ${join(dir, views)}`);
   }
 
-  const render: HandlebarsRender = (view, data = {}, options = {}) =>
+  return (view, data = {}, options = {}) =>
     response({
       body: viewTemplates[view](data, { helpers, partials: partialTemplates }),
       status: 200 as const,
       ...options,
       headers: { ...defaultHeaders, ...options.headers },
     });
+};
 
-  return (next) => (req) => next({ ...req, render });
+export const handlebarsMiddleware = (config: TemplateConfig): Middleware<RequestHandlebars> => {
+  const hbs = handlebars(config);
+  return (next) => (req) => next({ ...req, hbs });
 };

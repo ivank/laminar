@@ -1,11 +1,67 @@
-export const toArray = (value: unknown): unknown[] =>
-  Array.isArray(value) ? value : value ? [value] : [];
+import { URLSearchParams } from 'url';
 
-const isInRange = (from: number, to: number, num: number): boolean => num >= from && num <= to;
+/**
+ * Convert an value to an array `[value]`. If its already an array, keep it as is
+ */
+export function toArray<T = unknown>(value: T | T[]): T[] {
+  return Array.isArray(value) ? value : value ? [value] : [];
+}
 
+type Obj = Record<string, unknown>;
+
+const isObj = (obj: unknown): obj is Obj => typeof obj === 'object' && obj !== null;
+
+const setQuery = (path: string[], value: unknown, obj: Obj): Obj | unknown[] => {
+  const [current, ...rest] = path;
+  if (current) {
+    const currentValue = obj[current];
+    return {
+      ...obj,
+      [current]: rest.length
+        ? Array.isArray(currentValue)
+          ? [...currentValue, value]
+          : setQuery(rest, value, isObj(currentValue) ? currentValue : {})
+        : value,
+    };
+  } else {
+    return toArray(rest.length ? setQuery(rest, value, obj) : value);
+  }
+};
+
+const toQueryPath = (key: string): string[] => key.replace(/\]/g, '').split('[');
+
+/**
+ * Convert a URLSearchParams into a nested object.
+ * Supports ',' separateros as well as a[a][b] like names to build nested objects and arrays
+ */
+export const parseQueryObjects = (searchParams: URLSearchParams): Obj =>
+  [...searchParams.entries()]
+    .map<[string, unknown]>(([key, val]) => [
+      key,
+      typeof val === 'string' && val.includes(',') ? val.split(',') : val,
+    ])
+    .reduce((all, [key, val]) => setQuery(toQueryPath(key), val, all), {});
+
+/**
+ * Check if a number is between two other numbers, inclusive
+ */
+function isInRange(from: number, to: number, num: number): boolean {
+  return num >= from && num <= to;
+}
+
+/**
+ * Denote a range between two numbers.
+ */
 export type Range = { start: number; end: number };
 
-export const parseRange = (range: string, totalLength: number): Range | undefined => {
+/**
+ * Convert a [Range header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range) to a {@link Range} object.
+ * Also vaidates against total length and return undefined if the range is outside of it.
+ *
+ * @param range a Range Header
+ * @param totalLength maximum lenght the range can fall into, usually the file byte length
+ */
+export function parseRange(range: string, totalLength: number): Range | undefined {
   const fullRange = range.match(/^bytes=(\d+)-(\d+)/);
   if (fullRange) {
     const range: Range = { start: Number(fullRange[1]), end: Number(fullRange[2]) };
@@ -28,4 +84,42 @@ export const parseRange = (range: string, totalLength: number): Range | undefine
     return isInRange(0, totalLength, range.end) ? range : undefined;
   }
   return undefined;
-};
+}
+
+/**
+ * Escape a string to be placed inside of a RegEx
+ */
+function escapeRegExp(str: string): string {
+  return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+/**
+ * Convert a [Media Type matcher from OpenAPI](https://swagger.io/docs/specification/media-types/) to a RegExp string
+ * @param match
+ */
+export function toMatchPattern(match: string): string {
+  return match
+    .split('/')
+    .map((part) => (part === '*' ? '[^\\/]*' : escapeRegExp(part)))
+    .join('\\/');
+}
+
+/**
+ * Convert path paramters (like `/test1/{id}`) into a regex
+ */
+const paramRegEx = /\{[^\}]+\}/g;
+
+/**
+ * Convert path parameters to keys. `/test1/{id}/{other}` -> ['id','other']
+ */
+export function toPathKeys(path: string): string[] {
+  const keys = path.match(paramRegEx);
+  return keys ? keys.map((key) => key.slice(1, -1)) : [];
+}
+
+/**
+ * Convert path paramters (like `/test1/{id}`) into a regex that would extract the parameters as capture groups
+ */
+export function toPathRe(path: string): RegExp {
+  return new RegExp('^' + path.replace('/', '\\/').replace(paramRegEx, '([^/]+)') + '/?$');
+}

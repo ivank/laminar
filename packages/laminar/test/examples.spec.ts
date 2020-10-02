@@ -3,6 +3,9 @@ import { spawn } from 'child_process';
 import { readFileSync } from 'fs';
 import { Agent } from 'https';
 import { join } from 'path';
+import * as nock from 'nock';
+
+nock('http://example.com').get('/new/22').reply(200, { isNew: true });
 
 describe('Example files', () => {
   it.each<[string, AxiosRequestConfig, unknown]>([
@@ -119,6 +122,31 @@ describe('Example files', () => {
         url: 'http://localhost:3333/my-folder/texts/one.txt',
       },
       `one\n`,
+    ],
+    [
+      'examples/oapi-security.ts',
+      {
+        method: 'GET',
+        url: 'http://localhost:3333/user',
+        headers: { Authorization: 'Bearer my-secret-token' },
+      },
+      { email: 'me@example.com' },
+    ],
+    [
+      'examples/oapi.ts',
+      {
+        method: 'GET',
+        url: 'http://localhost:3333/user',
+      },
+      { email: 'me@example.com' },
+    ],
+    [
+      'examples/oapi-undocumented-routes.ts',
+      {
+        method: 'GET',
+        url: 'http://localhost:3333/old/22',
+      },
+      { isNew: true },
     ],
   ])('Should process %s', async (file, config, expected) => {
     const service = spawn('yarn', ['ts-node', file], {

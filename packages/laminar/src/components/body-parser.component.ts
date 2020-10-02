@@ -1,19 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component } from '../types';
 import { IncomingMessage } from 'http';
 import { Readable } from 'stream';
 import { URLSearchParams } from 'url';
-import { jsonBadRequest } from '../response';
+import { parseQueryObjects } from '../helpers';
 
 export interface BodyParser {
+  /**
+   * If returns true for a given content type, then this body parser will be used
+   */
   match: (contentType: string) => boolean;
+  /**
+   * Process a raw incomming message into a concrete parsed response
+   */
   parse: (body: IncomingMessage) => Promise<unknown>;
 }
 
+/**
+ * Request parameters added by the {@link bodyParserComponent}
+ */
 export interface RequestBody {
+  /**
+   * The parsed body of the request. Parsed using the provided body parsers.
+   *
+   * Supported:
+   *  - text
+   *  - json
+   *  - url encoded
+   *
+   * You can add additional parser / modify existing ones
+   */
   body: any;
 }
 
-export const concatStream = async (stream: Readable): Promise<string | undefined> => {
+/**
+ * Convert a stream of text data into a single string. If there were no chunks in the stream, return undefined
+ */
+export function concatStream(stream: Readable): Promise<string | undefined> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     stream
@@ -21,10 +44,13 @@ export const concatStream = async (stream: Readable): Promise<string | undefined
       .on('end', () => resolve(chunks.length ? String(Buffer.concat(chunks)) : undefined))
       .on('error', reject);
   });
-};
+}
+
+const parseJsonRegExp = /^application\/([^\+\;]+\+)?json(\;.*)?/;
+const parseFormRegExp = /^application\/x-www-form-urlencoded(\;.*)?/;
 
 export const parseJson: BodyParser = {
-  match: (contentType) => /^application\/([^\+\;]+\+)?json(\;.*)?/.test(contentType),
+  match: (contentType) => parseJsonRegExp.test(contentType),
   parse: async (incommingMessage) => {
     const buffer = await concatStream(incommingMessage);
     return buffer === undefined ? undefined : JSON.parse(buffer);
@@ -32,36 +58,45 @@ export const parseJson: BodyParser = {
 };
 
 export const parseForm: BodyParser = {
-  match: (contentType) => contentType === 'application/x-www-form-urlencoded',
+  match: (contentType) => parseFormRegExp.test(contentType),
   parse: async (incommingMessage) =>
-    new URLSearchParams((await concatStream(incommingMessage)) ?? ''),
+    parseQueryObjects(new URLSearchParams((await concatStream(incommingMessage)) ?? '')),
 };
 
+const parseTextRegx = /^text\/.*/;
+
 export const parseText: BodyParser = {
-  match: (contentType) => /^text\/.*/.test(contentType),
+  match: (contentType) => parseTextRegx.test(contentType),
   parse: async (incommingMessage) => await concatStream(incommingMessage),
 };
 
 export const defaultBodyParsers: BodyParser[] = [parseJson, parseForm, parseText];
 
-export const parseBody = async (
+export async function parseBody(
   incommingMessage: IncomingMessage,
   parsers = defaultBodyParsers,
-): Promise<unknown> => {
+): Promise<unknown> {
   const parser = parsers.find((parser) =>
     parser.match(incommingMessage.headers['content-type'] || ''),
   );
 
   return parser ? await parser.parse(incommingMessage) : incommingMessage;
-};
+}
 
-export const bodyParserComponent = (parsers = defaultBodyParsers): Component<RequestBody> => (
-  next,
-) => async (req) => {
-  try {
-    const body = await parseBody(req.incommingMessage, parsers);
-    return next({ ...req, body });
-  } catch (error) {
-    return jsonBadRequest({ message: `Error parsing request body`, error: error.message });
-  }
-};
+/**
+ * Parse the incommingMessage request into a javascript object
+ *
+ * Supports contentTypes by default for:
+ *
+ *  - json
+ *  - url encoded
+ *  - text content
+ *
+ * @param parsers replace with custom parsers, can use [...defaultBodyParsers, newParser] to add
+ *
+ * @category component
+ */
+export function bodyParserComponent(parsers = defaultBodyParsers): Component<RequestBody> {
+  return (next) => async (req) =>
+    next({ ...req, body: await parseBody(req.incommingMessage, parsers) });
+}

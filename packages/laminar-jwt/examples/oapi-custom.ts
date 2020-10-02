@@ -1,0 +1,53 @@
+import {
+  httpServer,
+  start,
+  describe,
+  openApi,
+  redirect,
+  isSecurityOk,
+  securityOk,
+  textOk,
+  textForbidden,
+  setCookie,
+} from '@ovotech/laminar';
+import { createSession, verifyToken } from '@ovotech/laminar-jwt';
+import { join } from 'path';
+
+const main = async () => {
+  const secret = '123';
+  const app = await openApi({
+    api: join(__dirname, 'oapi-custom.yaml'),
+    security: {
+      /**
+       * Implement additional cookie security.
+       * In an event of a failure, we'd want to redirect to an error page, instead of returning a 403 response
+       */
+      CookieSecurity: async ({ cookies, scopes }) => {
+        const result = await verifyToken({ secret }, cookies?.auth, scopes);
+        return isSecurityOk(result) ? result : redirect('/unauthorized');
+      },
+      /**
+       * Cloud Scheduler would ensure that this header is never sent outside of the app engine environment,
+       * so we're safe just checking for the existance of the header.
+       */
+      CloudSchedulerSecurity: ({ headers }) =>
+        headers['x-cloudscheduler'] ? securityOk({}) : textForbidden('Not Cloud Scheduler Job'),
+    },
+    paths: {
+      '/session': {
+        post: ({ body }) =>
+          setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+      },
+      '/test': {
+        get: () => textOk('OK'),
+        post: ({ authInfo }) => textOk(`OK ${authInfo.email}`),
+      },
+      '/unauthorized': { get: () => textForbidden('Forbidden!') },
+    },
+  });
+  const server = httpServer({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();

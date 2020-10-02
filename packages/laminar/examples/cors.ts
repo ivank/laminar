@@ -1,4 +1,13 @@
-import { start, jsonOk, get, put, laminar, router, corsMiddleware, describe } from '@ovotech/laminar';
+import {
+  start,
+  jsonOk,
+  get,
+  put,
+  httpServer,
+  router,
+  corsMiddleware,
+  describe,
+} from '@ovotech/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -9,7 +18,7 @@ const cors = corsMiddleware({
   allowOrigin: (origin) => ['http://example.com', 'http://localhost'].includes(origin),
 });
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: cors(
     router(

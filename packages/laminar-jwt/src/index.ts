@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module @ovotech/laminar-jwt
+ */
+
 export { RequestAuthInfo, RequestSign, User, Session, JWTData, JWTSign, JWTVerify } from './types';
 export { jwkPublicKey } from './jwk';
 export {

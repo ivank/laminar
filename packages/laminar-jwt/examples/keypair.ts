@@ -1,4 +1,4 @@
-import { get, post, laminar, router, start, jsonOk, App, describe } from '@ovotech/laminar';
+import { get, post, httpServer, router, start, jsonOk, App, describe } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -30,5 +30,5 @@ const app: App = router(
   ),
 );
 
-const server = laminar({ port: 3333, app });
+const server = httpServer({ port: 3333, app });
 start(server).then(() => console.log(describe(server)));

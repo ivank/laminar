@@ -1,4 +1,4 @@
-import { loggingMiddleware, laminar, start, describe } from '@ovotech/laminar';
+import { loggingMiddleware, httpServer, start, describe } from '@ovotech/laminar';
 import { createPgClient } from './db.middleware';
 import { routes } from './routes';
 
@@ -16,7 +16,7 @@ const main = async () => {
 
   const app = logging(pgClient(routes));
 
-  const server = laminar({ app, port: Number(process.env.PORT) });
+  const server = httpServer({ app, port: Number(process.env.PORT) });
   await start(server);
 
   console.log(describe(server));

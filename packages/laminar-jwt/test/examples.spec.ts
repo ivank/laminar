@@ -1,6 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import axiosCookieJarSupport from 'axios-cookiejar-support';
 import { spawn } from 'child_process';
+import { URLSearchParams } from 'url';
 import { join } from 'path';
+import { CookieJar } from 'tough-cookie';
 
 describe('Example files', () => {
   it.each<[string, AxiosRequestConfig, AxiosRequestConfig, unknown]>([
@@ -99,6 +102,34 @@ describe('Example files', () => {
       },
     ],
     [
+      'examples/oapi-api-key.ts',
+      {
+        method: 'POST',
+        url: 'http://localhost:3333/session',
+        data: new URLSearchParams({ email: 'test@example.com' }),
+      },
+      {
+        method: 'POST',
+        url: 'http://localhost:3333/test',
+        data: '',
+      },
+      'OK test@example.com',
+    ],
+    [
+      'examples/oapi-custom.ts',
+      {
+        method: 'POST',
+        url: 'http://localhost:3333/session',
+        data: new URLSearchParams({ email: 'test@example.com' }),
+      },
+      {
+        method: 'POST',
+        url: 'http://localhost:3333/test',
+        data: '',
+      },
+      'OK test@example.com',
+    ],
+    [
       'examples/simple.ts',
       {
         method: 'POST',
@@ -120,6 +151,7 @@ describe('Example files', () => {
       detached: true,
     });
     const errorLogger = (data: Buffer): void => console.error(data.toString());
+    const jar = new CookieJar();
 
     try {
       service.stderr.on('data', errorLogger);
@@ -128,10 +160,14 @@ describe('Example files', () => {
           String(data).includes('Laminar: Running') ? resolve() : undefined,
         );
       });
-      const jwtResponse = await axios.request(jwtRequest);
-      expect(jwtResponse.data).toMatchObject({ jwt: expect.any(String) });
+      const api = axiosCookieJarSupport(axios);
+      const jwtResponse = await api.request({ ...jwtRequest, jar });
+
+      if (typeof jwtResponse.data !== 'string') {
+        expect(jwtResponse.data).toMatchObject({ jwt: expect.any(String) });
+      }
       const headers = { Authorization: `Bearer ${jwtResponse.data.jwt}` };
-      const { data } = await axios.request({ ...testRequest, headers });
+      const { data } = await api.request({ ...testRequest, headers, withCredentials: true, jar });
       expect(data).toEqual(expected);
     } finally {
       /**

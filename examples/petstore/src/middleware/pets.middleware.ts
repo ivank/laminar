@@ -5,7 +5,7 @@ import { RequestPgPool } from './pg-pool.middleware';
 
 /**
  * A simple repository for handling pets
- * Encapsulates all the database connections, so that we can use a higher level abstraction in our controllers.
+ * Encapsulates all the database queries, so that we can use a higher level abstraction in our controllers.
  */
 export class PetsDb {
   public constructor(private db: PoolClient) {}
@@ -36,6 +36,7 @@ export class PetsDb {
 
     return (await this.db.query<Pet>(insertQuery)).rows[0];
   }
+
   public async remove(id: string): Promise<number> {
     return (await this.db.query('DELETE FROM pets WHERE id = $1', [id])).rowCount;
   }

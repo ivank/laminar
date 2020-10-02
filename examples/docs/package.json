@@ -1,0 +1,40 @@
+{
+  "name": "@examples/docs",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "This is a collection of example snippets for the docs",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/examples/docs#readme",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.1",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "eslint": "^7.9.0",
+    "prettier": "^2.1.2",
+    "axios": "^0.19.2",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.4.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "scripts": {
+    "build": "tsc --declaration",
+    "start": "ts-node src/index.ts",
+    "test": "jest test --runInBand",
+    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
+    "lint:eslint": "eslint '{src,test}/**/*.ts'",
+    "lint": "yarn lint:prettier && yarn lint:eslint"
+  },
+  "dependencies": {
+    "@ovotech/laminar": "^0.8.0",
+    "yaml": "^1.10.0"
+  }
+}

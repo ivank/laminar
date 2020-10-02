@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @module @ovotech/json-schema
+ */
+
 export { ValidationError } from './ValidationError';
 export { ResolveError } from './ResolveError';
 export {

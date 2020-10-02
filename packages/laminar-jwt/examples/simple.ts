@@ -1,4 +1,4 @@
-import { get, post, start, laminar, jsonOk, router, App, describe } from '@ovotech/laminar';
+import { get, post, start, httpServer, jsonOk, router, App, describe } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 
 const secret = '123';
@@ -21,6 +21,6 @@ const app: App = router(
   ),
 );
 
-const server = laminar({ port: 3333, app });
+const server = httpServer({ port: 3333, app });
 
 start(server).then(() => console.log(describe(server)));

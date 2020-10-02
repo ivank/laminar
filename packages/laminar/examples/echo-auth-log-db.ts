@@ -1,4 +1,12 @@
-import { Middleware, App, textForbidden, jsonOk, start, laminar, describe } from '@ovotech/laminar';
+import {
+  Middleware,
+  App,
+  textForbidden,
+  jsonOk,
+  start,
+  httpServer,
+  describe,
+} from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -22,7 +30,8 @@ const createDbMiddleware = (): Middleware<RequestDB> => {
   return (next) => (req) => next({ ...req, db });
 };
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: Middleware = (next) => (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -39,5 +48,5 @@ const app: App<RequestDB> = (req) => jsonOk({ url: req.url, user: req.db.getVali
 
 const db = createDbMiddleware();
 
-const server = laminar({ port: 3333, app: log(db(auth(app))) });
+const server = httpServer({ port: 3333, app: log(db(auth(app))) });
 start(server).then(() => console.log(describe(server)));

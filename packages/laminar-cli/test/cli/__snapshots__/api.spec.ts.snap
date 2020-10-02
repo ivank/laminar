@@ -1,0 +1,3284 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Types Content Test api-with-examples.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+
+export type ResponseGet = ResponseOapi<unknown, 200, \\"application/json\\"> | ResponseOapi<unknown, 300, \\"application/json\\">;
+
+export type PathGet<R extends Empty = Empty> = (req: RequestOapi & R) => ResponseGet | Promise<ResponseGet>;
+
+export type ResponseV2Get = ResponseOapi<unknown, 200, \\"application/json\\"> | ResponseOapi<unknown, 203, \\"application/json\\">;
+
+export type PathV2Get<R extends Empty = Empty> = (req: RequestOapi & R) => ResponseV2Get | Promise<ResponseV2Get>;
+
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        \\"/\\": {
+            get: PathGet<R>;
+        };
+        \\"/v2\\": {
+            get: PathV2Get<R>;
+        };
+    };
+}
+"
+`;
+
+exports[`Types Content Test balance-service.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<App<R>> => openApi(config);
+
+export type ResponseInternalStatusGet = ResponseOapi<unknown, 200, string>;
+
+/**
+ * Health check endpoint
+ * Returns 200 if the application is up. It does not do deep check. Always gives back 200.
+ */
+export interface RequestInternalStatusGet<TAuthInfo> extends RequestOapi {
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns 200 if the application is up. It does not do deep check. Always gives back 200.
+ */
+export type PathInternalStatusGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestInternalStatusGet<TAuthInfo> & R) => ResponseInternalStatusGet | Promise<ResponseInternalStatusGet>;
+
+export type ResponseInternalSwaggeryamlGet = ResponseOapi<unknown, 200, string>;
+
+/**
+ * Returns application swagger definition
+ */
+export interface RequestInternalSwaggeryamlGet<TAuthInfo> extends RequestOapi {
+    authInfo: TAuthInfo;
+}
+
+export type PathInternalSwaggeryamlGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestInternalSwaggeryamlGet<TAuthInfo> & R) => ResponseInternalSwaggeryamlGet | Promise<ResponseInternalSwaggeryamlGet>;
+
+export interface BalanceSummaryHttpResponse {
+    balance?: number;
+    /**
+     * Last transaction date-time which updated the balance
+     */
+    effectiveAt?: string;
+    /**
+     * When balance service updated the balance
+     */
+    updatedAt?: string;
+    [key: string]: unknown;
+}
+
+export interface HttpErrorResponse {
+    /**
+     * PLANNED. Currently not sent
+     */
+    errorCode?: string;
+    message?: string;
+    [key: string]: unknown;
+}
+
+export type ResponseApiV2AccountsAccountIdBalanceGet = ResponseOapi<BalanceSummaryHttpResponse, 200, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 400, \\"application/json\\"> | ResponseOapi<unknown, 404, string> | ResponseOapi<HttpErrorResponse, 500, \\"application/json\\">;
+
+/**
+ * DEPRECATED: Find Balance for the given accountId
+ * Returns the balance
+ */
+export interface RequestApiV2AccountsAccountIdBalanceGet<TAuthInfo> extends RequestOapi {
+    path: {
+        /**
+         * ID of the account to return
+         */
+        accountId: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns the balance
+ */
+export type PathApiV2AccountsAccountIdBalanceGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestApiV2AccountsAccountIdBalanceGet<TAuthInfo> & R) => ResponseApiV2AccountsAccountIdBalanceGet | Promise<ResponseApiV2AccountsAccountIdBalanceGet>;
+
+export interface TransactionHistoryHttpResponseV2 {
+    summary?: TransactionHistorySummary;
+    /**
+     * List of transactions ordered by transactionDateTime in ascending order.
+     */
+    transactions?: (GenericTransactionEntity | ChargeTransactionEntity)[];
+    [key: string]: unknown;
+}
+
+export interface TransactionHistorySummary {
+    /**
+     * Number of search hits
+     */
+    totalSize?: number;
+    [key: string]: unknown;
+}
+
+export interface GenericTransactionEntity {
+    transactionType?: \\"TopUp\\" | \\"BalanceAdjustment\\";
+    amount?: number;
+    transactionDateTime?: string;
+    /**
+     * CamelCased cause why the adjustment is needed, e.g. 'GoodWill', 'WarmHomeDiscount', 'DiscretionaryCredit', 'AppPayment'
+     */
+    cause?: string;
+    [key: string]: unknown;
+}
+
+export interface ChargeTransactionEntity {
+    transactionType?: \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\";
+    amount?: number;
+    transactionDateTime?: string;
+    fuelType?: \\"Electricity\\" | \\"Gas\\";
+    [key: string]: unknown;
+}
+
+export type ResponseApiV2AccountsAccountIdTransactionsGet = ResponseOapi<TransactionHistoryHttpResponseV2, 200, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 400, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 500, \\"application/json\\">;
+
+/**
+ * DEPRECATED: Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
+ * Returns the transaction history
+ */
+export interface RequestApiV2AccountsAccountIdTransactionsGet<TAuthInfo> extends RequestOapi {
+    path: {
+        /**
+         * ID of the account to return
+         */
+        accountId: string;
+    };
+    headers: {
+        scenario?: string;
+    };
+    cookies: {
+        session?: string;
+    };
+    query: {
+        /**
+         * Start date for the search period (inclusive)
+         */
+        fromDate: string;
+        /**
+         * End date for the search period (inclusive)
+         */
+        toDate: string;
+        /**
+         * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
+         */
+        transactionType?: (\\"TopUp\\" | \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\" | \\"BalanceAdjustment\\")[];
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns the transaction history
+ */
+export type PathApiV2AccountsAccountIdTransactionsGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestApiV2AccountsAccountIdTransactionsGet<TAuthInfo> & R) => ResponseApiV2AccountsAccountIdTransactionsGet | Promise<ResponseApiV2AccountsAccountIdTransactionsGet>;
+
+export interface AdjustBalanceRequest {
+    transactionId?: string;
+    /**
+     * Signed amount to adjust the balance with
+     */
+    amount?: number;
+    /**
+     * Adjustment date-time
+     */
+    transactionDateTime?: string;
+    /**
+     * CamelCased cause why the adjustment is needed, e.g. 'GoodWill', 'WarmHomeDiscount', 'DiscretionaryCredit'
+     */
+    cause?: string;
+    [key: string]: unknown;
+}
+
+export type ResponseApiV2AccountsAccountIdAdjustbalancePost = ResponseOapi<BalanceSummaryHttpResponse, 200, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 400, \\"application/json\\"> | ResponseOapi<unknown, 404, string> | ResponseOapi<HttpErrorResponse, 500, \\"application/json\\">;
+
+/**
+ * DEPRECATED: Adjust balance for a given accountId
+ * Returns with the adjusted balance
+ */
+export interface RequestApiV2AccountsAccountIdAdjustbalancePost<TAuthInfo> extends RequestOapi {
+    path: {
+        /**
+         * ID of the account
+         */
+        accountId: string;
+    };
+    body: AdjustBalanceRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns with the adjusted balance
+ */
+export type PathApiV2AccountsAccountIdAdjustbalancePost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestApiV2AccountsAccountIdAdjustbalancePost<TAuthInfo> & R) => ResponseApiV2AccountsAccountIdAdjustbalancePost | Promise<ResponseApiV2AccountsAccountIdAdjustbalancePost>;
+
+export type ResponseApiV3AccountsAccountIdBalanceGet = ResponseOapi<BalanceSummaryHttpResponse, 200, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 400, \\"application/json\\"> | ResponseOapi<unknown, 404, string> | ResponseOapi<HttpErrorResponse, 500, \\"application/json\\">;
+
+/**
+ * Find Balance for the given accountId
+ * Returns the balance
+ */
+export interface RequestApiV3AccountsAccountIdBalanceGet<TAuthInfo> extends RequestOapi {
+    path: {
+        /**
+         * ID of the account to return
+         */
+        accountId: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns the balance
+ */
+export type PathApiV3AccountsAccountIdBalanceGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestApiV3AccountsAccountIdBalanceGet<TAuthInfo> & R) => ResponseApiV3AccountsAccountIdBalanceGet | Promise<ResponseApiV3AccountsAccountIdBalanceGet>;
+
+export interface TransactionHistoryHttpResponseV3 {
+    summary?: TransactionHistorySummary;
+    /**
+     * List of transactions ordered by transactionDateTime in ascending order.
+     */
+    transactions?: (GenericTransactionEntity | UsageChargeTransactionEntity | StandingChargeTransactionEntity)[];
+    [key: string]: unknown;
+}
+
+export interface UsageChargeTransactionEntity {
+    transactionType?: \\"ElectricityUsageCharge\\";
+    amount?: number;
+    transactionDateTime?: string;
+    fuelType?: \\"Electricity\\" | \\"Gas\\";
+    /**
+     * Meter Serial Number
+     */
+    msn?: string;
+    /**
+     * The meter read that triggered the charge.
+     */
+    read?: number;
+    /**
+     * The consumption amount (kwH) corresponding to this charge.
+     */
+    consumption?: number;
+    [key: string]: unknown;
+}
+
+export interface StandingChargeTransactionEntity {
+    transactionType?: \\"ElectricityStandingCharge\\";
+    amount?: number;
+    transactionDateTime?: string;
+    fuelType?: \\"Electricity\\" | \\"Gas\\";
+    [key: string]: unknown;
+}
+
+export type ResponseApiV3AccountsAccountIdTransactionsGet = ResponseOapi<TransactionHistoryHttpResponseV3, 200, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 400, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 500, \\"application/json\\">;
+
+/**
+ * Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
+ * Returns the transaction history
+ */
+export interface RequestApiV3AccountsAccountIdTransactionsGet<TAuthInfo> extends RequestOapi {
+    path: {
+        /**
+         * ID of the account to return
+         */
+        accountId: string;
+    };
+    query: {
+        /**
+         * Start date for the search period (inclusive)
+         */
+        fromDate: string;
+        /**
+         * End date for the search period (inclusive)
+         */
+        toDate: string;
+        /**
+         * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
+         */
+        transactionType?: (\\"TopUp\\" | \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\" | \\"BalanceAdjustment\\")[];
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns the transaction history
+ */
+export type PathApiV3AccountsAccountIdTransactionsGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestApiV3AccountsAccountIdTransactionsGet<TAuthInfo> & R) => ResponseApiV3AccountsAccountIdTransactionsGet | Promise<ResponseApiV3AccountsAccountIdTransactionsGet>;
+
+export type ResponseApiV3AccountsAccountIdAdjustbalancePost = ResponseOapi<BalanceSummaryHttpResponse, 200, \\"application/json\\"> | ResponseOapi<HttpErrorResponse, 400, \\"application/json\\"> | ResponseOapi<unknown, 404, string> | ResponseOapi<HttpErrorResponse, 500, \\"application/json\\">;
+
+/**
+ * Adjust balance for a given accountId
+ * Returns with the adjusted balance
+ */
+export interface RequestApiV3AccountsAccountIdAdjustbalancePost<TAuthInfo> extends RequestOapi {
+    path: {
+        /**
+         * ID of the account
+         */
+        accountId: string;
+    };
+    body: AdjustBalanceRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns with the adjusted balance
+ */
+export type PathApiV3AccountsAccountIdAdjustbalancePost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestApiV3AccountsAccountIdAdjustbalancePost<TAuthInfo> & R) => ResponseApiV3AccountsAccountIdAdjustbalancePost | Promise<ResponseApiV3AccountsAccountIdAdjustbalancePost>;
+
+export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
+    paths: {
+        \\"/internal/status\\": {
+            /**
+             * Returns 200 if the application is up. It does not do deep check. Always gives back 200.
+             */
+            get: PathInternalStatusGet<R, TAuthInfo>;
+        };
+        \\"/internal/swagger.yaml\\": {
+            get: PathInternalSwaggeryamlGet<R, TAuthInfo>;
+        };
+        \\"/api/v2/accounts/{accountId}/balance\\": {
+            /**
+             * Returns the balance
+             */
+            get: PathApiV2AccountsAccountIdBalanceGet<R, TAuthInfo>;
+        };
+        \\"/api/v2/accounts/{accountId}/transactions\\": {
+            /**
+             * Returns the transaction history
+             */
+            get: PathApiV2AccountsAccountIdTransactionsGet<R, TAuthInfo>;
+        };
+        \\"/api/v2/accounts/{accountId}/adjust-balance\\": {
+            /**
+             * Returns with the adjusted balance
+             */
+            post: PathApiV2AccountsAccountIdAdjustbalancePost<R, TAuthInfo>;
+        };
+        \\"/api/v3/accounts/{accountId}/balance\\": {
+            /**
+             * Returns the balance
+             */
+            get: PathApiV3AccountsAccountIdBalanceGet<R, TAuthInfo>;
+        };
+        \\"/api/v3/accounts/{accountId}/transactions\\": {
+            /**
+             * Returns the transaction history
+             */
+            get: PathApiV3AccountsAccountIdTransactionsGet<R, TAuthInfo>;
+        };
+        \\"/api/v3/accounts/{accountId}/adjust-balance\\": {
+            /**
+             * Returns with the adjusted balance
+             */
+            post: PathApiV3AccountsAccountIdAdjustbalancePost<R, TAuthInfo>;
+        };
+    };
+    security: {
+        BasicAuth: OapiSecurityResolver<R, TAuthInfo>;
+        BearerAuth: OapiSecurityResolver<R, TAuthInfo>;
+        ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo>;
+    };
+}
+"
+`;
+
+exports[`Types Content Test cloudtasks.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<App<R>> => openApi(config);
+
+export interface Empty {
+    [key: string]: unknown;
+}
+
+export type ResponseV2NameDelete = ResponseOapi<Empty, 200, string>;
+
+/**
+ * Deletes a task.
+ *
+ * A task can be deleted if it is scheduled or dispatched. A task
+ * cannot be deleted if it has executed successfully or permanently
+ * failed.
+ */
+export interface RequestV2NameDelete<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * Required. The task name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+         */
+        name: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Deletes a task.
+ *
+ * A task can be deleted if it is scheduled or dispatched. A task
+ * cannot be deleted if it has executed successfully or permanently
+ * failed.
+ */
+export type PathV2NameDelete<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NameDelete<TAuthInfo> & R) => ResponseV2NameDelete | Promise<ResponseV2NameDelete>;
+
+export interface Task {
+    appEngineHttpRequest?: AppEngineHttpRequest;
+    /**
+     * Output only. The time that the task was created.
+     *
+     * \`create_time\` will be truncated to the nearest second.
+     */
+    createTime?: string;
+    /**
+     * Output only. The number of attempts dispatched.
+     *
+     * This count includes attempts which have been dispatched but haven't
+     * received a response.
+     */
+    dispatchCount?: number;
+    /**
+     * The deadline for requests sent to the worker. If the worker does not
+     * respond by this deadline then the request is cancelled and the attempt
+     * is marked as a \`DEADLINE_EXCEEDED\` failure. Cloud Tasks will retry the
+     * task according to the RetryConfig.
+     *
+     * Note that when the request is cancelled, Cloud Tasks will stop listing for
+     * the response, but whether the worker stops processing depends on the
+     * worker. For example, if the worker is stuck, it may not react to cancelled
+     * requests.
+     *
+     * The default and maximum values depend on the type of request:
+     *
+     *
+     * * For App Engine tasks, 0 indicates that the
+     *   request has the default deadline. The default deadline depends on the
+     *   [scaling
+     *   type](https://cloud.google.com/appengine/docs/standard/go/how-instances-are-managed#instance_scaling)
+     *   of the service: 10 minutes for standard apps with automatic scaling, 24
+     *   hours for standard apps with manual and basic scaling, and 60 minutes for
+     *   flex apps. If the request deadline is set, it must be in the interval [15
+     *   seconds, 24 hours 15 seconds]. Regardless of the task's
+     *   \`dispatch_deadline\`, the app handler will not run for longer than than
+     *   the service's timeout. We recommend setting the \`dispatch_deadline\` to
+     *   at most a few seconds more than the app handler's timeout. For more
+     *   information see
+     *   [Timeouts](https://cloud.google.com/tasks/docs/creating-appengine-handlers#timeouts).
+     *
+     * \`dispatch_deadline\` will be truncated to the nearest millisecond. The
+     * deadline is an approximate deadline.
+     */
+    dispatchDeadline?: string;
+    firstAttempt?: Attempt;
+    lastAttempt?: Attempt;
+    /**
+     * Optionally caller-specified in CreateTask.
+     *
+     * The task name.
+     *
+     * The task name must have the following format:
+     * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+     *
+     * * \`PROJECT_ID\` can contain letters ([A-Za-z]), numbers ([0-9]),
+     *    hyphens (-), colons (:), or periods (.).
+     *    For more information, see
+     *    [Identifying
+     *    projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+     * * \`LOCATION_ID\` is the canonical ID for the task's location.
+     *    The list of available locations can be obtained by calling
+     *    ListLocations.
+     *    For more information, see https://cloud.google.com/about/locations/.
+     * * \`QUEUE_ID\` can contain letters ([A-Za-z]), numbers ([0-9]), or
+     *   hyphens (-). The maximum length is 100 characters.
+     * * \`TASK_ID\` can contain only letters ([A-Za-z]), numbers ([0-9]),
+     *   hyphens (-), or underscores (_). The maximum length is 500 characters.
+     */
+    name?: string;
+    /**
+     * Output only. The number of attempts which have received a response.
+     */
+    responseCount?: number;
+    /**
+     * The time when the task is scheduled to be attempted or retried.
+     *
+     * \`schedule_time\` will be truncated to the nearest microsecond.
+     */
+    scheduleTime?: string;
+    /**
+     * Output only. The view specifies which subset of the Task has
+     * been returned.
+     */
+    view?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    [key: string]: unknown;
+}
+
+export interface AppEngineHttpRequest {
+    appEngineRouting?: AppEngineRouting;
+    /**
+     * HTTP request body.
+     *
+     * A request body is allowed only if the HTTP method is POST or PUT. It is
+     * an error to set a body on a task with an incompatible HttpMethod.
+     */
+    body?: string;
+    /**
+     * HTTP request headers.
+     *
+     * This map contains the header field names and values.
+     * Headers can be set when the
+     * task is created.
+     * Repeated headers are not supported but a header value can contain commas.
+     *
+     * Cloud Tasks sets some headers to default values:
+     *
+     * * \`User-Agent\`: By default, this header is
+     *   \`\\"AppEngine-Google; (+http://code.google.com/appengine)\\"\`.
+     *   This header can be modified, but Cloud Tasks will append
+     *   \`\\"AppEngine-Google; (+http://code.google.com/appengine)\\"\` to the
+     *   modified \`User-Agent\`.
+     *
+     * If the task has a body, Cloud
+     * Tasks sets the following headers:
+     *
+     * * \`Content-Type\`: By default, the \`Content-Type\` header is set to
+     *   \`\\"application/octet-stream\\"\`. The default can be overridden by explicitly
+     *   setting \`Content-Type\` to a particular media type when the
+     *   task is created.
+     *   For example, \`Content-Type\` can be set to \`\\"application/json\\"\`.
+     * * \`Content-Length\`: This is computed by Cloud Tasks. This value is
+     *   output only.   It cannot be changed.
+     *
+     * The headers below cannot be set or overridden:
+     *
+     * * \`Host\`
+     * * \`X-Google-*\`
+     * * \`X-AppEngine-*\`
+     *
+     * In addition, Cloud Tasks sets some headers when the task is dispatched,
+     * such as headers containing information about the task; see
+     * [request
+     * headers](https://cloud.google.com/appengine/docs/python/taskqueue/push/creating-handlers#reading_request_headers).
+     * These headers are set only when the task is dispatched, so they are not
+     * visible when the task is returned in a Cloud Tasks response.
+     *
+     * Although there is no specific limit for the maximum number of headers or
+     * the size, there is a limit on the maximum size of the Task. For more
+     * information, see the CreateTask documentation.
+     */
+    headers?: any;
+    /**
+     * The HTTP method to use for the request. The default is POST.
+     *
+     * The app's request handler for the task's target URL must be able to handle
+     * HTTP requests with this http_method, otherwise the task attempt will fail
+     * with error code 405 (Method Not Allowed). See
+     * [Writing a push task request
+     * handler](https://cloud.google.com/appengine/docs/java/taskqueue/push/creating-handlers#writing_a_push_task_request_handler)
+     * and the documentation for the request handlers in the language your app is
+     * written in e.g.
+     * [Python Request
+     * Handler](https://cloud.google.com/appengine/docs/python/tools/webapp/requesthandlerclass).
+     */
+    httpMethod?: \\"HTTP_METHOD_UNSPECIFIED\\" | \\"POST\\" | \\"GET\\" | \\"HEAD\\" | \\"PUT\\" | \\"DELETE\\" | \\"PATCH\\" | \\"OPTIONS\\";
+    /**
+     * The relative URI.
+     *
+     * The relative URI must begin with \\"/\\" and must be a valid HTTP relative URI.
+     * It can contain a path and query string arguments.
+     * If the relative URI is empty, then the root path \\"/\\" will be used.
+     * No spaces are allowed, and the maximum length allowed is 2083 characters.
+     */
+    relativeUri?: string;
+    [key: string]: unknown;
+}
+
+export interface AppEngineRouting {
+    /**
+     * Output only. The host that the task is sent to.
+     *
+     * The host is constructed from the domain name of the app associated with
+     * the queue's project ID (for example <app-id>.appspot.com), and the
+     * service, version,
+     * and instance. Tasks which were created using
+     * the App Engine SDK might have a custom domain name.
+     *
+     * For more information, see
+     * [How Requests are
+     * Routed](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed).
+     */
+    host?: string;
+    /**
+     * App instance.
+     *
+     * By default, the task is sent to an instance which is available when
+     * the task is attempted.
+     *
+     * Requests can only be sent to a specific instance if
+     * [manual scaling is used in App Engine
+     * Standard](https://cloud.google.com/appengine/docs/python/an-overview-of-app-engine?hl=en_US#scaling_types_and_instance_classes).
+     * App Engine Flex does not support instances. For more information, see
+     * [App Engine Standard request
+     * routing](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed)
+     * and [App Engine Flex request
+     * routing](https://cloud.google.com/appengine/docs/flexible/python/how-requests-are-routed).
+     */
+    instance?: string;
+    /**
+     * App service.
+     *
+     * By default, the task is sent to the service which is the default
+     * service when the task is attempted.
+     *
+     * For some queues or tasks which were created using the App Engine
+     * Task Queue API, host is not parsable
+     * into service,
+     * version, and
+     * instance. For example, some tasks
+     * which were created using the App Engine SDK use a custom domain
+     * name; custom domains are not parsed by Cloud Tasks. If
+     * host is not parsable, then
+     * service,
+     * version, and
+     * instance are the empty string.
+     */
+    service?: string;
+    /**
+     * App version.
+     *
+     * By default, the task is sent to the version which is the default
+     * version when the task is attempted.
+     *
+     * For some queues or tasks which were created using the App Engine
+     * Task Queue API, host is not parsable
+     * into service,
+     * version, and
+     * instance. For example, some tasks
+     * which were created using the App Engine SDK use a custom domain
+     * name; custom domains are not parsed by Cloud Tasks. If
+     * host is not parsable, then
+     * service,
+     * version, and
+     * instance are the empty string.
+     */
+    version?: string;
+    [key: string]: unknown;
+}
+
+export interface Attempt {
+    /**
+     * Output only. The time that this attempt was dispatched.
+     *
+     * \`dispatch_time\` will be truncated to the nearest microsecond.
+     */
+    dispatchTime?: string;
+    responseStatus?: Status;
+    /**
+     * Output only. The time that this attempt response was received.
+     *
+     * \`response_time\` will be truncated to the nearest microsecond.
+     */
+    responseTime?: string;
+    /**
+     * Output only. The time that this attempt was scheduled.
+     *
+     * \`schedule_time\` will be truncated to the nearest microsecond.
+     */
+    scheduleTime?: string;
+    [key: string]: unknown;
+}
+
+export interface Status {
+    /**
+     * The status code, which should be an enum value of google.rpc.Code.
+     */
+    code?: number;
+    /**
+     * A list of messages that carry the error details.  There is a common set of
+     * message types for APIs to use.
+     */
+    details?: any[];
+    /**
+     * A developer-facing error message, which should be in English. Any
+     * user-facing error message should be localized and sent in the
+     * google.rpc.Status.details field, or localized by the client.
+     */
+    message?: string;
+    [key: string]: unknown;
+}
+
+export type ResponseV2NameGet = ResponseOapi<Task, 200, string>;
+
+/**
+ * Gets a task.
+ */
+export interface RequestV2NameGet<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * The response_view specifies which subset of the Task will be
+         * returned.
+         *
+         * By default response_view is BASIC; not all
+         * information is retrieved by default because some data, such as
+         * payloads, might be desirable to return only when needed because
+         * of its large size or because of the sensitivity of data that it
+         * contains.
+         *
+         * Authorization for FULL requires
+         * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+         * permission on the Task resource.
+         */
+        responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    };
+    path: {
+        /**
+         * Required. The task name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+         */
+        name: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Gets a task.
+ */
+export type PathV2NameGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NameGet<TAuthInfo> & R) => ResponseV2NameGet | Promise<ResponseV2NameGet>;
+
+export interface Queue {
+    appEngineRoutingOverride?: AppEngineRouting;
+    /**
+     * Caller-specified and required in CreateQueue,
+     * after which it becomes output only.
+     *
+     * The queue name.
+     *
+     * The queue name must have the following format:
+     * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+     *
+     * * \`PROJECT_ID\` can contain letters ([A-Za-z]), numbers ([0-9]),
+     *    hyphens (-), colons (:), or periods (.).
+     *    For more information, see
+     *    [Identifying
+     *    projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+     * * \`LOCATION_ID\` is the canonical ID for the queue's location.
+     *    The list of available locations can be obtained by calling
+     *    ListLocations.
+     *    For more information, see https://cloud.google.com/about/locations/.
+     * * \`QUEUE_ID\` can contain letters ([A-Za-z]), numbers ([0-9]), or
+     *   hyphens (-). The maximum length is 100 characters.
+     */
+    name?: string;
+    /**
+     * Output only. The last time this queue was purged.
+     *
+     * All tasks that were created before this time
+     * were purged.
+     *
+     * A queue can be purged using PurgeQueue, the
+     * [App Engine Task Queue SDK, or the Cloud
+     * Console](https://cloud.google.com/appengine/docs/standard/python/taskqueue/push/deleting-tasks-and-queues#purging_all_tasks_from_a_queue).
+     *
+     * Purge time will be truncated to the nearest microsecond. Purge
+     * time will be unset if the queue has never been purged.
+     */
+    purgeTime?: string;
+    rateLimits?: RateLimits;
+    retryConfig?: RetryConfig;
+    /**
+     * Output only. The state of the queue.
+     *
+     * \`state\` can only be changed by called
+     * PauseQueue,
+     * ResumeQueue, or uploading
+     * [queue.yaml/xml](https://cloud.google.com/appengine/docs/python/config/queueref).
+     * UpdateQueue cannot be used to change \`state\`.
+     */
+    state?: \\"STATE_UNSPECIFIED\\" | \\"RUNNING\\" | \\"PAUSED\\" | \\"DISABLED\\";
+    [key: string]: unknown;
+}
+
+export interface RateLimits {
+    /**
+     * Output only. The max burst size.
+     *
+     * Max burst size limits how fast tasks in queue are processed when
+     * many tasks are in the queue and the rate is high. This field
+     * allows the queue to have a high rate so processing starts shortly
+     * after a task is enqueued, but still limits resource usage when
+     * many tasks are enqueued in a short period of time.
+     *
+     * The [token bucket](https://wikipedia.org/wiki/Token_Bucket)
+     * algorithm is used to control the rate of task dispatches. Each
+     * queue has a token bucket that holds tokens, up to the maximum
+     * specified by \`max_burst_size\`. Each time a task is dispatched, a
+     * token is removed from the bucket. Tasks will be dispatched until
+     * the queue's bucket runs out of tokens. The bucket will be
+     * continuously refilled with new tokens based on
+     * max_dispatches_per_second.
+     *
+     * Cloud Tasks will pick the value of \`max_burst_size\` based on the
+     * value of
+     * max_dispatches_per_second.
+     *
+     * For queues that were created or updated using
+     * \`queue.yaml/xml\`, \`max_burst_size\` is equal to
+     * [bucket_size](https://cloud.google.com/appengine/docs/standard/python/config/queueref#bucket_size).
+     * Since \`max_burst_size\` is output only, if
+     * UpdateQueue is called on a queue
+     * created by \`queue.yaml/xml\`, \`max_burst_size\` will be reset based
+     * on the value of
+     * max_dispatches_per_second,
+     * regardless of whether
+     * max_dispatches_per_second
+     * is updated.
+     *
+     */
+    maxBurstSize?: number;
+    /**
+     * The maximum number of concurrent tasks that Cloud Tasks allows
+     * to be dispatched for this queue. After this threshold has been
+     * reached, Cloud Tasks stops dispatching tasks until the number of
+     * concurrent requests decreases.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * The maximum allowed value is 5,000.
+     *
+     *
+     * This field has the same meaning as
+     * [max_concurrent_requests in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#max_concurrent_requests).
+     */
+    maxConcurrentDispatches?: number;
+    /**
+     * The maximum rate at which tasks are dispatched from this queue.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     * * The maximum allowed value is 500.
+     *
+     *
+     * This field has the same meaning as
+     * [rate in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#rate).
+     */
+    maxDispatchesPerSecond?: number;
+    [key: string]: unknown;
+}
+
+export interface RetryConfig {
+    /**
+     * Number of attempts per task.
+     *
+     * Cloud Tasks will attempt the task \`max_attempts\` times (that is, if the
+     * first attempt fails, then there will be \`max_attempts - 1\` retries). Must
+     * be >= -1.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     * -1 indicates unlimited attempts.
+     *
+     * This field has the same meaning as
+     * [task_retry_limit in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxAttempts?: number;
+    /**
+     * A task will be scheduled for retry between
+     * min_backoff and
+     * max_backoff duration after it fails,
+     * if the queue's RetryConfig specifies that the task should be
+     * retried.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * \`max_backoff\` will be truncated to the nearest second.
+     *
+     * This field has the same meaning as
+     * [max_backoff_seconds in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxBackoff?: string;
+    /**
+     * The time between retries will double \`max_doublings\` times.
+     *
+     * A task's retry interval starts at
+     * min_backoff, then doubles
+     * \`max_doublings\` times, then increases linearly, and finally
+     * retries retries at intervals of
+     * max_backoff up to
+     * max_attempts times.
+     *
+     * For example, if min_backoff is 10s,
+     * max_backoff is 300s, and
+     * \`max_doublings\` is 3, then the a task will first be retried in
+     * 10s. The retry interval will double three times, and then
+     * increase linearly by 2^3 * 10s.  Finally, the task will retry at
+     * intervals of max_backoff until the
+     * task has been attempted max_attempts
+     * times. Thus, the requests will retry at 10s, 20s, 40s, 80s, 160s,
+     * 240s, 300s, 300s, ....
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * This field has the same meaning as
+     * [max_doublings in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxDoublings?: number;
+    /**
+     * If positive, \`max_retry_duration\` specifies the time limit for
+     * retrying a failed task, measured from when the task was first
+     * attempted. Once \`max_retry_duration\` time has passed *and* the
+     * task has been attempted max_attempts
+     * times, no further attempts will be made and the task will be
+     * deleted.
+     *
+     * If zero, then the task age is unlimited.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * \`max_retry_duration\` will be truncated to the nearest second.
+     *
+     * This field has the same meaning as
+     * [task_age_limit in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    maxRetryDuration?: string;
+    /**
+     * A task will be scheduled for retry between
+     * min_backoff and
+     * max_backoff duration after it fails,
+     * if the queue's RetryConfig specifies that the task should be
+     * retried.
+     *
+     * If unspecified when the queue is created, Cloud Tasks will pick the
+     * default.
+     *
+     *
+     * \`min_backoff\` will be truncated to the nearest second.
+     *
+     * This field has the same meaning as
+     * [min_backoff_seconds in
+     * queue.yaml/xml](https://cloud.google.com/appengine/docs/standard/python/config/queueref#retry_parameters).
+     */
+    minBackoff?: string;
+    [key: string]: unknown;
+}
+
+export type ResponseV2NamePatch = ResponseOapi<Queue, 200, string>;
+
+/**
+ * Updates a queue.
+ *
+ * This method creates the queue if it does not exist and updates
+ * the queue if it does exist.
+ *
+ * Queues created with this method allow tasks to live for a maximum of 31
+ * days. After a task is 31 days old, the task will be deleted regardless of whether
+ * it was dispatched or not.
+ *
+ * WARNING: Using this method may have unintended side effects if you are
+ * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+ * Read
+ * [Overview of Queue Management and
+ * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+ * this method.
+ */
+export interface RequestV2NamePatch<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * A mask used to specify which fields of the queue are being updated.
+         *
+         * If empty, then all fields will be updated.
+         */
+        updateMask?: string;
+    };
+    path: {
+        /**
+         * Caller-specified and required in CreateQueue,
+         * after which it becomes output only.
+         *
+         * The queue name.
+         *
+         * The queue name must have the following format:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+         *
+         * * \`PROJECT_ID\` can contain letters ([A-Za-z]), numbers ([0-9]),
+         *    hyphens (-), colons (:), or periods (.).
+         *    For more information, see
+         *    [Identifying
+         *    projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+         * * \`LOCATION_ID\` is the canonical ID for the queue's location.
+         *    The list of available locations can be obtained by calling
+         *    ListLocations.
+         *    For more information, see https://cloud.google.com/about/locations/.
+         * * \`QUEUE_ID\` can contain letters ([A-Za-z]), numbers ([0-9]), or
+         *   hyphens (-). The maximum length is 100 characters.
+         */
+        name: string;
+    };
+    body?: Queue;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Updates a queue.
+ *
+ * This method creates the queue if it does not exist and updates
+ * the queue if it does exist.
+ *
+ * Queues created with this method allow tasks to live for a maximum of 31
+ * days. After a task is 31 days old, the task will be deleted regardless of whether
+ * it was dispatched or not.
+ *
+ * WARNING: Using this method may have unintended side effects if you are
+ * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+ * Read
+ * [Overview of Queue Management and
+ * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+ * this method.
+ */
+export type PathV2NamePatch<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NamePatch<TAuthInfo> & R) => ResponseV2NamePatch | Promise<ResponseV2NamePatch>;
+
+export interface ListLocationsResponse {
+    /**
+     * A list of locations that matches the specified filter in the request.
+     */
+    locations?: Location[];
+    /**
+     * The standard List next-page token.
+     */
+    nextPageToken?: string;
+    [key: string]: unknown;
+}
+
+export interface Location {
+    /**
+     * The friendly name for this location, typically a nearby city name.
+     * For example, \\"Tokyo\\".
+     */
+    displayName?: string;
+    /**
+     * Cross-service attributes for the location. For example
+     *
+     *     {\\"cloud.googleapis.com/region\\": \\"us-east1\\"}
+     */
+    labels?: any;
+    /**
+     * The canonical id for this location. For example: \`\\"us-east1\\"\`.
+     */
+    locationId?: string;
+    /**
+     * Service-specific metadata. For example the available capacity at the given
+     * location.
+     */
+    metadata?: any;
+    /**
+     * Resource name for the location, which may vary between implementations.
+     * For example: \`\\"projects/example-project/locations/us-east1\\"\`
+     */
+    name?: string;
+    [key: string]: unknown;
+}
+
+export type ResponseV2NameLocationsGet = ResponseOapi<ListLocationsResponse, 200, string>;
+
+/**
+ * Lists information about the supported locations for this service.
+ */
+export interface RequestV2NameLocationsGet<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * The standard list filter.
+         */
+        filter?: string;
+        /**
+         * The standard list page size.
+         */
+        pageSize?: number;
+        /**
+         * The standard list page token.
+         */
+        pageToken?: string;
+    };
+    path: {
+        /**
+         * The resource that owns the locations collection, if applicable.
+         */
+        name: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Lists information about the supported locations for this service.
+ */
+export type PathV2NameLocationsGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NameLocationsGet<TAuthInfo> & R) => ResponseV2NameLocationsGet | Promise<ResponseV2NameLocationsGet>;
+
+export interface PauseQueueRequest {
+    [key: string]: unknown;
+}
+
+export type ResponseV2NamepausePost = ResponseOapi<Queue, 200, string>;
+
+/**
+ * Pauses the queue.
+ *
+ * If a queue is paused then the system will stop dispatching tasks
+ * until the queue is resumed via
+ * ResumeQueue. Tasks can still be added
+ * when the queue is paused. A queue is paused if its
+ * state is PAUSED.
+ */
+export interface RequestV2NamepausePost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID\`
+         */
+        name: string;
+    };
+    body?: PauseQueueRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Pauses the queue.
+ *
+ * If a queue is paused then the system will stop dispatching tasks
+ * until the queue is resumed via
+ * ResumeQueue. Tasks can still be added
+ * when the queue is paused. A queue is paused if its
+ * state is PAUSED.
+ */
+export type PathV2NamepausePost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NamepausePost<TAuthInfo> & R) => ResponseV2NamepausePost | Promise<ResponseV2NamepausePost>;
+
+export interface PurgeQueueRequest {
+    [key: string]: unknown;
+}
+
+export type ResponseV2NamepurgePost = ResponseOapi<Queue, 200, string>;
+
+/**
+ * Purges a queue by deleting all of its tasks.
+ *
+ * All tasks created before this method is called are permanently deleted.
+ *
+ * Purge operations can take up to one minute to take effect. Tasks
+ * might be dispatched before the purge takes effect. A purge is irreversible.
+ */
+export interface RequestV2NamepurgePost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID\`
+         */
+        name: string;
+    };
+    body?: PurgeQueueRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Purges a queue by deleting all of its tasks.
+ *
+ * All tasks created before this method is called are permanently deleted.
+ *
+ * Purge operations can take up to one minute to take effect. Tasks
+ * might be dispatched before the purge takes effect. A purge is irreversible.
+ */
+export type PathV2NamepurgePost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NamepurgePost<TAuthInfo> & R) => ResponseV2NamepurgePost | Promise<ResponseV2NamepurgePost>;
+
+export interface ResumeQueueRequest {
+    [key: string]: unknown;
+}
+
+export type ResponseV2NameresumePost = ResponseOapi<Queue, 200, string>;
+
+/**
+ * Resume a queue.
+ *
+ * This method resumes a queue after it has been
+ * PAUSED or
+ * DISABLED. The state of a queue is stored
+ * in the queue's state; after calling this method it
+ * will be set to RUNNING.
+ *
+ * WARNING: Resuming many high-QPS queues at the same time can
+ * lead to target overloading. If you are resuming high-QPS
+ * queues, follow the 500/50/5 pattern described in
+ * [Managing Cloud Tasks Scaling
+ * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+ */
+export interface RequestV2NameresumePost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID\`
+         */
+        name: string;
+    };
+    body?: ResumeQueueRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Resume a queue.
+ *
+ * This method resumes a queue after it has been
+ * PAUSED or
+ * DISABLED. The state of a queue is stored
+ * in the queue's state; after calling this method it
+ * will be set to RUNNING.
+ *
+ * WARNING: Resuming many high-QPS queues at the same time can
+ * lead to target overloading. If you are resuming high-QPS
+ * queues, follow the 500/50/5 pattern described in
+ * [Managing Cloud Tasks Scaling
+ * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+ */
+export type PathV2NameresumePost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NameresumePost<TAuthInfo> & R) => ResponseV2NameresumePost | Promise<ResponseV2NameresumePost>;
+
+export interface RunTaskRequest {
+    /**
+     * The response_view specifies which subset of the Task will be
+     * returned.
+     *
+     * By default response_view is BASIC; not all
+     * information is retrieved by default because some data, such as
+     * payloads, might be desirable to return only when needed because
+     * of its large size or because of the sensitivity of data that it
+     * contains.
+     *
+     * Authorization for FULL requires
+     * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+     * permission on the Task resource.
+     */
+    responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    [key: string]: unknown;
+}
+
+export type ResponseV2NamerunPost = ResponseOapi<Task, 200, string>;
+
+/**
+ * Forces a task to run now.
+ *
+ * When this method is called, Cloud Tasks will dispatch the task, even if
+ * the task is already running, the queue has reached its RateLimits or
+ * is PAUSED.
+ *
+ * This command is meant to be used for manual debugging. For
+ * example, RunTask can be used to retry a failed
+ * task after a fix has been made or to manually force a task to be
+ * dispatched now.
+ *
+ * The dispatched task is returned. That is, the task that is returned
+ * contains the status after the task is dispatched but
+ * before the task is received by its target.
+ *
+ * If Cloud Tasks receives a successful response from the task's
+ * target, then the task will be deleted; otherwise the task's
+ * schedule_time will be reset to the time that
+ * RunTask was called plus the retry delay specified
+ * in the queue's RetryConfig.
+ *
+ * RunTask returns
+ * NOT_FOUND when it is called on a
+ * task that has already succeeded or permanently failed.
+ */
+export interface RequestV2NamerunPost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * Required. The task name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID\`
+         */
+        name: string;
+    };
+    body?: RunTaskRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Forces a task to run now.
+ *
+ * When this method is called, Cloud Tasks will dispatch the task, even if
+ * the task is already running, the queue has reached its RateLimits or
+ * is PAUSED.
+ *
+ * This command is meant to be used for manual debugging. For
+ * example, RunTask can be used to retry a failed
+ * task after a fix has been made or to manually force a task to be
+ * dispatched now.
+ *
+ * The dispatched task is returned. That is, the task that is returned
+ * contains the status after the task is dispatched but
+ * before the task is received by its target.
+ *
+ * If Cloud Tasks receives a successful response from the task's
+ * target, then the task will be deleted; otherwise the task's
+ * schedule_time will be reset to the time that
+ * RunTask was called plus the retry delay specified
+ * in the queue's RetryConfig.
+ *
+ * RunTask returns
+ * NOT_FOUND when it is called on a
+ * task that has already succeeded or permanently failed.
+ */
+export type PathV2NamerunPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2NamerunPost<TAuthInfo> & R) => ResponseV2NamerunPost | Promise<ResponseV2NamerunPost>;
+
+export interface ListQueuesResponse {
+    /**
+     * A token to retrieve next page of results.
+     *
+     * To return the next page of results, call
+     * ListQueues with this value as the
+     * page_token.
+     *
+     * If the next_page_token is empty, there are no more results.
+     *
+     * The page token is valid for only 2 hours.
+     */
+    nextPageToken?: string;
+    /**
+     * The list of queues.
+     */
+    queues?: Queue[];
+    [key: string]: unknown;
+}
+
+export type ResponseV2ParentQueuesGet = ResponseOapi<ListQueuesResponse, 200, string>;
+
+/**
+ * Lists queues.
+ *
+ * Queues are returned in lexicographical order.
+ */
+export interface RequestV2ParentQueuesGet<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * \`filter\` can be used to specify a subset of queues. Any Queue
+         * field can be used as a filter and several operators as supported.
+         * For example: \`<=, <, >=, >, !=, =, :\`. The filter syntax is the same as
+         * described in
+         * [Stackdriver's Advanced Logs
+         * Filters](https://cloud.google.com/logging/docs/view/advanced_filters).
+         *
+         * Sample filter \\"state: PAUSED\\".
+         *
+         * Note that using filters might cause fewer queues than the
+         * requested page_size to be returned.
+         */
+        filter?: string;
+        /**
+         * Requested page size.
+         *
+         * The maximum page size is 9800. If unspecified, the page size will
+         * be the maximum. Fewer queues than requested might be returned,
+         * even if more queues exist; use the
+         * next_page_token in the
+         * response to determine if more queues exist.
+         */
+        pageSize?: number;
+        /**
+         * A token identifying the page of results to return.
+         *
+         * To request the first page results, page_token must be empty. To
+         * request the next page of results, page_token must be the value of
+         * next_page_token returned
+         * from the previous call to ListQueues
+         * method. It is an error to switch the value of the
+         * filter while iterating through pages.
+         */
+        pageToken?: string;
+    };
+    path: {
+        /**
+         * Required. The location name.
+         * For example: \`projects/PROJECT_ID/locations/LOCATION_ID\`
+         */
+        parent: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Lists queues.
+ *
+ * Queues are returned in lexicographical order.
+ */
+export type PathV2ParentQueuesGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ParentQueuesGet<TAuthInfo> & R) => ResponseV2ParentQueuesGet | Promise<ResponseV2ParentQueuesGet>;
+
+export type ResponseV2ParentQueuesPost = ResponseOapi<Queue, 200, string>;
+
+/**
+ * Creates a queue.
+ *
+ * Queues created with this method allow tasks to live for a maximum of 31
+ * days. After a task is 31 days old, the task will be deleted regardless of whether
+ * it was dispatched or not.
+ *
+ * WARNING: Using this method may have unintended side effects if you are
+ * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+ * Read
+ * [Overview of Queue Management and
+ * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+ * this method.
+ */
+export interface RequestV2ParentQueuesPost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * Required. The location name in which the queue will be created.
+         * For example: \`projects/PROJECT_ID/locations/LOCATION_ID\`
+         *
+         * The list of allowed locations can be obtained by calling Cloud
+         * Tasks' implementation of
+         * ListLocations.
+         */
+        parent: string;
+    };
+    body?: Queue;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Creates a queue.
+ *
+ * Queues created with this method allow tasks to live for a maximum of 31
+ * days. After a task is 31 days old, the task will be deleted regardless of whether
+ * it was dispatched or not.
+ *
+ * WARNING: Using this method may have unintended side effects if you are
+ * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+ * Read
+ * [Overview of Queue Management and
+ * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+ * this method.
+ */
+export type PathV2ParentQueuesPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ParentQueuesPost<TAuthInfo> & R) => ResponseV2ParentQueuesPost | Promise<ResponseV2ParentQueuesPost>;
+
+export interface ListTasksResponse {
+    /**
+     * A token to retrieve next page of results.
+     *
+     * To return the next page of results, call
+     * ListTasks with this value as the
+     * page_token.
+     *
+     * If the next_page_token is empty, there are no more results.
+     */
+    nextPageToken?: string;
+    /**
+     * The list of tasks.
+     */
+    tasks?: Task[];
+    [key: string]: unknown;
+}
+
+export type ResponseV2ParentTasksGet = ResponseOapi<ListTasksResponse, 200, string>;
+
+/**
+ * Lists the tasks in a queue.
+ *
+ * By default, only the BASIC view is retrieved
+ * due to performance considerations;
+ * response_view controls the
+ * subset of information which is returned.
+ *
+ * The tasks may be returned in any order. The ordering may change at any
+ * time.
+ */
+export interface RequestV2ParentTasksGet<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        /**
+         * Maximum page size.
+         *
+         * Fewer tasks than requested might be returned, even if more tasks exist; use
+         * next_page_token in the response to
+         * determine if more tasks exist.
+         *
+         * The maximum page size is 1000. If unspecified, the page size will be the
+         * maximum.
+         */
+        pageSize?: number;
+        /**
+         * A token identifying the page of results to return.
+         *
+         * To request the first page results, page_token must be empty. To
+         * request the next page of results, page_token must be the value of
+         * next_page_token returned
+         * from the previous call to ListTasks
+         * method.
+         *
+         * The page token is valid for only 2 hours.
+         */
+        pageToken?: string;
+        /**
+         * The response_view specifies which subset of the Task will be
+         * returned.
+         *
+         * By default response_view is BASIC; not all
+         * information is retrieved by default because some data, such as
+         * payloads, might be desirable to return only when needed because
+         * of its large size or because of the sensitivity of data that it
+         * contains.
+         *
+         * Authorization for FULL requires
+         * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+         * permission on the Task resource.
+         */
+        responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    };
+    path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+         */
+        parent: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Lists the tasks in a queue.
+ *
+ * By default, only the BASIC view is retrieved
+ * due to performance considerations;
+ * response_view controls the
+ * subset of information which is returned.
+ *
+ * The tasks may be returned in any order. The ordering may change at any
+ * time.
+ */
+export type PathV2ParentTasksGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ParentTasksGet<TAuthInfo> & R) => ResponseV2ParentTasksGet | Promise<ResponseV2ParentTasksGet>;
+
+export interface CreateTaskRequest {
+    /**
+     * The response_view specifies which subset of the Task will be
+     * returned.
+     *
+     * By default response_view is BASIC; not all
+     * information is retrieved by default because some data, such as
+     * payloads, might be desirable to return only when needed because
+     * of its large size or because of the sensitivity of data that it
+     * contains.
+     *
+     * Authorization for FULL requires
+     * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
+     * permission on the Task resource.
+     */
+    responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    task?: Task;
+    [key: string]: unknown;
+}
+
+export type ResponseV2ParentTasksPost = ResponseOapi<Task, 200, string>;
+
+/**
+ * Creates a task and adds it to a queue.
+ *
+ * Tasks cannot be updated after creation; there is no UpdateTask command.
+ *
+ * * The maximum task size is 100KB.
+ */
+export interface RequestV2ParentTasksPost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * Required. The queue name. For example:
+         * \`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID\`
+         *
+         * The queue must already exist.
+         */
+        parent: string;
+    };
+    body?: CreateTaskRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Creates a task and adds it to a queue.
+ *
+ * Tasks cannot be updated after creation; there is no UpdateTask command.
+ *
+ * * The maximum task size is 100KB.
+ */
+export type PathV2ParentTasksPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ParentTasksPost<TAuthInfo> & R) => ResponseV2ParentTasksPost | Promise<ResponseV2ParentTasksPost>;
+
+export interface GetIamPolicyRequest {
+    options?: GetPolicyOptions;
+    [key: string]: unknown;
+}
+
+export interface GetPolicyOptions {
+    /**
+     * Optional. The policy format version to be returned.
+     * Acceptable values are 0, 1, and 3.
+     * If the value is 0, or the field is omitted, policy format version 1 will be
+     * returned.
+     */
+    requestedPolicyVersion?: number;
+    [key: string]: unknown;
+}
+
+export interface Policy {
+    /**
+     * Associates a list of \`members\` to a \`role\`.
+     * \`bindings\` with no members will result in an error.
+     */
+    bindings?: Binding[];
+    /**
+     * \`etag\` is used for optimistic concurrency control as a way to help
+     * prevent simultaneous updates of a policy from overwriting each other.
+     * It is strongly suggested that systems make use of the \`etag\` in the
+     * read-modify-write cycle to perform policy updates in order to avoid race
+     * conditions: An \`etag\` is returned in the response to \`getIamPolicy\`, and
+     * systems are expected to put that etag in the request to \`setIamPolicy\` to
+     * ensure that their change will be applied to the same version of the policy.
+     *
+     * If no \`etag\` is provided in the call to \`setIamPolicy\`, then the existing
+     * policy is overwritten.
+     */
+    etag?: string;
+    /**
+     * Deprecated.
+     */
+    version?: number;
+    [key: string]: unknown;
+}
+
+export interface Binding {
+    condition?: Expr;
+    /**
+     * Specifies the identities requesting access for a Cloud Platform resource.
+     * \`members\` can have the following values:
+     *
+     * * \`allUsers\`: A special identifier that represents anyone who is
+     *    on the internet; with or without a Google account.
+     *
+     * * \`allAuthenticatedUsers\`: A special identifier that represents anyone
+     *    who is authenticated with a Google account or a service account.
+     *
+     * * \`user:{emailid}\`: An email address that represents a specific Google
+     *    account. For example, \`alice@example.com\` .
+     *
+     *
+     * * \`serviceAccount:{emailid}\`: An email address that represents a service
+     *    account. For example, \`my-other-app@appspot.gserviceaccount.com\`.
+     *
+     * * \`group:{emailid}\`: An email address that represents a Google group.
+     *    For example, \`admins@example.com\`.
+     *
+     *
+     * * \`domain:{domain}\`: The G Suite domain (primary) that represents all the
+     *    users of that domain. For example, \`google.com\` or \`example.com\`.
+     */
+    members?: string[];
+    /**
+     * Role that is assigned to \`members\`.
+     * For example, \`roles/viewer\`, \`roles/editor\`, or \`roles/owner\`.
+     */
+    role?: string;
+    [key: string]: unknown;
+}
+
+export interface Expr {
+    /**
+     * An optional description of the expression. This is a longer text which
+     * describes the expression, e.g. when hovered over it in a UI.
+     */
+    description?: string;
+    /**
+     * Textual representation of an expression in
+     * Common Expression Language syntax.
+     *
+     * The application context of the containing message determines which
+     * well-known feature set of CEL is supported.
+     */
+    expression?: string;
+    /**
+     * An optional string indicating the location of the expression for error
+     * reporting, e.g. a file name and a position in the file.
+     */
+    location?: string;
+    /**
+     * An optional title for the expression, i.e. a short string describing
+     * its purpose. This can be used e.g. in UIs which allow to enter the
+     * expression.
+     */
+    title?: string;
+    [key: string]: unknown;
+}
+
+export type ResponseV2ResourcegetIamPolicyPost = ResponseOapi<Policy, 200, string>;
+
+/**
+ * Gets the access control policy for a Queue.
+ * Returns an empty policy if the resource exists and does not have a policy
+ * set.
+ *
+ * Authorization requires the following
+ * [Google IAM](https://cloud.google.com/iam) permission on the specified
+ * resource parent:
+ *
+ * * \`cloudtasks.queues.getIamPolicy\`
+ */
+export interface RequestV2ResourcegetIamPolicyPost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * REQUIRED: The resource for which the policy is being requested.
+         * See the operation documentation for the appropriate value for this field.
+         */
+        resource: string;
+    };
+    body?: GetIamPolicyRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Gets the access control policy for a Queue.
+ * Returns an empty policy if the resource exists and does not have a policy
+ * set.
+ *
+ * Authorization requires the following
+ * [Google IAM](https://cloud.google.com/iam) permission on the specified
+ * resource parent:
+ *
+ * * \`cloudtasks.queues.getIamPolicy\`
+ */
+export type PathV2ResourcegetIamPolicyPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ResourcegetIamPolicyPost<TAuthInfo> & R) => ResponseV2ResourcegetIamPolicyPost | Promise<ResponseV2ResourcegetIamPolicyPost>;
+
+export interface SetIamPolicyRequest {
+    policy?: Policy;
+    [key: string]: unknown;
+}
+
+export type ResponseV2ResourcesetIamPolicyPost = ResponseOapi<Policy, 200, string>;
+
+/**
+ * Sets the access control policy for a Queue. Replaces any existing
+ * policy.
+ *
+ * Note: The Cloud Console does not check queue-level IAM permissions yet.
+ * Project-level permissions are required to use the Cloud Console.
+ *
+ * Authorization requires the following
+ * [Google IAM](https://cloud.google.com/iam) permission on the specified
+ * resource parent:
+ *
+ * * \`cloudtasks.queues.setIamPolicy\`
+ */
+export interface RequestV2ResourcesetIamPolicyPost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * REQUIRED: The resource for which the policy is being specified.
+         * See the operation documentation for the appropriate value for this field.
+         */
+        resource: string;
+    };
+    body?: SetIamPolicyRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Sets the access control policy for a Queue. Replaces any existing
+ * policy.
+ *
+ * Note: The Cloud Console does not check queue-level IAM permissions yet.
+ * Project-level permissions are required to use the Cloud Console.
+ *
+ * Authorization requires the following
+ * [Google IAM](https://cloud.google.com/iam) permission on the specified
+ * resource parent:
+ *
+ * * \`cloudtasks.queues.setIamPolicy\`
+ */
+export type PathV2ResourcesetIamPolicyPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ResourcesetIamPolicyPost<TAuthInfo> & R) => ResponseV2ResourcesetIamPolicyPost | Promise<ResponseV2ResourcesetIamPolicyPost>;
+
+export interface TestIamPermissionsRequest {
+    /**
+     * The set of permissions to check for the \`resource\`. Permissions with
+     * wildcards (such as '*' or 'storage.*') are not allowed. For more
+     * information see
+     * [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+     */
+    permissions?: string[];
+    [key: string]: unknown;
+}
+
+export interface TestIamPermissionsResponse {
+    /**
+     * A subset of \`TestPermissionsRequest.permissions\` that the caller is
+     * allowed.
+     */
+    permissions?: string[];
+    [key: string]: unknown;
+}
+
+export type ResponseV2ResourcetestIamPermissionsPost = ResponseOapi<TestIamPermissionsResponse, 200, string>;
+
+/**
+ * Returns permissions that a caller has on a Queue.
+ * If the resource does not exist, this will return an empty set of
+ * permissions, not a NOT_FOUND error.
+ *
+ * Note: This operation is designed to be used for building permission-aware
+ * UIs and command-line tools, not for authorization checking. This operation
+ * may \\"fail open\\" without warning.
+ */
+export interface RequestV2ResourcetestIamPermissionsPost<TAuthInfo> extends RequestOapi {
+    query: {
+        /**
+         * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+         */
+        key?: string;
+        /**
+         * OAuth access token.
+         */
+        access_token?: string;
+        /**
+         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         */
+        upload_protocol?: string;
+        /**
+         * Returns response with indentations and line breaks.
+         */
+        prettyPrint?: boolean;
+        /**
+         * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+         */
+        quotaUser?: string;
+        /**
+         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         */
+        uploadType?: string;
+        /**
+         * Selector specifying which fields to include in a partial response.
+         */
+        fields?: string;
+        /**
+         * V1 error format.
+         */
+        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        /**
+         * OAuth 2.0 token for the current user.
+         */
+        oauth_token?: string;
+        /**
+         * JSONP
+         */
+        callback?: string;
+        /**
+         * Data format for response.
+         */
+        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+    };
+    path: {
+        /**
+         * REQUIRED: The resource for which the policy detail is being requested.
+         * See the operation documentation for the appropriate value for this field.
+         */
+        resource: string;
+    };
+    body?: TestIamPermissionsRequest;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Returns permissions that a caller has on a Queue.
+ * If the resource does not exist, this will return an empty set of
+ * permissions, not a NOT_FOUND error.
+ *
+ * Note: This operation is designed to be used for building permission-aware
+ * UIs and command-line tools, not for authorization checking. This operation
+ * may \\"fail open\\" without warning.
+ */
+export type PathV2ResourcetestIamPermissionsPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV2ResourcetestIamPermissionsPost<TAuthInfo> & R) => ResponseV2ResourcetestIamPermissionsPost | Promise<ResponseV2ResourcetestIamPermissionsPost>;
+
+export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
+    paths: {
+        \\"/v2/{+name}\\": {
+            /**
+             * Deletes a task.
+             *
+             * A task can be deleted if it is scheduled or dispatched. A task
+             * cannot be deleted if it has executed successfully or permanently
+             * failed.
+             */
+            delete: PathV2NameDelete<R, TAuthInfo>;
+            /**
+             * Gets a task.
+             */
+            get: PathV2NameGet<R, TAuthInfo>;
+            /**
+             * Updates a queue.
+             *
+             * This method creates the queue if it does not exist and updates
+             * the queue if it does exist.
+             *
+             * Queues created with this method allow tasks to live for a maximum of 31
+             * days. After a task is 31 days old, the task will be deleted regardless of whether
+             * it was dispatched or not.
+             *
+             * WARNING: Using this method may have unintended side effects if you are
+             * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+             * Read
+             * [Overview of Queue Management and
+             * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+             * this method.
+             */
+            patch: PathV2NamePatch<R, TAuthInfo>;
+        };
+        \\"/v2/{+name}/locations\\": {
+            /**
+             * Lists information about the supported locations for this service.
+             */
+            get: PathV2NameLocationsGet<R, TAuthInfo>;
+        };
+        \\"/v2/{+name}:pause\\": {
+            /**
+             * Pauses the queue.
+             *
+             * If a queue is paused then the system will stop dispatching tasks
+             * until the queue is resumed via
+             * ResumeQueue. Tasks can still be added
+             * when the queue is paused. A queue is paused if its
+             * state is PAUSED.
+             */
+            post: PathV2NamepausePost<R, TAuthInfo>;
+        };
+        \\"/v2/{+name}:purge\\": {
+            /**
+             * Purges a queue by deleting all of its tasks.
+             *
+             * All tasks created before this method is called are permanently deleted.
+             *
+             * Purge operations can take up to one minute to take effect. Tasks
+             * might be dispatched before the purge takes effect. A purge is irreversible.
+             */
+            post: PathV2NamepurgePost<R, TAuthInfo>;
+        };
+        \\"/v2/{+name}:resume\\": {
+            /**
+             * Resume a queue.
+             *
+             * This method resumes a queue after it has been
+             * PAUSED or
+             * DISABLED. The state of a queue is stored
+             * in the queue's state; after calling this method it
+             * will be set to RUNNING.
+             *
+             * WARNING: Resuming many high-QPS queues at the same time can
+             * lead to target overloading. If you are resuming high-QPS
+             * queues, follow the 500/50/5 pattern described in
+             * [Managing Cloud Tasks Scaling
+             * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+             */
+            post: PathV2NameresumePost<R, TAuthInfo>;
+        };
+        \\"/v2/{+name}:run\\": {
+            /**
+             * Forces a task to run now.
+             *
+             * When this method is called, Cloud Tasks will dispatch the task, even if
+             * the task is already running, the queue has reached its RateLimits or
+             * is PAUSED.
+             *
+             * This command is meant to be used for manual debugging. For
+             * example, RunTask can be used to retry a failed
+             * task after a fix has been made or to manually force a task to be
+             * dispatched now.
+             *
+             * The dispatched task is returned. That is, the task that is returned
+             * contains the status after the task is dispatched but
+             * before the task is received by its target.
+             *
+             * If Cloud Tasks receives a successful response from the task's
+             * target, then the task will be deleted; otherwise the task's
+             * schedule_time will be reset to the time that
+             * RunTask was called plus the retry delay specified
+             * in the queue's RetryConfig.
+             *
+             * RunTask returns
+             * NOT_FOUND when it is called on a
+             * task that has already succeeded or permanently failed.
+             */
+            post: PathV2NamerunPost<R, TAuthInfo>;
+        };
+        \\"/v2/{+parent}/queues\\": {
+            /**
+             * Lists queues.
+             *
+             * Queues are returned in lexicographical order.
+             */
+            get: PathV2ParentQueuesGet<R, TAuthInfo>;
+            /**
+             * Creates a queue.
+             *
+             * Queues created with this method allow tasks to live for a maximum of 31
+             * days. After a task is 31 days old, the task will be deleted regardless of whether
+             * it was dispatched or not.
+             *
+             * WARNING: Using this method may have unintended side effects if you are
+             * using an App Engine \`queue.yaml\` or \`queue.xml\` file to manage your queues.
+             * Read
+             * [Overview of Queue Management and
+             * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
+             * this method.
+             */
+            post: PathV2ParentQueuesPost<R, TAuthInfo>;
+        };
+        \\"/v2/{+parent}/tasks\\": {
+            /**
+             * Lists the tasks in a queue.
+             *
+             * By default, only the BASIC view is retrieved
+             * due to performance considerations;
+             * response_view controls the
+             * subset of information which is returned.
+             *
+             * The tasks may be returned in any order. The ordering may change at any
+             * time.
+             */
+            get: PathV2ParentTasksGet<R, TAuthInfo>;
+            /**
+             * Creates a task and adds it to a queue.
+             *
+             * Tasks cannot be updated after creation; there is no UpdateTask command.
+             *
+             * * The maximum task size is 100KB.
+             */
+            post: PathV2ParentTasksPost<R, TAuthInfo>;
+        };
+        \\"/v2/{+resource}:getIamPolicy\\": {
+            /**
+             * Gets the access control policy for a Queue.
+             * Returns an empty policy if the resource exists and does not have a policy
+             * set.
+             *
+             * Authorization requires the following
+             * [Google IAM](https://cloud.google.com/iam) permission on the specified
+             * resource parent:
+             *
+             * * \`cloudtasks.queues.getIamPolicy\`
+             */
+            post: PathV2ResourcegetIamPolicyPost<R, TAuthInfo>;
+        };
+        \\"/v2/{+resource}:setIamPolicy\\": {
+            /**
+             * Sets the access control policy for a Queue. Replaces any existing
+             * policy.
+             *
+             * Note: The Cloud Console does not check queue-level IAM permissions yet.
+             * Project-level permissions are required to use the Cloud Console.
+             *
+             * Authorization requires the following
+             * [Google IAM](https://cloud.google.com/iam) permission on the specified
+             * resource parent:
+             *
+             * * \`cloudtasks.queues.setIamPolicy\`
+             */
+            post: PathV2ResourcesetIamPolicyPost<R, TAuthInfo>;
+        };
+        \\"/v2/{+resource}:testIamPermissions\\": {
+            /**
+             * Returns permissions that a caller has on a Queue.
+             * If the resource does not exist, this will return an empty set of
+             * permissions, not a NOT_FOUND error.
+             *
+             * Note: This operation is designed to be used for building permission-aware
+             * UIs and command-line tools, not for authorization checking. This operation
+             * may \\"fail open\\" without warning.
+             */
+            post: PathV2ResourcetestIamPermissionsPost<R, TAuthInfo>;
+        };
+    };
+    security: {
+        Oauth2: OapiSecurityResolver<R, TAuthInfo>;
+        Oauth2c: OapiSecurityResolver<R, TAuthInfo>;
+    };
+}
+"
+`;
+
+exports[`Types Content Test converter.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+
+export type ResponseWellknownDocsGet = ResponseOapi<unknown, 200, \\"text/html\\">;
+
+export type PathWellknownDocsGet<R extends Empty = Empty> = (req: RequestOapi & R) => ResponseWellknownDocsGet | Promise<ResponseWellknownDocsGet>;
+
+export type ResponseWellknownOpenapiyamlGet = ResponseOapi<unknown, 200, \\"text/yaml\\">;
+
+export type PathWellknownOpenapiyamlGet<R extends Empty = Empty> = (req: RequestOapi & R) => ResponseWellknownOpenapiyamlGet | Promise<ResponseWellknownOpenapiyamlGet>;
+
+export interface HttpError {
+    message?: string;
+}
+
+export type ResponseHtmlPost = ResponseOapi<unknown, 200, \\"application/pdf\\"> | ResponseOapi<HttpError, number, \\"application/json\\">;
+
+/**
+ * Generate PDF from html
+ */
+export interface RequestHtmlPost extends RequestOapi {
+    body: any;
+}
+
+export type PathHtmlPost<R extends Empty = Empty> = (req: RequestHtmlPost & R) => ResponseHtmlPost | Promise<ResponseHtmlPost>;
+
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        \\"/.well-known/docs\\": {
+            get: PathWellknownDocsGet<R>;
+        };
+        \\"/.well-known/openapi.yaml\\": {
+            get: PathWellknownOpenapiyamlGet<R>;
+        };
+        \\"/html\\": {
+            post: PathHtmlPost<R>;
+        };
+    };
+}
+"
+`;
+
+exports[`Types Content Test link-example.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+
+export interface user {
+    username?: string;
+    uuid?: string;
+    [key: string]: unknown;
+}
+
+export type Response20UsersUsernameGet = ResponseOapi<user, 200, \\"application/json\\">;
+
+export interface Request20UsersUsernameGet extends RequestOapi {
+    path: {
+        username: string;
+    };
+}
+
+export type Path20UsersUsernameGet<R extends Empty = Empty> = (req: Request20UsersUsernameGet & R) => Response20UsersUsernameGet | Promise<Response20UsersUsernameGet>;
+
+export interface repository {
+    slug?: string;
+    owner?: user;
+    [key: string]: unknown;
+}
+
+export type Response20RepositoriesUsernameGet = ResponseOapi<repository[], 200, \\"application/json\\">;
+
+export interface Request20RepositoriesUsernameGet extends RequestOapi {
+    path: {
+        username: string;
+    };
+}
+
+export type Path20RepositoriesUsernameGet<R extends Empty = Empty> = (req: Request20RepositoriesUsernameGet & R) => Response20RepositoriesUsernameGet | Promise<Response20RepositoriesUsernameGet>;
+
+export type Response20RepositoriesUsernameSlugGet = ResponseOapi<repository, 200, \\"application/json\\">;
+
+export interface Request20RepositoriesUsernameSlugGet extends RequestOapi {
+    path: {
+        username: string;
+        slug: string;
+    };
+}
+
+export type Path20RepositoriesUsernameSlugGet<R extends Empty = Empty> = (req: Request20RepositoriesUsernameSlugGet & R) => Response20RepositoriesUsernameSlugGet | Promise<Response20RepositoriesUsernameSlugGet>;
+
+export interface pullrequest {
+    id?: number;
+    title?: string;
+    repository?: repository;
+    author?: user;
+    [key: string]: unknown;
+}
+
+export type Response20RepositoriesUsernameSlugPullrequestsGet = ResponseOapi<pullrequest[], 200, \\"application/json\\">;
+
+export interface Request20RepositoriesUsernameSlugPullrequestsGet extends RequestOapi {
+    path: {
+        username: string;
+        slug: string;
+    };
+    query: {
+        state?: \\"open\\" | \\"merged\\" | \\"declined\\";
+    };
+}
+
+export type Path20RepositoriesUsernameSlugPullrequestsGet<R extends Empty = Empty> = (req: Request20RepositoriesUsernameSlugPullrequestsGet & R) => Response20RepositoriesUsernameSlugPullrequestsGet | Promise<Response20RepositoriesUsernameSlugPullrequestsGet>;
+
+export type Response20RepositoriesUsernameSlugPullrequestsPidGet = ResponseOapi<pullrequest, 200, \\"application/json\\">;
+
+export interface Request20RepositoriesUsernameSlugPullrequestsPidGet extends RequestOapi {
+    path: {
+        username: string;
+        slug: string;
+        pid: string;
+    };
+}
+
+export type Path20RepositoriesUsernameSlugPullrequestsPidGet<R extends Empty = Empty> = (req: Request20RepositoriesUsernameSlugPullrequestsPidGet & R) => Response20RepositoriesUsernameSlugPullrequestsPidGet | Promise<Response20RepositoriesUsernameSlugPullrequestsPidGet>;
+
+export type Response20RepositoriesUsernameSlugPullrequestsPidMergePost = ResponseOapi<unknown, 204, string>;
+
+export interface Request20RepositoriesUsernameSlugPullrequestsPidMergePost extends RequestOapi {
+    path: {
+        username: string;
+        slug: string;
+        pid: string;
+    };
+}
+
+export type Path20RepositoriesUsernameSlugPullrequestsPidMergePost<R extends Empty = Empty> = (req: Request20RepositoriesUsernameSlugPullrequestsPidMergePost & R) => Response20RepositoriesUsernameSlugPullrequestsPidMergePost | Promise<Response20RepositoriesUsernameSlugPullrequestsPidMergePost>;
+
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        \\"/2.0/users/{username}\\": {
+            get: Path20UsersUsernameGet<R>;
+        };
+        \\"/2.0/repositories/{username}\\": {
+            get: Path20RepositoriesUsernameGet<R>;
+        };
+        \\"/2.0/repositories/{username}/{slug}\\": {
+            get: Path20RepositoriesUsernameSlugGet<R>;
+        };
+        \\"/2.0/repositories/{username}/{slug}/pullrequests\\": {
+            get: Path20RepositoriesUsernameSlugPullrequestsGet<R>;
+        };
+        \\"/2.0/repositories/{username}/{slug}/pullrequests/{pid}\\": {
+            get: Path20RepositoriesUsernameSlugPullrequestsPidGet<R>;
+        };
+        \\"/2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge\\": {
+            post: Path20RepositoriesUsernameSlugPullrequestsPidMergePost<R>;
+        };
+    };
+}
+"
+`;
+
+exports[`Types Content Test petstore.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+
+export type Pets = Pet[];
+
+export interface Pet {
+    id: number;
+    name: string;
+    tag?: string;
+    [key: string]: unknown;
+}
+
+export interface Error {
+    code: number;
+    message: string;
+    [key: string]: unknown;
+}
+
+export type ResponsePetsGet = ResponseOapi<Pets, 200, \\"application/json\\"> | ResponseOapi<Error, number, \\"application/json\\">;
+
+/**
+ * List all pets
+ */
+export interface RequestPetsGet extends RequestOapi {
+    query: {
+        /**
+         * How many items to return at one time (max 100)
+         */
+        limit?: number;
+    };
+}
+
+export type PathPetsGet<R extends Empty = Empty> = (req: RequestPetsGet & R) => ResponsePetsGet | Promise<ResponsePetsGet>;
+
+export type ResponsePetsPost = ResponseOapi<unknown, 201, string> | ResponseOapi<Error, number, \\"application/json\\">;
+
+export type PathPetsPost<R extends Empty = Empty> = (req: RequestOapi & R) => ResponsePetsPost | Promise<ResponsePetsPost>;
+
+export type ResponsePetsPetIdGet = ResponseOapi<Pets, 200, \\"application/json\\"> | ResponseOapi<Error, number, \\"application/json\\">;
+
+/**
+ * Info for a specific pet
+ */
+export interface RequestPetsPetIdGet extends RequestOapi {
+    path: {
+        /**
+         * The id of the pet to retrieve
+         */
+        petId: string;
+    };
+}
+
+export type PathPetsPetIdGet<R extends Empty = Empty> = (req: RequestPetsPetIdGet & R) => ResponsePetsPetIdGet | Promise<ResponsePetsPetIdGet>;
+
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        \\"/pets\\": {
+            get: PathPetsGet<R>;
+            post: PathPetsPost<R>;
+        };
+        \\"/pets/{petId}\\": {
+            get: PathPetsPetIdGet<R>;
+        };
+    };
+}
+"
+`;
+
+exports[`Types Content Test petstore-expanded.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+
+export type Pet = NewPet & {
+    id: number;
+    [key: string]: unknown;
+};
+
+export interface NewPet {
+    name: string;
+    tag?: string;
+    [key: string]: unknown;
+}
+
+export interface Error {
+    code: number;
+    message: string;
+    [key: string]: unknown;
+}
+
+export type ResponsePetsGet = ResponseOapi<Pet[], 200, \\"application/json\\"> | ResponseOapi<Error, number, \\"application/json\\">;
+
+/**
+ * Returns all pets from the system that the user has access to
+ * Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+ *
+ * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+ *
+ */
+export interface RequestPetsGet extends RequestOapi {
+    query: {
+        /**
+         * tags to filter by
+         */
+        tags?: string[];
+        /**
+         * maximum number of results to return
+         */
+        limit?: number;
+    };
+}
+
+/**
+ * Returns all pets from the system that the user has access to
+ * Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+ *
+ * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+ *
+ */
+export type PathPetsGet<R extends Empty = Empty> = (req: RequestPetsGet & R) => ResponsePetsGet | Promise<ResponsePetsGet>;
+
+export type ResponsePetsPost = ResponseOapi<Pet, 200, \\"application/json\\"> | ResponseOapi<Error, number, \\"application/json\\">;
+
+/**
+ * Creates a new pet in the store.  Duplicates are allowed
+ */
+export interface RequestPetsPost extends RequestOapi {
+    body: NewPet;
+}
+
+/**
+ * Creates a new pet in the store.  Duplicates are allowed
+ */
+export type PathPetsPost<R extends Empty = Empty> = (req: RequestPetsPost & R) => ResponsePetsPost | Promise<ResponsePetsPost>;
+
+export type ResponsePetsIdGet = ResponseOapi<Pet, 200, \\"application/json\\"> | ResponseOapi<Error, number, \\"application/json\\">;
+
+/**
+ * Returns a user based on a single ID, if the user does not have access to the pet
+ */
+export interface RequestPetsIdGet extends RequestOapi {
+    path: {
+        /**
+         * ID of pet to fetch
+         */
+        id: number;
+    };
+}
+
+/**
+ * Returns a user based on a single ID, if the user does not have access to the pet
+ */
+export type PathPetsIdGet<R extends Empty = Empty> = (req: RequestPetsIdGet & R) => ResponsePetsIdGet | Promise<ResponsePetsIdGet>;
+
+export type ResponsePetsIdDelete = ResponseOapi<unknown, 204, string> | ResponseOapi<Error, number, \\"application/json\\">;
+
+/**
+ * deletes a single pet based on the ID supplied
+ */
+export interface RequestPetsIdDelete extends RequestOapi {
+    path: {
+        /**
+         * ID of pet to delete
+         */
+        id: number;
+    };
+}
+
+/**
+ * deletes a single pet based on the ID supplied
+ */
+export type PathPetsIdDelete<R extends Empty = Empty> = (req: RequestPetsIdDelete & R) => ResponsePetsIdDelete | Promise<ResponsePetsIdDelete>;
+
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        \\"/pets\\": {
+            /**
+             * Returns all pets from the system that the user has access to
+             * Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.
+             *
+             * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
+             *
+             */
+            get: PathPetsGet<R>;
+            /**
+             * Creates a new pet in the store.  Duplicates are allowed
+             */
+            post: PathPetsPost<R>;
+        };
+        \\"/pets/{id}\\": {
+            /**
+             * Returns a user based on a single ID, if the user does not have access to the pet
+             */
+            get: PathPetsIdGet<R>;
+            /**
+             * deletes a single pet based on the ID supplied
+             */
+            delete: PathPetsIdDelete<R>;
+        };
+    };
+}
+"
+`;
+
+exports[`Types Content Test statements.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
+
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+
+export type AccountMeter = AccountMeterElec | AccountMeterGas;
+
+export type AccountMeterElec = AccountMeterBase & {
+    meterType: \\"elec\\";
+    profileClassId: string;
+    meterTimeswitchCode: string;
+    lineLossFactorClassId: string;
+    [key: string]: unknown;
+};
+
+export interface AccountMeterBase {
+    tariffName: string;
+    plan: string;
+    address: string;
+    postCode: string;
+    mpxn: string;
+    msn: string;
+    startDate: string;
+    endDate: string;
+    [key: string]: unknown;
+}
+
+export type AccountMeterGas = AccountMeterBase & {
+    meterType: \\"gas\\";
+    ldz: string;
+    [key: string]: unknown;
+};
+
+export interface HttpError {
+    message?: string;
+}
+
+export type ResponseAccountsAccountIdMetersGet = ResponseOapi<AccountMeter[], 200, \\"application/json\\"> | ResponseOapi<HttpError, number, \\"application/json\\">;
+
+/**
+ * Get Meters, associated with an account, and its service start and end dates (SSD...SED)
+ */
+export interface RequestAccountsAccountIdMetersGet extends RequestOapi {
+    path: {
+        accountId: string;
+    };
+}
+
+export type PathAccountsAccountIdMetersGet<R extends Empty = Empty> = (req: RequestAccountsAccountIdMetersGet & R) => ResponseAccountsAccountIdMetersGet | Promise<ResponseAccountsAccountIdMetersGet>;
+
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        \\"/accounts/{accountId}/meters\\": {
+            get: PathAccountsAccountIdMetersGet<R>;
+        };
+    };
+}
+"
+`;
+
+exports[`Types Content Test uspto.yaml 1`] = `
+"import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
+
+import { Readable } from \\"stream\\";
+
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+
+export interface dataSetList {
+    total?: number;
+    apis?: {
+        /**
+         * To be used as a dataset parameter value
+         */
+        apiKey?: string;
+        /**
+         * To be used as a version parameter value
+         */
+        apiVersionNumber?: string;
+        /**
+         * The URL describing the dataset's fields
+         */
+        apiUrl?: string;
+        /**
+         * A URL to the API console for each API
+         */
+        apiDocumentationUrl?: string;
+        [key: string]: unknown;
+    }[];
+    [key: string]: unknown;
+}
+
+export type ResponseGet = ResponseOapi<dataSetList, 200, \\"application/json\\">;
+
+export type PathGet<R extends Empty = Empty> = (req: RequestOapi & R) => ResponseGet | Promise<ResponseGet>;
+
+export type ResponseDatasetVersionFieldsGet = ResponseOapi<string | Readable | Buffer, 200, \\"application/json\\"> | ResponseOapi<string | Readable | Buffer, 404, \\"application/json\\">;
+
+/**
+ * Provides the general information about the API and the list of fields that can be used to query the dataset.
+ * This GET API returns the list of all the searchable field names that are in the oa_citations. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the syntax options shown below.
+ */
+export interface RequestDatasetVersionFieldsGet extends RequestOapi {
+    path: {
+        /**
+         * Name of the dataset.
+         */
+        dataset: string;
+        /**
+         * Version of the dataset.
+         */
+        version: string;
+    };
+}
+
+/**
+ * This GET API returns the list of all the searchable field names that are in the oa_citations. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the syntax options shown below.
+ */
+export type PathDatasetVersionFieldsGet<R extends Empty = Empty> = (req: RequestDatasetVersionFieldsGet & R) => ResponseDatasetVersionFieldsGet | Promise<ResponseDatasetVersionFieldsGet>;
+
+export type ResponseDatasetVersionRecordsPost = ResponseOapi<any[], 200, \\"application/json\\"> | ResponseOapi<unknown, 404, string>;
+
+/**
+ * Provides search capability for the data set with the given search criteria.
+ * This API is based on Solr/Lucense Search. The data is indexed using SOLR. This GET API returns the list of all the searchable field names that are in the Solr Index. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the Solr/Lucene Syntax. Please refer https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview for the query syntax. List of field names that are searchable can be determined using above GET api.
+ */
+export interface RequestDatasetVersionRecordsPost extends RequestOapi {
+    path: {
+        /**
+         * Version of the dataset.
+         */
+        version: string;
+        /**
+         * Name of the dataset. In this case, the default value is oa_citations
+         */
+        dataset: string;
+    };
+    body?: any;
+}
+
+/**
+ * This API is based on Solr/Lucense Search. The data is indexed using SOLR. This GET API returns the list of all the searchable field names that are in the Solr Index. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the Solr/Lucene Syntax. Please refer https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview for the query syntax. List of field names that are searchable can be determined using above GET api.
+ */
+export type PathDatasetVersionRecordsPost<R extends Empty = Empty> = (req: RequestDatasetVersionRecordsPost & R) => ResponseDatasetVersionRecordsPost | Promise<ResponseDatasetVersionRecordsPost>;
+
+export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
+    paths: {
+        \\"/\\": {
+            get: PathGet<R>;
+        };
+        \\"/{dataset}/{version}/fields\\": {
+            /**
+             * This GET API returns the list of all the searchable field names that are in the oa_citations. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the syntax options shown below.
+             */
+            get: PathDatasetVersionFieldsGet<R>;
+        };
+        \\"/{dataset}/{version}/records\\": {
+            /**
+             * This API is based on Solr/Lucense Search. The data is indexed using SOLR. This GET API returns the list of all the searchable field names that are in the Solr Index. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the Solr/Lucene Syntax. Please refer https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview for the query syntax. List of field names that are searchable can be determined using above GET api.
+             */
+            post: PathDatasetVersionRecordsPost<R>;
+        };
+    };
+}
+"
+`;

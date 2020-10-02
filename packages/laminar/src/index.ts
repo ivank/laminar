@@ -1,14 +1,19 @@
+/**
+ * @packageDocumentation
+ * @module @ovotech/laminar
+ */
 export {
-  laminar,
+  httpServer,
+  httpsServer,
   describe,
   start,
   stop,
-  Laminar,
-  Options,
+  requestListener,
+  HttpServer,
   OptionsBase,
   OptionsHttp,
   OptionsHttps,
-} from './laminar';
+} from './server';
 export {
   redirect,
   file,
@@ -72,11 +77,8 @@ export {
   Cookies,
   RequestCookie,
 } from './components/cookie-parser.component';
-export {
-  queryParserComponent,
-  parseQueryObjects,
-  RequestQuery,
-} from './components/query-parser.component';
+export { queryParserComponent, RequestQuery } from './components/query-parser.component';
+export { parseQueryObjects } from './helpers';
 export {
   responseTimeMiddleware,
   ResponseTimeConfig,
@@ -101,10 +103,23 @@ export {
   defaultResponseParsers,
   jsonResponseParser,
   formResponseParser,
+  ResponseParser,
   parseResponse,
 } from './components/response-parser.component';
 export { urlComponent, RequestUrl } from './components/url.component';
-export { appComponent, AppOptions, AppRequest, Middleware, App } from './components/app.component';
+export {
+  errorHandlerComponent,
+  defaultErrorHandler,
+  ErrorHandler,
+} from './components/error-handler.component';
+export {
+  appComponents,
+  AppComponents,
+  AppOptions,
+  AppRequest,
+  Middleware,
+  App,
+} from './components/components';
 export { HttpError } from './HttpError';
 export {
   router,
@@ -114,8 +129,28 @@ export {
   del,
   options,
   put,
-  directory,
+  route,
+  staticAssets,
   RequestRoute,
   AppRoute,
-} from './middleware/router';
+} from './apps/router';
 export { Request, Response, Resolver, Component, Empty } from './types';
+export {
+  openApi,
+  securityOk,
+  isSecurityOk,
+  isSecurityResponse,
+  defaultOapiNotFound,
+  RequestOapi,
+  AppRouteOapi,
+  OapiPath,
+  OapiAuthInfo,
+  SecurityOk,
+  Security,
+  RequestSecurityResolver,
+  OapiSecurityResolver,
+  OapiSecurity,
+  ResponseOapi,
+  OapiPaths,
+  OapiConfig,
+} from './apps/open-api';

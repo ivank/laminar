@@ -1,16 +1,15 @@
 import axios from 'axios';
 import { Readable } from 'stream';
-import { URLSearchParams } from 'url';
-import { laminar, start, stop, textOk, Laminar } from '../src';
+import { httpServer, start, HttpServer, stop, textOk } from '../src';
 
 const app = jest.fn().mockReturnValue(textOk('Test'));
 const api = axios.create({ baseURL: 'http://localhost:8051' });
 
-let server: Laminar;
+let server: HttpServer;
 
 describe('Requests', () => {
   beforeAll(async () => {
-    server = laminar({ app, port: 8051 });
+    server = httpServer({ app, port: 8051 });
     await start(server);
   });
 
@@ -118,7 +117,7 @@ describe('Requests', () => {
     });
 
     expect(app).toHaveBeenCalledWith(
-      expect.objectContaining({ body: new URLSearchParams({ one: 'other' }), method: 'POST' }),
+      expect.objectContaining({ body: { one: 'other' }, method: 'POST' }),
     );
 
     expect(result.data).toEqual('Test');
@@ -169,10 +168,9 @@ describe('Requests', () => {
         })
         .catch((error) => error.response),
     ).resolves.toMatchObject({
-      status: 400,
+      status: 500,
       data: {
-        message: 'Error parsing request body',
-        error: 'Unexpected token D in JSON at position 8',
+        message: 'Unexpected token D in JSON at position 8',
       },
     });
 

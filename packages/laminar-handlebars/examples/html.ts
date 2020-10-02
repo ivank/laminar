@@ -1,15 +1,15 @@
-import { start, router, get, post, laminar, describe } from '@ovotech/laminar';
+import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
 import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html') });
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: handlebars(
     router(
-      get('/', ({ render }) => render('index')),
-      post('/result', ({ render, body: { name } }) => render('result', { name })),
+      get('/', ({ hbs }) => hbs('index')),
+      post('/result', ({ hbs, body: { name } }) => hbs('result', { name })),
     ),
   ),
 });

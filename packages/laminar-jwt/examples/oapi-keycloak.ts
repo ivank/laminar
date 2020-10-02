@@ -1,6 +1,5 @@
-import { start, laminar, describe, jsonOk } from '@ovotech/laminar';
+import { start, httpServer, describe, jsonOk, openApi } from '@ovotech/laminar';
 import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@ovotech/laminar-jwt';
-import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import * as nock from 'nock';
@@ -27,7 +26,7 @@ const main = async () => {
     service: 'my-service-name',
   });
 
-  const app = await createOapi({
+  const app = await openApi({
     api: join(__dirname, 'oapi.yaml'),
     security: { JWTSecurity: jwtSecurity },
     paths: {
@@ -40,7 +39,7 @@ const main = async () => {
       },
     },
   });
-  const server = laminar({ port: 3333, app });
+  const server = httpServer({ port: 3333, app });
   await start(server);
   console.log(describe(server));
 };

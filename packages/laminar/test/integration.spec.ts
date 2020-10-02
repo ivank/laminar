@@ -2,7 +2,8 @@ import axios from 'axios';
 import {
   del,
   get,
-  laminar,
+  httpServer,
+  httpsServer,
   start,
   stop,
   options,
@@ -13,9 +14,8 @@ import {
   router,
   responseTimeMiddleware,
   Middleware,
-  Laminar,
   loggingMiddleware,
-  directory,
+  staticAssets,
   jsonOk,
   textOk,
   Logger,
@@ -27,12 +27,9 @@ import {
 import { join } from 'path';
 import { readFileSync, createReadStream } from 'fs';
 import { Agent } from 'https';
-
-let server: Laminar;
+import { URLSearchParams } from 'url';
 
 describe('Integration', () => {
-  afterEach(() => stop(server));
-
   it('Should allow TLS', async () => {
     const app = jest.fn().mockReturnValue(textOk('TLS Test'));
     const port = 8051;
@@ -40,14 +37,17 @@ describe('Integration', () => {
     const cert = readFileSync(join(__dirname, '../examples/cert.pem'));
     const ca = readFileSync(join(__dirname, '../examples/ca.pem'));
 
-    server = laminar({ port, app, https: { key, cert } });
+    const server = httpsServer({ port, app, serverOptions: { key, cert } });
+    try {
+      await start(server);
 
-    await start(server);
-
-    const response = await axios.get(`https://localhost:${port}`, {
-      httpsAgent: new Agent({ ca }),
-    });
-    expect(response.data).toEqual('TLS Test');
+      const response = await axios.get(`https://localhost:${port}`, {
+        httpsAgent: new Agent({ ca }),
+      });
+      expect(response.data).toEqual('TLS Test');
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response', async () => {
@@ -81,7 +81,7 @@ describe('Integration', () => {
     };
 
     const app = router<RequestLogging & DBRequest>(
-      directory('/assets', join(__dirname, '../examples/assets')),
+      staticAssets('/assets', join(__dirname, '../examples/assets')),
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
       get('/link', () => redirect('http://localhost:8050/destination')),
       get('/http-error', () => {
@@ -153,186 +153,212 @@ describe('Integration', () => {
       ({ url }) => jsonNotFound(`Test url ${url.pathname} not found`),
     );
 
-    server = laminar({ port: 8050, app: responseTime(db(logging(app))) });
+    const server = httpServer({ port: 8050, app: responseTime(db(logging(app))) });
+    try {
+      await start(server);
 
-    await start(server);
+      const api = axios.create({ baseURL: 'http://localhost:8050' });
 
-    const api = axios.create({ baseURL: 'http://localhost:8050' });
+      await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject(
+        {
+          status: 404,
+          data: 'Test url /unknown-url not found',
+        },
+      );
 
-    await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
-      status: 404,
-      data: 'Test url /unknown-url not found',
-    });
+      await expect(api.get('/error').catch((error) => error.response)).resolves.toMatchObject({
+        status: 500,
+        data: { message: 'unknown' },
+      });
 
-    await expect(api.get('/error').catch((error) => error.response)).resolves.toMatchObject({
-      status: 500,
-      data: { message: 'unknown' },
-    });
+      await expect(api.get('/return-file')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'text/plain' },
+        data: 'one\n',
+      });
 
-    await expect(api.get('/return-file')).resolves.toMatchObject({
-      status: 200,
-      headers: { 'content-type': 'text/plain' },
-      data: 'one\n',
-    });
+      await expect(api.get('/stream-file')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'text/plain' },
+        data: 'one\n',
+      });
 
-    await expect(api.get('/stream-file')).resolves.toMatchObject({
-      status: 200,
-      headers: { 'content-type': 'text/plain' },
-      data: 'one\n',
-    });
+      await expect(api.get('/assets/star.svg')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'image/svg+xml' },
+        data: readFileSync(join(__dirname, '../examples/assets/star.svg'), 'utf8'),
+      });
 
-    await expect(api.get('/assets/star.svg')).resolves.toMatchObject({
-      status: 200,
-      headers: { 'content-type': 'image/svg+xml' },
-      data: readFileSync(join(__dirname, '../examples/assets/star.svg'), 'utf8'),
-    });
+      await expect(api.get('/assets/svg.svg')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'image/svg+xml' },
+        data: readFileSync(join(__dirname, '../examples/assets/svg.svg'), 'utf8'),
+      });
 
-    await expect(api.get('/assets/svg.svg')).resolves.toMatchObject({
-      status: 200,
-      headers: { 'content-type': 'image/svg+xml' },
-      data: readFileSync(join(__dirname, '../examples/assets/svg.svg'), 'utf8'),
-    });
+      await expect(api.get('/assets/texts/one.txt')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'text/plain' },
+        data: readFileSync(join(__dirname, '../examples/assets/texts/one.txt'), 'utf8'),
+      });
 
-    await expect(api.get('/assets/texts/one.txt')).resolves.toMatchObject({
-      status: 200,
-      headers: { 'content-type': 'text/plain' },
-      data: readFileSync(join(__dirname, '../examples/assets/texts/one.txt'), 'utf8'),
-    });
+      await expect(api.get('/assets/texts/other.html')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'text/html' },
+        data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
+      });
 
-    await expect(api.get('/assets/texts/other.html')).resolves.toMatchObject({
-      status: 200,
-      headers: { 'content-type': 'text/html' },
-      data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
-    });
+      await expect(api.get('/assets/texts/')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'text/html' },
+        data: readFileSync(join(__dirname, '../examples/assets/texts/index.html'), 'utf8'),
+      });
 
-    await expect(api.get('/assets/../assets/texts/../texts/./other.html')).resolves.toMatchObject({
-      status: 200,
-      headers: { 'content-type': 'text/html' },
-      data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
-    });
+      await expect(api.get('/assets/texts')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'text/html' },
+        data: readFileSync(join(__dirname, '../examples/assets/texts/index.html'), 'utf8'),
+      });
 
-    await expect(
-      api.get('/assets/../../test.html').catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 404,
-    });
+      await expect(api.get('/assets/../assets/texts/../texts/./other.html')).resolves.toMatchObject(
+        {
+          status: 200,
+          headers: { 'content-type': 'text/html' },
+          data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
+        },
+      );
 
-    await expect(api.get('/.well-known/health-check')).resolves.toMatchObject({
-      status: 200,
-      data: { health: 'ok' },
-    });
+      await expect(
+        api.get('/assets/../../test.html').catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 404,
+      });
 
-    await expect(api.get('/.well-known/health-check/')).resolves.toMatchObject({
-      status: 200,
-      data: { health: 'ok' },
-    });
+      await expect(api.get('/.well-known/health-check')).resolves.toMatchObject({
+        status: 200,
+        data: { health: 'ok' },
+      });
 
-    await expect(
-      api.get('/.well-known/health-check/other').catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 404,
-      data: 'Test url /.well-known/health-check/other not found',
-    });
+      await expect(api.get('/.well-known/health-check/')).resolves.toMatchObject({
+        status: 200,
+        data: { health: 'ok' },
+      });
 
-    await expect(api.get('/link')).resolves.toMatchObject({
-      status: 200,
-      data: { arrived: true },
-    });
+      await expect(
+        api.get('/.well-known/health-check/other').catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 404,
+        data: 'Test url /.well-known/health-check/other not found',
+      });
 
-    await expect(
-      api.get('/link', { maxRedirects: 0 }).catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 302,
-      data: 'Redirecting to http://localhost:8050/destination',
-    });
+      await expect(api.get('/link')).resolves.toMatchObject({
+        status: 200,
+        data: { arrived: true },
+      });
 
-    await expect(api.get('/http-error')).resolves.toMatchObject({
-      status: 200,
-      data: { arrived: true },
-    });
+      await expect(
+        api.get('/link', { maxRedirects: 0 }).catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 302,
+        data: 'Redirecting to http://localhost:8050/destination',
+      });
 
-    await expect(
-      api.get('/http-error', { maxRedirects: 0 }).catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 302,
-      data: { message: 'Redirect to http://localhost:8050/destination' },
-    });
+      await expect(api.get('/http-error')).resolves.toMatchObject({
+        status: 200,
+        data: { arrived: true },
+      });
 
-    await expect(api.get('/link-other')).resolves.toMatchObject({
-      status: 200,
-      data: { arrived: true },
-    });
+      await expect(
+        api.get('/http-error', { maxRedirects: 0 }).catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 302,
+        data: { message: 'Redirect to http://localhost:8050/destination' },
+      });
 
-    await expect(api.request({ url: '/users/10', method: 'OPTIONS' })).resolves.toMatchObject({
-      status: 200,
-      headers: expect.objectContaining({
-        'access-control-allow-methods': 'GET,POST,DELETE',
-        'access-control-allow-origin': 'http://localhost:8050',
-      }),
-    });
+      await expect(api.get('/link-other')).resolves.toMatchObject({
+        status: 200,
+        data: { arrived: true },
+      });
 
-    await expect(api.get('/users/10')).resolves.toMatchObject({
-      status: 200,
-      data: { id: '10', name: 'John' },
-    });
+      await expect(api.request({ url: '/users/10', method: 'OPTIONS' })).resolves.toMatchObject({
+        status: 200,
+        headers: expect.objectContaining({
+          'access-control-allow-methods': 'GET,POST,DELETE',
+          'access-control-allow-origin': 'http://localhost:8050',
+        }),
+      });
 
-    await expect(api.get('/users/20')).resolves.toMatchObject({
-      status: 200,
-      data: { id: '20', name: 'Tom' },
-    });
+      await expect(api.get('/users/10')).resolves.toMatchObject({
+        status: 200,
+        data: { id: '10', name: 'John' },
+      });
 
-    await expect(api.get('/users/30').catch((error) => error.response)).resolves.toMatchObject({
-      status: 404,
-      data: { message: 'No User Found' },
-    });
+      await expect(api.get('/users/20')).resolves.toMatchObject({
+        status: 200,
+        data: { id: '20', name: 'Tom' },
+      });
 
-    await expect(api.post('/users/10', { name: 'Kostas' })).resolves.toMatchObject({
-      status: 200,
-      data: { saved: true },
-    });
+      await expect(api.get('/users/30').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+        data: { message: 'No User Found' },
+      });
 
-    await expect(api.patch('/users/20', { name: 'Pathing' })).resolves.toMatchObject({
-      status: 200,
-      data: { patched: true },
-    });
+      await expect(api.post('/users/10', { name: 'Kostas' })).resolves.toMatchObject({
+        status: 200,
+        data: { saved: true },
+      });
 
-    await expect(api.get('/users/10')).resolves.toMatchObject({
-      status: 200,
-      data: { id: '10', name: 'Kostas' },
-    });
+      await expect(api.patch('/users/20', { name: 'Pathing' })).resolves.toMatchObject({
+        status: 200,
+        data: { patched: true },
+      });
 
-    await expect(api.delete('/users/10')).resolves.toMatchObject({
-      status: 200,
-      data: { deleted: true },
-    });
+      await expect(
+        api.patch('/users/20', new URLSearchParams({ name: 'Pathing2' })),
+      ).resolves.toMatchObject({
+        status: 200,
+        data: { patched: true },
+      });
 
-    await expect(api.get('/users/10').catch((error) => error.response)).resolves.toMatchObject({
-      status: 404,
-      data: { message: 'No User Found' },
-    });
+      await expect(api.get('/users/10')).resolves.toMatchObject({
+        status: 200,
+        data: { id: '10', name: 'Kostas' },
+      });
 
-    await expect(api.put('/users', { id: 30, name: 'Added' })).resolves.toMatchObject({
-      status: 200,
-      data: { added: true },
-    });
+      await expect(api.delete('/users/10')).resolves.toMatchObject({
+        status: 200,
+        data: { deleted: true },
+      });
 
-    await expect(api.get('/users/30')).resolves.toMatchObject({
-      status: 200,
-      data: { id: '30', name: 'Added' },
-    });
+      await expect(api.get('/users/10').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+        data: { message: 'No User Found' },
+      });
 
-    expect(loggerMock.info).toHaveBeenNthCalledWith(1, 'Request', {
-      request: 'GET /unknown-url',
-    });
-    expect(loggerMock.info).toHaveBeenNthCalledWith(2, 'Response', {
-      request: 'GET /unknown-url',
-      status: 404,
-      contentType: 'application/json',
-    });
-    expect(loggerMock.error).toHaveBeenNthCalledWith(1, 'Error', {
-      request: 'GET /error',
-      message: 'unknown',
-      stack: expect.any(String),
-    });
+      await expect(api.put('/users', { id: 30, name: 'Added' })).resolves.toMatchObject({
+        status: 200,
+        data: { added: true },
+      });
+
+      await expect(api.get('/users/30')).resolves.toMatchObject({
+        status: 200,
+        data: { id: '30', name: 'Added' },
+      });
+
+      expect(loggerMock.info).toHaveBeenNthCalledWith(1, 'Request', {
+        request: 'GET /unknown-url',
+      });
+      expect(loggerMock.info).toHaveBeenNthCalledWith(2, 'Response', {
+        request: 'GET /unknown-url',
+        status: 404,
+        contentType: 'application/json',
+      });
+      expect(loggerMock.error).toHaveBeenNthCalledWith(1, 'Error', {
+        request: 'GET /error',
+        message: 'unknown',
+        stack: expect.any(String),
+      });
+    } finally {
+      await stop(server);
+    }
   });
 });

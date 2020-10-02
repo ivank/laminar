@@ -1,0 +1,65 @@
+---
+openapi: 3.0.0
+info:
+  title: Test
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/session':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/User' }
+      responses:
+        '200':
+          description: A session object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: auth=abcde12345; Path=/; HttpOnly
+  '/test':
+    post:
+      description: Protected by CookieSecurity, no scopes
+      security:
+        - CookieSecurity: []
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+    get:
+      description: Protected by CookieSecurity, no scopes
+      security:
+        - CookieSecurity: []
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+
+components:
+  securitySchemes:
+    CookieSecurity:
+      description: Security using the `auth` cookie. To be used in the routes.
+      type: apiKey
+      in: cookie
+      name: auth
+
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    Text:
+      type: string

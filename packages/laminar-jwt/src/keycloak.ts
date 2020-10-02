@@ -1,5 +1,4 @@
-import { Middleware, Empty } from '@ovotech/laminar';
-import { OapiSecurityResolver } from '@ovotech/laminar-oapi';
+import { Middleware, Empty, OapiSecurityResolver } from '@ovotech/laminar';
 import { authMiddleware, jwtSecurityResolver, toMissing } from './jwt';
 import { ScopeError, JWTData, JWTVerify, RequestAuthInfo } from './types';
 

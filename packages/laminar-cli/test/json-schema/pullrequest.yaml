@@ -1,0 +1,30 @@
+type: object
+properties:
+  id:
+    type: integer
+  title:
+    type: string
+  repository:
+    $ref: '#/components/schemas/repository'
+  author:
+    $ref: '#/components/schemas/user'
+required:
+  - id
+  - title
+
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        username:
+          type: string
+        uuid:
+          type: string
+    repository:
+      type: object
+      properties:
+        slug:
+          type: string
+        owner:
+          $ref: '#/components/schemas/user'

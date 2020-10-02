@@ -1,11 +1,10 @@
-import { laminar, start, describe, jsonOk } from '@ovotech/laminar';
+import { httpServer, start, describe, jsonOk, openApi } from '@ovotech/laminar';
 import { createSession, jwtSecurityResolver } from '@ovotech/laminar-jwt';
-import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const main = async () => {
   const secret = '123';
-  const app = await createOapi({
+  const app = await openApi({
     api: join(__dirname, 'oapi.yaml'),
     security: { JWTSecurity: jwtSecurityResolver({ secret }) },
     paths: {
@@ -18,7 +17,7 @@ const main = async () => {
       },
     },
   });
-  const server = laminar({ port: 3333, app });
+  const server = httpServer({ port: 3333, app });
   await start(server);
   console.log(describe(server));
 };

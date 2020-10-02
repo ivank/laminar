@@ -1,4 +1,4 @@
-import { Middleware } from '../components/app.component';
+import { Middleware } from '../components/components';
 
 export interface CorsConfig {
   allowOrigin?: string[] | string | RegExp | OriginChecker | true;
@@ -64,6 +64,11 @@ const toAllowMethods = (methods: CorsConfig['allowMethods']): string =>
 const toAllowCredentials = (credentials: CorsConfig['allowCredentials']): 'true' | undefined =>
   credentials ? 'true' : undefined;
 
+/**
+ * Cors middleware
+ *
+ * @category middleware
+ */
 export const corsMiddleware = ({
   fallbackAllowOrigin = 'Error matching origin header, none found',
   allowOrigin,

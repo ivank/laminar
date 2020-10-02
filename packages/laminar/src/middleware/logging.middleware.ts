@@ -1,4 +1,4 @@
-import { AppRequest, Middleware } from '../components/app.component';
+import { AppRequest, Middleware } from '../components/components';
 import { Response } from '../types';
 
 export interface Metadata {
@@ -22,6 +22,12 @@ export interface LoggerFormatters {
 
 export const requestUri = (req: AppRequest): string => `${req.method} ${req.url.pathname}`;
 
+/**
+ * Logging middleware
+ *
+ * @param logger Logger instance, must implement `info` and `error`. You can use `console` to output to stdout
+ * @category middleware
+ */
 export const loggingMiddleware = <TLogger extends Logger>(
   logger: TLogger,
   { request, response, error }: Partial<LoggerFormatters> = {

@@ -3,45 +3,74 @@
 import { lookup } from 'mime-types';
 import { Response } from './types';
 import { IncomingMessage, OutgoingHttpHeaders } from 'http';
-import { Readable } from 'stream';
 import { createReadStream, statSync } from 'fs';
 import { parseRange } from './helpers';
+import { Stats } from 'fs';
 
-export type StringResponse = string | Buffer | Readable;
-
-export const response = <T>({
+/**
+ * @category Response
+ * @typeParam TResponseBody The type of the response body
+ */
+export function response<TResponseBody>({
   body,
   status = 200,
   headers = { 'content-type': 'application/json' },
-}: Partial<Response<T>> = {}) => ({ body, status, headers });
+}: Partial<Response<TResponseBody>> = {}) {
+  return { body, status, headers };
+}
 
 /**
  * Create a response object that will redirect to a given location.
  * Sets the 'Location' header.
+ *
+ * @param location URL the location to redirect to, would be set as the "Location" header
+ * @category Response
  */
-export const redirect = (
+export function redirect(
   location: string,
   { status = 302, headers, body = `Redirecting to ${location}` }: Partial<Response> = {},
-): Response => ({
-  body,
-  status,
-  headers: { 'content-type': 'text/plain; charset=utf-8', location, ...headers },
-});
+): Response {
+  return {
+    body,
+    status,
+    headers: { 'content-type': 'text/plain; charset=utf-8', location, ...headers },
+  };
+}
 
+/**
+ * Options for {@link file}
+ *
+ * @category Response
+ */
 export interface FileOptions {
+  /**
+   * The raw incommingMessage from the request, would be used to get the Range headers
+   */
   incommingMessage?: IncomingMessage;
+  /**
+   * A file stats object. If you've already made a `stat` call to the filesystem, you can reuse that data and spare that IO call, by providing the data directly.
+   */
+  stats?: Stats;
 }
 
 /**
  * Return a file response.
  * Setting the 'content-type', 'content-length', 'last-modified' headers based on the file itself.
  * Supports content ranges as well, if you pass the incommingMessage from the request, so it can determine the range.
+ *
+ * 'Content-Type' header is set by inspecting the file extention. If no match could be found, defaults to 'text/plain'.
+ *
+ * Would set the 'Last-Modified', 'Content-Type' and 'Content-Length' headers
+ * If you provide `incommingMessage`, would set 'Last-Modified', 'Content-Type' and 'Accept-Ranges'. Also 'Content-Range' if there was a 'Range' header in the request
+ *
+ * @param filename a local path to the file.
+ * @category Response
  */
-export const file = (
+export function file(
   filename: string,
-  { headers, status = 200, incommingMessage }: Partial<Response> & FileOptions = {},
-): Response => {
-  const stat = statSync(filename);
+  { headers, status = 200, incommingMessage, stats }: Partial<Response> & FileOptions = {},
+): Response {
+  const stat = stats ?? statSync(filename);
   const contentType = lookup(filename) || 'text/plain';
   const lastModified = stat.mtime.toISOString();
   const hasRange = incommingMessage?.headers.range?.match(/^bytes=/);
@@ -75,7 +104,7 @@ export const file = (
       status,
       body: createReadStream(filename),
       headers: {
-        'accept-ranges': 'bytes',
+        ...(incommingMessage ? { 'accept-ranges': 'bytes' } : {}),
         'content-type': contentType,
         'content-length': stat.size,
         'last-modified': lastModified,
@@ -83,7 +112,7 @@ export const file = (
       },
     };
   }
-};
+}
 
 /**
  * Status
@@ -91,192 +120,391 @@ export const file = (
  */
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `200`
+ *
  * Standard response for successful HTTP requests.
  * The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the response will contain an entity describing or containing the result of the action.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const ok = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 200 as const,
-});
+export function ok<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 200 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `204`
+ *
  * The server successfully processed the request, and is not returning any content.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const noContent = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 204 as const,
-});
+export function noContent<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 204 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `301`
+ *
  * This and all future requests should be directed to the given URI.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const movedPermanently = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 301 as const,
-});
+export function movedPermanently<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 301 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `302`
+ *
  * Tells the client to look at (browse to) another URL. 302 has been superseded by 303 and 307.
  * This is an example of industry practice contradicting the standard.
  * The HTTP/1.0 specification (RFC 1945) required the client to perform a temporary redirect (the original describing phrase was "Moved Temporarily"),
  * but popular browsers implemented 302 with the functionality of a 303 See Other.
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const found = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 302 as const,
-});
+export function found<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 302 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `303`
+ *
  * The response to the request can be found under another URI using the GET method.
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const seeOther = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 303 as const,
-});
+export function seeOther<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 303 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `304`
+ *
  * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const notModified = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 304 as const,
-});
+export function notModified<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 304 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `400`
+ *
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const badRequest = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 400 as const,
-});
+export function badRequest<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 400 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `401`
+ *
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
  * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const unauthorized = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 401 as const,
-});
+export function unauthorized<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 401 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `403`
+ *
  * The request contained valid data and was understood by the server, but the server is refusing action.
  * This may be due to the user not having the necessary permissions for a resource or needing an account of some sort, or attempting a prohibited action (e.g. creating a duplicate record where only one is allowed).
  * This code is also typically used if the request provided authentication by answering the WWW-Authenticate header field challenge, but the server did not accept that authentication.
  * The request should not be repeated.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const forbidden = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 403 as const,
-});
+export function forbidden<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 403 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `404`
+ *
  * The requested resource could not be found but may be available in the future.
  * Subsequent requests by the client are permissible.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const notFound = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 404 as const,
-});
+export function notFound<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, status: 404 as const };
+}
 
 /**
+ * A helper to set the status of a {@link Response} to a specific type literal constant.
+ *
+ * Status: `500`
+ *
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const internalServerError = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  status: 500 as const,
-});
+export function internalServerError<
+  TResponseBody,
+  TResponse extends Partial<Response<TResponseBody>>
+>(res: TResponse) {
+  return { ...res, status: 500 as const };
+}
 
 /**
  * Type
  * ===========================================================================================
+ *
+ * @category Response
  */
 
 /**
- * Content Type: application/json
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `application/json`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const json = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'application/json' as const },
-});
+export function json<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'application/json' as const } };
+}
 
 /**
- * Content-Type: application/yaml
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `application/yaml`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const yaml = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'application/yaml' as const },
-});
+export function yaml<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'application/yaml' as const } };
+}
 
 /**
- * Content-Type: application/octet-stream
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `application/octet-stream`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const binary = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'application/octet-stream' as const },
-});
+export function binary<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return {
+    ...res,
+    headers: { ...res.headers, 'content-type': 'application/octet-stream' as const },
+  };
+}
 
 /**
- * Content-Type: application/pdf
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `application/pdf`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const pdf = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'application/pdf' as const },
-});
+export function pdf<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'application/pdf' as const } };
+}
 
 /**
- * Content-Type: application/xml
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `application/xml`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const xml = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'application/xml' as const },
-});
+export function xml<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'application/xml' as const } };
+}
 
 /**
- * Content-Type: text/plain
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `text/plain`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const text = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'text/plain' as const },
-});
+export function text<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'text/plain' as const } };
+}
 
 /**
- * Content-Type: text/html
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `text/html`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const html = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'text/html' as const },
-});
+export function html<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'text/html' as const } };
+}
 
 /**
- * Content-Type: text/css
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `text/css`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const css = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'text/css' as const },
-});
+export function css<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'text/css' as const } };
+}
 
 /**
- * Content-Type: text/csv
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `text/csv`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const csv = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'text/csv' as const },
-});
+export function csv<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return { ...res, headers: { ...res.headers, 'content-type': 'text/csv' as const } };
+}
 
 /**
- * Content Type: application/x-www-form-urlencoded
+ * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ *
+ * Content-Type: `application/x-www-form-urlencoded`
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category Response
  */
-export const form = <T, R extends Partial<Response<T>>>(res: R) => ({
-  ...res,
-  headers: { ...res.headers, 'content-type': 'application/x-www-form-urlencoded' as const },
-});
+export function form<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
+  res: TResponse,
+) {
+  return {
+    ...res,
+    headers: { ...res.headers, 'content-type': 'application/x-www-form-urlencoded' as const },
+  };
+}
 
 /**
  * JSON
@@ -284,31 +512,70 @@ export const form = <T, R extends Partial<Response<T>>>(res: R) => ({
  */
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link ok}
+ *
+ * Content-Type: `application/json`
+ * Status: `200`
+ *
  * Standard response for successful HTTP requests.
  * The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the response will contain an entity describing or containing the result of the action.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonOk = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(ok({ body, headers }));
+export function jsonOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+  return json(ok({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link noContent}
+ *
+ * Content-Type: `application/json`
+ * Status: `204`
+ *
  * The server successfully processed the request, and is not returning any content.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonNoContent = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(noContent({ body, headers }));
+export function jsonNoContent<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(noContent({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link movedPermanently}
+ *
+ * Content-Type: `application/json`
+ * Status: `301`
+ *
  * This and all future requests should be directed to the given URI.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonMovedPermanently = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(movedPermanently({ body, headers }));
+export function jsonMovedPermanently<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(movedPermanently({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link found}
+ *
+ * Content-Type: `application/json`
+ * Status: `302`
+ *
  * Tells the client to look at (browse to) another URL. 302 has been superseded by 303 and 307.
  * This is an example of industry practice contradicting the standard.
  * The HTTP/1.0 specification (RFC 1945) required the client to perform a temporary redirect (the original describing phrase was "Moved Temporarily"),
@@ -316,65 +583,140 @@ export const jsonMovedPermanently = <T>(body: T, headers: OutgoingHttpHeaders = 
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonFound = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(found({ body, headers }));
+export function jsonFound<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+  return json(found({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link seeOther}
+ *
+ * Content-Type: `application/json`
+ * Status: `303`
+ *
  * The response to the request can be found under another URI using the GET method.
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonSeeOther = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(seeOther({ body, headers }));
+export function jsonSeeOther<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(seeOther({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link badRequest}
+ *
+ * Content-Type: `application/json`
+ * Status: `400`
+ *
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonBadRequest = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(badRequest({ body, headers }));
+export function jsonBadRequest<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(badRequest({ body, headers }));
+}
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link unauthorized}
+ *
+ * Content-Type: `application/json`
+ * Status: `401`
+ *
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
  * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonUnauthorized = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(unauthorized({ body, headers }));
+export function jsonUnauthorized<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(unauthorized({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link forbidden}
+ *
+ * Content-Type: `application/json`
+ * Status: `403`
+ *
  * The request contained valid data and was understood by the server, but the server is refusing action.
  * This may be due to the user not having the necessary permissions for a resource or needing an account of some sort, or attempting a prohibited action (e.g. creating a duplicate record where only one is allowed).
  * This code is also typically used if the request provided authentication by answering the WWW-Authenticate header field challenge, but the server did not accept that authentication.
  * The request should not be repeated.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonForbidden = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(forbidden({ body, headers }));
+export function jsonForbidden<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(forbidden({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link notFound}
+ *
+ * Content-Type: `application/json`
+ * Status: `404`
+ *
  * The requested resource could not be found but may be available in the future.
  * Subsequent requests by the client are permissible.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonNotFound = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(notFound({ body, headers }));
+export function jsonNotFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(notFound({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link internalServerError}
+ *
+ * Content-Type: `application/json`
+ * Status: `500`
+ *
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  *
- * Content Type: application/json
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const jsonInternalServerError = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  json(internalServerError({ body, headers }));
+export function jsonInternalServerError<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return json(internalServerError({ body, headers }));
+}
 
 /**
  * Text
@@ -382,31 +724,70 @@ export const jsonInternalServerError = <T>(body: T, headers: OutgoingHttpHeaders
  */
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link ok}
+ *
+ * Content-Type: `text/plain`
+ * Status: `200`
+ *
  * Standard response for successful HTTP requests.
  * The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the response will contain an entity describing or containing the result of the action.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textOk = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(ok({ body, headers }));
+export function textOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+  return text(ok({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link noContent}
+ *
+ * Content-Type: `text/plain`
+ * Status: `204`
+ *
  * The server successfully processed the request, and is not returning any content.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textNoContent = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(noContent({ body, headers }));
+export function textNoContent<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(noContent({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link movedPermanently}
+ *
+ * Content-Type: `text/plain`
+ * Status: `301`
+ *
  * This and all future requests should be directed to the given URI.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textMovedPermanently = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(movedPermanently({ body, headers }));
+export function textMovedPermanently<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(movedPermanently({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link found}
+ *
+ * Content-Type: `text/plain`
+ * Status: `302`
+ *
  * Tells the client to look at (browse to) another URL. 302 has been superseded by 303 and 307.
  * This is an example of industry practice contradicting the standard.
  * The HTTP/1.0 specification (RFC 1945) required the client to perform a temporary redirect (the original describing phrase was "Moved Temporarily"),
@@ -414,65 +795,140 @@ export const textMovedPermanently = <T>(body: T, headers: OutgoingHttpHeaders = 
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textFound = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(found({ body, headers }));
+export function textFound<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+  return text(found({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link seeOther}
+ *
+ * Content-Type: `text/plain`
+ * Status: `303`
+ *
  * The response to the request can be found under another URI using the GET method.
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textSeeOther = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(seeOther({ body, headers }));
+export function textSeeOther<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(seeOther({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link badRequest}
+ *
+ * Content-Type: `text/plain`
+ * Status: `400`
+ *
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textBadRequest = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(badRequest({ body, headers }));
+export function textBadRequest<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(badRequest({ body, headers }));
+}
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link unauthorized}
+ *
+ * Content-Type: `text/plain`
+ * Status: `401`
+ *
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
  * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textUnauthorized = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(unauthorized({ body, headers }));
+export function textUnauthorized<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(unauthorized({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link forbidden}
+ *
+ * Content-Type: `text/plain`
+ * Status: `403`
+ *
  * The request contained valid data and was understood by the server, but the server is refusing action.
  * This may be due to the user not having the necessary permissions for a resource or needing an account of some sort, or attempting a prohibited action (e.g. creating a duplicate record where only one is allowed).
  * This code is also typically used if the request provided authentication by answering the WWW-Authenticate header field challenge, but the server did not accept that authentication.
  * The request should not be repeated.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textForbidden = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(forbidden({ body, headers }));
+export function textForbidden<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(forbidden({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link notFound}
+ *
+ * Content-Type: `text/plain`
+ * Status: `404`
+ *
  * The requested resource could not be found but may be available in the future.
  * Subsequent requests by the client are permissible.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textNotFound = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(notFound({ body, headers }));
+export function textNotFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(notFound({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link internalServerError}
+ *
+ * Content-Type: `text/plain`
+ * Status: `500`
+ *
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  *
- * Content Type: text/plain
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const textInternalServerError = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  text(internalServerError({ body, headers }));
+export function textInternalServerError<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return text(internalServerError({ body, headers }));
+}
 
 /**
  * Html
@@ -480,23 +936,70 @@ export const textInternalServerError = <T>(body: T, headers: OutgoingHttpHeaders
  */
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link ok}
+ *
+ * Content-Type: `text/html`
+ * Status: `200`
+ *
  * Standard response for successful HTTP requests.
  * The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the response will contain an entity describing or containing the result of the action.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlOk = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(ok({ body, headers }));
+export function htmlOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+  return html(ok({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link noContent}
+ *
+ * Content-Type: `text/html`
+ * Status: `204`
+ *
+ * The server successfully processed the request, and is not returning any content.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
+ */
+export function htmlNoContent<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(noContent({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link movedPermanently}
+ *
+ * Content-Type: `text/html`
+ * Status: `301`
+ *
  * This and all future requests should be directed to the given URI.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlMovedPermanently = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(movedPermanently({ body, headers }));
+export function htmlMovedPermanently<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(movedPermanently({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link found}
+ *
+ * Content-Type: `text/html`
+ * Status: `302`
+ *
  * Tells the client to look at (browse to) another URL. 302 has been superseded by 303 and 307.
  * This is an example of industry practice contradicting the standard.
  * The HTTP/1.0 specification (RFC 1945) required the client to perform a temporary redirect (the original describing phrase was "Moved Temporarily"),
@@ -504,62 +1007,137 @@ export const htmlMovedPermanently = <T>(body: T, headers: OutgoingHttpHeaders = 
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlFound = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(found({ body, headers }));
+export function htmlFound<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+  return html(found({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link seeOther}
+ *
+ * Content-Type: `text/html`
+ * Status: `303`
+ *
  * The response to the request can be found under another URI using the GET method.
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlSeeOther = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(seeOther({ body, headers }));
+export function htmlSeeOther<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(seeOther({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link badRequest}
+ *
+ * Content-Type: `text/html`
+ * Status: `400`
+ *
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlBadRequest = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(badRequest({ body, headers }));
+export function htmlBadRequest<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(badRequest({ body, headers }));
+}
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link unauthorized}
+ *
+ * Content-Type: `text/html`
+ * Status: `401`
+ *
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
  * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlUnauthorized = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(unauthorized({ body, headers }));
+export function htmlUnauthorized<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(unauthorized({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link forbidden}
+ *
+ * Content-Type: `text/html`
+ * Status: `403`
+ *
  * The request contained valid data and was understood by the server, but the server is refusing action.
  * This may be due to the user not having the necessary permissions for a resource or needing an account of some sort, or attempting a prohibited action (e.g. creating a duplicate record where only one is allowed).
  * This code is also typically used if the request provided authentication by answering the WWW-Authenticate header field challenge, but the server did not accept that authentication.
  * The request should not be repeated.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlForbidden = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(forbidden({ body, headers }));
+export function htmlForbidden<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(forbidden({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link notFound}
+ *
+ * Content-Type: `text/html`
+ * Status: `404`
+ *
  * The requested resource could not be found but may be available in the future.
  * Subsequent requests by the client are permissible.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlNotFound = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(notFound({ body, headers }));
+export function htmlNotFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(notFound({ body, headers }));
+}
 
 /**
+ * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link internalServerError}
+ *
+ * Content-Type: `text/html`
+ * Status: `500`
+ *
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  *
- * Content Type: text/html
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category Response
  */
-export const htmlInternalServerError = <T>(body: T, headers: OutgoingHttpHeaders = {}) =>
-  html(internalServerError({ body, headers }));
+export function htmlInternalServerError<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+) {
+  return html(internalServerError({ body, headers }));
+}

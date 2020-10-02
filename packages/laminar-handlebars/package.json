@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-handlebars",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Handlebars implementation for the laminar http server",
@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md",
+    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
-    "@ovotech/laminar": "^0.7.2",
+    "@ovotech/laminar": "^0.8.0",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.1",
     "@typescript-eslint/eslint-plugin": "^4.1.1",

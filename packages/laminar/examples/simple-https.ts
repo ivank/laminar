@@ -1,15 +1,14 @@
-import { get, post, laminar, router, start, textOk, jsonOk, describe } from '@ovotech/laminar';
+import { get, post, httpsServer, router, start, textOk, jsonOk, describe } from '@ovotech/laminar';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 const main = async () => {
-  const server = laminar({
+  const server = httpsServer({
     port: 8443,
-    https: {
+    serverOptions: {
       key: readFileSync(join(__dirname, 'key.pem')),
       cert: readFileSync(join(__dirname, 'cert.pem')),
     },
-
     app: router(
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
       post('/test', () => textOk('submited')),

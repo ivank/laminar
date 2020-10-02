@@ -15,7 +15,7 @@ export interface RequestPgPool {
  */
 export const pgPoolMiddleware = (pool: Pool): Middleware<RequestPgPool> => {
   return (next) => async (req) => {
-    // Each request gets its own client.
+    // Each request gets its own client connection.
     const db = await pool.connect();
     try {
       return await next({ ...req, db });

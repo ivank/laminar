@@ -18,8 +18,11 @@ import {
   Response,
   jsonForbidden,
   jsonInternalServerError,
+  isSecurityOk,
+  OapiSecurityResolver,
+  Security,
+  securityOk,
 } from '@ovotech/laminar';
-import { isSecurityOk, OapiSecurityResolver, Security, securityOk } from '@ovotech/laminar-oapi';
 
 const isJWTData = (data: VerifiedJWTData | string | null): data is JWTData =>
   data !== null && typeof data === 'object' && 'email' in data;

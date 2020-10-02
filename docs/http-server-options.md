@@ -1,0 +1,142 @@
+# Customizing Http Server
+
+Lets see how we can configure the http server function.
+
+By default laminar has a few middleware built in. They work just as normal middleware and are responsible for parsing the request body, the response, URL, cookies and query string and error handling. This is all done under the hood, but you can configure some aspects of it using `options`
+
+## Custom body parsers
+
+The default body parsers handle json, url encoded (application/x-www-form-urlencoded) and any text request bodies. You can add / modify the parsers using the `bodyParsers` array in the options:
+
+> [examples/docs/src/custom-body-parser.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-body-parser.ts)
+
+```typescript
+import {
+  App,
+  jsonOk,
+  httpServer,
+  BodyParser,
+  concatStream,
+  defaultBodyParsers,
+} from '@ovotech/laminar';
+import * as YAML from 'yaml';
+
+const app: App = ({ body }) => jsonOk(body);
+
+const yamlParser: BodyParser = {
+  match: (contentType) => contentType === 'application/yaml',
+  /**
+   * The data comes as a raw http.incommingMessage so we need to convert it to a string first
+   * Some parsers could take advantage of this and use a streaming parser instead for added performance
+   */
+  parse: async (stream) => YAML.parse((await concatStream(stream)) ?? ''),
+};
+
+export const server = httpServer({
+  app,
+  port: 8899,
+  hostname: 'localhost',
+
+  /**
+   * You can configure the request body parsers using `bodyParsers`
+   * If we want to keep all the default ones though, so we pass the default body parsers first
+   */
+  options: { bodyParsers: [...defaultBodyParsers, yamlParser] },
+});
+```
+
+## Custom response parsers
+
+You can add custom response parsers as well. That way you can pass the response body as any object you need, and based on the content type you can convert it to a string to be sent over the wire.
+
+> [examples/docs/src/custom-response-parser.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-response-parser.ts)
+
+```typescript
+import {
+  App,
+  yaml,
+  ok,
+  httpServer,
+  ResponseParser,
+  defaultResponseParsers,
+} from '@ovotech/laminar';
+import * as YAML from 'yaml';
+
+const app: App = () => yaml(ok({ body: { example: { test: 'msg' } } }));
+
+const yamlParser: ResponseParser = {
+  match: (contentType) => contentType === 'application/yaml',
+  parse: (yaml) => YAML.stringify(yaml),
+};
+
+export const server = httpServer({
+  app,
+  port: 8898,
+  hostname: 'localhost',
+  /**
+   * You can configure the response parsers using `responseParsers`
+   * If we want to keep all the default ones though, so we pass the default body parsers first
+   */
+  options: { responseParsers: [...defaultResponseParsers, yamlParser] },
+});
+```
+
+## Custom error handler
+
+You can define a default error handler if you want a more customised way to handle errors.
+
+> [examples/docs/src/custom-error-handler.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-error-handler.ts)
+
+```typescript
+import { App, htmlInternalServerError, httpServer, ErrorHandler } from '@ovotech/laminar';
+
+const app: App = () => {
+  throw new Error('Testing error');
+};
+
+const errorHandler: ErrorHandler = ({ error }) =>
+  htmlInternalServerError(`<html>${error.message}</html>`);
+
+export const server = httpServer({
+  app,
+  port: 8897,
+  hostname: 'localhost',
+  /**
+   * You can configure the default error handler with `errorHandler`
+   */
+  options: { errorHandler },
+});
+```
+
+## Custom everything
+
+If you want to skip the default parser / processors, you can combine all the pieces in a different configuration, customizing everything
+
+> [examples/docs/src/custom-everything.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-everything.ts)
+
+```typescript
+import {
+  requestListener,
+  response,
+  Resolver,
+  errorHandlerComponent,
+  urlComponent,
+} from '@ovotech/laminar';
+import { createServer } from 'http';
+
+/**
+ * A resolver is a function that gets a raw request and returns a Response object.
+ * By default the requestListener would supply only the raw unprocessed incomming message
+ */
+const app: Resolver = ({ incommingMessage }) => response({ body: incommingMessage.url });
+
+export const server = createServer({}, requestListener(app));
+
+/**
+ * We can add back a few the default components for our app
+ */
+const errorHandler = errorHandlerComponent();
+const url = urlComponent();
+
+export const serverWithErrorHandling = createServer({}, requestListener(errorHandler(url(app))));
+```

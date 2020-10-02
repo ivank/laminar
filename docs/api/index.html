@@ -1,0 +1,1026 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@ovotech/laminar</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@ovotech/laminar</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>@ovotech/laminar</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#laminar" id="laminar" style="color: inherit; text-decoration: none;">
+					<h1>Laminar</h1>
+				</a>
+				<p>A minimal nodejs http server, built around the concept of strictly typed middlewares.</p>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h3>Usage</h3>
+				</a>
+				<pre><code class="language-shell">yarn add @ovotech/laminar</code></pre>
+				<p>Docs for open api itself: <a href="https://swagger.io/docs/">https://swagger.io/docs/</a></p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi.yaml">examples/oapi.yaml</a></p>
+				</blockquote>
+				<pre><code class="language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">openapi:</span> <span class="hljs-number">3.0</span><span class="hljs-number">.0</span>
+<span class="hljs-attr">info:</span>
+  <span class="hljs-attr">title:</span> <span class="hljs-string">Simple</span> <span class="hljs-string">API</span>
+  <span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span>
+<span class="hljs-attr">servers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">url:</span> <span class="hljs-string">'http: //localhost:3333'</span>
+<span class="hljs-attr">paths:</span>
+  <span class="hljs-string">'/user'</span><span class="hljs-string">:</span>
+    <span class="hljs-attr">post:</span>
+      <span class="hljs-attr">requestBody:</span>
+        <span class="hljs-attr">required:</span> <span class="hljs-literal">true</span>
+        <span class="hljs-attr">content:</span>
+          <span class="hljs-attr">application/json:</span>
+            <span class="hljs-attr">schema:</span>
+              <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/User'</span>
+      <span class="hljs-attr">responses:</span>
+        <span class="hljs-attr">'200':</span>
+          <span class="hljs-attr">description:</span> <span class="hljs-string">Newly</span> <span class="hljs-string">Created</span> <span class="hljs-string">User</span>
+          <span class="hljs-attr">content:</span>
+            <span class="hljs-attr">application/json:</span>
+              <span class="hljs-attr">schema:</span>
+                <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/NewUser'</span>
+    <span class="hljs-attr">get:</span>
+      <span class="hljs-attr">responses:</span>
+        <span class="hljs-attr">'200':</span>
+          <span class="hljs-attr">description:</span> <span class="hljs-string">Loaded</span> <span class="hljs-string">User</span>
+          <span class="hljs-attr">content:</span>
+            <span class="hljs-attr">application/json:</span>
+              <span class="hljs-attr">schema:</span>
+                <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/User'</span>
+<span class="hljs-attr">components:</span>
+  <span class="hljs-attr">schemas:</span>
+    <span class="hljs-attr">User:</span>
+      <span class="hljs-attr">properties:</span>
+        <span class="hljs-attr">email:</span>
+          <span class="hljs-attr">type:</span> <span class="hljs-string">string</span>
+      <span class="hljs-attr">required:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">email</span>
+    <span class="hljs-attr">NewUser:</span>
+      <span class="hljs-attr">properties:</span>
+        <span class="hljs-attr">result:</span>
+          <span class="hljs-attr">type:</span> <span class="hljs-string">string</span>
+        <span class="hljs-attr">user:</span>
+          <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/User'</span>
+      <span class="hljs-attr">required:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">result</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">user</span></code></pre>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi.ts">examples/oapi.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { httpServer, start, describe, jsonOk, openApi } <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { join } <span class="hljs-keyword">from</span> <span class="hljs-string">'path'</span>;
+
+<span class="hljs-keyword">const</span> api = join(__dirname, <span class="hljs-string">'oapi.yaml'</span>);
+
+<span class="hljs-keyword">const</span> main = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> app = <span class="hljs-keyword">await</span> openApi({
+    api,
+    paths: {
+      <span class="hljs-string">'/user'</span>: {
+        post: <span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> jsonOk({ result: <span class="hljs-string">'ok'</span>, user: body }),
+        <span class="hljs-keyword">get</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ email: <span class="hljs-string">'me@example.com'</span> }),
+      },
+    },
+  });
+  <span class="hljs-keyword">const</span> server = httpServer({ port: <span class="hljs-number">3333</span>, app });
+  <span class="hljs-keyword">await</span> start(server);
+  <span class="hljs-built_in">console</span>.log(describe(server));
+};
+
+main();</code></pre>
+				<a href="#additional-options" id="additional-options" style="color: inherit; text-decoration: none;">
+					<h3>Additional options</h3>
+				</a>
+				<p><code>api</code> can be a filename, that would be loaded and parsed (json or yaml). Or it can be the an object representing OpenAPI schema directly. Typescript types would be used to validate that object, as well as using the official json schema to validate it at runtime as well.</p>
+				<p><code>paths</code> an object closely following the oapi <code>paths</code> config, with the &quot;method&quot; function being the actual resolver.</p>
+				<p>All the validations in open api would be run before executing it.</p>
+				<p>Validations on the response object shape would also be run, and would result in a 500 error if it doesn&#39;t match. This would mean that any clients of this api can be 100% certain they would receive objects in the specified shape.</p>
+				<p><code>security</code> An object implementing the security requirements, specified in the open api config. More on this later.</p>
+				<a href="#security" id="security" style="color: inherit; text-decoration: none;">
+					<h3>Security</h3>
+				</a>
+				<p>When you define OpenAPI security, you can configure a function that implements that security, and it will be automatically applied to all paths / methods that require it.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi-security.yaml">examples/oapi-security.yaml</a></p>
+				</blockquote>
+				<pre><code class="language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">openapi:</span> <span class="hljs-number">3.0</span><span class="hljs-number">.0</span>
+<span class="hljs-attr">info:</span>
+  <span class="hljs-attr">title:</span> <span class="hljs-string">Simple</span> <span class="hljs-string">API</span>
+  <span class="hljs-attr">version:</span> <span class="hljs-number">1.0</span><span class="hljs-number">.0</span>
+<span class="hljs-attr">servers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">url:</span> <span class="hljs-string">http://localhost:3333</span>
+<span class="hljs-attr">paths:</span>
+  <span class="hljs-string">'/user'</span><span class="hljs-string">:</span>
+    <span class="hljs-attr">post:</span>
+      <span class="hljs-attr">requestBody:</span>
+        <span class="hljs-attr">required:</span> <span class="hljs-literal">true</span>
+        <span class="hljs-attr">content:</span>
+          <span class="hljs-attr">application/json:</span>
+            <span class="hljs-attr">schema:</span>
+              <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/User'</span>
+      <span class="hljs-attr">security:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">MySecurity:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">admin</span>
+      <span class="hljs-attr">responses:</span>
+        <span class="hljs-attr">'200':</span>
+          <span class="hljs-attr">description:</span> <span class="hljs-string">Newly</span> <span class="hljs-string">Created</span> <span class="hljs-string">User</span>
+          <span class="hljs-attr">content:</span>
+            <span class="hljs-attr">application/json:</span>
+              <span class="hljs-attr">schema:</span>
+                <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/NewUser'</span>
+    <span class="hljs-attr">get:</span>
+      <span class="hljs-attr">security:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">MySecurity:</span> <span class="hljs-string">[]</span>
+      <span class="hljs-attr">responses:</span>
+        <span class="hljs-attr">'200':</span>
+          <span class="hljs-attr">description:</span> <span class="hljs-string">Loaded</span> <span class="hljs-string">User</span>
+          <span class="hljs-attr">content:</span>
+            <span class="hljs-attr">application/json:</span>
+              <span class="hljs-attr">schema:</span>
+                <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/User'</span>
+<span class="hljs-attr">components:</span>
+  <span class="hljs-attr">securitySchemes:</span>
+    <span class="hljs-attr">MySecurity:</span>
+      <span class="hljs-attr">type:</span> <span class="hljs-string">http</span>
+      <span class="hljs-attr">scheme:</span> <span class="hljs-string">bearer</span>
+  <span class="hljs-attr">schemas:</span>
+    <span class="hljs-attr">User:</span>
+      <span class="hljs-attr">properties:</span>
+        <span class="hljs-attr">email:</span>
+          <span class="hljs-attr">type:</span> <span class="hljs-string">string</span>
+      <span class="hljs-attr">required:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">email</span>
+    <span class="hljs-attr">NewUser:</span>
+      <span class="hljs-attr">properties:</span>
+        <span class="hljs-attr">result:</span>
+          <span class="hljs-attr">type:</span> <span class="hljs-string">string</span>
+        <span class="hljs-attr">user:</span>
+          <span class="hljs-string">'$ref'</span><span class="hljs-string">:</span> <span class="hljs-string">'#/components/schemas/User'</span>
+      <span class="hljs-attr">required:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">result</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">user</span></code></pre>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi-security.ts">examples/oapi-security.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  httpServer,
+  describe,
+  jsonOk,
+  start,
+  jsonUnauthorized,
+  openApi,
+  securityOk,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { join } <span class="hljs-keyword">from</span> <span class="hljs-string">'path'</span>;
+
+<span class="hljs-keyword">const</span> api = join(__dirname, <span class="hljs-string">'oapi-security.yaml'</span>);
+
+<span class="hljs-keyword">const</span> main = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> app = <span class="hljs-keyword">await</span> openApi({
+    api,
+    security: {
+      MySecurity: <span class="hljs-function">(<span class="hljs-params">{ headers }</span>) =&gt;</span>
+        headers.authorization === <span class="hljs-string">'Bearer my-secret-token'</span>
+          ? securityOk({ email: <span class="hljs-string">'me@example.com'</span> })
+          : jsonUnauthorized({ message: <span class="hljs-string">'Unauthorized user'</span> }),
+    },
+    paths: {
+      <span class="hljs-string">'/user'</span>: {
+        post: <span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> jsonOk({ result: <span class="hljs-string">'ok'</span>, user: body }),
+        <span class="hljs-keyword">get</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ email: <span class="hljs-string">'me@example.com'</span> }),
+      },
+    },
+  });
+  <span class="hljs-keyword">const</span> server = httpServer({ port: <span class="hljs-number">3333</span>, app });
+  <span class="hljs-keyword">await</span> start(server);
+  <span class="hljs-built_in">console</span>.log(describe(server));
+};
+
+main();</code></pre>
+				<p>The security function would also receive the scopes defined in OpenAPI in the second argument, so you can make the authentication more specific</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> MySecurity = <span class="hljs-function">(<span class="hljs-params">{ headers }, { scopes }</span>) =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+};</code></pre>
+				<a href="#generating-types" id="generating-types" style="color: inherit; text-decoration: none;">
+					<h3>Generating types</h3>
+				</a>
+				<p>You can use <a href="../lamina-cli">@ovotech/lamina-cli</a> package to generate types.</p>
+				<a href="#undocumented-types" id="undocumented-types" style="color: inherit; text-decoration: none;">
+					<h3>Undocumented types</h3>
+				</a>
+				<p>You can define additional types that are not defined by openapi schema. You can use the laminar router for that, by placing the routes before the app, so they take precedence.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi-undocumented-routes.ts">examples/oapi-undocumented-routes.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  httpServer,
+  start,
+  describe,
+  jsonOk,
+  router,
+  <span class="hljs-keyword">get</span>,
+  redirect,
+  openApi,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { join } <span class="hljs-keyword">from</span> <span class="hljs-string">'path'</span>;
+
+<span class="hljs-keyword">const</span> api = join(__dirname, <span class="hljs-string">'oapi.yaml'</span>);
+
+<span class="hljs-keyword">const</span> main = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> app = <span class="hljs-keyword">await</span> openApi({
+    api,
+    paths: {
+      <span class="hljs-string">'/user'</span>: {
+        post: <span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> jsonOk({ result: <span class="hljs-string">'ok'</span>, user: body }),
+        <span class="hljs-keyword">get</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ email: <span class="hljs-string">'me@example.com'</span> }),
+      },
+    },
+    notFound: router(
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/old/{id}'</span>, <span class="hljs-function">(<span class="hljs-params">{ path: { id } }</span>) =&gt;</span> redirect(<span class="hljs-string">`http://example.com/new/<span class="hljs-subst">${id}</span>`</span>)),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/old/{id}/pdf'</span>, <span class="hljs-function">(<span class="hljs-params">{ path: { id } }</span>) =&gt;</span> redirect(<span class="hljs-string">`http://example.com/new/<span class="hljs-subst">${id}</span>/pdf`</span>)),
+    ),
+  });
+
+  <span class="hljs-keyword">const</span> server = httpServer({
+    port: <span class="hljs-number">3333</span>,
+    app,
+  });
+  <span class="hljs-keyword">await</span> start(server);
+  <span class="hljs-built_in">console</span>.log(describe(server));
+};
+
+main();</code></pre>
+				<a href="#usage-without-open-api" id="usage-without-open-api" style="color: inherit; text-decoration: none;">
+					<h3>Usage without Open API</h3>
+				</a>
+				<p>To create an http server that responds to <code>GET .well-known/health-check</code>, <code>GET test</code> and <code>POST test</code></p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/simple.ts">examples/simple.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-keyword">get</span>, post, httpServer, start, router, describe, jsonOk, textOk } <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> main = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> server = httpServer({
+    port: <span class="hljs-number">3333</span>,
+    app: router(
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/.well-known/health-check'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+      post(<span class="hljs-string">'/test'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> textOk(<span class="hljs-string">'submited'</span>)),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/test'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> textOk(<span class="hljs-string">'index'</span>)),
+    ),
+  });
+  <span class="hljs-keyword">await</span> start(server);
+
+  <span class="hljs-built_in">console</span>.log(describe(server));
+};
+
+main();</code></pre>
+				<a href="#it39s-all-about-flows" id="it39s-all-about-flows" style="color: inherit; text-decoration: none;">
+					<h3>It&#39;s all about flows</h3>
+				</a>
+				<p>Well it&#39;s more about typescript types that automatically apply over middlewares, but we&#39;ll get to that in a minute.</p>
+				<p>Lets see the simplest possible app with laminar, a very simple echo app</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo.ts">examples/echo.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { httpServer, start, response, describe } <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> server = httpServer({ port: <span class="hljs-number">3333</span>, app: <span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> response({ body }) });
+
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
+				No paths, routes or other complications.</p>
+				<p>Pretty simple, but what if we wanted to add some authentication? This is usually done by having extra code run just before the response processing, to determine if we should execute it or not. Basic stuff I know but bear with me.</p>
+				<p>Lets just assume that if Authorization header is <code>Me</code> then it&#39;s me and its fine, otherwise it must be someone else.
+				We can go ahead and write a middleware, that would do stuff just before passing stuff to the next middleware.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo-auth.ts">examples/echo-auth.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  httpServer,
+  start,
+  textForbidden,
+  textOk,
+  App,
+  Middleware,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> auth: Middleware = <span class="hljs-function">(<span class="hljs-params">next</span>) =&gt;</span> (req) =&gt;
+  req.headers.authorization === <span class="hljs-string">'Me'</span> ? next(req) : textForbidden(<span class="hljs-string">'Not Me'</span>);
+
+<span class="hljs-keyword">const</span> app: App = <span class="hljs-function">(<span class="hljs-params">req</span>) =&gt;</span> textOk(req.url.toString());
+
+<span class="hljs-keyword">const</span> server = httpServer({ port: <span class="hljs-number">3333</span>, app: auth(app) });
+
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>Notice that we actually execute the next middleware <em>inside</em> our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo-auth-log.ts">examples/echo-auth-log.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  Middleware,
+  App,
+  textForbidden,
+  textOk,
+  start,
+  httpServer,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> auth: Middleware = <span class="hljs-function">(<span class="hljs-params">next</span>) =&gt;</span> (req) =&gt;
+  req.headers.authorization === <span class="hljs-string">'Me'</span> ? next(req) : textForbidden(<span class="hljs-string">'Not Me'</span>);
+
+<span class="hljs-keyword">const</span> log: Middleware = <span class="hljs-function">(<span class="hljs-params">next</span>) =&gt;</span> (req) =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Requested'</span>, req.body);
+  <span class="hljs-keyword">const</span> response = next(req);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Responded'</span>, response);
+  <span class="hljs-keyword">return</span> response;
+};
+
+<span class="hljs-keyword">const</span> app: App = <span class="hljs-function">(<span class="hljs-params">req</span>) =&gt;</span> textOk(req.body);
+
+<span class="hljs-keyword">const</span> server = httpServer({ port: <span class="hljs-number">3333</span>, app: log(auth(app)) });
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>You can see how we can string those middlewares along <code>log(auth(main))</code> as just function calls. But that&#39;s not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn&#39;t yet been set.</p>
+				<p>A simple example would be access to an external resource, say a database. We want a middleware that creates a connection, passes that connection to all the middlewares downstream that would make use of it like checking users. But we&#39;d like to be sure that middleware has actually executed, so we don&#39;t accidentally try to access a connection that&#39;s not there.</p>
+				<p>Lets see how we can go about doing that.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo-auth-log-db.ts">examples/echo-auth-log-db.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  Middleware,
+  App,
+  textForbidden,
+  jsonOk,
+  start,
+  httpServer,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-comment">/**
+ * Its a very simple database, that only has one function:
+ * Return the user that is valid, e.g. Me
+ */</span>
+<span class="hljs-keyword">interface</span> DB {
+  getValidUser: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">interface</span> RequestDB {
+  db: DB;
+}
+
+<span class="hljs-comment">/**
+ * Since any database would need to create a connection first,
+ * We'll need to have a "middleware creator" function that executes
+ * and returns the actual middleware
+ */</span>
+<span class="hljs-keyword">const</span> createDbMiddleware = (): Middleware&lt;RequestDB&gt; =&gt; {
+  <span class="hljs-keyword">const</span> db: DB = { getValidUser: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">'Me'</span> };
+  <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">next</span>) =&gt;</span> (req) =&gt; next({ ...req, db });
+};
+
+<span class="hljs-keyword">const</span> auth: Middleware = <span class="hljs-function">(<span class="hljs-params">next</span>) =&gt;</span> (req) =&gt;
+  req.headers.authorization === <span class="hljs-string">'Me'</span> ? next(req) : textForbidden(<span class="hljs-string">'Not Me'</span>);
+
+<span class="hljs-keyword">const</span> log: Middleware = <span class="hljs-function">(<span class="hljs-params">next</span>) =&gt;</span> (req) =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Requested'</span>, req.body);
+  <span class="hljs-keyword">const</span> response = next(req);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Responded'</span>, response);
+  <span class="hljs-keyword">return</span> response;
+};
+
+<span class="hljs-comment">/**
+ * We can now require this app to have the middleware.
+ * If the propper ones are not executed later, TypeScript will inform us at compile time.
+ */</span>
+<span class="hljs-keyword">const</span> app: App&lt;RequestDB&gt; = <span class="hljs-function">(<span class="hljs-params">req</span>) =&gt;</span> jsonOk({ url: req.url, user: req.db.getValidUser() });
+
+<span class="hljs-keyword">const</span> db = createDbMiddleware();
+
+<span class="hljs-keyword">const</span> server = httpServer({ port: <span class="hljs-number">3333</span>, app: log(db(auth(app))) });
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>We have a convenience type <code>Middleware&lt;TProvide, TRequre&gt;</code> that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.</p>
+				<p>This allows you to be absolutely sure that the middlewares are executed, and in the right order. If you try to play around with them - you&#39;ll see that if for example you put db after auth or remove it altogether, then it won&#39;t compile at all.</p>
+				<p>So its a flow of context down the middlewares, but since its an ordered flow, we call it <code>laminar</code>.</p>
+				<a href="#bodyparser" id="bodyparser" style="color: inherit; text-decoration: none;">
+					<h3>BodyParser</h3>
+				</a>
+				<p>By default bodyParser has parsers for json, urlencoded and plain text. If nothing is matched, the <code>body</code> parameter object would be the actual readable stream http.IncomingMessage.</p>
+				<p>You can write and add your own parsers. Each one has a &#39;match&#39; function and a &#39;parse&#39; function. Parse also gets the raw http.IncomingMessage from node.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/body-parser.ts">examples/body-parser.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  httpServer,
+  App,
+  start,
+  textOk,
+  BodyParser,
+  concatStream,
+  defaultBodyParsers,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> csvParser: BodyParser = {
+  match: <span class="hljs-function">(<span class="hljs-params">contentType</span>) =&gt;</span> contentType === <span class="hljs-string">'text/csv'</span>,
+  parse: <span class="hljs-keyword">async</span> (body) =&gt; <span class="hljs-built_in">String</span>(<span class="hljs-keyword">await</span> concatStream(body)).split(<span class="hljs-string">','</span>),
+};
+
+<span class="hljs-keyword">const</span> app: App = <span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> textOk(<span class="hljs-built_in">JSON</span>.stringify(body));
+
+<span class="hljs-keyword">const</span> server = httpServer({
+  port: <span class="hljs-number">3333</span>,
+  app,
+  options: { bodyParsers: [csvParser, ...defaultBodyParsers] },
+});
+
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<a href="#router" id="router" style="color: inherit; text-decoration: none;">
+					<h3>Router</h3>
+				</a>
+				<p>The router middleware allows you to respond to requests based on what path was requested, as well as extract information from that path for use in processing your request.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/router.ts">examples/router.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  <span class="hljs-keyword">get</span>,
+  put,
+  httpServer,
+  router,
+  start,
+  jsonOk,
+  jsonNotFound,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> users: Record&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt; = {
+  <span class="hljs-string">'1'</span>: <span class="hljs-string">'John'</span>,
+  <span class="hljs-string">'2'</span>: <span class="hljs-string">'Foo'</span>,
+};
+
+<span class="hljs-keyword">const</span> server = httpServer({
+  port: <span class="hljs-number">3333</span>,
+  app: router(
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/.well-known/health-check'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/users'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk(users)),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/users/{id}'</span>, <span class="hljs-function">(<span class="hljs-params">{ path }</span>) =&gt;</span> jsonOk(users[path.id])),
+    put(<span class="hljs-string">'/users/{id}'</span>, <span class="hljs-function">(<span class="hljs-params">{ path, body }</span>) =&gt;</span> {
+      users[path.id] = body;
+      <span class="hljs-keyword">return</span> jsonOk(users[path.id]);
+    }),
+    <span class="hljs-comment">// Default URL handler</span>
+    ({ url }) =&gt; jsonNotFound({ message: <span class="hljs-string">`This url <span class="hljs-subst">${url}</span> was not found`</span> }),
+  ),
+});
+
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>Path parameters are written in <code>{nameOfParameter}</code> style, and each name is extracted and its value passed in the <code>path</code> context property.</p>
+				<p>If none of the routes match, the router would return a generic 404. You can modify that by using <code>defaultRoute</code> at the end of all the matchers. You can also use <code>response</code> helper to set custom status code.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/default-route.ts">examples/default-route.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-keyword">get</span>, httpServer, router, jsonOk, textNotFound, start, describe } <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> server = httpServer({
+  port: <span class="hljs-number">3333</span>,
+  app: router(
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/.well-known/health-check'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+    <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> textNotFound(<span class="hljs-string">'Woopsy'</span>),
+  ),
+});
+
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>You can also configure a route to ba a static folder with assets. Works with nested folders as well, does not support index pages.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/static-assets.ts">examples/static-assets.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-keyword">get</span>, httpServer, router, staticAssets, start, jsonOk, describe } <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { join } <span class="hljs-keyword">from</span> <span class="hljs-string">'path'</span>;
+
+<span class="hljs-keyword">const</span> main = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> server = httpServer({
+    port: <span class="hljs-number">3333</span>,
+    app: router(
+      staticAssets(<span class="hljs-string">'/my-folder'</span>, join(__dirname, <span class="hljs-string">'assets'</span>)),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+    ),
+  });
+  <span class="hljs-keyword">await</span> start(server);
+  <span class="hljs-built_in">console</span>.log(describe(server));
+};
+
+main();</code></pre>
+				<p>All the available route matchers are:</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Matcher</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>get</td>
+							<td>Match path with http <code>GET</code></td>
+						</tr>
+						<tr>
+							<td>put</td>
+							<td>Match path with http <code>PUT</code></td>
+						</tr>
+						<tr>
+							<td>post</td>
+							<td>Match path with http <code>POST</code></td>
+						</tr>
+						<tr>
+							<td>del</td>
+							<td>Match path with http <code>DELETE</code></td>
+						</tr>
+						<tr>
+							<td>patch</td>
+							<td>Match path with http <code>PATCH</code></td>
+						</tr>
+						<tr>
+							<td>option</td>
+							<td>Match path with http <code>OPTION</code></td>
+						</tr>
+						<tr>
+							<td>index</td>
+							<td>Match any route or path</td>
+						</tr>
+						<tr>
+							<td>directory</td>
+							<td>Resolve paths to static files</td>
+						</tr>
+				</tbody></table>
+				<a href="#response" id="response" style="color: inherit; text-decoration: none;">
+					<h3>Response</h3>
+				</a>
+				<p>Each laminar app must return a response object. Response objects are created with the various helpers. Example how it all looks like:</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/response.ts">examples/cors.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  <span class="hljs-keyword">get</span>,
+  httpServer,
+  router,
+  start,
+  jsonOk,
+  jsonNotFound,
+  redirect,
+  jsonForbidden,
+  file,
+  jsonBadRequest,
+  htmlBadRequest,
+  htmlForbidden,
+  htmlNotFound,
+  htmlOk,
+  json,
+  csv,
+  ok,
+  badRequest,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { join } <span class="hljs-keyword">from</span> <span class="hljs-string">'path'</span>;
+
+<span class="hljs-keyword">const</span> server = httpServer({
+  port: <span class="hljs-number">3333</span>,
+  app: router(
+    <span class="hljs-comment">// Redirects</span>
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/redirect'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
+      redirect(<span class="hljs-string">'http://my-new-location.example.com'</span>, { headers: { <span class="hljs-string">'X-Other'</span>: <span class="hljs-string">'Other'</span> } }),
+    ),
+
+    <span class="hljs-comment">// Static files</span>
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/static-file'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> file(join(__dirname, <span class="hljs-string">'assets/start.svg'</span>))),
+
+    <span class="hljs-comment">// JSON Responses</span>
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/json/forbidden'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonForbidden({ message: <span class="hljs-string">'Not Authorized'</span> })),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/json/object'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/json/not-found-response'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonNotFound({ message: <span class="hljs-string">'not found'</span> })),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/json/bad-request'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonBadRequest({ message: <span class="hljs-string">'not found'</span> })),
+
+    <span class="hljs-comment">// Custom status code</span>
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/json/208'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> json({ body: { message: <span class="hljs-string">'custom response'</span> }, status: <span class="hljs-number">208</span> })),
+
+    <span class="hljs-comment">// HTML Responses</span>
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/json/forbidden'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> htmlForbidden(<span class="hljs-string">'&lt;html&gt;Forbidden&lt;/html&gt;'</span>)),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/html/object'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> htmlOk(<span class="hljs-string">'&lt;html&gt;OK&lt;/html&gt;'</span>)),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/html/not-found-response'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> htmlNotFound(<span class="hljs-string">'&lt;html&gt;Not Found&lt;/html&gt;'</span>)),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/html/bad-request'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> htmlBadRequest(<span class="hljs-string">'&lt;html&gt;Bad Request&lt;/html&gt;'</span>)),
+
+    <span class="hljs-comment">// Additional Types</span>
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/csv/ok'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> csv(ok({ body: <span class="hljs-string">'one,two,three'</span> }))),
+    <span class="hljs-keyword">get</span>(<span class="hljs-string">'/csv/error'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> csv(badRequest({ body: <span class="hljs-string">'error,error2,error3'</span> }))),
+  ),
+});
+
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>Helpers that set the status code are as follows:</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Helper</th>
+							<th>Status Code</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>ok</td>
+							<td><code>200</code></td>
+						</tr>
+						<tr>
+							<td>movedPermanently</td>
+							<td><code>301</code></td>
+						</tr>
+						<tr>
+							<td>found</td>
+							<td><code>302</code></td>
+						</tr>
+						<tr>
+							<td>seeOther</td>
+							<td><code>303</code></td>
+						</tr>
+						<tr>
+							<td>notModified</td>
+							<td><code>304</code></td>
+						</tr>
+						<tr>
+							<td>badRequest</td>
+							<td><code>400</code></td>
+						</tr>
+						<tr>
+							<td>unauthorized</td>
+							<td><code>401</code></td>
+						</tr>
+						<tr>
+							<td>forbidden</td>
+							<td><code>403</code></td>
+						</tr>
+						<tr>
+							<td>notFound</td>
+							<td><code>404</code></td>
+						</tr>
+						<tr>
+							<td>internalServerError</td>
+							<td><code>500</code></td>
+						</tr>
+				</tbody></table>
+				<p>Helpers that set the content type header are:</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Helper</th>
+							<th>Content Type Header</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>json</td>
+							<td><code>application/json</code></td>
+						</tr>
+						<tr>
+							<td>yaml</td>
+							<td><code>application/yaml</code></td>
+						</tr>
+						<tr>
+							<td>binary</td>
+							<td><code>application/octet-stream</code></td>
+						</tr>
+						<tr>
+							<td>form</td>
+							<td><code>application/x-www-form-urlencoded</code></td>
+						</tr>
+						<tr>
+							<td>pdf</td>
+							<td><code>application/pdf</code></td>
+						</tr>
+						<tr>
+							<td>xml</td>
+							<td><code>application/xml</code></td>
+						</tr>
+						<tr>
+							<td>text</td>
+							<td><code>text/plain</code></td>
+						</tr>
+						<tr>
+							<td>html</td>
+							<td><code>text/html</code></td>
+						</tr>
+						<tr>
+							<td>css</td>
+							<td><code>text/css</code></td>
+						</tr>
+						<tr>
+							<td>csv</td>
+							<td><code>text/csv</code></td>
+						</tr>
+				</tbody></table>
+				<p>You can combine them any way you like:</p>
+				<pre><code class="language-typescript">text(ok(<span class="hljs-string">'My text'</span>));
+xml(badRequest(<span class="hljs-string">'&lt;request type="bad"&gt;&lt;/request&gt;'</span>));
+internalServerError(yaml(<span class="hljs-string">'message: error'</span>));</code></pre>
+				<p>Since they are used often, there are combined shelpers for text, json and html - <code>jsonOk</code>, <code>jsonBadRequest</code>, <code>textNotFound</code>, <code>htmlNotModified</code> ...</p>
+				<p>There are also 2 special helpers: redirect and file</p>
+				<p>redirect(location, options);</p>
+				<blockquote>
+					<p>Create a response object that will redirect to a given location.
+					Sets the &#39;Location&#39; header.</p>
+				</blockquote>
+				<p>file(filename, options);</p>
+				<blockquote>
+					<p>Return a file response.
+						Setting the &#39;content-type&#39;, &#39;content-length&#39;, &#39;last-modified&#39; headers based on the file itself.
+					Supports content ranges as well, if you pass the incommingMessage from the request, so it can determine the range.</p>
+				</blockquote>
+				<a href="#cors-middleware" id="cors-middleware" style="color: inherit; text-decoration: none;">
+					<h3>Cors Middleware</h3>
+				</a>
+				<p>A cors handling middleware comes with laminar as well.</p>
+				<p>For example this would allow only &#39;example.com&#39; and &#39;localhost&#39; as origins.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/cors.ts">examples/cors.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  start,
+  jsonOk,
+  <span class="hljs-keyword">get</span>,
+  put,
+  httpServer,
+  router,
+  corsMiddleware,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> users: Record&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt; = {
+  <span class="hljs-string">'1'</span>: <span class="hljs-string">'John'</span>,
+  <span class="hljs-string">'2'</span>: <span class="hljs-string">'Foo'</span>,
+};
+
+<span class="hljs-keyword">const</span> cors = corsMiddleware({
+  allowOrigin: <span class="hljs-function">(<span class="hljs-params">origin</span>) =&gt;</span> [<span class="hljs-string">'http://example.com'</span>, <span class="hljs-string">'http://localhost'</span>].includes(origin),
+});
+
+<span class="hljs-keyword">const</span> server = httpServer({
+  port: <span class="hljs-number">3333</span>,
+  app: cors(
+    router(
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/.well-known/health-check'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/users'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk(users)),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/users/{id}'</span>, <span class="hljs-function">(<span class="hljs-params">{ path }</span>) =&gt;</span> jsonOk(users[path.id])),
+      put(<span class="hljs-string">'/users/{id}'</span>, <span class="hljs-function">(<span class="hljs-params">{ path, body }</span>) =&gt;</span> {
+        users[path.id] = body;
+        <span class="hljs-keyword">return</span> jsonOk(users[path.id]);
+      }),
+    ),
+  ),
+});
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<a href="#logging-middleware" id="logging-middleware" style="color: inherit; text-decoration: none;">
+					<h3>Logging Middleware</h3>
+				</a>
+				<p>There&#39;s a simple middleware that allows you to log requests, responses and pass in a your own logger as a context.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/logging.ts">examples/logging.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  <span class="hljs-keyword">get</span>,
+  put,
+  httpServer,
+  start,
+  router,
+  jsonOk,
+  loggingMiddleware,
+  describe,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+
+<span class="hljs-keyword">const</span> users: Record&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt; = {
+  <span class="hljs-string">'1'</span>: <span class="hljs-string">'John'</span>,
+  <span class="hljs-string">'2'</span>: <span class="hljs-string">'Foo'</span>,
+};
+
+<span class="hljs-keyword">const</span> logging = loggingMiddleware(<span class="hljs-built_in">console</span>);
+
+<span class="hljs-keyword">const</span> server = httpServer({
+  port: <span class="hljs-number">3333</span>,
+  app: logging(
+    router(
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/.well-known/health-check'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/users'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk(users)),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/users/{id}'</span>, <span class="hljs-function">(<span class="hljs-params">{ path }</span>) =&gt;</span> jsonOk(users[path.id])),
+      put(<span class="hljs-string">'/users/{id}'</span>, <span class="hljs-function">(<span class="hljs-params">{ path, body, logger }</span>) =&gt;</span> {
+        logger.log(<span class="hljs-string">'info'</span>, <span class="hljs-string">'putting'</span>);
+        users[path.id] = body;
+        <span class="hljs-keyword">return</span> jsonOk(users[path.id]);
+      }),
+    ),
+  ),
+});
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<a href="#https-tls-support" id="https-tls-support" style="color: inherit; text-decoration: none;">
+					<h3>HTTPS (TLS) Support</h3>
+				</a>
+				<p>laminar can use node&#39;s https server.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/simple-https.ts">examples/simple-https.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-keyword">get</span>, post, httpsServer, router, start, textOk, jsonOk, describe } <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { readFileSync } <span class="hljs-keyword">from</span> <span class="hljs-string">'fs'</span>;
+<span class="hljs-keyword">import</span> { join } <span class="hljs-keyword">from</span> <span class="hljs-string">'path'</span>;
+
+<span class="hljs-keyword">const</span> main = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> server = httpsServer({
+    port: <span class="hljs-number">8443</span>,
+    serverOptions: {
+      key: readFileSync(join(__dirname, <span class="hljs-string">'key.pem'</span>)),
+      cert: readFileSync(join(__dirname, <span class="hljs-string">'cert.pem'</span>)),
+    },
+    app: router(
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/.well-known/health-check'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> jsonOk({ health: <span class="hljs-string">'ok'</span> })),
+      post(<span class="hljs-string">'/test'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> textOk(<span class="hljs-string">'submited'</span>)),
+      <span class="hljs-keyword">get</span>(<span class="hljs-string">'/test'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> textOk(<span class="hljs-string">'index'</span>)),
+    ),
+  });
+  <span class="hljs-keyword">await</span> start(server);
+
+  <span class="hljs-built_in">console</span>.log(describe(server));
+};
+
+main();</code></pre>
+				<a href="#running-the-tests" id="running-the-tests" style="color: inherit; text-decoration: none;">
+					<h2>Running the tests</h2>
+				</a>
+				<p>You can run the tests with:</p>
+				<pre><code class="language-bash">yarn <span class="hljs-built_in">test</span></code></pre>
+				<a href="#coding-style-linting-etc-tests" id="coding-style-linting-etc-tests" style="color: inherit; text-decoration: none;">
+					<h3>Coding style (linting, etc) tests</h3>
+				</a>
+				<p>Style is maintained with prettier and eslint</p>
+				<pre><code><span class="hljs-attribute">yarn lint</span></code></pre>
+				<a href="#deployment" id="deployment" style="color: inherit; text-decoration: none;">
+					<h2>Deployment</h2>
+				</a>
+				<p>Deployment is preferment by lerna automatically on merge / push to master, but you&#39;ll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.</p>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
+				<p>Have a bug? File an issue with a simple example that reproduces this so we can take a look &amp; confirm.</p>
+				<p>Want to make a change? Submit a PR, explain why it&#39;s useful, and make sure you&#39;ve updated the docs (this file) and the tests (see <a href="test">test folder</a>).</p>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p>This project is licensed under Apache 2 - see the <a href="LICENSE">LICENSE</a> file for details</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_json_schema_src_index_.html">&quot;json-<wbr>schema/src/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_laminar_handlebars_src_index_.html">&quot;laminar-<wbr>handlebars/src/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_laminar_jwt_src_index_.html">&quot;laminar-<wbr>jwt/src/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_laminar_src_index_.html">&quot;laminar/src/index&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

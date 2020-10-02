@@ -1,4 +1,4 @@
-import { Middleware } from '../components/app.component';
+import { Middleware } from '../components/components';
 
 export interface ResponseTimeConfig {
   header?: string;
@@ -6,6 +6,11 @@ export interface ResponseTimeConfig {
 
 export const defaultResponseTimeHeader = 'x-response-time';
 
+/**
+ * Track response time of a response
+ *
+ * @category middleware
+ */
 export const responseTimeMiddleware = ({
   header = defaultResponseTimeHeader,
 }: ResponseTimeConfig = {}): Middleware => (next) => {

@@ -1,14 +1,10 @@
-import { laminar, start, Laminar, router, get, stop, jsonOk, App } from '@ovotech/laminar';
+import { httpServer, start, router, get, stop, jsonOk, App } from '@ovotech/laminar';
 import axios from 'axios';
 import { keycloakAuthMiddleware, createSession } from '../src';
 import { generateKeyPair } from 'crypto';
 import { promisify } from 'util';
 
-let server: Laminar;
-
 describe('Integration', () => {
-  afterEach(() => stop(server));
-
   it('Should process response for public / private key and keycloak', async () => {
     const { publicKey, privateKey } = await promisify(generateKeyPair)('rsa', {
       modulusLength: 4096,
@@ -62,52 +58,56 @@ describe('Integration', () => {
         auth(['test1'])(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
       ),
     );
-    server = laminar({ app, port: 8063 });
-    await start(server);
+    const server = httpServer({ app, port: 8063 });
+    try {
+      await start(server);
 
-    const api = axios.create({ baseURL: 'http://localhost:8063' });
+      const api = axios.create({ baseURL: 'http://localhost:8063' });
 
-    const { data: data1 } = await api.get('/test', {
-      headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
-    });
+      const { data: data1 } = await api.get('/test', {
+        headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
+      });
 
-    expect(data1).toEqual({
-      text: 'Test',
-      email: 'tester',
-      iat: expect.any(Number),
-    });
+      expect(data1).toEqual({
+        text: 'Test',
+        email: 'tester',
+        iat: expect.any(Number),
+      });
 
-    const result2 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithOtherServiceRoles}` },
-    });
+      const result2 = api.get('/test-scopes', {
+        headers: { authorization: `Bearer ${testTokenWithOtherServiceRoles}` },
+      });
 
-    await expect(result2.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: {
-        message: 'Unauthorized. User does not have required roles: [test1] for test-service',
-      },
-    });
+      await expect(result2.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          message: 'Unauthorized. User does not have required roles: [test1] for test-service',
+        },
+      });
 
-    const result3 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithServiceRolesOther}` },
-    });
+      const result3 = api.get('/test-scopes', {
+        headers: { authorization: `Bearer ${testTokenWithServiceRolesOther}` },
+      });
 
-    await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: {
-        message: 'Unauthorized. User does not have required roles: [test1] for test-service',
-      },
-    });
+      await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          message: 'Unauthorized. User does not have required roles: [test1] for test-service',
+        },
+      });
 
-    const { data: data4 } = await api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithServiceRoles}` },
-    });
+      const { data: data4 } = await api.get('/test-scopes', {
+        headers: { authorization: `Bearer ${testTokenWithServiceRoles}` },
+      });
 
-    expect(data4).toEqual({
-      text: 'Test',
-      email: 'tester',
-      resource_access: { 'test-service': { roles: ['test1'] } },
-      iat: expect.any(Number),
-    });
+      expect(data4).toEqual({
+        text: 'Test',
+        email: 'tester',
+        resource_access: { 'test-service': { roles: ['test1'] } },
+        iat: expect.any(Number),
+      });
+    } finally {
+      await stop(server);
+    }
   });
 });

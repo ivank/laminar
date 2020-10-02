@@ -3,13 +3,12 @@ import { join } from 'path';
 import { ObjectReadableMock } from 'stream-mock';
 import {
   file,
-  laminar,
+  httpServer,
   start,
   text,
   textOk,
   stop,
   form,
-  Laminar,
   json,
   jsonOk,
   binary,
@@ -24,85 +23,102 @@ import {
   yaml,
 } from '../src';
 
-let server: Laminar;
 const api = axios.create({ baseURL: 'http://localhost:8052' });
 
 describe('Requests', () => {
-  afterEach(() => stop(server));
-
   it('Should process response', async () => {
-    server = laminar({ port: 8052, app: () => textOk('Test') });
-    await start(server);
+    const server = httpServer({ port: 8052, app: () => textOk('Test') });
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({
-        'content-type': 'text/plain',
-        'content-length': '4',
-      }),
-      data: 'Test',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({
+          'content-type': 'text/plain',
+          'content-length': '4',
+        }),
+        data: 'Test',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process json', async () => {
-    server = laminar({ port: 8052, app: () => jsonOk({ other: 'stuff' }) });
-    await start(server);
+    const server = httpServer({ port: 8052, app: () => jsonOk({ other: 'stuff' }) });
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({
-        'content-type': 'application/json',
-        'content-length': '17',
-      }),
-      data: { other: 'stuff' },
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({
+          'content-type': 'application/json',
+          'content-length': '17',
+        }),
+        data: { other: 'stuff' },
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process buffer', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => binary(ok({ body: Buffer.from('test-test-maaaany-test') })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({
-        'content-type': 'application/octet-stream',
-        'content-length': '22',
-      }),
-      data: 'test-test-maaaany-test',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({
+          'content-type': 'application/octet-stream',
+          'content-length': '22',
+        }),
+        data: 'test-test-maaaany-test',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process stream', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => textOk(new ObjectReadableMock(['test-', 'test-', 'maaaany-', 'test'])),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({
-        'content-type': 'text/plain',
-      }),
-      data: 'test-test-maaaany-test',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({
+          'content-type': 'text/plain',
+        }),
+        data: 'test-test-maaaany-test',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar simple response', async () => {
-    server = laminar({ port: 8052, app: () => text({ body: '', status: 201 }) });
-    await start(server);
+    const server = httpServer({ port: 8052, app: () => text({ body: '', status: 201 }) });
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      status: 201,
-      headers: expect.objectContaining({
-        'content-type': 'text/plain',
-        'content-length': '0',
-      }),
-      data: '',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        status: 201,
+        headers: expect.objectContaining({
+          'content-type': 'text/plain',
+          'content-length': '0',
+        }),
+        data: '',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar response', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () =>
         setCookie(
@@ -110,238 +126,302 @@ describe('Requests', () => {
           json({ body: { some: 'stuff' }, status: 201, headers: { 'X-Response': 'other' } }),
         ),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      status: 201,
-      headers: expect.objectContaining({
-        'content-type': 'application/json',
-        'content-length': '16',
-        'set-cookie': ['me=test; Max-Age=1000; HttpOnly', 'other=test2'],
-        'x-response': 'other',
-      }),
-      data: { some: 'stuff' },
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        status: 201,
+        headers: expect.objectContaining({
+          'content-type': 'application/json',
+          'content-length': '16',
+          'set-cookie': ['me=test; Max-Age=1000; HttpOnly', 'other=test2'],
+          'x-response': 'other',
+        }),
+        data: { some: 'stuff' },
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar message', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => jsonNotFound({ message: 'test' }),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test').catch((error) => error.response)).resolves.toMatchObject({
-      status: 404,
-      data: { message: 'test' },
-    });
+      await expect(api.get('/test').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+        data: { message: 'test' },
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar text file', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => file(join(__dirname, 'test.txt')),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      status: 200,
-      headers: expect.objectContaining({
-        'content-length': '11',
-        'content-type': 'text/plain',
-      }),
-      data: 'some stuff\n',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        status: 200,
+        headers: expect.objectContaining({
+          'content-length': '11',
+          'content-type': 'text/plain',
+        }),
+        data: 'some stuff\n',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar html file', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => file(join(__dirname, 'test.html')),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      status: 200,
-      headers: expect.objectContaining({
-        'content-length': '14',
-        'content-type': 'text/html',
-      }),
-      data: '<html></html>\n',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        status: 200,
+        headers: expect.objectContaining({
+          'content-length': '14',
+          'content-type': 'text/html',
+        }),
+        data: '<html></html>\n',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar file with status', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => file(join(__dirname, 'test.txt'), { status: 201 }),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      status: 201,
-      data: 'some stuff\n',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        status: 201,
+        data: 'some stuff\n',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type csv', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => csv(ok({ body: 'one,two' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'text/csv' }),
-      data: 'one,two',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'text/csv' }),
+        data: 'one,two',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type css', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => css(ok({ body: 'html { backgroun: red; }' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'text/css' }),
-      data: 'html { backgroun: red; }',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'text/css' }),
+        data: 'html { backgroun: red; }',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type html', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => html(ok({ body: '<html></html>' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'text/html' }),
-      data: '<html></html>',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'text/html' }),
+        data: '<html></html>',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type text', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => text(ok({ body: 'txt' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'text/plain' }),
-      data: 'txt',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'text/plain' }),
+        data: 'txt',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type form', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => form(ok({ body: { one: 'foo', two: 'bar' } })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'application/x-www-form-urlencoded' }),
-      data: 'one=foo&two=bar',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'application/x-www-form-urlencoded' }),
+        data: 'one=foo&two=bar',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type xml', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => xml(ok({ body: '<xml></xml>' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'application/xml' }),
-      data: '<xml></xml>',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'application/xml' }),
+        data: '<xml></xml>',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type pdf', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => pdf(ok({ body: 'tmp' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'application/pdf' }),
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'application/pdf' }),
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type binary', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => binary(ok({ body: 'tmp' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'application/octet-stream' }),
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'application/octet-stream' }),
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response type yaml', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => yaml(ok({ body: 'tmp' })),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      headers: expect.objectContaining({ 'content-type': 'application/yaml' }),
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        headers: expect.objectContaining({ 'content-type': 'application/yaml' }),
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar file with status', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: () => file(join(__dirname, 'test.txt'), { status: 201 }),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test')).resolves.toMatchObject({
-      status: 201,
-      data: 'some stuff\n',
-    });
+      await expect(api.get('/test')).resolves.toMatchObject({
+        status: 201,
+        data: 'some stuff\n',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process laminar file with range', async () => {
-    server = laminar({
+    const server = httpServer({
       port: 8052,
       app: ({ incommingMessage }) => file(join(__dirname, 'test.txt'), { incommingMessage }),
     });
-    await start(server);
+    try {
+      await start(server);
 
-    await expect(api.get('/test', { headers: { Range: 'bytes=0-3' } })).resolves.toMatchObject({
-      status: 206,
-      headers: expect.objectContaining({
-        'content-range': 'bytes 0-3/11',
-      }),
-      data: 'some',
-    });
+      await expect(api.get('/test', { headers: { Range: 'bytes=0-3' } })).resolves.toMatchObject({
+        status: 206,
+        headers: expect.objectContaining({
+          'content-range': 'bytes 0-3/11',
+        }),
+        data: 'some',
+      });
 
-    await expect(api.get('/test', { headers: { Range: 'bytes=5-9' } })).resolves.toMatchObject({
-      status: 206,
-      headers: expect.objectContaining({
-        'content-range': 'bytes 5-9/11',
-      }),
-      data: 'stuff',
-    });
+      await expect(api.get('/test', { headers: { Range: 'bytes=5-9' } })).resolves.toMatchObject({
+        status: 206,
+        headers: expect.objectContaining({
+          'content-range': 'bytes 5-9/11',
+        }),
+        data: 'stuff',
+      });
 
-    await expect(
-      api.get('/test', { headers: { Range: 'bytes=9-12' } }).catch((error) => error.response),
-    ).resolves.toMatchObject({
-      status: 416,
-      headers: expect.objectContaining({
-        'content-range': 'bytes */11',
-      }),
-      data: '',
-    });
+      await expect(
+        api.get('/test', { headers: { Range: 'bytes=9-12' } }).catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 416,
+        headers: expect.objectContaining({
+          'content-range': 'bytes */11',
+        }),
+        data: '',
+      });
+    } finally {
+      await stop(server);
+    }
   });
 });

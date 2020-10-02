@@ -1,9 +1,8 @@
-import { get, post, start, router, laminar, jsonOk, describe } from '@ovotech/laminar';
-import { jwkPublicKey, createSession, JWTSign, JWTVerify } from '@ovotech/laminar-jwt';
+import { get, post, start, router, httpServer, jsonOk, describe } from '@ovotech/laminar';
+import { jwkPublicKey, createSession, authMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
-import { authMiddleware } from '@ovotech/laminar-jwt/src';
 
 /**
  * Make sure we have some response from a url
@@ -18,11 +17,11 @@ nock('http://example.com/').get('/jwk.json').reply(200, jwkFile);
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-const signOptions: JWTSign = {
+const signOptions = {
   secret: privateKey,
-  options: { algorithm: 'RS256', keyid: jwkFile.keys[0].kid },
+  options: { algorithm: 'RS256' as const, keyid: jwkFile.keys[0].kid },
 };
-const verifyOptions: JWTVerify = { secret: publicKey };
+const verifyOptions = { secret: publicKey };
 
 const auth = authMiddleware(verifyOptions);
 
@@ -30,7 +29,7 @@ const auth = authMiddleware(verifyOptions);
 const loggedIn = auth();
 const admin = auth(['admin']);
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),

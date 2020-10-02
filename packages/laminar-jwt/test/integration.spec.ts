@@ -1,24 +1,19 @@
-import { laminar, start, Laminar, router, get, post, stop, jsonOk } from '@ovotech/laminar';
+import { httpServer, start, router, get, post, stop, jsonOk } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
-import { createOapi } from '@ovotech/laminar-oapi';
 import { jwtSecurityResolver, authMiddleware, jwkPublicKey, createSession } from '../src';
-import { Config } from './__generated__/integration';
+import { openApiTyped } from './__generated__/integration';
 import { generateKeyPair } from 'crypto';
 import { promisify } from 'util';
 import * as nock from 'nock';
 import { readFileSync } from 'fs';
 
-let server: Laminar;
-
 describe('Integration', () => {
-  afterEach(() => stop(server));
-
   it('Should process response for secret', async () => {
     const secret = '123';
     const jwtSecurity = jwtSecurityResolver({ secret });
 
-    const config: Config = {
+    const app = await openApiTyped({
       api: join(__dirname, 'integration.yaml'),
       security: { JWTSecurity: jwtSecurity },
       paths: {
@@ -33,9 +28,7 @@ describe('Integration', () => {
           get: ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
         },
       },
-    };
-
-    const app = await createOapi(config);
+    });
 
     const testTokenWithoutScopes = createSession({ secret }, { email: 'tester' }).jwt;
     const testTokenWithOtherScopes = createSession(
@@ -51,83 +44,87 @@ describe('Integration', () => {
       { email: 'tester' },
     ).jwt;
 
-    server = laminar({ app, port: 8064 });
-    await start(server);
+    const server = httpServer({ app, port: 8064 });
+    try {
+      await start(server);
 
-    const api = axios.create({ baseURL: 'http://localhost:8064' });
+      const api = axios.create({ baseURL: 'http://localhost:8064' });
 
-    const { data: token } = await api.post('/session', {
-      email: 'test@example.com',
-      scopes: ['test1', 'plus'],
-    });
+      const { data: token } = await api.post('/session', {
+        email: 'test@example.com',
+        scopes: ['test1', 'plus'],
+      });
 
-    expect(token).toEqual({
-      jwt: expect.any(String),
-      user: { email: 'test@example.com', scopes: ['test1', 'plus'] },
-    });
+      expect(token).toEqual({
+        jwt: expect.any(String),
+        user: { email: 'test@example.com', scopes: ['test1', 'plus'] },
+      });
 
-    const { data: data1 } = await api.get('/test', {
-      headers: { authorization: `Bearer ${token.jwt}` },
-    });
+      const { data: data1 } = await api.get('/test', {
+        headers: { authorization: `Bearer ${token.jwt}` },
+      });
 
-    expect(data1).toEqual({
-      text: 'Test',
-      email: 'test@example.com',
-      iat: expect.any(Number),
-      scopes: ['test1', 'plus'],
-    });
+      expect(data1).toEqual({
+        text: 'Test',
+        email: 'test@example.com',
+        iat: expect.any(Number),
+        scopes: ['test1', 'plus'],
+      });
 
-    const { data: data2 } = await api.get('/test', {
-      headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
-    });
+      const { data: data2 } = await api.get('/test', {
+        headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
+      });
 
-    expect(data2).toEqual({
-      text: 'Test',
-      email: 'tester',
-      iat: expect.any(Number),
-    });
+      expect(data2).toEqual({
+        text: 'Test',
+        email: 'tester',
+        iat: expect.any(Number),
+      });
 
-    const result3 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
-    });
+      const result3 = api.get('/test-scopes', {
+        headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
+      });
 
-    await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
-    });
+      await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
+      });
 
-    const result4 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithOtherScopes}` },
-    });
+      const result4 = api.get('/test-scopes', {
+        headers: { authorization: `Bearer ${testTokenWithOtherScopes}` },
+      });
 
-    await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
-    });
+      await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
+      });
 
-    const result5 = api.get('/test', {
-      headers: { authorization: `Bearer ${testTokenExpires}` },
-    });
+      const result5 = api.get('/test', {
+        headers: { authorization: `Bearer ${testTokenExpires}` },
+      });
 
-    await expect(result5.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: {
-        expiredAt: expect.any(String),
-        message: 'Unauthorized. jwt expired',
-      },
-    });
+      await expect(result5.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          expiredAt: expect.any(String),
+          message: 'Unauthorized. jwt expired',
+        },
+      });
 
-    const result6 = api.get('/test', {
-      headers: { authorization: `Bearer ${testTokenNotBefore}` },
-    });
+      const result6 = api.get('/test', {
+        headers: { authorization: `Bearer ${testTokenNotBefore}` },
+      });
 
-    await expect(result6.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: {
-        date: expect.any(String),
-        message: 'Unauthorized. jwt not active',
-      },
-    });
+      await expect(result6.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          date: expect.any(String),
+          message: 'Unauthorized. jwt not active',
+        },
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process response for public / private key pair and multiple options', async () => {
@@ -173,65 +170,69 @@ describe('Integration', () => {
       ),
     );
 
-    server = laminar({ app, port: 8063 });
-    await start(server);
+    const server = httpServer({ app, port: 8063 });
+    try {
+      await start(server);
 
-    const api = axios.create({ baseURL: 'http://localhost:8063' });
+      const api = axios.create({ baseURL: 'http://localhost:8063' });
 
-    const { data: token } = await api.post('/session', {
-      email: 'test@example.com',
-      scopes: ['test1', 'plus'],
-    });
+      const { data: token } = await api.post('/session', {
+        email: 'test@example.com',
+        scopes: ['test1', 'plus'],
+      });
 
-    expect(token).toEqual({
-      jwt: expect.any(String),
-      user: { email: 'test@example.com', scopes: ['test1', 'plus'] },
-    });
+      expect(token).toEqual({
+        jwt: expect.any(String),
+        user: { email: 'test@example.com', scopes: ['test1', 'plus'] },
+      });
 
-    const { data: data1 } = await api.get('/test', {
-      headers: { authorization: `Bearer ${token.jwt}` },
-    });
+      const { data: data1 } = await api.get('/test', {
+        headers: { authorization: `Bearer ${token.jwt}` },
+      });
 
-    expect(data1).toEqual({
-      text: 'Test',
-      email: 'test@example.com',
-      aud: 'test audience',
-      iat: expect.any(Number),
-      scopes: ['test1', 'plus'],
-    });
+      expect(data1).toEqual({
+        text: 'Test',
+        email: 'test@example.com',
+        aud: 'test audience',
+        iat: expect.any(Number),
+        scopes: ['test1', 'plus'],
+      });
 
-    const { data: data2 } = await api.get('/test', {
-      headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
-    });
+      const { data: data2 } = await api.get('/test', {
+        headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
+      });
 
-    expect(data2).toEqual({
-      aud: 'test audience',
-      text: 'Test',
-      email: 'tester',
-      iat: expect.any(Number),
-    });
+      expect(data2).toEqual({
+        aud: 'test audience',
+        text: 'Test',
+        email: 'tester',
+        iat: expect.any(Number),
+      });
 
-    const result3 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
-    });
+      const result3 = api.get('/test-scopes', {
+        headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
+      });
 
-    await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: {
-        message: 'Unauthorized. User does not have required scopes: [test1]',
-      },
-    });
+      await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          message: 'Unauthorized. User does not have required scopes: [test1]',
+        },
+      });
 
-    const result4 = api.get('/test-scopes', {
-      headers: { authorization: `Bearer ${testTokenWithOtherScopes}` },
-    });
+      const result4 = api.get('/test-scopes', {
+        headers: { authorization: `Bearer ${testTokenWithOtherScopes}` },
+      });
 
-    await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
-      status: 403,
-      data: {
-        message: 'Unauthorized. User does not have required scopes: [test1]',
-      },
-    });
+      await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          message: 'Unauthorized. User does not have required scopes: [test1]',
+        },
+      });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should process jwk urls, with caching and max age settings', async () => {
@@ -251,7 +252,7 @@ describe('Integration', () => {
     };
     const auth = authMiddleware({ secret: publicKey });
 
-    server = laminar({
+    const server = httpServer({
       app: router(
         post('/session', ({ body: { email, scopes } }) =>
           jsonOk(createSession(signOptions, { email, scopes })),
@@ -263,37 +264,42 @@ describe('Integration', () => {
       ),
       port: 8065,
     });
-    await start(server);
 
-    const api = axios.create({ baseURL: 'http://localhost:8065' });
+    try {
+      await start(server);
 
-    const { data: token } = await api.post('/session', {
-      email: 'test@example.com',
-      scopes: ['test1', 'plus'],
-    });
+      const api = axios.create({ baseURL: 'http://localhost:8065' });
 
-    expect(token).toEqual({
-      jwt: expect.any(String),
-      user: { email: 'test@example.com', scopes: ['test1', 'plus'] },
-    });
+      const { data: token } = await api.post('/session', {
+        email: 'test@example.com',
+        scopes: ['test1', 'plus'],
+      });
 
-    const { data: data1 } = await api.get('/test', {
-      headers: { authorization: `Bearer ${token.jwt}` },
-    });
+      expect(token).toEqual({
+        jwt: expect.any(String),
+        user: { email: 'test@example.com', scopes: ['test1', 'plus'] },
+      });
 
-    expect(data1).toEqual({
-      text: 'Test',
-      email: 'test@example.com',
-      iat: expect.any(Number),
-      scopes: ['test1', 'plus'],
-    });
+      const { data: data1 } = await api.get('/test', {
+        headers: { authorization: `Bearer ${token.jwt}` },
+      });
 
-    await new Promise((resolve) => setTimeout(resolve, 10));
+      expect(data1).toEqual({
+        text: 'Test',
+        email: 'test@example.com',
+        iat: expect.any(Number),
+        scopes: ['test1', 'plus'],
+      });
 
-    await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+      await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
 
-    await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
+    } finally {
+      await stop(server);
+    }
   });
 });

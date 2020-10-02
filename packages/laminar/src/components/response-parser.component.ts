@@ -1,16 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ResponseBody, Response, Component } from '../types';
 import { URLSearchParams } from 'url';
-import { response } from '../response';
-import { HttpError } from '../HttpError';
 import { Readable } from 'stream';
 
+/**
+ * Convert a response body into a string / buffer / readable stream
+ */
 export interface ResponseParser {
+  /**
+   * If returns true for a given content type, this parser will be used
+   */
   match: (contentType: string) => boolean;
   parse: (body: any) => ResponseBody;
 }
 
+const jsonResponseParserRegex = /^application\/([^\+\;]+\+)?json(\;.*)?/;
+
 export const jsonResponseParser: ResponseParser = {
-  match: (contentType) => /^application\/([^\+\;]+\+)?json(\;.*)?/.test(contentType),
+  match: (contentType) => jsonResponseParserRegex.test(contentType),
   parse: (body) => JSON.stringify(body),
 };
 
@@ -21,7 +28,7 @@ export const formResponseParser: ResponseParser = {
 
 export const defaultResponseParsers: ResponseParser[] = [jsonResponseParser, formResponseParser];
 
-const contentLength = (body: unknown): number | undefined =>
+const toContentLength = (body: unknown): number | undefined =>
   body instanceof Buffer || typeof body === 'string' ? Buffer.byteLength(body) : undefined;
 
 export const parseResponse = (res: Response, parsers = defaultResponseParsers): Response => {
@@ -33,24 +40,22 @@ export const parseResponse = (res: Response, parsers = defaultResponseParsers): 
     ? res.body
     : String(res.body);
 
-  return {
-    ...res,
-    headers: {
-      ...res.headers,
-      'content-length': res.headers['content-length'] ?? contentLength(body),
-    },
-    body,
-  };
+  const contentLength = res.headers['content-length'] ?? toContentLength(body);
+
+  return { ...res, body, headers: { ...res.headers, 'content-length': contentLength } };
 };
 
+/**
+ * Parse the response body using the provided parsers.
+ * By default support
+ *
+ *  - json
+ *  - url encoded
+ *
+ * @param parsers
+ *
+ * @category component
+ */
 export const responseParserComponent = (parsers = defaultResponseParsers): Component => (
   next,
-) => async (req) => {
-  try {
-    return parseResponse(await next(req), parsers);
-  } catch (error) {
-    return error instanceof HttpError
-      ? response({ body: JSON.stringify(error.body), headers: error.headers, status: error.code })
-      : response({ body: JSON.stringify({ message: error.message }), status: 500 });
-  }
-};
+) => async (req) => parseResponse(await next(req), parsers);

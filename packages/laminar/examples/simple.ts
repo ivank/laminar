@@ -1,7 +1,7 @@
-import { get, post, laminar, start, router, describe, jsonOk, textOk } from '@ovotech/laminar';
+import { get, post, httpServer, start, router, describe, jsonOk, textOk } from '@ovotech/laminar';
 
 const main = async () => {
-  const server = laminar({
+  const server = httpServer({
     port: 3333,
     app: router(
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),

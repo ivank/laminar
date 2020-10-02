@@ -8,15 +8,275 @@ A minimal nodejs http server, built around the concept of strictly typed middlew
 yarn add @ovotech/laminar
 ```
 
-To create an http server that responds to `GET .well-known/health-check`, `GET test` and `POST test`
+Docs for open api itself: https://swagger.io/docs/
 
-> [examples/simple.ts](examples/simple.ts)
+> [examples/oapi.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi.yaml)
+
+```yaml
+---
+openapi: 3.0.0
+info:
+  title: Simple API
+  version: 1.0.0
+servers:
+  - url: 'http: //localhost:3333'
+paths:
+  '/user':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/User'
+      responses:
+        '200':
+          description: Newly Created User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/NewUser'
+    get:
+      responses:
+        '200':
+          description: Loaded User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    NewUser:
+      properties:
+        result:
+          type: string
+        user:
+          '$ref': '#/components/schemas/User'
+      required:
+        - result
+        - user
+```
+
+> [examples/oapi.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi.ts)
 
 ```typescript
-import { get, post, laminar, start, router, describe, jsonOk, textOk } from '@ovotech/laminar';
+import { httpServer, start, describe, jsonOk, openApi } from '@ovotech/laminar';
+import { join } from 'path';
+
+const api = join(__dirname, 'oapi.yaml');
 
 const main = async () => {
-  const server = laminar({
+  const app = await openApi({
+    api,
+    paths: {
+      '/user': {
+        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: () => jsonOk({ email: 'me@example.com' }),
+      },
+    },
+  });
+  const server = httpServer({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();
+```
+
+### Additional options
+
+`api` can be a filename, that would be loaded and parsed (json or yaml). Or it can be the an object representing OpenAPI schema directly. Typescript types would be used to validate that object, as well as using the official json schema to validate it at runtime as well.
+
+`paths` an object closely following the oapi `paths` config, with the "method" function being the actual resolver.
+
+All the validations in open api would be run before executing it.
+
+Validations on the response object shape would also be run, and would result in a 500 error if it doesn't match. This would mean that any clients of this api can be 100% certain they would receive objects in the specified shape.
+
+`security` An object implementing the security requirements, specified in the open api config. More on this later.
+
+### Security
+
+When you define OpenAPI security, you can configure a function that implements that security, and it will be automatically applied to all paths / methods that require it.
+
+> [examples/oapi-security.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi-security.yaml)
+
+```yaml
+---
+openapi: 3.0.0
+info:
+  title: Simple API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/user':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/User'
+      security:
+        - MySecurity:
+            - admin
+      responses:
+        '200':
+          description: Newly Created User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/NewUser'
+    get:
+      security:
+        - MySecurity: []
+      responses:
+        '200':
+          description: Loaded User
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/User'
+components:
+  securitySchemes:
+    MySecurity:
+      type: http
+      scheme: bearer
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    NewUser:
+      properties:
+        result:
+          type: string
+        user:
+          '$ref': '#/components/schemas/User'
+      required:
+        - result
+        - user
+```
+
+> [examples/oapi-security.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi-security.ts)
+
+```typescript
+import {
+  httpServer,
+  describe,
+  jsonOk,
+  start,
+  jsonUnauthorized,
+  openApi,
+  securityOk,
+} from '@ovotech/laminar';
+import { join } from 'path';
+
+const api = join(__dirname, 'oapi-security.yaml');
+
+const main = async () => {
+  const app = await openApi({
+    api,
+    security: {
+      MySecurity: ({ headers }) =>
+        headers.authorization === 'Bearer my-secret-token'
+          ? securityOk({ email: 'me@example.com' })
+          : jsonUnauthorized({ message: 'Unauthorized user' }),
+    },
+    paths: {
+      '/user': {
+        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: () => jsonOk({ email: 'me@example.com' }),
+      },
+    },
+  });
+  const server = httpServer({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();
+```
+
+The security function would also receive the scopes defined in OpenAPI in the second argument, so you can make the authentication more specific
+
+```typescript
+const MySecurity = ({ headers }, { scopes }) => {
+  // ...
+};
+```
+
+### Generating types
+
+You can use [@ovotech/lamina-cli](../lamina-cli) package to generate types.
+
+### Undocumented types
+
+You can define additional types that are not defined by openapi schema. You can use the laminar router for that, by placing the routes before the app, so they take precedence.
+
+> [examples/oapi-undocumented-routes.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/oapi-undocumented-routes.ts)
+
+```typescript
+import {
+  httpServer,
+  start,
+  describe,
+  jsonOk,
+  router,
+  get,
+  redirect,
+  openApi,
+} from '@ovotech/laminar';
+import { join } from 'path';
+
+const api = join(__dirname, 'oapi.yaml');
+
+const main = async () => {
+  const app = await openApi({
+    api,
+    paths: {
+      '/user': {
+        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: () => jsonOk({ email: 'me@example.com' }),
+      },
+    },
+    notFound: router(
+      get('/old/{id}', ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
+      get('/old/{id}/pdf', ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
+    ),
+  });
+
+  const server = httpServer({
+    port: 3333,
+    app,
+  });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();
+```
+
+### Usage without Open API
+
+To create an http server that responds to `GET .well-known/health-check`, `GET test` and `POST test`
+
+> [examples/simple.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/simple.ts)
+
+```typescript
+import { get, post, httpServer, start, router, describe, jsonOk, textOk } from '@ovotech/laminar';
+
+const main = async () => {
+  const server = httpServer({
     port: 3333,
     app: router(
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
@@ -38,12 +298,12 @@ Well it's more about typescript types that automatically apply over middlewares,
 
 Lets see the simplest possible app with laminar, a very simple echo app
 
-> [examples/echo.ts](examples/echo.ts)
+> [examples/echo.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo.ts)
 
 ```typescript
-import { laminar, start, response, describe } from '@ovotech/laminar';
+import { httpServer, start, response, describe } from '@ovotech/laminar';
 
-const server = laminar({ port: 3333, app: ({ body }) => response({ body }) });
+const server = httpServer({ port: 3333, app: ({ body }) => response({ body }) });
 
 start(server).then(() => console.log(describe(server)));
 ```
@@ -56,28 +316,46 @@ Pretty simple, but what if we wanted to add some authentication? This is usually
 Lets just assume that if Authorization header is `Me` then it's me and its fine, otherwise it must be someone else.
 We can go ahead and write a middleware, that would do stuff just before passing stuff to the next middleware.
 
-> [examples/echo-auth.ts](examples/echo-auth.ts)
+> [examples/echo-auth.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { laminar, start, textForbidden, textOk, App, Middleware, describe } from '@ovotech/laminar';
+import {
+  httpServer,
+  start,
+  textForbidden,
+  textOk,
+  App,
+  Middleware,
+  describe,
+} from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: Middleware = (next) => (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
 const app: App = (req) => textOk(req.url.toString());
 
-const server = laminar({ port: 3333, app: auth(app) });
+const server = httpServer({ port: 3333, app: auth(app) });
 
 start(server).then(() => console.log(describe(server)));
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
 
-> [examples/echo-auth-log.ts](examples/echo-auth-log.ts)
+> [examples/echo-auth-log.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { Middleware, App, textForbidden, textOk, start, laminar, describe } from '@ovotech/laminar';
+import {
+  Middleware,
+  App,
+  textForbidden,
+  textOk,
+  start,
+  httpServer,
+  describe,
+} from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: Middleware = (next) => (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -88,7 +366,7 @@ const log: Middleware = (next) => (req) => {
 
 const app: App = (req) => textOk(req.body);
 
-const server = laminar({ port: 3333, app: log(auth(app)) });
+const server = httpServer({ port: 3333, app: log(auth(app)) });
 start(server).then(() => console.log(describe(server)));
 ```
 
@@ -98,10 +376,18 @@ A simple example would be access to an external resource, say a database. We wan
 
 Lets see how we can go about doing that.
 
-> [examples/echo-auth-log-db.ts](examples/echo-auth-log-db.ts)
+> [examples/echo-auth-log-db.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { Middleware, App, textForbidden, jsonOk, start, laminar, describe } from '@ovotech/laminar';
+import {
+  Middleware,
+  App,
+  textForbidden,
+  jsonOk,
+  start,
+  httpServer,
+  describe,
+} from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -125,7 +411,8 @@ const createDbMiddleware = (): Middleware<RequestDB> => {
   return (next) => (req) => next({ ...req, db });
 };
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: Middleware = (next) => (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -142,7 +429,7 @@ const app: App<RequestDB> = (req) => jsonOk({ url: req.url, user: req.db.getVali
 
 const db = createDbMiddleware();
 
-const server = laminar({ port: 3333, app: log(db(auth(app))) });
+const server = httpServer({ port: 3333, app: log(db(auth(app))) });
 start(server).then(() => console.log(describe(server)));
 ```
 
@@ -158,10 +445,19 @@ By default bodyParser has parsers for json, urlencoded and plain text. If nothin
 
 You can write and add your own parsers. Each one has a 'match' function and a 'parse' function. Parse also gets the raw http.IncomingMessage from node.
 
-> [examples/body-parser.ts](examples/body-parser.ts)
+> [examples/body-parser.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/body-parser.ts)
 
 ```typescript
-import { laminar, App, start, textOk, BodyParser, concatStream, defaultBodyParsers, describe } from '@ovotech/laminar';
+import {
+  httpServer,
+  App,
+  start,
+  textOk,
+  BodyParser,
+  concatStream,
+  defaultBodyParsers,
+  describe,
+} from '@ovotech/laminar';
 
 const csvParser: BodyParser = {
   match: (contentType) => contentType === 'text/csv',
@@ -170,7 +466,7 @@ const csvParser: BodyParser = {
 
 const app: App = ({ body }) => textOk(JSON.stringify(body));
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app,
   options: { bodyParsers: [csvParser, ...defaultBodyParsers] },
@@ -183,17 +479,26 @@ start(server).then(() => console.log(describe(server)));
 
 The router middleware allows you to respond to requests based on what path was requested, as well as extract information from that path for use in processing your request.
 
-> [examples/router.ts](examples/router.ts)
+> [examples/router.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/router.ts)
 
 ```typescript
-import { get, put, laminar, router, start, jsonOk, jsonNotFound, describe } from '@ovotech/laminar';
+import {
+  get,
+  put,
+  httpServer,
+  router,
+  start,
+  jsonOk,
+  jsonNotFound,
+  describe,
+} from '@ovotech/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
   '2': 'Foo',
 };
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
@@ -215,12 +520,12 @@ Path parameters are written in `{nameOfParameter}` style, and each name is extra
 
 If none of the routes match, the router would return a generic 404. You can modify that by using `defaultRoute` at the end of all the matchers. You can also use `response` helper to set custom status code.
 
-> [examples/default-route.ts](examples/default-route.ts)
+> [examples/default-route.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/default-route.ts)
 
 ```typescript
-import { get, laminar, router, jsonOk, textNotFound, start, describe } from '@ovotech/laminar';
+import { get, httpServer, router, jsonOk, textNotFound, start, describe } from '@ovotech/laminar';
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
@@ -233,17 +538,17 @@ start(server).then(() => console.log(describe(server)));
 
 You can also configure a route to ba a static folder with assets. Works with nested folders as well, does not support index pages.
 
-> [examples/static-assets.ts](examples/static-assets.ts)
+> [examples/static-assets.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/static-assets.ts)
 
 ```typescript
-import { get, laminar, router, directory, start, jsonOk, describe } from '@ovotech/laminar';
+import { get, httpServer, router, staticAssets, start, jsonOk, describe } from '@ovotech/laminar';
 import { join } from 'path';
 
 const main = async () => {
-  const server = laminar({
+  const server = httpServer({
     port: 3333,
     app: router(
-      directory('/my-folder', join(__dirname, 'assets')),
+      staticAssets('/my-folder', join(__dirname, 'assets')),
       get('/', () => jsonOk({ health: 'ok' })),
     ),
   });
@@ -271,12 +576,12 @@ All the available route matchers are:
 
 Each laminar app must return a response object. Response objects are created with the various helpers. Example how it all looks like:
 
-> [examples/cors.ts](examples/response.ts)
+> [examples/cors.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/response.ts)
 
 ```typescript
 import {
   get,
-  laminar,
+  httpServer,
   router,
   start,
   jsonOk,
@@ -297,11 +602,13 @@ import {
 } from '@ovotech/laminar';
 import { join } from 'path';
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: router(
     // Redirects
-    get('/redirect', () => redirect('http://my-new-location.example.com', { headers: { 'X-Other': 'Other' } })),
+    get('/redirect', () =>
+      redirect('http://my-new-location.example.com', { headers: { 'X-Other': 'Other' } }),
+    ),
 
     // Static files
     get('/static-file', () => file(join(__dirname, 'assets/start.svg'))),
@@ -389,10 +696,19 @@ A cors handling middleware comes with laminar as well.
 
 For example this would allow only 'example.com' and 'localhost' as origins.
 
-> [examples/cors.ts](examples/cors.ts)
+> [examples/cors.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/cors.ts)
 
 ```typescript
-import { start, jsonOk, get, put, laminar, router, corsMiddleware, describe } from '@ovotech/laminar';
+import {
+  start,
+  jsonOk,
+  get,
+  put,
+  httpServer,
+  router,
+  corsMiddleware,
+  describe,
+} from '@ovotech/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -403,7 +719,7 @@ const cors = corsMiddleware({
   allowOrigin: (origin) => ['http://example.com', 'http://localhost'].includes(origin),
 });
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: cors(
     router(
@@ -424,10 +740,19 @@ start(server).then(() => console.log(describe(server)));
 
 There's a simple middleware that allows you to log requests, responses and pass in a your own logger as a context.
 
-> [examples/logging.ts](examples/logging.ts)
+> [examples/logging.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/logging.ts)
 
 ```typescript
-import { get, put, laminar, start, router, jsonOk, loggingMiddleware, describe } from '@ovotech/laminar';
+import {
+  get,
+  put,
+  httpServer,
+  start,
+  router,
+  jsonOk,
+  loggingMiddleware,
+  describe,
+} from '@ovotech/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -436,7 +761,7 @@ const users: Record<string, string> = {
 
 const logging = loggingMiddleware(console);
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: logging(
     router(
@@ -458,21 +783,20 @@ start(server).then(() => console.log(describe(server)));
 
 laminar can use node's https server.
 
-> [examples/simple-https.ts](examples/simple-https.ts)
+> [examples/simple-https.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/simple-https.ts)
 
 ```typescript
-import { get, post, laminar, router, start, textOk, jsonOk, describe } from '@ovotech/laminar';
+import { get, post, httpsServer, router, start, textOk, jsonOk, describe } from '@ovotech/laminar';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 const main = async () => {
-  const server = laminar({
+  const server = httpsServer({
     port: 8443,
-    https: {
+    serverOptions: {
       key: readFileSync(join(__dirname, 'key.pem')),
       cert: readFileSync(join(__dirname, 'cert.pem')),
     },
-
     app: router(
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
       post('/test', () => textOk('submited')),

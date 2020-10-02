@@ -20,7 +20,7 @@ Supported JSON Schema drafts
 yarn add @ovotech/json-schema
 ```
 
-> [examples/simple.ts](examples/simple.ts)
+> [examples/simple.ts](https://github.com/ovotech/laminar/tree/master/packages/json-schema/examples/simple.ts)
 
 ```typescript
 import { validate, Schema } from '@ovotech/json-schema';
@@ -56,7 +56,7 @@ It was made as a lightweight dependency to [@ovotech/laminar](https://github.com
 
 If we assume we have those 2 http resources at the given URLs, You can compile the schema once, downloading the relevant URLs, and then use the `CompiledSchema` to perform any further validation without downloading and parsing the files again.
 
-> [examples/compile-urls.ts](examples/compile-urls.ts)
+> [examples/compile-urls.ts](https://github.com/ovotech/laminar/tree/master/packages/json-schema/examples/compile-urls.ts)
 
 ```typescript
 import { validate, compile } from '@ovotech/json-schema';
@@ -107,7 +107,7 @@ compile('https://example.com/schema').then((schema) => {
 
 You can also provide paths to local files to download the schema from. It it ends with "yaml" or "yml" it would be loaded as YAML, otherwise it would be parsed as JSON.
 
-> [examples/validate-local-schema.ts](examples/validate-local-schema.ts)
+> [examples/validate-local-schema.ts](https://github.com/ovotech/laminar/tree/master/packages/json-schema/examples/validate-local-schema.ts)
 
 ```typescript
 import { validateCompiled, validate, compile } from '@ovotech/json-schema';

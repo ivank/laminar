@@ -1,10 +1,9 @@
-import { Config } from './__generated__/petstore';
+import { openApiTyped } from './__generated__/petstore';
 import { pathPetsGet, pathPetsIdGet, pathPetsIdDelete, pathPetsPost } from './paths';
 import { pgPoolMiddleware, RequestPgPool } from './middleware/pg-pool.middleware';
 import { join } from 'path';
 import { jwtSecurityResolver, verifyToken } from '@ovotech/laminar-jwt';
-import { laminar, Laminar, Logger, loggingMiddleware } from '@ovotech/laminar';
-import { createOapi } from '@ovotech/laminar-oapi';
+import { httpServer, HttpServer, Logger, loggingMiddleware } from '@ovotech/laminar';
 import { petsDbMiddleware, RequestPetsDb } from './middleware';
 import { Pool } from 'pg';
 
@@ -16,14 +15,25 @@ export interface Options {
   logger: Logger;
 }
 
-export const createApp = async (options: Options): Promise<Laminar> => {
+/**
+ * Create the http server to be started and stopped by the main executor
+ * Separating it this way allows us to test it easily
+ */
+export const createApp = async (options: Options): Promise<HttpServer> => {
   const jwtVerify = { secret: options.secret };
 
-  const config: Config<RequestPgPool & RequestPetsDb> = {
+  const oapi = await openApiTyped<RequestPgPool & RequestPetsDb>({
     api: join(__dirname, '../petstore.yaml'),
     security: {
-      // Since JWT tokens are a common case, we have an easy wrapper function to handle it
+      /**
+       * Since JWT tokens are a common case, we have an easy wrapper function to handle it
+       */
       BearerAuth: jwtSecurityResolver(jwtVerify),
+
+      /**
+       * Everything else can use the `verifyToken` method that handles raw jwt tokens
+       * It returns either a response object or a securityOk object, containing the authenticated user
+       */
       ApiKeyAuth: ({ headers, scopes }) => verifyToken(jwtVerify, headers['x-api-key'], scopes),
       CookieAuth: ({ cookies, scopes }) => verifyToken(jwtVerify, cookies.auth, scopes),
       QueryAuth: ({ query, scopes }) => verifyToken(jwtVerify, query.token, scopes),
@@ -38,9 +48,20 @@ export const createApp = async (options: Options): Promise<Laminar> => {
         delete: pathPetsIdDelete,
       },
     },
-  };
+  });
 
-  const oapi = await createOapi(config);
+  /**
+   * The pool middleware will provide access to the postgres pool
+   * While pets db middleware would use a connection from that pool to save / load pets
+   *
+   * They are separate this way since we want to have an isolated connection _per request_
+   * so no one request can accidentally get data from another.
+   *
+   * Pg Pool would get a connection from the pool for each request,
+   * and pets db would use that to pass a object to manipulate the model safely
+   *
+   * Their internal types make sure all dependencies are met at compile time.
+   */
   const pgPool = pgPoolMiddleware(options.pool);
   const petsDb = petsDbMiddleware();
   const logging = loggingMiddleware(options.logger);
@@ -49,5 +70,5 @@ export const createApp = async (options: Options): Promise<Laminar> => {
   // The typescript types will ensure they are applied in the right order, and no dependencies are missing
   const app = logging(pgPool(petsDb(oapi)));
 
-  return laminar({ app, port: options.port, hostname: options.hostname });
+  return httpServer({ app, port: options.port, hostname: options.hostname });
 };

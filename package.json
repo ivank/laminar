@@ -11,12 +11,14 @@
     "lint": "yarn workspaces run lint",
     "build": "lerna run build",
     "publish": "lerna run publish",
-    "build:docs": "build-docs README.md"
+    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/master && for f in docs/*.md; do build-docs $f 'https://github.com/ovotech/laminar/tree/master'; done",
+    "build:api": "typedoc --out docs/api packages/{laminar,laminar-jwt,laminar-handlebars,json-schema}/src/index.ts --mode library"
   },
   "workspaces": [
     "packages/*",
+    "examples/*",
     "performance",
-    "examples/*"
+    "website"
   ],
   "jest": {
     "preset": "./jest.json"

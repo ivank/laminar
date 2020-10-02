@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
@@ -19,6 +19,8 @@
     "axios": "^0.19.2",
     "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
+    "axios-cookiejar-support": "^1.0.0",
+    "nock": "^13.0.4",
     "jest": "^26.4.2",
     "prettier": "^2.1.2",
     "stream-mock": "^2.0.5",
@@ -28,7 +30,7 @@
   },
   "scripts": {
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md",
+    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/master/packages/laminar",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",
@@ -38,7 +40,10 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
+    "mime-types": "^2.1.27",
+    "@ovotech/json-schema": "^0.5.3",
     "cookie": "^0.4.1",
-    "mime-types": "^2.1.27"
+    "openapi-schemas": "^2.0.3",
+    "openapi3-ts": "^2.0.0"
   }
 }

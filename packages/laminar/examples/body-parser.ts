@@ -1,4 +1,13 @@
-import { laminar, App, start, textOk, BodyParser, concatStream, defaultBodyParsers, describe } from '@ovotech/laminar';
+import {
+  httpServer,
+  App,
+  start,
+  textOk,
+  BodyParser,
+  concatStream,
+  defaultBodyParsers,
+  describe,
+} from '@ovotech/laminar';
 
 const csvParser: BodyParser = {
   match: (contentType) => contentType === 'text/csv',
@@ -7,7 +16,7 @@ const csvParser: BodyParser = {
 
 const app: App = ({ body }) => textOk(JSON.stringify(body));
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app,
   options: { bodyParsers: [csvParser, ...defaultBodyParsers] },

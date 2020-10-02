@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { laminar, Middleware, App, jsonOk, start, stop } from '../../src';
+import { httpServer, Middleware, App, jsonOk, start, stop } from '../../src';
 
 interface One {
   one: string;
@@ -35,26 +35,29 @@ const appWithAutoAssign: App = withOne(
 
 describe('Nested middleware', () => {
   it('Should propagate multiple middlewarres ', async () => {
-    const server = laminar({ app, port: 8095 });
+    const server = httpServer({ app, port: 8095 });
     await start(server);
     const api = axios.create({ baseURL: 'http://localhost:8095' });
+    try {
+      const result = await api.get('/test2');
 
-    const result = await api.get('/test2');
-
-    expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
-
-    await stop(server);
+      expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
+    } finally {
+      await stop(server);
+    }
   });
 
   it('Should be able to pass context automatically', async () => {
-    const server = laminar({ app: appWithAutoAssign, port: 8095 });
-    await start(server);
+    const server = httpServer({ app: appWithAutoAssign, port: 8095 });
     const api = axios.create({ baseURL: 'http://localhost:8095' });
+    try {
+      await start(server);
 
-    const result = await api.get('/test2');
+      const result = await api.get('/test2');
 
-    expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
-
-    await stop(server);
+      expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
+    } finally {
+      await stop(server);
+    }
   });
 });

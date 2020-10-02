@@ -4,10 +4,10 @@ A json web token middleware for laminar
 
 ### Usage
 
-> [examples/simple.ts](examples/simple.ts)
+> [examples/simple.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/simple.ts)
 
 ```typescript
-import { get, post, start, laminar, jsonOk, router, App, describe } from '@ovotech/laminar';
+import { get, post, start, httpServer, jsonOk, router, App, describe } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 
 const secret = '123';
@@ -30,7 +30,7 @@ const app: App = router(
   ),
 );
 
-const server = laminar({ port: 3333, app });
+const server = httpServer({ port: 3333, app });
 
 start(server).then(() => console.log(describe(server)));
 ```
@@ -38,6 +38,8 @@ start(server).then(() => console.log(describe(server)));
 ### Usage with oapi
 
 If we had this basic oapi.yaml
+
+> [examples/oapi.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi.yaml)
 
 ```yaml
 ---
@@ -64,6 +66,7 @@ paths:
   '/test':
     post:
       security:
+        # Using the JWTSecurity with admin scopes
         - JWTSecurity: ['admin']
       responses:
         '200':
@@ -73,6 +76,7 @@ paths:
               schema: { $ref: '#/components/schemas/Test' }
     get:
       security:
+        # Using the JWTSecurity with no scopes
         - JWTSecurity: []
       responses:
         '200':
@@ -83,6 +87,7 @@ paths:
 
 components:
   securitySchemes:
+    # Defining the JWTSecurity schema to be used on the routes
     JWTSecurity:
       type: http
       scheme: bearer
@@ -119,19 +124,18 @@ components:
         - text
 ```
 
-And then implement it like this
+And then implement it using the helper `jwtSecurityResolver`. That function would return a `securityOk` object if the jwt was validated, with the contents of the jwt, or a 403 error response.
 
-> [examples/oapi.ts](examples/oapi.ts)
+> [examples/oapi.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi.ts)
 
 ```typescript
-import { laminar, start, describe, jsonOk } from '@ovotech/laminar';
+import { httpServer, start, describe, jsonOk, openApi } from '@ovotech/laminar';
 import { createSession, jwtSecurityResolver } from '@ovotech/laminar-jwt';
-import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 
 const main = async () => {
   const secret = '123';
-  const app = await createOapi({
+  const app = await openApi({
     api: join(__dirname, 'oapi.yaml'),
     security: { JWTSecurity: jwtSecurityResolver({ secret }) },
     paths: {
@@ -144,7 +148,266 @@ const main = async () => {
       },
     },
   });
-  const server = laminar({ port: 3333, app });
+  const server = httpServer({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();
+```
+
+### Cookie security
+
+If you need the old school but still awesome cookie security, OpenAPI can handle that too - [docs for cookie auth with OpenAPI](https://swagger.io/docs/specification/authentication/cookie-authentication/). You can use the "apiKey" security to define it.
+
+> [examples/oapi-api-key.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-api-key.yaml)
+
+```yaml
+---
+openapi: 3.0.0
+info:
+  title: Test
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/session':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/User' }
+      responses:
+        '200':
+          description: A session object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: auth=abcde12345; Path=/; HttpOnly
+  '/test':
+    post:
+      description: Protected by CookieSecurity, no scopes
+      security:
+        - CookieSecurity: []
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+    get:
+      description: Protected by CookieSecurity, no scopes
+      security:
+        - CookieSecurity: []
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+
+components:
+  securitySchemes:
+    CookieSecurity:
+      description: Security using the `auth` cookie. To be used in the routes.
+      type: apiKey
+      in: cookie
+      name: auth
+
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    Text:
+      type: string
+```
+
+Implementing it involves reading the cookie and validating its contents.
+
+> [examples/oapi-api-key.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-api-key.ts)
+
+```typescript
+import { httpServer, start, describe, openApi, textOk, setCookie } from '@ovotech/laminar';
+import { createSession, verifyToken } from '@ovotech/laminar-jwt';
+import { join } from 'path';
+
+const main = async () => {
+  const secret = '123';
+  const app = await openApi({
+    api: join(__dirname, 'oapi-api-key.yaml'),
+    security: {
+      /**
+       * Implement cookie security.
+       */
+      CookieSecurity: ({ cookies, scopes }) => verifyToken({ secret }, cookies?.auth, scopes),
+    },
+    paths: {
+      '/session': {
+        post: ({ body }) =>
+          setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+      },
+      '/test': {
+        get: () => textOk('OK'),
+        post: ({ authInfo }) => textOk(`OK ${authInfo.email}`),
+      },
+    },
+  });
+  const server = httpServer({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();
+```
+
+### Custom security resolvers
+
+OpenApi supports more security methods, and they can be implemented with a security resolver.
+Since a security resolver is just a function that gets request properties and returns either `securityOk` or a `Response` object, we can do a lot of custom things.
+
+> [examples/oapi-custom.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-custom.yaml)
+
+```yaml
+---
+openapi: 3.0.0
+info:
+  title: Test
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/session':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: { $ref: '#/components/schemas/User' }
+      responses:
+        '200':
+          description: A session object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: auth=abcde12345; Path=/; HttpOnly
+  '/test':
+    post:
+      description: Either CookieSecurity or CloudSchedulerSecurity should match, no scopes
+      security:
+        - CookieSecurity: []
+        - CloudSchedulerSecurity: []
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+    get:
+      description: Only CookieSecurity can be used for this route, no scopes, no scopes
+      security:
+        - CookieSecurity: []
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+  '/unauthorized':
+    get:
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            text/plain:
+              schema: { $ref: '#/components/schemas/Text' }
+
+components:
+  securitySchemes:
+    CookieSecurity:
+      description: Security using the `auth` cookie. To be used in the routes.
+      type: apiKey
+      in: cookie
+      name: auth
+    CloudSchedulerSecurity:
+      description: Security using the `X-CloudScheduler` header. To be used in the routes.
+      type: apiKey
+      in: header
+      name: 'x-cloudscheduler'
+
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    Text:
+      type: string
+```
+
+> [examples/oapi-custom.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-custom.ts)
+
+```typescript
+import {
+  httpServer,
+  start,
+  describe,
+  openApi,
+  redirect,
+  isSecurityOk,
+  securityOk,
+  textOk,
+  textForbidden,
+  setCookie,
+} from '@ovotech/laminar';
+import { createSession, verifyToken } from '@ovotech/laminar-jwt';
+import { join } from 'path';
+
+const main = async () => {
+  const secret = '123';
+  const app = await openApi({
+    api: join(__dirname, 'oapi-custom.yaml'),
+    security: {
+      /**
+       * Implement additional cookie security.
+       * In an event of a failure, we'd want to redirect to an error page, instead of returning a 403 response
+       */
+      CookieSecurity: async ({ cookies, scopes }) => {
+        const result = await verifyToken({ secret }, cookies?.auth, scopes);
+        return isSecurityOk(result) ? result : redirect('/unauthorized');
+      },
+      /**
+       * Cloud Scheduler would ensure that this header is never sent outside of the app engine environment,
+       * so we're safe just checking for the existance of the header.
+       */
+      CloudSchedulerSecurity: ({ headers }) =>
+        headers['x-cloudscheduler'] ? securityOk({}) : textForbidden('Not Cloud Scheduler Job'),
+    },
+    paths: {
+      '/session': {
+        post: ({ body }) =>
+          setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+      },
+      '/test': {
+        get: () => textOk('OK'),
+        post: ({ authInfo }) => textOk(`OK ${authInfo.email}`),
+      },
+      '/unauthorized': { get: () => textForbidden('Forbidden!') },
+    },
+  });
+  const server = httpServer({ port: 3333, app });
   await start(server);
   console.log(describe(server));
 };
@@ -156,10 +419,10 @@ main();
 
 You can specify public / private key pair (where the private key is used for signing and the public for verifying)
 
-> [examples/keypair.ts](examples/keypair.ts)
+> [examples/keypair.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keypair.ts)
 
 ```typescript
-import { get, post, laminar, router, start, jsonOk, App, describe } from '@ovotech/laminar';
+import { get, post, httpServer, router, start, jsonOk, App, describe } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -191,7 +454,7 @@ const app: App = router(
   ),
 );
 
-const server = laminar({ port: 3333, app });
+const server = httpServer({ port: 3333, app });
 start(server).then(() => console.log(describe(server)));
 ```
 
@@ -199,15 +462,14 @@ start(server).then(() => console.log(describe(server)));
 
 JWK are also supported with the `jwkPublicKey` function. It can also cache the jwk request.
 
-> [examples/jwk.ts](examples/jwk.ts)
+> [examples/jwk.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/jwk.ts)
 
 ```typescript
-import { get, post, start, router, laminar, jsonOk, describe } from '@ovotech/laminar';
-import { jwkPublicKey, createSession, JWTSign, JWTVerify } from '@ovotech/laminar-jwt';
+import { get, post, start, router, httpServer, jsonOk, describe } from '@ovotech/laminar';
+import { jwkPublicKey, createSession, authMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
-import { authMiddleware } from '@ovotech/laminar-jwt/src';
 
 /**
  * Make sure we have some response from a url
@@ -222,11 +484,11 @@ nock('http://example.com/').get('/jwk.json').reply(200, jwkFile);
 const publicKey = jwkPublicKey({ uri: 'http://example.com/jwk.json', cache: true });
 const privateKey = readFileSync(join(__dirname, './private-key.pem'), 'utf8');
 
-const signOptions: JWTSign = {
+const signOptions = {
   secret: privateKey,
-  options: { algorithm: 'RS256', keyid: jwkFile.keys[0].kid },
+  options: { algorithm: 'RS256' as const, keyid: jwkFile.keys[0].kid },
 };
-const verifyOptions: JWTVerify = { secret: publicKey };
+const verifyOptions = { secret: publicKey };
 
 const auth = authMiddleware(verifyOptions);
 
@@ -234,7 +496,7 @@ const auth = authMiddleware(verifyOptions);
 const loggedIn = auth();
 const admin = auth(['admin']);
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
@@ -255,7 +517,7 @@ start(server).then(() => console.log(describe(server)));
 
 You can test it by running (requires curl and jq):
 
-> [examples/jwk.sh](examples/jwk.sh)
+> [examples/jwk.sh](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/jwk.sh)
 
 ```bash
 JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","scopes":["admin"]}' | jq '.jwt' -r`
@@ -268,7 +530,7 @@ In order to use keycloak as public / private pair you'll need to provide a custo
 
 If we had a keycloak config like this:
 
-> [examples/keycloak-config.yaml](examples/keycloak-config.yaml)
+> [examples/keycloak-config.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keycloak-config.yaml)
 
 ```yaml
 my-service-name:
@@ -282,15 +544,14 @@ other-client-service:
 
 Then we could implement it with this service:
 
-> [examples/keycloak.ts](examples/keycloak.ts)
+> [examples/keycloak.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keycloak.ts)
 
 ```typescript
-import { get, post, laminar, router, start, jsonOk, describe } from '@ovotech/laminar';
-import { jwkPublicKey, createSession } from '@ovotech/laminar-jwt';
+import { get, post, httpServer, router, start, jsonOk, describe } from '@ovotech/laminar';
+import { jwkPublicKey, createSession, keycloakAuthMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as nock from 'nock';
-import { keycloakAuthMiddleware } from '@ovotech/laminar-jwt/src';
 
 /**
  * Make sure we have some response from a url
@@ -314,7 +575,7 @@ const auth = keycloakAuthMiddleware({ secret: publicKey, service: 'my-service-na
 const loggedIn = auth();
 const admin = auth(['admin']);
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
@@ -334,7 +595,7 @@ start(server).then(() => console.log(describe(server)));
 
 When this is running, you can test it with calls like this (requires curl and jq):
 
-> [examples/keycloak.sh](examples/keycloak.sh)
+> [examples/keycloak.sh](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keycloak.sh)
 
 ```bash
 JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
@@ -343,12 +604,11 @@ curl --request POST --header "Authorization: Bearer ${JWT}" http://localhost:333
 
 With oapi it is the same concempt - we use the scopes that are defined by the open api standard to check against the values from the keycloack resource access value:
 
-> [examples/oapi-keycloak.ts](examples/oapi-keycloak.ts)
+> [examples/oapi-keycloak.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-keycloak.ts)
 
 ```typescript
-import { start, laminar, describe, jsonOk } from '@ovotech/laminar';
+import { start, httpServer, describe, jsonOk, openApi } from '@ovotech/laminar';
 import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@ovotech/laminar-jwt';
-import { createOapi } from '@ovotech/laminar-oapi';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import * as nock from 'nock';
@@ -375,7 +635,7 @@ const main = async () => {
     service: 'my-service-name',
   });
 
-  const app = await createOapi({
+  const app = await openApi({
     api: join(__dirname, 'oapi.yaml'),
     security: { JWTSecurity: jwtSecurity },
     paths: {
@@ -388,7 +648,7 @@ const main = async () => {
       },
     },
   });
-  const server = laminar({ port: 3333, app });
+  const server = httpServer({ port: 3333, app });
   await start(server);
   console.log(describe(server));
 };
@@ -398,7 +658,7 @@ main();
 
 When this is running, this can be again test with (requires curl and jq):
 
-> [examples/oapi-keycloak.sh](examples/oapi-keycloak.sh)
+> [examples/oapi-keycloak.sh](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-keycloak.sh)
 
 ```bash
 JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`

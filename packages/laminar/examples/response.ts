@@ -1,6 +1,6 @@
 import {
   get,
-  laminar,
+  httpServer,
   router,
   start,
   jsonOk,
@@ -21,11 +21,13 @@ import {
 } from '@ovotech/laminar';
 import { join } from 'path';
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: router(
     // Redirects
-    get('/redirect', () => redirect('http://my-new-location.example.com', { headers: { 'X-Other': 'Other' } })),
+    get('/redirect', () =>
+      redirect('http://my-new-location.example.com', { headers: { 'X-Other': 'Other' } }),
+    ),
 
     // Static files
     get('/static-file', () => file(join(__dirname, 'assets/start.svg'))),

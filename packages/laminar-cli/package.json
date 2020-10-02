@@ -1,0 +1,62 @@
+{
+  "name": "@ovotech/laminar-cli",
+  "version": "0.9.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "CLI generating typescript types for @ovotech/laminar",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar-cli#readme",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@ovotech/laminar": "^0.8.0",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.1",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "axios": "^0.19.2",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.11.0",
+    "jest": "^26.4.2",
+    "pg": "^8.3.3",
+    "prettier": "^2.1.2",
+    "ts-jest": "^26.4.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  },
+  "bin": {
+    "laminar": "./scripts/laminar"
+  },
+  "scripts": {
+    "laminar": "node -r ts-node/register src/cli.ts",
+    "build:test:petstore": "yarn laminar api --file test/api/petstore.yaml --output test/api/__generated__/petstore.ts",
+    "build:test:loss": "yarn laminar api --file test/api/loss.yaml --output test/api/__generated__/loss.ts",
+    "build:test:statements": "yarn laminar api --file test/api/statements.yaml --output test/api/__generated__/statements.ts",
+    "build:test:axios": "yarn laminar axios --file test/axios/integration.yaml --output test/axios/__generated__/integration.axios.ts",
+    "build:test:axios-api": "yarn laminar api --file test/axios/integration.yaml --output test/axios/__generated__/integration.api.ts",
+    "build:test:pullrequest": "yarn laminar json-schema --file test/json-schema/pullrequest.yaml --output test/json-schema/__generated__/pullrequest.ts",
+    "build:examples:api": "yarn laminar api --file examples/api.yaml --output examples/__generated__/api.yaml.ts",
+    "build:examples:axios": "yarn laminar axios --file examples/axios.yaml --output examples/__generated__/axios.yaml.ts",
+    "build:examples:petstore": "yarn laminar axios --file examples/petstore.json --output examples/__generated__/petstore.json.ts",
+    "build:examples": "yarn build:examples:api && yarn build:examples:axios && yarn build:examples:petstore",
+    "build:test": "yarn build:test:petstore && yarn build:test:statements && yarn build:test:loss && yarn build:test:axios && yarn build:test:axios-api",
+    "pretest": "yarn build:examples && yarn build:test",
+    "build": "tsc --declaration",
+    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/master/packages/laminar-cli",
+    "test": "jest test --runInBand",
+    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
+    "lint:eslint": "eslint '{src,test}/**/*.ts'",
+    "lint": "yarn lint:prettier && yarn lint:eslint"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "dependencies": {
+    "@ovotech/json-schema": "^0.5.3",
+    "@ovotech/ts-compose": "^0.15.0",
+    "chalk": "^4.0.0",
+    "commander": "^6.1.0",
+    "openapi-schemas": "^2.0.3",
+    "openapi3-ts": "^2.0.0"
+  }
+}

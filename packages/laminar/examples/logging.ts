@@ -1,4 +1,13 @@
-import { get, put, laminar, start, router, jsonOk, loggingMiddleware, describe } from '@ovotech/laminar';
+import {
+  get,
+  put,
+  httpServer,
+  start,
+  router,
+  jsonOk,
+  loggingMiddleware,
+  describe,
+} from '@ovotech/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -7,7 +16,7 @@ const users: Record<string, string> = {
 
 const logging = loggingMiddleware(console);
 
-const server = laminar({
+const server = httpServer({
   port: 3333,
   app: logging(
     router(
