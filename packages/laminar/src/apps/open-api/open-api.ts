@@ -74,11 +74,11 @@ export async function openApi<TRequest extends Empty>(
       return notFound(req);
     }
 
-    const reqOapi: TRequest & AppRequest & RequestOapi = {
+    const reqOapi: TRequest & AppRequest & RequestOapi = select.route.coerce({
       ...req,
       authInfo: undefined,
       path: select.path,
-    };
+    });
 
     const checkRequest = validateCompiled({
       schema: compileInContext(select.route.request, oapi),

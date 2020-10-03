@@ -7,7 +7,7 @@ import {
   ResolvedRequestBodyObject,
   ResolvedResponseObject,
 } from './resolved-openapi-object';
-import { OapiPaths, Route, Matcher, OapiPath } from './types';
+import { OapiPaths, Route, Matcher, OapiPath, Coerce } from './types';
 import { Schema } from '@ovotech/json-schema';
 import { toMatchPattern, toPathKeys, toPathRe } from '../../helpers';
 import { SecurityRequirementObject, SecuritySchemeObject, SchemaObject } from 'openapi3-ts';
@@ -33,7 +33,9 @@ function toMatcher(path: string, method: string): Matcher {
 /**
  * Convert an OpenApi parameter name into a parameter name from {@link RequestOapi}
  */
-function toParamLocation(location: string): string {
+function toParamLocation(
+  location: 'query' | 'header' | 'path' | 'cookie',
+): 'query' | 'headers' | 'path' | 'cookies' {
   switch (location) {
     case 'header':
       return 'headers';
@@ -123,12 +125,9 @@ function toRequestSchema(
     parameters: commonParameters,
   }: Pick<ResolvedPathItemObject, 'summary' | 'parameters' | 'description'>,
 ): Schema {
-  const security = operationSecurity || defaultSecurity;
+  const security = operationSecurity ?? defaultSecurity;
   const securitySchemes = components && components.securitySchemes;
-  const allParameters = [
-    ...(parameters ? parameters : []),
-    ...(commonParameters ? commonParameters : []),
-  ];
+  const allParameters = (parameters ?? []).concat(commonParameters ?? []);
   if (security && securitySchemes) {
     toSecuritySchema(security, securitySchemes);
   }
@@ -138,6 +137,72 @@ function toRequestSchema(
       ...(requestBody ? [toRequestBodySchema(requestBody)] : []),
     ],
   };
+}
+
+/**
+ * Coerce raw string value into its intended type, based on the Json Schema
+ * Since query parameters come only as string, but we still want to type them as "integer" or "boolean"
+ * We attempt to coerce the type to the desired one
+ */
+type Coercer = (value: string) => unknown;
+
+const trueString = ['true', 'yes', '1'];
+const falseString = ['false', 'no', '0'];
+
+const coercers: { [key: string]: Coercer } = {
+  integer: (value) => {
+    const num = Number(value);
+    return Number.isInteger(num) ? num : value;
+  },
+  number: (value) => {
+    const num = Number(value);
+    return !Number.isNaN(num) ? num : value;
+  },
+  boolean: (value) =>
+    trueString.includes(value) ? true : falseString.includes(value) ? false : value,
+  null: (value) => (value === 'null' ? null : value),
+};
+
+/**
+ * If a parameter is defined to be integer, attempt to convert the string value to integer first
+ * Since all parameter values would be strings, this allows us to validate even numeric values
+ * @param parameter
+ */
+function toParameterCoerce<TRequest extends Empty>(
+  parameter: ResolvedParameterObject,
+): Coerce<TRequest> | undefined {
+  const coercer = coercers[parameter.schema?.type ?? ''];
+  if (coercer) {
+    return (req) => {
+      const location = toParamLocation(parameter.in);
+      const rawValue = req[location]?.[parameter.name];
+      if (rawValue !== undefined) {
+        const value = coercer(req[location][parameter.name]);
+        return { ...req, [location]: { ...req[location], [parameter.name]: value } };
+      } else {
+        return req;
+      }
+    };
+  } else {
+    return undefined;
+  }
+}
+
+/**
+ * If a request has parameters, defined to be integer, attempt to convert the string value to integer first
+ * Since all parameter values would be strings, this allows us to validate even numeric values
+ */
+function toRequestCoerce<TRequest extends Empty>(
+  { parameters }: ResolvedOperationObject,
+  { parameters: commonParameters }: Pick<ResolvedPathItemObject, 'parameters'>,
+): Coerce<TRequest> {
+  const allParameters = (parameters ?? []).concat(commonParameters ?? []);
+
+  const coerceParameters = allParameters
+    .map((item) => toParameterCoerce<TRequest>(item))
+    .filter((item): item is Coerce<TRequest> => Boolean(item));
+
+  return (req) => coerceParameters.reduce((acc, coerce) => coerce(acc), req);
 }
 
 /**
@@ -213,6 +278,7 @@ export function toRoutes<TRequest extends Empty>(
                 request: toRequestSchema(api, operation, { parameters, summary, description }),
                 response: toResponseSchema(operation),
                 operation,
+                coerce: toRequestCoerce(operation, { parameters }),
                 security: operation.security || api.security,
                 matcher: toMatcher(path, method),
                 resolver: oapiPaths[path][method],

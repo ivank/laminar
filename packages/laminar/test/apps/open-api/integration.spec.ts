@@ -79,9 +79,23 @@ describe('Integration', () => {
       paths: {
         '/about': { get: () => file(join(__dirname, 'about.html')) },
         '/pets': {
-          get: ({ logger }) => {
+          get: ({ logger, query: { limit, price, isKitten } }) => {
             logger('Get all');
-            return jsonOk(db);
+            let pets = db;
+
+            if (price !== undefined) {
+              pets = pets.filter((pet) => pet.name.length > price);
+            }
+
+            if (isKitten !== undefined) {
+              pets = pets.filter((pet) => (pet.tag === 'kitten') === isKitten);
+            }
+
+            if (limit !== undefined) {
+              pets = pets.slice(0, limit);
+            }
+
+            return jsonOk(pets);
           },
           post: ({ body, authInfo, logger, headers }) => {
             if (!isBodyNewPet(body)) {
@@ -358,6 +372,109 @@ describe('Integration', () => {
           { id: 222, name: 'Doggy' },
           { id: 223, name: 'New Puppy' },
           { id: 224, name: 'Cookie Puppy' },
+        ],
+      });
+
+      await expect(api.get('/pets', { params: { limit: 3 } })).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 111, name: 'Catty', tag: 'kitten' },
+          { id: 222, name: 'Doggy' },
+          { id: 223, name: 'New Puppy' },
+        ],
+      });
+
+      await expect(
+        api.get('/pets', { params: { limit: '3.2' } }).catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 400,
+        data: expect.objectContaining({
+          errors: ['[request.query.limit] (type) should be of type integer'],
+        }),
+      });
+
+      await expect(
+        api.get('/pets', { params: { limit: 'three' } }).catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 400,
+        data: expect.objectContaining({
+          errors: ['[request.query.limit] (type) should be of type integer'],
+        }),
+      });
+
+      await expect(api.get('/pets', { params: { isKitten: true } })).resolves.toMatchObject({
+        status: 200,
+        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+      });
+
+      await expect(api.get('/pets', { params: { isKitten: 'yes' } })).resolves.toMatchObject({
+        status: 200,
+        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+      });
+
+      await expect(api.get('/pets', { params: { isKitten: 1 } })).resolves.toMatchObject({
+        status: 200,
+        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+      });
+
+      await expect(api.get('/pets', { params: { isKitten: '1' } })).resolves.toMatchObject({
+        status: 200,
+        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+      });
+
+      await expect(
+        api.get('/pets', { params: { isKitten: 'test' } }).catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 400,
+        data: expect.objectContaining({
+          errors: ['[request.query.isKitten] (type) should be of type boolean'],
+        }),
+      });
+
+      await expect(api.get('/pets', { params: { price: 6.8 } })).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 223, name: 'New Puppy' },
+          { id: 224, name: 'Cookie Puppy' },
+        ],
+      });
+
+      await expect(
+        api.get('/pets', { params: { price: 'test' } }).catch((error) => error.response),
+      ).resolves.toMatchObject({
+        status: 400,
+        data: expect.objectContaining({
+          errors: ['[request.query.price] (type) should be of type number,integer'],
+        }),
+      });
+
+      await expect(
+        api.get('/pets', { params: { isKitten: false, limit: 2 } }),
+      ).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 222, name: 'Doggy' },
+          { id: 223, name: 'New Puppy' },
+        ],
+      });
+
+      await expect(
+        api.get('/pets', { params: { isKitten: 'no', limit: 2 } }),
+      ).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 222, name: 'Doggy' },
+          { id: 223, name: 'New Puppy' },
+        ],
+      });
+
+      await expect(
+        api.get('/pets', { params: { isKitten: '0', limit: 2 } }),
+      ).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 222, name: 'Doggy' },
+          { id: 223, name: 'New Puppy' },
         ],
       });
 

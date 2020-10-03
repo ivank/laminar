@@ -72,11 +72,19 @@ export interface OapiConfig<
 export type Matcher = (req: AppRequest) => OapiPath | false;
 
 /**
+ * A function that will convert a request into desired types.
+ */
+export type Coerce<TRequest extends Empty = Empty> = (
+  req: TRequest & AppRequest & RequestOapi,
+) => TRequest & AppRequest & RequestOapi;
+
+/**
  * @typeParam TRequest pass the request properties that the app requires. Usually added by the middlewares
  */
 export interface Route<TRequest extends Empty> {
   matcher: Matcher;
   request: Schema;
+  coerce: Coerce<TRequest>;
   response: Schema;
   operation: ResolvedOperationObject;
   security?: SecurityRequirementObject[];

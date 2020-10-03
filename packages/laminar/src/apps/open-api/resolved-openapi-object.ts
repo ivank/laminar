@@ -68,8 +68,8 @@ export interface ResolvedHeaderObject extends HeaderObject {
 
 export interface ResolvedOperationObject extends OperationObject {
   responses: ResolvedResponsesObject;
-  parameters?: ParameterObject[];
-  requestBody?: RequestBodyObject;
+  parameters?: ResolvedParameterObject[];
+  requestBody?: ResolvedRequestBodyObject;
 }
 
 export interface ResolvedRequestBodyObject extends RequestBodyObject {

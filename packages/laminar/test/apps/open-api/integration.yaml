@@ -51,6 +51,18 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: isKitten
+          in: query
+          description: if true only show pets tagged as kittens
+          required: false
+          schema:
+            type: boolean
+        - name: price
+          in: query
+          description: Show pets of certain price
+          required: false
+          schema:
+            type: number
       responses:
         '200':
           description: pet response
