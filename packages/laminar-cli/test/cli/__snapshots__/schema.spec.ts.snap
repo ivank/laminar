@@ -133,7 +133,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-    [key: string]: boolean;
+    [key: string]: boolean | undefined;
 }
 ",
 }
@@ -1715,7 +1715,7 @@ Object {
   "ts": "{
     foo?: any[];
     bar?: any;
-    [key: string]: number;
+    [key: string]: number | undefined;
 }
 ",
 }
@@ -2724,7 +2724,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-    [key: string]: boolean;
+    [key: string]: boolean | undefined;
 }
 ",
 }
@@ -4814,7 +4814,7 @@ Object {
   "ts": "{
     foo?: any[];
     bar?: any;
-    [key: string]: number;
+    [key: string]: number | undefined;
 }
 ",
 }
@@ -5911,7 +5911,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-    [key: string]: boolean;
+    [key: string]: boolean | undefined;
 }
 ",
 }
@@ -8251,7 +8251,7 @@ Object {
   "ts": "{
     foo?: any[];
     bar?: any;
-    [key: string]: number;
+    [key: string]: number | undefined;
 }
 ",
 }
@@ -9362,7 +9362,7 @@ Object {
   "ts": "{
     foo?: any;
     bar?: any;
-    [key: string]: boolean;
+    [key: string]: boolean | undefined;
 }
 ",
 }
@@ -11739,7 +11739,7 @@ Object {
   "ts": "{
     foo?: any[];
     bar?: any;
-    [key: string]: number;
+    [key: string]: number | undefined;
 }
 ",
 }

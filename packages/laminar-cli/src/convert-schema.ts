@@ -95,13 +95,33 @@ const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
   }
 };
 
+const areAllPropertiesRequired = ({ properties, required }: SchemaObject): boolean => {
+  return properties !== undefined && required !== undefined
+    ? Object.keys(properties).every((name) => required.includes(name))
+    : false;
+};
+
+const convertAdditionalPropertiesSchema = (
+  context: AstContext,
+  schema: SchemaObject,
+): Document<ts.TypeNode, AstContext> => {
+  if (isSchemaObject(schema.additionalProperties)) {
+    const converted = convertSchema(context, schema.additionalProperties);
+    return document(
+      converted.context,
+      areAllPropertiesRequired(schema)
+        ? converted.type
+        : Type.Union([converted.type, Type.Undefined]),
+    );
+  } else if (schema.additionalProperties !== false) {
+    return document(context, Type.Unknown);
+  }
+  return document(context, Type.Void);
+};
+
 const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
   if (isSchemaObject(schema) && schema.properties !== undefined) {
-    const additional = isSchemaObject(schema.additionalProperties)
-      ? convertSchema(context, schema.additionalProperties)
-      : schema.additionalProperties !== false
-      ? document(context, Type.Unknown)
-      : document(context, Type.Void);
+    const additional = convertAdditionalPropertiesSchema(context, schema);
 
     const props = mapWithContext(
       additional.context,

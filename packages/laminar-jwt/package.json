@@ -29,7 +29,7 @@
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
     "@ovotech/laminar": "^0.9.0",
-    "@ovotech/laminar-cli": "^0.9.0",
+    "@ovotech/laminar-cli": "^0.9.1",
     "@types/jest": "^26.0.14",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lru-cache": "^5.1.0",

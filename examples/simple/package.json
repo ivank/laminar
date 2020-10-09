@@ -21,7 +21,7 @@
     "@typescript-eslint/parser": "^4.1.1",
     "eslint": "^7.9.0",
     "prettier": "^2.1.2",
-    "@ovotech/laminar-cli": "^0.9.0"
+    "@ovotech/laminar-cli": "^0.9.1"
   },
   "jest": {
     "preset": "../../jest.json"
