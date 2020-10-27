@@ -225,7 +225,7 @@ export interface AxiosOapiInstance {
     /**
      * Updates a pet in the store with form data
      */
-    "POST /pet/{petId}": (petId: number, data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "POST /pet/{petId}": (petId: number, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     /**
      * Deletes a pet
      */
@@ -233,7 +233,7 @@ export interface AxiosOapiInstance {
     /**
      * uploads an image
      */
-    "POST /pet/{petId}/uploadImage": (petId: number, data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<ApiResponse>>;
+    "POST /pet/{petId}/uploadImage": (petId: number, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<ApiResponse>>;
     /**
      * Returns pet inventories by status
      * Returns a map of status codes to quantities

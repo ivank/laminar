@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Readable } from 'stream';
 import { httpServer, start, HttpServer, stop, textOk } from '../src';
 
 const app = jest.fn().mockReturnValue(textOk('Test'));
@@ -140,21 +139,17 @@ describe('Requests', () => {
       headers: { 'Content-Type': '123123' },
     });
 
-    expect(app).toHaveBeenCalledWith(
-      expect.objectContaining({ body: expect.any(Readable), method: 'POST' }),
-    );
+    expect(app).toHaveBeenCalledWith(expect.objectContaining({ body: 'test', method: 'POST' }));
 
     expect(result.data).toEqual('Test');
   });
 
-  it('Should handle unknown content type', async () => {
+  it('Should handle unknown content type, fallback to text', async () => {
     const result = await api.post('http://localhost:8051/post', 'test', {
       headers: { 'Content-Type': 'some/other' },
     });
 
-    expect(app).toHaveBeenCalledWith(
-      expect.objectContaining({ body: expect.any(Readable), method: 'POST' }),
-    );
+    expect(app).toHaveBeenCalledWith(expect.objectContaining({ body: 'test', method: 'POST' }));
 
     expect(result.data).toEqual('Test');
   });

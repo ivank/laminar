@@ -161,12 +161,16 @@ const convertResponses = (
 const convertRequestBody = (
   context: AstContext,
   requestBodyOrRef?: RequestBodyObject | ReferenceObject,
-): Document<ts.TypeNode, AstContext> => {
+): Document<{ isOptional: boolean; body: ts.TypeNode }, AstContext> => {
   const requestBody = requestBodyOrRef
     ? getReferencedObject(requestBodyOrRef, isRequestBodyObject, context)
     : undefined;
   const schema = requestBody?.content['application/json']?.schema;
-  return schema ? convertSchema(context, schema) : document(context, Type.Unknown);
+  const convertedSchema = schema ? convertSchema(context, schema) : document(context, Type.Unknown);
+  return document(convertedSchema.context, {
+    isOptional: !requestBody?.required,
+    body: convertedSchema.type,
+  });
 };
 
 export const convertOapi = (
@@ -244,7 +248,15 @@ export const convertOapi = (
             type: Type.Arrow({
               args: [
                 ...pathItems.items.map(Type.Param),
-                ...(hasData ? [Type.Param({ name: 'data', type: astRequestBody.type })] : []),
+                ...(hasData
+                  ? [
+                      Type.Param({
+                        name: 'data',
+                        type: astRequestBody.type.body,
+                        isOptional: astRequestBody.type.isOptional,
+                      }),
+                    ]
+                  : []),
                 Type.Param({
                   name: 'config',
                   isOptional: true,

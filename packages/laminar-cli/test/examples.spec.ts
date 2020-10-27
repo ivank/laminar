@@ -13,6 +13,14 @@ describe('Example files', () => {
       },
       { text: 'ok', user: { email: 'me@example.com' } },
     ],
+    [
+      'examples/convertion.ts',
+      {
+        method: 'GET',
+        url: 'http://localhost:3333/user',
+      },
+      { email: 'me@example.com', createdAt: '2020-01-01T12:00:00.000Z' },
+    ],
   ])('Should process %s', async (file, config, expected) => {
     const service = spawn('yarn', ['ts-node', file], {
       cwd: join(__dirname, '..'),

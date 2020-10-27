@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-cli",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar",
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.9.0",
+    "@ovotech/laminar": "^0.9.1",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.1",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
@@ -37,8 +37,9 @@
     "build:test:pullrequest": "yarn laminar json-schema --file test/json-schema/pullrequest.yaml --output test/json-schema/__generated__/pullrequest.ts",
     "build:examples:api": "yarn laminar api --file examples/api.yaml --output examples/__generated__/api.yaml.ts",
     "build:examples:axios": "yarn laminar axios --file examples/axios.yaml --output examples/__generated__/axios.yaml.ts",
+    "build:examples:convertion": "yarn laminar api --file examples/convertion.yaml --output examples/__generated__/convertion.yaml.ts",
     "build:examples:petstore": "yarn laminar axios --file examples/petstore.json --output examples/__generated__/petstore.json.ts",
-    "build:examples": "yarn build:examples:api && yarn build:examples:axios && yarn build:examples:petstore",
+    "build:examples": "yarn build:examples:api && yarn build:examples:axios && yarn build:examples:petstore && yarn build:examples:convertion",
     "build:test": "yarn build:test:petstore && yarn build:test:statements && yarn build:test:loss && yarn build:test:axios && yarn build:test:axios-api",
     "pretest": "yarn build:examples && yarn build:test",
     "build": "tsc --declaration",

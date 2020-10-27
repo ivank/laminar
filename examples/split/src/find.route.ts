@@ -7,7 +7,8 @@ import { RequestPg } from './db.middleware';
 export type FindRoute = AppRoute<RequestPg>;
 
 export const find: FindRoute = async ({ path, pg }) => {
-  const { rows } = await pg.query('SELECT id, name FROM users WHERE id = $1', [path.id]);
+  const sql = 'SELECT id, name, created_at as "createdAt" FROM users WHERE id = $1';
+  const { rows } = await pg.query(sql, [path.id]);
 
   return rows[0]
     ? jsonOk(rows[0])

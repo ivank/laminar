@@ -70,7 +70,12 @@ export const parseText: BodyParser = {
   parse: async (incommingMessage) => await concatStream(incommingMessage),
 };
 
-export const defaultBodyParsers: BodyParser[] = [parseJson, parseForm, parseText];
+export const parseDefault: BodyParser = {
+  match: () => true,
+  parse: async (incommingMessage) => await concatStream(incommingMessage),
+};
+
+export const defaultBodyParsers: BodyParser[] = [parseJson, parseForm, parseText, parseDefault];
 
 export async function parseBody(
   incommingMessage: IncomingMessage,

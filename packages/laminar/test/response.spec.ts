@@ -44,16 +44,19 @@ describe('Requests', () => {
   });
 
   it('Should process json', async () => {
-    const server = httpServer({ port: 8052, app: () => jsonOk({ other: 'stuff' }) });
+    const server = httpServer({
+      port: 8052,
+      app: () => jsonOk({ other: 'stuff', at: new Date('2020-02-02T12:00:00Z'), no: undefined }),
+    });
     try {
       await start(server);
 
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({
           'content-type': 'application/json',
-          'content-length': '17',
+          'content-length': '49',
         }),
-        data: { other: 'stuff' },
+        data: { other: 'stuff', at: '2020-02-02T12:00:00.000Z' },
       });
     } finally {
       await stop(server);
@@ -123,7 +126,11 @@ describe('Requests', () => {
       app: () =>
         setCookie(
           { me: { value: 'test', httpOnly: true, maxAge: 1000 }, other: 'test2' },
-          json({ body: { some: 'stuff' }, status: 201, headers: { 'X-Response': 'other' } }),
+          json({
+            body: { some: 'stuff', at: new Date('2020-02-02T12:00:00Z'), no: undefined },
+            status: 201,
+            headers: { 'X-Response': 'other' },
+          }),
         ),
     });
     try {
@@ -133,11 +140,11 @@ describe('Requests', () => {
         status: 201,
         headers: expect.objectContaining({
           'content-type': 'application/json',
-          'content-length': '16',
+          'content-length': '48',
           'set-cookie': ['me=test; Max-Age=1000; HttpOnly', 'other=test2'],
           'x-response': 'other',
         }),
-        data: { some: 'stuff' },
+        data: { some: 'stuff', at: '2020-02-02T12:00:00.000Z' },
       });
     } finally {
       await stop(server);

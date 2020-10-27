@@ -4,7 +4,7 @@ import { lookup } from 'mime-types';
 import { Response } from './types';
 import { IncomingMessage, OutgoingHttpHeaders } from 'http';
 import { createReadStream, statSync } from 'fs';
-import { parseRange } from './helpers';
+import { Json, parseRange, toJson } from './helpers';
 import { Stats } from 'fs';
 
 /**
@@ -342,6 +342,7 @@ export function internalServerError<
 
 /**
  * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
+ * Deeply convert JS Date types to string and remove undefined values.
  *
  * Content-Type: `application/json`
  *
@@ -353,7 +354,11 @@ export function internalServerError<
 export function json<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
   res: TResponse,
 ) {
-  return { ...res, headers: { ...res.headers, 'content-type': 'application/json' as const } };
+  return {
+    ...res,
+    body: toJson(res.body) as Json<TResponseBody>,
+    headers: { ...res.headers, 'content-type': 'application/json' as const },
+  };
 }
 
 /**
@@ -514,6 +519,7 @@ export function form<TResponseBody, TResponse extends Partial<Response<TResponse
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
  * A combination of {@link json} and {@link ok}
+ * Deeply convert JS Date types to string and remove undefined values.
  *
  * Content-Type: `application/json`
  * Status: `200`
@@ -525,13 +531,21 @@ export function form<TResponseBody, TResponse extends Partial<Response<TResponse
  *
  * @category Response
  */
-export function jsonOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+export function jsonOk<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 200;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(ok({ body, headers }));
 }
 
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
  * A combination of {@link json} and {@link noContent}
+ * Deeply convert JS Date types to string and remove undefined values.
  *
  * Content-Type: `application/json`
  * Status: `204`
@@ -545,12 +559,17 @@ export function jsonOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttp
 export function jsonNoContent<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 204;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(noContent({ body, headers }));
 }
 
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * Deeply convert JS Date types to string and remove undefined values.
  * A combination of {@link json} and {@link movedPermanently}
  *
  * Content-Type: `application/json`
@@ -565,12 +584,17 @@ export function jsonNoContent<TResponseBody>(
 export function jsonMovedPermanently<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 301;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(movedPermanently({ body, headers }));
 }
 
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * Deeply convert JS Date types to string and remove undefined values.
  * A combination of {@link json} and {@link found}
  *
  * Content-Type: `application/json`
@@ -587,7 +611,14 @@ export function jsonMovedPermanently<TResponseBody>(
  *
  * @category Response
  */
-export function jsonFound<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+export function jsonFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 302;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(found({ body, headers }));
 }
 
@@ -608,12 +639,17 @@ export function jsonFound<TResponseBody>(body: TResponseBody, headers: OutgoingH
 export function jsonSeeOther<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 303;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(seeOther({ body, headers }));
 }
 
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * Deeply convert JS Date types to string and remove undefined values.
  * A combination of {@link json} and {@link badRequest}
  *
  * Content-Type: `application/json`
@@ -628,11 +664,16 @@ export function jsonSeeOther<TResponseBody>(
 export function jsonBadRequest<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 400;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(badRequest({ body, headers }));
 }
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * Deeply convert JS Date types to string and remove undefined values.
  * A combination of {@link json} and {@link unauthorized}
  *
  * Content-Type: `application/json`
@@ -650,12 +691,17 @@ export function jsonBadRequest<TResponseBody>(
 export function jsonUnauthorized<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 401;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(unauthorized({ body, headers }));
 }
 
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * Deeply convert JS Date types to string and remove undefined values.
  * A combination of {@link json} and {@link forbidden}
  *
  * Content-Type: `application/json`
@@ -673,12 +719,17 @@ export function jsonUnauthorized<TResponseBody>(
 export function jsonForbidden<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 403;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(forbidden({ body, headers }));
 }
 
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * Deeply convert JS Date types to string and remove undefined values.
  * A combination of {@link json} and {@link notFound}
  *
  * Content-Type: `application/json`
@@ -694,12 +745,17 @@ export function jsonForbidden<TResponseBody>(
 export function jsonNotFound<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 404;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(notFound({ body, headers }));
 }
 
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
+ * Deeply convert JS Date types to string and remove undefined values.
  * A combination of {@link json} and {@link internalServerError}
  *
  * Content-Type: `application/json`
@@ -714,7 +770,11 @@ export function jsonNotFound<TResponseBody>(
 export function jsonInternalServerError<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 500;
+  body: Json<TResponseBody>;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
   return json(internalServerError({ body, headers }));
 }
 
@@ -737,7 +797,14 @@ export function jsonInternalServerError<TResponseBody>(
  *
  * @category Response
  */
-export function textOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+export function textOk<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 200;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(ok({ body, headers }));
 }
 
@@ -757,7 +824,11 @@ export function textOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttp
 export function textNoContent<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 204;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(noContent({ body, headers }));
 }
 
@@ -777,7 +848,11 @@ export function textNoContent<TResponseBody>(
 export function textMovedPermanently<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 301;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(movedPermanently({ body, headers }));
 }
 
@@ -799,7 +874,14 @@ export function textMovedPermanently<TResponseBody>(
  *
  * @category Response
  */
-export function textFound<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+export function textFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 302;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(found({ body, headers }));
 }
 
@@ -820,7 +902,11 @@ export function textFound<TResponseBody>(body: TResponseBody, headers: OutgoingH
 export function textSeeOther<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 303;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(seeOther({ body, headers }));
 }
 
@@ -862,7 +948,11 @@ export function textBadRequest<TResponseBody>(
 export function textUnauthorized<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 401;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(unauthorized({ body, headers }));
 }
 
@@ -885,7 +975,11 @@ export function textUnauthorized<TResponseBody>(
 export function textForbidden<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 403;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(forbidden({ body, headers }));
 }
 
@@ -906,7 +1000,11 @@ export function textForbidden<TResponseBody>(
 export function textNotFound<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 404;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(notFound({ body, headers }));
 }
 
@@ -926,7 +1024,11 @@ export function textNotFound<TResponseBody>(
 export function textInternalServerError<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 500;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
   return text(internalServerError({ body, headers }));
 }
 
@@ -949,7 +1051,14 @@ export function textInternalServerError<TResponseBody>(
  *
  * @category Response
  */
-export function htmlOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+export function htmlOk<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 200;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(ok({ body, headers }));
 }
 
@@ -969,7 +1078,11 @@ export function htmlOk<TResponseBody>(body: TResponseBody, headers: OutgoingHttp
 export function htmlNoContent<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 204;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(noContent({ body, headers }));
 }
 
@@ -989,7 +1102,11 @@ export function htmlNoContent<TResponseBody>(
 export function htmlMovedPermanently<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 301;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(movedPermanently({ body, headers }));
 }
 
@@ -1011,7 +1128,14 @@ export function htmlMovedPermanently<TResponseBody>(
  *
  * @category Response
  */
-export function htmlFound<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
+export function htmlFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 302;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(found({ body, headers }));
 }
 
@@ -1032,7 +1156,11 @@ export function htmlFound<TResponseBody>(body: TResponseBody, headers: OutgoingH
 export function htmlSeeOther<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 303;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(seeOther({ body, headers }));
 }
 
@@ -1052,7 +1180,11 @@ export function htmlSeeOther<TResponseBody>(
 export function htmlBadRequest<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 400;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(badRequest({ body, headers }));
 }
 /**
@@ -1074,7 +1206,11 @@ export function htmlBadRequest<TResponseBody>(
 export function htmlUnauthorized<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 401;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(unauthorized({ body, headers }));
 }
 
@@ -1097,7 +1233,11 @@ export function htmlUnauthorized<TResponseBody>(
 export function htmlForbidden<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 403;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(forbidden({ body, headers }));
 }
 
@@ -1118,7 +1258,11 @@ export function htmlForbidden<TResponseBody>(
 export function htmlNotFound<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 404;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(notFound({ body, headers }));
 }
 
@@ -1138,6 +1282,10 @@ export function htmlNotFound<TResponseBody>(
 export function htmlInternalServerError<TResponseBody>(
   body: TResponseBody,
   headers: OutgoingHttpHeaders = {},
-) {
+): {
+  status: 500;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
   return html(internalServerError({ body, headers }));
 }

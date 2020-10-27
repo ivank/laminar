@@ -219,6 +219,47 @@ const MySecurity = ({ headers }, { scopes }) => {
 
 You can use [@ovotech/lamina-cli](../lamina-cli) package to generate types.
 
+### Json Type Convertion
+
+JSON and JS object are not _exactly_ the same, as you can [read to your horror at MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#Description). Laminar tries to follow that spec, converting your JS objects into stuff that your json-schema can validate. For example Date objects are converted to iso strings and undefined fields are omitted from the object.
+
+This works on type level too. If the types generated from the OpenApi schema would match JS objects passed to the helper functions `jsonOk`, `jsonNotFound` etc.
+
+> [examples/convertion.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/convertion.ts)
+
+```typescript
+import { httpServer, start, describe, jsonOk, openApi } from '@ovotech/laminar';
+import { join } from 'path';
+
+const api = join(__dirname, 'convertion.yaml');
+
+const main = async () => {
+  const app = await openApi({
+    api,
+    paths: {
+      '/user': {
+        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
+        /**
+         * The Date object will be converted to a string
+         * undefined values will be cleaned up
+         */
+        get: () =>
+          jsonOk({
+            email: 'me@example.com',
+            createdAt: new Date('2020-01-01T12:00:00Z'),
+            title: undefined,
+          }),
+      },
+    },
+  });
+  const server = httpServer({ port: 3333, app });
+  await start(server);
+  console.log(describe(server));
+};
+
+main();
+```
+
 ### Undocumented types
 
 You can define additional types that are not defined by openapi schema. You can use the laminar router for that, by placing the routes before the app, so they take precedence.
@@ -425,7 +466,8 @@ const log: Middleware = (next) => (req) => {
  * We can now require this app to have the middleware.
  * If the propper ones are not executed later, TypeScript will inform us at compile time.
  */
-const app: App<RequestDB> = (req) => jsonOk({ url: req.url, user: req.db.getValidUser() });
+const app: App<RequestDB> = (req) =>
+  jsonOk({ url: req.url.toString(), user: req.db.getValidUser() });
 
 const db = createDbMiddleware();
 
@@ -474,6 +516,65 @@ const server = httpServer({
 
 start(server).then(() => console.log(describe(server)));
 ```
+
+### Streaming Data
+
+By default the body parser will concat the incoming request body stream into a string object and pass that around into your app. Sometimes you'd want to not do that for certain content types, like csv data for example.
+
+You can achieve that by writing your own parser that will preserve the `Readable` body object and just pass it inside.
+
+> [examples/streaming-parser.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/streaming-parser.ts)
+
+```typescript
+import {
+  httpServer,
+  App,
+  start,
+  BodyParser,
+  defaultBodyParsers,
+  describe,
+  csv,
+  ok,
+} from '@ovotech/laminar';
+import { pipeline, Readable, Transform } from 'stream';
+import * as parse from 'csv-parse';
+import * as stringify from 'csv-stringify';
+
+const csvParser: BodyParser = {
+  match: (contentType) => contentType === 'text/csv',
+  parse: async (body) => body,
+};
+
+const upperCaseTransform = new Transform({
+  objectMode: true,
+  transform: (row: string[], encoding, callback) =>
+    callback(
+      undefined,
+      row.map((item) => item.toUpperCase()),
+    ),
+});
+
+/**
+ * A function that will convert a readable stream of a csv into one with all items upper cased.
+ * Using node's [pipeline](https://nodejs.org/api/stream.html#stream_stream_pipeline_streams_callback) function to handle the streams
+ */
+const transformCsv = (body: Readable): Readable =>
+  pipeline(body, parse(), upperCaseTransform, stringify(), (err) =>
+    err ? console.error(err.message) : undefined,
+  );
+
+const app: App = ({ body }) => csv(ok({ body: transformCsv(body) }));
+
+const server = httpServer({
+  port: 3333,
+  app,
+  options: { bodyParsers: [csvParser, ...defaultBodyParsers] },
+});
+
+start(server).then(() => console.log(describe(server)));
+```
+
+Alternatively, you can also set `bodyParsers` option to an empty array (`[]`), and use `bodyParserComponent` as a middleware, selectively only on specific routes.
 
 ### Router
 

@@ -135,7 +135,8 @@ const log: Middleware = (next) => (req) => {
  * We can now require this app to have the middleware.
  * If the propper ones are not executed later, TypeScript will inform us at compile time.
  */
-const app: App<RequestDB> = (req) => jsonOk({ url: req.url, user: req.db.getValidUser() });
+const app: App<RequestDB> = (req) =>
+  jsonOk({ url: req.url.toString(), user: req.db.getValidUser() });
 
 const db = createDbMiddleware();
 

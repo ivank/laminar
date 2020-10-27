@@ -26,7 +26,7 @@ export const server = httpServer({
 
   /**
    * You can configure the request body parsers using `bodyParsers`
-   * If we want to keep all the default ones though, so we pass the default body parsers first
+   * If we want to keep all the default ones though, so we pass the default body parsers too
    */
-  options: { bodyParsers: [...defaultBodyParsers, yamlParser] },
+  options: { bodyParsers: [yamlParser, ...defaultBodyParsers] },
 });

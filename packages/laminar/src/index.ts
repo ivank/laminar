@@ -78,7 +78,7 @@ export {
   RequestCookie,
 } from './components/cookie-parser.component';
 export { queryParserComponent, RequestQuery } from './components/query-parser.component';
-export { parseQueryObjects } from './helpers';
+export { parseQueryObjects, toJson, Json } from './helpers';
 export {
   responseTimeMiddleware,
   ResponseTimeConfig,
@@ -97,6 +97,9 @@ export {
   concatStream,
   RequestBody,
   parseBody,
+  parseDefault,
+  parseForm,
+  parseText,
 } from './components/body-parser.component';
 export {
   responseParserComponent,

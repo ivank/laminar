@@ -148,6 +148,26 @@ describe('Example files', () => {
       },
       { isNew: true },
     ],
+    [
+      'examples/convertion.ts',
+      {
+        method: 'GET',
+        url: 'http://localhost:3333/user',
+      },
+      { email: 'me@example.com', createdAt: '2020-01-01T12:00:00.000Z' },
+    ],
+    [
+      'examples/streaming-parser.ts',
+      {
+        method: 'GET',
+        headers: {
+          'content-type': 'text/csv',
+        },
+        url: 'http://localhost:3333',
+        data: 'column1,column2\na,b\nc,d',
+      },
+      'COLUMN1,COLUMN2\nA,B\nC,D\n',
+    ],
   ])('Should process %s', async (file, config, expected) => {
     const service = spawn('yarn', ['ts-node', file], {
       cwd: join(__dirname, '..'),

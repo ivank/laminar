@@ -2126,7 +2126,7 @@ export interface AxiosOapiInstance {
      * when the queue is paused. A queue is paused if its
      * state is PAUSED.
      */
-    \\"POST /v2/{+name}:pause\\": (+name: string, data: PauseQueueRequest, config?: AxiosRequestConfig & PostV2Namepause) => Promise<AxiosResponse<Queue>>;
+    \\"POST /v2/{+name}:pause\\": (+name: string, data?: PauseQueueRequest, config?: AxiosRequestConfig & PostV2Namepause) => Promise<AxiosResponse<Queue>>;
     /**
      * Purges a queue by deleting all of its tasks.
      *
@@ -2135,7 +2135,7 @@ export interface AxiosOapiInstance {
      * Purge operations can take up to one minute to take effect. Tasks
      * might be dispatched before the purge takes effect. A purge is irreversible.
      */
-    \\"POST /v2/{+name}:purge\\": (+name: string, data: PurgeQueueRequest, config?: AxiosRequestConfig & PostV2Namepurge) => Promise<AxiosResponse<Queue>>;
+    \\"POST /v2/{+name}:purge\\": (+name: string, data?: PurgeQueueRequest, config?: AxiosRequestConfig & PostV2Namepurge) => Promise<AxiosResponse<Queue>>;
     /**
      * Resume a queue.
      *
@@ -2151,7 +2151,7 @@ export interface AxiosOapiInstance {
      * [Managing Cloud Tasks Scaling
      * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
      */
-    \\"POST /v2/{+name}:resume\\": (+name: string, data: ResumeQueueRequest, config?: AxiosRequestConfig & PostV2Nameresume) => Promise<AxiosResponse<Queue>>;
+    \\"POST /v2/{+name}:resume\\": (+name: string, data?: ResumeQueueRequest, config?: AxiosRequestConfig & PostV2Nameresume) => Promise<AxiosResponse<Queue>>;
     /**
      * Forces a task to run now.
      *
@@ -2178,7 +2178,7 @@ export interface AxiosOapiInstance {
      * NOT_FOUND when it is called on a
      * task that has already succeeded or permanently failed.
      */
-    \\"POST /v2/{+name}:run\\": (+name: string, data: RunTaskRequest, config?: AxiosRequestConfig & PostV2Namerun) => Promise<AxiosResponse<Task>>;
+    \\"POST /v2/{+name}:run\\": (+name: string, data?: RunTaskRequest, config?: AxiosRequestConfig & PostV2Namerun) => Promise<AxiosResponse<Task>>;
     /**
      * Lists queues.
      *
@@ -2199,7 +2199,7 @@ export interface AxiosOapiInstance {
      * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
      * this method.
      */
-    \\"POST /v2/{+parent}/queues\\": (+parent: string, data: Queue, config?: AxiosRequestConfig & PostV2ParentQueues) => Promise<AxiosResponse<Queue>>;
+    \\"POST /v2/{+parent}/queues\\": (+parent: string, data?: Queue, config?: AxiosRequestConfig & PostV2ParentQueues) => Promise<AxiosResponse<Queue>>;
     /**
      * Lists the tasks in a queue.
      *
@@ -2219,7 +2219,7 @@ export interface AxiosOapiInstance {
      *
      * * The maximum task size is 100KB.
      */
-    \\"POST /v2/{+parent}/tasks\\": (+parent: string, data: CreateTaskRequest, config?: AxiosRequestConfig & PostV2ParentTasks) => Promise<AxiosResponse<Task>>;
+    \\"POST /v2/{+parent}/tasks\\": (+parent: string, data?: CreateTaskRequest, config?: AxiosRequestConfig & PostV2ParentTasks) => Promise<AxiosResponse<Task>>;
     /**
      * Gets the access control policy for a Queue.
      * Returns an empty policy if the resource exists and does not have a policy
@@ -2231,7 +2231,7 @@ export interface AxiosOapiInstance {
      *
      * * \`cloudtasks.queues.getIamPolicy\`
      */
-    \\"POST /v2/{+resource}:getIamPolicy\\": (+resource: string, data: GetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcegetIamPolicy) => Promise<AxiosResponse<Policy>>;
+    \\"POST /v2/{+resource}:getIamPolicy\\": (+resource: string, data?: GetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcegetIamPolicy) => Promise<AxiosResponse<Policy>>;
     /**
      * Sets the access control policy for a Queue. Replaces any existing
      * policy.
@@ -2245,7 +2245,7 @@ export interface AxiosOapiInstance {
      *
      * * \`cloudtasks.queues.setIamPolicy\`
      */
-    \\"POST /v2/{+resource}:setIamPolicy\\": (+resource: string, data: SetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcesetIamPolicy) => Promise<AxiosResponse<Policy>>;
+    \\"POST /v2/{+resource}:setIamPolicy\\": (+resource: string, data?: SetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcesetIamPolicy) => Promise<AxiosResponse<Policy>>;
     /**
      * Returns permissions that a caller has on a Queue.
      * If the resource does not exist, this will return an empty set of
@@ -2255,7 +2255,7 @@ export interface AxiosOapiInstance {
      * UIs and command-line tools, not for authorization checking. This operation
      * may \\"fail open\\" without warning.
      */
-    \\"POST /v2/{+resource}:testIamPermissions\\": (+resource: string, data: TestIamPermissionsRequest, config?: AxiosRequestConfig & PostV2ResourcetestIamPermissions) => Promise<AxiosResponse<TestIamPermissionsResponse>>;
+    \\"POST /v2/{+resource}:testIamPermissions\\": (+resource: string, data?: TestIamPermissionsRequest, config?: AxiosRequestConfig & PostV2ResourcetestIamPermissions) => Promise<AxiosResponse<TestIamPermissionsResponse>>;
     api: AxiosInstance;
 }
 "
@@ -2357,7 +2357,7 @@ export interface AxiosOapiInstance {
     \\"GET /2.0/repositories/{username}/{slug}\\": (username: string, slug: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<repository>>;
     \\"GET /2.0/repositories/{username}/{slug}/pullrequests\\": (username: string, slug: string, config?: AxiosRequestConfig & Get20RepositoriesUsernameSlugPullrequests) => Promise<AxiosResponse<pullrequest[]>>;
     \\"GET /2.0/repositories/{username}/{slug}/pullrequests/{pid}\\": (username: string, slug: string, pid: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<pullrequest>>;
-    \\"POST /2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge\\": (username: string, slug: string, pid: string, data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    \\"POST /2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge\\": (username: string, slug: string, pid: string, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     api: AxiosInstance;
 }
 "
@@ -2419,7 +2419,7 @@ export interface AxiosOapiInstance {
     /**
      * Create a pet
      */
-    \\"POST /pets\\": (data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<Error>>;
+    \\"POST /pets\\": (data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<Error>>;
     /**
      * Info for a specific pet
      */
@@ -2645,7 +2645,7 @@ export interface AxiosOapiInstance {
      * Provides search capability for the data set with the given search criteria.
      * This API is based on Solr/Lucense Search. The data is indexed using SOLR. This GET API returns the list of all the searchable field names that are in the Solr Index. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the Solr/Lucene Syntax. Please refer https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview for the query syntax. List of field names that are searchable can be determined using above GET api.
      */
-    \\"POST /{dataset}/{version}/records\\": (dataset: string, version: string, data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<any[]>>;
+    \\"POST /{dataset}/{version}/records\\": (dataset: string, version: string, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<any[]>>;
     api: AxiosInstance;
 }
 "

@@ -123,3 +123,37 @@ export function toPathKeys(path: string): string[] {
 export function toPathRe(path: string): RegExp {
   return new RegExp('^' + path.replace('/', '\\/').replace(paramRegEx, '([^/]+)') + '/?$');
 }
+
+/**
+ * Deeply convert one typescript type to another, following nested objects and arrays
+ */
+export type Json<T> = T extends Date
+  ? string
+  : T extends string | number | boolean | null | undefined
+  ? T
+  : T extends Buffer
+  ? { type: 'Buffer'; data: number[] }
+  : {
+      [K in keyof T]: T[K] extends (infer U)[] ? Json<U>[] : Json<T[K]>;
+    };
+
+/**
+ * Convert a javascript object into a JSON plain object.
+ * Serializes Dates into strings and removes keys with undefined values
+ */
+export function toJson<T>(data: T): Json<T> {
+  if (data !== null && typeof data === 'object') {
+    if (data instanceof Date) {
+      return data.toISOString() as any;
+    } else if (Array.isArray(data)) {
+      return data.map(toJson) as any;
+    } else {
+      return Object.entries(data).reduce(
+        (acc, [key, value]) => (value === undefined ? acc : { ...acc, [key]: toJson(value) }),
+        {},
+      ) as any;
+    }
+  } else {
+    return data as any;
+  }
+}
