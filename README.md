@@ -3,7 +3,7 @@
 Building OpenApi backed REST APIs in TypeScript. Automatic validation of request / response based on the api schema.
 Generate Types using a cli. This is an attempt to implement the concepts of [Design-First, Evolve with Code](https://apisyouwonthate.com/blog/api-design-first-vs-code-first) principles cleanly.
 
-For detailed documentation, refer to https://ovotech/github.com/laminar
+For detailed documentation, refer to https://ovotech.github.com/laminar
 
 ## Installation
 
