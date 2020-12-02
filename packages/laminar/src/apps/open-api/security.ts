@@ -5,9 +5,7 @@ import { OapiAuthInfo, OapiSecurity, RequestOapi, Security, SecurityOk } from '.
 /**
  * Return a {@link SecurityOk} object, indicating a successfull security check. Should be returned by a {@link OapiSecurityResolver}
  */
-export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(
-  authInfo: TOapiAuthInfo,
-): Security<TOapiAuthInfo> {
+export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(authInfo: TOapiAuthInfo): Security<TOapiAuthInfo> {
   return { authInfo };
 }
 
@@ -54,7 +52,5 @@ export async function validateSecurity<
   const combinedResultGroups = resultGroups.map((group) =>
     group.every(isSecurityOk) ? group[0] : group.filter(isSecurityResponse)[0],
   );
-  return (
-    combinedResultGroups.find(isSecurityOk) ?? combinedResultGroups.filter(isSecurityResponse)[0]
-  );
+  return combinedResultGroups.find(isSecurityOk) ?? combinedResultGroups.filter(isSecurityResponse)[0];
 }

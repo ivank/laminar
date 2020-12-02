@@ -9,9 +9,7 @@ export const validateDependencies: Validator = ({ dependencies }, value, options
         .map(([key, dependency]) => {
           if (Array.isArray(dependency)) {
             const missing = dependency.filter((item) => !Object.keys(value).includes(item));
-            return missing.length > 0
-              ? error('dependencies', `${options.name}.${key}`, missing)
-              : empty;
+            return missing.length > 0 ? error('dependencies', `${options.name}.${key}`, missing) : empty;
           } else {
             return validateSchema(dependency, value, childOptions(key, options));
           }

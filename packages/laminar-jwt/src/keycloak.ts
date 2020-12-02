@@ -10,10 +10,7 @@ export interface KeycloakOptions extends JWTVerify {
   service: string;
 }
 
-export const keycloakScopeError = (service: string): ScopeError<JWTDataKeycloak> => (
-  data,
-  scopes = [],
-) => {
+export const keycloakScopeError = (service: string): ScopeError<JWTDataKeycloak> => (data, scopes = []) => {
   const missingScopes = toMissing(data.resource_access?.[service]?.roles ?? [], scopes);
   return missingScopes.length
     ? `User does not have required roles: [${missingScopes.join(', ')}] for ${service}`

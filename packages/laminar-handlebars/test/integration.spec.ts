@@ -34,9 +34,7 @@ describe('Integration', () => {
       await start(server);
 
       expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot);
-      expect(await api.post('/result', { name: 'John Smith' })).toMatchSnapshot<AxiosResponse>(
-        axiosSnapshot,
-      );
+      expect(await api.post('/result', { name: 'John Smith' })).toMatchSnapshot<AxiosResponse>(axiosSnapshot);
     } finally {
       await stop(server);
     }

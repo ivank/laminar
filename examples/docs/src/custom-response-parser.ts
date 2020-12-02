@@ -1,11 +1,4 @@
-import {
-  App,
-  yaml,
-  ok,
-  httpServer,
-  ResponseParser,
-  defaultResponseParsers,
-} from '@ovotech/laminar';
+import { App, yaml, ok, httpServer, ResponseParser, defaultResponseParsers } from '@ovotech/laminar';
 import * as YAML from 'yaml';
 
 const app: App = () => yaml(ok({ body: { example: { test: 'msg' } } }));

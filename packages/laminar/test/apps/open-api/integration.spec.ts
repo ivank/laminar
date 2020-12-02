@@ -38,11 +38,9 @@ interface AuthInfo {
   };
 }
 
-const isBodyNewPet = (body: unknown): body is NewPet =>
-  typeof body === 'object' && body !== null && 'name' in body;
+const isBodyNewPet = (body: unknown): body is NewPet => typeof body === 'object' && body !== null && 'name' in body;
 
-const isPathWithId = (path: unknown): path is PathWithId =>
-  typeof path === 'object' && path !== null && 'id' in path;
+const isPathWithId = (path: unknown): path is PathWithId => typeof path === 'object' && path !== null && 'id' in path;
 
 describe('Integration', () => {
   it('Should process response', async () => {
@@ -146,19 +144,14 @@ describe('Integration', () => {
 
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
-      await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject(
-        {
-          status: 404,
-          data: {
-            message:
-              'Request for "GET /unknown-url" did not match any of the paths defined in the OpenApi Schema',
-          },
+      await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+        data: {
+          message: 'Request for "GET /unknown-url" did not match any of the paths defined in the OpenApi Schema',
         },
-      );
+      });
 
-      await expect(
-        api.get('/about', { headers: { Authorization: 'Bearer 123' } }),
-      ).resolves.toMatchObject({
+      await expect(api.get('/about', { headers: { Authorization: 'Bearer 123' } })).resolves.toMatchObject({
         status: 200,
         headers: {
           'content-type': 'text/html',
@@ -174,9 +167,7 @@ describe('Integration', () => {
         ],
       });
 
-      await expect(
-        api.post('/pets', { other: 'New Puppy' }).catch((error) => error.response),
-      ).resolves.toMatchObject({
+      await expect(api.post('/pets', { other: 'New Puppy' }).catch((error) => error.response)).resolves.toMatchObject({
         status: 400,
         data: {
           errors: [
@@ -333,14 +324,13 @@ describe('Integration', () => {
         data: { pet: { id: 224, name: 'Cookie Puppy' }, user: 'cookie' },
       });
 
-      await expect(
-        api.get('/pets/111', { headers: { Authorization: 'Basic 123' } }),
-      ).resolves.toMatchObject({ status: 200, data: { id: 111, name: 'Catty', tag: 'kitten' } });
+      await expect(api.get('/pets/111', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
+        status: 200,
+        data: { id: 111, name: 'Catty', tag: 'kitten' },
+      });
 
       await expect(
-        api
-          .get('/pets/10000', { headers: { Authorization: 'Basic 123' } })
-          .catch((error) => error.response),
+        api.get('/pets/10000', { headers: { Authorization: 'Basic 123' } }).catch((error) => error.response),
       ).resolves.toMatchObject({
         status: 500,
         data: {
@@ -353,14 +343,10 @@ describe('Integration', () => {
       });
 
       await expect(
-        api
-          .get('/pets/000', { headers: { Authorization: 'Basic 123' } })
-          .catch((error) => error.response),
+        api.get('/pets/000', { headers: { Authorization: 'Basic 123' } }).catch((error) => error.response),
       ).resolves.toMatchObject({ status: 404, data: { code: 123, message: 'Not Found' } });
 
-      await expect(
-        api.get('/pets/223', { headers: { Authorization: 'Basic 123' } }),
-      ).resolves.toMatchObject({
+      await expect(api.get('/pets/223', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
         status: 200,
         data: { id: 223, name: 'New Puppy' },
       });
@@ -448,9 +434,23 @@ describe('Integration', () => {
         }),
       });
 
-      await expect(
-        api.get('/pets', { params: { isKitten: false, limit: 2 } }),
-      ).resolves.toMatchObject({
+      await expect(api.get('/pets', { params: { isKitten: false, limit: 2 } })).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 222, name: 'Doggy' },
+          { id: 223, name: 'New Puppy' },
+        ],
+      });
+
+      await expect(api.get('/pets', { params: { isKitten: 'no', limit: 2 } })).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 222, name: 'Doggy' },
+          { id: 223, name: 'New Puppy' },
+        ],
+      });
+
+      await expect(api.get('/pets', { params: { isKitten: '0', limit: 2 } })).resolves.toMatchObject({
         status: 200,
         data: [
           { id: 222, name: 'Doggy' },
@@ -459,40 +459,14 @@ describe('Integration', () => {
       });
 
       await expect(
-        api.get('/pets', { params: { isKitten: 'no', limit: 2 } }),
-      ).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 222, name: 'Doggy' },
-          { id: 223, name: 'New Puppy' },
-        ],
-      });
-
-      await expect(
-        api.get('/pets', { params: { isKitten: '0', limit: 2 } }),
-      ).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 222, name: 'Doggy' },
-          { id: 223, name: 'New Puppy' },
-        ],
-      });
-
-      await expect(
-        api
-          .delete('/pets/228', { headers: { 'X-API-KEY': 'Me' } })
-          .catch((error) => error.response),
+        api.delete('/pets/228', { headers: { 'X-API-KEY': 'Me' } }).catch((error) => error.response),
       ).resolves.toMatchObject({ status: 404, data: { code: 12, message: 'Item not found' } });
 
       await expect(
-        api
-          .delete('/pets/222', { headers: { 'X-API-missing': 'Me' } })
-          .catch((error) => error.response),
+        api.delete('/pets/222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
       ).resolves.toMatchObject({ status: 401, data: { message: 'Unathorized user' } });
 
-      await expect(
-        api.delete('/pets/222', { headers: { 'X-API-KEY': 'Me' } }),
-      ).resolves.toMatchObject({
+      await expect(api.delete('/pets/222', { headers: { 'X-API-KEY': 'Me' } })).resolves.toMatchObject({
         status: 204,
         data: {},
       });
@@ -511,14 +485,8 @@ describe('Integration', () => {
       expect(log).toHaveBeenNthCalledWith(3, 'Auth Successful');
       expect(log).toHaveBeenNthCalledWith(4, 'Auth Successful');
       expect(log).toHaveBeenNthCalledWith(5, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(
-        6,
-        'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
-      );
-      expect(log).toHaveBeenNthCalledWith(
-        7,
-        'new pet Cookie Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
-      );
+      expect(log).toHaveBeenNthCalledWith(6, 'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
+      expect(log).toHaveBeenNthCalledWith(7, 'new pet Cookie Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
       expect(log).toHaveBeenNthCalledWith(8, 'Get all');
       expect(log).toHaveBeenNthCalledWith(9, 'Get all');
     } finally {
@@ -552,8 +520,7 @@ describe('Invalid Schema', () => {
         api: join(__dirname, 'invalid-security.yaml'),
       }),
     ).rejects.toMatchObject({
-      message:
-        'Security scheme WrongAuth not defined in components.securitySchemes in the OpenApi Schema',
+      message: 'Security scheme WrongAuth not defined in components.securitySchemes in the OpenApi Schema',
     });
   });
 

@@ -33,9 +33,7 @@ function toMatcher(path: string, method: string): Matcher {
 /**
  * Convert an OpenApi parameter name into a parameter name from {@link RequestOapi}
  */
-function toParamLocation(
-  location: 'query' | 'header' | 'path' | 'cookie',
-): 'query' | 'headers' | 'path' | 'cookies' {
+function toParamLocation(location: 'query' | 'header' | 'path' | 'cookie'): 'query' | 'headers' | 'path' | 'cookies' {
   switch (location) {
     case 'header':
       return 'headers';
@@ -107,9 +105,7 @@ function toSecuritySchema(
       const scheme = schemes[name];
 
       if (!scheme) {
-        throw new Error(
-          `Security scheme ${name} not defined in components.securitySchemes in the OpenApi Schema`,
-        );
+        throw new Error(`Security scheme ${name} not defined in components.securitySchemes in the OpenApi Schema`);
       }
     }),
   );
@@ -121,9 +117,7 @@ function toSecuritySchema(
 function toRequestSchema(
   { security: defaultSecurity, components }: ResolvedOpenAPIObject,
   { requestBody, parameters, security: operationSecurity }: ResolvedOperationObject,
-  {
-    parameters: commonParameters,
-  }: Pick<ResolvedPathItemObject, 'summary' | 'parameters' | 'description'>,
+  { parameters: commonParameters }: Pick<ResolvedPathItemObject, 'summary' | 'parameters' | 'description'>,
 ): Schema {
   const security = operationSecurity ?? defaultSecurity;
   const securitySchemes = components && components.securitySchemes;
@@ -132,10 +126,7 @@ function toRequestSchema(
     toSecuritySchema(security, securitySchemes);
   }
   return {
-    allOf: [
-      ...allParameters.map(toParameterSchema),
-      ...(requestBody ? [toRequestBodySchema(requestBody)] : []),
-    ],
+    allOf: [...allParameters.map(toParameterSchema), ...(requestBody ? [toRequestBodySchema(requestBody)] : [])],
   };
 }
 
@@ -158,8 +149,7 @@ const coercers: { [key: string]: Coercer } = {
     const num = Number(value);
     return !Number.isNaN(num) ? num : value;
   },
-  boolean: (value) =>
-    trueString.includes(value) ? true : falseString.includes(value) ? false : value,
+  boolean: (value) => (trueString.includes(value) ? true : falseString.includes(value) ? false : value),
   null: (value) => (value === 'null' ? null : value),
 };
 
@@ -168,9 +158,7 @@ const coercers: { [key: string]: Coercer } = {
  * Since all parameter values would be strings, this allows us to validate even numeric values
  * @param parameter
  */
-function toParameterCoerce<TRequest extends Empty>(
-  parameter: ResolvedParameterObject,
-): Coerce<TRequest> | undefined {
+function toParameterCoerce<TRequest extends Empty>(parameter: ResolvedParameterObject): Coerce<TRequest> | undefined {
   const coercer = coercers[parameter.schema?.type ?? ''];
   if (coercer) {
     return (req) => {
@@ -240,10 +228,7 @@ function toResponseSchema({ responses }: ResolvedOperationObject): Record<string
                 body:
                   mediaType.schema?.type === 'string'
                     ? {
-                        oneOf: [
-                          mediaType.schema,
-                          { type: 'object', properties: { readable: { const: true } } },
-                        ],
+                        oneOf: [mediaType.schema, { type: 'object', properties: { readable: { const: true } } }],
                       }
                     : mediaType.schema,
               },
@@ -265,32 +250,26 @@ export function toRoutes<TRequest extends Empty>(
   api: ResolvedOpenAPIObject,
   oapiPaths: OapiPaths<TRequest>,
 ): Route<TRequest>[] {
-  return Object.entries(api.paths).reduce<Route<TRequest>[]>(
-    (pathRoutes, [path, pathParameters]) => {
-      const { parameters, summary, description, ...methods } = pathParameters;
-      return [
-        ...pathRoutes,
-        ...Object.entries(methods).reduce<Route<TRequest>[]>(
-          (methodRoutes, [method, operation]) => {
-            return [
-              ...methodRoutes,
-              {
-                request: toRequestSchema(api, operation, { parameters, summary, description }),
-                response: toResponseSchema(operation),
-                operation,
-                coerce: toRequestCoerce(operation, { parameters }),
-                security: operation.security || api.security,
-                matcher: toMatcher(path, method),
-                resolver: oapiPaths[path][method],
-              },
-            ];
+  return Object.entries(api.paths).reduce<Route<TRequest>[]>((pathRoutes, [path, pathParameters]) => {
+    const { parameters, summary, description, ...methods } = pathParameters;
+    return [
+      ...pathRoutes,
+      ...Object.entries(methods).reduce<Route<TRequest>[]>((methodRoutes, [method, operation]) => {
+        return [
+          ...methodRoutes,
+          {
+            request: toRequestSchema(api, operation, { parameters, summary, description }),
+            response: toResponseSchema(operation),
+            operation,
+            coerce: toRequestCoerce(operation, { parameters }),
+            security: operation.security || api.security,
+            matcher: toMatcher(path, method),
+            resolver: oapiPaths[path][method],
           },
-          [],
-        ),
-      ];
-    },
-    [],
-  );
+        ];
+      }, []),
+    ];
+  }, []);
 }
 
 /**

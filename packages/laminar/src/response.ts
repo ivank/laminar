@@ -76,9 +76,7 @@ export function file(
   const hasRange = incommingMessage?.headers.range?.match(/^bytes=/);
 
   if (hasRange) {
-    const range = incommingMessage?.headers.range
-      ? parseRange(incommingMessage.headers.range, stat.size)
-      : undefined;
+    const range = incommingMessage?.headers.range ? parseRange(incommingMessage.headers.range, stat.size) : undefined;
 
     if (range) {
       return {
@@ -132,9 +130,7 @@ export function file(
  *
  * @category Response
  */
-export function ok<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function ok<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 200 as const };
 }
 
@@ -150,9 +146,7 @@ export function ok<TResponseBody, TResponse extends Partial<Response<TResponseBo
  *
  * @category Response
  */
-export function noContent<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function noContent<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 204 as const };
 }
 
@@ -168,9 +162,7 @@ export function noContent<TResponseBody, TResponse extends Partial<Response<TRes
  *
  * @category Response
  */
-export function movedPermanently<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function movedPermanently<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 301 as const };
 }
 
@@ -191,9 +183,7 @@ export function movedPermanently<TResponseBody, TResponse extends Partial<Respon
  *
  * @category Response
  */
-export function found<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function found<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 302 as const };
 }
 
@@ -210,9 +200,7 @@ export function found<TResponseBody, TResponse extends Partial<Response<TRespons
  *
  * @category Response
  */
-export function seeOther<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function seeOther<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 303 as const };
 }
 
@@ -229,9 +217,7 @@ export function seeOther<TResponseBody, TResponse extends Partial<Response<TResp
  *
  * @category Response
  */
-export function notModified<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function notModified<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 304 as const };
 }
 
@@ -247,9 +233,7 @@ export function notModified<TResponseBody, TResponse extends Partial<Response<TR
  *
  * @category Response
  */
-export function badRequest<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function badRequest<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 400 as const };
 }
 
@@ -268,9 +252,7 @@ export function badRequest<TResponseBody, TResponse extends Partial<Response<TRe
  *
  * @category Response
  */
-export function unauthorized<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function unauthorized<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 401 as const };
 }
 
@@ -289,9 +271,7 @@ export function unauthorized<TResponseBody, TResponse extends Partial<Response<T
  *
  * @category Response
  */
-export function forbidden<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function forbidden<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 403 as const };
 }
 
@@ -308,9 +288,7 @@ export function forbidden<TResponseBody, TResponse extends Partial<Response<TRes
  *
  * @category Response
  */
-export function notFound<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function notFound<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 404 as const };
 }
 
@@ -326,10 +304,7 @@ export function notFound<TResponseBody, TResponse extends Partial<Response<TResp
  *
  * @category Response
  */
-export function internalServerError<
-  TResponseBody,
-  TResponse extends Partial<Response<TResponseBody>>
->(res: TResponse) {
+export function internalServerError<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, status: 500 as const };
 }
 
@@ -351,9 +326,7 @@ export function internalServerError<
  *
  * @category Response
  */
-export function json<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function json<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return {
     ...res,
     body: toJson(res.body) as Json<TResponseBody>,
@@ -371,9 +344,7 @@ export function json<TResponseBody, TResponse extends Partial<Response<TResponse
  *
  * @category Response
  */
-export function yaml<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function yaml<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, headers: { ...res.headers, 'content-type': 'application/yaml' as const } };
 }
 
@@ -387,9 +358,7 @@ export function yaml<TResponseBody, TResponse extends Partial<Response<TResponse
  *
  * @category Response
  */
-export function binary<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function binary<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return {
     ...res,
     headers: { ...res.headers, 'content-type': 'application/octet-stream' as const },
@@ -406,9 +375,7 @@ export function binary<TResponseBody, TResponse extends Partial<Response<TRespon
  *
  * @category Response
  */
-export function pdf<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function pdf<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, headers: { ...res.headers, 'content-type': 'application/pdf' as const } };
 }
 
@@ -422,9 +389,7 @@ export function pdf<TResponseBody, TResponse extends Partial<Response<TResponseB
  *
  * @category Response
  */
-export function xml<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function xml<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, headers: { ...res.headers, 'content-type': 'application/xml' as const } };
 }
 
@@ -438,9 +403,7 @@ export function xml<TResponseBody, TResponse extends Partial<Response<TResponseB
  *
  * @category Response
  */
-export function text<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function text<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, headers: { ...res.headers, 'content-type': 'text/plain' as const } };
 }
 
@@ -454,9 +417,7 @@ export function text<TResponseBody, TResponse extends Partial<Response<TResponse
  *
  * @category Response
  */
-export function html<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function html<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, headers: { ...res.headers, 'content-type': 'text/html' as const } };
 }
 
@@ -470,9 +431,7 @@ export function html<TResponseBody, TResponse extends Partial<Response<TResponse
  *
  * @category Response
  */
-export function css<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function css<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, headers: { ...res.headers, 'content-type': 'text/css' as const } };
 }
 
@@ -486,9 +445,7 @@ export function css<TResponseBody, TResponse extends Partial<Response<TResponseB
  *
  * @category Response
  */
-export function csv<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function csv<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return { ...res, headers: { ...res.headers, 'content-type': 'text/csv' as const } };
 }
 
@@ -502,9 +459,7 @@ export function csv<TResponseBody, TResponse extends Partial<Response<TResponseB
  *
  * @category Response
  */
-export function form<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(
-  res: TResponse,
-) {
+export function form<TResponseBody, TResponse extends Partial<Response<TResponseBody>>>(res: TResponse) {
   return {
     ...res,
     headers: { ...res.headers, 'content-type': 'application/x-www-form-urlencoded' as const },
@@ -923,10 +878,7 @@ export function textSeeOther<TResponseBody>(
  *
  * @category Response
  */
-export function textBadRequest<TResponseBody>(
-  body: TResponseBody,
-  headers: OutgoingHttpHeaders = {},
-) {
+export function textBadRequest<TResponseBody>(body: TResponseBody, headers: OutgoingHttpHeaders = {}) {
   return text(badRequest({ body, headers }));
 }
 /**

@@ -144,9 +144,7 @@ export const route = <TRequest extends Empty = Empty>({
     const pathMatch = re.exec(req.url.pathname);
     if (pathMatch) {
       return {
-        path: keys
-          ? pathMatch.slice(1).reduce((all, val, i) => ({ [keys[i]]: val, ...all }), {})
-          : pathMatch.slice(1),
+        path: keys ? pathMatch.slice(1).reduce((all, val, i) => ({ [keys[i]]: val, ...all }), {}) : pathMatch.slice(1),
       };
     }
 
@@ -248,10 +246,7 @@ export function staticAssets<T extends Empty = Empty>(
         : false;
     },
     app: (req) => {
-      const relativePath = join(
-        '.',
-        normalize(req.incommingMessage.url ?? '').substring(prefixPath.length),
-      );
+      const relativePath = join('.', normalize(req.incommingMessage.url ?? '').substring(prefixPath.length));
 
       if (parentPathRegEx.test(relativePath)) {
         return textForbidden('Access Denied');

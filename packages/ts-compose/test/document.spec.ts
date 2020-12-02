@@ -1,12 +1,4 @@
-import {
-  document,
-  DocumentContext,
-  printDocument,
-  Type,
-  Node,
-  withIdentifier,
-  withImports,
-} from '../src';
+import { document, DocumentContext, printDocument, Type, Node, withIdentifier, withImports } from '../src';
 import { withHeader } from '../src/document';
 
 describe('Document', () => {

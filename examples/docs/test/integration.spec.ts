@@ -50,7 +50,7 @@ describe('Docs examples', () => {
       service.stderr.on('data', (data) => console.error(String(data)));
       await new Promise((resolve) => {
         service.stdout.on('data', (data) =>
-          String(data).includes('Laminar: Running') ? resolve() : undefined,
+          String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
 
@@ -116,9 +116,9 @@ describe('Docs examples', () => {
 
       await expect(api.get('/my-assets/star.svg')).resolves.toMatchObject({ status: 200 });
       await expect(api.get('/my-assets/svg.svg')).resolves.toMatchObject({ status: 200 });
-      await expect(
-        api.get('/my-assets/other.txt').catch((error) => error.response),
-      ).resolves.toMatchObject({ status: 404 });
+      await expect(api.get('/my-assets/other.txt').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+      });
     } finally {
       await stop(server);
     }
@@ -133,9 +133,10 @@ describe('Docs examples', () => {
 
       await expect(api.get('/my-assets/star.svg')).resolves.toMatchObject({ status: 200 });
       await expect(api.get('/my-assets/svg.svg')).resolves.toMatchObject({ status: 200 });
-      await expect(
-        api.get('/my-assets/other.txt').catch((error) => error.response),
-      ).resolves.toMatchObject({ status: 404, data: '<html>No File</html>' });
+      await expect(api.get('/my-assets/other.txt').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+        data: '<html>No File</html>',
+      });
     } finally {
       await stop(server);
     }
@@ -172,9 +173,7 @@ describe('Docs examples', () => {
     const api = axios.create({ baseURL: `http://localhost:${customErrorHandlerServer.port}` });
     try {
       await start(customErrorHandlerServer);
-      await expect(
-        api.get('/test/star.yaml').catch((error) => error.response),
-      ).resolves.toMatchObject({
+      await expect(api.get('/test/star.yaml').catch((error) => error.response)).resolves.toMatchObject({
         status: 500,
         data: '<html>Testing error</html>',
       });
@@ -189,9 +188,7 @@ describe('Docs examples', () => {
     const server = httpServer({ port: 8858, app: corsRegex(app) });
     try {
       await start(server);
-      await expect(
-        api.options('/test', { headers: { Origin: 'https://localhost' } }),
-      ).resolves.toMatchObject({
+      await expect(api.options('/test', { headers: { Origin: 'https://localhost' } })).resolves.toMatchObject({
         status: 204,
         headers: {
           'access-control-allow-origin': 'https://localhost',
@@ -209,9 +206,7 @@ describe('Docs examples', () => {
     const server = httpServer({ port: 8859, app: corsFunction(app) });
     try {
       await start(server);
-      await expect(
-        api.options('/test', { headers: { Origin: 'https://example.com' } }),
-      ).resolves.toMatchObject({
+      await expect(api.options('/test', { headers: { Origin: 'https://example.com' } })).resolves.toMatchObject({
         status: 204,
         headers: {
           'access-control-allow-origin': 'https://example.com',
@@ -229,9 +224,7 @@ describe('Docs examples', () => {
     const server = httpServer({ port: 8860, app: corsOptions(app) });
     try {
       await start(server);
-      await expect(
-        api.options('/test', { headers: { Origin: 'https://localhost' } }),
-      ).resolves.toMatchObject({
+      await expect(api.options('/test', { headers: { Origin: 'https://localhost' } })).resolves.toMatchObject({
         status: 204,
         headers: {
           'access-control-allow-origin': 'http://localhost',

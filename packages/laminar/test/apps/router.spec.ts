@@ -21,9 +21,7 @@ describe('router middleware', () => {
           app: router(
             get(/^\/two\/foo\/(\d+)/, ({ path: [id] }) => textOk(`two foo ${id}`)),
             get(/^\/two\/bar\/(\d+)$/, ({ path: [id] }) => textOk(`two bar ${id}`)),
-            get(/^\/two\/bar\/(\d+)\/(\d+)/, ({ path: [id, serial] }) =>
-              textOk(`two bar ${id}:${serial}`),
-            ),
+            get(/^\/two\/bar\/(\d+)\/(\d+)/, ({ path: [id, serial] }) => textOk(`two bar ${id}:${serial}`)),
             () => textOk('two not found'),
           ),
         }),

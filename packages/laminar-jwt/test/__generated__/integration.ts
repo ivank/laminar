@@ -9,10 +9,7 @@ import {
   ResponseOapi,
 } from '@ovotech/laminar';
 
-export const openApiTyped = <
-  R extends Empty = Empty,
-  TAuthInfo extends OapiAuthInfo = OapiAuthInfo
->(
+export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(
   config: Config<R, TAuthInfo>,
 ): Promise<App<R>> => openApi(config);
 
@@ -73,10 +70,7 @@ export interface RequestTestscopesGet<TAuthInfo> extends RequestOapi {
   authInfo: TAuthInfo;
 }
 
-export type PathTestscopesGet<
-  R extends Empty = Empty,
-  TAuthInfo extends OapiAuthInfo = OapiAuthInfo
-> = (
+export type PathTestscopesGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
   req: RequestTestscopesGet<TAuthInfo> & R,
 ) => ResponseTestscopesGet | Promise<ResponseTestscopesGet>;
 
@@ -95,8 +89,7 @@ export type PathTestGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
   req: RequestTestGet<TAuthInfo> & R,
 ) => ResponseTestGet | Promise<ResponseTestGet>;
 
-export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>
-  extends OapiConfig<R> {
+export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
   paths: {
     '/session': {
       post: PathSessionPost<R>;

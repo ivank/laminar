@@ -84,12 +84,7 @@ export {
   ResponseTimeConfig,
   defaultResponseTimeHeader,
 } from './middleware/response-time.middleware';
-export {
-  loggingMiddleware,
-  Logger,
-  RequestLogging,
-  LoggerFormatters,
-} from './middleware/logging.middleware';
+export { loggingMiddleware, Logger, RequestLogging, LoggerFormatters } from './middleware/logging.middleware';
 export {
   bodyParserComponent,
   BodyParser,
@@ -110,19 +105,8 @@ export {
   parseResponse,
 } from './components/response-parser.component';
 export { urlComponent, RequestUrl } from './components/url.component';
-export {
-  errorHandlerComponent,
-  defaultErrorHandler,
-  ErrorHandler,
-} from './components/error-handler.component';
-export {
-  appComponents,
-  AppComponents,
-  AppOptions,
-  AppRequest,
-  Middleware,
-  App,
-} from './components/components';
+export { errorHandlerComponent, defaultErrorHandler, ErrorHandler } from './components/error-handler.component';
+export { appComponents, AppComponents, AppOptions, AppRequest, Middleware, App } from './components/components';
 export { HttpError } from './HttpError';
 export {
   router,

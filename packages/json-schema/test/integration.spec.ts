@@ -15,8 +15,7 @@ describe('Helper isEqual', () => {
                   type: 'object',
                   properties: {
                     value: {
-                      description:
-                        'The value of the balance. 1/1000ths of a penny. eg. 1000=1p, 100000=£1',
+                      description: 'The value of the balance. 1/1000ths of a penny. eg. 1000=1p, 100000=£1',
                       type: 'integer',
                       format: 'int32',
                       example: '123000',

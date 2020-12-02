@@ -1,10 +1,4 @@
-import {
-  SignOptions,
-  VerifyCallback,
-  Secret,
-  GetPublicKeyOrSecret,
-  VerifyOptions,
-} from 'jsonwebtoken';
+import { SignOptions, VerifyCallback, Secret, GetPublicKeyOrSecret, VerifyOptions } from 'jsonwebtoken';
 
 export interface JWTData {
   email: string;
@@ -38,10 +32,7 @@ export interface RequestSign<TUser extends User = User> {
 
 export type VerifiedJWTData = Parameters<VerifyCallback>[1];
 
-export type ScopeError<TUser extends JWTData = JWTData> = (
-  user: TUser,
-  scopes?: string[],
-) => undefined | string;
+export type ScopeError<TUser extends JWTData = JWTData> = (user: TUser, scopes?: string[]) => undefined | string;
 
 export interface JWTSign {
   secret: Secret;

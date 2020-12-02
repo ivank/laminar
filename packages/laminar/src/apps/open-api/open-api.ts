@@ -1,18 +1,5 @@
-import {
-  validateCompiled,
-  toSchemaObject,
-  compileInContext,
-  ResultError,
-} from '@ovotech/json-schema';
-import {
-  App,
-  AppRequest,
-  Empty,
-  jsonBadRequest,
-  jsonInternalServerError,
-  jsonNotFound,
-  Response,
-} from '../..';
+import { validateCompiled, toSchemaObject, compileInContext, ResultError } from '@ovotech/json-schema';
+import { App, AppRequest, Empty, jsonBadRequest, jsonInternalServerError, jsonNotFound, Response } from '../..';
 import { RequestOapi, OapiConfig, Route } from './types';
 import { compileOapi } from './compile-oapi';
 import { toRoutes, selectRoute } from './routes';
@@ -23,11 +10,7 @@ import { isSecurityResponse, validateSecurity } from './security';
  * If a request doesn't conform to the defined OpenApi schema,
  * Attempt to return the most information in order to help the user correct the error
  */
-function toRequestError<TRequest>(
-  result: ResultError,
-  route: Route<TRequest>,
-  req: AppRequest,
-): Response {
+function toRequestError<TRequest>(result: ResultError, route: Route<TRequest>, req: AppRequest): Response {
   const contentMediaTypes = Object.entries(route.operation.requestBody?.content ?? {});
   const mediaType =
     contentMediaTypes.find(([mimeType]) =>
@@ -60,9 +43,7 @@ export const defaultOapiNotFound: App = (req) =>
  *
  * @typeParam TRequest pass the request properties that the app requires. Usually added by the middlewares
  */
-export async function openApi<TRequest extends Empty>(
-  config: OapiConfig<TRequest>,
-): Promise<App<TRequest>> {
+export async function openApi<TRequest extends Empty>(config: OapiConfig<TRequest>): Promise<App<TRequest>> {
   const oapi = await compileOapi(config);
   const routes = toRoutes<TRequest>(toSchemaObject(oapi), config.paths);
   const notFound = config.notFound ?? defaultOapiNotFound;
@@ -101,7 +82,7 @@ export async function openApi<TRequest extends Empty>(
       return security;
     }
 
-    const res = await select.route.resolver({ ...reqOapi, ...security });
+    const res = await select.route.resolver({ ...reqOapi, authInfo: undefined, ...security });
     const checkResponse = validateCompiled({
       schema: compileInContext(select.route.response, oapi),
       value: res,

@@ -1,10 +1,9 @@
 import { Schema, JsonSchema } from './schema';
 
-export const isJsonSchema = (schema: Schema): schema is JsonSchema =>
-  schema && typeof schema === 'object';
+export const isJsonSchema = (schema: Schema): schema is JsonSchema => schema && typeof schema === 'object';
 
 export const isObject = (value: unknown): value is { [key: string]: unknown } =>
-  value && typeof value === 'object' && !Array.isArray(value);
+  Boolean(value && typeof value === 'object' && !Array.isArray(value));
 
 export const isEqual = (a: unknown, b: unknown): boolean => {
   if (a === b) {

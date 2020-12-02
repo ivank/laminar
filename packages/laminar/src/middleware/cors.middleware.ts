@@ -26,17 +26,12 @@ const toAllowOrigin = (
     if (requestOrigin) {
       if (Array.isArray(origin)) {
         return (
-          origin.find((item) => item === requestOrigin) ??
-          `Error, ${requestOrigin} was not one of ${origin.join(', ')}`
+          origin.find((item) => item === requestOrigin) ?? `Error, ${requestOrigin} was not one of ${origin.join(', ')}`
         );
       } else if (origin instanceof RegExp) {
-        return origin.test(requestOrigin)
-          ? requestOrigin
-          : `Error, ${requestOrigin} did not match ${String(origin)}`;
+        return origin.test(requestOrigin) ? requestOrigin : `Error, ${requestOrigin} did not match ${String(origin)}`;
       } else if (origin instanceof Function) {
-        return origin(requestOrigin)
-          ? requestOrigin
-          : `Error, ${requestOrigin} did not match cors function`;
+        return origin(requestOrigin) ? requestOrigin : `Error, ${requestOrigin} did not match cors function`;
       }
     }
   }
@@ -52,8 +47,7 @@ const toAllowHeaders = (
   return Array.isArray(allowed) ? allowed.join(',') : allowed;
 };
 
-const toMaxAge = (maxAge: CorsConfig['maxAge']): string | undefined =>
-  maxAge ? maxAge.toString() : undefined;
+const toMaxAge = (maxAge: CorsConfig['maxAge']): string | undefined => (maxAge ? maxAge.toString() : undefined);
 
 const toExposeHeaders = (headers: CorsConfig['exposeHeaders']): string | undefined =>
   Array.isArray(headers) ? headers.join(',') : headers;
@@ -86,25 +80,17 @@ export const corsMiddleware = ({
     ...(accessControlAllowCredentials
       ? { 'Access-Control-Allow-Credentials': accessControlAllowCredentials }
       : undefined),
-    ...(accessControlExposeHeaders
-      ? { 'Access-Control-Expose-Headers': accessControlExposeHeaders }
-      : undefined),
+    ...(accessControlExposeHeaders ? { 'Access-Control-Expose-Headers': accessControlExposeHeaders } : undefined),
   };
   const optionsHeaders = {
-    ...(accessControlAllowMethods
-      ? { 'Access-Control-Allow-Methods': accessControlAllowMethods }
-      : undefined),
+    ...(accessControlAllowMethods ? { 'Access-Control-Allow-Methods': accessControlAllowMethods } : undefined),
     ...(accessControlMaxAge ? { 'Access-Control-Max-Age': accessControlMaxAge } : undefined),
   };
 
   return (next) => {
     return async (req) => {
       const headers = {
-        'Access-Control-Allow-Origin': toAllowOrigin(
-          allowOrigin,
-          req.headers.origin,
-          fallbackAllowOrigin,
-        ),
+        'Access-Control-Allow-Origin': toAllowOrigin(allowOrigin, req.headers.origin, fallbackAllowOrigin),
         ...initialHeaders,
       };
 
@@ -115,10 +101,7 @@ export const corsMiddleware = ({
             ...headers,
             ...optionsHeaders,
             'content-type': '',
-            'Access-Control-Allow-Headers': toAllowHeaders(
-              allowHeaders,
-              req.headers['access-control-request-headers'],
-            ),
+            'Access-Control-Allow-Headers': toAllowHeaders(allowHeaders, req.headers['access-control-request-headers']),
           },
           status: 204,
         };

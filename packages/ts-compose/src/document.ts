@@ -3,11 +3,7 @@ import { Node } from './node';
 import { printNode } from './print';
 
 export interface Identifiers {
-  [key: string]:
-    | ts.InterfaceDeclaration
-    | ts.TypeAliasDeclaration
-    | ts.VariableStatement
-    | ts.EnumDeclaration;
+  [key: string]: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.VariableStatement | ts.EnumDeclaration;
 }
 
 export interface ImportNamed {
@@ -29,18 +25,12 @@ export interface DocumentContext {
   imports?: { [key: string]: ImportNode };
 }
 
-export interface Document<
-  TAstType = ts.TypeNode,
-  TContext extends DocumentContext = DocumentContext
-> {
+export interface Document<TAstType = ts.TypeNode, TContext extends DocumentContext = DocumentContext> {
   type: TAstType;
   context: TContext;
 }
 
-export const document = <
-  TAstType = ts.TypeNode,
-  TContext extends DocumentContext = DocumentContext
->(
+export const document = <TAstType = ts.TypeNode, TContext extends DocumentContext = DocumentContext>(
   context: TContext,
   type: TAstType,
 ): Document<TAstType, TContext> => ({
@@ -48,11 +38,7 @@ export const document = <
   type,
 });
 
-export const mapWithContext = <
-  T = unknown,
-  TAstType = ts.TypeNode,
-  TContext extends DocumentContext = DocumentContext
->(
+export const mapWithContext = <T = unknown, TAstType = ts.TypeNode, TContext extends DocumentContext = DocumentContext>(
   context: TContext,
   items: T[],
   callbackfn: (context: TContext, item: T) => Document<TAstType, TContext>,
@@ -70,11 +56,7 @@ export const mapWithContext = <
 
 export const withIdentifier = <TContext extends DocumentContext = DocumentContext>(
   context: TContext,
-  identifier:
-    | ts.InterfaceDeclaration
-    | ts.TypeAliasDeclaration
-    | ts.VariableStatement
-    | ts.EnumDeclaration,
+  identifier: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.VariableStatement | ts.EnumDeclaration,
   namespace?: string,
 ): TContext => {
   const name =
@@ -112,9 +94,7 @@ export const withImports = <TContext extends DocumentContext = DocumentContext>(
         ...current,
         ...value,
         named:
-          value.named && current?.named
-            ? mergeImportNamed(value.named, current.named)
-            : value.named ?? current?.named,
+          value.named && current?.named ? mergeImportNamed(value.named, current.named) : value.named ?? current?.named,
       },
     },
   };

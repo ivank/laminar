@@ -38,9 +38,7 @@ export const axiosCommand = (logger: Logger = console): commander.Command =>
 
       if (output) {
         fs.mkdirSync(dirname(output), { recursive: true });
-        logger.info(
-          `OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} axios types`,
-        );
+        logger.info(`OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} axios types`);
         fs.writeFileSync(output, result);
       } else {
         process.stdout.write(result);

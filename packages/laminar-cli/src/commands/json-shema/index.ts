@@ -13,9 +13,7 @@ import { SchemaObject } from 'openapi3-ts';
 export const processFile = async (file: string, name: string): Promise<string> => {
   const { schema, refs } = await compile(file);
   const converted = convertSchema({ root: schema as SchemaObject, refs }, schema);
-  return printDocument(
-    document(converted.context, Type.Alias({ name, isExport: true, type: converted.type })),
-  );
+  return printDocument(document(converted.context, Type.Alias({ name, isExport: true, type: converted.type })));
 };
 
 const parseSchema = (type: string, content: string): Schema => {
@@ -43,9 +41,7 @@ export const jsonSchemaCommand = (logger: Logger = console): commander.Command =
 
       if (output) {
         fs.mkdirSync(dirname(output), { recursive: true });
-        logger.info(
-          `OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} axios types`,
-        );
+        logger.info(`OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} axios types`);
         fs.writeFileSync(output, result);
       } else {
         process.stdout.write(result);

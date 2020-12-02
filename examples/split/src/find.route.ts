@@ -10,7 +10,5 @@ export const find: FindRoute = async ({ path, pg }) => {
   const sql = 'SELECT id, name, created_at as "createdAt" FROM users WHERE id = $1';
   const { rows } = await pg.query(sql, [path.id]);
 
-  return rows[0]
-    ? jsonOk(rows[0])
-    : jsonNotFound({ message: `No User With id ${path.id} was found` });
+  return rows[0] ? jsonOk(rows[0]) : jsonNotFound({ message: `No User With id ${path.id} was found` });
 };

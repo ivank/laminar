@@ -95,9 +95,7 @@ describe('Integration', () => {
         redirect('http://localhost:8050/destination', { headers: { Authorization: 'Bearer 123' } }),
       ),
       get('/destination', () => jsonOk({ arrived: true })),
-      get('/stream-file', () =>
-        textOk(createReadStream(join(__dirname, '../examples/assets/texts/one.txt'))),
-      ),
+      get('/stream-file', () => textOk(createReadStream(join(__dirname, '../examples/assets/texts/one.txt')))),
       get('/return-file', () => file(join(__dirname, '../examples/assets/texts/one.txt'), {})),
       get('/error', () => {
         throw new Error('unknown');
@@ -159,12 +157,10 @@ describe('Integration', () => {
 
       const api = axios.create({ baseURL: 'http://localhost:8050' });
 
-      await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject(
-        {
-          status: 404,
-          data: 'Test url /unknown-url not found',
-        },
-      );
+      await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+        data: 'Test url /unknown-url not found',
+      });
 
       await expect(api.get('/error').catch((error) => error.response)).resolves.toMatchObject({
         status: 500,
@@ -219,17 +215,13 @@ describe('Integration', () => {
         data: readFileSync(join(__dirname, '../examples/assets/texts/index.html'), 'utf8'),
       });
 
-      await expect(api.get('/assets/../assets/texts/../texts/./other.html')).resolves.toMatchObject(
-        {
-          status: 200,
-          headers: { 'content-type': 'text/html' },
-          data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
-        },
-      );
+      await expect(api.get('/assets/../assets/texts/../texts/./other.html')).resolves.toMatchObject({
+        status: 200,
+        headers: { 'content-type': 'text/html' },
+        data: readFileSync(join(__dirname, '../examples/assets/texts/other.html'), 'utf8'),
+      });
 
-      await expect(
-        api.get('/assets/../../test.html').catch((error) => error.response),
-      ).resolves.toMatchObject({
+      await expect(api.get('/assets/../../test.html').catch((error) => error.response)).resolves.toMatchObject({
         status: 404,
       });
 
@@ -243,9 +235,7 @@ describe('Integration', () => {
         data: { health: 'ok' },
       });
 
-      await expect(
-        api.get('/.well-known/health-check/other').catch((error) => error.response),
-      ).resolves.toMatchObject({
+      await expect(api.get('/.well-known/health-check/other').catch((error) => error.response)).resolves.toMatchObject({
         status: 404,
         data: 'Test url /.well-known/health-check/other not found',
       });
@@ -255,9 +245,7 @@ describe('Integration', () => {
         data: { arrived: true },
       });
 
-      await expect(
-        api.get('/link', { maxRedirects: 0 }).catch((error) => error.response),
-      ).resolves.toMatchObject({
+      await expect(api.get('/link', { maxRedirects: 0 }).catch((error) => error.response)).resolves.toMatchObject({
         status: 302,
         data: 'Redirecting to http://localhost:8050/destination',
       });
@@ -267,12 +255,12 @@ describe('Integration', () => {
         data: { arrived: true },
       });
 
-      await expect(
-        api.get('/http-error', { maxRedirects: 0 }).catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 302,
-        data: { message: 'Redirect to http://localhost:8050/destination' },
-      });
+      await expect(api.get('/http-error', { maxRedirects: 0 }).catch((error) => error.response)).resolves.toMatchObject(
+        {
+          status: 302,
+          data: { message: 'Redirect to http://localhost:8050/destination' },
+        },
+      );
 
       await expect(api.get('/link-other')).resolves.toMatchObject({
         status: 200,
@@ -312,9 +300,7 @@ describe('Integration', () => {
         data: { patched: true },
       });
 
-      await expect(
-        api.patch('/users/20', new URLSearchParams({ name: 'Pathing2' })),
-      ).resolves.toMatchObject({
+      await expect(api.patch('/users/20', new URLSearchParams({ name: 'Pathing2' }))).resolves.toMatchObject({
         status: 200,
         data: { patched: true },
       });

@@ -1,10 +1,4 @@
-import {
-  requestListener,
-  response,
-  Resolver,
-  errorHandlerComponent,
-  urlComponent,
-} from '@ovotech/laminar';
+import { requestListener, response, Resolver, errorHandlerComponent, urlComponent } from '@ovotech/laminar';
 import { createServer } from 'http';
 
 /**

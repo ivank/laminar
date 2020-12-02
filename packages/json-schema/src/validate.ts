@@ -55,8 +55,7 @@ const drafts: Drafts = {
 export const compile = async (schema: Schema | string): Promise<ResolvedSchema> =>
   typeof schema === 'string' ? resolveFile(schema) : resolve(schema);
 
-export const toSchemaObject = <T extends Schema = Schema>(schema: ResolvedSchema<T>): T =>
-  schema.schema;
+export const toSchemaObject = <T extends Schema = Schema>(schema: ResolvedSchema<T>): T => schema.schema;
 
 export const compileInContext = <T extends Schema = Schema>(
   schema: T,

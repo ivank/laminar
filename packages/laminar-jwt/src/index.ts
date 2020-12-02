@@ -14,9 +14,4 @@ export {
   createSessionMiddleware,
   simpleScopeError,
 } from './jwt';
-export {
-  keycloakScopeError,
-  keycloakAuthMiddleware,
-  keycloakJwtSecurityResolver,
-  JWTDataKeycloak,
-} from './keycloak';
+export { keycloakScopeError, keycloakAuthMiddleware, keycloakJwtSecurityResolver, JWTDataKeycloak } from './keycloak';

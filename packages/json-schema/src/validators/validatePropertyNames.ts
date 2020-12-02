@@ -3,11 +3,7 @@ import { Validator, childOptions, combine, validateSchema, empty } from '../vali
 
 export const validatePropertyNames: Validator = ({ propertyNames }, value, options) => {
   if (propertyNames !== undefined && isObject(value)) {
-    return combine(
-      Object.keys(value).map((key) =>
-        validateSchema(propertyNames, key, childOptions(key, options)),
-      ),
-    );
+    return combine(Object.keys(value).map((key) => validateSchema(propertyNames, key, childOptions(key, options))));
   }
   return empty;
 };

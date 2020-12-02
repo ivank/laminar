@@ -4,8 +4,7 @@ const app: App = () => {
   throw new Error('Testing error');
 };
 
-const errorHandler: ErrorHandler = ({ error }) =>
-  htmlInternalServerError(`<html>${error.message}</html>`);
+const errorHandler: ErrorHandler = ({ error }) => htmlInternalServerError(`<html>${error.message}</html>`);
 
 export const server = httpServer({
   app,

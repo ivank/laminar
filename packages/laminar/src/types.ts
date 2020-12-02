@@ -59,9 +59,7 @@ export interface Response<Content = unknown, Status = number> {
  *
  * @typeParam TRequest a basic request that must contain `incommingMessage` param
  */
-export type Resolver<TRequest extends Request = Request> = (
-  req: TRequest,
-) => Response | Promise<Response>;
+export type Resolver<TRequest extends Request = Request> = (req: TRequest) => Response | Promise<Response>;
 
 /**
  * An internal middleware that relies only on `incommingMessage` param.

@@ -47,8 +47,7 @@ interface FileContext {
   uris?: string[];
 }
 
-const isTraversable = (schema: unknown): schema is TraversableSchema =>
-  schema && typeof schema === 'object';
+const isTraversable = (schema: unknown): schema is TraversableSchema => Boolean(schema && typeof schema === 'object');
 
 const toUrl = (url: string, base?: string): string | undefined => {
   try {
@@ -70,18 +69,12 @@ const getId = (schema: Schema): string | undefined => {
 };
 
 const getAnchor = (schema: Schema): string | undefined =>
-  isTraversable(schema) &&
-  '$anchor' in schema &&
-  schema.$anchor &&
-  typeof schema.$anchor === 'string'
+  isTraversable(schema) && '$anchor' in schema && schema.$anchor && typeof schema.$anchor === 'string'
     ? schema.$anchor
     : undefined;
 
 const isRefSchema = (schema: Schema): schema is RefSchema =>
-  isTraversable(schema) &&
-  '$ref' in schema &&
-  schema.$ref !== undefined &&
-  typeof schema.$ref === 'string';
+  isTraversable(schema) && '$ref' in schema && schema.$ref !== undefined && typeof schema.$ref === 'string';
 
 const isRecursiveRefSchema = (schema: Schema): schema is RecursiveRefSchema =>
   isTraversable(schema) &&
@@ -137,11 +130,7 @@ export const extractNamedRefs = (document: Schema): RefMap =>
     {},
   );
 
-export const extractUrls = (
-  schema: Schema,
-  namedRefs: string[] = [],
-  fileContext: FileContext = {},
-): string[] => {
+export const extractUrls = (schema: Schema, namedRefs: string[] = [], fileContext: FileContext = {}): string[] => {
   const namedRefsAsUrls = namedRefs.map((ref) => toUrl(ref)?.split('#')[0] ?? ref);
   return reduceSchema<string[]>(
     schema,
@@ -181,23 +170,17 @@ const loadFile = async (uri: string, { cwd }: FileContext = {}): Promise<LoadedJ
   }
 };
 
-const parseJsonPointer = (name: string): string =>
-  decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
+const parseJsonPointer = (name: string): string => decodeURIComponent(name.replace('~1', '/').replace('~0', '~'));
 
 const getJsonPointer = (document: Schema, pointer: string): Schema | undefined =>
   pointer
     .split('/')
     .reduce<Schema | undefined>(
-      (item, name) =>
-        name ? (isTraversable(item) ? item[parseJsonPointer(name)] : undefined) : item,
+      (item, name) => (name ? (isTraversable(item) ? item[parseJsonPointer(name)] : undefined) : item),
       document,
     );
 
-const resolveNestedRefs = (
-  schema: Schema,
-  context: Context,
-  fileContext: FileContext = {},
-): Schema => {
+const resolveNestedRefs = (schema: Schema, context: Context, fileContext: FileContext = {}): Schema => {
   const parentId = currentId(schema, fileContext.parentId);
 
   if (isTraversable(schema)) {
@@ -207,7 +190,7 @@ const resolveNestedRefs = (
   }
 
   if (isRecursiveRefSchema(schema)) {
-    const { $recursiveRef, ...restSiblings } = schema;
+    const { $recursiveRef, ...restSiblings } = schema as RecursiveRefSchema;
     const [url, pointer] = $recursiveRef.split('#');
     const fullUrl = currentUrl(url, { ...fileContext, parentId });
 
@@ -226,7 +209,7 @@ const resolveNestedRefs = (
       return { $ref: anchorPointer, ...restSiblings };
     }
   } else if (isRefSchema(schema)) {
-    const { $ref, ...restSiblings } = schema;
+    const { $ref, ...restSiblings } = schema as RefSchema;
     const [url, pointer] = $ref.split('#');
 
     const fullUrl = currentUrl(url, { ...fileContext, parentId });
@@ -260,16 +243,13 @@ export const extractFiles = async (
     }),
   );
 
-  return result.reduce(
-    (all, item) => ({ uris: [...all.uris, ...item.uris], refs: { ...all.refs, ...item.refs } }),
-    { uris: [], refs: initialRefs },
-  );
+  return result.reduce((all, item) => ({ uris: [...all.uris, ...item.uris], refs: { ...all.refs, ...item.refs } }), {
+    uris: [],
+    refs: initialRefs,
+  });
 };
 
-export const resolve = async (
-  original: Schema,
-  fileContext: FileContext = {},
-): Promise<ResolvedSchema> => {
+export const resolve = async (original: Schema, fileContext: FileContext = {}): Promise<ResolvedSchema> => {
   const copy: Schema = JSON.parse(JSON.stringify(original));
   const { refs, uris } = await extractFiles(copy, fileContext);
   const context = { schema: copy, refs, uris };

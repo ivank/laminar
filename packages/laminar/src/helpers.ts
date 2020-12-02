@@ -36,10 +36,7 @@ const toQueryPath = (key: string): string[] => key.replace(/\]/g, '').split('[')
  */
 export const parseQueryObjects = (searchParams: URLSearchParams): Obj =>
   [...searchParams.entries()]
-    .map<[string, unknown]>(([key, val]) => [
-      key,
-      typeof val === 'string' && val.includes(',') ? val.split(',') : val,
-    ])
+    .map<[string, unknown]>(([key, val]) => [key, typeof val === 'string' && val.includes(',') ? val.split(',') : val])
     .reduce((all, [key, val]) => setQuery(toQueryPath(key), val, all), {});
 
 /**
@@ -146,7 +143,7 @@ export function toJson<T>(data: T): Json<T> {
     if (data instanceof Date) {
       return data.toISOString() as any;
     } else if (Array.isArray(data)) {
-      return data.map(toJson) as any;
+      return (data as any).map(toJson) as any;
     } else {
       return Object.entries(data).reduce(
         (acc, [key, value]) => (value === undefined ? acc : { ...acc, [key]: toJson(value) }),

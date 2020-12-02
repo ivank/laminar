@@ -9,10 +9,7 @@ import {
   ResponseOapi,
 } from '@ovotech/laminar';
 
-export const openApiTyped = <
-  R extends Empty = Empty,
-  TAuthInfo extends OapiAuthInfo = OapiAuthInfo
->(
+export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(
   config: Config<R, TAuthInfo>,
 ): Promise<App<R>> => openApi(config);
 
@@ -119,14 +116,11 @@ export interface RequestPetsIdGet<TAuthInfo> extends RequestOapi {
 /**
  * Returns a user based on a single ID, if the user does not have access to the pet
  */
-export type PathPetsIdGet<
-  R extends Empty = Empty,
-  TAuthInfo extends OapiAuthInfo = OapiAuthInfo
-> = (req: RequestPetsIdGet<TAuthInfo> & R) => ResponsePetsIdGet | Promise<ResponsePetsIdGet>;
+export type PathPetsIdGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
+  req: RequestPetsIdGet<TAuthInfo> & R,
+) => ResponsePetsIdGet | Promise<ResponsePetsIdGet>;
 
-export type ResponsePetsIdDelete =
-  | ResponseOapi<unknown, 204, string>
-  | ResponseOapi<Error, number, 'application/json'>;
+export type ResponsePetsIdDelete = ResponseOapi<unknown, 204, string> | ResponseOapi<Error, number, 'application/json'>;
 
 /**
  * deletes a single pet based on the ID supplied
@@ -144,15 +138,11 @@ export interface RequestPetsIdDelete<TAuthInfo> extends RequestOapi {
 /**
  * deletes a single pet based on the ID supplied
  */
-export type PathPetsIdDelete<
-  R extends Empty = Empty,
-  TAuthInfo extends OapiAuthInfo = OapiAuthInfo
-> = (
+export type PathPetsIdDelete<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
   req: RequestPetsIdDelete<TAuthInfo> & R,
 ) => ResponsePetsIdDelete | Promise<ResponsePetsIdDelete>;
 
-export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>
-  extends OapiConfig<R> {
+export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
   paths: {
     '/pets': {
       /**

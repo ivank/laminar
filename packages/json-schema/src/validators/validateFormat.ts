@@ -17,9 +17,6 @@ const formats: { [key: string]: RegExp } = {
 };
 
 export const validateFormat: Validator = (schema, value, { name }) =>
-  typeof value === 'string' &&
-  schema.format &&
-  schema.format in formats &&
-  !formats[schema.format].test(String(value))
+  typeof value === 'string' && schema.format && schema.format in formats && !formats[schema.format].test(String(value))
     ? error('format', name, schema.format)
     : empty;

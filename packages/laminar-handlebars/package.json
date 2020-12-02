@@ -25,17 +25,17 @@
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
     "@ovotech/laminar": "^0.9.1",
-    "@types/jest": "^26.0.14",
-    "@types/node": "^14.11.1",
-    "@typescript-eslint/eslint-plugin": "^4.1.1",
-    "@typescript-eslint/parser": "^4.1.1",
-    "axios": "^0.19.2",
-    "eslint": "^7.9.0",
-    "eslint-config-prettier": "^6.11.0",
-    "jest": "^26.4.2",
-    "prettier": "^2.1.2",
-    "ts-jest": "^26.4.0",
-    "typescript": "^4.0.2"
+    "@types/jest": "^26.0.16",
+    "@types/node": "^14.14.10",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "axios": "^0.21.0",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.2"
   },
   "peerDependencies": {
     "@ovotech/laminar": "*"

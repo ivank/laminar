@@ -41,9 +41,7 @@ export const rsaPublicKeyToPEM = (modulusB64: string, exponentB64: string): stri
 
   const encodedModlen = encodeLengthHex(modlen);
   const encodedExplen = encodeLengthHex(explen);
-  const encoded = encodeLengthHex(
-    modlen + explen + encodedModlen.length / 2 + encodedExplen.length / 2 + 2,
-  );
+  const encoded = encodeLengthHex(modlen + explen + encodedModlen.length / 2 + encodedExplen.length / 2 + 2);
   const encodedPubkey = `30${encoded}02${encodedModlen}${modulusHex}02${encodedExplen}${exponentHex}`;
 
   const der = Buffer.from(encodedPubkey, 'hex').toString('base64');

@@ -13,7 +13,7 @@ describe('Split App Integration Tests', () => {
       service.stderr.on('data', (data) => console.error(String(data)));
       await new Promise((resolve) => {
         service.stdout.on('data', (data) =>
-          String(data).includes('Laminar: Running') ? resolve() : undefined,
+          String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
 
@@ -24,9 +24,7 @@ describe('Split App Integration Tests', () => {
         data: { message: 'Unkown user' },
       });
 
-      await expect(
-        api.get('/user/3', { headers: { Authorization: 'Secret Pass' } }),
-      ).resolves.toMatchObject({
+      await expect(api.get('/user/3', { headers: { Authorization: 'Secret Pass' } })).resolves.toMatchObject({
         status: 200,
         data: { id: '3', name: 'John' },
       });

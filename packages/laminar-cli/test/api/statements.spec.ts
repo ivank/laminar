@@ -61,20 +61,14 @@ describe('Statements', () => {
             });
           },
           post: ({ path: { type }, body }) => {
-            reportsService.set(
-              type,
-              'date' in body ? body.date : `${body.fromDate}-${body.toDate}`,
-              'report',
-            );
+            reportsService.set(type, 'date' in body ? body.date : `${body.fromDate}-${body.toDate}`, 'report');
             return jsonOk({ success: true });
           },
         },
         '/v2/reports/{type}/{filename}': {
           get: ({ path: { type, filename } }) => {
             const report = reportsService.get(type, filename);
-            return report
-              ? csv(ok({ body: report.content }))
-              : jsonNotFound({ message: 'Report not found' });
+            return report ? csv(ok({ body: report.content })) : jsonNotFound({ message: 'Report not found' });
           },
         },
         '/v2/statements': {
@@ -113,9 +107,7 @@ describe('Statements', () => {
         '/v2/statements/{id}/approval': {
           post: ({ path: { id } }) => {
             const result = statementsService.approve(id);
-            return result
-              ? jsonOk({ success: true })
-              : jsonNotFound({ message: 'Cannot approve: Not Found' });
+            return result ? jsonOk({ success: true }) : jsonNotFound({ message: 'Cannot approve: Not Found' });
           },
         },
         '/v2/statements/{id}/data': {
@@ -133,17 +125,13 @@ describe('Statements', () => {
         '/v2/statements/{id}/modifications': {
           post: ({ path: { id }, body: { modification } }) => {
             const item = statementsService.modify(id, modification);
-            return item
-              ? jsonOk(item)
-              : jsonNotFound({ message: 'Cannot modify: Statement not found' });
+            return item ? jsonOk(item) : jsonNotFound({ message: 'Cannot modify: Statement not found' });
           },
         },
         '/v2/statements/{id}/pdf': {
           get: async ({ path: { id } }) => {
             const body = await statementsService.pdf(id);
-            return body
-              ? pdf(ok({ body }))
-              : jsonNotFound({ message: 'NoPdf: Statement not found' });
+            return body ? pdf(ok({ body })) : jsonNotFound({ message: 'NoPdf: Statement not found' });
           },
         },
       },

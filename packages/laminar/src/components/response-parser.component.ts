@@ -56,6 +56,5 @@ export const parseResponse = (res: Response, parsers = defaultResponseParsers): 
  *
  * @category component
  */
-export const responseParserComponent = (parsers = defaultResponseParsers): Component => (
-  next,
-) => async (req) => parseResponse(await next(req), parsers);
+export const responseParserComponent = (parsers = defaultResponseParsers): Component => (next) => async (req) =>
+  parseResponse(await next(req), parsers);

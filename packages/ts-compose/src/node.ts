@@ -28,19 +28,12 @@ export const Node = {
     args: ts.ParameterDeclaration[];
     ret?: ts.TypeNode;
     body: ts.ConciseBody;
-  }): ts.ArrowFunction =>
-    ts.factory.createArrowFunction(undefined, typeArgs, args, ret, undefined, body),
+  }): ts.ArrowFunction => ts.factory.createArrowFunction(undefined, typeArgs, args, ret, undefined, body),
 
-  Block: ({
-    statements,
-    multiline,
-  }: {
-    statements: ts.Statement[];
-    multiline?: boolean;
-  }): ts.Block => ts.factory.createBlock(statements, multiline),
+  Block: ({ statements, multiline }: { statements: ts.Statement[]; multiline?: boolean }): ts.Block =>
+    ts.factory.createBlock(statements, multiline),
 
-  Return: (expression: ts.Expression): ts.ReturnStatement =>
-    ts.factory.createReturnStatement(expression),
+  Return: (expression: ts.Expression): ts.ReturnStatement => ts.factory.createReturnStatement(expression),
 
   Call: ({
     expression,
@@ -83,8 +76,7 @@ export const Node = {
       ),
       ts.factory.createStringLiteral(module),
     ),
-  TemplateString: (text: string): ts.TemplateLiteral =>
-    ts.factory.createNoSubstitutionTemplateLiteral(text, text),
+  TemplateString: (text: string): ts.TemplateLiteral => ts.factory.createNoSubstitutionTemplateLiteral(text, text),
 
   ObjectLiteral: ({
     jsDoc,
@@ -108,10 +100,7 @@ export const Node = {
     jsDoc?: string;
   }) => {
     const escapedKey = isIdentiferString(key) ? key : Type.LiteralString(key);
-    return withJSDoc(
-      jsDoc,
-      ts.factory.createPropertyAssignment(escapedKey, Node.Literal({ value, multiline })),
-    );
+    return withJSDoc(jsDoc, ts.factory.createPropertyAssignment(escapedKey, Node.Literal({ value, multiline })));
   },
   Literal: ({
     value,
@@ -137,10 +126,7 @@ export const Node = {
           Object.keys(value).map((key) => {
             const escapedKey = isIdentiferString(key) ? key : Type.LiteralString(key);
 
-            return ts.factory.createPropertyAssignment(
-              escapedKey,
-              Node.Literal({ value: value[key], multiline }),
-            );
+            return ts.factory.createPropertyAssignment(escapedKey, Node.Literal({ value: value[key], multiline }));
           }),
           multiline,
         );
@@ -156,13 +142,7 @@ export const Node = {
     }
   },
 
-  EnumMember: ({
-    name,
-    value,
-  }: {
-    name: string | ts.Identifier;
-    value?: string | number;
-  }): ts.EnumMember =>
+  EnumMember: ({ name, value }: { name: string | ts.Identifier; value?: string | number }): ts.EnumMember =>
     ts.factory.createEnumMember(
       name,
       value
@@ -185,10 +165,7 @@ export const Node = {
     isDefault?: boolean;
     jsDoc?: string;
   }): ts.EnumDeclaration =>
-    withJSDoc(
-      jsDoc,
-      ts.factory.createEnumDeclaration([], Type.Export(isExport, isDefault), name, members),
-    ),
+    withJSDoc(jsDoc, ts.factory.createEnumDeclaration([], Type.Export(isExport, isDefault), name, members)),
 
   Const: ({
     name,

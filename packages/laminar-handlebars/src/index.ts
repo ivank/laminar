@@ -30,11 +30,7 @@ export interface Templates {
   [key: string]: TemplateDelegate;
 }
 
-export type HandlebarsRender = (
-  view: string,
-  data?: Record<string, unknown>,
-  options?: Partial<Response>,
-) => Response;
+export type HandlebarsRender = (view: string, data?: Record<string, unknown>, options?: Partial<Response>) => Response;
 
 export interface RequestHandlebars {
   hbs: HandlebarsRender;
@@ -49,12 +45,7 @@ export const deepReaddirSync = (dir: string, childDir: string, parent = ''): str
     [],
   );
 
-export const compileTemplates = ({
-  childDir,
-  dir,
-  extension,
-  compileOptions,
-}: CompileTemplatesOptions): Templates =>
+export const compileTemplates = ({ childDir, dir, extension, compileOptions }: CompileTemplatesOptions): Templates =>
   deepReaddirSync(dir, childDir)
     .filter((file) => file.endsWith(extension))
     .reduce((all, file) => {

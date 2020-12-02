@@ -14,12 +14,7 @@ import {
 } from '../validation';
 import { Schema } from '../schema';
 
-const validateProperty = (
-  schema: Schema,
-  key: string,
-  value: unknown,
-  options: Options,
-): Validation =>
+const validateProperty = (schema: Schema, key: string, value: unknown, options: Options): Validation =>
   evaluateProperty(key, onlyErrors(validateSchema(schema, value, childOptions(key, options))));
 
 export const validateProperties: Validator = (
@@ -28,9 +23,7 @@ export const validateProperties: Validator = (
   options,
 ) => {
   if (
-    (properties !== undefined ||
-      patternProperties !== undefined ||
-      additionalProperties !== undefined) &&
+    (properties !== undefined || patternProperties !== undefined || additionalProperties !== undefined) &&
     isObject(value)
   ) {
     return reduce((key) => {
@@ -53,11 +46,7 @@ export const validateProperties: Validator = (
         }
       }
 
-      if (
-        propertySchema === undefined &&
-        !patternPropertySchemas?.length &&
-        additionalProperties !== undefined
-      ) {
+      if (propertySchema === undefined && !patternPropertySchemas?.length && additionalProperties !== undefined) {
         results.push(
           additionalProperties === false
             ? error('additionalProperties', options.name, [key])

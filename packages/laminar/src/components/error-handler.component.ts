@@ -24,9 +24,7 @@ export const defaultErrorHandler: ErrorHandler = ({ error }) => {
  * @param errorHandler use the error property to return a response object from an error
  * @category component
  */
-export const errorHandlerComponent = (errorHandler = defaultErrorHandler): Component => (
-  next,
-) => async (req) => {
+export const errorHandlerComponent = (errorHandler = defaultErrorHandler): Component => (next) => async (req) => {
   try {
     return await next(req);
   } catch (error) {

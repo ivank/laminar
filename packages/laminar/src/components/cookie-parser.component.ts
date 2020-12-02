@@ -39,10 +39,7 @@ export const cookieParserComponent = (): Component<RequestCookie> => (next) => (
  *
  * @category component
  */
-export const setCookie = (
-  cookies: { [key: string]: string | SetCookie },
-  response: Response,
-): Response => ({
+export const setCookie = (cookies: { [key: string]: string | SetCookie }, response: Response): Response => ({
   ...response,
   headers: {
     ...response.headers,

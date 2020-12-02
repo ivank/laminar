@@ -91,10 +91,8 @@ export const hasErrors = ({ errors }: Validation): boolean => errors.length > 0;
 export const hasEvaluatedItem = (item: number, { evaluatedItems }: Validation | Options): boolean =>
   Boolean(evaluatedItems?.includes(item));
 
-export const hasEvaluatedProperty = (
-  property: string,
-  { evaluatedProperties }: Validation | Options,
-): boolean => Boolean(evaluatedProperties?.includes(property));
+export const hasEvaluatedProperty = (property: string, { evaluatedProperties }: Validation | Options): boolean =>
+  Boolean(evaluatedProperties?.includes(property));
 
 // Combinators
 // ===========================
@@ -117,10 +115,7 @@ export const reduce = <T>(
   items: T[],
   inital: Validation = empty,
 ): Validation =>
-  items.reduce(
-    (acc, item, index) => (acc.skipRest ? acc : combine([acc, callbackfn(item, index, acc)])),
-    inital,
-  );
+  items.reduce((acc, item, index) => (acc.skipRest ? acc : combine([acc, callbackfn(item, index, acc)])), inital);
 
 export const childOptions = (name: string | number, options: Options): Options => ({
   ...options,
@@ -133,8 +128,5 @@ export const validateSchema: Validator<Schema> = (schema, value, options) =>
     : schema === false
     ? error('false', options.name, false)
     : schema
-    ? reduce(
-        (validator, index, current) => validator(schema, value, { ...options, ...current }),
-        options.validators,
-      )
+    ? reduce((validator, index, current) => validator(schema, value, { ...options, ...current }), options.validators)
     : empty;

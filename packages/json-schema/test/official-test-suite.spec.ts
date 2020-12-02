@@ -105,11 +105,7 @@ for (const testFolder of testFolders) {
   for (const [name, suites] of testFiles) {
     describe(`${testFolder} ${name}`, () => {
       for (const suite of suites) {
-        const tests = suite.tests.map<[string, unknown, boolean]>((test) => [
-          test.description,
-          test.data,
-          test.valid,
-        ]);
+        const tests = suite.tests.map<[string, unknown, boolean]>((test) => [test.description, test.data, test.valid]);
 
         it.each<[string, unknown, boolean]>(tests)(
           `Should test ${suite.description}: %s`,

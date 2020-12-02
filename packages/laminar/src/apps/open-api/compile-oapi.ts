@@ -1,11 +1,4 @@
-import {
-  compile,
-  compileInContext,
-  ensureValid,
-  ResolvedSchema,
-  Schema,
-  toSchemaObject,
-} from '@ovotech/json-schema';
+import { compile, compileInContext, ensureValid, ResolvedSchema, Schema, toSchemaObject } from '@ovotech/json-schema';
 import { openapiV3 } from 'openapi-schemas';
 import { ResolvedOpenAPIObject } from './resolved-openapi-object';
 import { OapiConfig } from './types';

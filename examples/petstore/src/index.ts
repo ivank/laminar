@@ -26,9 +26,7 @@ const server = async (env: NodeJS.ProcessEnv): Promise<void> => {
    * This is just for demonstration and shouldn't be used in production
    */
   const token = sign({ email: 'me@example.com' }, secret, { expiresIn: '1 day' });
-  console.log(
-    `\nAccess with curl:\n\n  curl -H 'Authorization: Bearer ${token}' http://${hostname}:${port}/pets\n`,
-  );
+  console.log(`\nAccess with curl:\n\n  curl -H 'Authorization: Bearer ${token}' http://${hostname}:${port}/pets\n`);
 
   /**
    * Catch the termination event to shut down the app gracefully.

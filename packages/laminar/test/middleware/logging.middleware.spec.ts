@@ -86,9 +86,7 @@ describe('loggingMiddleware middleware', () => {
     try {
       await start(server);
 
-      await expect(
-        api.get('/test/23?test=other').catch((error) => error.response),
-      ).resolves.toMatchObject({
+      await expect(api.get('/test/23?test=other').catch((error) => error.response)).resolves.toMatchObject({
         status: 500,
       });
 

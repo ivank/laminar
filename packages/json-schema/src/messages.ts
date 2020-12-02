@@ -18,9 +18,7 @@ const formatErrors = (parentName: string, errors: Invalid[]): string =>
 
 const formatVariants = (parentName: string, variants: Invalid[][]): string =>
   variants
-    .map(
-      (errors, index) => `Schema ${index + 1}:\n${padWith('  ', formatErrors(parentName, errors))}`,
-    )
+    .map((errors, index) => `Schema ${index + 1}:\n${padWith('  ', formatErrors(parentName, errors))}`)
     .join('\n');
 
 const formatErrorGroups = (parentName: string, variants: Invalid[][]): string =>
@@ -41,18 +39,15 @@ export const messages: Messages = {
   minLength: ({ name, param }) => `[${name}] (minLength) should have length >= ${param}`,
   contains: ({ name }) => `[${name}] (contains) should contain items`,
   false: ({ name }) => `[${name}] (false) should not exist`,
-  additionalProperties: ({ name, param }) =>
-    `[${name}] (additionalProperties) has unknown key ${param}`,
+  additionalProperties: ({ name, param }) => `[${name}] (additionalProperties) has unknown key ${param}`,
   unevaluatedProperties: ({ name, param }) =>
     `[${name}] (unevaluatedProperties) has unevaluated keys ${toArray(param)}`,
-  unevaluatedItems: ({ name, param }) =>
-    `[${name}] (unevaluatedItems) has unevaluated item ${param}]`,
+  unevaluatedItems: ({ name, param }) => `[${name}] (unevaluatedItems) has unevaluated item ${param}]`,
   required: ({ name, param }) => `[${name}] (required) is missing ${toArray(param)} keys`,
   minProperties: ({ name, param }) => `[${name}] (minProperties) should have >= ${param} keys`,
   maxProperties: ({ name, param }) => `[${name}] (maxProperties) should have <= ${param} keys`,
   dependencies: ({ name, param }) => `[${name}] (dependencies) requires [${toArray(param)}] keys`,
-  uniqueItems: ({ name, param }) =>
-    `[${name}] (uniqueItems) should have only unique values, has ${param} duplicates`,
+  uniqueItems: ({ name, param }) => `[${name}] (uniqueItems) should have only unique values, has ${param} duplicates`,
   minItems: ({ name, param }) => `[${name}] (minItems) should have >= ${param} items`,
   maxItems: ({ name, param }) => `[${name}] (maxItems) should have <= ${param} items`,
   oneOf: ({ name, param }) =>
@@ -65,7 +60,6 @@ export const messages: Messages = {
       : `[${name}] (anyOf) should match at least 1 schema`,
 };
 
-export const toMessage = (messages: Messages) => (error: Invalid): string =>
-  messages[error.code](error);
+export const toMessage = (messages: Messages) => (error: Invalid): string => messages[error.code](error);
 export const toMessages = (messages: Messages) => (validation: Validation): string[] =>
   errors(validation).map(toMessage(messages));

@@ -11,9 +11,7 @@ export interface JWKHandlerOptions {
 }
 
 interface JWK {
-  keys: Array<
-    { kid: string; use: string; kty: string } & ({ x5c: string[] } | { n: string; e: string })
-  >;
+  keys: Array<{ kid: string; use: string; kty: string } & ({ x5c: string[] } | { n: string; e: string })>;
 }
 
 const jwkSchema = (kid: string): Schema => ({
@@ -45,11 +43,7 @@ const jwkSchema = (kid: string): Schema => ({
   },
 });
 
-export const jwkPublicKey = ({
-  uri,
-  maxAge,
-  cache = false,
-}: JWKHandlerOptions): GetPublicKeyOrSecret => {
+export const jwkPublicKey = ({ uri, maxAge, cache = false }: JWKHandlerOptions): GetPublicKeyOrSecret => {
   const lru = new LRU<string, JWK>({ maxAge });
 
   return async (header, callback) => {

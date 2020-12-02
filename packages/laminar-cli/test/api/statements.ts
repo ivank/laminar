@@ -36,9 +36,7 @@ export class StatementService {
             postcode: 'BGT 333',
             town: 'BigTown',
           },
-          transactions: [
-            { id: '1', type: 'Old', date: '2020-01-01', amount: 10, description: 'Old 10' },
-          ],
+          transactions: [{ id: '1', type: 'Old', date: '2020-01-01', amount: 10, description: 'Old 10' }],
         },
         supplies: [
           {

@@ -18,10 +18,7 @@ export const validateUnevaluatedItems: Validator = ({ unevaluatedItems }, value,
       } else if (unevaluatedItems === false) {
         return error('unevaluatedItems', options.name, index);
       } else {
-        return evaluateItem(
-          index,
-          onlyErrors(validateSchema(unevaluatedItems, item, childOptions(index, options))),
-        );
+        return evaluateItem(index, onlyErrors(validateSchema(unevaluatedItems, item, childOptions(index, options))));
       }
     }, value);
   }

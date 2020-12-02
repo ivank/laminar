@@ -25,19 +25,13 @@ describe('TS Compose', () => {
     ['Test.Other', Type.Referance(['Test', 'Other'])],
     ['Test.Other.Still', Type.Referance(['Test', 'Other', 'Still'])],
     ['Test<Other>', Type.Referance('Test', [Type.Referance('Other')])],
-    [
-      'Test<Other, Other2>',
-      Type.Referance('Test', [Type.Referance('Other'), Type.Referance('Other2')]),
-    ],
+    ['Test<Other, Other2>', Type.Referance('Test', [Type.Referance('Other'), Type.Referance('Other2')])],
     ['Test.Other<Me>', Type.Referance(['Test', 'Other'], [Type.Referance('Me')])],
     ['number | string', Type.Union([Type.Number, Type.String])],
     ['null | false', Type.Union([Type.Null, Type.Literal(false)])],
     ['number | string | string[]', Type.Union([Type.Number, Type.String, Type.Array(Type.String)])],
     ['number & string', Type.Intersection([Type.Number, Type.String])],
-    [
-      'number & string & string[]',
-      Type.Intersection([Type.Number, Type.String, Type.Array(Type.String)]),
-    ],
+    ['number & string & string[]', Type.Intersection([Type.Number, Type.String, Type.Array(Type.String)])],
     ['test1: number;', Type.Prop({ name: 'test1', type: Type.Number })],
     ['readonly test1: number;', Type.Prop({ name: 'test1', type: Type.Number, isReadonly: true })],
     ['test2?: string;', Type.Prop({ name: 'test2', type: Type.String, isOptional: true })],
@@ -76,10 +70,7 @@ describe('TS Compose', () => {
       }),
     ],
     ['type mytype = string;', Type.Alias({ name: 'mytype', type: Type.String })],
-    [
-      'export type mytype = string;',
-      Type.Alias({ name: 'mytype', type: Type.String, isExport: true }),
-    ],
+    ['export type mytype = string;', Type.Alias({ name: 'mytype', type: Type.String, isExport: true })],
     [
       'export default type mytype = string;',
       Type.Alias({ name: 'mytype', type: Type.String, isExport: true, isDefault: true }),

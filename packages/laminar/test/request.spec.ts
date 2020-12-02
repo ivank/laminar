@@ -88,9 +88,7 @@ describe('Requests', () => {
   it('Should parse json', async () => {
     const result = await api.post('/login', { test: 'other' });
 
-    expect(app).toHaveBeenCalledWith(
-      expect.objectContaining({ body: { test: 'other' }, method: 'POST' }),
-    );
+    expect(app).toHaveBeenCalledWith(expect.objectContaining({ body: { test: 'other' }, method: 'POST' }));
     expect(result.data).toEqual('Test');
   });
 
@@ -103,9 +101,7 @@ describe('Requests', () => {
       },
     );
 
-    expect(app).toHaveBeenCalledWith(
-      expect.objectContaining({ body: { test: 'other' }, method: 'POST' }),
-    );
+    expect(app).toHaveBeenCalledWith(expect.objectContaining({ body: { test: 'other' }, method: 'POST' }));
 
     expect(result.data).toEqual('Test');
   });
@@ -115,9 +111,7 @@ describe('Requests', () => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
 
-    expect(app).toHaveBeenCalledWith(
-      expect.objectContaining({ body: { one: 'other' }, method: 'POST' }),
-    );
+    expect(app).toHaveBeenCalledWith(expect.objectContaining({ body: { one: 'other' }, method: 'POST' }));
 
     expect(result.data).toEqual('Test');
   });
@@ -127,9 +121,7 @@ describe('Requests', () => {
       headers: { 'Content-Type': 'text/css' },
     });
 
-    expect(app).toHaveBeenCalledWith(
-      expect.objectContaining({ body: 'document { height: 100%; }', method: 'POST' }),
-    );
+    expect(app).toHaveBeenCalledWith(expect.objectContaining({ body: 'document { height: 100%; }', method: 'POST' }));
 
     expect(result.data).toEqual('Test');
   });

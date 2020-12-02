@@ -23,9 +23,7 @@ export type AppComponents = (app: App) => Resolver;
  *
  * @typeParam TRequest pass the request properties that the app requires. Usually added by the middlewares
  */
-export type App<TRequest extends Empty = Empty> = (
-  req: AppRequest & TRequest,
-) => Response | Promise<Response>;
+export type App<TRequest extends Empty = Empty> = (req: AppRequest & TRequest) => Response | Promise<Response>;
 
 /**
  * An middleware that uses {@link AppRequest} and modifies it to be used by the app or the downstream middlewares

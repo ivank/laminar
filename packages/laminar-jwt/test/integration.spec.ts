@@ -18,8 +18,7 @@ describe('Integration', () => {
       security: { JWTSecurity: jwtSecurity },
       paths: {
         '/session': {
-          post: ({ body: { email, scopes } }) =>
-            jsonOk(createSession({ secret }, { email, scopes })),
+          post: ({ body: { email, scopes } }) => jsonOk(createSession({ secret }, { email, scopes })),
         },
         '/test': {
           get: ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
@@ -31,18 +30,9 @@ describe('Integration', () => {
     });
 
     const testTokenWithoutScopes = createSession({ secret }, { email: 'tester' }).jwt;
-    const testTokenWithOtherScopes = createSession(
-      { secret },
-      { email: 'tester', scopes: ['other'] },
-    ).jwt;
-    const testTokenExpires = createSession(
-      { secret, options: { expiresIn: '1ms' } },
-      { email: 'tester' },
-    ).jwt;
-    const testTokenNotBefore = createSession(
-      { secret, options: { notBefore: 10000 } },
-      { email: 'tester' },
-    ).jwt;
+    const testTokenWithOtherScopes = createSession({ secret }, { email: 'tester', scopes: ['other'] }).jwt;
+    const testTokenExpires = createSession({ secret, options: { expiresIn: '1ms' } }, { email: 'tester' }).jwt;
+    const testTokenNotBefore = createSession({ secret, options: { notBefore: 10000 } }, { email: 'tester' }).jwt;
 
     const server = httpServer({ app, port: 8064 });
     try {
@@ -157,9 +147,7 @@ describe('Integration', () => {
     }).jwt;
 
     const app = router(
-      post('/session', ({ body: { email, scopes } }) =>
-        jsonOk(createSession(signOptions, { email, scopes })),
-      ),
+      post('/session', ({ body: { email, scopes } }) => jsonOk(createSession(signOptions, { email, scopes }))),
       get(
         '/test',
         auth()(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
@@ -254,9 +242,7 @@ describe('Integration', () => {
 
     const server = httpServer({
       app: router(
-        post('/session', ({ body: { email, scopes } }) =>
-          jsonOk(createSession(signOptions, { email, scopes })),
-        ),
+        post('/session', ({ body: { email, scopes } }) => jsonOk(createSession(signOptions, { email, scopes }))),
         get(
           '/test',
           auth()(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),

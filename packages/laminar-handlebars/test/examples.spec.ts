@@ -39,7 +39,7 @@ describe('Example files', () => {
       service.stderr.on('data', errorLogger);
       await new Promise((resolve) => {
         service.stdout.on('data', (data) =>
-          String(data).includes('Laminar: Running') ? resolve() : undefined,
+          String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
       const { data } = await axios.request(config);

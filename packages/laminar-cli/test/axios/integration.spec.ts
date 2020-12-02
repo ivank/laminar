@@ -45,11 +45,7 @@ describe('Integration', () => {
       paths: {
         '/pets': {
           get: ({ query }) =>
-            jsonOk(
-              db.filter((pet) =>
-                query.tags ? (pet.tag ? query.tags.includes(pet.tag) : false) : true,
-              ),
-            ),
+            jsonOk(db.filter((pet) => (query.tags ? (pet.tag ? query.tags.includes(pet.tag) : false) : true))),
           post: ({ body, authInfo }) => {
             const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             db.push(pet);
@@ -81,13 +77,10 @@ describe('Integration', () => {
 
       const api = axiosOapi(axios.create({ baseURL: 'http://localhost:8065' }));
 
-      await expect(
-        api.api.get('/unknown-url').catch((error) => error.response),
-      ).resolves.toMatchObject({
+      await expect(api.api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
         status: 404,
         data: {
-          message:
-            'Request for "GET /unknown-url" did not match any of the paths defined in the OpenApi Schema',
+          message: 'Request for "GET /unknown-url" did not match any of the paths defined in the OpenApi Schema',
         },
       });
 
@@ -110,26 +103,19 @@ describe('Integration', () => {
       });
 
       await expect(
-        api['POST /pets'](
-          { name: 'New Puppy' },
-          { headers: { Authorization: 'Bearer 123', 'x-trace-token': '123' } },
-        ),
+        api['POST /pets']({ name: 'New Puppy' }, { headers: { Authorization: 'Bearer 123', 'x-trace-token': '123' } }),
       ).resolves.toMatchObject({
         status: 200,
         data: { pet: { id: 223, name: 'New Puppy' }, user: 'dinkey' },
       });
 
-      await expect(
-        api['GET /pets/{id}']('111', { headers: { Authorization: 'Basic 123' } }),
-      ).resolves.toMatchObject({
+      await expect(api['GET /pets/{id}']('111', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
         status: 200,
         data: { id: 111, name: 'Catty', tag: 'kitten' },
       });
 
       await expect(
-        api['GET /pets/{id}']('000', { headers: { Authorization: 'Basic 123' } }).catch(
-          (error) => error.response,
-        ),
+        api['GET /pets/{id}']('000', { headers: { Authorization: 'Basic 123' } }).catch((error) => error.response),
       ).resolves.toMatchObject({
         status: 404,
         data: {
@@ -138,9 +124,7 @@ describe('Integration', () => {
         },
       });
 
-      await expect(
-        api['GET /pets/{id}']('223', { headers: { Authorization: 'Basic 123' } }),
-      ).resolves.toMatchObject({
+      await expect(api['GET /pets/{id}']('223', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
         status: 200,
         data: { id: 223, name: 'New Puppy' },
       });
@@ -160,9 +144,7 @@ describe('Integration', () => {
       });
 
       await expect(
-        api['DELETE /pets/{id}']('228', { headers: { 'X-API-KEY': 'Me' } }).catch(
-          (error) => error.response,
-        ),
+        api['DELETE /pets/{id}']('228', { headers: { 'X-API-KEY': 'Me' } }).catch((error) => error.response),
       ).resolves.toMatchObject({
         status: 404,
         data: {
@@ -172,17 +154,13 @@ describe('Integration', () => {
       });
 
       await expect(
-        api['DELETE /pets/{id}']('222', { headers: { 'X-API-missing': 'Me' } }).catch(
-          (error) => error.response,
-        ),
+        api['DELETE /pets/{id}']('222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
       ).resolves.toMatchObject({
         status: 401,
         data: { message: 'Unathorized user' },
       });
 
-      await expect(
-        api['DELETE /pets/{id}']('222', { headers: { 'X-API-KEY': 'Me' } }),
-      ).resolves.toMatchObject({
+      await expect(api['DELETE /pets/{id}']('222', { headers: { 'X-API-KEY': 'Me' } })).resolves.toMatchObject({
         status: 204,
         data: {},
       });

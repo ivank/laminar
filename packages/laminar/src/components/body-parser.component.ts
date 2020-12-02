@@ -77,13 +77,8 @@ export const parseDefault: BodyParser = {
 
 export const defaultBodyParsers: BodyParser[] = [parseJson, parseForm, parseText, parseDefault];
 
-export async function parseBody(
-  incommingMessage: IncomingMessage,
-  parsers = defaultBodyParsers,
-): Promise<unknown> {
-  const parser = parsers.find((parser) =>
-    parser.match(incommingMessage.headers['content-type'] || ''),
-  );
+export async function parseBody(incommingMessage: IncomingMessage, parsers = defaultBodyParsers): Promise<unknown> {
+  const parser = parsers.find((parser) => parser.match(incommingMessage.headers['content-type'] || ''));
 
   return parser ? await parser.parse(incommingMessage) : incommingMessage;
 }
@@ -102,6 +97,5 @@ export async function parseBody(
  * @category component
  */
 export function bodyParserComponent(parsers = defaultBodyParsers): Component<RequestBody> {
-  return (next) => async (req) =>
-    next({ ...req, body: await parseBody(req.incommingMessage, parsers) });
+  return (next) => async (req) => next({ ...req, body: await parseBody(req.incommingMessage, parsers) });
 }

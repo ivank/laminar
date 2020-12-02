@@ -13,7 +13,7 @@ describe('Split App Integration Tests', () => {
       service.stderr.on('data', (data) => console.error(String(data)));
       await new Promise((resolve) => {
         service.stdout.on('data', (data) =>
-          String(data).includes('Laminar: Running') ? resolve() : undefined,
+          String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
 

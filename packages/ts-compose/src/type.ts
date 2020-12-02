@@ -4,8 +4,7 @@ import { withJSDoc } from './docs';
 const isIdentifierString = (identifier: string): boolean => {
   for (let i = 0; i < identifier.length; i++) {
     const char = identifier.charCodeAt(i);
-    const isValid =
-      i === 0 ? ts.isIdentifierStart(char, undefined) : ts.isIdentifierPart(char, undefined);
+    const isValid = i === 0 ? ts.isIdentifierStart(char, undefined) : ts.isIdentifierPart(char, undefined);
     if (!isValid) {
       return false;
     }
@@ -45,15 +44,13 @@ export const Type = {
   }: {
     props?: ts.TypeElement[];
     index?: ts.IndexSignatureDeclaration;
-  } = {}): ts.TypeLiteralNode =>
-    ts.factory.createTypeLiteralNode([...props, ...(index ? [index] : [])]),
+  } = {}): ts.TypeLiteralNode => ts.factory.createTypeLiteralNode([...props, ...(index ? [index] : [])]),
 
   Array: (type: ts.TypeNode): ts.ArrayTypeNode => ts.factory.createArrayTypeNode(type),
 
   Union: (types: ts.TypeNode[]): ts.UnionTypeNode => ts.factory.createUnionTypeNode(types),
 
-  Intersection: (types: ts.TypeNode[]): ts.IntersectionTypeNode =>
-    ts.factory.createIntersectionTypeNode(types),
+  Intersection: (types: ts.TypeNode[]): ts.IntersectionTypeNode => ts.factory.createIntersectionTypeNode(types),
 
   Literal: (value: unknown): ts.LiteralTypeNode | ts.KeywordTypeNode => {
     switch (typeof value) {
@@ -62,9 +59,7 @@ export const Type = {
       case 'string':
         return ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(value));
       case 'boolean':
-        return ts.factory.createLiteralTypeNode(
-          value === true ? ts.factory.createTrue() : ts.factory.createFalse(),
-        );
+        return ts.factory.createLiteralTypeNode(value === true ? ts.factory.createTrue() : ts.factory.createFalse());
       default:
         return ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword);
     }
@@ -72,13 +67,8 @@ export const Type = {
 
   LiteralString: (value: string): ts.StringLiteral => ts.factory.createStringLiteral(value),
 
-  Arrow: ({
-    args,
-    ret,
-  }: {
-    args: ts.ParameterDeclaration[];
-    ret: ts.TypeNode;
-  }): ts.FunctionTypeNode => ts.factory.createFunctionTypeNode(undefined, args, ret),
+  Arrow: ({ args, ret }: { args: ts.ParameterDeclaration[]; ret: ts.TypeNode }): ts.FunctionTypeNode =>
+    ts.factory.createFunctionTypeNode(undefined, args, ret),
 
   Optional: (isOptional?: boolean): ts.Token<ts.SyntaxKind.QuestionToken> | undefined =>
     isOptional ? ts.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined,
@@ -120,14 +110,7 @@ export const Type = {
   }): ts.MethodSignature =>
     withJSDoc(
       jsDoc,
-      ts.factory.createMethodSignature(
-        undefined,
-        name,
-        Type.Optional(isOptional),
-        typeArgs,
-        params,
-        type,
-      ),
+      ts.factory.createMethodSignature(undefined, name, Type.Optional(isOptional), typeArgs, params, type),
     ),
 
   Prop: ({
@@ -160,9 +143,7 @@ export const Type = {
           ...Type.Private(isPrivate),
           ...Type.Protected(isProtected),
         ],
-        typeof name === 'string' && !isIdentifierString(name)
-          ? ts.factory.createStringLiteral(name)
-          : name,
+        typeof name === 'string' && !isIdentifierString(name) ? ts.factory.createStringLiteral(name) : name,
         Type.Optional(isOptional),
         type,
         initializer,
@@ -198,8 +179,7 @@ export const Type = {
     name: string | ts.Identifier;
     ext?: ts.TypeNode;
     defaultType?: ts.TypeNode;
-  }): ts.TypeParameterDeclaration =>
-    ts.factory.createTypeParameterDeclaration(name, ext, defaultType),
+  }): ts.TypeParameterDeclaration => ts.factory.createTypeParameterDeclaration(name, ext, defaultType),
 
   Index: ({
     name,
@@ -212,21 +192,12 @@ export const Type = {
     type: ts.TypeNode;
     isReadonly?: boolean;
   }): ts.IndexSignatureDeclaration =>
-    ts.factory.createIndexSignature(
-      undefined,
-      Type.Readonly(isReadonly),
-      [Type.Param({ name, type: nameType })],
-      type,
-    ),
+    ts.factory.createIndexSignature(undefined, Type.Readonly(isReadonly), [Type.Param({ name, type: nameType })], type),
 
-  Referance: (
-    name: string | ts.Identifier | string[],
-    types?: ts.TypeNode[],
-  ): ts.TypeReferenceNode => {
+  Referance: (name: string | ts.Identifier | string[], types?: ts.TypeNode[]): ts.TypeReferenceNode => {
     const fullName = Array.isArray(name)
       ? name.reduce<ts.QualifiedName | ts.Identifier | undefined>(
-          (acc, item) =>
-            acc ? ts.factory.createQualifiedName(acc, item) : ts.factory.createIdentifier(item),
+          (acc, item) => (acc ? ts.factory.createQualifiedName(acc, item) : ts.factory.createIdentifier(item)),
           undefined,
         )
       : name;
@@ -243,10 +214,7 @@ export const Type = {
     name: string | ts.Identifier;
     types?: ts.TypeNode[];
   }): ts.ExpressionWithTypeArguments =>
-    ts.factory.createExpressionWithTypeArguments(
-      typeof name === 'string' ? ts.createIdentifier(name) : name,
-      types,
-    ),
+    ts.factory.createExpressionWithTypeArguments(typeof name === 'string' ? ts.createIdentifier(name) : name, types),
 
   Alias: ({
     name,
@@ -265,13 +233,7 @@ export const Type = {
   }): ts.TypeAliasDeclaration =>
     withJSDoc(
       jsDoc,
-      ts.factory.createTypeAliasDeclaration(
-        undefined,
-        Type.Export(isExport, isDefault),
-        name,
-        typeArgs,
-        type,
-      ),
+      ts.factory.createTypeAliasDeclaration(undefined, Type.Export(isExport, isDefault), name, typeArgs, type),
     ),
 
   Interface: ({
@@ -300,14 +262,7 @@ export const Type = {
         Type.Export(isExport, isDefault),
         name,
         typeArgs,
-        ext
-          ? [
-              ts.factory.createHeritageClause(
-                ts.SyntaxKind.ExtendsKeyword,
-                ext.map(Type.TypeExpression),
-              ),
-            ]
-          : undefined,
+        ext ? [ts.factory.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, ext.map(Type.TypeExpression))] : undefined,
         [...props, ...(index ? [index] : [])],
       ),
     ),

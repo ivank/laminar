@@ -11,11 +11,7 @@ import {
   hasEvaluatedProperty,
 } from '../validation';
 
-export const validateUnevaluatedProperties: Validator = (
-  { unevaluatedProperties },
-  value,
-  options,
-) => {
+export const validateUnevaluatedProperties: Validator = ({ unevaluatedProperties }, value, options) => {
   if (unevaluatedProperties !== undefined && isObject(value)) {
     return reduce((key) => {
       if (hasEvaluatedProperty(key, options)) {

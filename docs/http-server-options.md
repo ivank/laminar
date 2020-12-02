@@ -11,14 +11,7 @@ The default body parsers handle json, url encoded (application/x-www-form-urlenc
 > [examples/docs/src/custom-body-parser.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-body-parser.ts)
 
 ```typescript
-import {
-  App,
-  jsonOk,
-  httpServer,
-  BodyParser,
-  concatStream,
-  defaultBodyParsers,
-} from '@ovotech/laminar';
+import { App, jsonOk, httpServer, BodyParser, concatStream, defaultBodyParsers } from '@ovotech/laminar';
 import * as YAML from 'yaml';
 
 const app: App = ({ body }) => jsonOk(body);
@@ -52,14 +45,7 @@ You can add custom response parsers as well. That way you can pass the response 
 > [examples/docs/src/custom-response-parser.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-response-parser.ts)
 
 ```typescript
-import {
-  App,
-  yaml,
-  ok,
-  httpServer,
-  ResponseParser,
-  defaultResponseParsers,
-} from '@ovotech/laminar';
+import { App, yaml, ok, httpServer, ResponseParser, defaultResponseParsers } from '@ovotech/laminar';
 import * as YAML from 'yaml';
 
 const app: App = () => yaml(ok({ body: { example: { test: 'msg' } } }));
@@ -94,8 +80,7 @@ const app: App = () => {
   throw new Error('Testing error');
 };
 
-const errorHandler: ErrorHandler = ({ error }) =>
-  htmlInternalServerError(`<html>${error.message}</html>`);
+const errorHandler: ErrorHandler = ({ error }) => htmlInternalServerError(`<html>${error.message}</html>`);
 
 export const server = httpServer({
   app,
@@ -115,13 +100,7 @@ If you want to skip the default parser / processors, you can combine all the pie
 > [examples/docs/src/custom-everything.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-everything.ts)
 
 ```typescript
-import {
-  requestListener,
-  response,
-  Resolver,
-  errorHandlerComponent,
-  urlComponent,
-} from '@ovotech/laminar';
+import { requestListener, response, Resolver, errorHandlerComponent, urlComponent } from '@ovotech/laminar';
 import { createServer } from 'http';
 
 /**

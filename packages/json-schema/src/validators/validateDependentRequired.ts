@@ -8,9 +8,7 @@ export const validateDependentRequired: Validator = ({ dependentRequired }, valu
         .filter(([key]) => key in value)
         .map(([key, dependency]) => {
           const missing = dependency.filter((item) => !Object.keys(value).includes(item));
-          return missing.length > 0
-            ? error('dependencies', `${options.name}.${key}`, missing)
-            : empty;
+          return missing.length > 0 ? error('dependencies', `${options.name}.${key}`, missing) : empty;
         }),
     );
   }

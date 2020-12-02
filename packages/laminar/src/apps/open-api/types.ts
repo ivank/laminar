@@ -17,26 +17,18 @@ export interface SecurityOk<TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> {
   authInfo: TOapiAuthInfo;
 }
 
-export type Security<TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> =
-  | SecurityOk<TOapiAuthInfo>
-  | Response;
+export type Security<TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> = SecurityOk<TOapiAuthInfo> | Response;
 
 export interface RequestSecurityResolver {
   scopes?: string[];
   securityScheme: SecuritySchemeObject;
 }
 
-export type OapiSecurityResolver<
-  TRequest extends Empty = Empty,
-  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
-> = (
+export type OapiSecurityResolver<TRequest extends Empty = Empty, TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
   req: TRequest & AppRequest & RequestOapi & RequestSecurityResolver,
 ) => Security<TOapiAuthInfo> | Response | Promise<Security<TOapiAuthInfo> | Response>;
 
-export interface OapiSecurity<
-  TRequest extends Empty = Empty,
-  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
-> {
+export interface OapiSecurity<TRequest extends Empty = Empty, TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> {
   [key: string]: OapiSecurityResolver<TRequest, TOapiAuthInfo>;
 }
 
@@ -59,10 +51,7 @@ export interface OapiPaths<TRequest extends Empty> {
   [path: string]: { [method: string]: AppRouteOapi<TRequest> };
 }
 
-export interface OapiConfig<
-  TRequest extends Empty = Empty,
-  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
-> {
+export interface OapiConfig<TRequest extends Empty = Empty, TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> {
   api: OpenAPIObject | string;
   paths: OapiPaths<TRequest>;
   security?: OapiSecurity<TRequest, TOapiAuthInfo>;

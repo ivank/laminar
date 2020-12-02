@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { compile, Schema } from '@ovotech/json-schema';
-import {
-  document,
-  Document,
-  mapWithContext,
-  printDocument,
-  Type,
-  withIdentifier,
-} from '@ovotech/ts-compose';
+import { document, Document, mapWithContext, printDocument, Type, withIdentifier } from '@ovotech/ts-compose';
 import { SchemaObject } from 'openapi3-ts';
 import * as ts from 'typescript';
 import { AstContext, AstConvert, isSchemaObject, isReferenceObject } from './traverse';
@@ -69,9 +62,7 @@ const convertEnum: AstConvert<ts.UnionTypeNode> = (context, schema) =>
     : null;
 
 const convertConst: AstConvert = (context, schema) =>
-  isSchemaObject(schema) && schema.const !== undefined
-    ? document(context, Type.Literal(schema.const))
-    : null;
+  isSchemaObject(schema) && schema.const !== undefined ? document(context, Type.Literal(schema.const)) : null;
 
 const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
   if (isReferenceObject(schema)) {
@@ -109,9 +100,7 @@ const convertAdditionalPropertiesSchema = (
     const converted = convertSchema(context, schema.additionalProperties);
     return document(
       converted.context,
-      areAllPropertiesRequired(schema)
-        ? converted.type
-        : Type.Union([converted.type, Type.Undefined]),
+      areAllPropertiesRequired(schema) ? converted.type : Type.Union([converted.type, Type.Undefined]),
     );
   } else if (schema.additionalProperties !== false) {
     return document(context, Type.Unknown);
@@ -191,17 +180,13 @@ const convertArray: AstConvert<ts.ArrayTypeNode | ts.TupleTypeNode> = (context, 
         const schemas = mapWithContext(context, schema.items, convertSchema);
         return document(schemas.context, Type.Tuple(schemas.items));
       } else {
-        const schemaItems = schema.items.concat(
-          isSchemaObject(schema.additionalItems) ? [schema.additionalItems] : [],
-        );
+        const schemaItems = schema.items.concat(isSchemaObject(schema.additionalItems) ? [schema.additionalItems] : []);
         const items = mapWithContext(context, schemaItems, convertSchema);
 
         return document(items.context, Type.Array(Type.Union(items.items)));
       }
     } else {
-      const value = schema.items
-        ? convertSchema(context, schema.items)
-        : document(context, Type.Any);
+      const value = schema.items ? convertSchema(context, schema.items) : document(context, Type.Any);
       return document(value.context, Type.Array(value.type));
     }
   } else {
@@ -225,10 +210,7 @@ const converters: AstConvert[] = [
   convertConst,
 ];
 
-export const convertSchema = (
-  context: AstContext,
-  schema: unknown,
-): Document<ts.TypeNode, AstContext> =>
+export const convertSchema = (context: AstContext, schema: unknown): Document<ts.TypeNode, AstContext> =>
   converters.reduce<Document<ts.TypeNode, AstContext> | null>(
     (node, converter) => node || converter(context, schema),
     null,

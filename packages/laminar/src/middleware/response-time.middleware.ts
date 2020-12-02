@@ -11,9 +11,9 @@ export const defaultResponseTimeHeader = 'x-response-time';
  *
  * @category middleware
  */
-export const responseTimeMiddleware = ({
-  header = defaultResponseTimeHeader,
-}: ResponseTimeConfig = {}): Middleware => (next) => {
+export const responseTimeMiddleware = ({ header = defaultResponseTimeHeader }: ResponseTimeConfig = {}): Middleware => (
+  next,
+) => {
   return async (ctx) => {
     const startAt = process.hrtime();
     const result = await next(ctx);

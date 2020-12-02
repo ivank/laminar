@@ -28,21 +28,14 @@ const isJWTData = (data: VerifiedJWTData | string | null): data is JWTData =>
   data !== null && typeof data === 'object' && 'email' in data;
 
 export const toMissing = (userScopes: string[], requiredScopes: string[]): string[] =>
-  requiredScopes.filter(
-    (requiredScope) => !userScopes.find((userScope) => requiredScope === userScope),
-  );
+  requiredScopes.filter((requiredScope) => !userScopes.find((userScope) => requiredScope === userScope));
 
 export const simpleScopeError: ScopeError = (data, scopes = []) => {
   const missingScopes = toMissing(data.scopes ?? [], scopes);
-  return missingScopes.length
-    ? `User does not have required scopes: [${missingScopes.join(', ')}]`
-    : undefined;
+  return missingScopes.length ? `User does not have required scopes: [${missingScopes.join(', ')}]` : undefined;
 };
 
-export const createSession = <TUser extends User = User>(
-  { secret, options }: JWTSign,
-  user: TUser,
-): Session<TUser> => {
+export const createSession = <TUser extends User = User>({ secret, options }: JWTSign, user: TUser): Session<TUser> => {
   const jwt = jsonwebtoken.sign(user, secret, options);
   const data = jsonwebtoken.decode(jwt);
   if (!isJWTData(data)) {
@@ -65,15 +58,12 @@ export const verifyToken = async <TUser extends JWTData = JWTData>(
 ): Promise<Security<TUser> | Response> => {
   try {
     const data = await new Promise<VerifiedJWTData>((resolve, reject) =>
-      jsonwebtoken.verify(token, secret, options, (err, data) =>
-        err ? reject(err) : resolve(data),
-      ),
+      jsonwebtoken.verify(token, secret, options, (err, data) => (err ? reject(err) : resolve(data))),
     );
 
     if (!isJWTData(data)) {
       return jsonUnauthorized({
-        message:
-          'Authorization token malformed, needs to be an object like { email: "...", scopes: ["...","..."] }',
+        message: 'Authorization token malformed, needs to be an object like { email: "...", scopes: ["...","..."] }',
       });
     }
 
@@ -122,14 +112,8 @@ export const verifyBearer = async <TUser extends JWTData = JWTData>(
 
 export const authMiddleware = <TUser extends JWTData = JWTData>(
   options: JWTVerify,
-): ((scopes?: string[]) => Middleware<RequestAuthInfo<TUser>>) => (scopes) => (next) => async (
-  req,
-) => {
-  const result = await verifyBearer<TUser>(
-    options,
-    req.incommingMessage.headers.authorization,
-    scopes,
-  );
+): ((scopes?: string[]) => Middleware<RequestAuthInfo<TUser>>) => (scopes) => (next) => async (req) => {
+  const result = await verifyBearer<TUser>(options, req.incommingMessage.headers.authorization, scopes);
   return isSecurityOk(result) ? next({ ...req, ...result }) : result;
 };
 

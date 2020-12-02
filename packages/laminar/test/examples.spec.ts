@@ -101,11 +101,7 @@ describe('Example files', () => {
       },
       'Foo',
     ],
-    [
-      'examples/simple.ts',
-      { method: 'GET', url: 'http://localhost:3333/.well-known/health-check' },
-      { health: 'ok' },
-    ],
+    ['examples/simple.ts', { method: 'GET', url: 'http://localhost:3333/.well-known/health-check' }, { health: 'ok' }],
     [
       'examples/simple-https.ts',
       {
@@ -179,7 +175,7 @@ describe('Example files', () => {
       service.stderr.on('data', errorLogger);
       await new Promise((resolve) => {
         service.stdout.on('data', (data) =>
-          String(data).includes('Laminar: Running') ? resolve() : undefined,
+          String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
       const { data } = await axios.request(config);

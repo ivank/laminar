@@ -123,12 +123,7 @@ describe('json-refs', () => {
         'http://one.test/': { $ref: 'http://three.test/#' },
         'http://two.test/folder': { test: 2 },
       },
-      uris: [
-        'http://four.test/',
-        'http://three.test/',
-        'http://one.test/',
-        'http://two.test/folder',
-      ],
+      uris: ['http://four.test/', 'http://three.test/', 'http://one.test/', 'http://two.test/folder'],
     };
 
     expect(await extractFiles(schema)).toEqual(expected);
@@ -267,10 +262,7 @@ describe('json-refs', () => {
         type: 'object',
         properties: {
           myprop: {
-            anyOf: [
-              { type: 'string' },
-              { type: 'object', additionalProperties: { $ref: 'http://localhost:1234#' } },
-            ],
+            anyOf: [{ type: 'string' }, { type: 'object', additionalProperties: { $ref: 'http://localhost:1234#' } }],
           },
         },
       },
@@ -281,10 +273,7 @@ describe('json-refs', () => {
           type: 'object',
           properties: {
             myprop: {
-              anyOf: [
-                { type: 'string' },
-                { type: 'object', additionalProperties: { $ref: 'http://localhost:1234#' } },
-              ],
+              anyOf: [{ type: 'string' }, { type: 'object', additionalProperties: { $ref: 'http://localhost:1234#' } }],
             },
           },
         },
@@ -294,10 +283,7 @@ describe('json-refs', () => {
           type: 'object',
           properties: {
             myprop: {
-              anyOf: [
-                { type: 'string' },
-                { type: 'object', additionalProperties: { $ref: 'http://localhost:1234#' } },
-              ],
+              anyOf: [{ type: 'string' }, { type: 'object', additionalProperties: { $ref: 'http://localhost:1234#' } }],
             },
           },
         },

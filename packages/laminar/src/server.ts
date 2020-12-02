@@ -25,9 +25,7 @@ export function requestListener(resolver: Resolver): http.RequestListener {
 
     serverResponse.statusCode = response.status;
 
-    response.body instanceof Readable
-      ? response.body.pipe(serverResponse)
-      : serverResponse.end(response.body);
+    response.body instanceof Readable ? response.body.pipe(serverResponse) : serverResponse.end(response.body);
   };
 }
 
@@ -125,9 +123,7 @@ export function stop({ server }: HttpServer): Promise<void> {
 export function describe(laminar: HttpServer): string {
   const address = laminar.server.address();
   const url =
-    typeof address === 'object' && address
-      ? `${address.address}:${address.port} (${address.family})`
-      : address;
+    typeof address === 'object' && address ? `${address.address}:${address.port} (${address.family})` : address;
 
   return ` ⛲ Laminar: ${laminar.server.listening ? 'Running' : 'Stopped'}, Address: ${url}`;
 }

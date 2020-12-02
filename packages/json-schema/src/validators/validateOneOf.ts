@@ -2,12 +2,7 @@ import { isJsonSchema, isObject } from '../helpers';
 import { Schema } from '../schema';
 import { Validator, hasErrors, error, empty, validateSchema, Options, errors } from '../validation';
 
-const findSchema = (
-  schemas: Schema[],
-  name: string,
-  value: unknown,
-  options: Options,
-): Schema | undefined =>
+const findSchema = (schemas: Schema[], name: string, value: unknown, options: Options): Schema | undefined =>
   schemas.find(
     (item) =>
       isJsonSchema(item) &&
@@ -22,12 +17,7 @@ export const validateOneOf: Validator = (schema, value, options) => {
     const { oneOf, discriminator } = schema;
     if (oneOf.length === 1) {
       return validateSchema(oneOf[0], value, options);
-    } else if (
-      discriminator &&
-      discriminator.propertyName &&
-      isObject(value) &&
-      value[discriminator.propertyName]
-    ) {
+    } else if (discriminator && discriminator.propertyName && isObject(value) && value[discriminator.propertyName]) {
       const discriminatedSchema = findSchema(
         oneOf,
         discriminator.propertyName,
@@ -42,9 +32,7 @@ export const validateOneOf: Validator = (schema, value, options) => {
     const validations = oneOf.map((item) => validateSchema(item, value, options));
     const matching = validations.filter((item) => !hasErrors(item));
 
-    return matching.length === 1
-      ? matching[0]
-      : error('oneOf', options.name, validations.map(errors));
+    return matching.length === 1 ? matching[0] : error('oneOf', options.name, validations.map(errors));
   }
   return empty;
 };

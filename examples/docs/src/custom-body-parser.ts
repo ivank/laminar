@@ -1,11 +1,4 @@
-import {
-  App,
-  jsonOk,
-  httpServer,
-  BodyParser,
-  concatStream,
-  defaultBodyParsers,
-} from '@ovotech/laminar';
+import { App, jsonOk, httpServer, BodyParser, concatStream, defaultBodyParsers } from '@ovotech/laminar';
 import * as YAML from 'yaml';
 
 const app: App = ({ body }) => jsonOk(body);
