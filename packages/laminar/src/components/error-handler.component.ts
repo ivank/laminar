@@ -13,7 +13,7 @@ export type ErrorHandler<T extends Request = Request> = Resolver<T & RequestErro
 
 export const defaultErrorHandler: ErrorHandler = ({ error }) => {
   return error instanceof HttpError
-    ? json({ body: error.body, headers: error.headers, status: error.code })
+    ? json({ body: error.body, headers: error.headers, status: error.code, stack: error.stack })
     : jsonInternalServerError({ message: error.message });
 };
 

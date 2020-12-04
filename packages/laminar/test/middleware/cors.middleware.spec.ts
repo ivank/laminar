@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { httpServer, corsMiddleware, jsonOk, App, start, stop } from '../../src';
 
 const api = axios.create({ baseURL: 'http://localhost:8095' });
@@ -333,6 +333,24 @@ describe('Cors middleware', () => {
           'access-control-allow-origin': 'Error, 127.0.0.1 did not match cors function',
         }),
       });
+    } finally {
+      await stop(server);
+    }
+  });
+
+  it('Should assign headers even if there is an error', async () => {
+    const app: App = () => jsonOk(JSON.parse('{'));
+    const cors = corsMiddleware({ allowOrigin: '*' });
+    const server = httpServer({ port: 8095, app: cors(app) });
+
+    try {
+      await start(server);
+
+      const error: AxiosResponse = await api
+        .get('/test', { headers: { origin: '127.0.0.1' } })
+        .catch((error) => error.response);
+
+      expect(error.headers).toHaveProperty('access-control-allow-origin', '*');
     } finally {
       await stop(server);
     }

@@ -1,4 +1,5 @@
 import { Middleware } from '../components/components';
+import { HttpError } from '../HttpError';
 
 export interface CorsConfig {
   allowOrigin?: string[] | string | RegExp | OriginChecker | true;
@@ -106,8 +107,16 @@ export const corsMiddleware = ({
           status: 204,
         };
       } else {
-        const response = await next(req);
-        return { ...response, headers: { ...response.headers, ...headers } };
+        try {
+          const response = await next(req);
+          return { ...response, headers: { ...response.headers, ...headers } };
+        } catch (error) {
+          if (error instanceof HttpError) {
+            throw new HttpError(error.code, error.body, { ...error.headers, ...headers }, error.stack);
+          } else {
+            throw new HttpError(500, { message: error.message }, headers, error.stack);
+          }
+        }
       }
     };
   };
