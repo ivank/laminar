@@ -13,6 +13,14 @@ describe('Example files', () => {
       `<body>\n  <div>HEADER</div>\n  INDEX\n</body>\n`,
     ],
     [
+      'examples/expiry-cache.ts',
+      {
+        method: 'GET',
+        url: 'http://localhost:3333/',
+      },
+      `<body>\n  <div>HEADER</div>\n  INDEX\n</body>\n`,
+    ],
+    [
       'examples/direct.ts',
       {
         method: 'GET',

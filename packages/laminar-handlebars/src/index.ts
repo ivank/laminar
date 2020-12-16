@@ -6,8 +6,19 @@
 import { Middleware, Response, response } from '@ovotech/laminar';
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { compile, RuntimeOptions, TemplateDelegate } from 'handlebars';
-import { join } from 'path';
+import { join, relative } from 'path';
 import { OutgoingHttpHeaders } from 'http';
+import { statSync } from 'fs';
+
+export type Cache = Map<string, { template: TemplateDelegate; mtime: Date }>;
+
+/**
+ * Cache types.
+ * - preload: load all the templates ones into memory
+ * - expiry: load partials when needed and keep them in cache, but check the file's mtime and reload template if changed
+ * - none: do not cache templates and load them on every request.
+ */
+export type CacheType = 'preload' | 'expiry' | 'none';
 
 export interface TemplateConfig {
   helpers?: RuntimeOptions['helpers'];
@@ -15,19 +26,13 @@ export interface TemplateConfig {
   partials?: string;
   extension?: string;
   views?: string;
+  cacheType?: CacheType;
   headers?: OutgoingHttpHeaders;
 }
 
 export interface CompileTemplatesOptions {
-  childDir: string;
   dir: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  compileOptions?: any;
   extension: string;
-}
-
-export interface Templates {
-  [key: string]: TemplateDelegate;
 }
 
 export type HandlebarsRender = (view: string, data?: Record<string, unknown>, options?: Partial<Response>) => Response;
@@ -36,23 +41,57 @@ export interface RequestHandlebars {
   hbs: HandlebarsRender;
 }
 
-export const deepReaddirSync = (dir: string, childDir: string, parent = ''): string[] =>
-  readdirSync(join(dir, childDir), { withFileTypes: true }).reduce<string[]>(
-    (all, item) =>
-      item.isDirectory()
-        ? [...all, ...deepReaddirSync(dir, join(childDir, item.name), join(parent, item.name))]
-        : [...all, join(parent, item.name)],
+const hasExtension = (extension: string) => (file: string): boolean => file.endsWith(extension);
+
+export const deepReaddirSync = ({ dir, extension }: CompileTemplatesOptions): string[] =>
+  readdirSync(dir, { withFileTypes: true })
+    .reduce<string[]>((all, item) => {
+      return all.concat(
+        item.isDirectory() ? deepReaddirSync({ dir: join(dir, item.name), extension }) : join(dir, item.name),
+      );
+    }, [])
+    .filter(hasExtension(extension));
+
+const toName = (dir: string, file: string): string => relative(dir, file.slice(0, file.lastIndexOf('.')));
+
+export const compileTemplates = ({ dir, extension }: CompileTemplatesOptions): Array<[string, TemplateDelegate]> =>
+  deepReaddirSync({ dir, extension }).reduce<Array<[string, TemplateDelegate]>>(
+    (all, file) => [...all, [toName(dir, file), compile(readFileSync(file, 'utf8'))]],
     [],
   );
 
-export const compileTemplates = ({ childDir, dir, extension, compileOptions }: CompileTemplatesOptions): Templates =>
-  deepReaddirSync(dir, childDir)
-    .filter((file) => file.endsWith(extension))
-    .reduce((all, file) => {
-      const name = file.slice(0, -(extension.length + 1));
-      const input = readFileSync(join(dir, childDir, file), 'utf8');
-      return { ...all, [name]: compile(input, compileOptions) };
-    }, {});
+export const loadTemplate = (
+  name: string,
+  cache: Cache,
+  cacheType: CacheType,
+  { dir, extension }: CompileTemplatesOptions,
+): TemplateDelegate => {
+  const file = `${join(dir, name)}.${extension}`;
+
+  const stat = cacheType === 'expiry' ? statSync(file) : { mtime: new Date(0) };
+  const cached = cache.get(name);
+
+  if (cacheType !== 'none' && cached && stat.mtime < cached.mtime) {
+    return cached.template;
+  } else {
+    const template = compile(readFileSync(file, 'utf8'));
+    cache.set(name, { template, mtime: new Date() });
+    return template;
+  }
+};
+
+const loadPartials = (options: CompileTemplatesOptions): { [key: string]: TemplateDelegate } =>
+  existsSync(options.dir)
+    ? compileTemplates(options).reduce((acc, [name, template]) => ({ ...acc, [name]: template }), {})
+    : {};
+
+const loadTemplates = (cache: Cache, options: CompileTemplatesOptions): Cache =>
+  existsSync(options.dir)
+    ? compileTemplates(options).reduce(
+        (cache, [name, template]) => cache.set(name, { template, mtime: new Date() }),
+        cache,
+      )
+    : cache;
 
 export const handlebars = ({
   helpers = {},
@@ -60,26 +99,25 @@ export const handlebars = ({
   extension = 'handlebars',
   partials = 'partials',
   views = 'views',
+  cacheType = 'preload',
   headers,
 }: TemplateConfig): HandlebarsRender => {
   const defaultHeaders = { 'content-type': 'text/html', ...headers };
+  const cache = cacheType === 'preload' ? loadTemplates(new Map(), { dir, extension }) : new Map();
+  const partialTemplates = cacheType === 'preload' ? loadPartials({ dir: join(dir, partials), extension }) : undefined;
 
-  const partialTemplates = existsSync(join(dir, partials))
-    ? compileTemplates({ childDir: partials, dir, extension })
-    : {};
-  const viewTemplates = compileTemplates({ childDir: views, dir, extension });
-
-  if (Object.keys(viewTemplates).length === 0) {
-    throw new Error(`No templates with extension ${extension} found in ${join(dir, views)}`);
-  }
-
-  return (view, data = {}, options = {}) =>
-    response({
-      body: viewTemplates[view](data, { helpers, partials: partialTemplates }),
+  return (name, data = {}, options = {}) => {
+    const template = loadTemplate(name, cache, cacheType, { dir: join(dir, views), extension });
+    return response({
+      body: template(data, {
+        helpers,
+        partials: partialTemplates ?? loadPartials({ dir: join(dir, partials), extension }),
+      }),
       status: 200 as const,
       ...options,
       headers: { ...defaultHeaders, ...options.headers },
     });
+  };
 };
 
 export const handlebarsMiddleware = (config: TemplateConfig): Middleware<RequestHandlebars> => {

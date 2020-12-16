@@ -5,23 +5,23 @@ const dir = join(__dirname, 'root');
 
 describe('Laminar Handlebars', () => {
   it('Test deepReaddirSync', () => {
-    const partials = deepReaddirSync(dir, 'partials');
+    const partials = deepReaddirSync({ dir: join(dir, 'partials'), extension: 'handlebars' });
 
     expect(partials).toEqual([
-      'inner/condition.handlebars',
-      'inner/deep/unless.handlebars',
-      'layout.handlebars',
-      'list.handlebars',
-      'span.handlebars',
+      join(dir, 'partials/inner/condition.handlebars'),
+      join(dir, 'partials/inner/deep/unless.handlebars'),
+      join(dir, 'partials/layout.handlebars'),
+      join(dir, 'partials/list.handlebars'),
+      join(dir, 'partials/span.handlebars'),
     ]);
   });
 
   it('Test compileTemplates', () => {
-    const partials = compileTemplates({ dir, childDir: 'partials', extension: 'handlebars' });
+    const partials = compileTemplates({ dir: join(dir, 'partials'), extension: 'handlebars' });
 
-    expect(partials.list({ list: ['one', 'two'] })).toMatchSnapshot();
-    expect(partials.span({ text: 'example' })).toMatchSnapshot();
-    expect(partials['inner/condition']({ test: true })).toMatchSnapshot();
-    expect(partials['inner/deep/unless']({})).toMatchSnapshot();
+    expect(partials.find(([name]) => name === 'list')?.[1]({ list: ['one', 'two'] })).toMatchSnapshot();
+    expect(partials.find(([name]) => name === 'span')?.[1]({ text: 'example' })).toMatchSnapshot();
+    expect(partials.find(([name]) => name === 'inner/condition')?.[1]({ test: true })).toMatchSnapshot();
+    expect(partials.find(([name]) => name === 'inner/deep/unless')?.[1]({})).toMatchSnapshot();
   });
 });

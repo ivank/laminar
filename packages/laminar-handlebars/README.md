@@ -83,6 +83,36 @@ const server = httpServer({
 start(server).then(() => console.log(describe(server)));
 ```
 
+### Caching options
+
+By default handlebars middleware would preload all the templates and keep them in memory, but you can control the caching behaviour with the `cacheType` option. Possible values:
+
+- `preload` - load all the templates ones into memory
+- `expiry` - load partials when needed and keep them in cache, but check the file's mtime and reload template if changed
+- `none` - do not cache templates and load them on every request.
+
+> [examples/expiry-cache.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars/examples/expiry-cache.ts)
+
+```typescript
+import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
+import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
+import { join } from 'path';
+
+const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html'), cacheType: 'expiry' });
+
+const server = httpServer({
+  port: 3333,
+  app: handlebars(
+    router(
+      get('/', ({ hbs }) => hbs('index')),
+      post('/result', ({ hbs, body: { name } }) => hbs('result', { name })),
+    ),
+  ),
+});
+
+start(server).then(() => console.log(describe(server)));
+```
+
 ## Running the tests
 
 You can run the tests with:
