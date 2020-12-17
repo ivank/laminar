@@ -41,6 +41,13 @@ export interface OptionsBase {
   options?: AppOptions;
 
   /**
+   * Node http server timeout setting, set using setTimeout()
+   *
+   * https://nodejs.org/api/http.html#http_server_settimeout_msecs_callback
+   */
+  timeout?: number;
+
+  /**
    * Port number, defaults to 3300
    */
   port?: number;
@@ -96,9 +103,13 @@ export function httpServer({
   hostname = 'localhost',
   serverOptions = {},
   options,
+  timeout,
   app,
 }: OptionsHttp): HttpServer<http.Server> {
   const server = http.createServer(serverOptions, requestListener(appComponents(options)(app)));
+  if (timeout !== undefined) {
+    server.setTimeout(timeout);
+  }
   return { server, port, hostname };
 }
 

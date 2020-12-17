@@ -23,6 +23,7 @@ import {
   jsonNotFound,
   file,
   HttpError,
+  App,
 } from '../src';
 import { join } from 'path';
 import { readFileSync, createReadStream } from 'fs';
@@ -30,6 +31,21 @@ import { Agent } from 'https';
 import { URLSearchParams } from 'url';
 
 describe('Integration', () => {
+  it('Should respect timeout', async () => {
+    const app: App = () => new Promise((resolve) => setTimeout(() => resolve(textOk('OK')), 100));
+    const port = 8051;
+
+    const server = httpServer({ port, app, timeout: 50 });
+    try {
+      await start(server);
+
+      const error = await axios.get(`http://localhost:${port}`).catch((error) => error);
+      expect(error.message).toEqual('socket hang up');
+    } finally {
+      await stop(server);
+    }
+  });
+
   it('Should allow TLS', async () => {
     const app = jest.fn().mockReturnValue(textOk('TLS Test'));
     const port = 8051;

@@ -85,12 +85,13 @@
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_laminar_handlebars_src_index_.compiletemplatesoptions.html" class="tsd-kind-icon">Compile<wbr>Templates<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_laminar_handlebars_src_index_.requesthandlebars.html" class="tsd-kind-icon">Request<wbr>Handlebars</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_laminar_handlebars_src_index_.templateconfig.html" class="tsd-kind-icon">Template<wbr>Config</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_laminar_handlebars_src_index_.templates.html" class="tsd-kind-icon">Templates</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_laminar_handlebars_src_index_.html#cache" class="tsd-kind-icon">Cache</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_laminar_handlebars_src_index_.html#cachetype" class="tsd-kind-icon">Cache<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_laminar_handlebars_src_index_.html#handlebarsrender" class="tsd-kind-icon">Handlebars<wbr>Render</a></li>
 							</ul>
 						</section>
@@ -101,6 +102,7 @@
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_laminar_handlebars_src_index_.html#deepreaddirsync" class="tsd-kind-icon">deep<wbr>Readdir<wbr>Sync</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_laminar_handlebars_src_index_.html#handlebars" class="tsd-kind-icon">handlebars</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_laminar_handlebars_src_index_.html#handlebarsmiddleware" class="tsd-kind-icon">handlebars<wbr>Middleware</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_laminar_handlebars_src_index_.html#loadtemplate" class="tsd-kind-icon">load<wbr>Template</a></li>
 							</ul>
 						</section>
 					</div>
@@ -109,12 +111,42 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="cache" class="tsd-anchor"></a>
+					<h3>Cache</h3>
+					<div class="tsd-signature tsd-kind-icon">Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>mtime<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">; </span>template<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TemplateDelegate</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L13">Projects/laminar/packages/laminar-handlebars/src/index.ts:13</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="cachetype" class="tsd-anchor"></a>
+					<h3>Cache<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">Cache<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"preload"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"expiry"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L21">Projects/laminar/packages/laminar-handlebars/src/index.ts:21</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Cache types.</p>
+							<ul>
+								<li>preload: load all the templates ones into memory</li>
+								<li>expiry: load partials when needed and keep them in cache, but check the file&#39;s mtime and reload template if changed</li>
+								<li>none: do not cache templates and load them on every request.</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="handlebarsrender" class="tsd-anchor"></a>
 					<h3>Handlebars<wbr>Render</h3>
 					<div class="tsd-signature tsd-kind-icon">Handlebars<wbr>Render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>view<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Response</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/3ffe3e7/packages/laminar-handlebars/src/index.ts#L33">Projects/laminar/packages/laminar-handlebars/src/index.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L38">Projects/laminar/packages/laminar-handlebars/src/index.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -152,26 +184,20 @@
 					<a name="compiletemplates" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> compile<wbr>Templates</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">compile<wbr>Templates<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>childDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>compileOptions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_laminar_handlebars_src_index_.templates.html" class="tsd-signature-type">Templates</a></li>
+						<li class="tsd-signature tsd-kind-icon">compile<wbr>Templates<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/3ffe3e7/packages/laminar-handlebars/src/index.ts#L52">Projects/laminar/packages/laminar-handlebars/src/index.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L57">Projects/laminar/packages/laminar-handlebars/src/index.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>childDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>compileOptions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5>child<wbr>Dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-										</li>
-										<li class="tsd-parameter">
-											<h5>compile<wbr>Options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-										</li>
 										<li class="tsd-parameter">
 											<h5>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
 										</li>
@@ -181,7 +207,7 @@
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_laminar_handlebars_src_index_.templates.html" class="tsd-signature-type">Templates</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -189,25 +215,27 @@
 					<a name="deepreaddirsync" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> deep<wbr>Readdir<wbr>Sync</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">deep<wbr>Readdir<wbr>Sync<span class="tsd-signature-symbol">(</span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, childDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, parent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">deep<wbr>Readdir<wbr>Sync<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/3ffe3e7/packages/laminar-handlebars/src/index.ts#L43">Projects/laminar/packages/laminar-handlebars/src/index.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L46">Projects/laminar/packages/laminar-handlebars/src/index.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>dir: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>childDir: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> parent: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+									</ul>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -218,20 +246,23 @@
 					<a name="handlebars" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> handlebars</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">handlebars<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>headers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">OutgoingHttpHeaders</span><span class="tsd-signature-symbol">; </span>helpers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>partials<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>views<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_laminar_handlebars_src_index_.html#handlebarsrender" class="tsd-signature-type">HandlebarsRender</a></li>
+						<li class="tsd-signature tsd-kind-icon">handlebars<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>cacheType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"preload"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"expiry"</span><span class="tsd-signature-symbol">; </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>headers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">OutgoingHttpHeaders</span><span class="tsd-signature-symbol">; </span>helpers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>partials<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>views<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_laminar_handlebars_src_index_.html#handlebarsrender" class="tsd-signature-type">HandlebarsRender</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/3ffe3e7/packages/laminar-handlebars/src/index.ts#L66">Projects/laminar/packages/laminar-handlebars/src/index.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L96">Projects/laminar/packages/laminar-handlebars/src/index.ts:96</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>headers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">OutgoingHttpHeaders</span><span class="tsd-signature-symbol">; </span>helpers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>partials<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>views<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>cacheType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"preload"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"expiry"</span><span class="tsd-signature-symbol">; </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>headers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">OutgoingHttpHeaders</span><span class="tsd-signature-symbol">; </span>helpers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>partials<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>views<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>cache<wbr>Type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"preload"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"expiry"</span></h5>
+										</li>
 										<li class="tsd-parameter">
 											<h5>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
 										</li>
@@ -272,7 +303,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/3ffe3e7/packages/laminar-handlebars/src/index.ts#L94">Projects/laminar/packages/laminar-handlebars/src/index.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L123">Projects/laminar/packages/laminar-handlebars/src/index.ts:123</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -282,6 +313,46 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_laminar_src_index_.html#middleware" class="tsd-signature-type">Middleware</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_laminar_handlebars_src_index_.requesthandlebars.html" class="tsd-signature-type">RequestHandlebars</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="loadtemplate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> load<wbr>Template</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">load<wbr>Template<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, cache<span class="tsd-signature-symbol">: </span><a href="_laminar_handlebars_src_index_.html#cache" class="tsd-signature-type">Cache</a>, cacheType<span class="tsd-signature-symbol">: </span><a href="_laminar_handlebars_src_index_.html#cachetype" class="tsd-signature-type">CacheType</a>, __namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TemplateDelegate</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/899c8f9/packages/laminar-handlebars/src/index.ts#L63">Projects/laminar/packages/laminar-handlebars/src/index.ts:63</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>cache: <a href="_laminar_handlebars_src_index_.html#cache" class="tsd-signature-type">Cache</a></h5>
+								</li>
+								<li>
+									<h5>cacheType: <a href="_laminar_handlebars_src_index_.html#cachetype" class="tsd-signature-type">CacheType</a></h5>
+								</li>
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-symbol">{ </span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5>extension<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TemplateDelegate</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -318,8 +389,11 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/_laminar_handlebars_src_index_.templateconfig.html" class="tsd-kind-icon">Template<wbr>Config</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/_laminar_handlebars_src_index_.templates.html" class="tsd-kind-icon">Templates</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="_laminar_handlebars_src_index_.html#cache" class="tsd-kind-icon">Cache</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="_laminar_handlebars_src_index_.html#cachetype" class="tsd-kind-icon">Cache<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="_laminar_handlebars_src_index_.html#handlebarsrender" class="tsd-kind-icon">Handlebars<wbr>Render</a>
@@ -335,6 +409,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="_laminar_handlebars_src_index_.html#handlebarsmiddleware" class="tsd-kind-icon">handlebars<wbr>Middleware</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_laminar_handlebars_src_index_.html#loadtemplate" class="tsd-kind-icon">load<wbr>Template</a>
 					</li>
 				</ul>
 			</nav>

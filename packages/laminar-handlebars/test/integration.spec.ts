@@ -70,7 +70,7 @@ describe('Integration', () => {
       writeFileSync(join(dir, 'partials/layout.hbs'), '<html><body>Layout 2 {{> @partial-block }}</body></html>');
       writeFileSync(join(dir, 'views/index.hbs'), '{{#> layout }}<span>Generated 2</span>{{/layout}}');
 
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 150));
 
       expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot, 'after modification');
     } finally {

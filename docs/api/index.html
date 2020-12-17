@@ -266,6 +266,44 @@ main();</code></pre>
 					<h3>Generating types</h3>
 				</a>
 				<p>You can use <a href="../lamina-cli">@ovotech/lamina-cli</a> package to generate types.</p>
+				<a href="#json-type-convertion" id="json-type-convertion" style="color: inherit; text-decoration: none;">
+					<h3>Json Type Convertion</h3>
+				</a>
+				<p>JSON and JS object are not <em>exactly</em> the same, as you can <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#Description">read to your horror at MDN docs</a>. Laminar tries to follow that spec, converting your JS objects into stuff that your json-schema can validate. For example Date objects are converted to iso strings and undefined fields are omitted from the object.</p>
+				<p>This works on type level too. If the types generated from the OpenApi schema would match JS objects passed to the helper functions <code>jsonOk</code>, <code>jsonNotFound</code> etc.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/convertion.ts">examples/convertion.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { httpServer, start, describe, jsonOk, openApi } <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { join } <span class="hljs-keyword">from</span> <span class="hljs-string">'path'</span>;
+
+<span class="hljs-keyword">const</span> api = join(__dirname, <span class="hljs-string">'convertion.yaml'</span>);
+
+<span class="hljs-keyword">const</span> main = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> app = <span class="hljs-keyword">await</span> openApi({
+    api,
+    paths: {
+      <span class="hljs-string">'/user'</span>: {
+        post: <span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> jsonOk({ result: <span class="hljs-string">'ok'</span>, user: body }),
+        <span class="hljs-comment">/**
+         * The Date object will be converted to a string
+         * undefined values will be cleaned up
+         */</span>
+        <span class="hljs-keyword">get</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
+          jsonOk({
+            email: <span class="hljs-string">'me@example.com'</span>,
+            createdAt: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2020-01-01T12:00:00Z'</span>),
+            title: <span class="hljs-literal">undefined</span>,
+          }),
+      },
+    },
+  });
+  <span class="hljs-keyword">const</span> server = httpServer({ port: <span class="hljs-number">3333</span>, app });
+  <span class="hljs-keyword">await</span> start(server);
+  <span class="hljs-built_in">console</span>.log(describe(server));
+};
+
+main();</code></pre>
 				<a href="#undocumented-types" id="undocumented-types" style="color: inherit; text-decoration: none;">
 					<h3>Undocumented types</h3>
 				</a>
@@ -454,7 +492,8 @@ start(server).then(<span class="hljs-function"><span class="hljs-params">()</spa
  * We can now require this app to have the middleware.
  * If the propper ones are not executed later, TypeScript will inform us at compile time.
  */</span>
-<span class="hljs-keyword">const</span> app: App&lt;RequestDB&gt; = <span class="hljs-function">(<span class="hljs-params">req</span>) =&gt;</span> jsonOk({ url: req.url, user: req.db.getValidUser() });
+<span class="hljs-keyword">const</span> app: App&lt;RequestDB&gt; = <span class="hljs-function">(<span class="hljs-params">req</span>) =&gt;</span>
+  jsonOk({ url: req.url.toString(), user: req.db.getValidUser() });
 
 <span class="hljs-keyword">const</span> db = createDbMiddleware();
 
@@ -496,6 +535,61 @@ start(server).then(<span class="hljs-function"><span class="hljs-params">()</spa
 });
 
 start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<a href="#streaming-data" id="streaming-data" style="color: inherit; text-decoration: none;">
+					<h3>Streaming Data</h3>
+				</a>
+				<p>By default the body parser will concat the incoming request body stream into a string object and pass that around into your app. Sometimes you&#39;d want to not do that for certain content types, like csv data for example.</p>
+				<p>You can achieve that by writing your own parser that will preserve the <code>Readable</code> body object and just pass it inside.</p>
+				<blockquote>
+					<p><a href="https://github.com/ovotech/laminar/tree/master/packages/laminar/examples/streaming-parser.ts">examples/streaming-parser.ts</a></p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> {
+  httpServer,
+  App,
+  start,
+  BodyParser,
+  defaultBodyParsers,
+  describe,
+  csv,
+  ok,
+} <span class="hljs-keyword">from</span> <span class="hljs-string">'@ovotech/laminar'</span>;
+<span class="hljs-keyword">import</span> { pipeline, Readable, Transform } <span class="hljs-keyword">from</span> <span class="hljs-string">'stream'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> parse <span class="hljs-keyword">from</span> <span class="hljs-string">'csv-parse'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> stringify <span class="hljs-keyword">from</span> <span class="hljs-string">'csv-stringify'</span>;
+
+<span class="hljs-keyword">const</span> csvParser: BodyParser = {
+  match: <span class="hljs-function">(<span class="hljs-params">contentType</span>) =&gt;</span> contentType === <span class="hljs-string">'text/csv'</span>,
+  parse: <span class="hljs-keyword">async</span> (body) =&gt; body,
+};
+
+<span class="hljs-keyword">const</span> upperCaseTransform = <span class="hljs-keyword">new</span> Transform({
+  objectMode: <span class="hljs-literal">true</span>,
+  transform: <span class="hljs-function">(<span class="hljs-params">row: <span class="hljs-built_in">string</span>[], encoding, callback</span>) =&gt;</span>
+    callback(
+      <span class="hljs-literal">undefined</span>,
+      row.map(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.toUpperCase()),
+    ),
+});
+
+<span class="hljs-comment">/**
+ * A function that will convert a readable stream of a csv into one with all items upper cased.
+ * Using node's [pipeline](https://nodejs.org/api/stream.html#stream_stream_pipeline_streams_callback) function to handle the streams
+ */</span>
+<span class="hljs-keyword">const</span> transformCsv = (body: Readable): <span class="hljs-function"><span class="hljs-params">Readable</span> =&gt;</span>
+  pipeline(body, parse(), upperCaseTransform, stringify(), <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span>
+    err ? <span class="hljs-built_in">console</span>.error(err.message) : <span class="hljs-literal">undefined</span>,
+  );
+
+<span class="hljs-keyword">const</span> app: App = <span class="hljs-function">(<span class="hljs-params">{ body }</span>) =&gt;</span> csv(ok({ body: transformCsv(body) }));
+
+<span class="hljs-keyword">const</span> server = httpServer({
+  port: <span class="hljs-number">3333</span>,
+  app,
+  options: { bodyParsers: [csvParser, ...defaultBodyParsers] },
+});
+
+start(server).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(describe(server)));</code></pre>
+				<p>Alternatively, you can also set <code>bodyParsers</code> option to an empty array (<code>[]</code>), and use <code>bodyParserComponent</code> as a middleware, selectively only on specific routes.</p>
 				<a href="#router" id="router" style="color: inherit; text-decoration: none;">
 					<h3>Router</h3>
 				</a>
