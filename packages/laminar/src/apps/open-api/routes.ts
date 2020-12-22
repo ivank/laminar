@@ -135,7 +135,7 @@ function toRequestSchema(
  * Since query parameters come only as string, but we still want to type them as "integer" or "boolean"
  * We attempt to coerce the type to the desired one
  */
-type Coercer = (value: string) => unknown;
+type Coercer = (value: string, schema: SchemaObject | undefined) => unknown;
 
 const trueString = ['true', 'yes', '1'];
 const falseString = ['false', 'no', '0'];
@@ -151,6 +151,15 @@ const coercers: { [key: string]: Coercer } = {
   },
   boolean: (value) => (trueString.includes(value) ? true : falseString.includes(value) ? false : value),
   null: (value) => (value === 'null' ? null : value),
+  object: (value, schema: SchemaObject | undefined) =>
+    Object.entries(value).reduce((acc, [name, propertyValue]) => {
+      const propertySchema = schema?.properties?.[name] as SchemaObject;
+      const coercer = coercers[propertySchema.type ?? ''];
+      return {
+        ...acc,
+        [name]: coercer && propertyValue !== undefined ? coercer(propertyValue, propertySchema) : propertyValue,
+      };
+    }, {}),
 };
 
 /**
@@ -165,7 +174,7 @@ function toParameterCoerce<TRequest extends Empty>(parameter: ResolvedParameterO
       const location = toParamLocation(parameter.in);
       const rawValue = req[location]?.[parameter.name];
       if (rawValue !== undefined) {
-        const value = coercer(req[location][parameter.name]);
+        const value = coercer(req[location][parameter.name], parameter.schema);
         return { ...req, [location]: { ...req[location], [parameter.name]: value } };
       } else {
         return req;

@@ -34,7 +34,7 @@
     "lint": "yarn lint:prettier && yarn lint:eslint"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.9.4",
+    "@ovotech/laminar": "^0.9.5",
     "yaml": "^1.10.0"
   }
 }

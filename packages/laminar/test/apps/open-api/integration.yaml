@@ -44,6 +44,24 @@ paths:
             type: array
             items:
               type: string
+        - name: pagination
+          in: query
+          description: Container for all pagination params
+          required: false
+          schema:
+            type: object
+            properties:
+              page:
+                type: integer
+                minimum: 0
+              perPage:
+                type: integer
+                minimum: 1
+                maximum: 100
+            additionalProperties: false
+            required:
+              - page
+              - perPage
         - name: limit
           in: query
           description: maximum number of results to return

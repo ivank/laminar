@@ -12,3 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Ability to coerce request query params into its schema defined types (integer, boolean)
+
+## [0.9.3] - 2020-12-04
+
+### Changed
+
+- Support CORs headers even if there are exceptions in the response
+
+## [0.9.5] - 2020-12-22
+
+### Changed
+
+- Support type coercion even for nested request parameter objects in the query string

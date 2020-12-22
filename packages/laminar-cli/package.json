@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.9.4",
+    "@ovotech/laminar": "^0.9.5",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
