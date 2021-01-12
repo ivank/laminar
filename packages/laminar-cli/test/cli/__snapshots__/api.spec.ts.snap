@@ -3122,6 +3122,8 @@ exports[`Types Content Test statements.yaml 1`] = `
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
 
+export type AccountId = string;
+
 export type AccountMeter = AccountMeterElec | AccountMeterGas;
 
 export type AccountMeterElec = AccountMeterBase & {
@@ -3161,7 +3163,7 @@ export type ResponseAccountsAccountIdMetersGet = ResponseOapi<AccountMeter[], 20
  */
 export interface RequestAccountsAccountIdMetersGet extends RequestOapi {
     path: {
-        accountId: string;
+        accountId: AccountId;
     };
 }
 

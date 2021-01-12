@@ -230,7 +230,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
 
           const astRequestBody = operation.requestBody
             ? convertRequestBody(astParams.context, operation.requestBody)
-            : document(methodContext, Type.TypeLiteral());
+            : document(astParams.context, Type.TypeLiteral());
 
           const identifier = pathToIdentifier(path) + title(method);
           const requestIdentifier = 'Request' + identifier;

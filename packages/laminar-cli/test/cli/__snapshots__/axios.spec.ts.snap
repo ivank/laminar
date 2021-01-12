@@ -2536,6 +2536,8 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     api: api
 });
 
+export type AccountId = string;
+
 export type AccountMeter = AccountMeterElec | AccountMeterGas;
 
 export type AccountMeterElec = AccountMeterBase & {
@@ -2572,7 +2574,7 @@ export interface AxiosOapiInstance {
     /**
      * Get Meters, associated with an account, and its service start and end dates (SSD...SED)
      */
-    \\"GET /accounts/{accountId}/meters\\": (accountId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<AccountMeter[] | HttpError>>;
+    \\"GET /accounts/{accountId}/meters\\": (accountId: AccountId, config?: AxiosRequestConfig) => Promise<AxiosResponse<AccountMeter[] | HttpError>>;
     api: AxiosInstance;
 }
 "

@@ -34,10 +34,13 @@ components:
       name: accountId
       in: path
       schema:
-        type: string
+        $ref: '#/components/schemas/AccountId'
       required: true
 
   schemas:
+    AccountId:
+      type: string
+      pattern: '\\d+'
     HttpError:
       additionalProperties: false
       properties:

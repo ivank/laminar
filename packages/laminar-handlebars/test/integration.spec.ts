@@ -1,6 +1,7 @@
 import { get, post, router, httpServer, start, stop } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
 import { writeFileSync, mkdirSync } from 'fs';
+import { retry } from 'ts-retry-promise';
 import { join } from 'path';
 import { handlebarsMiddleware } from '../src';
 
@@ -47,6 +48,8 @@ describe('Integration', () => {
     ${'preload'}
     ${'none'}
   `('Should process changing handlebars tempaltes with $cacheType', async ({ cacheType }) => {
+    jest.setTimeout(10000);
+
     const dir = join(__dirname, '__generated__/root');
     mkdirSync(join(dir, 'views'), { recursive: true });
     mkdirSync(join(dir, 'partials'), { recursive: true });
@@ -70,9 +73,11 @@ describe('Integration', () => {
       writeFileSync(join(dir, 'partials/layout.hbs'), '<html><body>Layout 2 {{> @partial-block }}</body></html>');
       writeFileSync(join(dir, 'views/index.hbs'), '{{#> layout }}<span>Generated 2</span>{{/layout}}');
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot, 'after modification');
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      await retry(
+        () => expect(api.get('/')).resolves.toMatchSnapshot<AxiosResponse>(axiosSnapshot, 'after modification'),
+        { delay: 1000, retries: 5, timeout: 10000 },
+      );
     } finally {
       await stop(server);
     }
