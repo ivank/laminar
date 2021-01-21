@@ -21,6 +21,7 @@ import {
   xml,
   pdf,
   yaml,
+  optional,
 } from '../src';
 
 const api = axios.create({ baseURL: 'http://localhost:8052' });
@@ -162,6 +163,31 @@ describe('Requests', () => {
       await expect(api.get('/test').catch((error) => error.response)).resolves.toMatchObject({
         status: 404,
         data: { message: 'test' },
+      });
+    } finally {
+      await stop(server);
+    }
+  });
+
+  it('Should process json responds for undefined', async () => {
+    let data: { message: string } | undefined;
+
+    const server = httpServer({
+      port: 8052,
+      app: () => optional(jsonOk, data) ?? jsonNotFound({ message: 'not found' }),
+    });
+    try {
+      await start(server);
+      data = { message: 'test' };
+      await expect(api.get('/test')).resolves.toMatchObject({
+        status: 200,
+        data: { message: 'test' },
+      });
+
+      data = undefined;
+      await expect(api.get('/test').catch((error) => error.response)).resolves.toMatchObject({
+        status: 404,
+        data: { message: 'not found' },
       });
     } finally {
       await stop(server);

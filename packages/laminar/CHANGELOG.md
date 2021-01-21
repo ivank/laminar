@@ -24,3 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Support type coercion even for nested request parameter objects in the query string
+
+## [0.9.6] - 2021-01-21
+
+### Changed
+
+- Introduced the `optional` response helper, for more elegantly dealing with MyType | undefined types with nullish coallesing

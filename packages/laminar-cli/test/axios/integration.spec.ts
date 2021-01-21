@@ -7,6 +7,7 @@ import {
   jsonNotFound,
   jsonUnauthorized,
   securityOk,
+  optional,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
@@ -55,7 +56,7 @@ describe('Integration', () => {
         '/pets/{id}': {
           get: ({ path }) => {
             const pet = db.find((item) => item.id === Number(path.id));
-            return pet ? jsonOk(pet) : jsonNotFound({ code: 123, message: 'Not Found' });
+            return optional(jsonOk, pet) ?? jsonNotFound({ code: 123, message: 'Not Found' });
           },
           delete: ({ path }) => {
             const index = db.findIndex((item) => item.id === Number(path.id));

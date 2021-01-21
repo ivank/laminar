@@ -700,19 +700,23 @@ import {
   ok,
   badRequest,
   describe,
+  textOk,
 } from '@ovotech/laminar';
+import { createReadStream } from 'fs';
 import { join } from 'path';
 
 const server = httpServer({
   port: 3333,
   app: router(
     // Redirects
-    get('/redirect', () =>
-      redirect('http://my-new-location.example.com', { headers: { 'X-Other': 'Other' } }),
-    ),
+    get('/redirect', () => redirect('http://my-new-location.example.com', { headers: { 'X-Other': 'Other' } })),
 
     // Static files
     get('/static-file', () => file(join(__dirname, 'assets/start.svg'))),
+
+    // Different stream types
+    get('/text-stream', () => textOk(createReadStream(join(__dirname, 'assets/one.txt')))),
+    get('/html-stream', () => htmlOk(createReadStream(join(__dirname, 'assets/other.html')))),
 
     // JSON Responses
     get('/json/forbidden', () => jsonForbidden({ message: 'Not Authorized' })),

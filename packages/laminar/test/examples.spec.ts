@@ -94,6 +94,14 @@ describe('Example files', () => {
       '<html>OK</html>',
     ],
     [
+      'examples/response.ts',
+      {
+        method: 'GET',
+        url: 'http://localhost:3333/text-stream',
+      },
+      'one\n',
+    ],
+    [
       'examples/router.ts',
       {
         method: 'GET',

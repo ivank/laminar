@@ -12,6 +12,7 @@ import {
   jsonNotFound,
   jsonUnauthorized,
   jsonForbidden,
+  optional,
 } from '../../../src';
 import axios from 'axios';
 import { join } from 'path';
@@ -119,7 +120,7 @@ describe('Integration', () => {
               return jsonOk(JSON.parse(JSON.stringify({ something: 'else' })));
             }
             const item = db.find((item) => item.id === Number(path.id));
-            return item ? jsonOk(item) : jsonNotFound({ code: 123, message: 'Not Found' });
+            return optional(jsonOk, item) ?? jsonNotFound({ code: 123, message: 'Not Found' });
           },
           delete: ({ path }) => {
             if (!isPathWithId(path)) {

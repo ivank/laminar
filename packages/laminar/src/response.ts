@@ -335,6 +335,59 @@ export function json<TResponseBody, TResponse extends Partial<Response<TResponse
 }
 
 /**
+ * A Response creator helper, used for {@link optional}
+ */
+type ResponseCreator<TResponseBody, TStatus, THeaders> = (
+  body: TResponseBody,
+  headers?: OutgoingHttpHeaders,
+) => { status: TStatus; body: TResponseBody; headers: THeaders };
+
+/**
+ * A helper to allow optional bodies to be chained with nullish coallesing
+ * For example you can combine {@link jsonOk} and {@link jsonNotFound}
+ *
+ * ```typescript
+ * const handler = () => {
+ *   const value: MyType | undefined = ...
+ *   return optional(jsonOk, value) ?? jsonNotFound({ message: 'Not Found' });
+ * }
+ * ```
+ *
+ * @typeParam TResponseBody Strictly type the response body, can be undefined too
+ * @typeParam TStatus Strictly type the http status value
+ * @typeParam THeaders Strictly type the http headers.
+ *
+ * @category Response
+ */
+export function optional<TResponseBody, TStatus, THeaders>(
+  response: ResponseCreator<TResponseBody, TStatus, THeaders>,
+  body: TResponseBody,
+  headers?: OutgoingHttpHeaders,
+): {
+  status: TStatus;
+  body: Exclude<TResponseBody, undefined>;
+  headers: THeaders;
+};
+export function optional<TResponseBody, TStatus, THeaders>(
+  response: ResponseCreator<TResponseBody, TStatus, THeaders>,
+  body: undefined,
+  headers?: OutgoingHttpHeaders,
+): undefined;
+export function optional<TResponseBody, TStatus, THeaders>(
+  response: ResponseCreator<TResponseBody, TStatus, THeaders>,
+  body: TResponseBody | undefined,
+  headers: OutgoingHttpHeaders = {},
+):
+  | {
+      status: TStatus;
+      body: TResponseBody;
+      headers: THeaders;
+    }
+  | undefined {
+  return body !== undefined ? response(body, headers) : undefined;
+}
+
+/**
  * A helper to set the `Content-Type` header of a {@link Response} to a specific type literal constant.
  *
  * Content-Type: `application/yaml`

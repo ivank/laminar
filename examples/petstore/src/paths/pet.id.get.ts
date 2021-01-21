@@ -1,5 +1,5 @@
 import { PathPetsIdGet } from '../__generated__/petstore';
-import { jsonNotFound, jsonOk } from '@ovotech/laminar';
+import { jsonNotFound, jsonOk, optional } from '@ovotech/laminar';
 import { RequestPetsDb } from '../middleware';
 
 /**
@@ -11,7 +11,5 @@ import { RequestPetsDb } from '../middleware';
  * Anithing that's deviating from the OpenAPI schema - the shape of the json response, status or content-type
  * would be flagged by typescript as an error
  */
-export const pathPetsIdGet: PathPetsIdGet<RequestPetsDb> = async ({ petsDb, path: { id } }) => {
-  const pet = await petsDb.find(id);
-  return pet ? jsonOk(pet) : jsonNotFound({ code: 11, message: `Pet ${id} not found` });
-};
+export const pathPetsIdGet: PathPetsIdGet<RequestPetsDb> = async ({ petsDb, path: { id } }) =>
+  optional(jsonOk, await petsDb.find(id)) ?? jsonNotFound({ code: 11, message: `Pet ${id} not found` });

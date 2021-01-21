@@ -15,6 +15,7 @@ export {
   OptionsHttps,
 } from './server';
 export {
+  optional,
   redirect,
   file,
   response,
