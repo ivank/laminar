@@ -4,7 +4,7 @@ Handlebars implementation for the laminar http server.
 
 ### Usage
 
-> [examples/html.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars/examples/html.ts)
+> [examples/html.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/html.ts)
 
 ```typescript
 import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
@@ -32,7 +32,7 @@ Creating the middleware would crawl through the directory and all of its subdire
 
 ### Custom response options
 
-> [examples/yaml.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars/examples/yaml.ts)
+> [examples/yaml.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/yaml.ts)
 
 ```typescript
 import { start, router, get, httpServer, describe } from '@ovotech/laminar';
@@ -63,7 +63,7 @@ start(server).then(() => console.log(describe(server)));
 
 You can also create the handblebars renderer directly without going through a middleware
 
-> [examples/direct.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars/examples/direct.ts)
+> [examples/direct.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/direct.ts)
 
 ```typescript
 import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
@@ -91,7 +91,7 @@ By default handlebars middleware would preload all the templates and keep them i
 - `expiry` - load partials when needed and keep them in cache, but check the file's mtime and reload template if changed
 - `none` - do not cache templates and load them on every request.
 
-> [examples/expiry-cache.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars/examples/expiry-cache.ts)
+> [examples/expiry-cache.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/expiry-cache.ts)
 
 ```typescript
 import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
@@ -131,14 +131,14 @@ yarn lint
 
 ## Deployment
 
-Deployment is preferment by lerna automatically on merge / push to master, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
+Deployment is preferment by lerna automatically on merge / push to main, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
 
 ## Contributing
 
 Have a bug? File an issue with a simple example that reproduces this so we can take a look & confirm.
 
-Want to make a change? Submit a PR, explain why it's useful, and make sure you've updated the docs (this file) and the tests (see [test folder](https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars/test)).
+Want to make a change? Submit a PR, explain why it's useful, and make sure you've updated the docs (this file) and the tests (see [test folder](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/test)).
 
 ## License
 
-This project is licensed under Apache 2 - see the [LICENSE](https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars/LICENSE) file for details
+This project is licensed under Apache 2 - see the [LICENSE](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/LICENSE) file for details

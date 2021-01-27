@@ -7,7 +7,7 @@
   "description": "This is a simple example of a laminar app split into files",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/master/examples/security#readme",
+  "homepage": "https://github.com/ovotech/laminar/tree/main/examples/security#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/laminar-cli": "^0.9.4",

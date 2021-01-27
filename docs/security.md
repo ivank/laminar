@@ -2,7 +2,7 @@
 
 If you have this schema, that has `JWT` Security schema and uses it to protect the get method without any scopes:
 
-> [examples/security/src/api.yaml](https://github.com/ovotech/laminar/tree/master/examples/security/src/api.yaml)
+> [examples/security/src/api.yaml](https://github.com/ovotech/laminar/tree/main/examples/security/src/api.yaml)
 
 ```yaml
 openapi: '3.0.0'
@@ -47,7 +47,7 @@ components:
 You can then implement the security, by writing a Security Resolver function, that would return either `securityOk` or any `Response` object.
 If the user is authenticated, then laminar will add the user auth info in the `userAuth` property of hte request, otherwise it would just return the `Response` object, whatever it is.
 
-> [examples/security/src/index.ts](https://github.com/ovotech/laminar/tree/master/examples/security/src/index.ts)
+> [examples/security/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/security/src/index.ts)
 
 ```typescript
 import { httpServer, start, jsonOk, describe, jsonForbidden, securityOk } from '@ovotech/laminar';
@@ -96,7 +96,7 @@ main();
 
 If we had this oapi.yaml
 
-> [packages/laminar-jwt/examples/oapi.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi.yaml)
+> [packages/laminar-jwt/examples/oapi.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi.yaml)
 
 ```yaml
 ---
@@ -183,7 +183,7 @@ components:
 
 And then implement it using the helper `jwtSecurityResolver`. That function would return a `securityOk` object if the jwt was validated, with the contents of the jwt, or a 403 error response.
 
-> [packages/laminar-jwt/examples/oapi.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi.ts)
+> [packages/laminar-jwt/examples/oapi.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi.ts)
 
 ```typescript
 import { httpServer, start, describe, jsonOk, openApi } from '@ovotech/laminar';
@@ -217,7 +217,7 @@ main();
 
 If you need the old school but still awesome cookie security, OpenAPI can handle that too - [docs for cookie auth with OpenAPI](https://swagger.io/docs/specification/authentication/cookie-authentication/). You can use the "apiKey" security to define it.
 
-> [packages/laminar-jwt/examples/oapi-api-key.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-api-key.yaml)
+> [packages/laminar-jwt/examples/oapi-api-key.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-api-key.yaml)
 
 ```yaml
 ---
@@ -289,7 +289,7 @@ components:
 
 Implementing it involves reading the cookie and validating its contents.
 
-> [packages/laminar-jwt/examples/oapi-api-key.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-api-key.ts)
+> [packages/laminar-jwt/examples/oapi-api-key.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-api-key.ts)
 
 ```typescript
 import { httpServer, start, describe, openApi, textOk, setCookie } from '@ovotech/laminar';
@@ -330,7 +330,7 @@ main();
 OpenApi supports more security methods, and they can be implemented with a security resolver.
 Since a security resolver is just a function that gets request properties and returns either `securityOk` or a `Response` object, we can do a lot of custom things.
 
-> [packages/laminar-jwt/examples/oapi-custom.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-custom.yaml)
+> [packages/laminar-jwt/examples/oapi-custom.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-custom.yaml)
 
 ```yaml
 ---
@@ -414,7 +414,7 @@ components:
       type: string
 ```
 
-> [packages/laminar-jwt/examples/oapi-custom.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-custom.ts)
+> [packages/laminar-jwt/examples/oapi-custom.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-custom.ts)
 
 ```typescript
 import {

@@ -139,14 +139,10 @@ export const toEntityDocument = (context: DocumentContext, entity: Entity): Docu
    * Allows you to keep the context of each iteration in an
    * without modifying the original context.
    */
-  const props = mapWithContext(
-    context,
-    Object.entries(entity.fields),
-    (fieldContext, [name, field]) => {
-      const fieldDoc = toFieldDocument(fieldContext, field);
-      return document(fieldDoc.context, Type.Prop({ name, type: fieldDoc.type }));
-    },
-  );
+  const props = mapWithContext(context, Object.entries(entity.fields), (fieldContext, [name, field]) => {
+    const fieldDoc = toFieldDocument(fieldContext, field);
+    return document(fieldDoc.context, Type.Prop({ name, type: fieldDoc.type }));
+  });
 
   const entityInterface = Type.Interface({ name: entity.name, props: props.items });
   const contextWithEntity = withIdentifier(props.context, entityInterface);
@@ -157,10 +153,7 @@ export const toEntityDocument = (context: DocumentContext, entity: Entity): Docu
  * Define an initial "Root" alias
  */
 const rootEntity = toEntityDocument({}, data);
-const rootDocument = document(
-  rootEntity.context,
-  Type.Alias({ name: 'Root', type: rootEntity.type }),
-);
+const rootDocument = document(rootEntity.context, Type.Alias({ name: 'Root', type: rootEntity.type }));
 
 console.log(printDocument(rootDocument));
 
@@ -207,7 +200,7 @@ yarn lint
 
 ## Deployment
 
-Deployment is preferment by lerna automatically on merge / push to master, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
+Deployment is preferment by lerna automatically on merge / push to main, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
 
 ## Contributing
 

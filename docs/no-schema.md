@@ -6,7 +6,7 @@ Laminar can be used without an open api schema, being a light-weight alternative
 
 You can use the `router` function to create a rest api
 
-> [examples/docs/src/server.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/server.ts)
+> [examples/docs/src/server.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/server.ts)
 
 ```typescript
 import { get, jsonOk, router, httpServer, describe, start } from '@ovotech/laminar';
@@ -42,7 +42,7 @@ The simplest possible laminar app you can write is just a function. Takes a requ
 
 A request object has at its core this `incommingMessage` which is an instance from node's own [http.IncommingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage) though in practice you wouldn't need to interact with it much.
 
-> [examples/docs/src/app.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/app.ts)
+> [examples/docs/src/app.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/app.ts)
 
 ```typescript
 import { App, jsonOk } from '@ovotech/laminar';
@@ -61,7 +61,7 @@ While simple the app sits at the heart of all of laminar and is an essential bui
 
 Understanding that we can start using the router function:
 
-> [examples/docs/src/router.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/router.ts)
+> [examples/docs/src/router.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/router.ts)
 
 ```typescript
 import { router, jsonOk, get, put, route } from '@ovotech/laminar';
@@ -118,7 +118,7 @@ You have helpers available for all the HTTP methods: `get`, `post`, `del`, `patc
 
 You can also use the low level function `route` for any custom method, or no method altogether (matching any method).
 
-> [examples/docs/src/router-regex.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/router-regex.ts)
+> [examples/docs/src/router-regex.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/router-regex.ts)
 
 ```typescript
 import { router, jsonOk, get, put } from '@ovotech/laminar';
@@ -161,7 +161,7 @@ If a pathname has a capture group in it it would be captured and accessible with
 
 You can serve a directory of static assesets with `staticAssets` helper.
 
-> [examples/docs/src/static-assets.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/static-assets.ts)
+> [examples/docs/src/static-assets.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/static-assets.ts)
 
 ```typescript
 import { router, jsonOk, get, staticAssets } from '@ovotech/laminar';
@@ -180,7 +180,7 @@ All the files from the 'assets' directory are going to be served.
 
 By default it accepts range headers on files and if you request a directory, it would load the index.html file. You can configure this with several configuration options.
 
-> [examples/docs/src/static-assets-options.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/static-assets-options.ts)
+> [examples/docs/src/static-assets-options.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/static-assets-options.ts)
 
 ```typescript
 import { router, jsonOk, get, staticAssets, htmlNotFound } from '@ovotech/laminar';

@@ -11,7 +11,7 @@
     "lint": "yarn workspaces run lint",
     "build": "lerna run build",
     "publish": "lerna run publish",
-    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/master && for f in docs/*.md; do build-docs $f 'https://github.com/ovotech/laminar/tree/master'; done",
+    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/main && for f in docs/*.md; do build-docs $f 'https://github.com/ovotech/laminar/tree/main'; done",
     "build:api": "typedoc --out docs/api packages/{laminar,laminar-jwt,laminar-handlebars,json-schema}/src/index.ts --mode library"
   },
   "workspaces": [

@@ -6,7 +6,7 @@
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar#readme",
+  "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ovotech/build-docs": "^0.1.0",
@@ -32,7 +32,7 @@
   },
   "scripts": {
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/master/packages/laminar",
+    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/main/packages/laminar",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

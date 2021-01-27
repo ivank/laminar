@@ -8,7 +8,7 @@ By default laminar has a few middleware built in. They work just as normal middl
 
 The default body parsers handle json, url encoded (application/x-www-form-urlencoded) and any text request bodies. You can add / modify the parsers using the `bodyParsers` array in the options:
 
-> [examples/docs/src/custom-body-parser.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-body-parser.ts)
+> [examples/docs/src/custom-body-parser.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-body-parser.ts)
 
 ```typescript
 import { App, jsonOk, httpServer, BodyParser, concatStream, defaultBodyParsers } from '@ovotech/laminar';
@@ -42,7 +42,7 @@ export const server = httpServer({
 
 You can add custom response parsers as well. That way you can pass the response body as any object you need, and based on the content type you can convert it to a string to be sent over the wire.
 
-> [examples/docs/src/custom-response-parser.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-response-parser.ts)
+> [examples/docs/src/custom-response-parser.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-response-parser.ts)
 
 ```typescript
 import { App, yaml, ok, httpServer, ResponseParser, defaultResponseParsers } from '@ovotech/laminar';
@@ -71,7 +71,7 @@ export const server = httpServer({
 
 You can define a default error handler if you want a more customised way to handle errors.
 
-> [examples/docs/src/custom-error-handler.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-error-handler.ts)
+> [examples/docs/src/custom-error-handler.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-error-handler.ts)
 
 ```typescript
 import { App, htmlInternalServerError, httpServer, ErrorHandler } from '@ovotech/laminar';
@@ -97,7 +97,7 @@ export const server = httpServer({
 
 If you want to skip the default parser / processors, you can combine all the pieces in a different configuration, customizing everything
 
-> [examples/docs/src/custom-everything.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/custom-everything.ts)
+> [examples/docs/src/custom-everything.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-everything.ts)
 
 ```typescript
 import { requestListener, response, Resolver, errorHandlerComponent, urlComponent } from '@ovotech/laminar';

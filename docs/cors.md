@@ -6,7 +6,7 @@ Here we'll talk mostly about how to implement it with a middleware. What are mid
 
 ## Basic usage
 
-> [examples/docs/src/cors.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/cors.ts)
+> [examples/docs/src/cors.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors.ts)
 
 ```typescript
 import { httpServer, start, describe, jsonOk, openApi, corsMiddleware } from '@ovotech/laminar';
@@ -46,7 +46,7 @@ You can also do customisations on the cors middleware
 
 You can allow origins using a regex:
 
-> [examples/docs/src/cors-regex.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/cors-regex.ts)
+> [examples/docs/src/cors-regex.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-regex.ts)
 
 ```typescript
 import { corsMiddleware } from '@ovotech/laminar';
@@ -59,7 +59,7 @@ export const cors = corsMiddleware({ allowOrigin: /https?\:\/\/(localhost|exampl
 
 You can allow origins using a function:
 
-> [examples/docs/src/cors-function.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/cors-function.ts)
+> [examples/docs/src/cors-function.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-function.ts)
 
 ```typescript
 import { corsMiddleware } from '@ovotech/laminar';
@@ -72,7 +72,7 @@ export const cors = corsMiddleware({ allowOrigin: (origin) => origin.endsWith('.
 
 You can allow other options:
 
-> [examples/docs/src/cors-options.ts](https://github.com/ovotech/laminar/tree/master/examples/docs/src/cors-options.ts)
+> [examples/docs/src/cors-options.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-options.ts)
 
 ```typescript
 import { corsMiddleware } from '@ovotech/laminar';

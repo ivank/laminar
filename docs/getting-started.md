@@ -18,7 +18,7 @@ yarn add @ovotech/laminar-cli
 
 You'll need a very simple OpenAPI schema file, something like:
 
-> [examples/simple/src/api.yaml](https://github.com/ovotech/laminar/tree/master/examples/simple/src/api.yaml)
+> [examples/simple/src/api.yaml](https://github.com/ovotech/laminar/tree/main/examples/simple/src/api.yaml)
 
 ```yaml
 openapi: '3.0.0'
@@ -59,7 +59,7 @@ First we'll generate the types for its so its easier to implement it. Since we'v
 yarn laminar api --file api.yaml --output __generated__/api.ts
 ```
 
-> [examples/simple/src/index.ts](https://github.com/ovotech/laminar/tree/master/examples/simple/src/index.ts)
+> [examples/simple/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/simple/src/index.ts)
 
 ```typescript
 import { httpServer, start, describe, jsonOk } from '@ovotech/laminar';
@@ -114,6 +114,6 @@ main();
 
 You can dive in directly with some example apps:
 
-- [examples/simple](https://github.com/ovotech/laminar/tree/master/examples/simple) Where you see how the most minimal laminar app with generated types can look like
-- [examples/security](https://github.com/ovotech/laminar/tree/master/examples/security) With some simple security built in
-- [examples/petstore](https://github.com/ovotech/laminar/tree/master/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
+- [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
+- [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
+- [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access

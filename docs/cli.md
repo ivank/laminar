@@ -10,7 +10,7 @@ yarn add @ovotech/laminar-cli
 
 Given a OpenAPI config file:
 
-> [examples/api.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/api.yaml)
+> [examples/api.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/api.yaml)
 
 ```yaml
 ---
@@ -76,7 +76,7 @@ Which would convert a given `api.yaml` file to a `api.yaml.ts`. Any external url
 
 Then you can load the types like this:
 
-> [examples/api.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/api.ts)
+> [examples/api.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/api.ts)
 
 ```typescript
 import { httpServer, start, describe, jsonOk } from '@ovotech/laminar';
@@ -115,7 +115,7 @@ When you update the source yaml file, or any of the local files it references, `
 
 Given this OpenApi file:
 
-> [examples/axios.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/axios.yaml)
+> [examples/axios.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/axios.yaml)
 
 ```yaml
 ---
@@ -186,7 +186,7 @@ yarn laminar axios --file examples/axios.yaml --output examples/__generated__/ax
 
 And would then have:
 
-> [examples/\_\_generated\_\_/axios.yaml.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/__generated__/axios.yaml.ts)
+> [examples/\_\_generated\_\_/axios.yaml.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/__generated__/axios.yaml.ts)
 
 ```typescript
 import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
@@ -214,11 +214,7 @@ export interface Test {
 }
 
 export interface AxiosOapiInstance {
-  'POST /test/{id}': (
-    id: string,
-    data: User,
-    config?: AxiosRequestConfig,
-  ) => Promise<AxiosResponse<Test>>;
+  'POST /test/{id}': (id: string, data: User, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
   'GET /test/{id}': (id: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Test>>;
   api: AxiosInstance;
 }
@@ -226,7 +222,7 @@ export interface AxiosOapiInstance {
 
 And you can then use it like this:
 
-> [examples/axios.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/axios.ts)
+> [examples/axios.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/axios.ts)
 
 ```typescript
 import axios from 'axios';
@@ -256,9 +252,9 @@ simple['POST /test/{id}']('30', { email: 'test2example.com' }).then(({ data }) =
 
 ## Complex example
 
-If we use swagger's [petstore.json](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/petstore.json) example, we can generate the [petstore types](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/__generated__/petstore.json.ts) and use them like this:
+If we use swagger's [petstore.json](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/petstore.json) example, we can generate the [petstore types](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/__generated__/petstore.json.ts) and use them like this:
 
-> [examples/axios-petstore.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-cli/examples/axios-petstore.ts)
+> [examples/axios-petstore.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/axios-petstore.ts)
 
 ```typescript
 import { axiosOapi } from './__generated__/petstore.json';

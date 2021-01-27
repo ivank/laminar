@@ -4,7 +4,7 @@ A json web token middleware for laminar
 
 ### Usage
 
-> [examples/simple.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/simple.ts)
+> [examples/simple.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/simple.ts)
 
 ```typescript
 import { get, post, start, httpServer, jsonOk, router, App, describe } from '@ovotech/laminar';
@@ -39,7 +39,7 @@ start(server).then(() => console.log(describe(server)));
 
 If we had this basic oapi.yaml
 
-> [examples/oapi.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi.yaml)
+> [examples/oapi.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi.yaml)
 
 ```yaml
 ---
@@ -126,7 +126,7 @@ components:
 
 And then implement it using the helper `jwtSecurityResolver`. That function would return a `securityOk` object if the jwt was validated, with the contents of the jwt, or a 403 error response.
 
-> [examples/oapi.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi.ts)
+> [examples/oapi.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi.ts)
 
 ```typescript
 import { httpServer, start, describe, jsonOk, openApi } from '@ovotech/laminar';
@@ -160,7 +160,7 @@ main();
 
 If you need the old school but still awesome cookie security, OpenAPI can handle that too - [docs for cookie auth with OpenAPI](https://swagger.io/docs/specification/authentication/cookie-authentication/). You can use the "apiKey" security to define it.
 
-> [examples/oapi-api-key.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-api-key.yaml)
+> [examples/oapi-api-key.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-api-key.yaml)
 
 ```yaml
 ---
@@ -232,7 +232,7 @@ components:
 
 Implementing it involves reading the cookie and validating its contents.
 
-> [examples/oapi-api-key.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-api-key.ts)
+> [examples/oapi-api-key.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-api-key.ts)
 
 ```typescript
 import { httpServer, start, describe, openApi, textOk, setCookie } from '@ovotech/laminar';
@@ -273,7 +273,7 @@ main();
 OpenApi supports more security methods, and they can be implemented with a security resolver.
 Since a security resolver is just a function that gets request properties and returns either `securityOk` or a `Response` object, we can do a lot of custom things.
 
-> [examples/oapi-custom.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-custom.yaml)
+> [examples/oapi-custom.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-custom.yaml)
 
 ```yaml
 ---
@@ -357,7 +357,7 @@ components:
       type: string
 ```
 
-> [examples/oapi-custom.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-custom.ts)
+> [examples/oapi-custom.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-custom.ts)
 
 ```typescript
 import {
@@ -419,7 +419,7 @@ main();
 
 You can specify public / private key pair (where the private key is used for signing and the public for verifying)
 
-> [examples/keypair.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keypair.ts)
+> [examples/keypair.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/keypair.ts)
 
 ```typescript
 import { get, post, httpServer, router, start, jsonOk, App, describe } from '@ovotech/laminar';
@@ -462,7 +462,7 @@ start(server).then(() => console.log(describe(server)));
 
 JWK are also supported with the `jwkPublicKey` function. It can also cache the jwk request.
 
-> [examples/jwk.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/jwk.ts)
+> [examples/jwk.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/jwk.ts)
 
 ```typescript
 import { get, post, start, router, httpServer, jsonOk, describe } from '@ovotech/laminar';
@@ -517,7 +517,7 @@ start(server).then(() => console.log(describe(server)));
 
 You can test it by running (requires curl and jq):
 
-> [examples/jwk.sh](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/jwk.sh)
+> [examples/jwk.sh](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/jwk.sh)
 
 ```bash
 JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","scopes":["admin"]}' | jq '.jwt' -r`
@@ -530,7 +530,7 @@ In order to use keycloak as public / private pair you'll need to provide a custo
 
 If we had a keycloak config like this:
 
-> [examples/keycloak-config.yaml](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keycloak-config.yaml)
+> [examples/keycloak-config.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/keycloak-config.yaml)
 
 ```yaml
 my-service-name:
@@ -544,7 +544,7 @@ other-client-service:
 
 Then we could implement it with this service:
 
-> [examples/keycloak.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keycloak.ts)
+> [examples/keycloak.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/keycloak.ts)
 
 ```typescript
 import { get, post, httpServer, router, start, jsonOk, describe } from '@ovotech/laminar';
@@ -595,7 +595,7 @@ start(server).then(() => console.log(describe(server)));
 
 When this is running, you can test it with calls like this (requires curl and jq):
 
-> [examples/keycloak.sh](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/keycloak.sh)
+> [examples/keycloak.sh](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/keycloak.sh)
 
 ```bash
 JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
@@ -604,7 +604,7 @@ curl --request POST --header "Authorization: Bearer ${JWT}" http://localhost:333
 
 With oapi it is the same concempt - we use the scopes that are defined by the open api standard to check against the values from the keycloack resource access value:
 
-> [examples/oapi-keycloak.ts](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-keycloak.ts)
+> [examples/oapi-keycloak.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-keycloak.ts)
 
 ```typescript
 import { start, httpServer, describe, jsonOk, openApi } from '@ovotech/laminar';
@@ -658,7 +658,7 @@ main();
 
 When this is running, this can be again test with (requires curl and jq):
 
-> [examples/oapi-keycloak.sh](https://github.com/ovotech/laminar/tree/master/packages/laminar-jwt/examples/oapi-keycloak.sh)
+> [examples/oapi-keycloak.sh](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-keycloak.sh)
 
 ```bash
 JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
@@ -699,7 +699,7 @@ yarn lint
 
 ## Deployment
 
-Deployment is preferment by lerna automatically on merge / push to master, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
+Deployment is preferment by lerna automatically on merge / push to main, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
 
 ## Contributing
 

@@ -6,11 +6,11 @@
   "description": "Handlebars implementation for the laminar http server",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars#readme",
+  "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars#readme",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/master/packages/laminar-handlebars",
+    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",
