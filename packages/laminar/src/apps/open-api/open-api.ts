@@ -63,6 +63,7 @@ export async function openApi<TRequest extends Empty>(config: OapiConfig<TReques
 
     const checkRequest = validateCompiled({
       schema: compileInContext(select.route.request, oapi),
+      draft: 'openapi3',
       name: 'request',
       value: reqOapi,
     });
@@ -83,9 +84,11 @@ export async function openApi<TRequest extends Empty>(config: OapiConfig<TReques
     }
 
     const res = await select.route.resolver({ ...reqOapi, authInfo: undefined, ...security });
+
     const checkResponse = validateCompiled({
       schema: compileInContext(select.route.response, oapi),
       value: res,
+      draft: 'openapi3',
       name: 'response',
     });
 

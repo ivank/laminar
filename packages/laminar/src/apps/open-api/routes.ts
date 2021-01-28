@@ -211,7 +211,7 @@ function toResponseSchema({ responses }: ResolvedOperationObject): Record<string
     oneOf: Object.entries<ResolvedResponseObject>(responses).map(([status, response]) => ({
       type: 'object',
       properties: {
-        status: status === 'default' ? true : { const: Number(status) },
+        status: status === 'default' ? true : { enum: [Number(status)] },
         ...(response.headers
           ? {
               headers: {
@@ -237,7 +237,7 @@ function toResponseSchema({ responses }: ResolvedOperationObject): Record<string
                 body:
                   mediaType.schema?.type === 'string'
                     ? {
-                        oneOf: [mediaType.schema, { type: 'object', properties: { readable: { const: true } } }],
+                        oneOf: [mediaType.schema, { type: 'object', properties: { readable: { enum: [true] } } }],
                       }
                     : mediaType.schema,
               },

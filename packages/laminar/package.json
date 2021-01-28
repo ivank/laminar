@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar",
-  "version": "0.9.6",
+  "version": "0.10.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
@@ -42,7 +42,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.5.4",
+    "@ovotech/json-schema": "^0.6.0",
     "cookie": "^0.4.1",
     "mime-types": "^2.1.27",
     "openapi-schemas": "^2.0.3",

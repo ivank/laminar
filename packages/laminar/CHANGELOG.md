@@ -30,3 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Introduced the `optional` response helper, for more elegantly dealing with MyType | undefined types with nullish coallesing
+
+## [0.10.0] - 2021-01-28
+
+### Changed
+
+- Changed laminar to use OpenApi's json-schema dielect, instead of the latest json-schema draft. Differences documented here https://swagger.io/docs/specification/data-models/keywords/.

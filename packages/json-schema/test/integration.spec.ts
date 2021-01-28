@@ -152,7 +152,7 @@ describe('Helper isEqual', () => {
     });
   });
 
-  it('Should discriminate schema', async () => {
+  it('Should not discriminate schema in default draft', async () => {
     const schema: Schema = {
       oneOf: [
         {
@@ -181,7 +181,13 @@ describe('Helper isEqual', () => {
     };
 
     const result = await validate({ schema, value: { type: 'cat', size: 'big' } });
-    expect(result.errors).toEqual(['[value.size] (type) should be of type integer']);
+    expect(result.errors).toEqual([
+      '[value] (oneOf) should satisfy exactly only 1 schema\n' +
+        '  | Schema 1:\n' +
+        '  |   [.size] (type) should be of type integer\n' +
+        '  | Schema 2:\n' +
+        '  |   [.type] (enum) should be one of [dog]',
+    ]);
   });
 
   it('Should optimize one anyOf', async () => {

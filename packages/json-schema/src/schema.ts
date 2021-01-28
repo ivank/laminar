@@ -18,6 +18,7 @@ export interface JsonSchema {
   minLength?: number;
   maxLength?: number;
   const?: unknown;
+  nullable?: boolean;
   format?:
     | 'date'
     | 'date-time'

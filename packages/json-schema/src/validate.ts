@@ -6,6 +6,7 @@ import { draft4 } from './drafts/draft4';
 import { draft201909 } from './drafts/draft201909';
 import { draft7 } from './drafts/draft7';
 import { draft6 } from './drafts/draft6';
+import { openapi3 } from './drafts/openapi3';
 import { resolveFile, resolve, ResolvedSchema } from './resolve';
 
 export interface Drafts {
@@ -13,6 +14,7 @@ export interface Drafts {
   draft6: Validator[];
   draft7: Validator[];
   'draft2019-09': Validator[];
+  openapi3: Validator[];
 }
 
 export interface ResultSuccess<T> {
@@ -50,6 +52,7 @@ const drafts: Drafts = {
   draft6,
   draft7,
   'draft2019-09': draft201909,
+  openapi3: openapi3,
 };
 
 export const compile = async (schema: Schema | string): Promise<ResolvedSchema> =>

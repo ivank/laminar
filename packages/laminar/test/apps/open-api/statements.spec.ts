@@ -51,6 +51,9 @@ describe('Statements', () => {
       const { data } = await api.get('/accounts/123/meters');
 
       expect(data).toMatchSnapshot();
+    } catch (error) {
+      console.log(error.response?.data);
+      throw error;
     } finally {
       stop(server);
     }

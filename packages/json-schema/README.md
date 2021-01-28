@@ -13,6 +13,7 @@ Supported JSON Schema drafts
 - draft-5
 - draft-7
 - draft-2019-09
+- openapi3 (The json-schema variant that's used by OpenApi 3: https://swagger.io/docs/specification/data-models/keywords/)
 
 ### Usage
 

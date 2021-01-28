@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.9.6",
+    "@ovotech/laminar": "^0.10.0",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
@@ -53,7 +53,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.5.4",
+    "@ovotech/json-schema": "^0.6.0",
     "@ovotech/ts-compose": "^0.16.0",
     "chalk": "^4.0.0",
     "commander": "^6.2.0",

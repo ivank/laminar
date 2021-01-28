@@ -528,6 +528,9 @@ describe('Integration', () => {
       );
       expect(log).toHaveBeenNthCalledWith(11, 'Get all');
       expect(log).toHaveBeenNthCalledWith(12, 'Get all');
+    } catch (error) {
+      console.log(error.response?.data);
+      throw error;
     } finally {
       await stop(server);
     }

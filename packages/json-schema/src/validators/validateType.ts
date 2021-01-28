@@ -1,6 +1,6 @@
 import { Validator, error, empty } from '../validation';
 
-const getType = (
+export const getType = (
   value: unknown,
 ): 'null' | 'boolean' | 'object' | 'array' | 'number' | 'string' | 'integer' | undefined => {
   if (value === null) {
