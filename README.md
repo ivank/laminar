@@ -131,11 +131,11 @@ You can dive in directly with some example apps:
 
 ## Packages in this monorepo
 
-- [@ovotech/laminar](https://github.com/ovotech/laminar/tree/packages/laminar) - [OpenAPI](https://swagger.io/docs/) http server
-- [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/packages/laminar-cli) - [OpenAPI](https://swagger.io/docs/) type generation for laminar, axios and just plain ts types
-- [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
-- [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware with jwk, keypairs and keycloack support
-- [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/packages/json-schema) - Lightweight json-schema validator
+- [@ovotech/laminar](https://github.com/ovotech/laminar/tree/main/packages/laminar) - [OpenAPI](https://swagger.io/docs/) http server
+- [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli) - [OpenAPI](https://swagger.io/docs/) type generation for laminar, axios and just plain ts types
+- [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
+- [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware with jwk, keypairs and keycloack support
+- [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/main/packages/json-schema) - Lightweight json-schema validator
 
 ## Running the tests
 
