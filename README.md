@@ -97,7 +97,7 @@ const main = async () => {
   });
 
   /**
-   * Now we've cerated the server, but it has not yet been started.
+   * Now we've created the server, but it has not yet been started.
    */
   const server = httpServer({ app, port: 3300 });
 
@@ -134,7 +134,7 @@ You can dive in directly with some example apps:
 - [@ovotech/laminar](https://github.com/ovotech/laminar/tree/main/packages/laminar) - [OpenAPI](https://swagger.io/docs/) http server
 - [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli) - [OpenAPI](https://swagger.io/docs/) type generation for laminar, axios and just plain ts types
 - [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
-- [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware with jwk, keypairs and keycloack support
+- [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware with jwk, keypairs and keycloack support
 - [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/main/packages/json-schema) - Lightweight json-schema validator
 
 ## Running the tests
