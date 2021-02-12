@@ -13,6 +13,8 @@
     "@ovotech/laminar-cli": "^0.9.4",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/pg": "^7.14.9",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
     "axios": "^0.21.0",
@@ -28,7 +30,7 @@
     "preset": "../../jest.json"
   },
   "scripts": {
-    "start": " SECRET=123 PG=postgres://example-admin:example-pass@localhost:5432/example ts-node src/index.ts",
+    "start": "SECRET=123 PG=postgres://example-admin:example-pass@localhost:5432/example ts-node src/index.ts",
     "build:types": "laminar api --file petstore.yaml | prettier --stdin-filepath petstore.ts > src/__generated__/petstore.ts",
     "build:ts": "tsc --declaration",
     "build": "yarn build:types && yarn build:ts",
