@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/packages/json-schema#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/build-docs": "^0.1.0",
+    "@ikerin/build-readme": "^1.0.4",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@types/node-fetch": "^2.5.7",
@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/main/packages/json-schema",
+    "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/json-schema",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

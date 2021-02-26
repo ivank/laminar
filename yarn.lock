@@ -373,6 +373,11 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
+"@ikerin/build-readme@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@ikerin/build-readme/-/build-readme-1.0.4.tgz#5c88623607c5882970d9e6fb9d2fef1fc4bd5725"
+  integrity sha512-zFvq4UiFzXUj7ITJmnlMJ5+Dc1HEnChlb2SvRldw3KX7XRMtlslN89q10Mg3ezay0LpJF99yTrsIg07JlSrBLQ==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -1409,6 +1414,14 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@ovotech/json-schema@^0.5.3":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@ovotech/json-schema/-/json-schema-0.5.4.tgz#bf124d8133b535dc81b2d104bca46ca75fd01a29"
+  integrity sha512-/CBJCAQiH9KIQr1fH/qpP94M9qgW6q0BH3LM7OOXJO64x52+OrWhFpDJvte33xaMgDW277yuFbn0LOSd9SlgVQ==
+  dependencies:
+    node-fetch "^2.6.1"
+    yaml "^1.10.0"
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.1.tgz#e7df00f98a203324f6dc7cc606cad9d4a8ab2217"
@@ -1603,6 +1616,15 @@
   dependencies:
     "@types/node" "*"
     "@types/pg-types" "*"
+
+"@types/pg@^7.14.9":
+  version "7.14.10"
+  resolved "https://registry.yarnpkg.com/@types/pg/-/pg-7.14.10.tgz#95c01de1a54e45d78058b9b5b4c365102e4113f7"
+  integrity sha512-m6G0mrpj71YgVgHJF0cIHC3OZTKiQSUzTkMj869a+YWXF2tdbmO2PmIpNnDkiFPhHWcoGq2bk5P2e0CZX0F9Mg==
+  dependencies:
+    "@types/node" "*"
+    pg-protocol "^1.2.0"
+    pg-types "^2.2.0"
 
 "@types/prettier@^2.0.0":
   version "2.0.2"
@@ -6207,12 +6229,12 @@ pg-pool@^3.2.2:
   resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-3.2.2.tgz#a560e433443ed4ad946b84d774b3f22452694dff"
   integrity sha512-ORJoFxAlmmros8igi608iVEbQNNZlp89diFVx6yV5v+ehmpMY9sK6QgpmgoXbmkNaBAx8cOOZh9g80kJv1ooyA==
 
-pg-protocol@^1.4.0:
+pg-protocol@^1.2.0, pg-protocol@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/pg-protocol/-/pg-protocol-1.4.0.tgz#43a71a92f6fe3ac559952555aa3335c8cb4908be"
   integrity sha512-El+aXWcwG/8wuFICMQjM5ZSAm6OWiJicFdNYo+VY3QP+8vI4SvLIWVe51PppTzMhikUJR+PsyIFKqfdXPz/yxA==
 
-pg-types@^2.1.0:
+pg-types@^2.1.0, pg-types@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/pg-types/-/pg-types-2.2.0.tgz#2d0250d636454f7cfa3b6ae0382fdfa8063254a3"
   integrity sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==

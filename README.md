@@ -97,7 +97,7 @@ const main = async () => {
   });
 
   /**
-   * Now we've created the server, but it has not yet been started.
+   * Now we've cerated the server, but it has not yet been started.
    */
   const server = httpServer({ app, port: 3300 });
 

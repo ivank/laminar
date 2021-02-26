@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.10.0",
+    "@ikerin/build-readme": "^1.0.4",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
@@ -43,7 +43,7 @@
     "build:test": "yarn build:test:petstore && yarn build:test:statements && yarn build:test:loss && yarn build:test:axios && yarn build:test:axios-api",
     "pretest": "yarn build:examples && yarn build:test",
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-cli",
+    "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-cli",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",

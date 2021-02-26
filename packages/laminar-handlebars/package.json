@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --declaration",
-    "build:docs": "build-docs README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars",
+    "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars",
     "test": "jest test --runInBand",
     "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
     "lint:eslint": "eslint '{src,test}/**/*.ts'",
@@ -23,7 +23,7 @@
     "handlebars": "^4.7.6"
   },
   "devDependencies": {
-    "@ovotech/build-docs": "^0.1.0",
+    "@ikerin/build-readme": "^1.0.4",
     "@ovotech/laminar": "^0.10.0",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
