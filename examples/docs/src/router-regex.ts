@@ -1,11 +1,13 @@
-import { router, jsonOk, get, put } from '@ovotech/laminar';
+import { router, jsonOk, get, put, httpServer, start, describe } from '@ovotech/laminar';
+
+// << app
 
 const items: Record<string, string> = { 10: 'Dave', 20: 'Bob' };
 
 /**
  * Returns a laminar App object
  */
-export const app = router(
+const app = router(
   /**
    * You match pathnames with regex.
    * They need to start it with a ^ and should end it with $
@@ -26,3 +28,10 @@ export const app = router(
     return jsonOk({ success: true });
   }),
 );
+
+// app
+
+/**
+ * Start the http service
+ */
+start(httpServer({ app })).then((http) => console.log(describe(http)));

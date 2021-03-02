@@ -1,6 +1,6 @@
 import { compile, Schema } from '@ovotech/json-schema';
 import { readdirSync, readFileSync } from 'fs';
-import nock = require('nock');
+import * as nock from 'nock';
 import { join } from 'path';
 import { schemaContent } from '../../src';
 

@@ -3,7 +3,7 @@ import { join } from 'path';
 import axios from 'axios';
 import { Client } from 'pg';
 
-const PORT = '8831';
+const PORT = '4700';
 const PG = 'postgres://example-admin:example-pass@localhost:5432/example';
 
 describe('Split App Integration Tests', () => {
@@ -16,7 +16,7 @@ describe('Split App Integration Tests', () => {
 
     const service = spawn('yarn', ['ts-node', 'src/index.ts'], {
       cwd: join(__dirname, '..'),
-      env: { PG, PORT, PATH: process.env.PATH },
+      env: { ...process.env, PG, PORT },
       detached: true,
     });
 

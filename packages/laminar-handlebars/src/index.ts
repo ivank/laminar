@@ -75,7 +75,7 @@ export const loadTemplate = (
     return cached.template;
   } else {
     const template = compile(readFileSync(file, 'utf8'));
-    cache.set(name, { template, mtime: new Date() });
+    cache.set(name, { template, mtime: cacheType === 'expiry' ? stat.mtime : new Date() });
     return template;
   }
 };

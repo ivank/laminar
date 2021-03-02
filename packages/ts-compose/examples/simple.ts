@@ -2,6 +2,7 @@ import { Type, printNode } from '../src';
 
 const myInterface = Type.Interface({
   name: 'MyInterface',
+  isExport: true,
   props: [
     Type.Prop({
       name: 'id',
@@ -20,7 +21,7 @@ console.log(printNode(myInterface));
 // Would output:
 // ==========================================
 
-interface MyInterface {
+export interface MyInterface {
   id: number;
   name?: string | null;
 }

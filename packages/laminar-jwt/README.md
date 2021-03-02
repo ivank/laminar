@@ -30,7 +30,7 @@ const app: App = router(
   ),
 );
 
-const server = httpServer({ port: 3333, app });
+const server = httpServer({ app });
 
 start(server).then(() => console.log(describe(server)));
 ```
@@ -148,7 +148,7 @@ const main = async () => {
       },
     },
   });
-  const server = httpServer({ port: 3333, app });
+  const server = httpServer({ app });
   await start(server);
   console.log(describe(server));
 };
@@ -251,8 +251,7 @@ const main = async () => {
     },
     paths: {
       '/session': {
-        post: ({ body }) =>
-          setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+        post: ({ body }) => setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
       },
       '/test': {
         get: () => textOk('OK'),
@@ -260,7 +259,7 @@ const main = async () => {
       },
     },
   });
-  const server = httpServer({ port: 3333, app });
+  const server = httpServer({ app });
   await start(server);
   console.log(describe(server));
 };
@@ -397,8 +396,7 @@ const main = async () => {
     },
     paths: {
       '/session': {
-        post: ({ body }) =>
-          setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+        post: ({ body }) => setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
       },
       '/test': {
         get: () => textOk('OK'),
@@ -407,7 +405,7 @@ const main = async () => {
       '/unauthorized': { get: () => textForbidden('Forbidden!') },
     },
   });
-  const server = httpServer({ port: 3333, app });
+  const server = httpServer({ app });
   await start(server);
   console.log(describe(server));
 };
@@ -441,9 +439,7 @@ const onlyAdmin = auth(['admin']);
 
 const app: App = router(
   get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-  post('/session', ({ body }) =>
-    jsonOk(createSession({ secret: privateKey, options: { algorithm: 'RS256' } }, body)),
-  ),
+  post('/session', ({ body }) => jsonOk(createSession({ secret: privateKey, options: { algorithm: 'RS256' } }, body))),
   post(
     '/test',
     onlyAdmin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
@@ -454,7 +450,7 @@ const app: App = router(
   ),
 );
 
-const server = httpServer({ port: 3333, app });
+const server = httpServer({ app });
 start(server).then(() => console.log(describe(server)));
 ```
 
@@ -497,7 +493,6 @@ const loggedIn = auth();
 const admin = auth(['admin']);
 
 const server = httpServer({
-  port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
     post('/session', ({ body }) => jsonOk(createSession(signOptions, body))),
@@ -576,7 +571,6 @@ const loggedIn = auth();
 const admin = auth(['admin']);
 
 const server = httpServer({
-  port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
     post('/session', ({ body }) => jsonOk(createSession(sessionOptions, body))),
@@ -648,7 +642,7 @@ const main = async () => {
       },
     },
   });
-  const server = httpServer({ port: 3333, app });
+  const server = httpServer({ app });
   await start(server);
   console.log(describe(server));
 };

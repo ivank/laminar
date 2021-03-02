@@ -35,8 +35,7 @@ const main = async () => {
     },
     paths: {
       '/session': {
-        post: ({ body }) =>
-          setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+        post: ({ body }) => setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
       },
       '/test': {
         get: () => textOk('OK'),
@@ -45,7 +44,7 @@ const main = async () => {
       '/unauthorized': { get: () => textForbidden('Forbidden!') },
     },
   });
-  const server = httpServer({ port: 3333, app });
+  const server = httpServer({ app });
   await start(server);
   console.log(describe(server));
 };

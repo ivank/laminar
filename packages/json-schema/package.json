@@ -27,9 +27,7 @@
     "build": "tsc --declaration",
     "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/json-schema",
     "test": "jest test --runInBand",
-    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
-    "lint:eslint": "eslint '{src,test}/**/*.ts'",
-    "lint": "yarn lint:prettier && yarn lint:eslint"
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "jest": {
     "preset": "../../jest.json"

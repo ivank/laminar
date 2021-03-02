@@ -10,9 +10,7 @@
   "scripts": {
     "test": "jest --runInBand",
     "build": "tsc --declaration",
-    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
-    "lint:eslint": "eslint '{src,test}/**/*.ts'",
-    "lint": "yarn lint:prettier && yarn lint:eslint"
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "devDependencies": {
     "@types/jest": "^26.0.16",
@@ -22,7 +20,8 @@
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "jest": "^26.6.3",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.4.4"
   },
   "jest": {
     "preset": "../../jest.json"

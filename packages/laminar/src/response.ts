@@ -553,26 +553,23 @@ export function jsonOk<TResponseBody>(
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
  * A combination of {@link json} and {@link noContent}
- * Deeply convert JS Date types to string and remove undefined values.
+ * No body is specified as this response should not have any content
  *
  * Content-Type: `application/json`
  * Status: `204`
  *
  * The server successfully processed the request, and is not returning any content.
  *
- * @typeParam TResponseBody Strictly type the response body
- *
  * @category Response
  */
-export function jsonNoContent<TResponseBody>(
-  body: TResponseBody,
+export function jsonNoContent(
   headers: OutgoingHttpHeaders = {},
 ): {
   status: 204;
-  body: Json<TResponseBody>;
+  body: undefined;
   headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
 } {
-  return json(noContent({ body, headers }));
+  return json(noContent({ body: undefined, headers }));
 }
 
 /**
@@ -819,6 +816,7 @@ export function textOk<TResponseBody>(
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
  * A combination of {@link text} and {@link noContent}
+ * No body is specified as this response should not have any content
  *
  * Content-Type: `text/plain`
  * Status: `204`
@@ -829,15 +827,14 @@ export function textOk<TResponseBody>(
  *
  * @category Response
  */
-export function textNoContent<TResponseBody>(
-  body: TResponseBody,
+export function textNoContent(
   headers: OutgoingHttpHeaders = {},
 ): {
   status: 204;
-  body: TResponseBody;
+  body: undefined;
   headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
 } {
-  return text(noContent({ body, headers }));
+  return text(noContent({ body: undefined, headers }));
 }
 
 /**
@@ -1070,6 +1067,7 @@ export function htmlOk<TResponseBody>(
 /**
  * A helper to create a {@link Response} object with specific type literal constants for Status and Content-Type Header.
  * A combination of {@link html} and {@link noContent}
+ * No body is specified as this response should not have any content
  *
  * Content-Type: `text/html`
  * Status: `204`
@@ -1080,15 +1078,14 @@ export function htmlOk<TResponseBody>(
  *
  * @category Response
  */
-export function htmlNoContent<TResponseBody>(
-  body: TResponseBody,
+export function htmlNoContent(
   headers: OutgoingHttpHeaders = {},
 ): {
   status: 204;
-  body: TResponseBody;
+  body: undefined;
   headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
 } {
-  return html(noContent({ body, headers }));
+  return html(noContent({ body: undefined, headers }));
 }
 
 /**

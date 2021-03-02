@@ -30,12 +30,10 @@
     "build": "tsc --declaration",
     "start": "PORT=8821 PG=postgres://example-admin:example-pass@localhost:5432/example ts-node src/index.ts",
     "test": "jest test --runInBand",
-    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
-    "lint:eslint": "eslint '{src,test}/**/*.ts'",
-    "lint": "yarn lint:prettier && yarn lint:eslint"
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.10.0",
+    "@ovotech/laminar": "^0.10.1",
     "pg": "^8.5.1"
   }
 }

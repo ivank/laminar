@@ -93,8 +93,9 @@ const main = async () => {
 
   /**
    * Now we've cerated the server, but it has not yet been started.
+   * Default port is 3300
    */
-  const server = httpServer({ app, port: 3300 });
+  const server = httpServer({ app });
 
   /**
    * The http server now should be running

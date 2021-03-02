@@ -22,7 +22,7 @@ const main = async () => {
       },
     },
   });
-  const server = httpServer({ port: 3333, app });
+  const server = httpServer({ app });
   await start(server);
   console.log(describe(server));
 };

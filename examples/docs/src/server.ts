@@ -11,7 +11,7 @@ const main = async () => {
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
       get('/users/{id}', ({ path }) => jsonOk(findUser(path.id))),
     ),
-    port: 3300,
+    port: 4399,
   });
 
   /**

@@ -13,9 +13,8 @@
     "build": "true",
     "test": "true"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@ovotech/json-schema": "^0.5.3",
+    "@ovotech/json-schema": "^0.6.0",
     "@types/benchmark": "^1.0.33",
     "benchmark": "^2.1.4",
     "node-fetch": "^2.6.1",

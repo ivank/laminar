@@ -1,17 +1,19 @@
-import { App, htmlInternalServerError, httpServer, ErrorHandler } from '@ovotech/laminar';
+import { App, htmlInternalServerError, httpServer, ErrorHandler, start, describe } from '@ovotech/laminar';
 
+// << app
 const app: App = () => {
   throw new Error('Testing error');
 };
 
 const errorHandler: ErrorHandler = ({ error }) => htmlInternalServerError(`<html>${error.message}</html>`);
 
-export const server = httpServer({
+const server = httpServer({
   app,
-  port: 8897,
-  hostname: 'localhost',
   /**
    * You can configure the default error handler with `errorHandler`
    */
   options: { errorHandler },
 });
+// app
+
+start(server).then((http) => console.log(describe(http)));

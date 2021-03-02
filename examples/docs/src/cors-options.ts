@@ -1,6 +1,10 @@
-import { corsMiddleware } from '@ovotech/laminar';
+import { httpServer, start, describe, textOk, corsMiddleware } from '@ovotech/laminar';
 
-export const cors = corsMiddleware({
+const app = () => textOk('OK');
+
+// << middleware
+
+const cors = corsMiddleware({
   /**
    * Allow origin can be a simple string
    */
@@ -18,3 +22,10 @@ export const cors = corsMiddleware({
    */
   allowHeaders: ['Authorization', 'X-Authorization'],
 });
+
+// middleware
+
+/**
+ * Apply cors and start http server
+ */
+start(httpServer({ app: cors(app) })).then((http) => console.log(describe(http)));

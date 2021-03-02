@@ -1,15 +1,6 @@
-import {
-  Middleware,
-  App,
-  textForbidden,
-  textOk,
-  start,
-  httpServer,
-  describe,
-} from '@ovotech/laminar';
+import { Middleware, App, textForbidden, textOk, start, httpServer, describe } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) =>
-  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -20,5 +11,5 @@ const log: Middleware = (next) => (req) => {
 
 const app: App = (req) => textOk(req.body);
 
-const server = httpServer({ port: 3333, app: log(auth(app)) });
+const server = httpServer({ app: log(auth(app)) });
 start(server).then(() => console.log(describe(server)));

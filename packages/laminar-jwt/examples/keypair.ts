@@ -17,9 +17,7 @@ const onlyAdmin = auth(['admin']);
 
 const app: App = router(
   get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-  post('/session', ({ body }) =>
-    jsonOk(createSession({ secret: privateKey, options: { algorithm: 'RS256' } }, body)),
-  ),
+  post('/session', ({ body }) => jsonOk(createSession({ secret: privateKey, options: { algorithm: 'RS256' } }, body))),
   post(
     '/test',
     onlyAdmin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
@@ -30,5 +28,5 @@ const app: App = router(
   ),
 );
 
-const server = httpServer({ port: 3333, app });
+const server = httpServer({ app });
 start(server).then(() => console.log(describe(server)));

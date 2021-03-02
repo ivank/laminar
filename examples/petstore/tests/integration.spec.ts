@@ -6,7 +6,7 @@ import { Pool } from 'pg';
 
 const secret = 'TEST_SECRET';
 const logger = { info: jest.fn(), error: jest.fn() };
-const port = 8822;
+const port = 4400;
 const hostname = 'localhost';
 const connectionString = 'postgres://example-admin:example-pass@localhost:5432/example';
 const token = sign({ email: 'me@example.com', scopes: [] }, secret);
@@ -39,11 +39,7 @@ describe('Petstore Integration Tests', () => {
         data: { id: expect.any(Number), name: 'Charlie', tag: 'dog' },
       });
 
-      const leya = await client.post(
-        '/pets',
-        { name: 'Leya', tag: 'cat' },
-        { headers: { 'x-trace-token': 'me' } },
-      );
+      const leya = await client.post('/pets', { name: 'Leya', tag: 'cat' }, { headers: { 'x-trace-token': 'me' } });
 
       expect(leya).toMatchObject({
         status: 200,

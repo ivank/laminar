@@ -1,13 +1,4 @@
-import {
-  get,
-  put,
-  httpServer,
-  router,
-  start,
-  jsonOk,
-  jsonNotFound,
-  describe,
-} from '@ovotech/laminar';
+import { get, put, httpServer, router, start, jsonOk, jsonNotFound, describe } from '@ovotech/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -15,7 +6,6 @@ const users: Record<string, string> = {
 };
 
 const server = httpServer({
-  port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
     get('/users', () => jsonOk(users)),

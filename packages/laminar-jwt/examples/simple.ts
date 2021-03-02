@@ -21,6 +21,6 @@ const app: App = router(
   ),
 );
 
-const server = httpServer({ port: 3333, app });
+const server = httpServer({ app });
 
 start(server).then(() => console.log(describe(server)));

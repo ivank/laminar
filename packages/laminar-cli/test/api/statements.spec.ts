@@ -138,11 +138,11 @@ describe('Statements', () => {
     });
     const log = jest.fn();
     const logger = withLogger(log);
-    const server = httpServer({ app: logger(app), port: 8067 });
+    const server = httpServer({ app: logger(app), port: 4913 });
     try {
       await start(server);
 
-      const api = axios.create({ baseURL: 'http://localhost:8067' });
+      const api = axios.create({ baseURL: 'http://localhost:4913' });
 
       const { data: statementHtml } = await api.get('/v2/statements/111/html', {
         headers: { Authorization: 'Bearer Me' },

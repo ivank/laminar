@@ -1,13 +1,4 @@
-import {
-  httpServer,
-  App,
-  start,
-  BodyParser,
-  defaultBodyParsers,
-  describe,
-  csv,
-  ok,
-} from '@ovotech/laminar';
+import { httpServer, App, start, BodyParser, defaultBodyParsers, describe, csv, ok } from '@ovotech/laminar';
 import { pipeline, Readable, Transform } from 'stream';
 import * as parse from 'csv-parse';
 import * as stringify from 'csv-stringify';
@@ -31,14 +22,11 @@ const upperCaseTransform = new Transform({
  * Using node's [pipeline](https://nodejs.org/api/stream.html#stream_stream_pipeline_streams_callback) function to handle the streams
  */
 const transformCsv = (body: Readable): Readable =>
-  pipeline(body, parse(), upperCaseTransform, stringify(), (err) =>
-    err ? console.error(err.message) : undefined,
-  );
+  pipeline(body, parse(), upperCaseTransform, stringify(), (err) => (err ? console.error(err.message) : undefined));
 
 const app: App = ({ body }) => csv(ok({ body: transformCsv(body) }));
 
 const server = httpServer({
-  port: 3333,
   app,
   options: { bodyParsers: [csvParser, ...defaultBodyParsers] },
 });

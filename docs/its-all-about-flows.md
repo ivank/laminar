@@ -13,7 +13,7 @@ Lets see the simplest possible app with laminar, a very simple echo app
 ```typescript
 import { httpServer, start, response, describe } from '@ovotech/laminar';
 
-const server = httpServer({ port: 3333, app: ({ body }) => response({ body }) });
+const server = httpServer({ app: ({ body }) => response({ body }) });
 
 start(server).then(() => console.log(describe(server)));
 ```
@@ -29,22 +29,13 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 > [packages/laminar/examples/echo-auth.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import {
-  httpServer,
-  start,
-  textForbidden,
-  textOk,
-  App,
-  Middleware,
-  describe,
-} from '@ovotech/laminar';
+import { httpServer, start, textForbidden, textOk, App, Middleware, describe } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) =>
-  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
 const app: App = (req) => textOk(req.url.toString());
 
-const server = httpServer({ port: 3333, app: auth(app) });
+const server = httpServer({ app: auth(app) });
 
 start(server).then(() => console.log(describe(server)));
 ```
@@ -54,18 +45,9 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 > [packages/laminar/examples/echo-auth-log.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import {
-  Middleware,
-  App,
-  textForbidden,
-  textOk,
-  start,
-  httpServer,
-  describe,
-} from '@ovotech/laminar';
+import { Middleware, App, textForbidden, textOk, start, httpServer, describe } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) =>
-  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -76,7 +58,7 @@ const log: Middleware = (next) => (req) => {
 
 const app: App = (req) => textOk(req.body);
 
-const server = httpServer({ port: 3333, app: log(auth(app)) });
+const server = httpServer({ app: log(auth(app)) });
 start(server).then(() => console.log(describe(server)));
 ```
 
@@ -89,15 +71,7 @@ Lets see how we can go about doing that.
 > [packages/laminar/examples/echo-auth-log-db.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import {
-  Middleware,
-  App,
-  textForbidden,
-  jsonOk,
-  start,
-  httpServer,
-  describe,
-} from '@ovotech/laminar';
+import { Middleware, App, textForbidden, jsonOk, start, httpServer, describe } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -121,8 +95,7 @@ const createDbMiddleware = (): Middleware<RequestDB> => {
   return (next) => (req) => next({ ...req, db });
 };
 
-const auth: Middleware = (next) => (req) =>
-  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
+const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
 
 const log: Middleware = (next) => (req) => {
   console.log('Requested', req.body);
@@ -135,12 +108,11 @@ const log: Middleware = (next) => (req) => {
  * We can now require this app to have the middleware.
  * If the propper ones are not executed later, TypeScript will inform us at compile time.
  */
-const app: App<RequestDB> = (req) =>
-  jsonOk({ url: req.url.toString(), user: req.db.getValidUser() });
+const app: App<RequestDB> = (req) => jsonOk({ url: req.url.toString(), user: req.db.getValidUser() });
 
 const db = createDbMiddleware();
 
-const server = httpServer({ port: 3333, app: log(db(auth(app))) });
+const server = httpServer({ app: log(db(auth(app))) });
 start(server).then(() => console.log(describe(server)));
 ```
 

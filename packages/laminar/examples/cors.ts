@@ -1,13 +1,4 @@
-import {
-  start,
-  jsonOk,
-  get,
-  put,
-  httpServer,
-  router,
-  corsMiddleware,
-  describe,
-} from '@ovotech/laminar';
+import { start, jsonOk, get, put, httpServer, router, corsMiddleware, describe } from '@ovotech/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -19,7 +10,6 @@ const cors = corsMiddleware({
 });
 
 const server = httpServer({
-  port: 3333,
   app: cors(
     router(
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),

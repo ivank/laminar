@@ -2,11 +2,12 @@ import { spawn } from 'child_process';
 import { join } from 'path';
 import axios from 'axios';
 
-describe('Split App Integration Tests', () => {
+describe('Simple App Integration Tests', () => {
   it('Should work as an app', async () => {
     const service = spawn('yarn', ['ts-node', 'src/index.ts'], {
       cwd: join(__dirname, '..'),
       detached: true,
+      env: { ...process.env, LAMINAR_HTTP_PORT: '4600' },
     });
 
     try {
@@ -17,7 +18,7 @@ describe('Split App Integration Tests', () => {
         );
       });
 
-      const api = axios.create({ baseURL: `http://localhost:3300` });
+      const api = axios.create({ baseURL: `http://localhost:4600` });
 
       await expect(api.get('/user/3')).resolves.toMatchObject({
         status: 200,

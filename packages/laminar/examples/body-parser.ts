@@ -17,7 +17,6 @@ const csvParser: BodyParser = {
 const app: App = ({ body }) => textOk(JSON.stringify(body));
 
 const server = httpServer({
-  port: 3333,
   app,
   options: { bodyParsers: [csvParser, ...defaultBodyParsers] },
 });

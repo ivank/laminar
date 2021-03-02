@@ -84,8 +84,8 @@ export interface HttpServer<TServer = http.Server | https.Server> {
  * It is not yet listeing to that port though, you need to call {@link start} on it, and {@link stop} to stop
  */
 export function httpsServer({
-  port = 3300,
-  hostname = 'localhost',
+  port = process.env.LAMINAR_HTTP_PORT ? Number(process.env.LAMINAR_HTTP_PORT) : 3300,
+  hostname = process.env.LAMINAR_HTTP_HOST ?? 'localhost',
   serverOptions = {},
   options,
   app,
@@ -99,8 +99,8 @@ export function httpsServer({
  * It is not yet listeing to that port though, you need to call {@link start} on it, and {@link stop} to stop
  */
 export function httpServer({
-  port = 3300,
-  hostname = 'localhost',
+  port = process.env.LAMINAR_HTTP_PORT ? Number(process.env.LAMINAR_HTTP_PORT) : 3300,
+  hostname = process.env.LAMINAR_HTTP_HOST ?? 'localhost',
   serverOptions = {},
   options,
   timeout,
@@ -116,15 +116,15 @@ export function httpServer({
 /**
  * Start the http server created with {@link httpServer} or {@link httpsServer}, uses Promises
  */
-export function start({ server, port, hostname }: HttpServer): Promise<void> {
-  return new Promise((resolve) => server.listen(port, hostname, resolve));
+export function start(http: HttpServer): Promise<HttpServer> {
+  return new Promise((resolve) => http.server.listen(http.port, http.hostname, () => resolve(http)));
 }
 
 /**
  * Stop the http server created with {@link httpServer} or {@link httpsServer}, and started with {@link start}, uses Promises
  */
-export function stop({ server }: HttpServer): Promise<void> {
-  return new Promise((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
+export function stop(http: HttpServer): Promise<HttpServer> {
+  return new Promise((resolve, reject) => http.server.close((err) => (err ? reject(err) : resolve(http))));
 }
 
 /**

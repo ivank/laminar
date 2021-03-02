@@ -1,4 +1,6 @@
-import { router, jsonOk, get, put, route } from '@ovotech/laminar';
+import { router, jsonOk, get, put, route, start, httpServer, describe } from '@ovotech/laminar';
+
+// << app
 
 const authors: Record<string, string> = { 10: 'Dave', 20: 'Bob' };
 const articles: Record<string, string> = { 1: 'Hapiness', 2: 'Love' };
@@ -6,7 +8,7 @@ const articles: Record<string, string> = { 1: 'Hapiness', 2: 'Love' };
 /**
  * Returns a laminar App object
  */
-export const app = router(
+const app = router(
   /**
    * You match pathnames with strings
    */
@@ -44,3 +46,10 @@ export const app = router(
     },
   }),
 );
+
+// app
+
+/**
+ * Start the http service
+ */
+start(httpServer({ app })).then((http) => console.log(describe(http)));

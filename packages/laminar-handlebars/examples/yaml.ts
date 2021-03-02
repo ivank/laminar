@@ -10,7 +10,6 @@ const handlebars = handlebarsMiddleware({
 });
 
 const server = httpServer({
-  port: 3333,
   app: handlebars(
     router(
       get('/', ({ hbs }) => hbs('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } })),

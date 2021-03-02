@@ -62,7 +62,7 @@ describe('Integration', () => {
             const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
-              return jsonNoContent({ status: 204 });
+              return jsonNoContent();
             } else {
               return jsonNotFound({ code: 12, message: 'Item not found' });
             }
@@ -71,12 +71,12 @@ describe('Integration', () => {
       },
     });
 
-    const server = httpServer({ app, port: 8065 });
+    const server = httpServer({ app, port: 4920 });
 
     try {
       await start(server);
 
-      const api = axiosOapi(axios.create({ baseURL: 'http://localhost:8065' }));
+      const api = axiosOapi(axios.create({ baseURL: 'http://localhost:4920' }));
 
       await expect(api.api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
         status: 404,

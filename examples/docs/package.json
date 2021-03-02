@@ -10,6 +10,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/examples/docs#readme",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@ovotech/laminar": "^0.10.1",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
@@ -19,22 +20,18 @@
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "ts-jest": "^26.4.4",
-    "ts-node": "^9.0.0",
     "typescript": "^4.1.2"
   },
   "jest": {
     "preset": "../../jest.json"
   },
   "scripts": {
-    "build": "tsc --declaration",
-    "start": "ts-node src/index.ts",
-    "test": "jest test --runInBand",
-    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
-    "lint:eslint": "eslint '{src,test}/**/*.ts'",
-    "lint": "yarn lint:prettier && yarn lint:eslint"
+    "build": "tsc",
+    "test": "jest test",
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.10.0",
+    "@ovotech/laminar": "^0.10.1",
     "yaml": "^1.10.0"
   }
 }

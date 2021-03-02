@@ -30,7 +30,6 @@ const loggedIn = auth();
 const admin = auth(['admin']);
 
 const server = httpServer({
-  port: 3333,
   app: router(
     get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
     post('/session', ({ body }) => jsonOk(createSession(signOptions, body))),

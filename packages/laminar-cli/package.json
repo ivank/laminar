@@ -10,6 +10,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.0.4",
+    "@ovotech/laminar": "^0.10.1",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
@@ -18,17 +19,17 @@
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "jest": "^26.6.3",
+    "nock": "^13.0.5",
     "pg": "^8.5.1",
     "prettier": "^2.2.1",
     "ts-jest": "^26.4.4",
-    "ts-node": "^9.0.0",
     "typescript": "^4.1.2"
   },
   "bin": {
     "laminar": "./scripts/laminar"
   },
   "scripts": {
-    "laminar": "node -r ts-node/register src/cli.ts",
+    "laminar": "yarn tsc && node dist/cli.js",
     "build:test:petstore": "yarn laminar api --file test/api/petstore.yaml --output test/api/__generated__/petstore.ts",
     "build:test:loss": "yarn laminar api --file test/api/loss.yaml --output test/api/__generated__/loss.ts",
     "build:test:statements": "yarn laminar api --file test/api/statements.yaml --output test/api/__generated__/statements.ts",
@@ -45,9 +46,7 @@
     "build": "tsc --declaration",
     "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-cli",
     "test": "jest test --runInBand",
-    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
-    "lint:eslint": "eslint '{src,test}/**/*.ts'",
-    "lint": "yarn lint:prettier && yarn lint:eslint"
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "jest": {
     "preset": "../../jest.json"
@@ -58,6 +57,7 @@
     "chalk": "^4.0.0",
     "commander": "^6.2.0",
     "openapi-schemas": "^2.0.3",
-    "openapi3-ts": "^2.0.0"
+    "openapi3-ts": "^2.0.0",
+    "yaml": "^1.10.0"
   }
 }

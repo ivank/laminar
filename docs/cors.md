@@ -14,25 +14,23 @@ import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });
 
+/**
+ * Define cors with all of its options
+ */
+const cors = corsMiddleware({ allowOrigin: ['http://localhost', 'http://example.com'] });
+
 const main = async () => {
   const app = await openApi({
-    api: join(__dirname, 'api.yaml'),
+    api: join(__dirname, '../schema/api.yaml'),
     paths: {
-      '/user/{id}': {
-        get: ({ path }) => jsonOk(findUser(path.id)),
-      },
+      '/user/{id}': { get: ({ path }) => jsonOk(findUser(path.id)) },
     },
   });
 
   /**
-   * Define cors with all of its options
-   */
-  const cors = corsMiddleware({ allowOrigin: ['http://localhost', 'http://example.com'] });
-
-  /**
    * Apply cors
    */
-  const server = httpServer({ app: cors(app), port: 3300 });
+  const server = httpServer({ app: cors(app) });
   await start(server);
   console.log(describe(server));
 };
@@ -46,38 +44,32 @@ You can also do customisations on the cors middleware
 
 You can allow origins using a regex:
 
-> [examples/docs/src/cors-regex.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-regex.ts)
+> [examples/docs/src/cors-regex.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-regex.ts#L4-L11)
 
 ```typescript
-import { corsMiddleware } from '@ovotech/laminar';
-
 /**
  * Regex middleware, matching http://localhost, https://localhost, http://example.com, https://example.com
  */
-export const cors = corsMiddleware({ allowOrigin: /https?\:\/\/(localhost|example\.com)/ });
+const cors = corsMiddleware({ allowOrigin: /https?\:\/\/(localhost|example\.com)/ });
 ```
 
 You can allow origins using a function:
 
-> [examples/docs/src/cors-function.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-function.ts)
+> [examples/docs/src/cors-function.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-function.ts#L4-L11)
 
 ```typescript
-import { corsMiddleware } from '@ovotech/laminar';
-
 /**
  * allowOrigin can be a function
  */
-export const cors = corsMiddleware({ allowOrigin: (origin) => origin.endsWith('.com') });
+const cors = corsMiddleware({ allowOrigin: (origin) => origin.endsWith('.com') });
 ```
 
 You can allow other options:
 
-> [examples/docs/src/cors-options.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-options.ts)
+> [examples/docs/src/cors-options.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-options.ts#L4-L25)
 
 ```typescript
-import { corsMiddleware } from '@ovotech/laminar';
-
-export const cors = corsMiddleware({
+const cors = corsMiddleware({
   /**
    * Allow origin can be a simple string
    */

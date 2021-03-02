@@ -5,7 +5,6 @@ import { join } from 'path';
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html') });
 
 const server = httpServer({
-  port: 3333,
   app: handlebars(
     router(
       get('/', ({ hbs }) => hbs('index')),

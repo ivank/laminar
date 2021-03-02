@@ -1,22 +1,34 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import axiosCookieJarSupport from 'axios-cookiejar-support';
-import { spawn } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import { URLSearchParams } from 'url';
 import { join } from 'path';
 import { CookieJar } from 'tough-cookie';
+import { readdirSync, unlinkSync } from 'fs';
+
+const examplesDir = join(__dirname, '../examples/');
+
+let port = 5000;
 
 describe('Example files', () => {
+  beforeAll(() => execSync('yarn tsc', { cwd: examplesDir }));
+  afterAll(() =>
+    readdirSync(examplesDir)
+      .filter((file) => file.endsWith('.js'))
+      .forEach((file) => unlinkSync(join(examplesDir, file))),
+  );
+
   it.each<[string, AxiosRequestConfig, AxiosRequestConfig, unknown]>([
     [
       'examples/jwk.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: { email: 'test@example.com', scopes: ['admin'] },
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
       },
       {
         result: 'ok',
@@ -27,7 +39,7 @@ describe('Example files', () => {
       'examples/keycloak.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: {
           email: 'test@example.com',
           resource_access: { 'my-service-name': { roles: ['admin'] } },
@@ -35,7 +47,7 @@ describe('Example files', () => {
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
       },
       {
         result: 'ok',
@@ -50,12 +62,12 @@ describe('Example files', () => {
       'examples/keypair.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: { email: 'test@example.com', scopes: ['admin'] },
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
       },
       {
         result: 'ok',
@@ -66,7 +78,7 @@ describe('Example files', () => {
       'examples/oapi-keycloak.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: {
           email: 'test@example.com',
           resource_access: { 'my-service-name': { roles: ['admin'] } },
@@ -74,7 +86,7 @@ describe('Example files', () => {
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
       },
       {
         text: 'ok',
@@ -89,12 +101,12 @@ describe('Example files', () => {
       'examples/oapi.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: { email: 'test@example.com', scopes: ['admin'] },
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
       },
       {
         text: 'ok',
@@ -105,12 +117,12 @@ describe('Example files', () => {
       'examples/oapi-api-key.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: new URLSearchParams({ email: 'test@example.com' }),
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
         data: '',
       },
       'OK test@example.com',
@@ -119,12 +131,12 @@ describe('Example files', () => {
       'examples/oapi-custom.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: new URLSearchParams({ email: 'test@example.com' }),
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
         data: '',
       },
       'OK test@example.com',
@@ -133,12 +145,12 @@ describe('Example files', () => {
       'examples/simple.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333/session',
+        url: '/session',
         data: { email: 'test@example.com', scopes: ['admin'] },
       },
       {
         method: 'POST',
-        url: 'http://localhost:3333/test',
+        url: '/test',
       },
       {
         result: 'ok',
@@ -146,9 +158,11 @@ describe('Example files', () => {
       },
     ],
   ])('Should process %s', async (file, jwtRequest, testRequest, expected) => {
-    const service = spawn('yarn', ['ts-node', file], {
+    port += 1;
+    const service = spawn('yarn', ['node', file.replace('.ts', '.js')], {
       cwd: join(__dirname, '..'),
       detached: true,
+      env: { ...process.env, LAMINAR_HTTP_PORT: String(port) },
     });
     const errorLogger = (data: Buffer): void => console.error(data.toString());
     const jar = new CookieJar();
@@ -160,7 +174,7 @@ describe('Example files', () => {
           String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
-      const api = axiosCookieJarSupport(axios);
+      const api = axiosCookieJarSupport(axios.create({ baseURL: `http://localhost:${port}` }));
       const jwtResponse = await api.request({ ...jwtRequest, jar });
 
       if (typeof jwtResponse.data !== 'string') {

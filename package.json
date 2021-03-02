@@ -7,24 +7,29 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "private": true,
   "scripts": {
-    "test": "yarn workspaces run test",
-    "lint": "yarn workspaces run lint",
-    "build": "lerna run build",
+    "test": "lerna run test --stream",
+    "lint": "lerna run lint --stream",
+    "build": "lerna run build --stream",
     "publish": "lerna run publish",
-    "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main && for f in docs/*.md; do build-readme $f 'https://github.com/ovotech/laminar/tree/main'; done",
+    "build:readme": "build-readme README.md 'https://github.com/ovotech/laminar/tree/main' && bash -c 'for f in docs/*.md; do yarn build-readme $f https://github.com/ovotech/laminar/tree/main; done'",
     "build:api": "typedoc --out docs/api packages/{laminar,laminar-jwt,laminar-handlebars,json-schema}/src/index.ts --mode library"
   },
   "workspaces": [
     "packages/*",
     "examples/*",
-    "performance",
-    "website"
+    "performance"
   ],
   "jest": {
     "preset": "./jest.json"
   },
   "devDependencies": {
     "@ikerin/build-readme": "^1.0.4",
-    "lerna": "^3.22.0"
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "lerna": "^3.22.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.2"
   }
 }

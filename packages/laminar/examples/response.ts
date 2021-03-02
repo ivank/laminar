@@ -24,7 +24,6 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 
 const server = httpServer({
-  port: 3333,
   app: router(
     // Redirects
     get('/redirect', () => redirect('http://my-new-location.example.com', { headers: { 'X-Other': 'Other' } })),

@@ -43,11 +43,11 @@ describe('Integration', () => {
   });
 
   it.each`
-    cacheType
-    ${'expiry'}
-    ${'preload'}
-    ${'none'}
-  `('Should process changing handlebars tempaltes with $cacheType', async ({ cacheType }) => {
+    cacheType    | expectedData
+    ${'expiry'}  | ${'<html><body>Layout 2 <span>Generated 2</span></body></html>'}
+    ${'none'}    | ${'<html><body>Layout 2 <span>Generated 2</span></body></html>'}
+    ${'preload'} | ${'<html><body>Layout <span>Generated</span></body></html>'}
+  `('Should process changing handlebars tempaltes with $cacheType', async ({ cacheType, expectedData }) => {
     jest.setTimeout(10000);
 
     const dir = join(__dirname, '__generated__/root');
@@ -55,6 +55,8 @@ describe('Integration', () => {
     mkdirSync(join(dir, 'partials'), { recursive: true });
     writeFileSync(join(dir, 'views/index.hbs'), '{{#> layout }}<span>Generated</span>{{/layout}}');
     writeFileSync(join(dir, 'partials/layout.hbs'), '<html><body>Layout {{> @partial-block }}</body></html>');
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const handlebars = handlebarsMiddleware({ dir, extension: 'hbs', cacheType });
 
@@ -68,16 +70,12 @@ describe('Integration', () => {
     try {
       await start(server);
 
-      expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot, 'inital');
+      expect((await api.get('/')).data).toEqual('<html><body>Layout <span>Generated</span></body></html>');
 
       writeFileSync(join(dir, 'partials/layout.hbs'), '<html><body>Layout 2 {{> @partial-block }}</body></html>');
       writeFileSync(join(dir, 'views/index.hbs'), '{{#> layout }}<span>Generated 2</span>{{/layout}}');
 
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      await retry(
-        () => expect(api.get('/')).resolves.toMatchSnapshot<AxiosResponse>(axiosSnapshot, 'after modification'),
-        { delay: 1000, retries: 5, timeout: 10000 },
-      );
+      await retry(async () => expect((await api.get('/')).data).toEqual(expectedData), { delay: 500, retries: 10 });
     } finally {
       await stop(server);
     }

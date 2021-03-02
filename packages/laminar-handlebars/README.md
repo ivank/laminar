@@ -14,7 +14,6 @@ import { join } from 'path';
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html') });
 
 const server = httpServer({
-  port: 3333,
   app: handlebars(
     router(
       get('/', ({ hbs }) => hbs('index')),
@@ -47,7 +46,6 @@ const handlebars = handlebarsMiddleware({
 });
 
 const server = httpServer({
-  port: 3333,
   app: handlebars(
     router(
       get('/', ({ hbs }) => hbs('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } })),
@@ -73,7 +71,6 @@ import { join } from 'path';
 const hbs = handlebars({ dir: join(__dirname, 'templates-html') });
 
 const server = httpServer({
-  port: 3333,
   app: router(
     get('/', () => hbs('index')),
     post('/result', ({ body: { name } }) => hbs('result', { name })),
@@ -101,7 +98,6 @@ import { join } from 'path';
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html'), cacheType: 'expiry' });
 
 const server = httpServer({
-  port: 3333,
   app: handlebars(
     router(
       get('/', ({ hbs }) => hbs('index')),

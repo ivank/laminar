@@ -41,11 +41,11 @@ describe('Statements', () => {
         },
       },
     });
-    const server = httpServer({ app, port: 8065 });
+    const server = httpServer({ app, port: 4910 });
     try {
       await start(server);
 
-      const api = axios.create({ baseURL: 'http://localhost:8065' });
+      const api = axios.create({ baseURL: 'http://localhost:4910' });
       const { data } = await api.get('/accounts/123/meters');
 
       expect(data).toMatchSnapshot();

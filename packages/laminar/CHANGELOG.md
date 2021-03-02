@@ -36,3 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changed laminar to use OpenApi's json-schema dielect, instead of the latest json-schema draft. Differences documented here https://swagger.io/docs/specification/data-models/keywords/.
+
+## [0.10.1] - 2021-03-02
+
+### Changed
+
+- `jsonNoContent`, `htmlNoContent` and `textNoContent` no longer accept a body argument, as there should be no content
+- `start` and `stop` laminar calls now return the server object, so it can be easily described later.

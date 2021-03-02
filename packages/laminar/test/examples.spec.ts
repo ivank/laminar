@@ -1,19 +1,30 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { spawn } from 'child_process';
-import { readFileSync } from 'fs';
+import { execSync, spawn } from 'child_process';
+import { readdirSync, readFileSync, unlinkSync } from 'fs';
 import { Agent } from 'https';
 import { join } from 'path';
 import * as nock from 'nock';
 
 nock('http://example.com').get('/new/22').reply(200, { isNew: true });
 
+const examplesDir = join(__dirname, '../examples/');
+
+let port = 4800;
+
 describe('Example files', () => {
+  beforeAll(() => execSync('yarn tsc', { cwd: examplesDir }));
+  afterAll(() =>
+    readdirSync(examplesDir)
+      .filter((file) => file.endsWith('.js'))
+      .forEach((file) => unlinkSync(join(examplesDir, file))),
+  );
+
   it.each<[string, AxiosRequestConfig, unknown]>([
     [
       'examples/body-parser.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333',
+        url: '/',
         data: 'one,two,three',
         headers: { 'Content-Type': 'text/csv' },
       },
@@ -23,7 +34,7 @@ describe('Example files', () => {
       'examples/cors.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/.well-known/health-check',
+        url: '/.well-known/health-check',
         headers: { Origin: 'http://example.com' },
       },
       { health: 'ok' },
@@ -32,7 +43,7 @@ describe('Example files', () => {
       'examples/default-route.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/unknown',
+        url: '/unknown',
         validateStatus: (status) => status === 404,
       },
       'Woopsy',
@@ -41,16 +52,16 @@ describe('Example files', () => {
       'examples/echo-auth-log-db.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333',
+        url: '/',
         headers: { Authorization: 'Me' },
       },
-      { url: 'http://localhost:3333/', user: 'Me' },
+      { url: 'http://localhost:4804/', user: 'Me' },
     ],
     [
       'examples/echo-auth-log.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333',
+        url: '/',
         data: ['Testing'],
         headers: { Authorization: 'Me' },
       },
@@ -60,16 +71,16 @@ describe('Example files', () => {
       'examples/echo-auth.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/tmp',
+        url: '/tmp',
         headers: { Authorization: 'Me' },
       },
-      'http://localhost:3333/tmp',
+      'http://localhost:4806/tmp',
     ],
     [
       'examples/echo.ts',
       {
         method: 'POST',
-        url: 'http://localhost:3333',
+        url: '/',
         data: 'data',
         headers: { 'Content-Type': 'text/plain' },
       },
@@ -79,7 +90,7 @@ describe('Example files', () => {
       'examples/logging.ts',
       {
         method: 'PUT',
-        url: 'http://localhost:3333/users/4',
+        url: '/users/4',
         data: '"Tester"',
         headers: { 'Content-Type': 'application/json' },
       },
@@ -89,7 +100,7 @@ describe('Example files', () => {
       'examples/response.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/html/object',
+        url: '/html/object',
       },
       '<html>OK</html>',
     ],
@@ -97,7 +108,7 @@ describe('Example files', () => {
       'examples/response.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/text-stream',
+        url: '/text-stream',
       },
       'one\n',
     ],
@@ -105,11 +116,11 @@ describe('Example files', () => {
       'examples/router.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/users/2',
+        url: '/users/2',
       },
       'Foo',
     ],
-    ['examples/simple.ts', { method: 'GET', url: 'http://localhost:3333/.well-known/health-check' }, { health: 'ok' }],
+    ['examples/simple.ts', { method: 'GET', url: '/.well-known/health-check' }, { health: 'ok' }],
     [
       'examples/simple-https.ts',
       {
@@ -123,7 +134,7 @@ describe('Example files', () => {
       'examples/static-assets.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/my-folder/texts/one.txt',
+        url: '/my-folder/texts/one.txt',
       },
       `one\n`,
     ],
@@ -131,7 +142,7 @@ describe('Example files', () => {
       'examples/oapi-security.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/user',
+        url: '/user',
         headers: { Authorization: 'Bearer my-secret-token' },
       },
       { email: 'me@example.com' },
@@ -140,7 +151,7 @@ describe('Example files', () => {
       'examples/oapi.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/user',
+        url: '/user',
       },
       { email: 'me@example.com' },
     ],
@@ -148,7 +159,7 @@ describe('Example files', () => {
       'examples/oapi-undocumented-routes.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/old/22',
+        url: '/old/22',
       },
       { isNew: true },
     ],
@@ -156,7 +167,7 @@ describe('Example files', () => {
       'examples/convertion.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/user',
+        url: '/user',
       },
       { email: 'me@example.com', createdAt: '2020-01-01T12:00:00.000Z' },
     ],
@@ -167,15 +178,17 @@ describe('Example files', () => {
         headers: {
           'content-type': 'text/csv',
         },
-        url: 'http://localhost:3333',
+        url: '/',
         data: 'column1,column2\na,b\nc,d',
       },
       'COLUMN1,COLUMN2\nA,B\nC,D\n',
     ],
   ])('Should process %s', async (file, config, expected) => {
-    const service = spawn('yarn', ['ts-node', file], {
+    port += 1;
+    const service = spawn('yarn', ['node', file.replace('.ts', '.js')], {
       cwd: join(__dirname, '..'),
       detached: true,
+      env: { ...process.env, LAMINAR_HTTP_PORT: String(port) },
     });
     const errorLogger = (data: Buffer): void => console.error(data.toString());
 
@@ -186,7 +199,8 @@ describe('Example files', () => {
           String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
-      const { data } = await axios.request(config);
+      const api = axios.create({ baseURL: `http://localhost:${port}` });
+      const { data } = await api.request(config);
       expect(data).toEqual(expected);
     } finally {
       /**

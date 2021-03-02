@@ -141,16 +141,20 @@ export type Json<T> = T extends Date
 export function toJson<T>(data: T): Json<T> {
   if (data !== null && typeof data === 'object') {
     if (data instanceof Date) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return data.toISOString() as any;
     } else if (Array.isArray(data)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (data as any).map(toJson) as any;
     } else {
       return Object.entries(data).reduce(
         (acc, [key, value]) => (value === undefined ? acc : { ...acc, [key]: toJson(value) }),
         {},
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ) as any;
     }
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data as any;
   }
 }

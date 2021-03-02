@@ -13,6 +13,7 @@ import {
   jsonUnauthorized,
   jsonForbidden,
   optional,
+  jsonNoContent,
 } from '../../../src';
 import axios from 'axios';
 import { join } from 'path';
@@ -130,7 +131,7 @@ describe('Integration', () => {
             const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
-              return response({ status: 204 });
+              return jsonNoContent();
             } else {
               return jsonNotFound({ code: 12, message: 'Item not found' });
             }

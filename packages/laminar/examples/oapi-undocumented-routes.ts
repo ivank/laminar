@@ -1,13 +1,4 @@
-import {
-  httpServer,
-  start,
-  describe,
-  jsonOk,
-  router,
-  get,
-  redirect,
-  openApi,
-} from '@ovotech/laminar';
+import { httpServer, start, describe, jsonOk, router, get, redirect, openApi } from '@ovotech/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi.yaml');
@@ -28,7 +19,6 @@ const main = async () => {
   });
 
   const server = httpServer({
-    port: 3333,
     app,
   });
   await start(server);

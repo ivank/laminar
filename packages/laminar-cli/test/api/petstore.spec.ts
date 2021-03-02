@@ -75,7 +75,7 @@ describe('Petstore', () => {
             const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
-              return jsonNoContent({ body: 'OK' });
+              return jsonNoContent();
             } else {
               return jsonNotFound({ code: 12, message: 'Item not found' });
             }
@@ -84,12 +84,12 @@ describe('Petstore', () => {
       },
     });
     const logger = withLogger(log);
-    const server = httpServer({ app: logger(oapi), port: 8065 });
+    const server = httpServer({ app: logger(oapi), port: 4911 });
 
     try {
       await start(server);
 
-      const api = axios.create({ baseURL: 'http://localhost:8065' });
+      const api = axios.create({ baseURL: 'http://localhost:4911' });
 
       await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
         status: 404,

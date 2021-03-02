@@ -12,8 +12,8 @@
   "devDependencies": {
     "@ovotech/laminar-cli": "^0.9.4",
     "@types/jest": "^26.0.16",
-    "@types/node": "^14.14.10",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/node": "^14.14.10",
     "@types/pg": "^7.14.9",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
@@ -21,6 +21,7 @@
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "jest": "^26.6.3",
+    "jsonwebtoken": "^8.5.1",
     "prettier": "^2.2.1",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.0.0",
@@ -35,12 +36,10 @@
     "build:ts": "tsc --declaration",
     "build": "yarn build:types && yarn build:ts",
     "test": "jest test --runInBand",
-    "lint:prettier": "prettier --list-different '{src,test}/**/*.ts'",
-    "lint:eslint": "eslint '{src,test}/**/*.ts'",
-    "lint": "yarn lint:prettier && yarn lint:eslint"
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.10.0",
+    "@ovotech/laminar": "^0.10.1",
     "@ovotech/laminar-jwt": "^0.9.2",
     "pg": "^8.5.1"
   }

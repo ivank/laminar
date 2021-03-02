@@ -1,15 +1,31 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { exec, spawn } from 'child_process';
+import { exec, execSync, spawn } from 'child_process';
+import { readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { promisify } from 'util';
 
+const examplesDir = join(__dirname, '../examples/');
+
+let port = 4900;
+
 describe('Example files', () => {
+  beforeAll(() => execSync('yarn tsc', { cwd: examplesDir }));
+  afterAll(() => {
+    readdirSync(examplesDir)
+      .filter((file) => file.endsWith('.js'))
+      .forEach((file) => unlinkSync(join(examplesDir, file)));
+
+    readdirSync(join(examplesDir, '__generated__'))
+      .filter((file) => file.endsWith('.js'))
+      .forEach((file) => unlinkSync(join(examplesDir, '__generated__', file)));
+  });
+
   it.each<[string, AxiosRequestConfig, unknown]>([
     [
       'examples/api.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/test',
+        url: '/test',
       },
       { text: 'ok', user: { email: 'me@example.com' } },
     ],
@@ -17,14 +33,16 @@ describe('Example files', () => {
       'examples/convertion.ts',
       {
         method: 'GET',
-        url: 'http://localhost:3333/user',
+        url: '/user',
       },
       { email: 'me@example.com', createdAt: '2020-01-01T12:00:00.000Z' },
     ],
   ])('Should process %s', async (file, config, expected) => {
-    const service = spawn('yarn', ['ts-node', file], {
+    port += 1;
+    const service = spawn('yarn', ['node', file.replace('.ts', '.js')], {
       cwd: join(__dirname, '..'),
       detached: true,
+      env: { ...process.env, LAMINAR_HTTP_PORT: String(port) },
     });
     const errorLogger = (data: Buffer): void => console.error(data.toString());
 
@@ -35,7 +53,7 @@ describe('Example files', () => {
           String(data).includes('Laminar: Running') ? resolve(undefined) : undefined,
         );
       });
-      const { data } = await axios.request(config);
+      const { data } = await axios.create({ baseURL: `http://localhost:${port}` }).request(config);
       expect(data).toEqual(expected);
     } finally {
       /**
@@ -51,7 +69,7 @@ describe('Example files', () => {
     ['examples/axios.ts', `{ text: 'test', user: { email: 'test@example.com' } }`],
     // ['examples/axios-petstore.ts', `INVENTORY`],
   ])('Should process %s', async (file, expected) => {
-    const { stdout, stderr } = await promisify(exec)(`yarn ts-node ${file}`, {
+    const { stdout, stderr } = await promisify(exec)(`yarn node ${file.replace('.ts', '.js')}`, {
       cwd: join(__dirname, '..'),
     });
 

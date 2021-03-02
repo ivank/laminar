@@ -8,26 +8,28 @@ commands:
     description: Install cached yarn packages
     steps:
       - restore_cache:
-          keys: ['v2-{{ checksum "yarn.lock" }}']
-      - run: yarn config set yarn-offline-mirror ~/.cache/yarn
-      - run: yarn install --frozen-lockfile
+          keys: ['v3-{{ checksum "yarn.lock" }}']
+      - run: yarn
 
   npm-login:
     description: Set npm login
     steps:
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      - run: yarn config set npmRegistries --json '{"https://registry.yarnpkg.com":{"npmAuthToken":"${NPM_TOKEN}","npmAlwaysAuth":true}}'
 
   yarn-save-cache:
     description: Save yarn packages cache
     steps:
       - save_cache:
-          key: v2-{{ checksum "yarn.lock" }}
-          paths: ['~/.cache']
+          key: v3-{{ checksum "yarn.lock" }}
+          paths: ['.yarn/cache']
 
 jobs:
   test:
+    parameters:
+      node-image:
+        type: string
     docker:
-      - image: circleci/node:10
+      - image: << parameters.node-image >>
       - image: postgres:11
         environment:
           POSTGRES_DB: example
@@ -42,7 +44,8 @@ jobs:
             git submodule update --init
       - yarn-install
       - yarn-save-cache
-      - run: yarn build --concurrency 1
+      - run: yarn lint
+      - run: yarn build
       - postgres/install_postgres_client
       - run:
           name: 'Run install scripts for examples'
@@ -57,7 +60,7 @@ jobs:
     steps:
       - checkout
       - yarn-install
-      - run: yarn build --concurrency 1
+      - run: yarn build
       - npm-login
       - run: git config user.email "ovotech-ci@ovoenergy.com"
       - run: git config user.name "Ovotech CI"
@@ -68,12 +71,18 @@ workflows:
   test:
     jobs:
       - test:
+          matrix:
+            parameters:
+              node-image: ['circleci/node:10', 'circleci/node:12', 'circleci/node:14']
           filters:
             branches:
               ignore: main
   deploy:
     jobs:
       - test:
+          matrix:
+            parameters:
+              node-image: ['circleci/node:14']
           filters:
             branches:
               only: main

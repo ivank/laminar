@@ -3,7 +3,6 @@ import { join } from 'path';
 
 const main = async () => {
   const server = httpServer({
-    port: 3333,
     app: router(
       staticAssets('/my-folder', join(__dirname, 'assets')),
       get('/', () => jsonOk({ health: 'ok' })),

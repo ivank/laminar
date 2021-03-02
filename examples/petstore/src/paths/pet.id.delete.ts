@@ -15,7 +15,7 @@ export const pathPetsIdDelete: PathPetsIdDelete<RequestPetsDb> = async ({ petsDb
   const pet = await petsDb.find(id);
   if (pet) {
     await petsDb.remove(id);
-    return jsonNoContent(null);
+    return jsonNoContent();
   } else {
     return jsonNotFound({ code: 12, message: `Cannot delete pet ${id} - pet not found` });
   }

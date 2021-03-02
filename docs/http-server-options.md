@@ -8,10 +8,9 @@ By default laminar has a few middleware built in. They work just as normal middl
 
 The default body parsers handle json, url encoded (application/x-www-form-urlencoded) and any text request bodies. You can add / modify the parsers using the `bodyParsers` array in the options:
 
-> [examples/docs/src/custom-body-parser.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-body-parser.ts)
+> [examples/docs/src/custom-body-parser.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-body-parser.ts#L11-L34)
 
 ```typescript
-import { App, jsonOk, httpServer, BodyParser, concatStream, defaultBodyParsers } from '@ovotech/laminar';
 import * as YAML from 'yaml';
 
 const app: App = ({ body }) => jsonOk(body);
@@ -25,11 +24,8 @@ const yamlParser: BodyParser = {
   parse: async (stream) => YAML.parse((await concatStream(stream)) ?? ''),
 };
 
-export const server = httpServer({
+const server = httpServer({
   app,
-  port: 8899,
-  hostname: 'localhost',
-
   /**
    * You can configure the request body parsers using `bodyParsers`
    * If we want to keep all the default ones though, so we pass the default body parsers too
@@ -42,10 +38,9 @@ export const server = httpServer({
 
 You can add custom response parsers as well. That way you can pass the response body as any object you need, and based on the content type you can convert it to a string to be sent over the wire.
 
-> [examples/docs/src/custom-response-parser.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-response-parser.ts)
+> [examples/docs/src/custom-response-parser.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-response-parser.ts#L2-L22)
 
 ```typescript
-import { App, yaml, ok, httpServer, ResponseParser, defaultResponseParsers } from '@ovotech/laminar';
 import * as YAML from 'yaml';
 
 const app: App = () => yaml(ok({ body: { example: { test: 'msg' } } }));
@@ -55,10 +50,8 @@ const yamlParser: ResponseParser = {
   parse: (yaml) => YAML.stringify(yaml),
 };
 
-export const server = httpServer({
+const server = httpServer({
   app,
-  port: 8898,
-  hostname: 'localhost',
   /**
    * You can configure the response parsers using `responseParsers`
    * If we want to keep all the default ones though, so we pass the default body parsers first
@@ -71,21 +64,17 @@ export const server = httpServer({
 
 You can define a default error handler if you want a more customised way to handle errors.
 
-> [examples/docs/src/custom-error-handler.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-error-handler.ts)
+> [examples/docs/src/custom-error-handler.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/custom-error-handler.ts#L2-L16)
 
 ```typescript
-import { App, htmlInternalServerError, httpServer, ErrorHandler } from '@ovotech/laminar';
-
 const app: App = () => {
   throw new Error('Testing error');
 };
 
 const errorHandler: ErrorHandler = ({ error }) => htmlInternalServerError(`<html>${error.message}</html>`);
 
-export const server = httpServer({
+const server = httpServer({
   app,
-  port: 8897,
-  hostname: 'localhost',
   /**
    * You can configure the default error handler with `errorHandler`
    */

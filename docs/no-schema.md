@@ -22,7 +22,7 @@ const main = async () => {
       get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
       get('/users/{id}', ({ path }) => jsonOk(findUser(path.id))),
     ),
-    port: 3300,
+    port: 4399,
   });
 
   /**
@@ -42,17 +42,13 @@ The simplest possible laminar app you can write is just a function. Takes a requ
 
 A request object has at its core this `incommingMessage` which is an instance from node's own [http.IncommingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage) though in practice you wouldn't need to interact with it much.
 
-> [examples/docs/src/app.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/app.ts)
+> [examples/docs/src/app.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/app.ts#L2-L9)
 
 ```typescript
-import { App, jsonOk } from '@ovotech/laminar';
-
 /**
  * Returns the url path being accessed
  */
-export const app: App = ({ incommingMessage }) => {
-  return jsonOk({ accessedUrl: incommingMessage.url });
-};
+const app: App = ({ incommingMessage }) => jsonOk({ accessedUrl: incommingMessage.url });
 ```
 
 While simple the app sits at the heart of all of laminar and is an essential building block, so don't dismiss it out of hand.
@@ -61,18 +57,16 @@ While simple the app sits at the heart of all of laminar and is an essential bui
 
 Understanding that we can start using the router function:
 
-> [examples/docs/src/router.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/router.ts)
+> [examples/docs/src/router.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/router.ts#L2-L49)
 
 ```typescript
-import { router, jsonOk, get, put, route } from '@ovotech/laminar';
-
 const authors: Record<string, string> = { 10: 'Dave', 20: 'Bob' };
 const articles: Record<string, string> = { 1: 'Hapiness', 2: 'Love' };
 
 /**
  * Returns a laminar App object
  */
-export const app = router(
+const app = router(
   /**
    * You match pathnames with strings
    */
@@ -118,17 +112,15 @@ You have helpers available for all the HTTP methods: `get`, `post`, `del`, `patc
 
 You can also use the low level function `route` for any custom method, or no method altogether (matching any method).
 
-> [examples/docs/src/router-regex.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/router-regex.ts)
+> [examples/docs/src/router-regex.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/router-regex.ts#L2-L31)
 
 ```typescript
-import { router, jsonOk, get, put } from '@ovotech/laminar';
-
 const items: Record<string, string> = { 10: 'Dave', 20: 'Bob' };
 
 /**
  * Returns a laminar App object
  */
-export const app = router(
+const app = router(
   /**
    * You match pathnames with regex.
    * They need to start it with a ^ and should end it with $
@@ -161,18 +153,15 @@ If a pathname has a capture group in it it would be captured and accessible with
 
 You can serve a directory of static assesets with `staticAssets` helper.
 
-> [examples/docs/src/static-assets.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/static-assets.ts)
+> [examples/docs/src/static-assets.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/static-assets.ts#L3-L13)
 
 ```typescript
-import { router, jsonOk, get, staticAssets } from '@ovotech/laminar';
-import { join } from 'path';
-
-export const app = router(
+const app = router(
   get('/.well-known/health-check', () => jsonOk({ success: 'ok' })),
   /**
    * All the files from the 'assets' directory are going to be served
    */
-  staticAssets('/my-assets', join(__dirname, 'assets')),
+  staticAssets('/my-assets', join(__dirname, '../assets')),
 );
 ```
 
@@ -180,18 +169,15 @@ All the files from the 'assets' directory are going to be served.
 
 By default it accepts range headers on files and if you request a directory, it would load the index.html file. You can configure this with several configuration options.
 
-> [examples/docs/src/static-assets-options.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/static-assets-options.ts)
+> [examples/docs/src/static-assets-options.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/static-assets-options.ts#L3-L18)
 
 ```typescript
-import { router, jsonOk, get, staticAssets, htmlNotFound } from '@ovotech/laminar';
-import { join } from 'path';
-
-export const app = router(
+const app = router(
   get('/.well-known/health-check', () => jsonOk({ success: 'ok' })),
   /**
    * You can pass configuration options
    */
-  staticAssets('/my-assets', join(__dirname, 'assets'), {
+  staticAssets('/my-assets', join(__dirname, '../assets'), {
     index: 'index.htm',
     acceptRanges: false,
     indexNotFound: () => htmlNotFound('<html>Not Found</html>'),

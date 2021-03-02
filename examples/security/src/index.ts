@@ -32,7 +32,7 @@ const main = async () => {
       },
     },
   });
-  const server = httpServer({ app, port: 3300 });
+  const server = httpServer({ app });
   await start(server);
   console.log(describe(server));
 };
