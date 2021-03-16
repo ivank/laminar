@@ -73,12 +73,9 @@ jobs:
       - checkout
       - yarn-install
       - run: yarn build
-      - run:
-          name: Set npm login
-          command: yarn config set npmRegistries --json '{"https://registry.yarnpkg.com":{"npmAuthToken":"${NPM_TOKEN}","npmAlwaysAuth":true}}'
+      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
       - run: git config user.email "ovotech-ci@ovoenergy.com"
       - run: git config user.name "Ovotech CI"
-      - run: git update-index --assume-unchanged .yarnrc.yml
       - run: yarn lerna publish from-package --yes --no-verify-access
 
 workflows:
