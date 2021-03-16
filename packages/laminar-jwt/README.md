@@ -7,7 +7,7 @@ A json web token middleware for laminar
 > [examples/simple.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/simple.ts)
 
 ```typescript
-import { get, post, start, httpServer, jsonOk, router, App, describe } from '@ovotech/laminar';
+import { get, post, init, HttpService, jsonOk, router, HttpListener } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 
 const secret = '123';
@@ -17,22 +17,22 @@ const auth = authMiddleware({ secret });
 const loggedIn = auth();
 const admin = auth(['admin']);
 
-const app: App = router(
-  get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-  post('/session', ({ body }) => jsonOk(createSession({ secret }, body))),
+const listener: HttpListener = router(
+  get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+  post('/session', async ({ body }) => jsonOk(createSession({ secret }, body))),
   post(
     '/test',
-    admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+    admin(async ({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
   ),
   get(
     '/test',
-    loggedIn(() => jsonOk('index')),
+    loggedIn(async () => jsonOk('index')),
   ),
 );
 
-const server = httpServer({ app });
+const http = new HttpService({ listener });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 ### Usage with oapi
@@ -129,28 +129,27 @@ And then implement it using the helper `jwtSecurityResolver`. That function woul
 > [examples/oapi.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi.ts)
 
 ```typescript
-import { httpServer, start, describe, jsonOk, openApi } from '@ovotech/laminar';
+import { HttpService, init, jsonOk, openApi } from '@ovotech/laminar';
 import { createSession, jwtSecurityResolver } from '@ovotech/laminar-jwt';
 import { join } from 'path';
 
 const main = async () => {
   const secret = '123';
-  const app = await openApi({
+  const listener = await openApi({
     api: join(__dirname, 'oapi.yaml'),
     security: { JWTSecurity: jwtSecurityResolver({ secret }) },
     paths: {
       '/session': {
-        post: ({ body }) => jsonOk(createSession({ secret }, body)),
+        post: async ({ body }) => jsonOk(createSession({ secret }, body)),
       },
       '/test': {
-        get: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
-        post: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        get: async ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        post: async ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
       },
     },
   });
-  const server = httpServer({ app });
-  await start(server);
-  console.log(describe(server));
+  const http = new HttpService({ listener });
+  await init({ services: [http], logger: console });
 };
 
 main();
@@ -235,13 +234,13 @@ Implementing it involves reading the cookie and validating its contents.
 > [examples/oapi-api-key.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-api-key.ts)
 
 ```typescript
-import { httpServer, start, describe, openApi, textOk, setCookie } from '@ovotech/laminar';
+import { HttpService, init, openApi, textOk, setCookie } from '@ovotech/laminar';
 import { createSession, verifyToken } from '@ovotech/laminar-jwt';
 import { join } from 'path';
 
 const main = async () => {
   const secret = '123';
-  const app = await openApi({
+  const listener = await openApi({
     api: join(__dirname, 'oapi-api-key.yaml'),
     security: {
       /**
@@ -251,17 +250,16 @@ const main = async () => {
     },
     paths: {
       '/session': {
-        post: ({ body }) => setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+        post: async ({ body }) => setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
       },
       '/test': {
-        get: () => textOk('OK'),
-        post: ({ authInfo }) => textOk(`OK ${authInfo.email}`),
+        get: async () => textOk('OK'),
+        post: async ({ authInfo }) => textOk(`OK ${authInfo.email}`),
       },
     },
   });
-  const server = httpServer({ app });
-  await start(server);
-  console.log(describe(server));
+  const http = new HttpService({ listener });
+  await init({ services: [http], logger: console });
 };
 
 main();
@@ -360,9 +358,8 @@ components:
 
 ```typescript
 import {
-  httpServer,
-  start,
-  describe,
+  HttpService,
+  init,
   openApi,
   redirect,
   isSecurityOk,
@@ -376,7 +373,7 @@ import { join } from 'path';
 
 const main = async () => {
   const secret = '123';
-  const app = await openApi({
+  const listener = await openApi({
     api: join(__dirname, 'oapi-custom.yaml'),
     security: {
       /**
@@ -396,18 +393,17 @@ const main = async () => {
     },
     paths: {
       '/session': {
-        post: ({ body }) => setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
+        post: async ({ body }) => setCookie({ auth: createSession({ secret }, body).jwt }, textOk('Cookie Set')),
       },
       '/test': {
-        get: () => textOk('OK'),
-        post: ({ authInfo }) => textOk(`OK ${authInfo.email}`),
+        get: async () => textOk('OK'),
+        post: async ({ authInfo }) => textOk(`OK ${authInfo.email}`),
       },
-      '/unauthorized': { get: () => textForbidden('Forbidden!') },
+      '/unauthorized': { get: async () => textForbidden('Forbidden!') },
     },
   });
-  const server = httpServer({ app });
-  await start(server);
-  console.log(describe(server));
+  const http = new HttpService({ listener });
+  await init({ services: [http], logger: console });
 };
 
 main();
@@ -420,7 +416,7 @@ You can specify public / private key pair (where the private key is used for sig
 > [examples/keypair.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/keypair.ts)
 
 ```typescript
-import { get, post, httpServer, router, start, jsonOk, App, describe } from '@ovotech/laminar';
+import { get, post, HttpService, router, init, jsonOk, HttpListener } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -437,21 +433,23 @@ const auth = authMiddleware({ secret: publicKey, options: { clockTolerance: 2 } 
 const onlyLoggedIn = auth();
 const onlyAdmin = auth(['admin']);
 
-const app: App = router(
-  get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-  post('/session', ({ body }) => jsonOk(createSession({ secret: privateKey, options: { algorithm: 'RS256' } }, body))),
+const listener: HttpListener = router(
+  get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+  post('/session', async ({ body }) =>
+    jsonOk(createSession({ secret: privateKey, options: { algorithm: 'RS256' } }, body)),
+  ),
   post(
     '/test',
-    onlyAdmin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+    onlyAdmin(async ({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
   ),
   get(
     '/test',
-    onlyLoggedIn(() => jsonOk('index')),
+    onlyLoggedIn(async () => jsonOk('index')),
   ),
 );
 
-const server = httpServer({ app });
-start(server).then(() => console.log(describe(server)));
+const http = new HttpService({ listener });
+init({ services: [http], logger: console });
 ```
 
 ### JWK for public keys
@@ -461,7 +459,7 @@ JWK are also supported with the `jwkPublicKey` function. It can also cache the j
 > [examples/jwk.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/jwk.ts)
 
 ```typescript
-import { get, post, start, router, httpServer, jsonOk, describe } from '@ovotech/laminar';
+import { get, post, init, router, HttpService, jsonOk } from '@ovotech/laminar';
 import { jwkPublicKey, createSession, authMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -492,22 +490,22 @@ const auth = authMiddleware(verifyOptions);
 const loggedIn = auth();
 const admin = auth(['admin']);
 
-const server = httpServer({
-  app: router(
-    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-    post('/session', ({ body }) => jsonOk(createSession(signOptions, body))),
+const http = new HttpService({
+  listener: router(
+    get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+    post('/session', async ({ body }) => jsonOk(createSession(signOptions, body))),
     post(
       '/test',
-      admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+      admin(async ({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
     ),
     get(
       '/test',
-      loggedIn(() => jsonOk('index')),
+      loggedIn(async () => jsonOk('index')),
     ),
   ),
 });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 You can test it by running (requires curl and jq):
@@ -542,7 +540,7 @@ Then we could implement it with this service:
 > [examples/keycloak.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/keycloak.ts)
 
 ```typescript
-import { get, post, httpServer, router, start, jsonOk, describe } from '@ovotech/laminar';
+import { get, post, HttpService, router, init, jsonOk } from '@ovotech/laminar';
 import { jwkPublicKey, createSession, keycloakAuthMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -570,21 +568,21 @@ const auth = keycloakAuthMiddleware({ secret: publicKey, service: 'my-service-na
 const loggedIn = auth();
 const admin = auth(['admin']);
 
-const server = httpServer({
-  app: router(
-    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-    post('/session', ({ body }) => jsonOk(createSession(sessionOptions, body))),
+const http = new HttpService({
+  listener: router(
+    get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+    post('/session', async ({ body }) => jsonOk(createSession(sessionOptions, body))),
     post(
       '/test',
-      admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+      admin(async ({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
     ),
     get(
       '/test',
-      loggedIn(() => jsonOk('index')),
+      loggedIn(async () => jsonOk('index')),
     ),
   ),
 });
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 When this is running, you can test it with calls like this (requires curl and jq):
@@ -601,7 +599,7 @@ With oapi it is the same concempt - we use the scopes that are defined by the op
 > [examples/oapi-keycloak.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-keycloak.ts)
 
 ```typescript
-import { start, httpServer, describe, jsonOk, openApi } from '@ovotech/laminar';
+import { init, HttpService, jsonOk, openApi } from '@ovotech/laminar';
 import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@ovotech/laminar-jwt';
 import { join } from 'path';
 import { readFileSync } from 'fs';
@@ -629,22 +627,21 @@ const main = async () => {
     service: 'my-service-name',
   });
 
-  const app = await openApi({
+  const listener = await openApi({
     api: join(__dirname, 'oapi.yaml'),
     security: { JWTSecurity: jwtSecurity },
     paths: {
       '/session': {
-        post: ({ body }) => jsonOk(createSession(jwtSign, body)),
+        post: async ({ body }) => jsonOk(createSession(jwtSign, body)),
       },
       '/test': {
-        get: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
-        post: ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        get: async ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
+        post: async ({ authInfo }) => jsonOk({ text: 'ok', user: authInfo }),
       },
     },
   });
-  const server = httpServer({ app });
-  await start(server);
-  console.log(describe(server));
+  const http = new HttpService({ listener });
+  await init({ services: [http], logger: console });
 };
 
 main();

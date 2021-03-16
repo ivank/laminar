@@ -1,28 +1,27 @@
-import { httpServer, start, describe, jsonOk, router, get, redirect, openApi } from '@ovotech/laminar';
+import { HttpService, jsonOk, router, get, redirect, openApi, init } from '@ovotech/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi.yaml');
 
 const main = async () => {
-  const app = await openApi({
+  const listener = await openApi({
     api,
     paths: {
       '/user': {
-        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
-        get: () => jsonOk({ email: 'me@example.com' }),
+        post: async ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: async () => jsonOk({ email: 'me@example.com' }),
       },
     },
     notFound: router(
-      get('/old/{id}', ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
-      get('/old/{id}/pdf', ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
+      get('/old/{id}', async ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
+      get('/old/{id}/pdf', async ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
     ),
   });
 
-  const server = httpServer({
-    app,
+  const http = new HttpService({
+    listener,
   });
-  await start(server);
-  console.log(describe(server));
+  await init({ services: [http], logger: console });
 };
 
 main();

@@ -1,4 +1,4 @@
-import { OapiConfig, openApi, httpServer, stop, start, jsonOk } from '../../../src';
+import { OapiConfig, openApi, HttpService, jsonOk, run } from '../../../src';
 import axios from 'axios';
 import { join } from 'path';
 
@@ -8,7 +8,7 @@ describe('Statements', () => {
       api: join(__dirname, 'statements.yaml'),
       paths: {
         '/accounts/{accountId}/meters': {
-          get: () =>
+          get: async () =>
             jsonOk([
               {
                 meterType: 'gas',
@@ -41,21 +41,14 @@ describe('Statements', () => {
       },
     };
 
-    const app = await openApi(config);
-    const server = httpServer({ app, port: 8064 });
+    const listener = await openApi(config);
+    const http = new HttpService({ listener, port: 8064 });
 
-    try {
-      await start(server);
-
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8064' });
       const { data } = await api.get('/accounts/123/meters');
 
       expect(data).toMatchSnapshot();
-    } catch (error) {
-      console.log(error.response?.data);
-      throw error;
-    } finally {
-      stop(server);
-    }
+    });
   });
 });

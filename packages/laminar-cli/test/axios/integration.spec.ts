@@ -1,13 +1,12 @@
 import {
-  httpServer,
-  start,
-  stop,
+  HttpService,
   jsonOk,
   jsonNoContent,
   jsonNotFound,
   jsonUnauthorized,
   securityOk,
   optional,
+  run,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
@@ -27,7 +26,7 @@ describe('Integration', () => {
       { id: 222, name: 'Doggy' },
     ];
 
-    const app = await openApiTyped<AuthInfo>({
+    const listener = await openApiTyped<AuthInfo>({
       api: join(__dirname, 'integration.yaml'),
       security: {
         BearerAuth: ({ headers }) =>
@@ -45,20 +44,20 @@ describe('Integration', () => {
       },
       paths: {
         '/pets': {
-          get: ({ query }) =>
+          get: async ({ query }) =>
             jsonOk(db.filter((pet) => (query.tags ? (pet.tag ? query.tags.includes(pet.tag) : false) : true))),
-          post: ({ body, authInfo }) => {
+          post: async ({ body, authInfo }) => {
             const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             db.push(pet);
             return jsonOk({ pet, user: authInfo && authInfo.user });
           },
         },
         '/pets/{id}': {
-          get: ({ path }) => {
+          get: async ({ path }) => {
             const pet = db.find((item) => item.id === Number(path.id));
             return optional(jsonOk, pet) ?? jsonNotFound({ code: 123, message: 'Not Found' });
           },
-          delete: ({ path }) => {
+          delete: async ({ path }) => {
             const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
@@ -71,11 +70,9 @@ describe('Integration', () => {
       },
     });
 
-    const server = httpServer({ app, port: 4920 });
+    const http = new HttpService({ listener, port: 4920 });
 
-    try {
-      await start(server);
-
+    await run({ services: [http] }, async () => {
       const api = axiosOapi(axios.create({ baseURL: 'http://localhost:4920' }));
 
       await expect(api.api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
@@ -173,8 +170,6 @@ describe('Integration', () => {
           { id: 223, name: 'New Puppy' },
         ],
       });
-    } finally {
-      await stop(server);
-    }
+    });
   });
 });

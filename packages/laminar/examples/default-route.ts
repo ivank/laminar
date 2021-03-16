@@ -1,10 +1,10 @@
-import { get, httpServer, router, jsonOk, textNotFound, start, describe } from '@ovotech/laminar';
+import { get, router, init, jsonOk, textNotFound, HttpService } from '@ovotech/laminar';
 
-const server = httpServer({
-  app: router(
-    get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-    () => textNotFound('Woopsy'),
+const http = new HttpService({
+  listener: router(
+    get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+    async () => textNotFound('Woopsy'),
   ),
 });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });

@@ -1,14 +1,12 @@
-import { Middleware } from '@ovotech/laminar';
-import { PoolClient } from 'pg';
+import { Middleware, PgContext, PgClient } from '@ovotech/laminar';
 import { NewPet, Pet } from '../__generated__/petstore';
-import { RequestPgPool } from './pg-pool.middleware';
 
 /**
  * A simple repository for handling pets
  * Encapsulates all the database queries, so that we can use a higher level abstraction in our controllers.
  */
 export class PetsDb {
-  public constructor(private db: PoolClient) {}
+  public constructor(private db: PgClient) {}
 
   public async all({ tags, limit = '20' }: { tags?: string[]; limit?: string }): Promise<Pet[]> {
     const query = tags
@@ -42,7 +40,7 @@ export class PetsDb {
   }
 }
 
-export interface RequestPetsDb {
+export interface PetsDbContext {
   petsDb: PetsDb;
 }
 
@@ -51,12 +49,12 @@ export interface RequestPetsDb {
  * While not as optimal as shareing it between requests,
  * it would mean we are absolutly sure about its isolation between requests.
  *
- * We explicitly require the request to have the "RequestPgPool" type
+ * We explicitly require the request to have the "PgContextPool" type
  * This ensures we apply it after the pgPoolMiddleware.
  *
  * It will provide all subsiquent middlewares with the petsDb object.
  */
-export const petsDbMiddleware = (): Middleware<RequestPetsDb, RequestPgPool> => {
+export const petsDbMiddleware = (): Middleware<PetsDbContext, PgContext> => {
   return (next) => (req) => {
     const petsDb = new PetsDb(req.db);
     return next({ ...req, petsDb });

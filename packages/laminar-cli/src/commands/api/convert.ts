@@ -249,7 +249,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
                 isExport: true,
                 jsDoc: doc,
                 typeArgs: security ? [Type.TypeArg({ name: 'TAuthInfo' })] : undefined,
-                ext: [{ name: 'RequestOapi' }],
+                ext: [{ name: 'OapiContext' }],
                 props: requestProps,
               })
             : undefined;
@@ -283,12 +283,12 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
                   type: Type.Intersection([
                     ...(requestInterface
                       ? [Type.Referance(requestIdentifier, security ? [Type.Referance('TAuthInfo')] : undefined)]
-                      : [Type.Referance('RequestOapi')]),
+                      : [Type.Referance('OapiContext')]),
                     Type.Referance('R'),
                   ]),
                 }),
               ],
-              ret: Type.Union([responseAst.type, Type.Referance('Promise', [responseAst.type])]),
+              ret: Type.Referance('Promise', [responseAst.type]),
             }),
           });
 
@@ -349,10 +349,10 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
       withImports(finalContext, {
         module: '@ovotech/laminar',
         named: [
-          { name: 'RequestOapi' },
+          { name: 'OapiContext' },
           { name: 'OapiConfig' },
           { name: 'Empty' },
-          { name: 'App' },
+          { name: 'HttpListener' },
           { name: 'openApi' },
           ...(security ? [{ name: 'OapiSecurityResolver' }, { name: 'OapiAuthInfo' }] : []),
         ],
@@ -384,7 +384,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
             type: Type.Referance('Config', [Type.Referance('R'), ...(security ? [Type.Referance('TAuthInfo')] : [])]),
           }),
         ],
-        ret: Type.Referance('Promise', [Type.Referance('App', [Type.Referance('R')])]),
+        ret: Type.Referance('Promise', [Type.Referance('HttpListener', [Type.Referance('R')])]),
         body: Node.Call({
           expression: Node.Identifier('openApi'),
           args: [Node.Identifier('config')],

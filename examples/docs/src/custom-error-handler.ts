@@ -1,19 +1,19 @@
-import { App, htmlInternalServerError, httpServer, ErrorHandler, start, describe } from '@ovotech/laminar';
+import { HttpListener, htmlInternalServerError, HttpService, HttpErrorHandler, init } from '@ovotech/laminar';
 
 // << app
-const app: App = () => {
+const listener: HttpListener = () => {
   throw new Error('Testing error');
 };
 
-const errorHandler: ErrorHandler = ({ error }) => htmlInternalServerError(`<html>${error.message}</html>`);
+const errorHandler: HttpErrorHandler = async ({ error }) => htmlInternalServerError(`<html>${error.message}</html>`);
 
-const server = httpServer({
-  app,
+const http = new HttpService({
+  listener,
   /**
    * You can configure the default error handler with `errorHandler`
    */
-  options: { errorHandler },
+  errorHandler,
 });
 // app
 
-start(server).then((http) => console.log(describe(http)));
+init({ services: [http], logger: console });

@@ -3,9 +3,7 @@ import {
   openApi,
   securityOk,
   file,
-  stop,
-  start,
-  httpServer,
+  HttpService,
   response,
   jsonOk,
   jsonBadRequest,
@@ -14,6 +12,7 @@ import {
   jsonForbidden,
   optional,
   jsonNoContent,
+  run,
 } from '../../../src';
 import axios from 'axios';
 import { join } from 'path';
@@ -77,9 +76,9 @@ describe('Integration', () => {
             : jsonForbidden({ message: 'Forbidden user' }),
       },
       paths: {
-        '/about': { get: () => file(join(__dirname, 'about.html')) },
+        '/about': { get: async () => file(join(__dirname, 'about.html')) },
         '/pets': {
-          get: ({ logger, query: { limit, price, isKitten, pagination } }) => {
+          get: async ({ logger, query: { limit, price, isKitten, pagination } }) => {
             logger('Get all');
             let pets = db;
 
@@ -101,7 +100,7 @@ describe('Integration', () => {
 
             return jsonOk(pets);
           },
-          post: ({ body, authInfo, logger, headers }) => {
+          post: async ({ body, authInfo, logger, headers }) => {
             if (!isBodyNewPet(body)) {
               return jsonBadRequest({ message: 'Wrong body' });
             }
@@ -113,7 +112,7 @@ describe('Integration', () => {
           },
         },
         '/pets/{id}': {
-          get: ({ path }) => {
+          get: async ({ path }) => {
             if (!isPathWithId(path)) {
               return jsonBadRequest({ message: 'Missing id in path' });
             }
@@ -123,7 +122,7 @@ describe('Integration', () => {
             const item = db.find((item) => item.id === Number(path.id));
             return optional(jsonOk, item) ?? jsonNotFound({ code: 123, message: 'Not Found' });
           },
-          delete: ({ path }) => {
+          delete: async ({ path }) => {
             if (!isPathWithId(path)) {
               return jsonBadRequest({ message: 'Missing id in path' });
             }
@@ -143,11 +142,9 @@ describe('Integration', () => {
     const oapi = await openApi(config);
     const logger = withLogger(log);
 
-    const server = httpServer({ app: logger(oapi), port: 8063 });
+    const http = new HttpService({ listener: logger(oapi), port: 8063 });
 
-    try {
-      await start(server);
-
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
       await expect(api.get('/pets?pagination[page]=0&pagination[perPage]=1')).resolves.toMatchObject({
@@ -529,12 +526,7 @@ describe('Integration', () => {
       );
       expect(log).toHaveBeenNthCalledWith(11, 'Get all');
       expect(log).toHaveBeenNthCalledWith(12, 'Get all');
-    } catch (error) {
-      console.log(error.response?.data);
-      throw error;
-    } finally {
-      await stop(server);
-    }
+    });
   });
 });
 
@@ -557,8 +549,8 @@ describe('Invalid Schema', () => {
     await expect(
       openApi({
         paths: {
-          '/pets': { get: () => response(), post: () => response() },
-          '/pets/{id}': { get: () => response(), delete: () => response() },
+          '/pets': { get: async () => response(), post: async () => response() },
+          '/pets/{id}': { get: async () => response(), delete: async () => response() },
         },
         api: join(__dirname, 'invalid-security.yaml'),
       }),
@@ -571,8 +563,8 @@ describe('Invalid Schema', () => {
     await expect(
       openApi({
         paths: {
-          '/about': { get: () => response() },
-          '/pets': { get: () => response() },
+          '/about': { get: async () => response() },
+          '/pets': { get: async () => response() },
         },
         security: {
           BasicAuth: () => securityOk({}),

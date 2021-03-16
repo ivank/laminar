@@ -1,4 +1,4 @@
-import { get, post, router, httpServer, start, stop } from '@ovotech/laminar';
+import { get, post, router, HttpService, run } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
 import { writeFileSync, mkdirSync } from 'fs';
 import { retry } from 'ts-retry-promise';
@@ -20,26 +20,22 @@ describe('Integration', () => {
       helpers: { capitalizeName },
     });
 
-    const server = httpServer({
+    const http = new HttpService({
       port: 8062,
-      app: handlebars(
+      listener: handlebars(
         router(
-          get('/', ({ hbs }) => hbs('index')),
-          post('/result', ({ hbs, body: { name } }) => hbs('result', { name }, { status: 201 })),
+          get('/', async ({ hbs }) => hbs('index')),
+          post('/result', async ({ hbs, body: { name } }) => hbs('result', { name }, { status: 201 })),
         ),
       ),
     });
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });
 
-    try {
-      await start(server);
-
+    await run({ services: [http] }, async () => {
       expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot);
       expect(await api.post('/result', { name: 'John Smith' })).toMatchSnapshot<AxiosResponse>(axiosSnapshot);
-    } finally {
-      await stop(server);
-    }
+    });
   });
 
   it.each`
@@ -60,24 +56,20 @@ describe('Integration', () => {
 
     const handlebars = handlebarsMiddleware({ dir, extension: 'hbs', cacheType });
 
-    const server = httpServer({
+    const http = new HttpService({
       port: 8062,
-      app: handlebars(router(get('/', ({ hbs }) => hbs('index')))),
+      listener: handlebars(router(get('/', async ({ hbs }) => hbs('index')))),
     });
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });
 
-    try {
-      await start(server);
-
+    await run({ services: [http] }, async () => {
       expect((await api.get('/')).data).toEqual('<html><body>Layout <span>Generated</span></body></html>');
 
       writeFileSync(join(dir, 'partials/layout.hbs'), '<html><body>Layout 2 {{> @partial-block }}</body></html>');
       writeFileSync(join(dir, 'views/index.hbs'), '{{#> layout }}<span>Generated 2</span>{{/layout}}');
 
       await retry(async () => expect((await api.get('/')).data).toEqual(expectedData), { delay: 500, retries: 10 });
-    } finally {
-      await stop(server);
-    }
+    });
   });
 });

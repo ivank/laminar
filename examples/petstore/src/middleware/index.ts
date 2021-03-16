@@ -1,2 +1,1 @@
-export { petsDbMiddleware, PetsDb, RequestPetsDb } from './pets.middleware';
-export { pgPoolMiddleware, RequestPgPool } from './pg-pool.middleware';
+export { petsDbMiddleware, PetsDb, PetsDbContext } from './pets.middleware';

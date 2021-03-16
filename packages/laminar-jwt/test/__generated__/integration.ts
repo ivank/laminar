@@ -1,8 +1,8 @@
 import {
-  RequestOapi,
+  OapiContext,
   OapiConfig,
   Empty,
-  App,
+  HttpListener,
   openApi,
   OapiSecurityResolver,
   OapiAuthInfo,
@@ -11,7 +11,7 @@ import {
 
 export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(
   config: Config<R, TAuthInfo>,
-): Promise<App<R>> => openApi(config);
+): Promise<HttpListener<R>> => openApi(config);
 
 export interface CreateSession {
   email: string;
@@ -44,13 +44,11 @@ export type ResponseSessionPost =
 /**
  * Cerate a new session
  */
-export interface RequestSessionPost extends RequestOapi {
+export interface RequestSessionPost extends OapiContext {
   body: CreateSession;
 }
 
-export type PathSessionPost<R extends Empty = Empty> = (
-  req: RequestSessionPost & R,
-) => ResponseSessionPost | Promise<ResponseSessionPost>;
+export type PathSessionPost<R extends Empty = Empty> = (req: RequestSessionPost & R) => Promise<ResponseSessionPost>;
 
 export interface Test {
   text: string;
@@ -66,13 +64,13 @@ export type ResponseTestscopesGet =
 /**
  * Secured by jwt with scopes
  */
-export interface RequestTestscopesGet<TAuthInfo> extends RequestOapi {
+export interface RequestTestscopesGet<TAuthInfo> extends OapiContext {
   authInfo: TAuthInfo;
 }
 
 export type PathTestscopesGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
   req: RequestTestscopesGet<TAuthInfo> & R,
-) => ResponseTestscopesGet | Promise<ResponseTestscopesGet>;
+) => Promise<ResponseTestscopesGet>;
 
 export type ResponseTestGet =
   | ResponseOapi<Test, 200, 'application/json'>
@@ -81,13 +79,13 @@ export type ResponseTestGet =
 /**
  * Secured by jwt without scopes
  */
-export interface RequestTestGet<TAuthInfo> extends RequestOapi {
+export interface RequestTestGet<TAuthInfo> extends OapiContext {
   authInfo: TAuthInfo;
 }
 
 export type PathTestGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
   req: RequestTestGet<TAuthInfo> & R,
-) => ResponseTestGet | Promise<ResponseTestGet>;
+) => Promise<ResponseTestGet>;
 
 export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
   paths: {

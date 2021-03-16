@@ -1,20 +1,20 @@
 import {
-  App,
+  HttpListener,
   jsonOk,
-  httpServer,
+  HttpService,
   BodyParser,
   concatStream,
   defaultBodyParsers,
-  start,
-  describe,
+  init,
 } from '@ovotech/laminar';
 
 // << app
 import * as YAML from 'yaml';
 
-const app: App = ({ body }) => jsonOk(body);
+const listener: HttpListener = async ({ body }) => jsonOk(body);
 
 const yamlParser: BodyParser = {
+  name: 'YamlParser',
   match: (contentType) => contentType === 'application/yaml',
   /**
    * The data comes as a raw http.incommingMessage so we need to convert it to a string first
@@ -23,15 +23,15 @@ const yamlParser: BodyParser = {
   parse: async (stream) => YAML.parse((await concatStream(stream)) ?? ''),
 };
 
-const server = httpServer({
-  app,
+const http = new HttpService({
+  listener,
   /**
    * You can configure the request body parsers using `bodyParsers`
    * If we want to keep all the default ones though, so we pass the default body parsers too
    */
-  options: { bodyParsers: [yamlParser, ...defaultBodyParsers] },
+  bodyParsers: [yamlParser, ...defaultBodyParsers],
 });
 
 // app
 
-start(server).then((http) => console.log(describe(http)));
+init({ services: [http], logger: console });

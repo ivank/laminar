@@ -11,11 +11,11 @@ Lets see the simplest possible app with laminar, a very simple echo app
 > [packages/laminar/examples/echo.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo.ts)
 
 ```typescript
-import { httpServer, start, response, describe } from '@ovotech/laminar';
+import { HttpService, response, init } from '@ovotech/laminar';
 
-const server = httpServer({ app: ({ body }) => response({ body }) });
+const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -29,15 +29,16 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 > [packages/laminar/examples/echo-auth.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { httpServer, start, textForbidden, textOk, App, Middleware, describe } from '@ovotech/laminar';
+import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: HttpMiddleware = (next) => async (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
-const app: App = (req) => textOk(req.url.toString());
+const app: HttpListener = async (req) => textOk(req.url.toString());
 
-const server = httpServer({ app: auth(app) });
+const http = new HttpService({ listener: auth(app) });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
@@ -45,21 +46,23 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 > [packages/laminar/examples/echo-auth-log.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { Middleware, App, textForbidden, textOk, start, httpServer, describe } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: HttpMiddleware = (next) => async (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
-const log: Middleware = (next) => (req) => {
+const log: HttpMiddleware = (next) => (req) => {
   console.log('Requested', req.body);
   const response = next(req);
   console.log('Responded', response);
   return response;
 };
 
-const app: App = (req) => textOk(req.body);
+const app: HttpListener = async (req) => textOk(req.body);
 
-const server = httpServer({ app: log(auth(app)) });
-start(server).then(() => console.log(describe(server)));
+const http = new HttpService({ listener: log(auth(app)) });
+
+init({ services: [http], logger: console });
 ```
 
 You can see how we can string those middlewares along `log(auth(app))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -71,7 +74,7 @@ Lets see how we can go about doing that.
 > [packages/laminar/examples/echo-auth-log-db.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { Middleware, App, textForbidden, jsonOk, start, httpServer, describe } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@ovotech/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -81,7 +84,7 @@ interface DB {
   getValidUser: () => string;
 }
 
-interface RequestDB {
+interface DBContext {
   db: DB;
 }
 
@@ -90,14 +93,15 @@ interface RequestDB {
  * We'll need to have a "middleware creator" function that executes
  * and returns the actual middleware
  */
-const createDbMiddleware = (): Middleware<RequestDB> => {
+const createDbMiddleware = (): HttpMiddleware<DBContext> => {
   const db: DB = { getValidUser: () => 'Me' };
   return (next) => (req) => next({ ...req, db });
 };
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: HttpMiddleware = (next) => async (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
-const log: Middleware = (next) => (req) => {
+const log: HttpMiddleware = (next) => (req) => {
   console.log('Requested', req.body);
   const response = next(req);
   console.log('Responded', response);
@@ -108,12 +112,13 @@ const log: Middleware = (next) => (req) => {
  * We can now require this app to have the middleware.
  * If the propper ones are not executed later, TypeScript will inform us at compile time.
  */
-const app: App<RequestDB> = (req) => jsonOk({ url: req.url.toString(), user: req.db.getValidUser() });
+const app: HttpListener<DBContext> = async (req) => jsonOk({ url: req.url.toString(), user: req.db.getValidUser() });
 
 const db = createDbMiddleware();
 
-const server = httpServer({ app: log(db(auth(app))) });
-start(server).then(() => console.log(describe(server)));
+const http = new HttpService({ listener: log(db(auth(app))) });
+
+init({ services: [http], logger: console });
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.

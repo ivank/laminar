@@ -1,15 +1,14 @@
-import { get, httpServer, router, staticAssets, start, jsonOk, describe } from '@ovotech/laminar';
+import { get, HttpService, router, staticAssets, jsonOk, init } from '@ovotech/laminar';
 import { join } from 'path';
 
 const main = async () => {
-  const server = httpServer({
-    app: router(
+  const http = new HttpService({
+    listener: router(
       staticAssets('/my-folder', join(__dirname, 'assets')),
-      get('/', () => jsonOk({ health: 'ok' })),
+      get('/', async () => jsonOk({ health: 'ok' })),
     ),
   });
-  await start(server);
-  console.log(describe(server));
+  await init({ services: [http], logger: console });
 };
 
 main();

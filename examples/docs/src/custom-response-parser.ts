@@ -1,25 +1,25 @@
-import { App, yaml, ok, httpServer, ResponseParser, defaultResponseParsers, start, describe } from '@ovotech/laminar';
+import { HttpListener, yaml, ok, HttpService, ResponseParser, defaultResponseParsers, init } from '@ovotech/laminar';
 
 // << app
 
 import * as YAML from 'yaml';
 
-const app: App = () => yaml(ok({ body: { example: { test: 'msg' } } }));
+const listener: HttpListener = async () => yaml(ok({ body: { example: { test: 'msg' } } }));
 
 const yamlParser: ResponseParser = {
   match: (contentType) => contentType === 'application/yaml',
   parse: (yaml) => YAML.stringify(yaml),
 };
 
-const server = httpServer({
-  app,
+const http = new HttpService({
+  listener,
   /**
    * You can configure the response parsers using `responseParsers`
    * If we want to keep all the default ones though, so we pass the default body parsers first
    */
-  options: { responseParsers: [...defaultResponseParsers, yamlParser] },
+  responseParsers: [...defaultResponseParsers, yamlParser],
 });
 
 // app
 
-start(server).then((http) => console.log(describe(http)));
+init({ services: [http], logger: console });

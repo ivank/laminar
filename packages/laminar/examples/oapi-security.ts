@@ -1,10 +1,10 @@
-import { httpServer, describe, jsonOk, start, jsonUnauthorized, openApi, securityOk } from '@ovotech/laminar';
+import { HttpService, jsonOk, jsonUnauthorized, openApi, securityOk, init } from '@ovotech/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi-security.yaml');
 
 const main = async () => {
-  const app = await openApi({
+  const listener = await openApi({
     api,
     security: {
       MySecurity: ({ headers }) =>
@@ -14,14 +14,13 @@ const main = async () => {
     },
     paths: {
       '/user': {
-        post: ({ body }) => jsonOk({ result: 'ok', user: body }),
-        get: () => jsonOk({ email: 'me@example.com' }),
+        post: async ({ body }) => jsonOk({ result: 'ok', user: body }),
+        get: async () => jsonOk({ email: 'me@example.com' }),
       },
     },
   });
-  const server = httpServer({ app });
-  await start(server);
-  console.log(describe(server));
+  const http = new HttpService({ listener });
+  await init({ services: [http], logger: console });
 };
 
 main();

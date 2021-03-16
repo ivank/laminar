@@ -1,6 +1,6 @@
-import { RequestOapi, OapiConfig, Empty, App, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@ovotech/laminar";
+import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@ovotech/laminar";
 
-export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<App<R>> => openApi(config);
+export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<HttpListener<R>> => openApi(config);
 
 export interface UserResponse {
     id?: string;
@@ -10,14 +10,14 @@ export interface UserResponse {
 
 export type ResponseUserIdGet = ResponseOapi<UserResponse, 200, "application/json">;
 
-export interface RequestUserIdGet<TAuthInfo> extends RequestOapi {
+export interface RequestUserIdGet<TAuthInfo> extends OapiContext {
     path: {
         id: string;
     };
     authInfo: TAuthInfo;
 }
 
-export type PathUserIdGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestUserIdGet<TAuthInfo> & R) => ResponseUserIdGet | Promise<ResponseUserIdGet>;
+export type PathUserIdGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestUserIdGet<TAuthInfo> & R) => Promise<ResponseUserIdGet>;
 
 export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
     paths: {

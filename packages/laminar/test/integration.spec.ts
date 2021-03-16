@@ -2,10 +2,7 @@ import axios from 'axios';
 import {
   del,
   get,
-  httpServer,
-  httpsServer,
-  start,
-  stop,
+  HttpService,
   options,
   patch,
   post,
@@ -13,17 +10,17 @@ import {
   redirect,
   router,
   responseTimeMiddleware,
-  Middleware,
-  loggingMiddleware,
+  HttpMiddleware,
+  requestLoggingMiddleware,
   staticAssets,
   jsonOk,
   textOk,
-  Logger,
-  RequestLogging,
+  LoggerContext,
   jsonNotFound,
   file,
   HttpError,
-  App,
+  HttpListener,
+  run,
 } from '../src';
 import { join } from 'path';
 import { readFileSync, createReadStream } from 'fs';
@@ -32,58 +29,50 @@ import { URLSearchParams } from 'url';
 
 describe('Integration', () => {
   it('Should respect timeout', async () => {
-    const app: App = () => new Promise((resolve) => setTimeout(() => resolve(textOk('OK')), 100));
+    const listener: HttpListener = () => new Promise((resolve) => setTimeout(() => resolve(textOk('OK')), 100));
     const port = 8051;
 
-    const server = httpServer({ port, app, timeout: 50 });
-    try {
-      await start(server);
-
+    const server = new HttpService({ port, listener, timeout: 50 });
+    await run({ services: [server] }, async () => {
       const error = await axios.get(`http://localhost:${port}`).catch((error) => error);
       expect(error.message).toEqual('socket hang up');
-    } finally {
-      await stop(server);
-    }
+    });
   });
 
   it('Should allow TLS', async () => {
-    const app = jest.fn().mockReturnValue(textOk('TLS Test'));
+    const listener = jest.fn().mockReturnValue(textOk('TLS Test'));
     const port = 8051;
     const key = readFileSync(join(__dirname, '../examples/key.pem'));
     const cert = readFileSync(join(__dirname, '../examples/cert.pem'));
     const ca = readFileSync(join(__dirname, '../examples/ca.pem'));
 
-    const server = httpsServer({ port, app, serverOptions: { key, cert } });
-    try {
-      await start(server);
-
+    const http = new HttpService({ port, listener, https: { key, cert } });
+    await run({ services: [http] }, async () => {
       const response = await axios.get(`https://localhost:${port}`, {
         httpsAgent: new Agent({ ca }),
       });
       expect(response.data).toEqual('TLS Test');
-    } finally {
-      await stop(server);
-    }
+    });
   });
 
   it('Should process response', async () => {
-    const loggerMock = { info: jest.fn(), error: jest.fn() };
-    const logging = loggingMiddleware(loggerMock as Logger);
+    const logger = { info: jest.fn(), error: jest.fn(), debug: jest.fn(), warn: jest.fn() };
+    const logging = requestLoggingMiddleware(logger);
     const responseTime = responseTimeMiddleware();
 
-    interface DBRequest {
+    interface DBContext {
       getUser: (id: string) => string | undefined;
       delUser: (id: string) => void;
       setUser: (id: string, name: string) => void;
     }
 
-    const db: Middleware<DBRequest> = (next) => {
+    const db: HttpMiddleware<DBContext> = (next) => {
       const users: { [key: string]: string } = {
         10: 'John',
         20: 'Tom',
       };
 
-      const dbReq: DBRequest = {
+      const dbReq: DBContext = {
         getUser: (id) => users[id],
         setUser: (id, name) => {
           users[id] = name;
@@ -96,33 +85,33 @@ describe('Integration', () => {
       return (req) => next({ ...req, ...dbReq });
     };
 
-    const app = router<RequestLogging & DBRequest>(
+    const app = router<LoggerContext & DBContext>(
       staticAssets('/assets', join(__dirname, '../examples/assets')),
-      get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-      get('/link', () => redirect('http://localhost:8050/destination')),
-      get('/http-error', () => {
+      get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+      get('/link', async () => redirect('http://localhost:8050/destination')),
+      get('/http-error', async () => {
         throw new HttpError(
           302,
           { message: 'Redirect to http://localhost:8050/destination' },
           { location: 'http://localhost:8050/destination' },
         );
       }),
-      get('/link-other', () =>
+      get('/link-other', async () =>
         redirect('http://localhost:8050/destination', { headers: { Authorization: 'Bearer 123' } }),
       ),
-      get('/destination', () => jsonOk({ arrived: true })),
-      get('/stream-file', () => textOk(createReadStream(join(__dirname, '../examples/assets/texts/one.txt')))),
-      get('/return-file', () => file(join(__dirname, '../examples/assets/texts/one.txt'), {})),
+      get('/destination', async () => jsonOk({ arrived: true })),
+      get('/stream-file', async () => textOk(createReadStream(join(__dirname, '../examples/assets/texts/one.txt')))),
+      get('/return-file', async () => file(join(__dirname, '../examples/assets/texts/one.txt'), {})),
       get('/error', () => {
         throw new Error('unknown');
       }),
-      options('/users/{id}', () =>
+      options('/users/{id}', async () =>
         textOk('', {
           'Access-Control-Allow-Origin': 'http://localhost:8050',
           'Access-Control-Allow-Methods': 'GET,POST,DELETE',
         }),
       ),
-      get('/users/{id}', ({ path, logger, getUser }) => {
+      get('/users/{id}', async ({ path, logger, getUser }) => {
         logger.info(`Getting id ${path.id}`);
         const user = getUser(path.id);
 
@@ -132,12 +121,12 @@ describe('Integration', () => {
           return jsonNotFound({ message: 'No User Found' });
         }
       }),
-      put('/users', ({ body, logger, setUser }) => {
+      put('/users', async ({ body, logger, setUser }) => {
         logger.info(`Test Body ${body.name}`);
         setUser(body.id, body.name);
         return jsonOk({ added: true });
       }),
-      patch('/users/{id}', ({ path, body, getUser, setUser }) => {
+      patch('/users/{id}', async ({ path, body, getUser, setUser }) => {
         const user = getUser(path.id);
         if (user) {
           setUser(body.id, body.name);
@@ -146,7 +135,7 @@ describe('Integration', () => {
           return jsonNotFound({ message: 'No User Found' });
         }
       }),
-      post('/users/{id}', ({ path, body, getUser, setUser }) => {
+      post('/users/{id}', async ({ path, body, getUser, setUser }) => {
         const user = getUser(path.id);
         if (user) {
           setUser(path.id, body.name);
@@ -155,7 +144,7 @@ describe('Integration', () => {
           return jsonNotFound({ message: 'No User Found' });
         }
       }),
-      del('/users/{id}', ({ path, getUser, delUser }) => {
+      del('/users/{id}', async ({ path, getUser, delUser }) => {
         const user = getUser(path.id);
         if (user) {
           delUser(path.id);
@@ -164,13 +153,11 @@ describe('Integration', () => {
           return jsonNotFound({ message: 'No User Found' });
         }
       }),
-      ({ url }) => jsonNotFound(`Test url ${url.pathname} not found`),
+      async ({ url }) => jsonNotFound(`Test url ${url.pathname} not found`),
     );
 
-    const server = httpServer({ port: 8050, app: responseTime(db(logging(app))) });
-    try {
-      await start(server);
-
+    const http = new HttpService({ port: 8050, listener: responseTime(db(logging(app))) });
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8050' });
 
       await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
@@ -183,7 +170,7 @@ describe('Integration', () => {
         data: { message: 'unknown' },
       });
 
-      await expect(api.get('/return-file')).resolves.toMatchObject({
+      expect(await api.get('/return-file')).toMatchObject({
         status: 200,
         headers: { 'content-type': 'text/plain' },
         data: 'one\n',
@@ -346,21 +333,14 @@ describe('Integration', () => {
         data: { id: '30', name: 'Added' },
       });
 
-      expect(loggerMock.info).toHaveBeenNthCalledWith(1, 'Request', {
+      expect(logger.error).toHaveBeenNthCalledWith(1, 'Status: 404', {
         request: 'GET /unknown-url',
+        body: 'Test url /unknown-url not found',
       });
-      expect(loggerMock.info).toHaveBeenNthCalledWith(2, 'Response', {
-        request: 'GET /unknown-url',
-        status: 404,
-        contentType: 'application/json',
-      });
-      expect(loggerMock.error).toHaveBeenNthCalledWith(1, 'Error', {
+      expect(logger.error).toHaveBeenNthCalledWith(2, 'unknown', {
         request: 'GET /error',
-        message: 'unknown',
         stack: expect.any(String),
       });
-    } finally {
-      await stop(server);
-    }
+    });
   });
 });

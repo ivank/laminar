@@ -1,5 +1,5 @@
-import { httpServer, start, response, describe } from '@ovotech/laminar';
+import { HttpService, response, init } from '@ovotech/laminar';
 
-const server = httpServer({ app: ({ body }) => response({ body }) });
+const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });

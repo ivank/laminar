@@ -3,17 +3,14 @@
  * @module @ovotech/laminar
  */
 export {
-  httpServer,
-  httpsServer,
-  describe,
-  start,
-  stop,
-  requestListener,
-  HttpServer,
-  OptionsBase,
-  OptionsHttp,
-  OptionsHttps,
-} from './server';
+  toIncommingMessageResolver,
+  toRequestListener,
+  HttpService,
+  HttpServiceParams,
+  HttpsServiceParams,
+  IncommingMessageResolverParams,
+  HttpParams,
+} from './http/http-service';
 export {
   optional,
   redirect,
@@ -68,47 +65,64 @@ export {
   htmlForbidden,
   htmlNotFound,
   htmlInternalServerError,
-} from './response';
-export { corsMiddleware, CorsConfig } from './middleware/cors.middleware';
-export {
-  cookieParserComponent,
   setCookie,
   SetCookie,
-  parseCookies,
-  Cookies,
-  RequestCookie,
-} from './components/cookie-parser.component';
-export { queryParserComponent, RequestQuery } from './components/query-parser.component';
+} from './http/response';
+export { corsMiddleware, CorsConfig } from './http/middleware/cors.middleware';
+export {
+  BodyParser,
+  parseJson,
+  parseForm,
+  parseText,
+  parseDefault,
+  defaultBodyParsers,
+  bodyParserMiddleware,
+  concatStream,
+  parseBody,
+} from './http/middleware/body-parser.middleware';
+export { toHttpRequest } from './http/request';
+export { parseCookie, serializeCookie } from './http/cookie';
 export { parseQueryObjects, toJson, Json } from './helpers';
 export {
   responseTimeMiddleware,
   ResponseTimeConfig,
   defaultResponseTimeHeader,
-} from './middleware/response-time.middleware';
-export { loggingMiddleware, Logger, RequestLogging, LoggerFormatters } from './middleware/logging.middleware';
+} from './http/middleware/response-time.middleware';
+export { requestLoggingMiddleware } from './http/middleware/request-logging.middleware';
+
 export {
-  bodyParserComponent,
-  BodyParser,
-  defaultBodyParsers,
-  concatStream,
-  RequestBody,
-  parseBody,
-  parseDefault,
-  parseForm,
-  parseText,
-} from './components/body-parser.component';
+  LoggerMetadata,
+  LoggerLike,
+  withStaticMetadata,
+  LoggerContext,
+  loggerMiddleware,
+  LoggerService,
+} from './logger/index';
+
+export { start, stop, Application, init, run, stopOnSignal } from './application';
 export {
-  responseParserComponent,
+  responseParserMiddleware,
   defaultResponseParsers,
   jsonResponseParser,
   formResponseParser,
   ResponseParser,
   parseResponse,
-} from './components/response-parser.component';
-export { urlComponent, RequestUrl } from './components/url.component';
-export { errorHandlerComponent, defaultErrorHandler, ErrorHandler } from './components/error-handler.component';
-export { appComponents, AppComponents, AppOptions, AppRequest, Middleware, App } from './components/components';
-export { HttpError } from './HttpError';
+} from './http/middleware/response-parser.middleware';
+export {
+  errorsMiddleware,
+  defaultErrorHandler,
+  RequestError,
+  HttpErrorHandler,
+} from './http/middleware/errors.middleware';
+export {
+  HttpContext,
+  HttpResponseBody,
+  HttpResponse,
+  HttpListener,
+  HttpMiddleware,
+  IncommingMessageResolver,
+} from './http/types';
+export { HttpError } from './http/http-error';
 export {
   router,
   get,
@@ -119,17 +133,17 @@ export {
   put,
   route,
   staticAssets,
-  RequestRoute,
+  RouteContext,
   AppRoute,
-} from './apps/router';
-export { Request, Response, Resolver, Component, Empty } from './types';
+} from './http/apps/router';
+export { Empty, Service, AbstractMiddleware, Middleware } from './types';
 export {
   openApi,
   securityOk,
   isSecurityOk,
   isSecurityResponse,
   defaultOapiNotFound,
-  RequestOapi,
+  OapiContext,
   AppRouteOapi,
   OapiPath,
   OapiAuthInfo,
@@ -141,4 +155,47 @@ export {
   ResponseOapi,
   OapiPaths,
   OapiConfig,
-} from './apps/open-api';
+} from './http/apps/open-api';
+
+export { PgContext, pgMiddleware, PgService, PgClient, PgError } from './pg/index';
+export { toErrorMetadata } from './errors';
+
+export {
+  QueueService,
+  QueueWorkerService,
+  QueueWorkersService,
+  queueMiddleware,
+  jobLoggingMiddleware,
+  WorkerMiddleware,
+  QueueContext,
+  Publish,
+  JobData,
+  JobWorker,
+  Subscribe,
+  Queue,
+} from './queue/index';
+
+export {
+  KafkaConsumerService,
+  KafkaConsumerOptionalService,
+  KafkaProducerService,
+  RegisterSchemas,
+  producerMiddleware,
+  ProducerContext,
+  registerSchemas,
+  toProducerRecord,
+  RegisterSchemasConfig,
+  kafkaLogCreator,
+  produce,
+  Produce,
+  chunkBatchMiddleware,
+  DecodedKafkaMessage,
+  DecodedEachMessagePayload,
+  DecodedBatch,
+  DecodedEachBatchPayload,
+  EachBatchConsumer,
+  EachMessageConsumer,
+  EncodedMessage,
+  EncodedProducerRecord,
+  SchemaRegistryConsumerRunConfig,
+} from './kafka/index';

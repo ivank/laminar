@@ -1,23 +1,21 @@
-import { get, post, httpsServer, router, start, textOk, jsonOk, describe } from '@ovotech/laminar';
+import { get, post, HttpService, router, textOk, jsonOk, init } from '@ovotech/laminar';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 const main = async () => {
-  const server = httpsServer({
+  const http = new HttpService({
     port: 8443,
-    serverOptions: {
+    https: {
       key: readFileSync(join(__dirname, 'key.pem')),
       cert: readFileSync(join(__dirname, 'cert.pem')),
     },
-    app: router(
-      get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-      post('/test', () => textOk('submited')),
-      get('/test', () => textOk('index')),
+    listener: router(
+      get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+      post('/test', async () => textOk('submited')),
+      get('/test', async () => textOk('index')),
     ),
   });
-  await start(server);
-
-  console.log(describe(server));
+  await init({ services: [http], logger: console });
 };
 
 main();

@@ -79,23 +79,22 @@ Then you can load the types like this:
 > [examples/api.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/api.ts)
 
 ```typescript
-import { httpServer, start, describe, jsonOk } from '@ovotech/laminar';
+import { HttpService, init, jsonOk } from '@ovotech/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api.yaml';
 
 const main = async () => {
-  const app = await openApiTyped({
+  const listener = await openApiTyped({
     api: join(__dirname, 'api.yaml'),
     paths: {
       '/test': {
-        post: ({ body }) => jsonOk({ text: 'ok', user: body }),
-        get: () => jsonOk({ text: 'ok', user: { email: 'me@example.com' } }),
+        post: async ({ body }) => jsonOk({ text: 'ok', user: body }),
+        get: async () => jsonOk({ text: 'ok', user: { email: 'me@example.com' } }),
       },
     },
   });
-  const server = httpServer({ app });
-  await start(server);
-  console.log(describe(server));
+  const server = new HttpService({ listener });
+  await init({ services: [server], logger: console });
 };
 
 main();

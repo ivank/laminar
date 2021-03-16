@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-jwt",
-  "version": "0.9.4",
+  "version": "0.11.0-alpha.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A json web token middleware for laminar",
@@ -20,30 +20,30 @@
   },
   "dependencies": {
     "@ovotech/json-schema": "^0.6.0",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "jsonwebtoken": "^8.5.1",
     "lru-cache": "^6.0.0"
   },
   "devDependencies": {
     "@ikerin/build-readme": "^1.0.4",
-    "@ovotech/laminar": "^0.10.1",
-    "@ovotech/laminar-cli": "^0.9.4",
-    "@types/jest": "^26.0.16",
+    "@ovotech/laminar": "^0.11.0-alpha.0",
+    "@ovotech/laminar-cli": "^0.11.0-alpha.0",
+    "@types/jest": "^26.0.20",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lru-cache": "^5.1.0",
-    "@types/node": "^14.14.10",
+    "@types/node": "^14.14.35",
     "@types/tough-cookie": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.9.0",
-    "@typescript-eslint/parser": "^4.9.0",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
     "axios-cookiejar-support": "^1.0.1",
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint": "^7.22.0",
+    "eslint-config-prettier": "^8.1.0",
     "jest": "^26.6.3",
-    "nock": "^13.0.5",
+    "nock": "^13.0.11",
     "prettier": "^2.2.1",
     "tough-cookie": "^4.0.0",
-    "ts-jest": "^26.4.4",
-    "typescript": "^4.1.2"
+    "ts-jest": "^26.5.3",
+    "typescript": "^4.2.3"
   },
   "peerDependencies": {
     "@ovotech/laminar": "*"

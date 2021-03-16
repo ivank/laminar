@@ -1,6 +1,6 @@
-import { RequestOapi, OapiConfig, Empty, App, openApi, ResponseOapi } from "@ovotech/laminar";
+import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@ovotech/laminar";
 
-export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<App<R>> => openApi(config);
+export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
 export interface User {
     email: string;
@@ -17,15 +17,15 @@ export interface NewUser {
 
 export type ResponseUserPost = ResponseOapi<NewUser, 200, "application/json">;
 
-export interface RequestUserPost extends RequestOapi {
+export interface RequestUserPost extends OapiContext {
     body: User;
 }
 
-export type PathUserPost<R extends Empty = Empty> = (req: RequestUserPost & R) => ResponseUserPost | Promise<ResponseUserPost>;
+export type PathUserPost<R extends Empty = Empty> = (req: RequestUserPost & R) => Promise<ResponseUserPost>;
 
 export type ResponseUserGet = ResponseOapi<User, 200, "application/json">;
 
-export type PathUserGet<R extends Empty = Empty> = (req: RequestOapi & R) => ResponseUserGet | Promise<ResponseUserGet>;
+export type PathUserGet<R extends Empty = Empty> = (req: OapiContext & R) => Promise<ResponseUserGet>;
 
 export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
     paths: {

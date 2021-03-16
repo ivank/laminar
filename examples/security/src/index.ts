@@ -1,4 +1,4 @@
-import { httpServer, start, jsonOk, describe, jsonForbidden, securityOk } from '@ovotech/laminar';
+import { HttpService, init, jsonOk, jsonForbidden, securityOk } from '@ovotech/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -18,7 +18,7 @@ const validate = (authorizaitonHeader?: string) =>
     : jsonForbidden({ message: 'Unkown user' });
 
 const main = async () => {
-  const app = await openApiTyped({
+  const listener = await openApiTyped({
     api: join(__dirname, 'api.yaml'),
     security: {
       /**
@@ -28,13 +28,12 @@ const main = async () => {
     },
     paths: {
       '/user/{id}': {
-        get: ({ path }) => jsonOk(findUser(path.id)),
+        get: async ({ path }) => jsonOk(findUser(path.id)),
       },
     },
   });
-  const server = httpServer({ app });
-  await start(server);
-  console.log(describe(server));
+  const http = new HttpService({ listener });
+  await init({ services: [http], logger: console });
 };
 
 main();

@@ -1,6 +1,6 @@
-import { RequestOapi, OapiConfig, Empty, App, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@ovotech/laminar";
+import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@ovotech/laminar";
 
-export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<App<R>> => openApi(config);
+export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<HttpListener<R>> => openApi(config);
 
 export type Pet = NewPet & {
     id: number;
@@ -27,7 +27,7 @@ export type ResponsePetsGet = ResponseOapi<Pet[], 200, "application/json"> | Res
  * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
  *
  */
-export interface RequestPetsGet<TAuthInfo> extends RequestOapi {
+export interface RequestPetsGet<TAuthInfo> extends OapiContext {
     query: {
         /**
          * tags to filter by
@@ -48,7 +48,7 @@ export interface RequestPetsGet<TAuthInfo> extends RequestOapi {
  * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
  *
  */
-export type PathPetsGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsGet<TAuthInfo> & R) => ResponsePetsGet | Promise<ResponsePetsGet>;
+export type PathPetsGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsGet<TAuthInfo> & R) => Promise<ResponsePetsGet>;
 
 export interface PetCreated {
     pet?: NewPet;
@@ -61,7 +61,7 @@ export type ResponsePetsPost = ResponseOapi<PetCreated, 200, "application/json">
 /**
  * Creates a new pet in the store.  Duplicates are allowed
  */
-export interface RequestPetsPost<TAuthInfo> extends RequestOapi {
+export interface RequestPetsPost<TAuthInfo> extends OapiContext {
     headers: {
         /**
          * a trace token to trace posts
@@ -75,14 +75,14 @@ export interface RequestPetsPost<TAuthInfo> extends RequestOapi {
 /**
  * Creates a new pet in the store.  Duplicates are allowed
  */
-export type PathPetsPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsPost<TAuthInfo> & R) => ResponsePetsPost | Promise<ResponsePetsPost>;
+export type PathPetsPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsPost<TAuthInfo> & R) => Promise<ResponsePetsPost>;
 
 export type ResponsePetsIdGet = ResponseOapi<Pet, 200, "application/json"> | ResponseOapi<Error, number, "application/json">;
 
 /**
  * Returns a user based on a single ID, if the user does not have access to the pet
  */
-export interface RequestPetsIdGet<TAuthInfo> extends RequestOapi {
+export interface RequestPetsIdGet<TAuthInfo> extends OapiContext {
     path: {
         /**
          * ID of pet to fetch
@@ -95,14 +95,14 @@ export interface RequestPetsIdGet<TAuthInfo> extends RequestOapi {
 /**
  * Returns a user based on a single ID, if the user does not have access to the pet
  */
-export type PathPetsIdGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdGet<TAuthInfo> & R) => ResponsePetsIdGet | Promise<ResponsePetsIdGet>;
+export type PathPetsIdGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdGet<TAuthInfo> & R) => Promise<ResponsePetsIdGet>;
 
 export type ResponsePetsIdDelete = ResponseOapi<unknown, 204, string> | ResponseOapi<Error, number, "application/json">;
 
 /**
  * deletes a single pet based on the ID supplied
  */
-export interface RequestPetsIdDelete<TAuthInfo> extends RequestOapi {
+export interface RequestPetsIdDelete<TAuthInfo> extends OapiContext {
     path: {
         /**
          * ID of pet to delete
@@ -115,7 +115,7 @@ export interface RequestPetsIdDelete<TAuthInfo> extends RequestOapi {
 /**
  * deletes a single pet based on the ID supplied
  */
-export type PathPetsIdDelete<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdDelete<TAuthInfo> & R) => ResponsePetsIdDelete | Promise<ResponsePetsIdDelete>;
+export type PathPetsIdDelete<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdDelete<TAuthInfo> & R) => Promise<ResponsePetsIdDelete>;
 
 export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
     paths: {

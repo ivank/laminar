@@ -62,7 +62,7 @@ yarn laminar api --file api.yaml --output __generated__/api.ts
 > [examples/simple/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/simple/src/index.ts)
 
 ```typescript
-import { httpServer, start, describe, jsonOk } from '@ovotech/laminar';
+import { HttpService, init, jsonOk } from '@ovotech/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -76,11 +76,11 @@ const main = async () => {
    * Since we've already generated this using the api file, the paths,
    * all of its request and response data would be properly typed
    */
-  const app = await openApiTyped({
+  const listener = await openApiTyped({
     api: join(__dirname, 'api.yaml'),
     paths: {
       '/user/{id}': {
-        get: ({ path }) => {
+        get: async ({ path }) => {
           /**
            * Our types would require us to return a json response specifically,
            * otherwise it would not compile
@@ -95,17 +95,12 @@ const main = async () => {
    * Now we've cerated the server, but it has not yet been started.
    * Default port is 3300
    */
-  const server = httpServer({ app });
+  const http = new HttpService({ listener });
 
   /**
-   * The http server now should be running
+   * The http server now should be running and indicate that the server is now running
    */
-  await start(server);
-
-  /**
-   * We indicate that the server is now running
-   */
-  console.log(describe(server));
+  await init({ services: [http], logger: console });
 };
 
 main();
@@ -118,3 +113,4 @@ You can dive in directly with some example apps:
 - [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
 - [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
 - [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
+- [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).

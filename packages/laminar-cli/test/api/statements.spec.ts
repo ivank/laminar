@@ -1,7 +1,5 @@
 import {
-  httpServer,
-  start,
-  stop,
+  HttpService,
   htmlOk,
   jsonOk,
   ok,
@@ -11,11 +9,13 @@ import {
   jsonNotFound,
   jsonUnauthorized,
   securityOk,
+  loggerMiddleware,
+  run,
+  LoggerContext,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/statements';
-import { LoggerContext, withLogger } from './middleware/logger';
 import { createReadStream } from 'fs';
 import { StatementService, ReportsService } from './statements';
 
@@ -28,7 +28,7 @@ const reportsService = new ReportsService();
 
 describe('Statements', () => {
   it('Should process response', async () => {
-    const app = await openApiTyped<LoggerContext, AuthInfo>({
+    const oapi = await openApiTyped<LoggerContext, AuthInfo>({
       api: join(__dirname, 'statements.yaml'),
       security: {
         BearerAuth: ({ headers }) => {
@@ -39,40 +39,40 @@ describe('Statements', () => {
         },
       },
       paths: {
-        '/.well-known/health-check': { get: () => jsonOk({ success: true }) },
+        '/.well-known/health-check': { get: async () => jsonOk({ success: true }) },
         '/.well-known/openapi.html': {
-          get: () => htmlOk(createReadStream(join(__dirname, 'statements.html'))),
+          get: async () => htmlOk(createReadStream(join(__dirname, 'statements.html'))),
         },
         '/.well-known/openapi.yaml': {
-          get: () => yaml(ok({ body: createReadStream(join(__dirname, 'statements.yaml')) })),
+          get: async () => yaml(ok({ body: createReadStream(join(__dirname, 'statements.yaml')) })),
         },
         '/v2/reports/daily': {
-          post: () => {
+          post: async () => {
             reportsService.set('errors', 'daily', 'daily');
             return jsonOk({ success: true });
           },
         },
         '/v2/reports/{type}': {
-          get: ({ path: { type } }) => {
+          get: async ({ path: { type } }) => {
             const items = reportsService.getAll(type);
             return jsonOk({
               total: items.length,
               items: items.map((item) => ({ filename: item.filename, createdAt: item.createdAt })),
             });
           },
-          post: ({ path: { type }, body }) => {
+          post: async ({ path: { type }, body }) => {
             reportsService.set(type, 'date' in body ? body.date : `${body.fromDate}-${body.toDate}`, 'report');
             return jsonOk({ success: true });
           },
         },
         '/v2/reports/{type}/{filename}': {
-          get: ({ path: { type, filename } }) => {
+          get: async ({ path: { type, filename } }) => {
             const report = reportsService.get(type, filename);
             return report ? csv(ok({ body: report.content })) : jsonNotFound({ message: 'Report not found' });
           },
         },
         '/v2/statements': {
-          get: () =>
+          get: async () =>
             jsonOk(
               statementsService.getAll().map((item) => ({
                 id: item.id,
@@ -84,7 +84,7 @@ describe('Statements', () => {
                 state: item.state,
               })),
             ),
-          post: ({ body }) => {
+          post: async ({ body }) => {
             const statement = {
               id: body.accountId,
               ref: 'REF111',
@@ -105,25 +105,25 @@ describe('Statements', () => {
           },
         },
         '/v2/statements/{id}/approval': {
-          post: ({ path: { id } }) => {
+          post: async ({ path: { id } }) => {
             const result = statementsService.approve(id);
             return result ? jsonOk({ success: true }) : jsonNotFound({ message: 'Cannot approve: Not Found' });
           },
         },
         '/v2/statements/{id}/data': {
-          get: ({ path: { id } }) => {
+          get: async ({ path: { id } }) => {
             const item = statementsService.get(id);
             return item ? jsonOk(item) : jsonNotFound({ message: 'NoData: Statement not found' });
           },
         },
         '/v2/statements/{id}/html': {
-          get: ({ path: { id } }) => {
+          get: async ({ path: { id } }) => {
             const html = statementsService.html(id);
             return html ? htmlOk(html) : jsonNotFound({ message: 'NoHtml: Statement not found' });
           },
         },
         '/v2/statements/{id}/modifications': {
-          post: ({ path: { id }, body: { modification } }) => {
+          post: async ({ path: { id }, body: { modification } }) => {
             const item = statementsService.modify(id, modification);
             return item ? jsonOk(item) : jsonNotFound({ message: 'Cannot modify: Statement not found' });
           },
@@ -136,12 +136,11 @@ describe('Statements', () => {
         },
       },
     });
-    const log = jest.fn();
-    const logger = withLogger(log);
-    const server = httpServer({ app: logger(app), port: 4913 });
-    try {
-      await start(server);
 
+    const logger = { error: jest.fn(), warn: jest.fn(), info: jest.fn(), debug: jest.fn() };
+    const withLogger = loggerMiddleware(logger);
+    const http = new HttpService({ listener: withLogger(oapi), port: 4913 });
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:4913' });
 
       const { data: statementHtml } = await api.get('/v2/statements/111/html', {
@@ -155,8 +154,6 @@ describe('Statements', () => {
       });
 
       expect(statementPdf).toMatchSnapshot();
-    } finally {
-      await stop(server);
-    }
+    });
   });
 });

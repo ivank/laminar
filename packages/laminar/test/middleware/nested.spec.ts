@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { httpServer, Middleware, App, jsonOk, start, stop } from '../../src';
+import { HttpService, HttpMiddleware, HttpListener, jsonOk } from '../../src';
 
 interface One {
   one: string;
@@ -11,22 +11,22 @@ interface Three {
   three: boolean;
 }
 
-const withOne: Middleware<One> = (next) => async (req) => next({ ...req, one: 'one' });
+const withOne: HttpMiddleware<One> = (next) => async (req) => next({ ...req, one: 'one' });
 
-const withTwo: Middleware<Two, One> = (next) => (req) => next({ ...req, two: 2 });
+const withTwo: HttpMiddleware<Two, One> = (next) => (req) => next({ ...req, two: 2 });
 
-const withThree: Middleware<Three> = (next) => async (req) => next({ ...req, three: false });
+const withThree: HttpMiddleware<Three> = (next) => async (req) => next({ ...req, three: false });
 
-const resolver: App<One & Two & Three> = (req) => {
+const httpApp: HttpListener<One & Two & Three> = async (req) => {
   const { one, two, three, url } = req;
   return jsonOk({ one, two, three, url: url.pathname });
 };
 
-const app: App = withOne(withTwo(withThree(resolver)));
+const listener: HttpListener = withOne(withTwo(withThree(httpApp)));
 
-const appWithAutoAssign: App = withOne(
+const appWithAutoAssign: HttpListener = withOne(
   withTwo(
-    withThree((req) => {
+    withThree(async (req) => {
       const { one, two, three, url } = req;
       return jsonOk({ one, two, three, url: url.pathname });
     }),
@@ -35,29 +35,29 @@ const appWithAutoAssign: App = withOne(
 
 describe('Nested middleware', () => {
   it('Should propagate multiple middlewarres ', async () => {
-    const server = httpServer({ app, port: 8095 });
-    await start(server);
+    const server = new HttpService({ listener, port: 8095 });
+    await server.start();
     const api = axios.create({ baseURL: 'http://localhost:8095' });
     try {
       const result = await api.get('/test2');
 
       expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to pass context automatically', async () => {
-    const server = httpServer({ app: appWithAutoAssign, port: 8095 });
+    const server = new HttpService({ listener: appWithAutoAssign, port: 8095 });
     const api = axios.create({ baseURL: 'http://localhost:8095' });
     try {
-      await start(server);
+      await server.start();
 
       const result = await api.get('/test2');
 
       expect(result.data).toEqual({ one: 'one', two: 2, three: false, url: '/test2' });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 });

@@ -1,12 +1,21 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
-  "extends": ["plugin:@typescript-eslint/recommended", "prettier", "prettier/@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
-      { "args": "after-used", "ignoreRestSiblings": true }
+      {
+        "args": "after-used",
+        "ignoreRestSiblings": true
+      }
     ],
     "@typescript-eslint/explicit-function-return-type": [
       1,

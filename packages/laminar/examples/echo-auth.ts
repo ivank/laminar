@@ -1,9 +1,10 @@
-import { httpServer, start, textForbidden, textOk, App, Middleware, describe } from '@ovotech/laminar';
+import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@ovotech/laminar';
 
-const auth: Middleware = (next) => (req) => (req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me'));
+const auth: HttpMiddleware = (next) => async (req) =>
+  req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
 
-const app: App = (req) => textOk(req.url.toString());
+const app: HttpListener = async (req) => textOk(req.url.toString());
 
-const server = httpServer({ app: auth(app) });
+const http = new HttpService({ listener: auth(app) });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });

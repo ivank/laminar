@@ -1,17 +1,17 @@
 import {
-  httpServer,
-  start,
-  stop,
+  HttpService,
   jsonUnauthorized,
   jsonNotFound,
   jsonOk,
   jsonNoContent,
   securityOk,
   optional,
+  run,
+  LoggerContext,
+  loggerMiddleware,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
-import { LoggerContext, withLogger } from './middleware/logger';
 import { openApiTyped, Pet } from './__generated__/petstore';
 
 interface AuthInfo {
@@ -24,14 +24,14 @@ describe('Petstore', () => {
       { id: 111, name: 'Catty', tag: 'kitten' },
       { id: 222, name: 'Doggy' },
     ];
-    const log = jest.fn();
+    const logger = { error: jest.fn(), warn: jest.fn(), info: jest.fn(), debug: jest.fn() };
 
     const oapi = await openApiTyped<LoggerContext, AuthInfo>({
       api: join(__dirname, 'petstore.yaml'),
       security: {
         BearerAuth: ({ headers, logger }) => {
           if (headers.authorization === 'Bearer 123') {
-            logger('Auth Successful');
+            logger.info('Auth Successful');
             return securityOk({ user: 'dinkey' });
           } else {
             return jsonUnauthorized({ message: 'Unathorized user' });
@@ -54,24 +54,24 @@ describe('Petstore', () => {
       },
       paths: {
         '/pets': {
-          get: ({ logger }) => {
-            logger('Get all');
+          get: async ({ logger }) => {
+            logger.info('Get all');
             return jsonOk(db);
           },
-          post: ({ body, authInfo, logger, headers }) => {
+          post: async ({ body, authInfo, logger, headers }) => {
             const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
-            logger(`new pet ${pet.name}, trace token: ${headers['x-trace-token']}`);
+            logger.info(`new pet ${pet.name}, trace token: ${headers['x-trace-token']}`);
 
             db.push(pet);
             return jsonOk({ pet, user: authInfo.user });
           },
         },
         '/pets/{id}': {
-          get: ({ path }) => {
+          get: async ({ path }) => {
             const pet = db.find((item) => item.id === Number(path.id));
             return optional(jsonOk, pet) ?? jsonNotFound({ code: 123, message: 'Not Found' });
           },
-          delete: ({ path }) => {
+          delete: async ({ path }) => {
             const index = db.findIndex((item) => item.id === Number(path.id));
             if (index !== -1) {
               db.splice(index, 1);
@@ -83,12 +83,10 @@ describe('Petstore', () => {
         },
       },
     });
-    const logger = withLogger(log);
-    const server = httpServer({ app: logger(oapi), port: 4911 });
+    const withLogger = loggerMiddleware(logger);
+    const http = new HttpService({ listener: withLogger(oapi), port: 4911 });
 
-    try {
-      await start(server);
-
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:4911' });
 
       await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
@@ -206,13 +204,11 @@ describe('Petstore', () => {
         ],
       });
 
-      expect(log).toHaveBeenNthCalledWith(1, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(2, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(3, 'new pet New Puppy, trace token: 123');
-      expect(log).toHaveBeenNthCalledWith(4, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(5, 'Get all');
-    } finally {
-      await stop(server);
-    }
+      expect(logger.info).toHaveBeenNthCalledWith(1, 'Get all');
+      expect(logger.info).toHaveBeenNthCalledWith(2, 'Auth Successful');
+      expect(logger.info).toHaveBeenNthCalledWith(3, 'new pet New Puppy, trace token: 123');
+      expect(logger.info).toHaveBeenNthCalledWith(4, 'Get all');
+      expect(logger.info).toHaveBeenNthCalledWith(5, 'Get all');
+    });
   });
 });

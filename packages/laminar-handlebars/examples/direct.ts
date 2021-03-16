@@ -1,14 +1,14 @@
-import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
+import { init, router, get, post, HttpService } from '@ovotech/laminar';
 import { handlebars } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
 const hbs = handlebars({ dir: join(__dirname, 'templates-html') });
 
-const server = httpServer({
-  app: router(
-    get('/', () => hbs('index')),
-    post('/result', ({ body: { name } }) => hbs('result', { name })),
+const http = new HttpService({
+  listener: router(
+    get('/', async () => hbs('index')),
+    post('/result', async ({ body: { name } }) => hbs('result', { name })),
   ),
 });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });

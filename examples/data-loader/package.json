@@ -1,0 +1,60 @@
+{
+  "name": "@examples/data-loader",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "This is a simple but functional example of building a todo api.",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ovotech/laminar.git",
+  "homepage": "https://github.com/ovotech/laminar/tree/main/examples/todo#readme",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@ovotech/avro-ts-cli": "^3.4.3",
+    "@ovotech/laminar-cli": "^0.11.0-alpha.0",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.35",
+    "@types/pg": "^7.14.11",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "axios": "^0.21.1",
+    "eslint": "^7.22.0",
+    "eslint-config-prettier": "^8.1.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.3",
+    "ts-node": "^9.1.1",
+    "ts-retry-promise": "^0.6.0",
+    "typescript": "^4.2.3"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "create-session": "node dist/create-session.js",
+    "build:schema": "laminar api --file schema.yaml --output src/__generated__/schema.ts",
+    "build:avro": "avro-ts src/services/consumers/avro/*.json --output-dir src/__generated__ --logical-type-import-default decimal=Decimal:decimal.js  --logical-type timestamp-millis=Date --logical-type date=Date",
+    "pretest": "laminar axios --file schema.yaml --output __generated__/schema.axios.ts",
+    "build": "yarn build:avro && yarn build:schema && yarn tsc",
+    "test": "TZ=UTC jest test --runInBand",
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
+  },
+  "dependencies": {
+    "@kafkajs/confluent-schema-registry": "^2.0.0",
+    "@ovotech/avro-decimal": "^0.1.4",
+    "@ovotech/avro-timestamp-millis": "^0.1.4",
+    "@ovotech/laminar": "^0.11.0-alpha.0",
+    "@ovotech/laminar-jwt": "^0.11.0-alpha.0",
+    "avsc": "^5.5.3",
+    "csv-parse": "^4.15.3",
+    "decimal.js": "^10.2.1",
+    "dotenv": "^8.2.0",
+    "kafkajs": "^1.15.0",
+    "pg": "^8.5.1",
+    "pg-boss": "^4.3.4",
+    "runtypes": "^5.0.2",
+    "sql-template-tag": "^4.0.0",
+    "winston": "^3.3.3"
+  }
+}

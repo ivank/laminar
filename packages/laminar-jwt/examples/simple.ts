@@ -1,4 +1,4 @@
-import { get, post, start, httpServer, jsonOk, router, App, describe } from '@ovotech/laminar';
+import { get, post, init, HttpService, jsonOk, router, HttpListener } from '@ovotech/laminar';
 import { authMiddleware, createSession } from '@ovotech/laminar-jwt';
 
 const secret = '123';
@@ -8,19 +8,19 @@ const auth = authMiddleware({ secret });
 const loggedIn = auth();
 const admin = auth(['admin']);
 
-const app: App = router(
-  get('/.well-known/health-check', () => jsonOk({ health: 'ok' })),
-  post('/session', ({ body }) => jsonOk(createSession({ secret }, body))),
+const listener: HttpListener = router(
+  get('/.well-known/health-check', async () => jsonOk({ health: 'ok' })),
+  post('/session', async ({ body }) => jsonOk(createSession({ secret }, body))),
   post(
     '/test',
-    admin(({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
+    admin(async ({ authInfo }) => jsonOk({ result: 'ok', user: authInfo })),
   ),
   get(
     '/test',
-    loggedIn(() => jsonOk('index')),
+    loggedIn(async () => jsonOk('index')),
   ),
 );
 
-const server = httpServer({ app });
+const http = new HttpService({ listener });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });

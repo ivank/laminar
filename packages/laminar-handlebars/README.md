@@ -7,22 +7,22 @@ Handlebars implementation for the laminar http server.
 > [examples/html.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/html.ts)
 
 ```typescript
-import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
+import { init, router, get, post, HttpService } from '@ovotech/laminar';
 import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html') });
 
-const server = httpServer({
-  app: handlebars(
+const server = new HttpService({
+  listener: handlebars(
     router(
-      get('/', ({ hbs }) => hbs('index')),
-      post('/result', ({ hbs, body: { name } }) => hbs('result', { name })),
+      get('/', async ({ hbs }) => hbs('index')),
+      post('/result', async ({ hbs, body: { name } }) => hbs('result', { name })),
     ),
   ),
 });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [server], logger: console });
 ```
 
 When you set `dir`, it will load and compile templates in `views` and `partials` folders.
@@ -34,7 +34,7 @@ Creating the middleware would crawl through the directory and all of its subdire
 > [examples/yaml.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/yaml.ts)
 
 ```typescript
-import { start, router, get, httpServer, describe } from '@ovotech/laminar';
+import { init, router, get, HttpService } from '@ovotech/laminar';
 import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
@@ -45,16 +45,16 @@ const handlebars = handlebarsMiddleware({
   headers: { 'Content-type': 'text/yaml' },
 });
 
-const server = httpServer({
-  app: handlebars(
+const http = new HttpService({
+  listener: handlebars(
     router(
-      get('/', ({ hbs }) => hbs('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } })),
-      get('/swagger.yaml', ({ hbs }) => hbs('swagger.yaml', { version: 10 })),
+      get('/', async ({ hbs }) => hbs('index.yaml', {}, { status: 400, headers: { 'X-Index': 'true' } })),
+      get('/swagger.yaml', async ({ hbs }) => hbs('swagger.yaml', { version: 10 })),
     ),
   ),
 });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 ### Usage without middleware
@@ -64,20 +64,20 @@ You can also create the handblebars renderer directly without going through a mi
 > [examples/direct.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/direct.ts)
 
 ```typescript
-import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
+import { init, router, get, post, HttpService } from '@ovotech/laminar';
 import { handlebars } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
 const hbs = handlebars({ dir: join(__dirname, 'templates-html') });
 
-const server = httpServer({
-  app: router(
-    get('/', () => hbs('index')),
-    post('/result', ({ body: { name } }) => hbs('result', { name })),
+const http = new HttpService({
+  listener: router(
+    get('/', async () => hbs('index')),
+    post('/result', async ({ body: { name } }) => hbs('result', { name })),
   ),
 });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 ### Caching options
@@ -91,22 +91,22 @@ By default handlebars middleware would preload all the templates and keep them i
 > [examples/expiry-cache.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars/examples/expiry-cache.ts)
 
 ```typescript
-import { start, router, get, post, httpServer, describe } from '@ovotech/laminar';
+import { init, router, get, post, HttpService } from '@ovotech/laminar';
 import { handlebarsMiddleware } from '@ovotech/laminar-handlebars';
 import { join } from 'path';
 
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html'), cacheType: 'expiry' });
 
-const server = httpServer({
-  app: handlebars(
+const http = new HttpService({
+  listener: handlebars(
     router(
-      get('/', ({ hbs }) => hbs('index')),
-      post('/result', ({ hbs, body: { name } }) => hbs('result', { name })),
+      get('/', async ({ hbs }) => hbs('index')),
+      post('/result', async ({ hbs, body: { name } }) => hbs('result', { name })),
     ),
   ),
 });
 
-start(server).then(() => console.log(describe(server)));
+init({ services: [http], logger: console });
 ```
 
 ## Running the tests

@@ -1,17 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
-import { httpServer, corsMiddleware, jsonOk, App, start, stop } from '../../src';
+import { HttpService, corsMiddleware, jsonOk, HttpListener } from '../../src';
 
 const api = axios.create({ baseURL: 'http://localhost:8095' });
 
-const app: App = () => jsonOk({ health: 'ok' });
-const asyncApp: App = () => Promise.resolve(jsonOk({ health: 'ok' }));
+const listener: HttpListener = async () => jsonOk({ health: 'ok' });
 
 describe('Cors middleware', () => {
   it('Should allow all by default', async () => {
     const cors = corsMiddleware();
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
@@ -30,15 +29,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should add headers on async responses', async () => {
     const cors = corsMiddleware();
-    const server = httpServer({ port: 8095, app: cors(asyncApp) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
@@ -57,15 +56,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to change allowed methods', async () => {
     const cors = corsMiddleware({ allowMethods: ['GET', 'POST', 'DELETE'] });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
@@ -84,15 +83,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to change allowed credentials', async () => {
     const cors = corsMiddleware({ allowCredentials: true });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
@@ -113,15 +112,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to set max age', async () => {
     const cors = corsMiddleware({ maxAge: 1200 });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
@@ -141,15 +140,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to set exposed headers', async () => {
     const cors = corsMiddleware({ exposeHeaders: ['Authentication', 'Content-Type'] });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
@@ -170,15 +169,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to set allowed headers directly', async () => {
     const cors = corsMiddleware({ allowHeaders: ['Authentication', 'Content-Type'] });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.request({ url: '/test', method: 'OPTIONS' })).resolves.toMatchObject({
         status: 204,
@@ -190,15 +189,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to infer allowed headers from request headers', async () => {
     const cors = corsMiddleware();
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(
         api.request({
@@ -216,15 +215,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to set origin as string', async () => {
     const cors = corsMiddleware({ allowOrigin: '127.0.0.1' });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test', { headers: { origin: '127.0.0.1' } })).resolves.toMatchObject({
         status: 200,
@@ -232,15 +231,15 @@ describe('Cors middleware', () => {
         headers: expect.objectContaining({ 'access-control-allow-origin': '127.0.0.1' }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to set origin as array', async () => {
     const cors = corsMiddleware({ allowOrigin: ['127.0.0.1', '127.0.0.2'] });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test', { headers: { origin: '127.0.0.1' } })).resolves.toMatchObject({
         status: 200,
@@ -274,15 +273,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to set origin as regex', async () => {
     const cors = corsMiddleware({ allowOrigin: /127\.0\.0\.\d/ });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test', { headers: { origin: '127.0.0.1' } })).resolves.toMatchObject({
         status: 200,
@@ -308,15 +307,15 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should be able to set origin as function', async () => {
     const cors = corsMiddleware({ allowOrigin: (origin) => origin === '127.0.0.3' });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
     try {
-      await start(server);
+      await server.start();
 
       await expect(api.get('/test', { headers: { origin: '127.0.0.3' } })).resolves.toMatchObject({
         status: 200,
@@ -334,17 +333,17 @@ describe('Cors middleware', () => {
         }),
       });
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 
   it('Should assign headers even if there is an error', async () => {
-    const app: App = () => jsonOk(JSON.parse('{'));
+    const listener: HttpListener = async () => jsonOk(JSON.parse('{'));
     const cors = corsMiddleware({ allowOrigin: '*' });
-    const server = httpServer({ port: 8095, app: cors(app) });
+    const server = new HttpService({ port: 8095, listener: cors(listener) });
 
     try {
-      await start(server);
+      await server.start();
 
       const error: AxiosResponse = await api
         .get('/test', { headers: { origin: '127.0.0.1' } })
@@ -352,7 +351,7 @@ describe('Cors middleware', () => {
 
       expect(error.headers).toHaveProperty('access-control-allow-origin', '*');
     } finally {
-      await stop(server);
+      await server.stop();
     }
   });
 });

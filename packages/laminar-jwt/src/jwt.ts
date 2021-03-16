@@ -11,17 +11,18 @@ import {
 } from './types';
 import * as jsonwebtoken from 'jsonwebtoken';
 import {
-  Middleware,
+  HttpMiddleware,
   Empty,
   jsonUnauthorized,
   jsonBadRequest,
-  Response,
+  HttpResponse,
   jsonForbidden,
   jsonInternalServerError,
   isSecurityOk,
   OapiSecurityResolver,
   Security,
   securityOk,
+  Middleware,
 } from '@ovotech/laminar';
 
 const isJWTData = (data: VerifiedJWTData | string | null): data is JWTData =>
@@ -55,7 +56,7 @@ export const verifyToken = async <TUser extends JWTData = JWTData>(
   { secret, options, scopeError = simpleScopeError }: JWTVerify,
   token: string,
   scopes?: string[],
-): Promise<Security<TUser> | Response> => {
+): Promise<Security<TUser> | HttpResponse> => {
   try {
     const data = await new Promise<VerifiedJWTData>((resolve, reject) =>
       jsonwebtoken.verify(token, secret, options, (err, data) => (err ? reject(err) : resolve(data))),
@@ -78,13 +79,18 @@ export const verifyToken = async <TUser extends JWTData = JWTData>(
   } catch (error) {
     if (error instanceof jsonwebtoken.TokenExpiredError) {
       return jsonForbidden({
-        message: `Unauthorized. ${error.message}`,
+        message: `Unauthorized. TokenExpiredError: ${error.message}`,
         expiredAt: error.expiredAt,
       });
     } else if (error instanceof jsonwebtoken.NotBeforeError) {
       return jsonForbidden({
-        message: `Unauthorized. ${error.message}`,
+        message: `Unauthorized. NotBeforeError: ${error.message}`,
         date: error.date,
+      });
+    } else if (error instanceof jsonwebtoken.JsonWebTokenError) {
+      return jsonForbidden({
+        message: `Unauthorized. JsonWebTokenError: ${error.message}`,
+        inner: error.inner,
       });
     }
 
@@ -96,7 +102,7 @@ export const verifyBearer = async <TUser extends JWTData = JWTData>(
   options: JWTVerify,
   authorization?: string,
   scopes?: string[],
-): Promise<Security<TUser> | Response> => {
+): Promise<Security<TUser> | HttpResponse> => {
   if (!authorization) {
     return jsonBadRequest({ message: 'Authorization header missing' });
   }
@@ -112,7 +118,7 @@ export const verifyBearer = async <TUser extends JWTData = JWTData>(
 
 export const authMiddleware = <TUser extends JWTData = JWTData>(
   options: JWTVerify,
-): ((scopes?: string[]) => Middleware<RequestAuthInfo<TUser>>) => (scopes) => (next) => async (req) => {
+): ((scopes?: string[]) => HttpMiddleware<RequestAuthInfo<TUser>>) => (scopes) => (next) => async (req) => {
   const result = await verifyBearer<TUser>(options, req.incommingMessage.headers.authorization, scopes);
   return isSecurityOk(result) ? next({ ...req, ...result }) : result;
 };

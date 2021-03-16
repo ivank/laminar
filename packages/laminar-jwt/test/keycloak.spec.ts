@@ -1,4 +1,4 @@
-import { httpServer, start, router, get, stop, jsonOk, App } from '@ovotech/laminar';
+import { HttpService, router, get, jsonOk, HttpListener, run } from '@ovotech/laminar';
 import axios from 'axios';
 import { keycloakAuthMiddleware, createSession } from '../src';
 import { generateKeyPair } from 'crypto';
@@ -48,20 +48,18 @@ describe('Integration', () => {
       resource_access: { 'test-service': { roles: ['test1'] } },
     }).jwt;
 
-    const app: App = router(
+    const listener: HttpListener = router(
       get(
         '/test',
-        auth()(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
+        auth()(async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
       ),
       get(
         '/test-scopes',
-        auth(['test1'])(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
+        auth(['test1'])(async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
       ),
     );
-    const server = httpServer({ app, port: 8063 });
-    try {
-      await start(server);
-
+    const http = new HttpService({ listener, port: 8063 });
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
       const { data: data1 } = await api.get('/test', {
@@ -106,8 +104,6 @@ describe('Integration', () => {
         resource_access: { 'test-service': { roles: ['test1'] } },
         iat: expect.any(Number),
       });
-    } finally {
-      await stop(server);
-    }
+    });
   });
 });

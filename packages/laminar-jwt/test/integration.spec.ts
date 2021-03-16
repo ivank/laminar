@@ -1,4 +1,4 @@
-import { httpServer, start, router, get, post, stop, jsonOk } from '@ovotech/laminar';
+import { HttpService, router, get, post, jsonOk, run } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { jwtSecurityResolver, authMiddleware, jwkPublicKey, createSession } from '../src';
@@ -13,18 +13,18 @@ describe('Integration', () => {
     const secret = '123';
     const jwtSecurity = jwtSecurityResolver({ secret });
 
-    const app = await openApiTyped({
+    const listener = await openApiTyped({
       api: join(__dirname, 'integration.yaml'),
       security: { JWTSecurity: jwtSecurity },
       paths: {
         '/session': {
-          post: ({ body: { email, scopes } }) => jsonOk(createSession({ secret }, { email, scopes })),
+          post: async ({ body: { email, scopes } }) => jsonOk(createSession({ secret }, { email, scopes })),
         },
         '/test': {
-          get: ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
+          get: async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
         },
         '/test-scopes': {
-          get: ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
+          get: async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),
         },
       },
     });
@@ -34,10 +34,9 @@ describe('Integration', () => {
     const testTokenExpires = createSession({ secret, options: { expiresIn: '1ms' } }, { email: 'tester' }).jwt;
     const testTokenNotBefore = createSession({ secret, options: { notBefore: 10000 } }, { email: 'tester' }).jwt;
 
-    const server = httpServer({ app, port: 8064 });
-    try {
-      await start(server);
+    const http = new HttpService({ listener, port: 8064 });
 
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8064' });
 
       const { data: token } = await api.post('/session', {
@@ -97,7 +96,7 @@ describe('Integration', () => {
         status: 403,
         data: {
           expiredAt: expect.any(String),
-          message: 'Unauthorized. jwt expired',
+          message: 'Unauthorized. TokenExpiredError: jwt expired',
         },
       });
 
@@ -109,12 +108,21 @@ describe('Integration', () => {
         status: 403,
         data: {
           date: expect.any(String),
-          message: 'Unauthorized. jwt not active',
+          message: 'Unauthorized. NotBeforeError: jwt not active',
         },
       });
-    } finally {
-      await stop(server);
-    }
+
+      const result7 = api.get('/test', {
+        headers: { authorization: `Bearer Bearer wrong` },
+      });
+
+      await expect(result7.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          message: 'Unauthorized. JsonWebTokenError: jwt malformed',
+        },
+      });
+    });
   });
 
   it('Should process response for public / private key pair and multiple options', async () => {
@@ -146,22 +154,20 @@ describe('Integration', () => {
       scopes: ['other'],
     }).jwt;
 
-    const app = router(
-      post('/session', ({ body: { email, scopes } }) => jsonOk(createSession(signOptions, { email, scopes }))),
+    const listener = router(
+      post('/session', async ({ body: { email, scopes } }) => jsonOk(createSession(signOptions, { email, scopes }))),
       get(
         '/test',
-        auth()(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
+        auth()(async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
       ),
       get(
         '/test-scopes',
-        auth(['test1'])(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
+        auth(['test1'])(async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
       ),
     );
 
-    const server = httpServer({ app, port: 8063 });
-    try {
-      await start(server);
-
+    const http = new HttpService({ listener, port: 8063 });
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
       const { data: token } = await api.post('/session', {
@@ -218,9 +224,7 @@ describe('Integration', () => {
           message: 'Unauthorized. User does not have required scopes: [test1]',
         },
       });
-    } finally {
-      await stop(server);
-    }
+    });
   });
 
   it('Should process jwk urls, with caching and max age settings', async () => {
@@ -240,20 +244,18 @@ describe('Integration', () => {
     };
     const auth = authMiddleware({ secret: publicKey });
 
-    const server = httpServer({
-      app: router(
-        post('/session', ({ body: { email, scopes } }) => jsonOk(createSession(signOptions, { email, scopes }))),
+    const http = new HttpService({
+      listener: router(
+        post('/session', async ({ body: { email, scopes } }) => jsonOk(createSession(signOptions, { email, scopes }))),
         get(
           '/test',
-          auth()(({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
+          auth()(async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo })),
         ),
       ),
       port: 8065,
     });
 
-    try {
-      await start(server);
-
+    await run({ services: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8065' });
 
       const { data: token } = await api.post('/session', {
@@ -284,8 +286,6 @@ describe('Integration', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       await api.get('/test', { headers: { authorization: `Bearer ${token.jwt}` } });
-    } finally {
-      await stop(server);
-    }
+    });
   });
 });
