@@ -73,7 +73,7 @@ jobs:
       - checkout
       - yarn-install
       - run: yarn build
-      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc
       - run: git config user.email "ovotech-ci@ovoenergy.com"
       - run: git config user.name "Ovotech CI"
       - run: yarn lerna publish from-package --yes --no-verify-access
