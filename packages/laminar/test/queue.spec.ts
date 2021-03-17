@@ -16,16 +16,26 @@ describe('Integration', () => {
     const port = 9060;
     const logger = { info: jest.fn(), error: jest.fn(), warn: jest.fn(), debug: jest.fn() };
     const logging = loggerMiddleware(logger);
+    const workerResponse = jest
+      .fn()
+      .mockResolvedValueOnce('Test Completed')
+      .mockRejectedValueOnce(new Error('Test Crashed'))
+      .mockResolvedValueOnce('Test Completed')
+      .mockRejectedValueOnce(new Error('Test Crashed'))
+      .mockResolvedValueOnce('Test Completed')
+      .mockResolvedValueOnce('Test Completed');
 
     const queue = new QueueService(
       new PgBoss({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' }),
+      { test: { retryLimit: 1, retryDelay: 1 } },
     );
     const withQueue = queueMiddleware(queue);
 
     const worker = new QueueWorkerService<string>(queue, {
       name: 'test',
       worker: logging(async ({ data, logger }) => {
-        logger.info(data);
+        const result = await workerResponse();
+        logger.info(data, result);
       }),
       options: { newJobCheckInterval: 100, teamConcurrency: 1, teamSize: 1 },
     });
@@ -50,10 +60,12 @@ describe('Integration', () => {
       await new Promise((resolve) => setTimeout(resolve, 3000));
     });
 
-    expect(logger.info).toHaveBeenCalledWith(1);
-    expect(logger.info).toHaveBeenCalledWith(2);
-    expect(logger.info).toHaveBeenCalledWith(3);
-    expect(logger.info).toHaveBeenCalledWith(4);
+    expect(logger.info).toHaveBeenCalledWith(1, 'Test Completed');
+    expect(logger.info).toHaveBeenCalledWith(2, 'Test Completed');
+    expect(logger.info).toHaveBeenCalledWith(3, 'Test Completed');
+    expect(logger.info).toHaveBeenCalledWith(4, 'Test Completed');
+
+    expect(logger.info).toHaveBeenCalledTimes(6);
   });
 
   it('Should work with multiple workers', async () => {

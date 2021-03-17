@@ -3,10 +3,15 @@ import { Service } from '../types';
 import { Queue, Publish, Subscribe } from './types';
 
 export class QueueService implements Queue, Service {
-  constructor(public boss: PgBoss) {}
+  constructor(
+    public boss: PgBoss,
+    public publishOptions?: {
+      [queue: string]: PgBoss.ExpirationOptions & PgBoss.RetentionOptions & PgBoss.RetryOptions;
+    },
+  ) {}
 
   async publish(req: Publish): Promise<string | null> {
-    return await this.boss.publish(req);
+    return await this.boss.publish({ options: { ...this.publishOptions?.[req.name], ...req.options }, ...req });
   }
 
   async subscribe<ReqData>(req: Subscribe<ReqData>): Promise<void> {

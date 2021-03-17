@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@ikerin/build-readme": "^1.0.4",
-    "@ovotech/laminar": "^0.11.0-alpha.0",
+    "@ovotech/laminar": "^0.11.0-alpha.1",
     "@ovotech/laminar-cli": "^0.11.0-alpha.0",
     "@types/jest": "^26.0.20",
     "@types/jsonwebtoken": "^8.5.0",

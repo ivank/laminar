@@ -113,5 +113,5 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
     }),
   ];
 
-  return { services: [logger, [pg, queue], services], logger };
+  return { services: [[pg, queue], services], logger };
 };

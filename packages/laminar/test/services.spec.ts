@@ -11,7 +11,15 @@ export const bossMiddleware = <TData>(boss: Boss<TData>): Middleware<BossContext
 describe('Services', () => {
   it('Should start and stop services', async () => {
     const port = 8060;
-    const logger = { info: jest.fn(), error: jest.fn(), warn: jest.fn(), debug: jest.fn() };
+    const logger = {
+      info: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+      start: jest.fn(),
+      stop: jest.fn(),
+      describe: () => 'TestLogger',
+    };
     const boss = new Boss<number>();
 
     const withBoss = bossMiddleware(boss);
@@ -60,6 +68,7 @@ describe('Services', () => {
       ['❎ Stopped ⛲ Laminar: http://localhost:8060'],
       ['⏬ Stopping Boss'],
       ['❎ Stopped Boss'],
+      ['❎ Stop TestLogger'],
     ]);
   });
 });

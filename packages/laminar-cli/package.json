@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.0.4",
-    "@ovotech/laminar": "^0.11.0-alpha.0",
+    "@ovotech/laminar": "^0.11.0-alpha.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.35",
     "@typescript-eslint/eslint-plugin": "^4.18.0",

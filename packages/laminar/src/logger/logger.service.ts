@@ -27,7 +27,7 @@ export class LoggerService implements Service, LoggerLike {
   }
 
   async stop(): Promise<this> {
-    await new Promise((resolve) => this.source.end(resolve));
+    this.source.close();
     return this;
   }
 

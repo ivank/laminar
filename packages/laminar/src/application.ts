@@ -7,6 +7,13 @@ export interface Application {
   services: NestedService[];
   logger?: LoggerLike | (LoggerLike & Service);
 }
+export interface StartLogger {
+  startLogger?: boolean;
+}
+
+export interface StopLogger {
+  stopLogger?: boolean;
+}
 
 const startService = async (item: Service, logger?: LoggerLike | (LoggerLike & Service)): Promise<void> => {
   logger?.info(`⏫ Starting ${item.describe()}`);
@@ -17,28 +24,38 @@ const startService = async (item: Service, logger?: LoggerLike | (LoggerLike & S
 const stopService = async (item: Service, logger?: LoggerLike | (LoggerLike & Service)): Promise<void> => {
   logger?.info(`⏬ Stopping ${item.describe()}`);
   await item.stop();
-  if (item !== logger) {
-    logger?.info(`❎ Stopped ${item.describe()}`);
-  }
+  logger?.info(`❎ Stopped ${item.describe()}`);
 };
 
-export async function start({ services, logger }: Application): Promise<void> {
+export async function start({ services, logger, startLogger = true }: Application & StartLogger): Promise<void> {
+  if (logger && 'start' in logger && startLogger) {
+    await logger.start();
+  }
+
   for (const item of services) {
     await ('start' in item
       ? startService(item, logger)
       : Promise.all(
-          item.map((child) => ('start' in child ? startService(child, logger) : start({ services: child, logger }))),
+          item.map((child) =>
+            'start' in child ? startService(child, logger) : start({ services: child, logger, startLogger: false }),
+          ),
         ));
   }
 }
 
-export async function stop({ services, logger }: Application): Promise<void> {
+export async function stop({ services, logger, stopLogger = true }: Application & StopLogger): Promise<void> {
   for (const item of services.reverse()) {
     await ('stop' in item
       ? stopService(item, logger)
       : Promise.all(
-          item.map((child) => ('stop' in child ? stopService(child, logger) : start({ services: child, logger }))),
+          item.map((child) =>
+            'stop' in child ? stopService(child, logger) : stop({ services: child, logger, stopLogger: false }),
+          ),
         ));
+  }
+  if (logger && 'stop' in logger && stopLogger) {
+    logger?.info(`❎ Stop ${logger.describe()}`);
+    await logger.stop();
   }
 }
 
