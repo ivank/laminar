@@ -7,7 +7,7 @@ import { Logger } from '../types';
 export const laminarCommand = (output: Logger = console): commander.Command =>
   commander
     .createCommand('laminar')
-    .version('0.9.2')
+    .version('0.11.0')
     .description(
       `Laminar CLI - a tool for converting OpenApi Schemas to appropriate typescript types
 

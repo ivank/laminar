@@ -29,7 +29,7 @@ export const toProducerRecord = async <TValue>(
   ),
 });
 
-export const registerSchemas = (register: { [key: string]: ConfluentSchema | RawAvroSchema }): RegisterSchemas => {
+export const registerSchemas = (register: { [topic: string]: ConfluentSchema | RawAvroSchema }): RegisterSchemas => {
   return async (schemaRegistry) =>
     new Map(
       await Promise.all(
@@ -59,7 +59,7 @@ export class KafkaProducerService implements Service {
     const id = this.register.get(subject);
     if (!id) {
       throw new Error(
-        `Cannot produce message, no schema registered for subject ${subject}. You need to add it to the topics config of the ProducerService`,
+        `Cannot produce message, no schema registered for subject ${subject}. You need to add it to the topics config of the ProducerService or use sendWithSchema method.`,
       );
     }
 
