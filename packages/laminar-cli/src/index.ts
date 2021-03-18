@@ -15,3 +15,6 @@ export const axiosContent = ({ schema, refs }: ResolvedSchema): string =>
 
 export const schemaContent = ({ schema, refs }: ResolvedSchema): string =>
   printDocument(convertSchema({ root: schema as SchemaObject, refs }, schema));
+
+export { toTypeScript as avroConvert } from './commands/avro/convert';
+export { toExternalContext as avroExternalConvert } from './commands/avro/convert';

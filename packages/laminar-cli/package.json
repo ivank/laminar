@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-cli",
-  "version": "0.11.0-alpha.1",
+  "version": "0.11.0-alpha.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar",
@@ -23,7 +23,7 @@
     "pg": "^8.5.1",
     "prettier": "^2.2.1",
     "ts-jest": "^26.5.3",
-    "typescript": "^4.1.2"
+    "typescript": "^4.2.3"
   },
   "bin": {
     "laminar": "./scripts/laminar"
@@ -54,6 +54,8 @@
   "dependencies": {
     "@ovotech/json-schema": "^0.6.0",
     "@ovotech/ts-compose": "^0.16.0",
+    "ansi-regex": "^5.0.0",
+    "avsc": "^5.5.3",
     "chalk": "^4.1.0",
     "commander": "^7.1.0",
     "openapi-schemas": "^2.0.4",
