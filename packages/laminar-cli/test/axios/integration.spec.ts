@@ -72,7 +72,7 @@ describe('Integration', () => {
 
     const http = new HttpService({ listener, port: 4920 });
 
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axiosOapi(axios.create({ baseURL: 'http://localhost:4920' }));
 
       await expect(api.api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({

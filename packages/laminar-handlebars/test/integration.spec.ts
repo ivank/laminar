@@ -32,7 +32,7 @@ describe('Integration', () => {
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });
 
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       expect(await api.get('/')).toMatchSnapshot<AxiosResponse>(axiosSnapshot);
       expect(await api.post('/result', { name: 'John Smith' })).toMatchSnapshot<AxiosResponse>(axiosSnapshot);
     });
@@ -63,7 +63,7 @@ describe('Integration', () => {
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });
 
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       expect((await api.get('/')).data).toEqual('<html><body>Layout <span>Generated</span></body></html>');
 
       writeFileSync(join(dir, 'partials/layout.hbs'), '<html><body>Layout 2 {{> @partial-block }}</body></html>');

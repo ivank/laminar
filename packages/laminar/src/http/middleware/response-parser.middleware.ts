@@ -56,5 +56,5 @@ export const parseResponse = (res: HttpResponse, parsers = defaultResponseParser
  *
  * @category component
  */
-export const responseParserMiddleware = (parsers = defaultResponseParsers): HttpMiddleware => (next) => async (req) =>
-  parseResponse(await next(req), parsers);
+export const responseParserMiddleware = (parsers = defaultResponseParsers): HttpMiddleware => (next) => async (ctx) =>
+  parseResponse(await next(ctx), parsers);

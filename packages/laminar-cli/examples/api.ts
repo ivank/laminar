@@ -13,7 +13,7 @@ const main = async () => {
     },
   });
   const server = new HttpService({ listener });
-  await init({ services: [server], logger: console });
+  await init({ initOrder: [server], logger: console });
 };
 
 main();

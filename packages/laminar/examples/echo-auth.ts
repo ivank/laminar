@@ -7,4 +7,4 @@ const app: HttpListener = async (req) => textOk(req.url.toString());
 
 const http = new HttpService({ listener: auth(app) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });

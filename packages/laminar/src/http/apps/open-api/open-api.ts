@@ -12,15 +12,15 @@ import { HttpContext, HttpResponse, HttpListener } from '../../types';
  * If a request doesn't conform to the defined OpenApi schema,
  * Attempt to return the most information in order to help the user correct the error
  */
-function toRequestError<TContext>(result: ResultError, route: Route<TContext>, req: HttpContext): HttpResponse {
+function toRequestError<TContext>(result: ResultError, route: Route<TContext>, ctx: HttpContext): HttpResponse {
   const contentMediaTypes = Object.entries(route.operation.requestBody?.content ?? {});
   const mediaType =
     contentMediaTypes.find(([mimeType]) =>
-      new RegExp(toMatchPattern(mimeType)).test(req.headers['content-type'] ?? ''),
+      new RegExp(toMatchPattern(mimeType)).test(ctx.headers['content-type'] ?? ''),
     )?.[1] ?? route.operation.requestBody?.content['default'];
 
   return jsonBadRequest({
-    message: `Request for "${req.method} ${req.url.pathname}" does not match OpenApi Schema`,
+    message: `Request for "${ctx.method} ${ctx.url.pathname}" does not match OpenApi Schema`,
     schema: route.request,
     errors: result.errors,
     ...(route.operation.summary ? { summary: route.operation.summary } : {}),
@@ -33,9 +33,9 @@ function toRequestError<TContext>(result: ResultError, route: Route<TContext>, r
 /**
  * If no path is found, this function would be called by default, Returning a 404 error
  */
-export const defaultOapiNotFound: HttpListener = async (req) =>
+export const defaultOapiNotFound: HttpListener = async (ctx) =>
   jsonNotFound({
-    message: `Request for "${req.method} ${req.url.pathname}" did not match any of the paths defined in the OpenApi Schema`,
+    message: `Request for "${ctx.method} ${ctx.url.pathname}" did not match any of the paths defined in the OpenApi Schema`,
   });
 
 /**
@@ -50,15 +50,15 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
   const routes = toRoutes<TContext>(toSchemaObject(oapi), config.paths);
   const notFound = config.notFound ?? defaultOapiNotFound;
 
-  return async (req) => {
-    const select = selectRoute<TContext>(req, routes);
+  return async (ctx) => {
+    const select = selectRoute<TContext>(ctx, routes);
 
     if (!select) {
-      return notFound(req);
+      return notFound(ctx);
     }
 
     const reqOapi: TContext & HttpContext & OapiContext = select.route.coerce({
-      ...req,
+      ...ctx,
       authInfo: undefined,
       path: select.path,
     });
@@ -71,7 +71,7 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
     });
 
     if (!checkRequest.valid) {
-      return toRequestError<TContext>(checkRequest, select.route, req);
+      return toRequestError<TContext>(checkRequest, select.route, ctx);
     }
 
     const security = await validateSecurity<TContext>(
@@ -96,7 +96,7 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
 
     if (!checkResponse.valid) {
       return jsonInternalServerError({
-        message: `Server response for "${req.method} ${req.url.pathname}" does not match OpenApi Schema`,
+        message: `Server response for "${ctx.method} ${ctx.url.pathname}" does not match OpenApi Schema`,
         errors: checkResponse.errors,
       });
     }

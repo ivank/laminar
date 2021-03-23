@@ -42,4 +42,4 @@ const db = createDbMiddleware();
 
 const http = new HttpService({ listener: log(db(auth(app))) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });

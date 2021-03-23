@@ -82,7 +82,7 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
    * That way every request will have its own connection, so there's no chance of transactions from one request affecting another.
    */
 
-  const withPg = pgMiddleware(pg);
+  const withDb = pgMiddleware({ db: pg });
   const withLogger = loggerMiddleware(logger);
   const withJobLogging = jobLoggingMiddleware(logger);
   const withQueue = queueMiddleware(queue);
@@ -98,20 +98,20 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
   const services = [
     new QueueWorkerService(queue, {
       name: 'import',
-      worker: withPg(withJobLogging(importWorker)),
+      worker: withDb(withJobLogging(importWorker)),
     }),
     new KafkaConsumerService(kafka, schemaRegistry, {
       topic: env.KAFKA_TOPIC_METER_READ,
       groupId: `${env.KAFKA_GROUP_ID}-test-1`,
       fromBeginning: true,
-      eachMessage: withLogger(withPg(meterReadsConsumer)),
+      eachMessage: withLogger(withDb(meterReadsConsumer)),
     }),
     new HttpService({
-      listener: withQueue(withRequestLogging(withPg(await httpListener(env)))),
+      listener: withQueue(withRequestLogging(withDb(await httpListener(env)))),
       hostname: env.HOST,
       port: Number(env.PORT),
     }),
   ];
 
-  return { services: [[pg, queue], services], logger };
+  return { initOrder: [[pg, queue], services], logger };
 };

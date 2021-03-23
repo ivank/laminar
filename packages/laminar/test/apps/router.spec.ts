@@ -29,7 +29,7 @@ describe('router middleware', () => {
         async () => textOk('nothing'),
       ),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/one/foo/10')).resolves.toMatchObject({
         status: 200,
         data: 'One foo 10',

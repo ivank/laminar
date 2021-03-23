@@ -13,4 +13,4 @@ const server = new HttpService({
   ),
 });
 
-init({ services: [server], logger: console });
+init({ initOrder: [server], logger: console });

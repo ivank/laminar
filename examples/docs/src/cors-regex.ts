@@ -14,4 +14,4 @@ const cors = corsMiddleware({ allowOrigin: /https?\:\/\/(localhost|example\.com)
 /**
  * Apply cors and start http server
  */
-init({ services: [new HttpService({ listener: cors(listener) })], logger: console });
+init({ initOrder: [new HttpService({ listener: cors(listener) })], logger: console });

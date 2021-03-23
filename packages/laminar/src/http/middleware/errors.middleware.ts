@@ -9,7 +9,7 @@ export interface RequestError {
   error: Error;
 }
 
-export type HttpErrorHandler = (req: HttpContext & RequestError) => Promise<HttpResponse>;
+export type HttpErrorHandler = (ctx: HttpContext & RequestError) => Promise<HttpResponse>;
 
 export const defaultErrorHandler: HttpErrorHandler = async ({ error }) => {
   return error instanceof HttpError
@@ -24,10 +24,10 @@ export const defaultErrorHandler: HttpErrorHandler = async ({ error }) => {
  * @param errorHandler use the error property to return a response object from an error
  * @category component
  */
-export const errorsMiddleware = (errorHandler = defaultErrorHandler): HttpMiddleware => (next) => async (req) => {
+export const errorsMiddleware = (errorHandler = defaultErrorHandler): HttpMiddleware => (next) => async (ctx) => {
   try {
-    return await next(req);
+    return await next(ctx);
   } catch (error) {
-    return await errorHandler({ ...req, error });
+    return await errorHandler({ ...ctx, error });
   }
 };

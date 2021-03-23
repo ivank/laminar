@@ -7,7 +7,7 @@ import { Application, HttpService, run, textOk } from '../src';
 const listener = jest.fn().mockReturnValue(textOk('Test'));
 const api = axios.create({ baseURL: 'http://localhost:8051' });
 
-const app: Application = { services: [new HttpService({ listener, port: 8051 })] };
+const app: Application = { initOrder: [new HttpService({ listener, port: 8051 })] };
 
 describe('Requests', () => {
   beforeEach(() => listener.mockClear());

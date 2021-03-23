@@ -82,7 +82,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -191,7 +191,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -243,7 +243,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -279,7 +279,7 @@ const main = async () => {
   const http = new HttpService({
     listener,
   });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -302,7 +302,7 @@ const main = async () => {
       get('/test', async () => textOk('index')),
     ),
   });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -321,7 +321,7 @@ import { HttpService, response, init } from '@ovotech/laminar';
 
 const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -344,7 +344,7 @@ const app: HttpListener = async (req) => textOk(req.url.toString());
 
 const http = new HttpService({ listener: auth(app) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
@@ -368,7 +368,7 @@ const app: HttpListener = async (req) => textOk(req.body);
 
 const http = new HttpService({ listener: log(auth(app)) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 You can see how we can string those middlewares along `log(auth(main))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -424,7 +424,7 @@ const db = createDbMiddleware();
 
 const http = new HttpService({ listener: log(db(auth(app))) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
@@ -465,7 +465,7 @@ const http = new HttpService({
   bodyParsers: [csvParser, ...defaultBodyParsers],
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ### Streaming Data
@@ -511,7 +511,7 @@ const http = new HttpService({
   bodyParsers: [csvParser, ...defaultBodyParsers],
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 Alternatively, you can also set `bodyParsers` option to an empty array (`[]`), and use `bodyParserComponent` as a middleware, selectively only on specific routes.
@@ -544,7 +544,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 Path parameters are written in `{nameOfParameter}` style, and each name is extracted and its value passed in the `path` context property.
@@ -563,7 +563,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 You can also configure a route to ba a static folder with assets. Works with nested folders as well, does not support index pages.
@@ -581,7 +581,7 @@ const main = async () => {
       get('/', async () => jsonOk({ health: 'ok' })),
     ),
   });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -664,7 +664,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 Helpers that set the status code are as follows:
@@ -753,7 +753,7 @@ const http = new HttpService({
     ),
   ),
 });
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ### Multipart Form Data
@@ -769,7 +769,7 @@ const http = new HttpService({
   listener: async ({ body }) => jsonOk({ name: body.name, file: body['my-file'][0].data.toString() }),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ```sh
@@ -813,7 +813,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ### HTTPS (TLS) Support
@@ -840,7 +840,7 @@ const main = async () => {
       get('/test', async () => textOk('index')),
     ),
   });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();

@@ -42,7 +42,7 @@ describe('Statements', () => {
       },
     });
     const http = new HttpService({ listener, port: 4910 });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:4910' });
       const { data } = await api.get('/accounts/123/meters');
 

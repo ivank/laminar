@@ -33,7 +33,7 @@ describe('Integration', () => {
     const port = 8051;
 
     const server = new HttpService({ port, listener, timeout: 50 });
-    await run({ services: [server] }, async () => {
+    await run({ initOrder: [server] }, async () => {
       const error = await axios.get(`http://localhost:${port}`).catch((error) => error);
       expect(error.message).toEqual('socket hang up');
     });
@@ -47,7 +47,7 @@ describe('Integration', () => {
     const ca = readFileSync(join(__dirname, '../examples/ca.pem'));
 
     const http = new HttpService({ port, listener, https: { key, cert } });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const response = await axios.get(`https://localhost:${port}`, {
         httpsAgent: new Agent({ ca }),
       });
@@ -157,7 +157,7 @@ describe('Integration', () => {
     );
 
     const http = new HttpService({ port: 8050, listener: responseTime(db(logging(app))) });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8050' });
 
       await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({

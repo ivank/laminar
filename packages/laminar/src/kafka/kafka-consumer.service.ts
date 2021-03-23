@@ -1,8 +1,14 @@
 import type { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import { Service } from '../types';
 import type { Kafka, ConsumerSubscribeTopic, ConsumerConfig, Consumer } from 'kafkajs';
-import { SchemaRegistryConsumerRunConfig, DecodedKafkaMessage } from './types';
+import { SchemaRegistryConsumerRunConfig, DecodedKafkaMessage, DecodedEachBatchPayload } from './types';
 
+/**
+ * Start a consumer group to consume a kafka topic.
+ * When service service starts, subscribe to the topic and call kafkajs consumer `run` method.
+ *
+ * On each message / each batch, decode the message using schemaRegistry and pass it as `decodedValue` next to the `value` param.
+ */
 export class KafkaConsumerService<TValue> implements Service {
   public consumer: Consumer;
 
@@ -41,8 +47,7 @@ export class KafkaConsumerService<TValue> implements Service {
                 ? await this.schemaRegistry.decode(value)
                 : null;
             }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            return eachBatch(payload as any);
+            return eachBatch(payload as DecodedEachBatchPayload<TValue>);
           }
         : undefined,
     });

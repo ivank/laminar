@@ -89,26 +89,26 @@ export const corsMiddleware = ({
   };
 
   return (next) => {
-    return async (req) => {
+    return async (ctx) => {
       const headers = {
-        'Access-Control-Allow-Origin': toAllowOrigin(allowOrigin, req.headers.origin, fallbackAllowOrigin),
+        'Access-Control-Allow-Origin': toAllowOrigin(allowOrigin, ctx.headers.origin, fallbackAllowOrigin),
         ...initialHeaders,
       };
 
-      if (req.method === 'OPTIONS') {
+      if (ctx.method === 'OPTIONS') {
         return {
           body: '',
           headers: {
             ...headers,
             ...optionsHeaders,
             'content-type': '',
-            'Access-Control-Allow-Headers': toAllowHeaders(allowHeaders, req.headers['access-control-request-headers']),
+            'Access-Control-Allow-Headers': toAllowHeaders(allowHeaders, ctx.headers['access-control-request-headers']),
           },
           status: 204,
         };
       } else {
         try {
-          const response = await next(req);
+          const response = await next(ctx);
           return { ...response, headers: { ...response.headers, ...headers } };
         } catch (error) {
           if (error instanceof HttpError) {

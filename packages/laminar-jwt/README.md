@@ -32,7 +32,7 @@ const listener: HttpListener = router(
 
 const http = new HttpService({ listener });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ### Usage with oapi
@@ -149,7 +149,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -259,7 +259,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -403,7 +403,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
@@ -449,7 +449,7 @@ const listener: HttpListener = router(
 );
 
 const http = new HttpService({ listener });
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ### JWK for public keys
@@ -505,7 +505,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 You can test it by running (requires curl and jq):
@@ -582,7 +582,7 @@ const http = new HttpService({
     ),
   ),
 });
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 When this is running, you can test it with calls like this (requires curl and jq):
@@ -641,7 +641,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();

@@ -28,7 +28,7 @@ const main = async () => {
   /**
    * Now we've cerated the server, but it has not yet been started.
    */
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();

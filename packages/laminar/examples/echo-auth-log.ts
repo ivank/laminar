@@ -14,4 +14,4 @@ const app: HttpListener = async (req) => textOk(req.body);
 
 const http = new HttpService({ listener: log(auth(app)) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });

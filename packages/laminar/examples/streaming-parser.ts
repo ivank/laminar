@@ -32,4 +32,4 @@ const http = new HttpService({
   bodyParsers: [csvParser, ...defaultBodyParsers],
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });

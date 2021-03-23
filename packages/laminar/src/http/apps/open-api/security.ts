@@ -31,7 +31,7 @@ export async function validateSecurity<
   TContext extends Empty = Empty,
   TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
 >(
-  req: TContext & HttpContext & OapiContext,
+  ctx: TContext & HttpContext & OapiContext,
   requirements?: SecurityRequirementObject[],
   schemes?: { [securityScheme: string]: SecuritySchemeObject },
   security?: OapiSecurity<TContext, TOapiAuthInfo>,
@@ -44,7 +44,7 @@ export async function validateSecurity<
     requirements.map((group) =>
       Promise.all(
         Object.entries(group).map(([name, scopes]) =>
-          security[name]({ ...req, securityScheme: schemes[name], scopes }),
+          security[name]({ ...ctx, securityScheme: schemes[name], scopes }),
         ),
       ),
     ),

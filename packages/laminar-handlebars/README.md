@@ -22,7 +22,7 @@ const server = new HttpService({
   ),
 });
 
-init({ services: [server], logger: console });
+init({ initOrder: [server], logger: console });
 ```
 
 When you set `dir`, it will load and compile templates in `views` and `partials` folders.
@@ -54,7 +54,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ### Usage without middleware
@@ -77,7 +77,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ### Caching options
@@ -106,7 +106,7 @@ const http = new HttpService({
   ),
 });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 ## Running the tests

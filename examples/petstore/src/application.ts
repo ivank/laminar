@@ -31,7 +31,7 @@ export const createApplication = async (env: EnvVars, logger: LoggerLike): Promi
   /**
    * Middlewares
    */
-  const withPg = pgMiddleware(pg);
+  const withDb = pgMiddleware({ db: pg });
   const withLogger = requestLoggingMiddleware(logger);
   const withPetsDb = petsDbMiddleware();
 
@@ -39,10 +39,10 @@ export const createApplication = async (env: EnvVars, logger: LoggerLike): Promi
    * Services
    */
   const http = new HttpService({
-    listener: withLogger(withPg(withPetsDb(await createHttp(env)))),
+    listener: withLogger(withDb(withPetsDb(await createHttp(env)))),
     port: Number(env.PORT),
     hostname: env.HOST,
   });
 
-  return { services: [pg, http], secret: env.SECRET, pg, http, logger };
+  return { initOrder: [pg, http], secret: env.SECRET, pg, http, logger };
 };

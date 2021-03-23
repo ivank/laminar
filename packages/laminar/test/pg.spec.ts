@@ -23,6 +23,8 @@ export const loggerMiddleware = (logger: LoggerLike): Middleware<LoggerContext> 
 
 describe('Integration', () => {
   it('Should start and stop services', async () => {
+    jest.setTimeout(10000);
+
     const port = 10060;
     const loggerMock = {
       info: jest.fn(),
@@ -40,12 +42,12 @@ describe('Integration', () => {
         max: 5,
       }),
     );
-    const withPool = pgMiddleware(pool);
+    const withDb = pgMiddleware({ db: pool });
 
     const http = new HttpService({
       port,
       listener: withLogger(
-        withPool(
+        withDb(
           router(
             post('/create', async ({ logger, db, body }) => {
               logger.info('create', body);
@@ -64,7 +66,7 @@ describe('Integration', () => {
       ),
     });
 
-    await run({ services: [pool, http] }, async () => {
+    await run({ initOrder: [pool, http] }, async () => {
       const names = [...Array(100).keys()].map((key) => `test-${key}`);
 
       const results = await Promise.all(names.map((name) => axios.post(`http://localhost:${port}/create`, { name })));

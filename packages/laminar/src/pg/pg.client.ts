@@ -2,6 +2,9 @@ import type { QueryResult, QueryConfig, QueryResultRow, PoolClient } from 'pg';
 import { LoggerLike } from '../logger';
 import { PgError } from './pg-error';
 
+/**
+ * A class that wraps a PoolClient, cathing errors and re-throwing them with more diagnostic information.
+ */
 export class PgClient {
   constructor(public client: PoolClient, public logger?: LoggerLike) {}
 

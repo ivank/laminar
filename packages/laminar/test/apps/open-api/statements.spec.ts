@@ -44,7 +44,7 @@ describe('Statements', () => {
     const listener = await openApi(config);
     const http = new HttpService({ listener, port: 8064 });
 
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8064' });
       const { data } = await api.get('/accounts/123/meters');
 

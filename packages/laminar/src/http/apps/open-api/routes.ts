@@ -17,12 +17,12 @@ function toMatcher(path: string, method: string): Matcher {
   const uppercaseMethod = method.toUpperCase();
   const keys = toPathKeys(path);
   const re = toPathRe(path);
-  return (req) => {
-    if (!req.url.pathname || uppercaseMethod !== req.method) {
+  return (ctx) => {
+    if (!ctx.url.pathname || uppercaseMethod !== ctx.method) {
       return false;
     }
 
-    const pathMatch = re.exec(req.url.pathname);
+    const pathMatch = re.exec(ctx.url.pathname);
     if (pathMatch) {
       return pathMatch.slice(1).reduce((all, val, i) => ({ [keys[i]]: val, ...all }), {});
     }
@@ -171,14 +171,14 @@ const coercers: { [key: string]: Coercer | undefined } = {
 function toParameterCoerce<TContext extends Empty>(parameter: ResolvedParameterObject): Coerce<TContext> | undefined {
   const coercer = coercers[parameter.schema?.type ?? ''];
   if (coercer) {
-    return (req) => {
+    return (ctx) => {
       const location = toParamLocation(parameter.in);
-      const rawValue = req[location]?.[parameter.name];
+      const rawValue = ctx[location]?.[parameter.name];
       if (rawValue !== undefined) {
-        const value = coercer(req[location][parameter.name], parameter.schema);
-        return { ...req, [location]: { ...req[location], [parameter.name]: value } };
+        const value = coercer(ctx[location][parameter.name], parameter.schema);
+        return { ...ctx, [location]: { ...ctx[location], [parameter.name]: value } };
       } else {
-        return req;
+        return ctx;
       }
     };
   } else {
@@ -200,7 +200,7 @@ function toRequestCoerce<TContext extends Empty>(
     .map((item) => toParameterCoerce<TContext>(item))
     .filter((item): item is Coerce<TContext> => Boolean(item));
 
-  return (req) => coerceParameters.reduce((acc, coerce) => coerce(acc), req);
+  return (ctx) => coerceParameters.reduce((acc, coerce) => coerce(acc), ctx);
 }
 
 /**
@@ -289,11 +289,11 @@ export function toRoutes<TContext extends Empty>(
  * @typeParam TContext pass the request properties that the app requires. Usually added by the middlewares
  */
 export function selectRoute<TContext extends Empty = Empty>(
-  req: TContext & HttpContext,
+  ctx: TContext & HttpContext,
   routes: Route<TContext>[],
 ): false | { path: OapiPath; route: Route<TContext> } {
   for (const route of routes) {
-    const path = route.matcher(req);
+    const path = route.matcher(ctx);
     if (path) {
       return { route, path };
     }

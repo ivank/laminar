@@ -99,7 +99,7 @@ export {
   LoggerService,
 } from './logger/index';
 
-export { start, stop, Application, init, run, stopOnSignal } from './application';
+export { start, stop, Application, init, run, InitOrder, StartLogger, StopLogger } from './application';
 export {
   responseParserMiddleware,
   defaultResponseParsers,

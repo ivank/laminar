@@ -31,4 +31,4 @@ const listener: HttpListener = router(
 );
 
 const http = new HttpService({ listener });
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });

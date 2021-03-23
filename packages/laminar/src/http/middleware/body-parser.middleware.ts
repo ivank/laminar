@@ -105,5 +105,5 @@ export async function parseBody(incommingMessage: IncomingMessage, parsers = def
  * @param parsers replace with custom parsers, can use [...defaultBodyParsers, newParser] to add
  */
 export function bodyParserMiddleware(parsers = defaultBodyParsers): HttpMiddleware {
-  return (next) => async (req) => next({ ...req, body: await parseBody(req.incommingMessage, parsers) });
+  return (next) => async (ctx) => next({ ...ctx, body: await parseBody(ctx.incommingMessage, parsers) });
 }

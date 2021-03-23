@@ -33,7 +33,7 @@ const main = async () => {
     },
   });
   const http = new HttpService({ listener });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();

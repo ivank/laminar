@@ -26,7 +26,7 @@ export interface RequestSecurityResolver {
 }
 
 export type OapiSecurityResolver<TContext extends Empty = Empty, TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
-  req: TContext & HttpContext & OapiContext & RequestSecurityResolver,
+  ctx: TContext & HttpContext & OapiContext & RequestSecurityResolver,
 ) => Security<TOapiAuthInfo> | HttpResponse | Promise<Security<TOapiAuthInfo> | HttpResponse>;
 
 export interface OapiSecurity<TContext extends Empty = Empty, TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> {
@@ -59,13 +59,13 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   notFound?: HttpListener<TContext>;
 }
 
-export type Matcher = (req: HttpContext) => OapiPath | false;
+export type Matcher = (ctx: HttpContext) => OapiPath | false;
 
 /**
  * A function that will convert a request into desired types.
  */
 export type Coerce<TContext extends Empty = Empty> = (
-  req: TContext & HttpContext & OapiContext,
+  ctx: TContext & HttpContext & OapiContext,
 ) => TContext & HttpContext & OapiContext;
 
 /**

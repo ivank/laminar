@@ -3,6 +3,11 @@ import type { Kafka, ConsumerSubscribeTopic, ConsumerConfig } from 'kafkajs';
 import { KafkaConsumerService } from './kafka-consumer.service';
 import { SchemaRegistryConsumerRunConfig } from './types';
 
+/**
+ * Optionally start a consumer group to consume a kafka topic.
+ * Start it only if the topic name is not undefined, otherwise skip it.
+ * Otherwise behaves same ways as {@link KafkaConsumerService}
+ */
 export class KafkaConsumerOptionalService<TValue> extends KafkaConsumerService<TValue> {
   public isActive = false;
 

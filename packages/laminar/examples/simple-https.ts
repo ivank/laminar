@@ -15,7 +15,7 @@ const main = async () => {
       get('/test', async () => textOk('index')),
     ),
   });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();

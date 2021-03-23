@@ -36,7 +36,7 @@ describe('Integration', () => {
 
     const http = new HttpService({ listener, port: 8064 });
 
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8064' });
 
       const { data: token } = await api.post('/session', {
@@ -167,7 +167,7 @@ describe('Integration', () => {
     );
 
     const http = new HttpService({ listener, port: 8063 });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
       const { data: token } = await api.post('/session', {
@@ -255,7 +255,7 @@ describe('Integration', () => {
       port: 8065,
     });
 
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8065' });
 
       const { data: token } = await api.post('/session', {

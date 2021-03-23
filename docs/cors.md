@@ -31,7 +31,7 @@ const main = async () => {
    * Apply cors
    */
   const http = new HttpService({ listener: cors(app) });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();

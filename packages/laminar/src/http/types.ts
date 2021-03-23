@@ -104,13 +104,7 @@ export interface HttpResponse<Content = unknown, Status = number> {
  *
  * @typeParam TRequest pass the request properties that the app requires. Usually added by the middlewares
  */
-export type HttpListener<TRequest extends Empty = Empty> = (req: HttpContext & TRequest) => Promise<HttpResponse>;
-
-// export type HttpMiddleware<TProvide extends Empty = Empty, TRequire extends Empty = Empty> = <
-//   TInherit extends HttpRequest
-// >(
-//   next: (req: TProvide & TRequire & TInherit) => Promise<HttpResponse>,
-// ) => (req: TRequire & TInherit) => Promise<HttpResponse>;
+export type HttpListener<TRequest extends Empty = Empty> = (ctx: HttpContext & TRequest) => Promise<HttpResponse>;
 
 /**
  * An middleware that uses {@link HttpRequest} and modifies it to be used by the app or the downstream middlewares

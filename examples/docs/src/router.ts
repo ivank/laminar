@@ -52,4 +52,4 @@ const listener = router(
 /**
  * Start the http service
  */
-init({ services: [new HttpService({ listener })], logger: console });
+init({ initOrder: [new HttpService({ listener })], logger: console });

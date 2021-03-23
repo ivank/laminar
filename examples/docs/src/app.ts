@@ -9,4 +9,4 @@ const listener: HttpListener = async ({ incommingMessage }) => jsonOk({ accessed
 
 // app
 
-init({ services: [new HttpService({ listener })], logger: console });
+init({ initOrder: [new HttpService({ listener })], logger: console });

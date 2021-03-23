@@ -24,7 +24,7 @@ export interface RouteContext {
  *
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
  */
-type Matcher<TContext> = (req: TContext & HttpContext) => RouteContext | false;
+type Matcher<TContext> = (ctx: TContext & HttpContext) => RouteContext | false;
 
 /**
  * Captured path parameters to the route would be passed to the `path` property.
@@ -136,12 +136,12 @@ export const route = <TContext extends Empty = Empty>({
   const re = typeof path === 'string' ? toPathRe(path) : path;
   const uppercaseMethod = method?.toUpperCase();
 
-  const matcher: Matcher<TContext> = (req) => {
-    if (!req.url || (uppercaseMethod && uppercaseMethod !== req.method)) {
+  const matcher: Matcher<TContext> = (ctx) => {
+    if (!ctx.url || (uppercaseMethod && uppercaseMethod !== ctx.method)) {
       return false;
     }
 
-    const pathMatch = re.exec(req.url.pathname);
+    const pathMatch = re.exec(ctx.url.pathname);
     if (pathMatch) {
       return {
         path: keys ? pathMatch.slice(1).reduce((all, val, i) => ({ [keys[i]]: val, ...all }), {}) : pathMatch.slice(1),
@@ -158,17 +158,17 @@ export const route = <TContext extends Empty = Empty>({
  * If the route's matcher matches the current request,
  * extract the path parameters and return them along with the matched route's listener
  *
- * @param req
+ * @param ctx
  * @param routes An array of routes to be checked sequentially
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
  */
 const selectRoute = <TContext extends Empty = Empty>(
-  req: TContext & HttpContext,
+  ctx: TContext & HttpContext,
   routes: (PathRoute<TContext> | AppRoute<TContext>)[],
 ): false | { path: any; listener: HttpListener<TContext & RouteContext> } => {
   for (const route of routes) {
     if ('matcher' in route) {
-      const params = route.matcher(req);
+      const params = route.matcher(ctx);
       if (params) {
         return { listener: route.listener, ...params };
       }
@@ -199,11 +199,11 @@ const selectRoute = <TContext extends Empty = Empty>(
 export function router<TContext extends Empty = Empty>(
   ...routes: (PathRoute<TContext> | AppRoute<TContext>)[]
 ): HttpListener<TContext> {
-  return async (req) => {
-    const selected = selectRoute<TContext>(req, routes);
+  return async (ctx) => {
+    const selected = selectRoute<TContext>(ctx, routes);
     return selected
-      ? selected.listener({ ...req, path: selected.path })
-      : jsonNotFound({ message: `Path ${req.method} ${req.url.pathname} not found` });
+      ? selected.listener({ ...ctx, path: selected.path })
+      : jsonNotFound({ message: `Path ${ctx.method} ${ctx.url.pathname} not found` });
   };
 }
 
@@ -239,21 +239,21 @@ export function staticAssets<T extends Empty = Empty>(
   const allwoedMethods = ['GET', 'HEAD'];
 
   return {
-    matcher: (req) => {
-      return allwoedMethods.includes(req.incommingMessage.method ?? '') &&
-        req.incommingMessage.url?.startsWith(prefixPath)
+    matcher: (ctx) => {
+      return allwoedMethods.includes(ctx.incommingMessage.method ?? '') &&
+        ctx.incommingMessage.url?.startsWith(prefixPath)
         ? { path: {} }
         : false;
     },
-    listener: async (req) => {
-      const relativePath = join('.', normalize(req.incommingMessage.url ?? '').substring(prefixPath.length));
+    listener: async (ctx) => {
+      const relativePath = join('.', normalize(ctx.incommingMessage.url ?? '').substring(prefixPath.length));
 
       if (parentPathRegEx.test(relativePath)) {
         return textForbidden('Access Denied');
       }
 
       const filename = resolve(normalize(root), relativePath);
-      const incommingMessage = acceptRanges ? req.incommingMessage : undefined;
+      const incommingMessage = acceptRanges ? ctx.incommingMessage : undefined;
 
       if (existsSync(filename)) {
         const stats = statSync(filename);
@@ -264,12 +264,12 @@ export function staticAssets<T extends Empty = Empty>(
               return file(indexname, { incommingMessage });
             }
           }
-          return indexNotFound(req);
+          return indexNotFound(ctx);
         } else {
           return file(filename, { incommingMessage, stats });
         }
       } else {
-        return fileNotFound(req);
+        return fileNotFound(ctx);
       }
     },
   };

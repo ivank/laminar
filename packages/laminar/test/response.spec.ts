@@ -28,7 +28,7 @@ const api = axios.create({ baseURL: 'http://localhost:8052' });
 describe('Requests', () => {
   it('Should process response', async () => {
     const http = new HttpService({ port: 8052, listener: async () => textOk('Test') });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({
           'content-type': 'text/plain',
@@ -44,7 +44,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => jsonOk({ other: 'stuff', at: new Date('2020-02-02T12:00:00Z'), no: undefined }),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({
           'content-type': 'application/json',
@@ -60,7 +60,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => binary(ok({ body: Buffer.from('test-test-maaaany-test') })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({
           'content-type': 'application/octet-stream',
@@ -76,7 +76,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => textOk(new ObjectReadableMock(['test-', 'test-', 'maaaany-', 'test'])),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({
           'content-type': 'text/plain',
@@ -88,7 +88,7 @@ describe('Requests', () => {
 
   it('Should process laminar simple response', async () => {
     const http = new HttpService({ port: 8052, listener: async () => text({ body: '', status: 201 }) });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 201,
         headers: expect.objectContaining({
@@ -113,7 +113,7 @@ describe('Requests', () => {
           }),
         ),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 201,
         headers: expect.objectContaining({
@@ -132,7 +132,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => jsonNotFound({ message: 'test' }),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test').catch((error) => error.response)).resolves.toMatchObject({
         status: 404,
         data: { message: 'test' },
@@ -147,7 +147,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => optional(jsonOk, data) ?? jsonNotFound({ message: 'not found' }),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       data = { message: 'test' };
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
@@ -167,7 +167,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => file(join(__dirname, 'test.txt')),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
         headers: expect.objectContaining({
@@ -184,7 +184,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => file(join(__dirname, 'test.html')),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 200,
         headers: expect.objectContaining({
@@ -201,7 +201,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => file(join(__dirname, 'test.txt'), { status: 201 }),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 201,
         data: 'some stuff\n',
@@ -214,7 +214,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => csv(ok({ body: 'one,two' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'text/csv' }),
         data: 'one,two',
@@ -227,7 +227,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => css(ok({ body: 'html { backgroun: red; }' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'text/css' }),
         data: 'html { backgroun: red; }',
@@ -240,7 +240,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => html(ok({ body: '<html></html>' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'text/html' }),
         data: '<html></html>',
@@ -253,7 +253,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => text(ok({ body: 'txt' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'text/plain' }),
         data: 'txt',
@@ -266,7 +266,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => form(ok({ body: { one: 'foo', two: 'bar' } })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'application/x-www-form-urlencoded' }),
         data: 'one=foo&two=bar',
@@ -279,7 +279,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => xml(ok({ body: '<xml></xml>' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'application/xml' }),
         data: '<xml></xml>',
@@ -292,7 +292,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => pdf(ok({ body: 'tmp' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'application/pdf' }),
       });
@@ -304,7 +304,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => binary(ok({ body: 'tmp' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'application/octet-stream' }),
       });
@@ -316,7 +316,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => yaml(ok({ body: 'tmp' })),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         headers: expect.objectContaining({ 'content-type': 'application/yaml' }),
       });
@@ -328,7 +328,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async () => file(join(__dirname, 'test.txt'), { status: 201 }),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({
         status: 201,
         data: 'some stuff\n',
@@ -341,7 +341,7 @@ describe('Requests', () => {
       port: 8052,
       listener: async ({ incommingMessage }) => file(join(__dirname, 'test.txt'), { incommingMessage }),
     });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test', { headers: { Range: 'bytes=0-3' } })).resolves.toMatchObject({
         status: 206,
         headers: expect.objectContaining({

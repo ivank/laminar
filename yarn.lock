@@ -446,7 +446,7 @@ __metadata:
     "@kafkajs/confluent-schema-registry": ^2.0.0
     "@ovotech/avro-decimal": ^0.1.4
     "@ovotech/avro-timestamp-millis": ^0.1.4
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@ovotech/laminar-cli": ^0.11.0-alpha.2
     "@ovotech/laminar-jwt": ^0.11.0-alpha.0
     "@types/jest": ^26.0.20
@@ -480,7 +480,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/docs@workspace:examples/docs"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -499,7 +499,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/petstore@workspace:examples/petstore"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@ovotech/laminar-cli": ^0.11.0-alpha.2
     "@ovotech/laminar-jwt": ^0.11.0-alpha.0
     "@types/jest": ^26.0.20
@@ -523,7 +523,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/security@workspace:examples/security"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@ovotech/laminar-cli": ^0.11.0-alpha.2
     "@ovotech/laminar-jwt": ^0.11.0-alpha.0
     "@types/jest": ^26.0.20
@@ -564,7 +564,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/split@workspace:examples/split"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@types/pg": ^7.14.11
@@ -1930,7 +1930,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": ^1.0.4
     "@ovotech/json-schema": ^0.6.0
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@ovotech/ts-compose": ^0.16.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -1962,7 +1962,7 @@ __metadata:
   resolution: "@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars"
   dependencies:
     "@ikerin/build-readme": ^1.0.4
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -1987,7 +1987,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": ^1.0.4
     "@ovotech/json-schema": ^0.6.0
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.2
     "@ovotech/laminar-cli": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/jsonwebtoken": ^8.5.0
@@ -2026,7 +2026,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar@^0.11.0-alpha.1, @ovotech/laminar@workspace:packages/laminar":
+"@ovotech/laminar@^0.11.0-alpha.1, @ovotech/laminar@^0.11.0-alpha.2, @ovotech/laminar@workspace:packages/laminar":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar@workspace:packages/laminar"
   dependencies:

@@ -1,6 +1,9 @@
 import { Service } from '../types';
 import { Queue, Subscribe } from './types';
 
+/**
+ * Start a queue worker {@link Service}, by subscribing to the queue on start.
+ */
 export class QueueWorkerService<ReqData> implements Service {
   constructor(public queue: Queue, public subscribe: Subscribe<ReqData>) {}
 

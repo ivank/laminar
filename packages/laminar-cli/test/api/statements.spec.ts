@@ -140,7 +140,7 @@ describe('Statements', () => {
     const logger = { error: jest.fn(), warn: jest.fn(), info: jest.fn(), debug: jest.fn() };
     const withLogger = loggerMiddleware(logger);
     const http = new HttpService({ listener: withLogger(oapi), port: 4913 });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:4913' });
 
       const { data: statementHtml } = await api.get('/v2/statements/111/html', {

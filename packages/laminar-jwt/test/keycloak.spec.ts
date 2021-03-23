@@ -59,7 +59,7 @@ describe('Integration', () => {
       ),
     );
     const http = new HttpService({ listener, port: 8063 });
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
       const { data: data1 } = await api.get('/test', {

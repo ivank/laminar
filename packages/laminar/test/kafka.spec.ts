@@ -140,7 +140,7 @@ describe('Integration', () => {
       }),
     });
 
-    const services = [producer, [event1Service, event2Service, event3Service]];
+    const initOrder = [producer, [event1Service, event2Service, event3Service]];
 
     try {
       await admin.connect();
@@ -151,7 +151,7 @@ describe('Integration', () => {
           { topic: topic3, numPartitions: 1 },
         ],
       });
-      await start({ services, logger });
+      await start({ initOrder, logger });
 
       await Promise.all([
         producer.send<Event1>({ topic: topic1, messages: [{ value: { field1: 'test1' }, partition: 0 }] }),
@@ -222,7 +222,7 @@ describe('Integration', () => {
       );
     } finally {
       await admin.disconnect();
-      await stop({ services, logger });
+      await stop({ initOrder, logger });
     }
   });
 });

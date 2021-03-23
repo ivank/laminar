@@ -86,7 +86,7 @@ describe('Petstore', () => {
     const withLogger = loggerMiddleware(logger);
     const http = new HttpService({ listener: withLogger(oapi), port: 4911 });
 
-    await run({ services: [http] }, async () => {
+    await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:4911' });
 
       await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({

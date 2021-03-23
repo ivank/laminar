@@ -14,12 +14,12 @@ const main = async () => {
   const pg = new PgService(new Pool({ connectionString: process.env.PG }));
 
   const withLogger = loggerMiddleware(console);
-  const withPg = pgMiddleware(pg);
+  const withDb = pgMiddleware({ db: pg });
 
-  const listener = withLogger(withPg(routes));
+  const listener = withLogger(withDb(routes));
 
   const http = new HttpService({ listener, port: Number(process.env.PORT) });
-  await init({ services: [pg, http], logger: console });
+  await init({ initOrder: [pg, http], logger: console });
 };
 
 main();

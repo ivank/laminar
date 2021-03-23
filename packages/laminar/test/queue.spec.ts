@@ -53,7 +53,7 @@ describe('Integration', () => {
       ),
     });
 
-    await run({ services: [queue, [http, worker]] }, async () => {
+    await run({ initOrder: [queue, [http, worker]] }, async () => {
       await axios.get(`http://localhost:${port}?data[]=1&data[]=2&data[]=3`);
       await axios.get(`http://localhost:${port}?data[]=4`);
 
@@ -108,7 +108,7 @@ describe('Integration', () => {
       ),
     });
 
-    await run({ services: [queue, [http, worker]] }, async () => {
+    await run({ initOrder: [queue, [http, worker]] }, async () => {
       await axios.get(`http://localhost:${port}?name=test-1&data[]=1&data[]=2&data[]=3`);
       await axios.get(`http://localhost:${port}?name=test-2&data[]=4`);
 

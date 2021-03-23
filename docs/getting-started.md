@@ -100,7 +100,7 @@ const main = async () => {
   /**
    * The http server now should be running and indicate that the server is now running
    */
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();

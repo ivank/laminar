@@ -22,4 +22,4 @@ const http = new HttpService({
 
 // app
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });

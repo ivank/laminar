@@ -15,7 +15,7 @@ import { HttpService, response, init } from '@ovotech/laminar';
 
 const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 It consists of a function that gets the body of the request from the current request context, and returns it as a response. Echo.
@@ -38,7 +38,7 @@ const app: HttpListener = async (req) => textOk(req.url.toString());
 
 const http = new HttpService({ listener: auth(app) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
@@ -62,7 +62,7 @@ const app: HttpListener = async (req) => textOk(req.body);
 
 const http = new HttpService({ listener: log(auth(app)) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 You can see how we can string those middlewares along `log(auth(app))` as just function calls. But that's not all that impressive. Where this approach really shines is when we want to modify the context to pass state to middlewares downstream, and we want to make sure that is statically typed. E.g. we want typescript to complain and bicker if we attempt to use a middleware that requires something from the context, that hasn't yet been set.
@@ -118,7 +118,7 @@ const db = createDbMiddleware();
 
 const http = new HttpService({ listener: log(db(auth(app))) });
 
-init({ services: [http], logger: console });
+init({ initOrder: [http], logger: console });
 ```
 
 We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.

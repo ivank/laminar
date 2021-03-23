@@ -8,7 +8,7 @@ const main = async () => {
       get('/', async () => jsonOk({ health: 'ok' })),
     ),
   });
-  await init({ services: [http], logger: console });
+  await init({ initOrder: [http], logger: console });
 };
 
 main();
