@@ -22,13 +22,13 @@ And lastly there is no external code dependancies, as we only depend on mimetype
 
 ## Effortless scaling
 
-![A single node, holding multiple services with different team concurrencies](docs/readme-assets/node-instance-single.svg)
+<img src="docs/readme-assets/node-instance-single.png" alt="A single node, holding multiple services with different team concurrencies" width="600" height="330">
 
 Laminar is designed around _Service_ objects that handle different requests - coming from http, kafka, queue managers etc. Each of those _Services_ is able to spawn multiple concurrent workers, that process the requests.
 
 You can easily scale your laminar app by increasing the workers for each _Service_, or increse the instances of your whole node application (thus scaling each _Service_ within the application). If any particular _Service_ demands more resource you can move it to its own Laminar application and scale that separately. Since each worker would be a pure stateless function, so moving them around to differnet packages should be simple enough.
 
-![Multiple nodes holding different services with their own concurrencies](docs/readme-assets/node-instance-split.svg)
+<img src="docs/readme-assets/node-instance-split.png" alt="Multiple nodes holding different services with their own concurrencies" width="600" height="434">
 
 This flexibility allows you to either keep all your code in one codebase, but quickly spin it out if size / scale demands it.
 
@@ -36,7 +36,7 @@ A typical laminar app will concist of setting up the various instances that you 
 
 ## Middlewares and external Dependencies
 
-![An image illustrating how middlewares work](docs/readme-assets/middlewares-illustration.svg)
+<img src="docs/readme-assets/middlewares-illustration.png" alt="An image illustrating how middlewares work" width="861" height="271">
 
 A key concept in Laminar is the use of middlewares, those are async function wrappers, that can be used to inject dependencies into function calls, while themselves being just functions. Very similar to [express middlewares](https://expressjs.com/en/guide/using-middleware.html), but allowing you to statically define and enforce the types all around.
 
