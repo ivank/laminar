@@ -1,4 +1,4 @@
-![Laminar logo](docs/readme-assets/logo.svg)
+![Laminar logo](docs/readme-assets/laminar-logo.svg)
 
 # Laminar
 
@@ -36,7 +36,7 @@ A typical laminar app will concist of setting up the various instances that you 
 
 ## Middlewares and external Dependencies
 
-![An image illustrating how middlewares work](docs/readme-assets/middlewares.svg)
+![An image illustrating how middlewares work](docs/readme-assets/middlewares-illustration.svg)
 
 A key concept in Laminar is the use of middlewares, those are async function wrappers, that can be used to inject dependencies into function calls, while themselves being just functions. Very similar to [express middlewares](https://expressjs.com/en/guide/using-middleware.html), but allowing you to statically define and enforce the types all around.
 
