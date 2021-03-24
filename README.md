@@ -1,4 +1,8 @@
-![Laminar logo](docs/readme-assets/laminar-logo.svg)
+![Laminar logo](docs/assets/laminar-logo.svg)
+
+| Laminar                                                                                                      | Laminar CLI                                                                                                              | Laminar Handlebars                                                                                                                     | Laminar JWT                                                                                                              | json-schema                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| [![Laminar](https://circleci.com/gh/ovotech/laminar.svg?style=svg)](https://circleci.com/gh/ovotech/laminar) | [![Laminar CLI](https://circleci.com/gh/ovotech/laminar-cli.svg?style=svg)](https://circleci.com/gh/ovotech/laminar-cli) | [![Laminar CLI](https://circleci.com/gh/ovotech/laminar-handlebars.svg?style=svg)](https://circleci.com/gh/ovotech/laminar-handlebars) | [![Laminar CLI](https://circleci.com/gh/ovotech/laminar-jwt.svg?style=svg)](https://circleci.com/gh/ovotech/laminar-jwt) | [![Laminar CLI](https://circleci.com/gh/ovotech/json-schema.svg?style=svg)](https://circleci.com/gh/ovotech/json-schema) |
 
 # Laminar
 
@@ -6,9 +10,9 @@ A library for building node services in TypeScript. Convert external interfaces 
 
 This is an attempt to implement the concepts of [Design-First, Evolve with Code](https://apisyouwonthate.com/blog/api-design-first-vs-code-first) principles cleanly.
 
-| OpenAPI Definition                               | Service Implementation                           |
-| ------------------------------------------------ | ------------------------------------------------ |
-| ![OpenAPI Code](docs/readme-assets/api.yaml.png) | ![Http Service](docs/readme-assets/index.ts.png) |
+| OpenAPI Definition                        | Service Implementation                    |
+| ----------------------------------------- | ----------------------------------------- |
+| ![OpenAPI Code](docs/assets/api.yaml.png) | ![Http Service](docs/assets/index.ts.png) |
 
 For detailed documentation, refer to https://ovotech.github.com/laminar
 
@@ -22,13 +26,13 @@ And lastly there is no external code dependancies, as we only depend on mimetype
 
 ## Effortless scaling
 
-<img src="docs/readme-assets/node-instance-single.png" alt="A single node, holding multiple services with different team concurrencies" width="600" height="330">
+<img src="docs/assets/node-instance-single.png" alt="A single node, holding multiple services with different team concurrencies" width="600" height="330">
 
 Laminar is designed around _Service_ objects that handle different requests - coming from http, kafka, queue managers etc. Each of those _Services_ is able to spawn multiple concurrent workers, that process the requests.
 
 You can easily scale your laminar app by increasing the workers for each _Service_, or increse the instances of your whole node application (thus scaling each _Service_ within the application). If any particular _Service_ demands more resource you can move it to its own Laminar application and scale that separately. Since each worker would be a pure stateless function, so moving them around to differnet packages should be simple enough.
 
-<img src="docs/readme-assets/node-instance-split.png" alt="Multiple nodes holding different services with their own concurrencies" width="600" height="434">
+<img src="docs/assets/node-instance-split.png" alt="Multiple nodes holding different services with their own concurrencies" width="600" height="434">
 
 This flexibility allows you to either keep all your code in one codebase, but quickly spin it out if size / scale demands it.
 
@@ -36,11 +40,33 @@ A typical laminar app will concist of setting up the various instances that you 
 
 ## Middlewares and external Dependencies
 
-<img src="docs/readme-assets/middlewares.png" alt="An image illustrating how middlewares work" width="861" height="271">
+<img src="docs/assets/middlewares.png" alt="An image illustrating how middlewares work" width="861" height="271">
 
 A key concept in Laminar is the use of middlewares, those are async function wrappers, that can be used to inject dependencies into function calls, while themselves being just functions. Very similar to [express middlewares](https://expressjs.com/en/guide/using-middleware.html), but allowing you to statically define and enforce the types all around.
 
-In practice it ends up looking like dependency injection, that's just function calls and without the magic.
+In practice it ends up looking like dependency injection, that's just function calls and without the magic. As fancy as that may sound, a middleware is just a function wrapper. For example look at this postgres middleware that take a pool and for each incomming request (function execution) will get a connection to the pool, pass it down to the function, and cleanup after its done.
+
+> [packages/laminar/examples/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/middleware.ts#L2-L21)
+
+```typescript
+import { Middleware } from '@ovotech/laminar';
+import { Pool, PoolClient } from 'pg';
+
+interface DBContext {
+  db: PoolClient;
+}
+
+const pgPoolMiddleware = (pool: Pool): Middleware<DBContext> => {
+  return (next) => async (ctx) => {
+    const db = await pool.connect();
+    try {
+      return await next({ ...ctx, db });
+    } finally {
+      db.release();
+    }
+  };
+};
+```
 
 ## Installation
 
