@@ -2,6 +2,8 @@ import { inspect } from 'util';
 
 /**
  * An axios error for easier testing.
+ *
+ * @category http
  */
 export class AxiosError extends Error {
   public readonly code: number;

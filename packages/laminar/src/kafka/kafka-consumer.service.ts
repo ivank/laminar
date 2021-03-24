@@ -4,10 +4,13 @@ import type { Kafka, ConsumerSubscribeTopic, ConsumerConfig, Consumer } from 'ka
 import { SchemaRegistryConsumerRunConfig, DecodedKafkaMessage, DecodedEachBatchPayload } from './types';
 
 /**
- * Start a consumer group to consume a kafka topic.
+ * A class that wraps [kafkajs Consumer](https://kafka.js.org/docs/consuming) and implements laminar {@link Service}, so lamniar can handle its lifecycle.
  * When service service starts, subscribe to the topic and call kafkajs consumer `run` method.
  *
  * On each message / each batch, decode the message using schemaRegistry and pass it as `decodedValue` next to the `value` param.
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @category kafka
  */
 export class KafkaConsumerService<TValue> implements Service {
   public consumer: Consumer;

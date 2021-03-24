@@ -7,6 +7,8 @@ import { Queue, Publish, Subscribe } from './types';
  *
  * Allows you to use the full feature set of [PgBoss](https://github.com/timgit/pg-boss) to publish and subscribe to queues.
  * You can also specify options to be passed down to publish calls.
+ *
+ * @category queue
  */
 export class QueueService implements Queue, Service {
   constructor(

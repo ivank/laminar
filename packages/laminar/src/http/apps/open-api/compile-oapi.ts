@@ -11,6 +11,8 @@ import { Empty } from '../../../types';
  * Additioanlly ensure that all the paths resolvers and security resolvers are present for all paths
  *
  * @typeParam TRequest pass the request properties that the app requires. Usually added by the middlewares
+ *
+ * @category http
  */
 export async function compileOapi<TRequest extends Empty>({
   api,

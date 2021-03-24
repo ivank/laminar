@@ -4,6 +4,8 @@ import { OutgoingHttpHeaders } from 'http';
  * A generic exception.
  *
  * When thrown, the default laminar error handler will convert it to a response object, using the code for status and headers and body appropriately.
+ *
+ * @category http
  */
 export class HttpError extends Error {
   public readonly code: number;

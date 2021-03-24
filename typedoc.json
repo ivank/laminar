@@ -1,0 +1,13 @@
+{
+  "entryPoints": [
+    "packages/json-schema/src/index.ts",
+    "packages/laminar/src/index.ts",
+    "packages/laminar-jwt/src/index.ts",
+    "packages/laminar-handlebars/src/index.ts"
+  ],
+  "name": "Laminar",
+  "out": "docs/api",
+  "includeVersion": true,
+  "readme": "none",
+  "categorizeByGroup": true
+}

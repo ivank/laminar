@@ -1,6 +1,11 @@
 import { HttpMiddleware } from '../types';
 import { HttpError } from '../http-error';
 
+/**
+ * Cors configuration, used by {@link corsMiddleware}
+ *
+ * @category http
+ */
 export interface CorsConfig {
   allowOrigin?: string[] | string | RegExp | OriginChecker | true;
   allowHeaders?: string[];
@@ -62,9 +67,9 @@ const toAllowCredentials = (credentials: CorsConfig['allowCredentials']): 'true'
 /**
  * Cors middleware
  *
- * @category middleware
+ * @category http
  */
-export const corsMiddleware = ({
+export function corsMiddleware({
   fallbackAllowOrigin = 'Error matching origin header, none found',
   allowOrigin,
   allowHeaders,
@@ -72,7 +77,7 @@ export const corsMiddleware = ({
   allowMethods,
   maxAge,
   allowCredentials,
-}: CorsConfig = {}): HttpMiddleware => {
+}: CorsConfig = {}): HttpMiddleware {
   const accessControlExposeHeaders = toExposeHeaders(exposeHeaders);
   const accessControlAllowMethods = toAllowMethods(allowMethods);
   const accessControlMaxAge = toMaxAge(maxAge);
@@ -120,4 +125,4 @@ export const corsMiddleware = ({
       }
     };
   };
-};
+}

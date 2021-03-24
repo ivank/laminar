@@ -4,6 +4,15 @@ export interface LoggerMetadata {
   [key: string]: unknown;
 }
 
+/**
+ * The context that includes a {@link LoggerLike} logger, used by
+ *
+ * - {@link loggerMiddleware}
+ * - {@link requestLoggingMiddleware}
+ * - {@link jobLoggingMiddleware}
+ *
+ * @category logger
+ */
 export interface LoggerContext {
   logger: LoggerLike;
 }
@@ -11,6 +20,8 @@ export interface LoggerContext {
 /**
  * An interface all loggers for laminar must conform too.
  * Is the least common denominator between node's Console and winston's logger.
+ *
+ * @category logger
  */
 export interface LoggerLike {
   debug: (message: any, metadata?: LoggerMetadata) => void;
@@ -30,21 +41,26 @@ export interface LoggerLike {
  *
  * // Would output 'trace' with the traceToken metadata we've setup earlier.
  * myLoggerTraced.info('test');
+ * ```
+ *
+ * @category logger
  */
-export const withStaticMetadata = (logger: LoggerLike, staticMetadata: LoggerMetadata): LoggerLike => ({
-  info(message, metadata) {
-    logger.info(message, { ...metadata, ...staticMetadata });
-  },
+export function withStaticMetadata(logger: LoggerLike, staticMetadata: LoggerMetadata): LoggerLike {
+  return {
+    info(message, metadata) {
+      logger.info(message, { ...metadata, ...staticMetadata });
+    },
 
-  error(message, metadata) {
-    logger.error(message, { ...metadata, ...staticMetadata });
-  },
+    error(message, metadata) {
+      logger.error(message, { ...metadata, ...staticMetadata });
+    },
 
-  debug(message, metadata) {
-    logger.debug(message, { ...metadata, ...staticMetadata });
-  },
+    debug(message, metadata) {
+      logger.debug(message, { ...metadata, ...staticMetadata });
+    },
 
-  warn(message, metadata) {
-    logger.warn(message, { ...metadata, ...staticMetadata });
-  },
-});
+    warn(message, metadata) {
+      logger.warn(message, { ...metadata, ...staticMetadata });
+    },
+  };
+}

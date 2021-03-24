@@ -6,9 +6,13 @@ import { EncodedProducerRecord, EncodedSchemaProducerRecord } from './types';
 
 /**
  * A function to be called with the schema registry that will pre-register all schemas you'll be producing.
+ * @category kafka
  */
 export type RegisterSchemas = (schemaRegistry: SchemaRegistry) => Promise<Map<string, number>>;
 
+/**
+ * @category kafka
+ */
 export interface RegisterSchemasConfig {
   /**
    * A function to be called with the schema registry that will pre-register all schemas you'll be producing.
@@ -16,35 +20,48 @@ export interface RegisterSchemasConfig {
   register?: RegisterSchemas;
 }
 
+/**
+ * The context added by {@link producerMiddleware}
+ *
+ * @category kafka
+ */
 export interface ProducerContext {
   producer: KafkaProducerService;
 }
 
 /**
  * A generic middleware to pass on the {@link KafkaProducerService} instance inside the function call.
+ *
+ * @category kafka
  */
-export const producerMiddleware = (producer: KafkaProducerService): Middleware<ProducerContext> => (next) => (
-  payload,
-) => next({ ...payload, producer });
+export function producerMiddleware(producer: KafkaProducerService): Middleware<ProducerContext> {
+  return (next) => (payload) => next({ ...payload, producer });
+}
 
 /**
  * Encode a the record value, using schemaRegistry and a given registry schema id.
+ *
+ * @category kafka
  */
-export const toProducerRecord = async <TValue>(
+export async function toProducerRecord<TValue>(
   id: number,
   schemaRegistry: SchemaRegistry,
   { messages, ...rest }: EncodedProducerRecord<TValue>,
-): Promise<ProducerRecord> => ({
-  ...rest,
-  messages: await Promise.all(
-    messages.map(async (message) => ({ ...message, value: await schemaRegistry.encode(id, message.value) })),
-  ),
-});
+): Promise<ProducerRecord> {
+  return {
+    ...rest,
+    messages: await Promise.all(
+      messages.map(async (message) => ({ ...message, value: await schemaRegistry.encode(id, message.value) })),
+    ),
+  };
+}
 
 /**
  * Pre-register schemas in the schema registry. This will add / load them from the registry and cache them, so they can be used for producing records
+ *
+ * @category kafka
  */
-export const registerSchemas = (register: { [topic: string]: ConfluentSchema | RawAvroSchema }): RegisterSchemas => {
+export function registerSchemas(register: { [topic: string]: ConfluentSchema | RawAvroSchema }): RegisterSchemas {
   return async (schemaRegistry) =>
     new Map(
       await Promise.all(
@@ -55,8 +72,14 @@ export const registerSchemas = (register: { [topic: string]: ConfluentSchema | R
         }),
       ),
     );
-};
+}
 
+/**
+ * A class that wraps [kafkajs Producer](https://kafka.js.org/docs/producing) and implements laminar {@link Service}, so lamniar can handle its lifecycle.
+ * It can also pre-load schema registries so they can be used for encoding messages.
+ *
+ * @category kafka
+ */
 export class KafkaProducerService implements Service {
   public producer: Producer;
   public register: Map<string, number> = new Map();

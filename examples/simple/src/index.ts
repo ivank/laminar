@@ -18,7 +18,7 @@ const main = async () => {
       '/user/{id}': {
         get: async ({ path }) => {
           /**
-           * Our types would require us to return a json response specifically,
+           * Our types would require us to return a 200 json response specifically,
            * otherwise it would not compile
            */
           return jsonOk(findUser(path.id));
@@ -34,7 +34,7 @@ const main = async () => {
   const http = new HttpService({ listener });
 
   /**
-   * The http server now should be running and indicate that the server is now running
+   * The http server now should now be running and happily reporting so in the console
    */
   await init({ initOrder: [http], logger: console });
 };

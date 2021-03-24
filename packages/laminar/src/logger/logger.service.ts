@@ -4,10 +4,13 @@ import { LoggerLike, LoggerMetadata } from './types';
 import type { Logger } from 'winston';
 
 /**
- * A {@link Service} wrapper for a winston logger instance.
+ * A {@link Service} wrapper for a winston logger instance to manage its lifecycle
+ *
  * Forwards all calls to `debug`, `info`, `warn`, `error` to the winston instance.
  *
  * Calls logger.close() on stop
+ *
+ * @category logger
  */
 export class LoggerService implements Service, LoggerLike {
   constructor(public source: Logger) {}

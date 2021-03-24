@@ -8,6 +8,8 @@ export type Empty = {};
  * A type that needs to be implemented by all laminar services.
  *
  * If a class implements it, you can put it in `initOrder` for {@link init}, {@link run}, {@link start}, {@link stop} commands
+ *
+ * @category application
  */
 export interface Service {
   start(): Promise<this>;

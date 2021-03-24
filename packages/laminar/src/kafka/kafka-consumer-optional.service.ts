@@ -6,7 +6,11 @@ import { SchemaRegistryConsumerRunConfig } from './types';
 /**
  * Optionally start a consumer group to consume a kafka topic.
  * Start it only if the topic name is not undefined, otherwise skip it.
+ *
  * Otherwise behaves same ways as {@link KafkaConsumerService}
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @category kafka
  */
 export class KafkaConsumerOptionalService<TValue> extends KafkaConsumerService<TValue> {
   public isActive = false;

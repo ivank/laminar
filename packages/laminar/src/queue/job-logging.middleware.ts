@@ -4,10 +4,11 @@ import { WorkerMiddleware } from './types';
 
 /**
  * A middleware that logs a successful worker run, as well as any worker errors.
- * Also adds `queue` and `jobId` metadata
+ * Also adds `queue`, `traceToken` and `jobId` to the logger metadata
  *
  * @param logger Logger instance, must implement `info` and `error`. You can use `console` to output to stdout
- * @category middleware
+ *
+ * @category queue
  */
 export function jobLoggingMiddleware(source: LoggerLike): WorkerMiddleware<LoggerContext> {
   return (next) => async (ctx) => {

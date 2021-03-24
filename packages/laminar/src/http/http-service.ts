@@ -12,6 +12,8 @@ import { Service } from '../types';
 /**
  * Options supplied when creating the laminar application with {@link httpServer} (or {@link httpsServer}).
  * Would be passed down to the appropriate components.
+ *
+ * @category http
  */
 export interface IncommingMessageResolverParams {
   /**
@@ -50,6 +52,8 @@ export interface IncommingMessageResolverParams {
 
 /**
  * Combine all the components into a single middleware, and allow passing options to individual component
+ *
+ * @category http
  */
 export function toIncommingMessageResolver({
   responseParsers,
@@ -73,6 +77,8 @@ export function toIncommingMessageResolver({
  * A {@link HttpResolver} would convert an incomingRequest to a {@link HttpResponse} object.
  * This function would also use the parameters of the {@link HttpResponse} to set the statusCode, headers and body in the Request Listener
  * Multiple headers are supported. If the response body is a [Readable Stream](https://nodejs.org/api/stream.html#stream_readable_streams) it would stream it as a response directly
+ *
+ * @category http
  */
 export function toRequestListener(resolver: IncommingMessageResolver): http.RequestListener {
   return async function (incommingMessage, serverResponse) {
@@ -91,6 +97,9 @@ export function toRequestListener(resolver: IncommingMessageResolver): http.Requ
   };
 }
 
+/**
+ * @category http
+ */
 export interface HttpParams {
   /**
    * Node http server timeout setting, set using setTimeout()
@@ -110,6 +119,9 @@ export interface HttpParams {
   hostname?: string;
 }
 
+/**
+ * @category http
+ */
 export interface HttpServiceParams extends IncommingMessageResolverParams, HttpParams {
   /**
    * Options passed directly to [http.createServer](https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener)
@@ -117,6 +129,9 @@ export interface HttpServiceParams extends IncommingMessageResolverParams, HttpP
   http?: http.ServerOptions;
 }
 
+/**
+ * @category http
+ */
 export interface HttpsServiceParams extends IncommingMessageResolverParams, HttpParams {
   /**
    * Options passed directly to [https.createServer](https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener)
@@ -124,6 +139,12 @@ export interface HttpsServiceParams extends IncommingMessageResolverParams, Http
   https: https.ServerOptions;
 }
 
+/**
+ * An http server that implements {@link Service} interface so it can be started / stopped by laminar.
+ * Uses [https.createServer](https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener) or [http.createServer](https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener)
+ *
+ * @category http
+ */
 export class HttpService implements Service {
   public port: number;
   public hostname: string;

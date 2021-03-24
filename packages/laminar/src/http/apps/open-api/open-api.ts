@@ -32,6 +32,8 @@ function toRequestError<TContext>(result: ResultError, route: Route<TContext>, c
 
 /**
  * If no path is found, this function would be called by default, Returning a 404 error
+ *
+ * @category http
  */
 export const defaultOapiNotFound: HttpListener = async (ctx) =>
   jsonNotFound({
@@ -44,6 +46,7 @@ export const defaultOapiNotFound: HttpListener = async (ctx) =>
  * You also provide an {@link App} for each path. As well as all security resolvers
  *
  * @typeParam TContext pass the request properties that the app requires. Usually added by the middlewares
+ * @category http
  */
 export async function openApi<TContext extends Empty>(config: OapiConfig<TContext>): Promise<HttpListener<TContext>> {
   const oapi = await compileOapi(config);
@@ -85,7 +88,7 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
       return security;
     }
 
-    const res = await select.route.resolver({ ...reqOapi, authInfo: undefined, ...security });
+    const res = await select.route.listener({ ...reqOapi, authInfo: undefined, ...security });
 
     const checkResponse = validateCompiled({
       schema: compileInContext(select.route.response, oapi),

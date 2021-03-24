@@ -1,5 +1,7 @@
 /**
  * A postgres error that contains the query and the position of the error.
+ *
+ * @category pg
  */
 export class PgError extends Error {
   public queryText: string;

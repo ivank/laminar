@@ -4,6 +4,8 @@ import type { PublishOptions, SubscribeOptions } from 'pg-boss';
 /**
  * Publish a job to a queue.
  * You can read in [PgBoss for docs about publish options](https://github.com/timgit/pg-boss/blob/master/docs/configuration.md#publish-options)
+ *
+ * @category queue
  */
 export interface Publish<TData extends Empty = Empty> {
   name: string;
@@ -11,6 +13,9 @@ export interface Publish<TData extends Empty = Empty> {
   options?: PublishOptions;
 }
 
+/**
+ * @category queue
+ */
 // eslint-disable-next-line @typescript-eslint/ban-types
 export interface JobData<TData extends object = object> {
   data: TData;
@@ -22,7 +27,7 @@ export interface JobData<TData extends object = object> {
 /**
  * Worker middleware, to be used when building middlewares specifically for {@link QueueWorkerService} workers.
  *
- * @category middleware
+ * @category queue
  */
 export type WorkerMiddleware<TProvide extends Empty = Empty, TRequire extends Empty = Empty> = AbstractMiddleware<
   JobData,
@@ -33,6 +38,8 @@ export type WorkerMiddleware<TProvide extends Empty = Empty, TRequire extends Em
 
 /**
  * A function to be called by {@link QueueWorkerService} workers.
+ *
+ * @category queue
  */
 export type JobWorker<TData extends Empty, TContext extends Empty = Empty> = (
   data: JobData<TData> & TContext,
@@ -40,6 +47,8 @@ export type JobWorker<TData extends Empty, TContext extends Empty = Empty> = (
 
 /**
  * Subscribe to a queue using a job worker
+ *
+ * @category queue
  */
 export interface Subscribe<TData extends Empty = Empty, TContext extends Empty = Empty> {
   name: string;
@@ -49,6 +58,8 @@ export interface Subscribe<TData extends Empty = Empty, TContext extends Empty =
 
 /**
  * An abstract interfacee for a queue, backed by [PgBoss](https://github.com/timgit/pg-boss)
+ *
+ * @category queue
  */
 export interface Queue {
   publish<TData>(request: Publish<TData>): Promise<string | null>;

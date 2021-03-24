@@ -11,15 +11,17 @@ import { Readable } from 'stream';
 
 /**
  * Set additional paramters for the cookie
+ *
+ * @category HttpResponse
  */
 export interface SetCookie extends CookieOptions {
   value: string;
 }
 
 /**
- * Set cookie heders on the response
+ * Set cookie headers on the response object
  *
- * @category component
+ * @category HttpResponse
  */
 export const setCookie = (cookies: { [key: string]: string | SetCookie }, res: HttpResponse): HttpResponse => ({
   ...res,

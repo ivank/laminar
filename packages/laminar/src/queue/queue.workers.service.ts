@@ -3,6 +3,8 @@ import { Queue, Subscribe } from './types';
 
 /**
  * Start multiple queue workers {@link Service}, by subscribing to the queue on start.
+ *
+ * @category queue
  */
 export class QueueWorkersService implements Service {
   constructor(public queue: Queue, public workers: Subscribe[]) {}

@@ -16,5 +16,12 @@
       "es2018"
     ],
     "outDir": "dist"
-  }
+  },
+  "include": [
+    "packages/laminar/src",
+    "packages/laminar-jwt/src",
+    "packages/laminar-handlebars/src",
+    "packages/laminar-cli/src",
+    "packages/json-schema/src",
+  ]
 }

@@ -10,7 +10,7 @@ import { HttpContext } from './types';
  * A component that parses the url and header information from the raw incommingMessage
  * And adding `host`, `protocol`, `headers`, `url` and `method` properties
  *
- * @category component
+ * @category http
  */
 export function toHttpRequest(incommingMessage: IncomingMessage): HttpContext {
   const socket: TLSSocket | Socket = incommingMessage.socket;

@@ -14,6 +14,8 @@ import { EachBatchMiddleware } from './types';
  *   eachBatch: inBatches({ size: 500 })(myBatchConsumer),
  * });
  * ```
+ *
+ * @category kafka
  */
 export function chunkBatchMiddleware({ size = 1000 }): EachBatchMiddleware {
   return (next) => async (payload) => {

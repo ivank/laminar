@@ -167,6 +167,8 @@ const coercers: { [key: string]: Coercer | undefined } = {
  * If a parameter is defined to be integer, attempt to convert the string value to integer first
  * Since all parameter values would be strings, this allows us to validate even numeric values
  * @param parameter
+ *
+ * @category http
  */
 function toParameterCoerce<TContext extends Empty>(parameter: ResolvedParameterObject): Coerce<TContext> | undefined {
   const coercer = coercers[parameter.schema?.type ?? ''];
@@ -189,6 +191,8 @@ function toParameterCoerce<TContext extends Empty>(parameter: ResolvedParameterO
 /**
  * If a request has parameters, defined to be integer, attempt to convert the string value to integer first
  * Since all parameter values would be strings, this allows us to validate even numeric values
+ *
+ * @category http
  */
 function toRequestCoerce<TContext extends Empty>(
   { parameters }: ResolvedOperationObject,
@@ -205,6 +209,8 @@ function toRequestCoerce<TContext extends Empty>(
 
 /**
  * Convert an OpenApi response schema into an executable json-schema.
+ *
+ * @category http
  */
 function toResponseSchema({ responses }: ResolvedOperationObject): Record<string, unknown> {
   return {
@@ -255,6 +261,8 @@ function toResponseSchema({ responses }: ResolvedOperationObject): Record<string
  *
  * @param api
  * @param oapiPaths
+ *
+ * @category http
  */
 export function toRoutes<TContext extends Empty>(
   api: ResolvedOpenAPIObject,
@@ -274,7 +282,7 @@ export function toRoutes<TContext extends Empty>(
             coerce: toRequestCoerce(operation, { parameters }),
             security: operation.security || api.security,
             matcher: toMatcher(path, method),
-            resolver: oapiPaths[path][method],
+            listener: oapiPaths[path][method],
           },
         ];
       }, []),
@@ -287,6 +295,7 @@ export function toRoutes<TContext extends Empty>(
  * If a route matches, return it plus the captured path parameters
  *
  * @typeParam TContext pass the request properties that the app requires. Usually added by the middlewares
+ * @category http
  */
 export function selectRoute<TContext extends Empty = Empty>(
   ctx: TContext & HttpContext,

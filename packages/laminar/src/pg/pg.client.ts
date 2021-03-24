@@ -4,6 +4,8 @@ import { PgError } from './pg-error';
 
 /**
  * A class that wraps a PoolClient, cathing errors and re-throwing them with more diagnostic information.
+ *
+ * @category pg
  */
 export class PgClient {
   constructor(public client: PoolClient, public logger?: LoggerLike) {}

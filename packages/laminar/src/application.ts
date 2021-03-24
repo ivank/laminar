@@ -4,6 +4,7 @@ import { Service } from './types';
 
 /**
  * A recursive list of {@link Service} instances or arrays of {@link Service} instances.
+ * @category application
  */
 export type InitOrder = Service | InitOrder[];
 
@@ -12,6 +13,7 @@ export type InitOrder = Service | InitOrder[];
  * Would be started in the `initOrder` (and stopped in the reverse of `initOrder` order).
  *
  * Arrays in `initOrder` define services that need to be started / stopped in parallel.
+ * @category application
  */
 export interface Application {
   /**
@@ -25,6 +27,9 @@ export interface Application {
   logger?: LoggerLike | (LoggerLike & Service);
 }
 
+/**
+ * @category application
+ */
 export interface StartLogger {
   /**
    * Should start the logger service, if its a {@link Service} used to break services recursion.
@@ -32,6 +37,9 @@ export interface StartLogger {
   startLogger?: boolean;
 }
 
+/**
+ * @category application
+ */
 export interface StopLogger {
   /**
    * Should stop the logger service, if its a {@link Service} used to break services recursion.
@@ -61,6 +69,7 @@ const stopService = async (item: Service, logger?: LoggerLike | (LoggerLike & Se
  * // Will start s1 and s2, then start s3, s4 and s5 in parallel, and lastly start s6
  * start({ initOrder: [s1, s2, [s3, s4, s5], s6] });
  *```
+ * @category application
  */
 export async function start({ initOrder, logger, startLogger = true }: Application & StartLogger): Promise<void> {
   if (logger && 'start' in logger && startLogger) {
@@ -88,6 +97,7 @@ export async function start({ initOrder, logger, startLogger = true }: Applicati
  * // Will stop s6, then s3, s4 and s5 in parallel, and lastly will stop s2 and s1 sequentially
  * start({ initOrder: [s1, s2, [s3, s4, s5], s6] });
  *```
+ * @category application
  */
 export async function stop({ initOrder, logger, stopLogger = true }: Application & StopLogger): Promise<void> {
   for (const item of initOrder.reverse()) {
@@ -107,6 +117,8 @@ export async function stop({ initOrder, logger, stopLogger = true }: Application
 
 /**
  * Run {@link start}, and add a listener to SIGTERM, that would call {@link stop}
+ *
+ * @category application
  */
 export async function init<TApplication extends Application>(app: TApplication): Promise<TApplication> {
   await start(app);
@@ -117,6 +129,8 @@ export async function init<TApplication extends Application>(app: TApplication):
 /**
  * Run {@link start}, execute the predicate, and when its finished, call {@link stop}.
  * Useful for testing out the application as you can put your test code in the predicate
+ *
+ * @category application
  */
 export async function run(app: Application, predicate: (app: Application) => Promise<void>): Promise<void> {
   await start(app);

@@ -5,6 +5,8 @@ import { HttpMiddleware, HttpResponseBody, HttpResponse } from '../types';
 
 /**
  * Convert a response body into a string / buffer / readable stream
+ *
+ * @category http
  */
 export interface ResponseParser {
   /**
@@ -14,24 +16,49 @@ export interface ResponseParser {
   parse: (body: any) => HttpResponseBody;
 }
 
+/**
+ * A regex for {@link jsonResponseParser} to find if the response object is a json.
+ *
+ * @category http
+ */
 const jsonResponseParserRegex = /^application\/([^\+\;]+\+)?json(\;.*)?/;
 
+/**
+ * @category http
+ */
 export const jsonResponseParser: ResponseParser = {
   match: (contentType) => jsonResponseParserRegex.test(contentType),
   parse: (body) => JSON.stringify(body),
 };
 
+/**
+ * @category http
+ */
 export const formResponseParser: ResponseParser = {
   match: (contentType) => contentType === 'application/x-www-form-urlencoded',
   parse: (body) => new URLSearchParams(body).toString(),
 };
 
+/**
+ * @category http
+ */
 export const defaultResponseParsers: ResponseParser[] = [jsonResponseParser, formResponseParser];
 
+/**
+ * Get the content length of buffer or string. Return undefined otherwise.
+ *
+ * @category http
+ */
 const toContentLength = (body: unknown): number | undefined =>
   body instanceof Buffer || typeof body === 'string' ? Buffer.byteLength(body) : undefined;
 
-export const parseResponse = (res: HttpResponse, parsers = defaultResponseParsers): HttpResponse => {
+/**
+ * Parse the body of {@link HttpResponse}, using content-type header and a list of parsers.
+ * Conver it to a suitable string representation
+ *
+ * @category http
+ */
+export function parseResponse(res: HttpResponse, parsers = defaultResponseParsers): HttpResponse {
   const contentType = res.headers['content-type'] as string | undefined;
   const parser = parsers.find((parser) => parser.match(contentType ?? ''));
   const body = parser
@@ -43,18 +70,19 @@ export const parseResponse = (res: HttpResponse, parsers = defaultResponseParser
   const contentLength = res.headers['content-length'] ?? toContentLength(body);
 
   return { ...res, body, headers: { ...res.headers, 'content-length': contentLength } };
-};
+}
 
 /**
  * Parse the response body using the provided parsers.
  * By default support
  *
  *  - json
- *  - url encoded
+ *  - url encoded form data
  *
  * @param parsers
  *
- * @category component
+ * @category http
  */
-export const responseParserMiddleware = (parsers = defaultResponseParsers): HttpMiddleware => (next) => async (ctx) =>
-  parseResponse(await next(ctx), parsers);
+export function responseParserMiddleware(parsers = defaultResponseParsers): HttpMiddleware {
+  return (next) => async (ctx) => parseResponse(await next(ctx), parsers);
+}

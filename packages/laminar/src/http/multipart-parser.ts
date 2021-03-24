@@ -1,5 +1,8 @@
 import { Readable, Transform, TransformCallback } from 'stream';
 
+/**
+ * The response objects from {@link MultipartParser} stream transformer.
+ */
 export interface MultipartItem {
   data: Buffer;
   filename?: string;
@@ -11,6 +14,13 @@ export interface MultipartData {
   [key: string]: MultipartItem[] | string;
 }
 
+/**
+ * Get the multipart boundary from contentType
+ * @param contentType header from http request
+ * @returns boundary string or undefined, if not found
+ *
+ * @category http
+ */
 export function toMultipartBoundary(contentType: string | undefined): string | undefined {
   return contentType?.split('; boundary=')?.[1];
 }
@@ -86,6 +96,11 @@ function endsWith(end: Buffer, index: number, buffer: Buffer): boolean {
 const newLine = Buffer.from('\r\n');
 const newLineDouble = Buffer.from('\r\n\r\n');
 
+/**
+ * A node stream transformer, that would transform a buffer stream into a stream of parsed {@link MultipartItem} objects
+ *
+ * @category http
+ */
 export class MultipartParser extends Transform {
   private headers = '';
   private state: State = State.Start;

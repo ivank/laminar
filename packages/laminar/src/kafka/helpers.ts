@@ -8,14 +8,21 @@ const stringLevel = { [0]: 'error', [1]: 'error', [2]: 'warn', [4]: 'info', [5]:
 
 /**
  * Convert a {@link LoggerLike} logger into a kafkajs logger.
+ *
+ * @category kafka
  */
-export const kafkaLogCreator = (logger: LoggerLike): logCreator => () => ({ level, log: { message, ...extra } }) => {
-  logger[stringLevel[level]](message, extra);
-};
+export function kafkaLogCreator(logger: LoggerLike): logCreator {
+  return () => ({ level, log: { message, ...extra } }) => {
+    logger[stringLevel[level]](message, extra);
+  };
+}
 
 /**
  * A producer function, that has topic and schema baked in
  * Only needing the contents of the messages and the a {@link KafkaProducerService} object.
+ *
+ * @typeParam TValue The type of the the kafka message value, before its encoded
+ * @category kafka
  */
 export type Produce<TValue> = (
   producer: KafkaProducerService,
@@ -24,8 +31,10 @@ export type Produce<TValue> = (
 
 /**
  * A helper to create a producer function, with "baked in" topic and schema names
+ *
+ * @typeParam TValue The type of the the kafka message value, before its encoded
+ * @category kafka
  */
-export const produce = <TValue>(config: { topic: string; schema: ConfluentSchema }): Produce<TValue> => (
-  producer,
-  messages,
-) => producer.sendWithSchema<TValue>({ ...config, messages });
+export function produce<TValue>(config: { topic: string; schema: ConfluentSchema }): Produce<TValue> {
+  return (producer, messages) => producer.sendWithSchema<TValue>({ ...config, messages });
+}

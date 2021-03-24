@@ -8,6 +8,8 @@ import { toPathKeys, toPathRe } from '../../helpers';
 
 /**
  * Adds the `path` property to the request, containing the captured path parameters.
+ *
+ * @category http
  */
 export interface RouteContext {
   /**
@@ -23,6 +25,7 @@ export interface RouteContext {
  * A function to check if a route matches. If it does, returns the captured path parameters, otherwsie - false.
  *
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
+ * @category http
  */
 type Matcher<TContext> = (ctx: TContext & HttpContext) => RouteContext | false;
 
@@ -30,12 +33,14 @@ type Matcher<TContext> = (ctx: TContext & HttpContext) => RouteContext | false;
  * Captured path parameters to the route would be passed to the `path` property.
  *
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
+ * @category http
  */
 export type AppRoute<TContext extends Empty = Empty> = HttpListener<TContext & RouteContext>;
 
 /**
  * A route object, containing a route mather and the route application
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
+ * @category http
  */
 interface PathRoute<TContext extends Empty> {
   matcher: Matcher<TContext>;
@@ -46,6 +51,7 @@ interface PathRoute<TContext extends Empty> {
  * An options for a route
  *
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
+ * @category http
  */
 interface PathRouteOptions<TContext extends Empty> {
   /**
@@ -81,6 +87,7 @@ interface PathRouteOptions<TContext extends Empty> {
  * - {@link options}
  *
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
+ * @category http
  */
 export type Method = <TContext extends Empty = Empty>(
   /**
@@ -101,6 +108,7 @@ export type Method = <TContext extends Empty = Empty>(
 
 /**
  * Options for {@link staticAssets}
+ * @category http
  */
 export interface StaticAssetsOptions {
   /**
@@ -126,6 +134,7 @@ export interface StaticAssetsOptions {
  * A generic route function. If you omit the method, would match any method.
  *
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
+ * @category http
  */
 export const route = <TContext extends Empty = Empty>({
   method,
@@ -195,6 +204,7 @@ const selectRoute = <TContext extends Empty = Empty>(
  * )
  * ```
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
+ * @category http
  */
 export function router<TContext extends Empty = Empty>(
   ...routes: (PathRoute<TContext> | AppRoute<TContext>)[]
@@ -207,11 +217,40 @@ export function router<TContext extends Empty = Empty>(
   };
 }
 
+/**
+ * Create a listener for a specific method (GET), used by {@link router}
+ * @category http
+ */
 export const get: Method = (path, listener) => route({ method: 'GET', path, listener });
+
+/**
+ * Create a listener for a specific method (POST), used by {@link router}
+ * @category http
+ */
 export const post: Method = (path, listener) => route({ method: 'POST', path, listener });
+
+/**
+ * Create a listener for a specific method (DEL), used by {@link router}
+ * @category http
+ */
 export const del: Method = (path, listener) => route({ method: 'DELETE', path, listener });
+
+/**
+ * Create a listener for a specific method (PATCH), used by {@link router}
+ * @category http
+ */
 export const patch: Method = (path, listener) => route({ method: 'PATCH', path, listener });
+
+/**
+ * Create a listener for a specific method (PUT), used by {@link router}
+ * @category http
+ */
 export const put: Method = (path, listener) => route({ method: 'PUT', path, listener });
+
+/**
+ * Create a listener for a specific method (OPTIONS), used by {@link router}
+ * @category http
+ */
 export const options: Method = (path, listener) => route({ method: 'OPTIONS', path, listener });
 
 /**
@@ -225,6 +264,8 @@ const parentPathRegEx = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
  * @param prefixPath The pathname where the directory would be located, example: '/assets'
  * @param root The directory containing the files
  * @param param2 Options
+ *
+ * @category http
  */
 export function staticAssets<T extends Empty = Empty>(
   prefixPath: string,

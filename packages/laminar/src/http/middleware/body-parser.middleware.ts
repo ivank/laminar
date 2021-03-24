@@ -6,6 +6,9 @@ import { Readable } from 'stream';
 import { toMultipartBoundary, MultipartParser, toMultipartData } from '../multipart-parser';
 import { HttpError } from '../http-error';
 
+/**
+ * @category http
+ */
 export interface BodyParser {
   /**
    * The name of the parseer, for debugging purposes
@@ -34,6 +37,11 @@ export function concatStream(stream: Readable): Promise<string | undefined> {
   });
 }
 
+/**
+ * Http body parser for json requests
+ *
+ * @category http
+ */
 export const parseJson: BodyParser = {
   name: 'JsonBodyParser',
   match: /^application\/([^\+\;]+\+)?json(\;.*)?/,
@@ -43,6 +51,11 @@ export const parseJson: BodyParser = {
   },
 };
 
+/**
+ * Http body parser for url encoded requests (http forms)
+ *
+ * @category http
+ */
 export const parseForm: BodyParser = {
   name: 'FormUrlEncodedBodyParser',
   match: /^application\/x-www-form-urlencoded(\;.*)?/,
@@ -50,12 +63,22 @@ export const parseForm: BodyParser = {
     parseQueryObjects(new URLSearchParams((await concatStream(incommingMessage)) ?? '')),
 };
 
+/**
+ * Http body parser for plain text requests
+ *
+ * @category http
+ */
 export const parseText: BodyParser = {
   name: 'PlainTextBodyParser',
   match: /^text\/.*/,
   parse: async (incommingMessage) => await concatStream(incommingMessage),
 };
 
+/**
+ * Http body parser for multipart form data requests
+ *
+ * @category http
+ */
 export const multipartFormData: BodyParser = {
   name: 'MultipartFormDataBodyParser',
   match: /^multipart\/form-data/,
@@ -70,6 +93,11 @@ export const multipartFormData: BodyParser = {
   },
 };
 
+/**
+ * Http body parser for anything, just concatenates the stream
+ *
+ * @category http
+ */
 export const parseDefault: BodyParser = {
   name: 'DefaultParser',
   match: () => true,
@@ -103,6 +131,8 @@ export async function parseBody(incommingMessage: IncomingMessage, parsers = def
  *  - text content
  *
  * @param parsers replace with custom parsers, can use [...defaultBodyParsers, newParser] to add
+ *
+ * @category http
  */
 export function bodyParserMiddleware(parsers = defaultBodyParsers): HttpMiddleware {
   return (next) => async (ctx) => next({ ...ctx, body: await parseBody(ctx.incommingMessage, parsers) });

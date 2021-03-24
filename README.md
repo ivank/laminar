@@ -1,9 +1,46 @@
+![Laminar logo](docs/readme-assets/logo.svg)
+
 # Laminar
 
-Building OpenApi backed REST APIs in TypeScript. Automatic validation of request / response based on the api schema.
-Generate Types using a cli. This is an attempt to implement the concepts of [Design-First, Evolve with Code](https://apisyouwonthate.com/blog/api-design-first-vs-code-first) principles cleanly.
+A library for building node services in TypeScript. Convert external interfaces into TypeScript types with a cli tool - so that http request / responses would be validated against the OpenApi schema **at compile time**. Supports kafka / schema registry too, for event driven requests.
+
+This is an attempt to implement the concepts of [Design-First, Evolve with Code](https://apisyouwonthate.com/blog/api-design-first-vs-code-first) principles cleanly.
+
+| OpenAPI Definition                               | Service Implementation                           |
+| ------------------------------------------------ | ------------------------------------------------ |
+| ![OpenAPI Code](docs/readme-assets/api.yaml.png) | ![Http Service](docs/readme-assets/index.ts.png) |
 
 For detailed documentation, refer to https://ovotech.github.com/laminar
+
+## Why?
+
+It works mostly as [express](https://expressjs.com) or [koa](https://koajs.com) but does not use any mutation on any of its requests objects, guaranteing runtime safety. Since all your request handlers and middlewares will be statically typed, if it compiles it will probably run.
+
+Also, all of the external dependancies are created and instantiated by the user. E.g. postgres pools and the like are created by you, and you pass them down to laminar, so it can handle its lifecycle. This allows you to be flexible about where and how you use it.
+
+And lastly there is no external code dependancies, as we only depend on mimetype databases and official openapi definitions.
+
+## Effortless scaling
+
+![A single node, holding multiple services with different team concurrencies](docs/readme-assets/node-instance-single.svg)
+
+Laminar is designed around _Service_ objects that handle different requests - coming from http, kafka, queue managers etc. Each of those _Services_ is able to spawn multiple concurrent workers, that process the requests.
+
+You can easily scale your laminar app by increasing the workers for each _Service_, or increse the instances of your whole node application (thus scaling each _Service_ within the application). If any particular _Service_ demands more resource you can move it to its own Laminar application and scale that separately. Since each worker would be a pure stateless function, so moving them around to differnet packages should be simple enough.
+
+![Multiple nodes holding different services with their own concurrencies](docs/readme-assets/node-instance-split.svg)
+
+This flexibility allows you to either keep all your code in one codebase, but quickly spin it out if size / scale demands it.
+
+A typical laminar app will concist of setting up the various instances that you depend on, like db connections, queues etc. and defining all your business logic in pure functions that contain your business logic. Laminar then works like glue that would hold them together, allowing you full control of each end.
+
+## Middlewares and external Dependencies
+
+![An image illustrating how middlewares work](docs/readme-assets/middlewares.svg)
+
+A key concept in Laminar is the use of middlewares, those are async function wrappers, that can be used to inject dependencies into function calls, while themselves being just functions. Very similar to [express middlewares](https://expressjs.com/en/guide/using-middleware.html), but allowing you to statically define and enforce the types all around.
+
+In practice it ends up looking like dependency injection, that's just function calls and without the magic.
 
 ## Installation
 
@@ -16,7 +53,7 @@ yarn add @ovotech/laminar
 Additionally, if you want to take advantage of the type generation:
 
 ```shell
-yarn add @ovotech/laminar-cli
+yarn add --dev @ovotech/laminar-cli
 ```
 
 ## A tutorial to get started.
@@ -61,7 +98,7 @@ components:
 First we'll generate the types for its so its easier to implement it. Since we've already installed `@ovotech/laminar-cli` we can:
 
 ```shell
-yarn laminar api.yaml __generated__/api.ts
+yarn laminar api --file api.yaml --output __generated__/api.ts
 ```
 
 > [examples/simple/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/simple/src/index.ts)
@@ -87,7 +124,7 @@ const main = async () => {
       '/user/{id}': {
         get: async ({ path }) => {
           /**
-           * Our types would require us to return a json response specifically,
+           * Our types would require us to return a 200json response specifically,
            * otherwise it would not compile
            */
           return jsonOk(findUser(path.id));
@@ -122,6 +159,7 @@ You can dive in directly with some example apps:
 - [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
 - [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
 - [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
+- [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) Simple but functional example of building a data loading api, using database, kafka and queued request processing.
 
 ## More docs
 
@@ -138,7 +176,7 @@ You can dive in directly with some example apps:
 You'll need to start a postgres instance to run the tests for some of the exmaples
 
 ```shell
-docker-compose -f examples/docker-compose.yaml up
+docker-compose up
 ```
 
 You can then run the tests with:

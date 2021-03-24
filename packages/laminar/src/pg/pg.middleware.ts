@@ -14,11 +14,11 @@ export type PgContext<TConfig extends PgMiddlewareConfig = { db: PgService }> = 
  * We are also able to handle exceptions gracefully,
  * releasing the client from the pool in an event of one.
  *
- * Can be used with any resolver funciton, like http listener or queue worker.
+ * Can be used with any resolver function, like http listener or queue worker.
  *
  * Supports multiple pools, and would create connections to all of them simultaneously.
  *
- * @category middleware
+ * @category pg
  */
 export function pgMiddleware(config: { db: PgService }): Middleware<PgContext>;
 export function pgMiddleware<TConfig extends PgMiddlewareConfig>(config: TConfig): Middleware<PgContext<TConfig>>;

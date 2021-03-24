@@ -132,13 +132,8 @@ export interface CookieOptions {
  * serialize('foo', 'bar', { httpOnly: true })
  *   => "foo=bar; httpOnly"
  *
- * @param {string} name
- * @param {string} val
- * @param {object} [options]
- * @return {string}
- * @public
+ * @category http
  */
-
 export function serializeCookie(
   name: string,
   rawValue: string | number | boolean,

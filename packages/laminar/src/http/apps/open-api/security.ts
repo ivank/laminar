@@ -5,6 +5,8 @@ import { OapiAuthInfo, OapiSecurity, OapiContext, Security, SecurityOk } from '.
 
 /**
  * Return a {@link SecurityOk} object, indicating a successfull security check. Should be returned by a {@link OapiSecurityResolver}
+ *
+ * @category http
  */
 export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(authInfo: TOapiAuthInfo): Security<TOapiAuthInfo> {
   return { authInfo };
@@ -12,6 +14,8 @@ export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(authInfo: TOapiAu
 
 /**
  * Check if a response from {@link OapiSecurityResolver} is a {@link SecurityOk} object, indicating a successfull security check
+ *
+ * @category http
  */
 export function isSecurityOk(item: Security): item is SecurityOk {
   return 'authInfo' in item;
@@ -19,6 +23,8 @@ export function isSecurityOk(item: Security): item is SecurityOk {
 
 /**
  * Check if a response from {@link OapiSecurityResolver} is a {@link HttpResponse} object, indicating a failed security check
+ *
+ * @category http
  */
 export function isSecurityResponse(item: Security): item is HttpResponse {
   return 'status' in item;
@@ -26,6 +32,8 @@ export function isSecurityResponse(item: Security): item is HttpResponse {
 
 /**
  * Using the OpenApi schema requiremnts over the current request.
+ *
+ * @category http
  */
 export async function validateSecurity<
   TContext extends Empty = Empty,

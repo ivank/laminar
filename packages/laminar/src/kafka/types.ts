@@ -13,6 +13,9 @@ import { AbstractMiddleware, Empty } from '../types';
 
 /**
  * Kafka Message that's been decoded with [kafkajs SchemaRegistry](https://github.com/kafkajs/confluent-schema-registry)
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @category kafka
  */
 export interface DecodedKafkaMessage<TValue> extends KafkaMessage {
   decodedValue: TValue | null;
@@ -21,6 +24,9 @@ export interface DecodedKafkaMessage<TValue> extends KafkaMessage {
 /**
  * A payload for [eachMessage](https://kafka.js.org/docs/consuming#a-name-each-message-a-eachmessage)
  * where the message has been decoded with [kafkajs SchemaRegistry](https://github.com/kafkajs/confluent-schema-registry)
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @category kafka
  */
 export interface DecodedEachMessagePayload<TValue> extends EachMessagePayload {
   schemaRegistry: SchemaRegistry;
@@ -29,6 +35,9 @@ export interface DecodedEachMessagePayload<TValue> extends EachMessagePayload {
 
 /**
  * Batch of Kafka Messages that's been decoded with [kafkajs SchemaRegistry](https://github.com/kafkajs/confluent-schema-registry)
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @category kafka
  */
 export interface DecodedBatch<TValue> extends Batch {
   messages: DecodedKafkaMessage<TValue>[];
@@ -37,6 +46,9 @@ export interface DecodedBatch<TValue> extends Batch {
 /**
  * A payload for [eachBatch](https://kafka.js.org/docs/consuming#a-name-each-batch-a-eachbatch)
  * where each message has been decoded with [kafkajs SchemaRegistry](https://github.com/kafkajs/confluent-schema-registry)
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @category kafka
  */
 export interface DecodedEachBatchPayload<TValue> extends EachBatchPayload {
   schemaRegistry: SchemaRegistry;
@@ -45,6 +57,10 @@ export interface DecodedEachBatchPayload<TValue> extends EachBatchPayload {
 
 /**
  * A consumer function to be passed to {@link KafkaConsumerService}
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @typeParam TContext The context that this consumer requires to exeecute
+ * @category kafka
  */
 export type EachMessageConsumer<TValue, TContext extends Empty = Empty> = (
   payload: DecodedEachMessagePayload<TValue> & TContext,
@@ -52,6 +68,10 @@ export type EachMessageConsumer<TValue, TContext extends Empty = Empty> = (
 
 /**
  * A batch consumer function to be passed to {@link KafkaConsumerService}
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @typeParam TContext The context that this consumer requires to exeecute
+ * @category kafka
  */
 export type EachBatchConsumer<TValue, TContext extends Empty = Empty> = (
   payload: DecodedEachBatchPayload<TValue> & TContext,
@@ -60,6 +80,9 @@ export type EachBatchConsumer<TValue, TContext extends Empty = Empty> = (
 /**
  * A [consumer run configuration](https://kafka.js.org/docs/consuming),
  * where `eachMessage` / `eachBatch` have been updated to include {@link DecodedKafkaMessage} / {@link DecodedBatch}
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ * @category kafka
  */
 export interface SchemaRegistryConsumerRunConfig<TValue> extends Omit<ConsumerRunConfig, 'eachMessage' | 'eachBatch'> {
   eachMessage?: EachMessageConsumer<TValue>;
@@ -68,14 +91,26 @@ export interface SchemaRegistryConsumerRunConfig<TValue> extends Omit<ConsumerRu
 
 /**
  * A message to be encoded with [kafkajs SchemaRegistry](https://github.com/kafkajs/confluent-schema-registry)
+ *
+ * @typeParam TValue The type of the the kafka message value, before its encoded
+ * @category kafka
  */
 export interface EncodedMessage<TValue> extends Omit<Message, 'value'> {
   value: TValue;
 }
 
+/**
+ * @typeParam TValue The type of the the kafka message value, before its encoded
+ * @category kafka
+ */
 export interface EncodedProducerRecord<TValue> extends Omit<ProducerRecord, 'messages'> {
   messages: EncodedMessage<TValue>[];
 }
+
+/**
+ * @typeParam TValue The type of the the kafka message value, before its encoded
+ * @category kafka
+ */
 export interface EncodedSchemaProducerRecord<TValue> extends EncodedProducerRecord<TValue> {
   schema: ConfluentSchema | RawAvroSchema;
 }
@@ -83,13 +118,13 @@ export interface EncodedSchemaProducerRecord<TValue> extends EncodedProducerReco
 /**
  * Middleware for {@link EachMessageConsumer}
  *
- * @category middleware
+ * @category kafka
  */
 export type EachMessageeMiddleware = AbstractMiddleware<DecodedEachMessagePayload<unknown>, void>;
 
 /**
  * Middleware for {@link EachBatchConsumer}
  *
- * @category middleware
+ * @category kafka
  */
 export type EachBatchMiddleware = AbstractMiddleware<DecodedEachBatchPayload<unknown>, void>;
