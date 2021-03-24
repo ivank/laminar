@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-cli",
-  "version": "0.11.0-alpha.2",
+  "version": "0.11.0-alpha.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar",
@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@ovotech/json-schema": "^0.6.0",
-    "@ovotech/ts-compose": "^0.16.0",
+    "@ovotech/ts-compose": "^0.17.0-alpha.0",
     "ansi-regex": "^5.0.0",
     "avsc": "^5.5.3",
     "chalk": "^4.1.0",

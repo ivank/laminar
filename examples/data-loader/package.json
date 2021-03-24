@@ -10,7 +10,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/examples/todo#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar-cli": "^0.11.0-alpha.2",
+    "@ovotech/laminar-cli": "^0.11.0-alpha.3",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.35",
     "@types/pg": "^7.14.11",
