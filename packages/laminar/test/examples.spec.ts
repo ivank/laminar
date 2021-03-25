@@ -96,7 +96,6 @@ describe('Example files', () => {
       },
       'Tester',
     ],
-    ['examples/middleware.ts', { method: 'GET', url: '/' }, []],
     [
       'examples/response.ts',
       {

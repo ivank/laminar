@@ -147,12 +147,12 @@ export interface HttpsServiceParams extends IncommingMessageResolverParams, Http
  */
 export class HttpService implements Service {
   public port: number;
-  public hostname: string;
+  public hostname?: string;
   public server: https.Server | http.Server;
 
   constructor(public params: HttpServiceParams | HttpsServiceParams) {
     this.port = params.port ?? (process.env.LAMINAR_HTTP_PORT ? Number(process.env.LAMINAR_HTTP_PORT) : 3300);
-    this.hostname = process.env.LAMINAR_HTTP_HOST ?? 'localhost';
+    this.hostname = params.hostname ?? process.env.LAMINAR_HTTP_HOST;
 
     const requestListener = toRequestListener(toIncommingMessageResolver(params));
 
@@ -175,7 +175,7 @@ export class HttpService implements Service {
   }
 
   url(): string {
-    return `${'https' in this.params ? 'https' : 'http'}://${this.hostname}:${this.port}`;
+    return `${'https' in this.params ? 'https' : 'http'}://${this.hostname ?? '0.0.0.0'}:${this.port}`;
   }
 
   describe(): string {

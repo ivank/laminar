@@ -20,6 +20,10 @@
   "include": [
     "packages/laminar/src",
     "packages/laminar-jwt/src",
+    "packages/laminar-pgboss/src",
+    "packages/laminar-pg/src",
+    "packages/laminar-kafkajs/src",
+    "packages/laminar-winston/src",
     "packages/laminar-handlebars/src",
     "packages/laminar-cli/src",
     "packages/json-schema/src",

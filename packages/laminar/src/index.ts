@@ -90,14 +90,7 @@ export {
 } from './http/middleware/response-time.middleware';
 export { requestLoggingMiddleware } from './http/middleware/request-logging.middleware';
 
-export {
-  LoggerMetadata,
-  LoggerLike,
-  withStaticMetadata,
-  LoggerContext,
-  loggerMiddleware,
-  LoggerService,
-} from './logger/index';
+export { LoggerMetadata, LoggerLike, withStaticMetadata, LoggerContext, loggerMiddleware } from './logger/index';
 
 export { start, stop, Application, init, run, InitOrder, StartLogger, StopLogger } from './application';
 export {
@@ -157,45 +150,4 @@ export {
   OapiConfig,
 } from './http/apps/open-api';
 
-export { PgContext, pgMiddleware, PgService, PgClient, PgError } from './pg/index';
-export { toErrorMetadata } from './errors';
-
-export {
-  QueueService,
-  QueueWorkerService,
-  QueueWorkersService,
-  queueMiddleware,
-  jobLoggingMiddleware,
-  WorkerMiddleware,
-  QueueContext,
-  Publish,
-  JobData,
-  JobWorker,
-  Subscribe,
-  Queue,
-} from './queue/index';
-
-export {
-  KafkaConsumerService,
-  KafkaConsumerOptionalService,
-  KafkaProducerService,
-  RegisterSchemas,
-  producerMiddleware,
-  ProducerContext,
-  registerSchemas,
-  toProducerRecord,
-  RegisterSchemasConfig,
-  kafkaLogCreator,
-  produce,
-  Produce,
-  chunkBatchMiddleware,
-  DecodedKafkaMessage,
-  DecodedEachMessagePayload,
-  DecodedBatch,
-  DecodedEachBatchPayload,
-  EachBatchConsumer,
-  EachMessageConsumer,
-  EncodedMessage,
-  EncodedProducerRecord,
-  SchemaRegistryConsumerRunConfig,
-} from './kafka/index';
+export { toErrorMetadata, LaminarError } from './errors';

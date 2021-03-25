@@ -1,11 +1,5 @@
-import {
-  Application,
-  HttpService,
-  requestLoggingMiddleware,
-  pgMiddleware,
-  PgService,
-  LoggerLike,
-} from '@ovotech/laminar';
+import { Application, HttpService, requestLoggingMiddleware, LoggerLike } from '@ovotech/laminar';
+import { pgMiddleware, PgService } from '@ovotech/laminar-pg';
 import { createHttp } from './http';
 import { Pool } from 'pg';
 import { EnvVars } from './env';

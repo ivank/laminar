@@ -1,7 +1,18 @@
 # Laminar
 
-Building OpenApi backed REST APIs in TypeScript. Automatic validation of request / response based on the api schema.
-Generate Types using a cli. This is an attempt to implement the concepts of [Design-First, Evolve with Code](https://apisyouwonthate.com/blog/api-design-first-vs-code-first) principles cleanly.
+A library for building node services in TypeScript. Convert external interfaces into TypeScript types with a cli tool - so that http request / responses would be validated against the OpenApi schema **at compile time**. Supports kafka / schema registry too, for event driven requests.
+
+This is an attempt to implement the concepts of [Design-First, Evolve with Code](https://apisyouwonthate.com/blog/api-design-first-vs-code-first) principles cleanly.
+
+## Why?
+
+It works mostly as [express](https://expressjs.com) or [koa](https://koajs.com) but does not use any mutation on any of its requests objects, guaranteing runtime safety. Since all your request handlers and middlewares will be statically typed, if it compiles it will probably run.
+
+All of the external dependancies are created and instantiated by the user. E.g. postgres pools and the like are created by you, and you pass them down to laminar, so it can handle its lifecycle. This allows you to be flexible about where and how you use it.
+
+You can scale things up or down, by adding all of your code into a single instance with lots of workers, or by splitting them up into separate node instance, and everything in between.
+
+And lastly there is no external code dependancies, as we only depend on mimetype databases and official openapi definitions.
 
 ## Installation
 
@@ -70,7 +81,8 @@ import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
 /**
- * A simple function to get some data out of a data store
+ * A simple function to get some data out of a data store, think databases and the like.
+ * Though for bravity it just returns a static js object.
  */
 const findUser = (id: string) => ({ id, name: 'John' });
 
@@ -86,7 +98,7 @@ const main = async () => {
         get: async ({ path }) => {
           /**
            * Our types would require us to return a 200 json response specifically,
-           * otherwise it would not compile
+           * otherwise it would not compile. That's what `jsonOk` function does.
            */
           return jsonOk(findUser(path.id));
         },
@@ -95,13 +107,15 @@ const main = async () => {
   });
 
   /**
-   * Now we've cerated the server, but it has not yet been started.
+   * Now we need to create the Http Service that would call our listener.
+   * Its a very shallow wrapper around `http.createService` from node
    * Default port is 3300
    */
   const http = new HttpService({ listener });
 
   /**
-   * The http server now should now be running and happily reporting so in the console
+   * We can now start it by calling `init`.
+   * Output would then be sent to the logger we've specified: node's console.
    */
   await init({ initOrder: [http], logger: console });
 };

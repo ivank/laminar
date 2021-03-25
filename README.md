@@ -42,7 +42,7 @@ A typical laminar app will concist of setting up the various instances that you 
 
 A key concept in Laminar is the use of middlewares, those are async function wrappers, that can be used to inject dependencies into function calls, while themselves being just functions. Very similar to [express middlewares](https://expressjs.com/en/guide/using-middleware.html), but allowing you to statically define and enforce the types all around.
 
-In practice it ends up looking like dependency injection, that's just function calls and without the magic. As fancy as that may sound, a middleware is just a function wrapper. For example look at this postgres middleware that take a pool and for each incomming request (function execution) will get a connection to the pool, pass it down to the function, and cleanup after its done.
+In practice it ends up looking like dependency injection, but it's just function calls and without the magic. As fancy as that may sound, a middleware is just a function wrapper. An example postgres middleware that take a pool and for each incomming request (function execution) will get a connection to the pool, pass it down to the function, and cleanup after its done.
 
 > [packages/laminar/examples/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/middleware.ts#L2-L21)
 
@@ -133,7 +133,8 @@ import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
 /**
- * A simple function to get some data out of a data store
+ * A simple function to get some data out of a data store, think databases and the like.
+ * Though for bravity it just returns a static js object.
  */
 const findUser = (id: string) => ({ id, name: 'John' });
 
@@ -149,7 +150,7 @@ const main = async () => {
         get: async ({ path }) => {
           /**
            * Our types would require us to return a 200 json response specifically,
-           * otherwise it would not compile
+           * otherwise it would not compile. That's what `jsonOk` function does.
            */
           return jsonOk(findUser(path.id));
         },
@@ -158,13 +159,15 @@ const main = async () => {
   });
 
   /**
-   * Now we've cerated the server, but it has not yet been started.
+   * Now we need to create the Http Service that would call our listener.
+   * Its a very shallow wrapper around `http.createService` from node
    * Default port is 3300
    */
   const http = new HttpService({ listener });
 
   /**
-   * The http server now should now be running and happily reporting so in the console
+   * We can now start it by calling `init`.
+   * Output would then be sent to the logger we've specified: node's console.
    */
   await init({ initOrder: [http], logger: console });
 };

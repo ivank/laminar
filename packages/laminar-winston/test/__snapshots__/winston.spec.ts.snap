@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Services Should start and stop services 1`] = `
+"{\\"level\\":\\"info\\",\\"message\\":\\"⏫ Starting Boss\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"✅ Started Boss\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"⏫ Starting ⛲ Laminar: http://0.0.0.0:8200\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"⏫ Starting Queue: one\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"✅ Started Queue: one\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"✅ Started ⛲ Laminar: http://0.0.0.0:8200\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"test\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"1\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"2\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"3\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"test\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"4\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"⏬ Stopping ⛲ Laminar: http://0.0.0.0:8200\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"⏬ Stopping Queue: one\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"❎ Stopped Queue: one\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"❎ Stopped ⛲ Laminar: http://0.0.0.0:8200\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"⏬ Stopping Boss\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"❎ Stopped Boss\\"}
+{\\"level\\":\\"info\\",\\"message\\":\\"❎ Stop 📜 Winston Logger\\"}
+"
+`;

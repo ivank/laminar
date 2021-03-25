@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { KafkaProducerService, run } from '@ovotech/laminar';
+import { run } from '@ovotech/laminar';
+import { KafkaProducerService } from '@ovotech/laminar-kafkajs';
 import { randomBytes } from 'crypto';
 import { createSession } from '@ovotech/laminar-jwt';
 import { createApplication } from '../src/application';

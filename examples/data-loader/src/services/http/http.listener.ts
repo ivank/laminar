@@ -1,4 +1,6 @@
-import { HttpListener, jsonOk, ok, yaml, file, LoggerContext, PgContext, QueueContext } from '@ovotech/laminar';
+import { HttpListener, jsonOk, ok, yaml, file, LoggerContext } from '@ovotech/laminar';
+import { PgContext } from '@ovotech/laminar-pg';
+import { QueueContext } from '@ovotech/laminar-pgboss';
 import { jwtSecurityResolver } from '@ovotech/laminar-jwt';
 import { join } from 'path';
 import { openApiTyped } from '../../__generated__/schema';

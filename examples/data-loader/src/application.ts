@@ -1,18 +1,8 @@
-import {
-  Application,
-  HttpService,
-  loggerMiddleware,
-  requestLoggingMiddleware,
-  jobLoggingMiddleware,
-  PgService,
-  pgMiddleware,
-  QueueService,
-  queueMiddleware,
-  QueueWorkerService,
-  LoggerService,
-  KafkaConsumerService,
-  kafkaLogCreator,
-} from '@ovotech/laminar';
+import { Application, HttpService, loggerMiddleware, requestLoggingMiddleware } from '@ovotech/laminar';
+import { WinstonService } from '@ovotech/laminar-winston';
+import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService } from '@ovotech/laminar-pgboss';
+import { PgService, pgMiddleware } from '@ovotech/laminar-pg';
+import { KafkaConsumerService, kafkaLogCreator } from '@ovotech/laminar-kafkajs';
 import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import * as PgBoss from 'pg-boss';
 import { Kafka, logLevel } from 'kafkajs';
@@ -68,7 +58,7 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
 
   const pg = new PgService(pool);
   const queue = new QueueService(pgBoss);
-  const logger = new LoggerService(winston);
+  const logger = new WinstonService(winston);
 
   /**
    * Middlewares

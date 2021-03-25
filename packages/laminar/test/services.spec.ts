@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Pool } from 'pg';
-import { HttpService, textOk, Middleware, run, PgService, pgMiddleware } from '../src';
+import { HttpService, textOk, Middleware, run } from '../src';
 import { SimpleQueue, Boss } from './simple-queue';
 
 export interface BossContext<TData> {
@@ -23,14 +22,8 @@ describe('Services', () => {
       describe: () => 'TestLogger',
     };
     const boss = new Boss<number>();
-    const pool1 = new Pool({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' });
-    const pool2 = new Pool({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' });
-
-    const pg1 = new PgService(pool1, 'db1');
-    const pg2 = new PgService(pool2, 'db2');
 
     const withBoss = bossMiddleware(boss);
-    const withDatabases = pgMiddleware({ db1: pg1, db2: pg2 });
 
     const queue = new SimpleQueue<number>(boss, [
       {
@@ -41,26 +34,19 @@ describe('Services', () => {
 
     const http = new HttpService({
       port,
-      listener: withDatabases(
-        withBoss(async ({ boss, query: { data }, db1, db2 }) => {
-          logger.info('test');
-          await db1.query('SELECT * FROM pg_catalog.pg_tables');
-          await db2.query('SELECT * FROM pg_catalog.pg_tables');
+      listener: withBoss(async ({ boss, query: { data } }) => {
+        logger.info('test');
 
-          for (const item of data) {
-            boss.add('one', Number(item));
-          }
-          return textOk('OK');
-        }),
-      ),
+        for (const item of data) {
+          boss.add('one', Number(item));
+        }
+        return textOk('OK');
+      }),
     });
 
     await run(
       {
-        initOrder: [
-          [boss, pg1, pg2],
-          [http, queue],
-        ],
+        initOrder: [boss, [http, queue]],
         logger,
       },
       async () => {
@@ -73,31 +59,23 @@ describe('Services', () => {
 
     expect(logger.info.mock.calls).toEqual([
       ['⏫ Starting Boss'],
-      ['⏫ Starting 🛢️ Postgres: db1'],
-      ['⏫ Starting 🛢️ Postgres: db2'],
       ['✅ Started Boss'],
-      ['✅ Started 🛢️ Postgres: db1'],
-      ['✅ Started 🛢️ Postgres: db2'],
-      ['⏫ Starting ⛲ Laminar: http://localhost:8060'],
+      ['⏫ Starting ⛲ Laminar: http://0.0.0.0:8060'],
       ['⏫ Starting Queue: one'],
       ['✅ Started Queue: one'],
-      ['✅ Started ⛲ Laminar: http://localhost:8060'],
+      ['✅ Started ⛲ Laminar: http://0.0.0.0:8060'],
       ['test'],
       ['1'],
       ['2'],
       ['3'],
       ['test'],
       ['4'],
-      ['⏬ Stopping ⛲ Laminar: http://localhost:8060'],
+      ['⏬ Stopping ⛲ Laminar: http://0.0.0.0:8060'],
       ['⏬ Stopping Queue: one'],
       ['❎ Stopped Queue: one'],
-      ['❎ Stopped ⛲ Laminar: http://localhost:8060'],
+      ['❎ Stopped ⛲ Laminar: http://0.0.0.0:8060'],
       ['⏬ Stopping Boss'],
-      ['⏬ Stopping 🛢️ Postgres: db1'],
-      ['⏬ Stopping 🛢️ Postgres: db2'],
       ['❎ Stopped Boss'],
-      ['❎ Stopped 🛢️ Postgres: db1'],
-      ['❎ Stopped 🛢️ Postgres: db2'],
       ['❎ Stop TestLogger'],
     ]);
   });
