@@ -6,7 +6,7 @@ Laminar can be used without an open api schema, being a light-weight alternative
 
 You can use the `router` function to create a rest api
 
-> [examples/docs/src/http-service-router/simple.ts:(simple)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/simple.ts#L2-L12)
+> [examples/docs/src/http-service-router/simple.ts:(simple)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/simple.ts#L3-L13)
 
 ```typescript
 /**
@@ -26,7 +26,7 @@ The simplest possible http listener app you can write is just a function. Takes 
 
 A request object has at its core this `incommingMessage` which is an instance from node's own [http.IncommingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage) though in practice you wouldn't need to interact with it much.
 
-> [examples/docs/src/http-service-router/function.ts:(function)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/function.ts#L2-L9)
+> [examples/docs/src/http-service-router/function.ts:(function)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/function.ts#L3-L10)
 
 ```typescript
 /**
@@ -41,7 +41,7 @@ While simple the app sits at the heart of all of laminar and is an essential bui
 
 Understanding that we can start using the router function:
 
-> [examples/docs/src/http-service-router/complex.ts:(complex)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/complex.ts#L2-L49)
+> [examples/docs/src/http-service-router/complex.ts:(complex)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/complex.ts#L3-L50)
 
 ```typescript
 const authors: Record<string, string> = { 10: 'Dave', 20: 'Bob' };
@@ -96,7 +96,7 @@ You have helpers available for all the HTTP methods: `get`, `post`, `del`, `patc
 
 You can also use the low level function `route` for any custom method, or no method altogether (matching any method).
 
-> [examples/docs/src/http-service-router/regex.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/regex.ts#L2-L31)
+> [examples/docs/src/http-service-router/regex.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/regex.ts#L3-L32)
 
 ```typescript
 const items: Record<string, string> = { 10: 'Dave', 20: 'Bob' };
@@ -137,7 +137,7 @@ If a pathname has a capture group in it it would be captured and accessible with
 
 You can serve a directory of static assesets with `staticAssets` helper.
 
-> [examples/docs/src/http-service-router/static-assets.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/static-assets.ts#L3-L13)
+> [examples/docs/src/http-service-router/static-assets.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/static-assets.ts#L4-L14)
 
 ```typescript
 const listener = router(
@@ -153,7 +153,7 @@ All the files from the 'assets' directory are going to be served.
 
 By default it accepts range headers on files and if you request a directory, it would load the index.html file. You can configure this with several configuration options.
 
-> [examples/docs/src/http-service-router/static-assets-options.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/static-assets-options.ts#L3-L18)
+> [examples/docs/src/http-service-router/static-assets-options.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-router/static-assets-options.ts#L4-L19)
 
 ```typescript
 const listener = router(

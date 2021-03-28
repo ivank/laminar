@@ -44,7 +44,7 @@ A key concept in Laminar is the use of middlewares, those are async function wra
 
 In practice it ends up looking like dependency injection, but it's just function calls and without the magic. As fancy as that may sound, a middleware is just a function wrapper. An example postgres middleware that take a pool and for each incomming request (function execution) will get a connection to the pool, pass it down to the function, and cleanup after its done.
 
-> [examples/docs/src/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/middleware.ts#L3-L22)
+> [examples/docs/src/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/middleware.ts#L4-L23)
 
 ```typescript
 import { Middleware } from '@ovotech/laminar';

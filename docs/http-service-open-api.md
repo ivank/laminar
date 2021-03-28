@@ -4,7 +4,7 @@ Laminar comes with with a function that will use an OpenApi file to craete an ht
 
 ### api
 
-> [examples/docs/src/http-service-open-api/simple.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/simple.ts#L8-L19)
+> [examples/docs/src/http-service-open-api/simple.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/simple.ts#L9-L20)
 
 ```typescript
 const createHttpListener = async (): Promise<HttpListener> => {
@@ -23,7 +23,7 @@ The `openApi` function that implements an OpenApi schema file, needs the schema 
 
 `api` can be a JSON file too
 
-> [examples/docs/src/http-service-open-api/json.ts:(api)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/json.ts#L10-L12)
+> [examples/docs/src/http-service-open-api/json.ts:(api)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/json.ts#L11-L13)
 
 ```typescript
 api: join(__dirname, '../../schema/api.json'),
@@ -31,7 +31,7 @@ api: join(__dirname, '../../schema/api.json'),
 
 Or you can use a plain js object. Though in that case we need to use `as const` as otherwise things like `"string"` would not be converted to their respective type literal values, but would remain as a generic `string`.
 
-> [examples/docs/src/http-service-open-api/object.ts:(api)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/object.ts#L7-L37)
+> [examples/docs/src/http-service-open-api/object.ts:(api)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/object.ts#L8-L38)
 
 ```typescript
 const api = {
@@ -97,7 +97,7 @@ paths:
 
 You can implement [OpenApi security](https://swagger.io/docs/specification/authentication/), using the `security` option.
 
-> [examples/docs/schema/security.yaml:(security)](https://github.com/ovotech/laminar/tree/main/examples/docs/schema/security.yaml#L24-L29)
+> [examples/docs/schema/security.yaml:(security)](https://github.com/ovotech/laminar/tree/main/examples/docs/schema/security.yaml#L25-L30)
 
 ```yaml
 securitySchemes:
@@ -106,7 +106,7 @@ securitySchemes:
     scheme: bearer
 ```
 
-> [examples/docs/src/http-service-open-api/security.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/security.ts#L8-L25)
+> [examples/docs/src/http-service-open-api/security.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/security.ts#L9-L26)
 
 ```typescript
 const createHttpListener = async (): Promise<HttpListener> => {
@@ -137,7 +137,7 @@ This is a trivial example of a security resolver that you wouldn't use in practi
 
 You can define additional paths that are not defined by openapi schema. To do that you can use the `notFound` property, which accepts any laminar app.
 
-> [examples/docs/src/http-service-open-api/not-found.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/not-found.ts#L5-L20)
+> [examples/docs/src/http-service-open-api/not-found.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/not-found.ts#L6-L21)
 
 ```typescript
 const createHttpListener = async (): Promise<HttpListener> => {
@@ -162,7 +162,7 @@ You will probably want to add some additional props to your openApi context, for
 
 `openApi` function has a generic type interface that you can assign, to be used by all the path functions.
 
-> [examples/docs/src/http-service-open-api/middlewares.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/middlewares.ts#L8-L33)
+> [examples/docs/src/http-service-open-api/middlewares.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/middlewares.ts#L9-L34)
 
 ```typescript
 const createHttpListener = async () => {
@@ -200,7 +200,7 @@ yarn add --dev @ovotech/laminar-cli
 yarn laminar api --file schema/api.yaml --output src/__generated/api.yaml.ts
 ```
 
-> [examples/docs/src/http-service-open-api/simple-typed.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/simple-typed.ts#L8-L21)
+> [examples/docs/src/http-service-open-api/simple-typed.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/simple-typed.ts#L9-L22)
 
 ```typescript
 import { openApiTyped } from './__generated__/api.yaml';
@@ -221,7 +221,7 @@ const createHttpListener = async (): Promise<HttpListener> => {
 
 Providing context types works the same too.
 
-> [examples/docs/src/http-service-open-api/middlewares-typed.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/middlewares-typed.ts#L8-L24)
+> [examples/docs/src/http-service-open-api/middlewares-typed.ts:(app)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/middlewares-typed.ts#L9-L25)
 
 ```typescript
 import { openApiTyped } from './__generated__/api.yaml';

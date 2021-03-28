@@ -9,7 +9,7 @@ yarn add pg
 yarn add @ovotech/laminar-pg
 ```
 
-> [examples/docs/src/database.ts:(openApi)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L9-L29)
+> [examples/docs/src/database.ts:(openApi)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L10-L30)
 
 ```typescript
 const app = await openApi<PgContext>({
@@ -33,7 +33,7 @@ const app = await openApi<PgContext>({
 
 Say we have this openapi service. We'll leave out the OpenApi Schema itself for bravity, but you can read it in the actual example file.
 
-> [examples/docs/src/database.ts:(query)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L14-L19)
+> [examples/docs/src/database.ts:(query)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L15-L20)
 
 ```typescript
 post: async ({ db, body }) => {
@@ -45,7 +45,7 @@ post: async ({ db, body }) => {
 As you can see in the functions for each route you now have access to `db` from the context. That's because we've specified `PgContext` for `openApi`.
 And we return `jsonOk` as our OpenAPI specifies that we can only return a json, and only with a status 200.
 
-> [examples/docs/src/database.ts:(PgService)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L32-L34)
+> [examples/docs/src/database.ts:(PgService)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L33-L35)
 
 ```typescript
 const pg = new PgService(new Pool({ connectionString: process.env.PG }));
@@ -53,7 +53,7 @@ const pg = new PgService(new Pool({ connectionString: process.env.PG }));
 
 Next we create the `PgService`. This is a class that wraps an actual [postgres Pool](https://node-postgres.com/api/pool) and manages its lifecycle. It would start / stop it when we run the application.
 
-> [examples/docs/src/database.ts:(pgMiddleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L36-L38)
+> [examples/docs/src/database.ts:(pgMiddleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L37-L39)
 
 ```typescript
 const withDb = pgMiddleware({ db: pg });
@@ -63,7 +63,7 @@ Using the `PgService` we create a `pgMiddleware`. Middlewares are like "glue" th
 
 In this case `pgMiddleware` will get a new connection from the pool and pass it down to the context. And after the function has finished (or throws an error), it will release the connection to the pool. This will make sure any request does not accidentally share a transation with another request.
 
-> [examples/docs/src/database.ts:(HttpService)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L40-L42)
+> [examples/docs/src/database.ts:(HttpService)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L41-L43)
 
 ```typescript
 const http = new HttpService({ listener: withDb(app) });
@@ -71,7 +71,7 @@ const http = new HttpService({ listener: withDb(app) });
 
 We are now ready to create the `HttpService` service with our `openApi` app as a listener.
 
-> [examples/docs/src/database.ts:(init)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L31-L45)
+> [examples/docs/src/database.ts:(init)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database.ts#L32-L46)
 
 ```typescript
 const pg = new PgService(new Pool({ connectionString: process.env.PG }));
@@ -89,7 +89,7 @@ Tying it all together, we call the `init` method. Now that would start all the s
 
 What if you have multiple database serveres you want to talk to? The `@ovotech/laminar-pg` can handle that, and with the correct typescript types.
 
-> [examples/docs/src/database-multiple.ts:(openApi)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database-multiple.ts#L6-L27)
+> [examples/docs/src/database-multiple.ts:(openApi)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database-multiple.ts#L7-L28)
 
 ```typescript
 const app = await openApi<PgContext<{ db: PgService; backup: PgService }>>({
@@ -116,7 +116,7 @@ const app = await openApi<PgContext<{ db: PgService; backup: PgService }>>({
 
 You can define a `PgContext` which comes from multiple `PgService` objects. Which puts them with the right names into the context, and you can acceess them in your route functions.
 
-> [examples/docs/src/database-multiple.ts:(pgMiddleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database-multiple.ts#L31-L40)
+> [examples/docs/src/database-multiple.ts:(pgMiddleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/database-multiple.ts#L32-L41)
 
 ```typescript
 const pg = new PgService(new Pool({ connectionString: process.env.PG }));
@@ -134,7 +134,7 @@ Notice that we've put the two postgres services in an array. That would mean the
 
 ## Custom database connections
 
-> [examples/docs/src/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/middleware.ts#L3-L22)
+> [examples/docs/src/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/middleware.ts#L4-L23)
 
 ```typescript
 import { Middleware } from '@ovotech/laminar';

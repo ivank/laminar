@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar-kafkajs#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ikerin/build-readme": "^1.1.0",
+    "@ikerin/build-readme": "^1.1.1",
     "@kafkajs/confluent-schema-registry": "^2.0.0",
     "@types/cookie": "^0.4.0",
     "@types/jest": "^26.0.20",

@@ -25,7 +25,7 @@
     "lru-cache": "^6.0.0"
   },
   "devDependencies": {
-    "@ikerin/build-readme": "^1.1.0",
+    "@ikerin/build-readme": "^1.1.1",
     "@ovotech/laminar": "^0.11.0-alpha.5",
     "@ovotech/laminar-cli": "^0.11.0-alpha.4",
     "@types/jest": "^26.0.20",

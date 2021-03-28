@@ -8,7 +8,7 @@ Now with TypeScript and the whole async / await this is not particularly hard to
 
 Lets look at exhibit one, the `Service` interface.
 
-> [packages/laminar/src/types.ts:(Service)](https://github.com/ovotech/laminar/tree/main/packages/laminar/src/types.ts#L6-L19)
+> [packages/laminar/src/types.ts:(Service)](https://github.com/ovotech/laminar/tree/main/packages/laminar/src/types.ts#L7-L20)
 
 ```typescript
 /**
@@ -31,7 +31,7 @@ Laminar has several functions that will work with classes that implement `Servic
 
 Lets say we have a bunch of services:
 
-> [examples/docs/src/application.ts:(Service)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L2-L24)
+> [examples/docs/src/application.ts:(Service)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L3-L25)
 
 ```typescript
 class MyService implements Service {
@@ -58,7 +58,7 @@ const http = new HttpService({ listener: async () => jsonOk({ success: true }) }
 
 The most common function you'll want to use is `init`
 
-> [examples/docs/src/application.ts:(init)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L38-L40)
+> [examples/docs/src/application.ts:(init)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L39-L41)
 
 ```typescript
 await init({ initOrder: [[db, events, dataCat], http], logger: console });
@@ -70,7 +70,7 @@ Additionally it starts listening to the `SIGTERM` event and upon recieving it, w
 
 ### run
 
-> [examples/docs/src/application.ts:(run)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L32-L36)
+> [examples/docs/src/application.ts:(run)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L33-L37)
 
 ```typescript
 await run({ initOrder: [db, events, dataCat], logger: console }, async () => {
@@ -82,7 +82,7 @@ This is used mostly for test. It will keep the application and all of its servic
 
 ### start, stop
 
-> [examples/docs/src/application.ts:(start-stop)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L27-L30)
+> [examples/docs/src/application.ts:(start-stop)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/application.ts#L28-L31)
 
 ```typescript
 await start({ initOrder: [db, events, dataCat], logger: console });

@@ -43,7 +43,7 @@ You can also do customisations on the cors middleware
 
 You can allow origins using a regex:
 
-> [examples/docs/src/cors/regex.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/regex.ts#L4-L11)
+> [examples/docs/src/cors/regex.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/regex.ts#L5-L12)
 
 ```typescript
 /**
@@ -54,7 +54,7 @@ const cors = corsMiddleware({ allowOrigin: /https?\:\/\/(localhost|example\.com)
 
 You can allow origins using a function:
 
-> [examples/docs/src/cors/function.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/function.ts#L4-L11)
+> [examples/docs/src/cors/function.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/function.ts#L5-L12)
 
 ```typescript
 /**
@@ -65,7 +65,7 @@ const cors = corsMiddleware({ allowOrigin: (origin) => origin.endsWith('.com') }
 
 You can allow other options:
 
-> [examples/docs/src/cors/options.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/options.ts#L4-L25)
+> [examples/docs/src/cors/options.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/options.ts#L5-L26)
 
 ```typescript
 const cors = corsMiddleware({

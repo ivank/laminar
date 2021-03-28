@@ -621,12 +621,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ikerin/build-readme@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@ikerin/build-readme@npm:1.1.0"
+"@ikerin/build-readme@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@ikerin/build-readme@npm:1.1.1"
   bin:
     build-readme: bin/build-readme
-  checksum: e809db5704e5cc89e92ba4b53374d6b50e25dd0959f10b3a961633d8b7d031a938a042a3fd4d89a6a31d06fb25b762f72d51a9656d38c1a81866040df198a38d
+  checksum: 4af0e8b4567c8939aea7d52ddf664e9a998923cd52f84dcc355c141ad0d8a6398161a02466a13739fe6e86a598e7d31fc5c896c7b612ae5cd9a108bfaf3d04a3
   languageName: node
   linkType: hard
 
@@ -1946,7 +1946,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/json-schema@workspace:packages/json-schema"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -1967,7 +1967,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-cli@workspace:packages/laminar-cli"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@ovotech/json-schema": ^0.11.0-alpha.0
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/ts-compose": ^0.17.0-alpha.0
@@ -2000,7 +2000,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -2024,7 +2024,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-jwt@workspace:packages/laminar-jwt"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@ovotech/json-schema": ^0.11.0-alpha.0
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-cli": ^0.11.0-alpha.4
@@ -2056,7 +2056,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-kafkajs@workspace:packages/laminar-kafkajs"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@kafkajs/confluent-schema-registry": ^2.0.0
     "@ovotech/laminar": ^0.11.0-alpha.4
     "@types/cookie": ^0.4.0
@@ -2098,7 +2098,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-pg@workspace:packages/laminar-pg"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
@@ -2124,7 +2124,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-pgboss@workspace:packages/laminar-pgboss"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
@@ -2151,7 +2151,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-winston@workspace:packages/laminar-winston"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -2175,7 +2175,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar@workspace:packages/laminar"
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@ovotech/json-schema": ^0.11.0-alpha.0
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
@@ -7004,7 +7004,7 @@ fsevents@^2.1.2:
   version: 0.0.0-use.local
   resolution: "laminar@workspace:."
   dependencies:
-    "@ikerin/build-readme": ^1.1.0
+    "@ikerin/build-readme": ^1.1.1
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
     eslint: ^7.22.0
