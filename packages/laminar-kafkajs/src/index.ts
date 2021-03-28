@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @ovotech/laminar-kafkajs
+ */
 export { KafkaConsumerService } from './kafka-consumer.service';
 export { KafkaConsumerOptionalService } from './kafka-consumer-optional.service';
 export {

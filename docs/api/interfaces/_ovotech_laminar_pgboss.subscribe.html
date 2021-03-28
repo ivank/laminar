@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>JobData | Laminar - v0.11.0</title>
+	<title>Subscribe | Laminar - v0.11.0</title>
 	<meta name="description" content="Documentation for Laminar - v0.11.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,24 +55,34 @@
 					<a href="../index.html">Laminar - v0.11.0</a>
 				</li>
 				<li>
-					<a href="../modules/laminar_pgboss_src.html">laminar-pgboss/src</a>
+					<a href="../modules/_ovotech_laminar_pgboss.html">@ovotech/laminar-pgboss</a>
 				</li>
 				<li>
-					<a href="laminar_pgboss_src.jobdata.html">JobData</a>
+					<a href="_ovotech_laminar_pgboss.subscribe.html">Subscribe</a>
 				</li>
 			</ul>
-			<h1>Interface JobData&lt;TData&gt;</h1>
+			<h1>Interface Subscribe&lt;TData, TContext&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Subscribe to a queue using a job worker</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">object</span></h4>
+						<h4>TData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Empty</span> = <span class="tsd-signature-type">Empty</span></h4>
+					</li>
+					<li>
+						<h4>TContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Empty</span> = <span class="tsd-signature-type">Empty</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -80,7 +90,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">JobData</span>
+						<span class="target">Subscribe</span>
 					</li>
 				</ul>
 			</section>
@@ -91,10 +101,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="laminar_pgboss_src.jobdata.html#data" class="tsd-kind-icon">data</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="laminar_pgboss_src.jobdata.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="laminar_pgboss_src.jobdata.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="laminar_pgboss_src.jobdata.html#queue" class="tsd-kind-icon">queue</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_ovotech_laminar_pgboss.subscribe.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_ovotech_laminar_pgboss.subscribe.html#options" class="tsd-kind-icon">options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_ovotech_laminar_pgboss.subscribe.html#worker" class="tsd-kind-icon">worker</a></li>
 							</ul>
 						</section>
 					</div>
@@ -103,42 +112,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="data" class="tsd-anchor"></a>
-					<h3>data</h3>
-					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TData</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/add10c5/packages/laminar-pgboss/src/types.ts#L16">packages/laminar-pgboss/src/types.ts:16</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="id" class="tsd-anchor"></a>
-					<h3>id</h3>
-					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/add10c5/packages/laminar-pgboss/src/types.ts#L17">packages/laminar-pgboss/src/types.ts:17</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/add10c5/packages/laminar-pgboss/src/types.ts#L18">packages/laminar-pgboss/src/types.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/af2631d/packages/laminar-pgboss/src/types.ts#L43">packages/laminar-pgboss/src/types.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="queue" class="tsd-anchor"></a>
-					<h3>queue</h3>
-					<div class="tsd-signature tsd-kind-icon">queue<span class="tsd-signature-symbol">:</span> <a href="laminar_pgboss_src.queue.html" class="tsd-signature-type" data-tsd-kind="Interface">Queue</a></div>
+					<a name="options" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> options</h3>
+					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SubscribeOptions</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/add10c5/packages/laminar-pgboss/src/types.ts#L19">packages/laminar-pgboss/src/types.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/af2631d/packages/laminar-pgboss/src/types.ts#L45">packages/laminar-pgboss/src/types.ts:45</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="worker" class="tsd-anchor"></a>
+					<h3>worker</h3>
+					<div class="tsd-signature tsd-kind-icon">worker<span class="tsd-signature-symbol">:</span> <a href="../modules/_ovotech_laminar_pgboss.html#jobworker" class="tsd-signature-type" data-tsd-kind="Type alias">JobWorker</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TData</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/af2631d/packages/laminar-pgboss/src/types.ts#L44">packages/laminar-pgboss/src/types.ts:44</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -163,74 +162,71 @@
 						<a href="../modules/_ovotech_laminar_jwt.html">@ovotech/laminar-<wbr>jwt</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/laminar_kafkajs_src.html">laminar-<wbr>kafkajs/src</a>
+						<a href="../modules/_ovotech_laminar_kafkajs.html">@ovotech/laminar-<wbr>kafkajs</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/laminar_pg_src.html">laminar-<wbr>pg/src</a>
+						<a href="../modules/_ovotech_laminar_pg.html">@ovotech/laminar-<wbr>pg</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/laminar_pgboss_src.html">laminar-<wbr>pgboss/src</a>
+						<a href="../modules/_ovotech_laminar_pgboss.html">@ovotech/laminar-<wbr>pgboss</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/laminar_winston_src.html">laminar-<wbr>winston/src</a>
+						<a href="../modules/_ovotech_laminar_winston.html">@ovotech/laminar-<wbr>winston</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/laminar_pgboss_src.queueservice.html" class="tsd-kind-icon">Queue<wbr>Service</a>
+						<a href="../classes/_ovotech_laminar_pgboss.queueservice.html" class="tsd-kind-icon">Queue<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../classes/laminar_pgboss_src.queueworkerservice.html" class="tsd-kind-icon">Queue<wbr>Worker<wbr>Service</a>
+						<a href="../classes/_ovotech_laminar_pgboss.queueworkerservice.html" class="tsd-kind-icon">Queue<wbr>Worker<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/laminar_pgboss_src.queueworkersservice.html" class="tsd-kind-icon">Queue<wbr>Workers<wbr>Service</a>
+						<a href="../classes/_ovotech_laminar_pgboss.queueworkersservice.html" class="tsd-kind-icon">Queue<wbr>Workers<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_ovotech_laminar_pgboss.jobdata.html" class="tsd-kind-icon">Job<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_ovotech_laminar_pgboss.publish.html" class="tsd-kind-icon">Publish</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="_ovotech_laminar_pgboss.queue.html" class="tsd-kind-icon">Queue</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="_ovotech_laminar_pgboss.queuecontext.html" class="tsd-kind-icon">Queue<wbr>Context</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="laminar_pgboss_src.jobdata.html" class="tsd-kind-icon">Job<wbr>Data</a>
+						<a href="_ovotech_laminar_pgboss.subscribe.html" class="tsd-kind-icon">Subscribe</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="laminar_pgboss_src.jobdata.html#data" class="tsd-kind-icon">data</a>
+								<a href="_ovotech_laminar_pgboss.subscribe.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="laminar_pgboss_src.jobdata.html#id" class="tsd-kind-icon">id</a>
+								<a href="_ovotech_laminar_pgboss.subscribe.html#options" class="tsd-kind-icon">options</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="laminar_pgboss_src.jobdata.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="laminar_pgboss_src.jobdata.html#queue" class="tsd-kind-icon">queue</a>
+								<a href="_ovotech_laminar_pgboss.subscribe.html#worker" class="tsd-kind-icon">worker</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="laminar_pgboss_src.publish.html" class="tsd-kind-icon">Publish</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="laminar_pgboss_src.queue.html" class="tsd-kind-icon">Queue</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="laminar_pgboss_src.queuecontext.html" class="tsd-kind-icon">Queue<wbr>Context</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="laminar_pgboss_src.subscribe.html" class="tsd-kind-icon">Subscribe</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_ovotech_laminar_pgboss.html#jobworker" class="tsd-kind-icon">Job<wbr>Worker</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/laminar_pgboss_src.html#jobworker" class="tsd-kind-icon">Job<wbr>Worker</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/laminar_pgboss_src.html#workermiddleware" class="tsd-kind-icon">Worker<wbr>Middleware</a>
+						<a href="../modules/_ovotech_laminar_pgboss.html#workermiddleware" class="tsd-kind-icon">Worker<wbr>Middleware</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/laminar_pgboss_src.html#jobloggingmiddleware" class="tsd-kind-icon">job<wbr>Logging<wbr>Middleware</a>
+						<a href="../modules/_ovotech_laminar_pgboss.html#jobloggingmiddleware" class="tsd-kind-icon">job<wbr>Logging<wbr>Middleware</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/laminar_pgboss_src.html#queuemiddleware" class="tsd-kind-icon">queue<wbr>Middleware</a>
+						<a href="../modules/_ovotech_laminar_pgboss.html#queuemiddleware" class="tsd-kind-icon">queue<wbr>Middleware</a>
 					</li>
 				</ul>
 			</nav>

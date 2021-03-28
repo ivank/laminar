@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @ovotech/laminar-pgboss
+ */
 export { QueueService } from './queue.service';
 export { QueueWorkerService } from './queue.worker.service';
 export { QueueWorkersService } from './queue.workers.service';
