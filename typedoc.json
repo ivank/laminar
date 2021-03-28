@@ -3,7 +3,11 @@
     "packages/json-schema/src/index.ts",
     "packages/laminar/src/index.ts",
     "packages/laminar-jwt/src/index.ts",
-    "packages/laminar-handlebars/src/index.ts"
+    "packages/laminar-handlebars/src/index.ts",
+    "packages/laminar-pg/src/index.ts",
+    "packages/laminar-kafkajs/src/index.ts",
+    "packages/laminar-pgboss/src/index.ts",
+    "packages/laminar-winston/src/index.ts"
   ],
   "name": "Laminar",
   "out": "docs/api",
