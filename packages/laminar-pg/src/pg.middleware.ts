@@ -4,6 +4,17 @@ import { PgClient } from './pg.client';
 
 export type PgMiddlewareConfig = Record<string, PgService>;
 
+/**
+ * Context with one or more database clients connected.
+ *
+ * By default client is `db`.
+ *
+ * You can define multiple client by using an object with `PgService` properties.
+ *
+ * ```typescript
+ * type MyDatabasesContext = PgContext<{ db1: PgService, db2: PgService }>;
+ * ```
+ */
 export type PgContext<TConfig extends PgMiddlewareConfig = { db: PgService }> = Record<keyof TConfig, PgClient>;
 
 /**
@@ -17,6 +28,29 @@ export type PgContext<TConfig extends PgMiddlewareConfig = { db: PgService }> = 
  * Can be used with any resolver function, like http listener or queue worker.
  *
  * Supports multiple pools, and would create connections to all of them simultaneously.
+ *
+ * ```typescript
+ * const pool = new Pool({ connectionString: '...' });
+ * const pg = new PgService(pool);
+ *
+ * const withDb = pgMiddleware(pg);
+ *
+ * new HttpService({ listener: withDb(async ({ db }) => {
+ **   console.log(await db.query('...'));
+ * }) });
+ *
+ * // Multiple
+ * // ----------------
+ * const pg1 = new PgService(new Pool({ connectionString: '...' }));
+ * const pg2 = new PgService(new Pool({ connectionString: '...' }));
+ *
+ * const withDbs = pgMiddleware({ db1: pg1, db2: pg2 });
+ *
+ * new HttpService({ listener: withDb(async ({ db1, db2 }) => {
+ *   console.log(await db1.query('...'));
+ *   console.log(await db2.query('...'));
+ * }) });
+ * ```
  */
 export function pgMiddleware(config: { db: PgService }): Middleware<PgContext>;
 export function pgMiddleware<TConfig extends PgMiddlewareConfig>(config: TConfig): Middleware<PgContext<TConfig>>;

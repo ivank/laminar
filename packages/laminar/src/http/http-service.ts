@@ -74,7 +74,7 @@ export function toIncommingMessageResolver({
 /**
  * Creeate a request listner to be used for [http.createServer](https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener)
  *
- * A {@link HttpResolver} would convert an incomingRequest to a {@link HttpResponse} object.
+ * A {@link HttpListener} would convert an incomingRequest to a {@link HttpResponse} object.
  * This function would also use the parameters of the {@link HttpResponse} to set the statusCode, headers and body in the Request Listener
  * Multiple headers are supported. If the response body is a [Readable Stream](https://nodejs.org/api/stream.html#stream_readable_streams) it would stream it as a response directly
  *

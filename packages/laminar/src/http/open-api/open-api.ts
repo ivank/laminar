@@ -43,7 +43,7 @@ export const defaultOapiNotFound: HttpListener = async (ctx) =>
 /**
  * Create an application using an OpenApi schema.
  * The api can be a filename (json or yaml) or a javascript object containing OpenApi Schema.
- * You also provide an {@link App} for each path. As well as all security resolvers
+ * You also provide an {@link HttpListener} for each path. As well as all security resolvers
  *
  * @typeParam TContext pass the request properties that the app requires. Usually added by the middlewares
  * @category http

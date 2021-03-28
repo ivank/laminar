@@ -29,6 +29,11 @@ export type Produce<TValue> = (
 /**
  * A helper to create a producer function, with "baked in" topic and schema names
  *
+ * ```typescript
+ * const mySend = produce({ topic: 'my-topic', schema: mySchema });
+ * await mySend(producer, [{ value: { ... }, partition: 1 }]);
+ * ```
+ *
  * @typeParam TValue The type of the the kafka message value, before its encoded
  */
 export function produce<TValue>(config: { topic: string; schema: ConfluentSchema }): Produce<TValue> {

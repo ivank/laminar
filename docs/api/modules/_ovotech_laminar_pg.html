@@ -102,9 +102,18 @@
 					<div class="tsd-signature tsd-kind-icon">Pg<wbr>Context&lt;TConfig&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">TConfig</span><span class="tsd-signature-symbol">, </span><a href="../classes/_ovotech_laminar_pg.pgclient.html" class="tsd-signature-type" data-tsd-kind="Class">PgClient</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.middleware.ts#L7">packages/laminar-pg/src/pg.middleware.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.middleware.ts#L18">packages/laminar-pg/src/pg.middleware.ts:18</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Context with one or more database clients connected.</p>
+						</div>
+						<p>By default client is <code>db</code>.</p>
+						<p>You can define multiple client by using an object with <code>PgService</code> properties.</p>
+						<pre><code class="language-typescript"><span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">MyDatabasesContext</span><span style="color: #000000"> = </span><span style="color: #267F99">PgContext</span><span style="color: #000000">&lt;{ </span><span style="color: #001080">db1</span><span style="color: #000000">: </span><span style="color: #267F99">PgService</span><span style="color: #000000">, </span><span style="color: #001080">db2</span><span style="color: #000000">: </span><span style="color: #267F99">PgService</span><span style="color: #000000"> }&gt;;</span>
+</code></pre>
+					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -126,7 +135,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.middleware.ts#L21">packages/laminar-pg/src/pg.middleware.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.middleware.ts#L55">packages/laminar-pg/src/pg.middleware.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -139,6 +148,27 @@
 								releasing the client from the pool in an event of one.</p>
 								<p>Can be used with any resolver function, like http listener or queue worker.</p>
 								<p>Supports multiple pools, and would create connections to all of them simultaneously.</p>
+								<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pool</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Pool</span><span style="color: #000000">({ </span><span style="color: #001080">connectionString:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000"> });</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pg</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PgService</span><span style="color: #000000">(</span><span style="color: #001080">pool</span><span style="color: #000000">);</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">withDb</span><span style="color: #000000"> = </span><span style="color: #795E26">pgMiddleware</span><span style="color: #000000">(</span><span style="color: #001080">pg</span><span style="color: #000000">);</span>
+
+<span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">HttpService</span><span style="color: #000000">({ </span><span style="color: #001080">listener:</span><span style="color: #000000"> </span><span style="color: #795E26">withDb</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> ({ </span><span style="color: #001080">db</span><span style="color: #000000"> }) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">*   </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">db</span><span style="color: #000000">.</span><span style="color: #795E26">query</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000">));</span>
+<span style="color: #000000">}) });</span>
+
+<span style="color: #008000">// Multiple</span>
+<span style="color: #008000">// ----------------</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pg1</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PgService</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Pool</span><span style="color: #000000">({ </span><span style="color: #001080">connectionString:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000"> }));</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pg2</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PgService</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Pool</span><span style="color: #000000">({ </span><span style="color: #001080">connectionString:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000"> }));</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">withDbs</span><span style="color: #000000"> = </span><span style="color: #795E26">pgMiddleware</span><span style="color: #000000">({ </span><span style="color: #001080">db1:</span><span style="color: #000000"> </span><span style="color: #001080">pg1</span><span style="color: #000000">, </span><span style="color: #001080">db2:</span><span style="color: #000000"> </span><span style="color: #001080">pg2</span><span style="color: #000000"> });</span>
+
+<span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">HttpService</span><span style="color: #000000">({ </span><span style="color: #001080">listener:</span><span style="color: #000000"> </span><span style="color: #795E26">withDb</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> ({ </span><span style="color: #001080">db1</span><span style="color: #000000">, </span><span style="color: #001080">db2</span><span style="color: #000000"> }) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">db1</span><span style="color: #000000">.</span><span style="color: #795E26">query</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000">));</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">db2</span><span style="color: #000000">.</span><span style="color: #795E26">query</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000">));</span>
+<span style="color: #000000">}) });</span>
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -156,7 +186,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.middleware.ts#L22">packages/laminar-pg/src/pg.middleware.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.middleware.ts#L56">packages/laminar-pg/src/pg.middleware.ts:56</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>

@@ -73,6 +73,13 @@
 					<div class="lead">
 						<p>A class that wraps a PoolClient, cathing errors and re-throwing them with more diagnostic information.</p>
 					</div>
+					<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pool</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Pool</span><span style="color: #000000">({ </span><span style="color: #001080">connectionString:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000">});</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">client</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">pool</span><span style="color: #000000">.</span><span style="color: #795E26">connect</span><span style="color: #000000">();</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">pgClient</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">PgClient</span><span style="color: #000000">(</span><span style="color: #001080">client</span><span style="color: #000000">, </span><span style="color: #001080">console</span><span style="color: #000000">);</span>
+
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">pgClient</span><span style="color: #000000">.</span><span style="color: #795E26">query</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000">);</span>
+</code></pre>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -121,7 +128,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.client.ts#L9">packages/laminar-pg/src/pg.client.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.client.ts#L18">packages/laminar-pg/src/pg.client.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -167,7 +174,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.client.ts#L13">packages/laminar-pg/src/pg.client.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-pg/src/pg.client.ts#L22">packages/laminar-pg/src/pg.client.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>

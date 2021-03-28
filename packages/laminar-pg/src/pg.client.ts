@@ -4,6 +4,15 @@ import { LoggerLike, LaminarError } from '@ovotech/laminar';
 /**
  * A class that wraps a PoolClient, cathing errors and re-throwing them with more diagnostic information.
  *
+ * ```typescript
+ * const pool = new Pool({ connectionString: '...'});
+ * const client = await pool.connect();
+ *
+ * const pgClient = new PgClient(client, console);
+ *
+ * await pgClient.query('...');
+ * ```
+ *
  * @category pg
  */
 export class PgClient {
