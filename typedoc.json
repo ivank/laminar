@@ -13,5 +13,6 @@
   "out": "docs/api",
   "includeVersion": true,
   "readme": "none",
-  "categorizeByGroup": true
+  "categorizeByGroup": true,
+  "gitRevision": "main"
 }

@@ -100,14 +100,14 @@ export interface HttpResponse<Content = unknown, Status = number> {
 }
 
 /**
- * A pure function to convert an {@link HttpRequest} into a {@link Response} object
+ * A pure function to convert an {@link HttpContext} into a {@link HttpResponse} object
  *
  * @typeParam TRequest pass the request properties that the app requires. Usually added by the middlewares
  */
 export type HttpListener<TRequest extends Empty = Empty> = (ctx: HttpContext & TRequest) => Promise<HttpResponse>;
 
 /**
- * An middleware that uses {@link HttpRequest} and modifies it to be used by the app or the downstream middlewares
+ * An middleware that uses {@link HttpContext} and modifies it to be used by the app or the downstream middlewares
  *
  * You can compose middlewares in order to build a larger app.
  * Each middlewares would process the request parameters and add new ones, that would be available to downstream components.
@@ -121,8 +121,8 @@ export type HttpListener<TRequest extends Empty = Empty> = (ctx: HttpContext & T
  * const appWithMiddlewares = middleware1(middleware2(app));
  * ```
  *
- * @typeParam TProvide Specify what parameters the component would add into the {@link HttpRequest}.
- * @typeParam TRequire Specify what parameters to require from the {@link HttpRequest}.
+ * @typeParam TProvide Specify what parameters the component would add into the {@link HttpContext}.
+ * @typeParam TRequire Specify what parameters to require from the {@link HttpContext}.
  * @typeParam TInherit A helper type to allow Typescript to correctly infer the types of all the previous / next middleware in the flow
  * @returns A function to compose with other middlewares over an app
  */
