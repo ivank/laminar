@@ -11,6 +11,8 @@ services:
       POSTGRES_USER: example-admin
       POSTGRES_PASSWORD: example-pass
     volumes:
+      - ./examples/docs/init.sql:/docker-entrypoint-initdb.d/docs.sql
+      - ./examples/comms/init.sql:/docker-entrypoint-initdb.d/comms.sql
       - ./examples/petstore/init.sql:/docker-entrypoint-initdb.d/petstore.sql
       - ./examples/split/init.sql:/docker-entrypoint-initdb.d/split.sql
       - ./examples/data-loader/init.sql:/docker-entrypoint-initdb.d/data-loader.sql

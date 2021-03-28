@@ -4,6 +4,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type Empty = {};
 
+// << Service
 /**
  * A type that needs to be implemented by all laminar services.
  *
@@ -16,6 +17,7 @@ export interface Service {
   stop(): Promise<this>;
   describe(): string;
 }
+// Service
 
 /**
  * A type to help with creating specific middlewares.

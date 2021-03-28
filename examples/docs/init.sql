@@ -1,0 +1,9 @@
+CREATE TABLE db_users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL
+);
+
+CREATE TABLE db_users2 (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL
+);

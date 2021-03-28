@@ -123,6 +123,16 @@ export function toPathRe(path: string): RegExp {
 
 /**
  * Deeply convert one typescript type to another, following nested objects and arrays
+ *
+ * ```typescript
+ * interface MyType {
+ *   date: Date;
+ * }
+ *
+ * type JsonMyTpe = Json<MyType>
+ *
+ * // JsonMyTpe['date'] will be string
+ * ```
  */
 export type Json<T> = T extends Date
   ? string
@@ -137,6 +147,12 @@ export type Json<T> = T extends Date
 /**
  * Convert a javascript object into a JSON plain object.
  * Serializes Dates into strings and removes keys with undefined values
+ *
+ * ```typescript
+ * const a = toJson({ date: new Date(), test: undefined });
+ *
+ * // a will be { date: '2020-01 ...' };
+ * ```
  */
 export function toJson<T>(data: T): Json<T> {
   if (data !== null && typeof data === 'object') {

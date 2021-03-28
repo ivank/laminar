@@ -3,7 +3,8 @@ import { readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { avroConvert } from '../../../src';
 
-const avscFiles = readdirSync(join(__dirname, 'avro'));
+const avroDir = join(__dirname, '../avro');
+const avscFiles = readdirSync(avroDir);
 
 describe('Avro ts test', () => {
   beforeAll(() => {
@@ -13,7 +14,7 @@ describe('Avro ts test', () => {
   });
 
   it.each(avscFiles)('Should convert %s successfully', (file) => {
-    const avro: schema.RecordType = JSON.parse(String(readFileSync(join(__dirname, 'avro', file))));
+    const avro: schema.RecordType = JSON.parse(String(readFileSync(join(avroDir, file))));
     const ts = avroConvert(avro, {
       logicalTypes: {
         'timestamp-millis': { module: 'moment', named: 'Moment' },
@@ -26,7 +27,7 @@ describe('Avro ts test', () => {
   });
 
   it.each(avscFiles)('Should convert %s successfully with default as optional', (file) => {
-    const avro: schema.RecordType = JSON.parse(String(readFileSync(join(__dirname, 'avro', file))));
+    const avro: schema.RecordType = JSON.parse(String(readFileSync(join(avroDir, file))));
     const ts = avroConvert(avro, {
       logicalTypes: {
         'timestamp-millis': { module: 'moment', named: 'Moment' },

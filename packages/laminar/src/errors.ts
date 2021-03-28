@@ -2,6 +2,12 @@ import { LoggerMetadata } from './logger';
 
 /**
  * A generic error that contains the some additional metadata.
+ *
+ * If you throw an laminar error its metadata will be displayed in the logs
+ *
+ * ```typescript
+ * throw new LaminarError('Error in query', { sql: 'SELECT ... ' });
+ * ```
  */
 export class LaminarError extends Error {
   constructor(message: string, public metadata: LoggerMetadata) {

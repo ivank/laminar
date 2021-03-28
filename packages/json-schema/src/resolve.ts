@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'fs';
 import * as YAML from 'yaml';
-import fetch from 'node-fetch';
 import { dirname, join } from 'path';
 import { URL } from 'url';
+import axios from 'axios';
 import { ResolveError } from './ResolveError';
 import { Schema } from './schema';
 
@@ -151,12 +151,8 @@ export const extractUrls = (schema: Schema, namedRefs: string[] = [], fileContex
 const loadFile = async (uri: string, { cwd }: FileContext = {}): Promise<LoadedJsonObject> => {
   const url = toUrl(uri);
   if (url) {
-    const result = await fetch(uri);
-    if (result.headers.get('content-type') === 'application/yaml') {
-      return { uri, content: YAML.parse(await result.text()) };
-    } else {
-      return { uri, content: await result.json() };
-    }
+    const { data } = await axios.get(uri);
+    return { uri: url, content: typeof data === 'string' ? YAML.parse(data) : data };
   } else {
     const file = cwd ? join(cwd, uri) : uri;
     const content = readFileSync(file, 'utf8');

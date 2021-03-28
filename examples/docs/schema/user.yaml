@@ -1,0 +1,64 @@
+---
+openapi: 3.0.0
+info:
+  title: Simple Example
+  version: 1.0.0
+paths:
+  "/user":
+    post:
+      description: Create New User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewUser"
+      responses:
+        '200':
+          description: Newly created user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  "/user/{id}":
+    get:
+      description: Retrieve User
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '404':
+          description: No user has been found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    NewUser:
+      type: object
+      properties:
+        name:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+

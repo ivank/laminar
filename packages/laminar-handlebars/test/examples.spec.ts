@@ -49,6 +49,7 @@ describe('Example files', () => {
       `openapi: '3.0.0'\ninfo:\n  version: 10\n`,
     ],
   ])('Should process %s', async (file, config, expected) => {
+    jest.setTimeout(10000);
     port += 1;
     const service = spawn('yarn', ['node', file.replace('.ts', '.js')], {
       cwd: join(__dirname, '..'),

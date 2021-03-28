@@ -38,6 +38,7 @@ describe('Example files', () => {
       { email: 'me@example.com', createdAt: '2020-01-01T12:00:00.000Z' },
     ],
   ])('Should process %s', async (file, config, expected) => {
+    jest.setTimeout(10000);
     port += 1;
     const service = spawn('yarn', ['node', file.replace('.ts', '.js')], {
       cwd: join(__dirname, '..'),

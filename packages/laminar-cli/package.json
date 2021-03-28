@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-cli",
-  "version": "0.11.0-alpha.3",
+  "version": "0.11.0-alpha.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar",
@@ -9,8 +9,8 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar-cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ikerin/build-readme": "^1.0.4",
-    "@ovotech/laminar": "^0.11.0-alpha.3",
+    "@ikerin/build-readme": "^1.1.0",
+    "@ovotech/laminar": "^0.11.0-alpha.5",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.35",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
@@ -52,10 +52,10 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.6.0",
+    "@ovotech/json-schema": "^0.11.0-alpha.0",
     "@ovotech/ts-compose": "^0.17.0-alpha.0",
     "ansi-regex": "^5.0.0",
-    "avsc": "^5.5.3",
+    "avsc": "^5.5.6",
     "chalk": "^4.1.0",
     "commander": "^7.1.0",
     "openapi-schemas": "^2.0.4",

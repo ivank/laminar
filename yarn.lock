@@ -439,15 +439,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@examples/comms@workspace:examples/comms":
+  version: 0.0.0-use.local
+  resolution: "@examples/comms@workspace:examples/comms"
+  dependencies:
+    "@kafkajs/confluent-schema-registry": ^2.0.0
+    "@ovotech/laminar": ^0.11.0-alpha.5
+    "@ovotech/laminar-cli": ^0.11.0-alpha.4
+    "@ovotech/laminar-kafkajs": ^0.11.0-alpha.0
+    "@ovotech/laminar-pg": ^0.11.0-alpha.0
+    "@types/jest": ^26.0.20
+    "@types/node": ^14.14.35
+    "@types/pg": ^7.14.11
+    "@typescript-eslint/eslint-plugin": ^4.18.0
+    "@typescript-eslint/parser": ^4.18.0
+    axios: ^0.21.1
+    eslint: ^7.22.0
+    eslint-config-prettier: ^8.1.0
+    jest: ^26.6.3
+    kafkajs: ^1.15.0
+    nock: ^13.0.11
+    pg: ^8.5.1
+    prettier: ^2.2.1
+    ts-jest: ^26.5.3
+    ts-node: ^9.1.1
+    ts-retry-promise: ^0.6.0
+    typescript: ^4.2.3
+  languageName: unknown
+  linkType: soft
+
 "@examples/data-loader@workspace:examples/data-loader":
   version: 0.0.0-use.local
   resolution: "@examples/data-loader@workspace:examples/data-loader"
   dependencies:
     "@kafkajs/confluent-schema-registry": ^2.0.0
-    "@ovotech/avro-decimal": ^0.1.4
-    "@ovotech/avro-timestamp-millis": ^0.1.4
-    "@ovotech/laminar": ^0.11.0-alpha.4
-    "@ovotech/laminar-cli": ^0.11.0-alpha.3
+    "@ovotech/avro-decimal": ^0.1.5
+    "@ovotech/avro-timestamp-millis": ^0.1.5
+    "@ovotech/laminar": ^0.11.0-alpha.5
+    "@ovotech/laminar-cli": ^0.11.0-alpha.4
     "@ovotech/laminar-jwt": ^0.11.0-alpha.0
     "@ovotech/laminar-kafkajs": ^0.11.0-alpha.0
     "@ovotech/laminar-pg": ^0.11.0-alpha.0
@@ -458,7 +487,7 @@ __metadata:
     "@types/pg": ^7.14.11
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
-    avsc: ^5.5.3
+    avsc: ^5.5.6
     axios: ^0.21.1
     csv-parse: ^4.15.3
     decimal.js: ^10.2.1
@@ -484,14 +513,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/docs@workspace:examples/docs"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.3
+    "@ovotech/laminar": ^0.11.0-alpha.5
+    "@ovotech/laminar-cli": ^0.11.0-alpha.4
+    "@ovotech/laminar-pg": ^0.11.0-alpha.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
+    "@types/pg": ^7.14.11
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
     axios: ^0.21.1
     eslint: ^7.22.0
     jest: ^26.6.3
+    nock: ^13.0.11
+    pg: ^8.5.1
     prettier: ^2.2.1
     ts-jest: ^26.5.3
     typescript: ^4.2.3
@@ -503,8 +537,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/petstore@workspace:examples/petstore"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.4
-    "@ovotech/laminar-cli": ^0.11.0-alpha.3
+    "@ovotech/laminar": ^0.11.0-alpha.5
+    "@ovotech/laminar-cli": ^0.11.0-alpha.4
     "@ovotech/laminar-jwt": ^0.11.0-alpha.0
     "@ovotech/laminar-pg": ^0.11.0-alpha.0
     "@types/jest": ^26.0.20
@@ -528,8 +562,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/security@workspace:examples/security"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.3
-    "@ovotech/laminar-cli": ^0.11.0-alpha.3
+    "@ovotech/laminar": ^0.11.0-alpha.5
+    "@ovotech/laminar-cli": ^0.11.0-alpha.4
     "@ovotech/laminar-jwt": ^0.11.0-alpha.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -550,7 +584,7 @@ __metadata:
   resolution: "@examples/simple@workspace:examples/simple"
   dependencies:
     "@ovotech/laminar": ^0.11.0-alpha.1
-    "@ovotech/laminar-cli": ^0.11.0-alpha.3
+    "@ovotech/laminar-cli": ^0.11.0-alpha.4
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -569,7 +603,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/split@workspace:examples/split"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.4
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-pg": ^0.11.0-alpha.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -587,12 +621,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ikerin/build-readme@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "@ikerin/build-readme@npm:1.0.4"
+"@ikerin/build-readme@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ikerin/build-readme@npm:1.1.0"
   bin:
     build-readme: bin/build-readme
-  checksum: 1963247484efc5a08ac1acf89c1a7f679796ef0b2ee6d44e61afe95b704ec965e2ac7358fdb7855ced45bfa2601c47e831fde728fbe594c4b941332bee2e70c6
+  checksum: e809db5704e5cc89e92ba4b53374d6b50e25dd0959f10b3a961633d8b7d031a938a042a3fd4d89a6a31d06fb25b762f72d51a9656d38c1a81866040df198a38d
   languageName: node
   linkType: hard
 
@@ -1887,42 +1921,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ovotech/avro-decimal@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@ovotech/avro-decimal@npm:0.1.4"
+"@ovotech/avro-decimal@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@ovotech/avro-decimal@npm:0.1.5"
   dependencies:
     decimal.js: ^10.2.1
     int64-buffer: ^1.0.0
   peerDependencies:
-    avsc: ^5.4.22
-  checksum: 9b1ae02e4eee63902d7d782fd942c4b67741f1f3dacb55e1410e53dcc377c845ae9bb62b31bac84d3d728f5ee8943d35a75c6b2198ffdee9d9c0d44f7a842f50
+    avsc: ^5.5.3
+  checksum: 5bc7d360c992e4e5864d723c14fa0afc75abd2b96408884712ba659c4dfba0987b5e20f27be58b633bfb8479e2caa604473acb51f8c167ea257d00be9d7b4049
   languageName: node
   linkType: hard
 
-"@ovotech/avro-timestamp-millis@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@ovotech/avro-timestamp-millis@npm:0.1.4"
+"@ovotech/avro-timestamp-millis@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@ovotech/avro-timestamp-millis@npm:0.1.5"
   peerDependencies:
-    avsc: ^5.4.22
-  checksum: d5897dd5a207f13545d55edfdbefdd0decc3378699a6ff124e34e5e50e4814d25a3d4af0d03d13e8356ecbede50cf7c8a003c1feacf0328671c2e201aa21bbe2
+    avsc: ^5.5.6
+  checksum: 7dcc5179c63c827f9ecde2175bfad84ba93202954c7e46028fac4159d0d8529775964531bee25e7d72ee85149898d006291009d471a324e197c16c7d8c243c82
   languageName: node
   linkType: hard
 
-"@ovotech/json-schema@^0.6.0, @ovotech/json-schema@workspace:packages/json-schema":
+"@ovotech/json-schema@^0.11.0-alpha.0, @ovotech/json-schema@workspace:packages/json-schema":
   version: 0.0.0-use.local
   resolution: "@ovotech/json-schema@workspace:packages/json-schema"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
+    "@ikerin/build-readme": ^1.1.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
-    "@types/node-fetch": ^2.5.8
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
+    axios: ^0.21.1
     eslint: ^7.22.0
     eslint-config-prettier: ^8.1.0
     jest: ^26.6.3
     nock: ^13.0.11
-    node-fetch: ^2.6.1
     prettier: ^2.2.1
     ts-jest: ^26.5.3
     typescript: ^4.2.3
@@ -1930,20 +1963,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar-cli@^0.11.0-alpha.3, @ovotech/laminar-cli@workspace:packages/laminar-cli":
+"@ovotech/laminar-cli@^0.11.0-alpha.4, @ovotech/laminar-cli@workspace:packages/laminar-cli":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-cli@workspace:packages/laminar-cli"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
-    "@ovotech/json-schema": ^0.6.0
-    "@ovotech/laminar": ^0.11.0-alpha.3
+    "@ikerin/build-readme": ^1.1.0
+    "@ovotech/json-schema": ^0.11.0-alpha.0
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/ts-compose": ^0.17.0-alpha.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
     ansi-regex: ^5.0.0
-    avsc: ^5.5.3
+    avsc: ^5.5.6
     axios: ^0.21.1
     chalk: ^4.1.0
     commander: ^7.1.0
@@ -1967,8 +2000,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
-    "@ovotech/laminar": ^0.11.0-alpha.3
+    "@ikerin/build-readme": ^1.1.0
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -1991,10 +2024,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-jwt@workspace:packages/laminar-jwt"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
-    "@ovotech/json-schema": ^0.6.0
-    "@ovotech/laminar": ^0.11.0-alpha.3
-    "@ovotech/laminar-cli": ^0.11.0-alpha.3
+    "@ikerin/build-readme": ^1.1.0
+    "@ovotech/json-schema": ^0.11.0-alpha.0
+    "@ovotech/laminar": ^0.11.0-alpha.5
+    "@ovotech/laminar-cli": ^0.11.0-alpha.4
     "@types/jest": ^26.0.20
     "@types/jsonwebtoken": ^8.5.0
     "@types/lru-cache": ^5.1.0
@@ -2023,7 +2056,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-kafkajs@workspace:packages/laminar-kafkajs"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
+    "@ikerin/build-readme": ^1.1.0
     "@kafkajs/confluent-schema-registry": ^2.0.0
     "@ovotech/laminar": ^0.11.0-alpha.4
     "@types/cookie": ^0.4.0
@@ -2052,7 +2085,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-performance-testing@workspace:performance"
   dependencies:
-    "@ovotech/json-schema": ^0.6.0
+    "@ovotech/json-schema": ^0.11.0-alpha.0
     "@types/benchmark": ^1.0.33
     benchmark: ^2.1.4
     node-fetch: ^2.6.1
@@ -2065,8 +2098,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-pg@workspace:packages/laminar-pg"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
-    "@ovotech/laminar": ^0.11.0-alpha.4
+    "@ikerin/build-readme": ^1.1.0
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -2091,8 +2124,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-pgboss@workspace:packages/laminar-pgboss"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
-    "@ovotech/laminar": ^0.11.0-alpha.4
+    "@ikerin/build-readme": ^1.1.0
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -2118,8 +2151,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-winston@workspace:packages/laminar-winston"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
-    "@ovotech/laminar": ^0.11.0-alpha.4
+    "@ikerin/build-readme": ^1.1.0
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -2138,12 +2171,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar@^0.11.0-alpha.1, @ovotech/laminar@^0.11.0-alpha.3, @ovotech/laminar@^0.11.0-alpha.4, @ovotech/laminar@workspace:packages/laminar":
+"@ovotech/laminar@^0.11.0-alpha.1, @ovotech/laminar@^0.11.0-alpha.4, @ovotech/laminar@^0.11.0-alpha.5, @ovotech/laminar@workspace:packages/laminar":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar@workspace:packages/laminar"
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
-    "@ovotech/json-schema": ^0.6.0
+    "@ikerin/build-readme": ^1.1.0
+    "@ovotech/json-schema": ^0.11.0-alpha.0
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
     "@types/jsonwebtoken": ^8.5.0
@@ -2456,16 +2489,6 @@ __metadata:
   version: 1.2.0
   resolution: "@types/minimist@npm:1.2.0"
   checksum: 098945c2c29df019cae250dfe614e50dab8120f4e359bd034190f931a63a23f3058764eec0d8cea3757eedd5b308ed28e4357ece9510a99380da08762f5f6635
-  languageName: node
-  linkType: hard
-
-"@types/node-fetch@npm:^2.5.8":
-  version: 2.5.8
-  resolution: "@types/node-fetch@npm:2.5.8"
-  dependencies:
-    "@types/node": "*"
-    form-data: ^3.0.0
-  checksum: 608cdd6aed2c6a44a26406eb63475d4bfb8f63f78f22f747e30dd7cda309b86dc019e4427b9092011541da95d83ef03e2e6558c37d39221c0931617f32d3c4e1
   languageName: node
   linkType: hard
 
@@ -3055,10 +3078,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"avsc@npm:>= 5.4.13 < 6, avsc@npm:^5.5.3":
+"avsc@npm:>= 5.4.13 < 6":
   version: 5.5.3
   resolution: "avsc@npm:5.5.3"
   checksum: 78a29387e6213a9d3790811184b64cab05ae2fcc99212c187aec1c663c42f7a71599f91ca9b548a16dce6641fb37a3a609f8b33b4d8d6641d7c4a639474cc737
+  languageName: node
+  linkType: hard
+
+"avsc@npm:^5.5.6":
+  version: 5.6.0
+  resolution: "avsc@npm:5.6.0"
+  checksum: c9ea32497504573e3876bc090a3f7e73600136df5197d3ee273b535bde867998c09ef78e4b8143f53b90c74ee8701dd8d6c3bccdb62fe08725d3574ede600990
   languageName: node
   linkType: hard
 
@@ -5009,17 +5039,6 @@ __metadata:
   version: 0.6.1
   resolution: "forever-agent@npm:0.6.1"
   checksum: 9cc0054dd4ea5fc26e014b8c929d1fb9247e931e81165cbd965a712061d65fb84791b2124f64cd79492e516662b94068d29fe1d824732382237321b3f61955fe
-  languageName: node
-  linkType: hard
-
-"form-data@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "form-data@npm:3.0.0"
-  dependencies:
-    asynckit: ^0.4.0
-    combined-stream: ^1.0.8
-    mime-types: ^2.1.12
-  checksum: 1af88217b449eda6566a0d95185f2baa403ed2a0e3b11547069f6062be66cbac7c8d7a25f0fc59560702e96526e659b5b9e5a8c6fefe00f06da44338191a9133
   languageName: node
   linkType: hard
 
@@ -6985,7 +7004,7 @@ fsevents@^2.1.2:
   version: 0.0.0-use.local
   resolution: "laminar@workspace:."
   dependencies:
-    "@ikerin/build-readme": ^1.0.4
+    "@ikerin/build-readme": ^1.1.0
     "@typescript-eslint/eslint-plugin": ^4.18.0
     "@typescript-eslint/parser": ^4.18.0
     eslint: ^7.22.0

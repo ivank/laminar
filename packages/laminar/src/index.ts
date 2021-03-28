@@ -128,7 +128,7 @@ export {
   staticAssets,
   RouteContext,
   AppRoute,
-} from './http/apps/router';
+} from './http/router';
 export { Empty, Service, AbstractMiddleware, Middleware } from './types';
 export {
   openApi,
@@ -148,6 +148,7 @@ export {
   ResponseOapi,
   OapiPaths,
   OapiConfig,
-} from './http/apps/open-api';
+} from './http/open-api';
 
 export { toErrorMetadata, LaminarError } from './errors';
+export { passThroughMiddleware } from './middleware/pass-through.middleware';

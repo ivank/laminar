@@ -2,7 +2,8 @@ import { readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { avroExternalConvert, avroConvert } from '../../../src';
 
-const avscFiles = readdirSync(join(__dirname, 'external-references')).filter((file) => file.endsWith('.avsc'));
+const externalReferencesDir = join(__dirname, '../external-references');
+const avscFiles = readdirSync(externalReferencesDir).filter((file) => file.endsWith('.avsc'));
 
 describe('Avro ts test', () => {
   beforeAll(() => {
@@ -16,14 +17,14 @@ describe('Avro ts test', () => {
       (acc, file) => ({
         ...acc,
         [`./${file}.external`]: avroExternalConvert(
-          JSON.parse(String(readFileSync(join(__dirname, 'external-references', file)))),
+          JSON.parse(String(readFileSync(join(externalReferencesDir, file)))),
         ),
       }),
       {},
     );
 
     for (const file of avscFiles) {
-      const ts = avroConvert(JSON.parse(String(readFileSync(join(__dirname, 'external-references', file)))), {
+      const ts = avroConvert(JSON.parse(String(readFileSync(join(externalReferencesDir, file)))), {
         external,
       });
       writeFileSync(join(__dirname, '__generated__', file + '.external.ts'), ts);

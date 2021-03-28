@@ -134,6 +134,8 @@ You can dive in directly with some example apps:
 - [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
 - [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
 - [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
+- [examples/comms](https://github.com/ovotech/laminar/tree/main/examples/comms) An api that holds some state for an external email api.
+- [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).
 
 ## Packages in this monorepo
 
@@ -144,4 +146,7 @@ Laminar includes packages that are used internally or are additions to its core 
 - [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
 - [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
 - [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/packages/json-schema) - Lightweight json-schema validator
-- [@ovotech/axios-oapi-cli](https://github.com/ovotech/laminar/tree/packages/axios-oapi-cli) - Generate typescript types for axios, using OpenApi schema
+- [@ovotech/laminar-pg](https://github.com/ovotech/laminar/tree/packages/laminar-pg) - Connect to postgres db
+- [@ovotech/laminar-winstong](https://github.com/ovotech/laminar/tree/packages/laminar-winstong) - Use winston logger
+- [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/packages/laminar-winstong) - Use kafkajs to consumer and produce kafka messages, with schema registry support
+- [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/packages/laminar-winstong) - Use pgboss to schedule jobs

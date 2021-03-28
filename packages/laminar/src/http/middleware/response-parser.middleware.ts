@@ -8,12 +8,12 @@ import { HttpMiddleware, HttpResponseBody, HttpResponse } from '../types';
  *
  * @category http
  */
-export interface ResponseParser {
+export interface ResponseParser<TBody = any> {
   /**
    * If returns true for a given content type, this parser will be used
    */
   match: (contentType: string) => boolean;
-  parse: (body: any) => HttpResponseBody;
+  parse: (body: TBody) => HttpResponseBody;
 }
 
 /**

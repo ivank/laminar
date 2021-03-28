@@ -7,6 +7,7 @@ import {
   kafkaLogCreator,
   produce,
   registerSchemas,
+  KafkaAdminService,
 } from '../src';
 import { LoggerLike, Middleware, start, stop } from '@ovotech/laminar';
 import { retry } from 'ts-retry-promise';
@@ -90,7 +91,14 @@ describe('Integration', () => {
     jest.setTimeout(30000);
     const kafka = new Kafka({ brokers: ['localhost:29092'], logCreator });
     const schemaRegistry = new SchemaRegistry({ host: 'http://localhost:8081' });
-    const admin = kafka.admin();
+
+    const admin = new KafkaAdminService(kafka, {
+      topics: [
+        { topic: topic1, numPartitions: 3 },
+        { topic: topic2, numPartitions: 2 },
+        { topic: topic3, numPartitions: 1 },
+      ],
+    });
 
     const event1Service = new KafkaConsumerService<Event1>(kafka, schemaRegistry, {
       topic: topic1,
@@ -114,7 +122,7 @@ describe('Integration', () => {
       autoCommitThreshold: 2,
       eachBatch: chunkBatchMiddleware({ size: 2 })(
         async ({ batch: { messages, partition, firstOffset, lastOffset } }) => {
-          const commitedOffset = await admin.fetchOffsets({ groupId: groupId3, topic: topic3 });
+          const commitedOffset = await admin.client.fetchOffsets({ groupId: groupId3, topic: topic3 });
 
           batchSizer({
             partition,
@@ -137,17 +145,9 @@ describe('Integration', () => {
       }),
     });
 
-    const initOrder = [producer, [event1Service, event2Service, event3Service]];
+    const initOrder = [admin, producer, [event1Service, event2Service, event3Service]];
 
     try {
-      await admin.connect();
-      await admin.createTopics({
-        topics: [
-          { topic: topic1, numPartitions: 3 },
-          { topic: topic2, numPartitions: 2 },
-          { topic: topic3, numPartitions: 1 },
-        ],
-      });
       await start({ initOrder, logger });
 
       await Promise.all([
@@ -218,7 +218,6 @@ describe('Integration', () => {
         { delay: 1000, retries: 20 },
       );
     } finally {
-      await admin.disconnect();
       await stop({ initOrder, logger });
     }
   });

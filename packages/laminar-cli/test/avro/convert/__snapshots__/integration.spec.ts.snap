@@ -852,6 +852,10 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         effectiveEnrollmentDate: string;
         /**
+         * Because dates as Decimal are the best!
+         */
+        effectiveEnrollmentDateAsDecimal: number;
+        /**
          * The time when the migration was cancelled (in epoch millis)
          */
         cancelledAt: Moment;
@@ -1125,6 +1129,10 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         effectiveEnrollmentDate: string;
         /**
+         * Because dates as Decimal are the best!
+         */
+        effectiveEnrollmentDateAsDecimal: number;
+        /**
          * The time when the migration was cancelled (in epoch millis)
          */
         cancelledAt: Moment;
@@ -1341,6 +1349,40 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
             \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
             \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\": UkCoBoostpowerSupportKafkaMessages.BalanceRetrievedMigrationEvent;
         };
+    }
+}
+"
+`;
+
+exports[`Avro ts test Should convert EpicError.avsc successfully 1`] = `
+"/* eslint-disable @typescript-eslint/no-namespace */
+
+export type EpicFailure = Namespace.EpicFailure;
+
+export namespace Namespace {
+    export const ErrorCodeName = \\"namespace.ErrorCode\\";
+    export type ErrorCode = \\"ERROR\\";
+    export const EpicFailureName = \\"namespace.EpicFailure\\";
+    export interface EpicFailure {
+        code: Namespace.ErrorCode;
+        message: string;
+    }
+}
+"
+`;
+
+exports[`Avro ts test Should convert EpicError.avsc successfully with default as optional 1`] = `
+"/* eslint-disable @typescript-eslint/no-namespace */
+
+export type EpicFailure = Namespace.EpicFailure;
+
+export namespace Namespace {
+    export const ErrorCodeName = \\"namespace.ErrorCode\\";
+    export type ErrorCode = \\"ERROR\\";
+    export const EpicFailureName = \\"namespace.EpicFailure\\";
+    export interface EpicFailure {
+        code: Namespace.ErrorCode;
+        message: string;
     }
 }
 "

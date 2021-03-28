@@ -1,5 +1,7 @@
 # It's all about flows
 
+<img src="assets/middlewares.png" alt="An image illustrating how middlewares work" width="861" height="271">
+
 Why "Laminar"? From phisics (well wikipedia really) laminar flow is characterized by fluid particles following smooth paths in layers with each layer moving smoothly past the adjacent layers with little or no mixing.
 
 I wanted to create a way to write rest apis in node using the full power of TypeScript so you can know at compile time if anything is wrong.
@@ -121,7 +123,7 @@ const http = new HttpService({ listener: log(db(auth(app))) });
 init({ initOrder: [http], logger: console });
 ```
 
-We have a convenience type `Middleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
+We have a convenience type `HttpMiddleware<TProvide, TRequre>` that state what context does it provide to all the middleware downstream of it, and what context does it require from the one upstream of it.
 
 This allows you to be absolutely sure that the middlewares are executed, and in the right order. If you try to play around with them - you'll see that if for example you put db after auth or remove it altogether, then it won't compile at all.
 
@@ -140,3 +142,13 @@ createServer(async (request, response) => {
   response.end(result.body);
 });
 ```
+
+## Middleware, AbstractMiddleware
+
+There are a bunch of types around middlewares that would be useful to build your own
+
+With `Middleware` you can create a "function agnostic" middleware that can be used for kafka / pgboss / http listener equally. This means that when implementing it, you don't have access to anything, except what you put into it. This is useful for things like database connections, which will the same regardless of what function uses it.
+
+`HttpMiddleware`, `EachMessageMiddleware`, `EeachBatchMiddleware` and `WorkerMiddleware` are function specific. They are for building middlewares that will be used only on their repsective function types. But in return they give you access to the underlying data, specific for each of them individually.
+
+`AbstractMiddleware` is used to build function specific middleware types. In fact all of the above are implemented using it. If you are building a new service worker type, this can be useful.

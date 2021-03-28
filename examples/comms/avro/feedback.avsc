@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "Feedback",
+  "namespace": "com.example.feedback",
+  "fields": [
+    {
+      "name": "status",
+      "type": {
+        "type": "enum",
+        "name": "FeedbackStatus",
+        "symbols": ["Pending", "Delivered", "Failed"]
+      }
+    },
+    {
+      "name": "commId",
+      "type": "string"
+    }
+  ]
+}

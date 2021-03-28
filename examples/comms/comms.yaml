@@ -1,0 +1,76 @@
+---
+openapi: 3.0.0
+info:
+  title: Comms
+  version: 1.0.0
+paths:
+  "/comms":
+    post:
+      description: Send New Comm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendComm"
+      responses:
+        '200':
+          description: Newly created comm
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comm"
+  "/comms/{id}":
+    get:
+      description: Retrieve Comm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Comm found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comm"
+        '404':
+          description: No comm has been found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    SendComm:
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    Comm:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+        commId:
+          type: string
+        status:
+          enum: ["Pending", "Delivered", "Failed"]
+      required:
+        - id
+        - commId
+        - status
+    Error:
+      additionalProperties: false
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message

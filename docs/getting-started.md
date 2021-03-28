@@ -1,22 +1,30 @@
 # Getting Started
 
-## Installation
-
-You'll need to install `@ovotech/laminar` package:
+Install [@ovotech/laminar](https://github.com/ovotech/laminar/tree/main/packages/laminar) through your favorite (or the one you put up with) package manager:
 
 ```shell
 yarn add @ovotech/laminar
 ```
 
-Additionally, if you want to take advantage of the type generation:
+You'll also need typescript, if you don't have it already:
 
 ```shell
-yarn add @ovotech/laminar-cli
+yarn add typescript --dev
 ```
 
-## A tutorial to get started.
+We're not done yet. You're here because of all the fancy types and static type checking, you'd be remiss if you didn't go and install the CLI tools: [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli). Getting the compiler to work for you is fun! It goes to devDependencies though, since you shouldn't need to have it in your deployed service.
 
-You'll need a very simple OpenAPI schema file, something like:
+```shell
+yarn add @ovotech/laminar-cli --dev
+```
+
+## Your first simple http listener
+
+Laminar wants to be more than just a rest api, but since that's what its probably most use for, we'll start with a _simple_ http service.
+
+We'll be implementing this [OpenAPI contract](https://swagger.io/specification/). If you're not familiar with it, you can think of it as a pinkey swear of the services, promising to return exactly this data, given exactly those requests. [Json-Schema](https://json-schema.org/learn/getting-started-step-by-step), the language used to acomplish this is very powerful, allowing you to express almost anything you'd want out of your rest service.
+
+Today though we'll start with service that just returns a user, given an id.
 
 > [examples/simple/src/api.yaml](https://github.com/ovotech/laminar/tree/main/examples/simple/src/api.yaml)
 
@@ -53,10 +61,20 @@ components:
           type: string
 ```
 
-First we'll generate the types for its so its easier to implement it. Since we've already installed `@ovotech/laminar-cli` we can:
+> "machines should work; people should think."
+>
+> -- IBM Pollyanna Principle
+
+Now comes the good part. Since we've already installed [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli). We can run it in the command line and get our typescript types directly from openapi yaml.
 
 ```shell
 yarn laminar api --file api.yaml --output __generated__/api.ts
+```
+
+If you want to keep the types up to date as you're making updates to the yaml file, you can use `--watch` mode:
+
+```shell
+yarn laminar api --file api.yaml --output __generated__/api.ts --watch
 ```
 
 > [examples/simple/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/simple/src/index.ts)
@@ -109,11 +127,17 @@ const main = async () => {
 main();
 ```
 
-## Functioning examples
+```shell
+yarn tsc index.ts
+node index.js
+```
 
-You can dive in directly with some example apps:
+## Other examples
+
+You can dive in directly with some other example apps:
 
 - [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
 - [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
 - [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
+- [examples/comms](https://github.com/ovotech/laminar/tree/main/examples/comms) An api that holds some state for an external email api.
 - [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).

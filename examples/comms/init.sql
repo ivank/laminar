@@ -1,0 +1,5 @@
+CREATE TABLE comms (
+  id SERIAL PRIMARY KEY,
+  comm_id VARCHAR NOT NULL,
+  status VARCHAR NOT NULL
+);

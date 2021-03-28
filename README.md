@@ -44,7 +44,7 @@ A key concept in Laminar is the use of middlewares, those are async function wra
 
 In practice it ends up looking like dependency injection, but it's just function calls and without the magic. As fancy as that may sound, a middleware is just a function wrapper. An example postgres middleware that take a pool and for each incomming request (function execution) will get a connection to the pool, pass it down to the function, and cleanup after its done.
 
-> [packages/laminar/examples/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/middleware.ts#L2-L21)
+> [examples/docs/src/middleware.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/middleware.ts#L3-L22)
 
 ```typescript
 import { Middleware } from '@ovotech/laminar';
@@ -186,17 +186,22 @@ You can dive in directly with some example apps:
 - [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
 - [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
 - [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
-- [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) Simple but functional example of building a data loading api, using database, kafka and queued request processing.
-
-## More docs
+- [examples/comms](https://github.com/ovotech/laminar/tree/main/examples/comms) An api that holds some state for an external email api.
+- [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).
 
 ## Packages in this monorepo
 
-- [@ovotech/laminar](https://github.com/ovotech/laminar/tree/main/packages/laminar) - [OpenAPI](https://swagger.io/docs/) http server
-- [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli) - [OpenAPI](https://swagger.io/docs/) type generation for laminar, axios and just plain ts types
-- [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
-- [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware with jwk, keypairs and keycloack support
-- [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/main/packages/json-schema) - Lightweight json-schema validator
+Laminar includes packages that are used internally or are additions to its core features.
+
+- [@ovotech/laminar](https://github.com/ovotech/laminar/tree/packages/laminar) - [OpenAPI](https://swagger.io/docs/) http server
+- [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/packages/laminar-cli) - [OpenAPI](https://swagger.io/docs/) type generation
+- [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
+- [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
+- [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/packages/json-schema) - Lightweight json-schema validator
+- [@ovotech/laminar-pg](https://github.com/ovotech/laminar/tree/packages/laminar-pg) - Connect to postgres db
+- [@ovotech/laminar-winstong](https://github.com/ovotech/laminar/tree/packages/laminar-winstong) - Use winston logger
+- [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/packages/laminar-winstong) - Use kafkajs to consumer and produce kafka messages, with schema registry support
+- [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/packages/laminar-winstong) - Use pgboss to schedule jobs
 
 ## Running the tests
 

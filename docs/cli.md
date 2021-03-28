@@ -249,6 +249,18 @@ simple['POST /test/{id}']('30', { email: 'test2example.com' }).then(({ data }) =
 );
 ```
 
+## Avro
+
+If you have an avro type of your kafka messages, for example [examples/comms/avro/feedback.avsc](https://github.com/ovotech/laminar/tree/main/examples/comms/avro/feedback.avsc).
+
+Using the cli, we can start generating the types for us.
+
+```
+yarn laminar avro avro/* --output-dir src/__generated__
+```
+
+It supports multiple avsc files with references between them. The resulting typescript files will have the correct imports for referencing external files.
+
 ## Complex example
 
 If we use swagger's [petstore.json](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/petstore.json) example, we can generate the [petstore types](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli/examples/__generated__/petstore.json.ts) and use them like this:

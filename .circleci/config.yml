@@ -60,6 +60,8 @@ jobs:
       - run:
           name: 'Run install scripts for examples'
           command: |
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/docs/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/comms/init.sql
             psql postgres://example-admin:example-pass@localhost:5432/example < examples/petstore/init.sql
             psql postgres://example-admin:example-pass@localhost:5432/example < examples/split/init.sql
             psql postgres://example-admin:example-pass@localhost:5432/example < examples/data-loader/init.sql

@@ -73,6 +73,9 @@
 					<div class="lead">
 						<p>A generic error that contains the some additional metadata.</p>
 					</div>
+					<p>If you throw an laminar error its metadata will be displayed in the logs</p>
+					<pre><code class="language-typescript"><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">LaminarError</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Error in query&#039;</span><span style="color: #000000">, { </span><span style="color: #001080">sql:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;SELECT ... &#039;</span><span style="color: #000000"> });</span>
+</code></pre>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -131,7 +134,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Error.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/8d969b3/packages/laminar/src/errors.ts#L6">packages/laminar/src/errors.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/cfccd66/packages/laminar/src/errors.ts#L12">packages/laminar/src/errors.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>

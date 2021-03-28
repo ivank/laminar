@@ -3,7 +3,7 @@
 You'll need to start a postgres instance to run the tests for some of the exmaples
 
 ```shell
-docker-compose -f examples/docker-compose.yaml up
+docker-compose up
 ```
 
 You can then run the tests with:

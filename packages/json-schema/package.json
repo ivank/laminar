@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/json-schema",
-  "version": "0.6.0",
+  "version": "0.11.0-alpha.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A lightweight a json-schema. Depends only on yaml package and node-fetch.",
@@ -9,10 +9,9 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/packages/json-schema#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ikerin/build-readme": "^1.0.4",
+    "@ikerin/build-readme": "^1.1.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.35",
-    "@types/node-fetch": "^2.5.8",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "eslint": "^7.22.0",
@@ -33,7 +32,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
+    "axios": "^0.21.1",
     "yaml": "^1.10.2"
   }
 }

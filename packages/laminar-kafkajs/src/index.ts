@@ -22,3 +22,4 @@ export {
   EncodedProducerRecord,
   SchemaRegistryConsumerRunConfig,
 } from './types';
+export { KafkaAdminService } from './kafka-admin.service';

@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/**
+ * Used by {@link LoggerLike} to display additional metadata
+ */
 export interface LoggerMetadata {
   [key: string]: unknown;
 }
@@ -21,6 +24,10 @@ export interface LoggerContext {
  * An interface all loggers for laminar must conform too.
  * Is the least common denominator between node's Console and winston's logger.
  *
+ * ```typescript
+ * logger.info('Log message', { stack: 'some jucy details' });
+ * ```
+ * *
  * @category logger
  */
 export interface LoggerLike {
@@ -36,7 +43,7 @@ export interface LoggerLike {
  * Useful for adding trace tokens and the like
  *
  * ```typescript
- * const myLogger = ...
+ * const myLogger = console
  * const myLoggerTraced = withStaticMetadata(myLogger, { traceToken: '123' });
  *
  * // Would output 'trace' with the traceToken metadata we've setup earlier.

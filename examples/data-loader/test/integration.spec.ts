@@ -134,7 +134,11 @@ describe('Data Loader Integration Tests', () => {
         new Kafka({ brokers: [env.KAFKA_BROKER] }),
         new SchemaRegistry(
           { host: env.KAFKA_SCHEMA_REGISTRY },
-          { forSchemaOptions: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } } },
+          {
+            forSchemaOptions: {
+              logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any,
+            },
+          },
         ),
       );
 

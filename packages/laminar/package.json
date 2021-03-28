@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar",
-  "version": "0.11.0-alpha.4",
+  "version": "0.11.0-alpha.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ikerin/build-readme": "^1.0.4",
+    "@ikerin/build-readme": "^1.1.0",
     "@types/cookie": "^0.4.0",
     "@types/jest": "^26.0.20",
     "@types/jsonwebtoken": "^8.5.0",
@@ -48,7 +48,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.6.0",
+    "@ovotech/json-schema": "^0.11.0-alpha.0",
     "mime-types": "^2.1.29",
     "openapi-schemas": "^2.0.4",
     "openapi3-ts": "^2.0.1"

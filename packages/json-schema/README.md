@@ -5,7 +5,7 @@ A lightweight a json-schema.
 Dependencies:
 
 - yaml
-- node-fetch
+- axios
 
 Supported JSON Schema drafts
 

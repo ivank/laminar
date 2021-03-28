@@ -10,14 +10,17 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/examples/docs#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "^0.11.0-alpha.3",
+    "@ovotech/laminar": "^0.11.0-alpha.5",
+    "@ovotech/laminar-cli": "^0.11.0-alpha.4",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.35",
+    "@types/pg": "^7.14.11",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "axios": "^0.21.1",
     "eslint": "^7.22.0",
     "jest": "^26.6.3",
+    "nock": "^13.0.11",
     "prettier": "^2.2.1",
     "ts-jest": "^26.5.3",
     "typescript": "^4.2.3"
@@ -26,12 +29,16 @@
     "preset": "../../jest.json"
   },
   "scripts": {
-    "build": "tsc",
+    "build:api": "laminar api --file schema/api.yaml | prettier --stdin-filepath api.yaml.ts > src/http-service-open-api/__generated__/api.yaml.ts",
+    "build:security": "laminar api --file schema/security.yaml | prettier --stdin-filepath security.yaml.ts > src/http-service-open-api/__generated__/security.yaml.ts",
+    "build": "tsc && yarn build:api && yarn build:security",
     "test": "jest test",
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.11.0-alpha.3",
+    "@ovotech/laminar": "^0.11.0-alpha.5",
+    "@ovotech/laminar-pg": "^0.11.0-alpha.0",
+    "pg": "^8.5.1",
     "yaml": "^1.10.2"
   }
 }

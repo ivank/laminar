@@ -43,7 +43,7 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
   });
   const schemaRegistry = new SchemaRegistry(
     { host: env.KAFKA_SCHEMA_REGISTRY },
-    { forSchemaOptions: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } } },
+    { forSchemaOptions: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any } },
   );
   const pool = new Pool({ connectionString: env.DB_CONNECTION });
   const pgBoss = new PgBoss({ connectionString: env.DB_CONNECTION });

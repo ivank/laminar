@@ -99,6 +99,13 @@ const newLineDouble = Buffer.from('\r\n\r\n');
 /**
  * A node stream transformer, that would transform a buffer stream into a stream of parsed {@link MultipartItem} objects
  *
+ * ```typescript
+ * const contentType = request.headers['content-type'];
+ * const parser = new MultipartParser(toMultipartBoundary(contentType));
+ * const response = new Readable();
+ *
+ * pipeline(request, parser, response);
+ * ```
  * @category http
  */
 export class MultipartParser extends Transform {

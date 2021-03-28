@@ -6,7 +6,7 @@ Here we'll talk mostly about how to implement it with a middleware. What are mid
 
 ## Basic usage
 
-> [examples/docs/src/cors.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors.ts)
+> [examples/docs/src/cors/simple.ts](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/simple.ts)
 
 ```typescript
 import { HttpService, init, jsonOk, openApi, corsMiddleware } from '@ovotech/laminar';
@@ -21,7 +21,7 @@ const cors = corsMiddleware({ allowOrigin: ['http://localhost', 'http://example.
 
 const main = async () => {
   const app = await openApi({
-    api: join(__dirname, '../schema/api.yaml'),
+    api: join(__dirname, '../../schema/api.yaml'),
     paths: {
       '/user/{id}': { get: async ({ path }) => jsonOk(findUser(path.id)) },
     },
@@ -43,7 +43,7 @@ You can also do customisations on the cors middleware
 
 You can allow origins using a regex:
 
-> [examples/docs/src/cors-regex.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-regex.ts#L4-L11)
+> [examples/docs/src/cors/regex.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/regex.ts#L4-L11)
 
 ```typescript
 /**
@@ -54,7 +54,7 @@ const cors = corsMiddleware({ allowOrigin: /https?\:\/\/(localhost|example\.com)
 
 You can allow origins using a function:
 
-> [examples/docs/src/cors-function.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-function.ts#L4-L11)
+> [examples/docs/src/cors/function.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/function.ts#L4-L11)
 
 ```typescript
 /**
@@ -65,7 +65,7 @@ const cors = corsMiddleware({ allowOrigin: (origin) => origin.endsWith('.com') }
 
 You can allow other options:
 
-> [examples/docs/src/cors-options.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors-options.ts#L4-L25)
+> [examples/docs/src/cors/options.ts:(middleware)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/cors/options.ts#L4-L25)
 
 ```typescript
 const cors = corsMiddleware({
