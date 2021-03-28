@@ -12,7 +12,7 @@ All of the external dependancies are created and instantiated by the user. E.g. 
 
 You can scale things up or down, by adding all of your code into a single instance with lots of workers, or by splitting them up into separate node instance, and everything in between.
 
-And lastly there is no external code dependancies, as we only depend on mimetype databases and official openapi definitions.
+And lastly there is almost no external code dependancies, as we only depend on mimetype databases and official openapi definitions and [axios](https://github.com/axios/axios) for fetching data.
 
 ## Installation
 

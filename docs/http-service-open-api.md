@@ -2,7 +2,7 @@
 
 Laminar comes with with a function that will use an OpenApi file to craete an http listener function, to be used for your HttpService.
 
-### api
+## api
 
 > [examples/docs/src/http-service-open-api/simple.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/simple.ts#L9-L20)
 
@@ -93,7 +93,7 @@ paths:
                 $ref: './api-components.yaml#/schemas/UserResponse'
 ```
 
-### security
+## security
 
 You can implement [OpenApi security](https://swagger.io/docs/specification/authentication/), using the `security` option.
 
@@ -133,7 +133,7 @@ The security resolver needs to return a `securityOk` object or a response object
 
 This is a trivial example of a security resolver that you wouldn't use in practice. A more fleshed out example can be seen in [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) that uses JWT tokens.
 
-### notFound
+## notFound
 
 You can define additional paths that are not defined by openapi schema. To do that you can use the `notFound` property, which accepts any laminar app.
 
@@ -156,7 +156,7 @@ const createHttpListener = async (): Promise<HttpListener> => {
 };
 ```
 
-### Middlewares
+## Middlewares
 
 You will probably want to add some additional props to your openApi context, for access to databases, or other things. In laminar those are accomplished with middlewares.
 
@@ -191,7 +191,7 @@ const createApplication = async (): Promise<Application> => {
 };
 ```
 
-### Type generation
+## Type generation
 
 You can install `@ovotech/laminar-cli` package to generate types for your OpenApi http listener.
 
