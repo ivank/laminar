@@ -2058,7 +2058,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": ^1.1.1
     "@kafkajs/confluent-schema-registry": ^2.0.0
-    "@ovotech/laminar": ^0.11.0-alpha.4
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -2171,7 +2171,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar@^0.11.0-alpha.1, @ovotech/laminar@^0.11.0-alpha.4, @ovotech/laminar@^0.11.0-alpha.5, @ovotech/laminar@workspace:packages/laminar":
+"@ovotech/laminar@^0.11.0-alpha.1, @ovotech/laminar@^0.11.0-alpha.5, @ovotech/laminar@workspace:packages/laminar":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar@workspace:packages/laminar"
   dependencies:
