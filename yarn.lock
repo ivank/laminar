@@ -446,8 +446,8 @@ __metadata:
     "@kafkajs/confluent-schema-registry": ^2.0.0
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-cli": ^0.11.0-alpha.4
-    "@ovotech/laminar-kafkajs": ^0.11.0-alpha.0
-    "@ovotech/laminar-pg": ^0.11.0-alpha.0
+    "@ovotech/laminar-kafkajs": ^0.11.0-alpha.3
+    "@ovotech/laminar-pg": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@types/pg": ^7.14.11
@@ -477,11 +477,11 @@ __metadata:
     "@ovotech/avro-timestamp-millis": ^0.1.5
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-cli": ^0.11.0-alpha.4
-    "@ovotech/laminar-jwt": ^0.11.0-alpha.0
-    "@ovotech/laminar-kafkajs": ^0.11.0-alpha.0
-    "@ovotech/laminar-pg": ^0.11.0-alpha.0
-    "@ovotech/laminar-pgboss": ^0.11.0-alpha.0
-    "@ovotech/laminar-winston": ^0.11.0-alpha.0
+    "@ovotech/laminar-jwt": ^0.11.0-alpha.1
+    "@ovotech/laminar-kafkajs": ^0.11.0-alpha.3
+    "@ovotech/laminar-pg": ^0.11.0-alpha.2
+    "@ovotech/laminar-pgboss": ^0.11.0-alpha.2
+    "@ovotech/laminar-winston": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@types/pg": ^7.14.11
@@ -515,7 +515,7 @@ __metadata:
   dependencies:
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-cli": ^0.11.0-alpha.4
-    "@ovotech/laminar-pg": ^0.11.0-alpha.0
+    "@ovotech/laminar-pg": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@types/pg": ^7.14.11
@@ -539,8 +539,8 @@ __metadata:
   dependencies:
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-cli": ^0.11.0-alpha.4
-    "@ovotech/laminar-jwt": ^0.11.0-alpha.0
-    "@ovotech/laminar-pg": ^0.11.0-alpha.0
+    "@ovotech/laminar-jwt": ^0.11.0-alpha.1
+    "@ovotech/laminar-pg": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@types/pg": ^7.14.11
@@ -564,7 +564,7 @@ __metadata:
   dependencies:
     "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-cli": ^0.11.0-alpha.4
-    "@ovotech/laminar-jwt": ^0.11.0-alpha.0
+    "@ovotech/laminar-jwt": ^0.11.0-alpha.1
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@typescript-eslint/eslint-plugin": ^4.18.0
@@ -583,7 +583,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/simple@workspace:examples/simple"
   dependencies:
-    "@ovotech/laminar": ^0.11.0-alpha.1
+    "@ovotech/laminar": ^0.11.0-alpha.5
     "@ovotech/laminar-cli": ^0.11.0-alpha.4
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -604,7 +604,7 @@ __metadata:
   resolution: "@examples/split@workspace:examples/split"
   dependencies:
     "@ovotech/laminar": ^0.11.0-alpha.5
-    "@ovotech/laminar-pg": ^0.11.0-alpha.0
+    "@ovotech/laminar-pg": ^0.11.0-alpha.2
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
     "@types/pg": ^7.14.11
@@ -2020,7 +2020,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar-jwt@^0.11.0-alpha.0, @ovotech/laminar-jwt@workspace:packages/laminar-jwt":
+"@ovotech/laminar-jwt@^0.11.0-alpha.1, @ovotech/laminar-jwt@workspace:packages/laminar-jwt":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-jwt@workspace:packages/laminar-jwt"
   dependencies:
@@ -2052,13 +2052,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar-kafkajs@^0.11.0-alpha.0, @ovotech/laminar-kafkajs@workspace:packages/laminar-kafkajs":
+"@ovotech/laminar-kafkajs@^0.11.0-alpha.3, @ovotech/laminar-kafkajs@workspace:packages/laminar-kafkajs":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-kafkajs@workspace:packages/laminar-kafkajs"
   dependencies:
     "@ikerin/build-readme": ^1.1.1
     "@kafkajs/confluent-schema-registry": ^2.0.0
-    "@ovotech/laminar": ^0.11.0-alpha.5
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.35
@@ -2076,8 +2075,9 @@ __metadata:
     typescript: ^4.2.3
     uuid: ^8.3.2
   peerDependencies:
-    "@kafkajs/confluent-schema-registry": ^2.0.0
-    kafkajs: ^1.15.0
+    "@kafkajs/confluent-schema-registry": "*"
+    "@ovotech/laminar": "*"
+    kafkajs: "*"
   languageName: unknown
   linkType: soft
 
@@ -2094,7 +2094,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar-pg@^0.11.0-alpha.0, @ovotech/laminar-pg@workspace:packages/laminar-pg":
+"@ovotech/laminar-pg@^0.11.0-alpha.2, @ovotech/laminar-pg@workspace:packages/laminar-pg":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-pg@workspace:packages/laminar-pg"
   dependencies:
@@ -2116,11 +2116,12 @@ __metadata:
     ts-retry-promise: ^0.6.0
     typescript: ^4.2.3
   peerDependencies:
-    pg: ^8.5.1
+    "@ovotech/laminar": "*"
+    pg: "*"
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar-pgboss@^0.11.0-alpha.0, @ovotech/laminar-pgboss@workspace:packages/laminar-pgboss":
+"@ovotech/laminar-pgboss@^0.11.0-alpha.2, @ovotech/laminar-pgboss@workspace:packages/laminar-pgboss":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-pgboss@workspace:packages/laminar-pgboss"
   dependencies:
@@ -2143,11 +2144,12 @@ __metadata:
     typescript: ^4.2.3
     uuid: ^8.3.2
   peerDependencies:
-    pg-boss: ^4.3.4
+    "@ovotech/laminar": "*"
+    pg-boss: "*"
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar-winston@^0.11.0-alpha.0, @ovotech/laminar-winston@workspace:packages/laminar-winston":
+"@ovotech/laminar-winston@^0.11.0-alpha.2, @ovotech/laminar-winston@workspace:packages/laminar-winston":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-winston@workspace:packages/laminar-winston"
   dependencies:
@@ -2167,11 +2169,12 @@ __metadata:
     typescript: ^4.2.3
     winston: ^3.3.3
   peerDependencies:
-    winston: ^3.3.3
+    "@ovotech/laminar": "*"
+    winston: "*"
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar@^0.11.0-alpha.1, @ovotech/laminar@^0.11.0-alpha.5, @ovotech/laminar@workspace:packages/laminar":
+"@ovotech/laminar@^0.11.0-alpha.5, @ovotech/laminar@workspace:packages/laminar":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar@workspace:packages/laminar"
   dependencies:

@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-winston",
-  "version": "0.11.0-alpha.1",
+  "version": "0.11.0-alpha.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Use winston with @ovotech/laminar",
@@ -35,9 +35,7 @@
     "preset": "../../jest.json"
   },
   "peerDependencies": {
-    "winston": "^3.3.3"
-  },
-  "dependencies": {
-    "@ovotech/laminar": "^0.11.0-alpha.5"
+    "@ovotech/laminar": "*",
+    "winston": "*"
   }
 }

@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@ovotech/laminar": "^0.11.0-alpha.5",
-    "@ovotech/laminar-pg": "^0.11.0-alpha.0",
+    "@ovotech/laminar-pg": "^0.11.0-alpha.2",
     "pg": "^8.5.1",
     "yaml": "^1.10.2"
   }
