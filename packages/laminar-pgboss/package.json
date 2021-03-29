@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-pgboss",
-  "version": "0.11.0-alpha.0",
+  "version": "0.11.0-alpha.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Use pgboss with @ovotech/laminar",
@@ -41,6 +41,6 @@
     "pg-boss": "^4.3.4"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.11.0-alpha.4"
+    "@ovotech/laminar": "^0.11.0-alpha.5"
   }
 }

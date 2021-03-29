@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-kafkajs",
-  "version": "0.11.0-alpha.1",
+  "version": "0.11.0-alpha.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Use kafkajs with @ovotech/laminar",
@@ -42,6 +42,6 @@
     "kafkajs": "^1.15.0"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.11.0-alpha.4"
+    "@ovotech/laminar": "^0.11.0-alpha.5"
   }
 }
