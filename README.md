@@ -197,11 +197,11 @@ Laminar includes packages that are used internally or are additions to its core 
 - [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/packages/laminar-cli) - [OpenAPI](https://swagger.io/docs/) type generation for OpenAPI, json-schema, Avro and axios
 - [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
 - [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
-- [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/packages/json-schema) - Lightweight json-schema validator
-- [@ovotech/laminar-pg](https://github.com/ovotech/laminar/tree/packages/laminar-pg) - Connect to postgres db
-- [@ovotech/laminar-winstonjs](https://github.com/ovotech/laminar/tree/packages/laminar-winstonjs) - Use winston logger
-- [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/packages/laminar-kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
-- [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/packages/laminar-pgboss) - Use pgboss to schedule jobs
+- [@ovotech/json-schema](https://github.com/ovotech/laminar/main/tree/packages/json-schema) - Lightweight json-schema validator
+- [@ovotech/laminar-pg](https://github.com/ovotech/laminar/main/tree/packages/laminar-pg) - Connect to postgres db
+- [@ovotech/laminar-winston](https://github.com/ovotech/laminar/tree/main/packages/laminar-winston) - Use winston logger
+- [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/main/packages/laminar-kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
+- [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/main/packages/laminar-pgboss) - Use pgboss to schedule jobs
 
 ## Running the tests
 
