@@ -28,11 +28,11 @@ And lastly there is no external code dependancies, as we only depend on mimetype
 
 Laminar is designed around _Service_ objects that handle different requests - coming from http, kafka, queue managers etc. Each of those _Services_ is able to spawn multiple concurrent workers, that process the requests.
 
-You can easily scale your laminar app by increasing the workers for each _Service_, or increse the instances of your whole node application (thus scaling each _Service_ within the application). If any particular _Service_ demands more resource you can move it to its own Laminar application and scale that separately. Since each worker would be a pure stateless function, so moving them around to differnet packages should be simple enough.
+You can easily scale your laminar app by increasing the workers for each _Service_, or increse the instances of your whole node application (thus scaling each _Service_ within the application). If any particular _Service_ demands more resource you can move it to its own Laminar application and scale that separately. Since each worker would be a pure stateless function, moving them around to differnet packages should be simple enough.
 
 <img src="docs/assets/node-instance-split.png" alt="Multiple nodes holding different services with their own concurrencies" width="600" height="434">
 
-This flexibility allows you to either keep all your code in one codebase, but quickly spin it out if size / scale demands it.
+This flexibility allows you to keep all your code in one codebase, but quickly spin it off if size / scale demands it.
 
 A typical laminar app will concist of setting up the various instances that you depend on, like db connections, queues etc. and defining all your business logic in pure functions that contain your business logic. Laminar then works like glue that would hold them together, allowing you full control of each end.
 
