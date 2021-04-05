@@ -55,6 +55,20 @@ describe('Integration', () => {
     });
   });
 
+  it('Should use the name', async () => {
+    const listener = jest.fn().mockReturnValue(textOk('Name Test'));
+    const logger = { info: jest.fn(), error: jest.fn(), debug: jest.fn(), warn: jest.fn() };
+    const port = 8052;
+
+    const http = new HttpService({ port, listener, name: 'My Service' });
+    await run({ initOrder: [http], logger }, async () => {
+      const response = await axios.get(`http://localhost:${port}`);
+      expect(response.data).toEqual('Name Test');
+    });
+
+    expect(logger.info).toHaveBeenCalledWith('✅ Started My Service: http://0.0.0.0:8052');
+  });
+
   it('Should process response', async () => {
     const logger = { info: jest.fn(), error: jest.fn(), debug: jest.fn(), warn: jest.fn() };
     const logging = requestLoggingMiddleware(logger);

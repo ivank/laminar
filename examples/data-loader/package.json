@@ -43,7 +43,7 @@
     "@kafkajs/confluent-schema-registry": "^2.0.0",
     "@ovotech/avro-decimal": "^0.1.5",
     "@ovotech/avro-timestamp-millis": "^0.1.5",
-    "@ovotech/laminar": "^0.11.0-alpha.5",
+    "@ovotech/laminar": "^0.11.0-alpha.6",
     "@ovotech/laminar-jwt": "^0.11.0-alpha.1",
     "@ovotech/laminar-kafkajs": "^0.11.0-alpha.3",
     "@ovotech/laminar-pg": "^0.11.0-alpha.2",

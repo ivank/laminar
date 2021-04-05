@@ -117,6 +117,12 @@ export interface HttpParams {
    * Hostname, defaults to localhost
    */
   hostname?: string;
+
+  /**
+   * The name of the service, appears when describe is called.
+   * Default: ⛲ Laminar
+   */
+  name?: string;
 }
 
 /**
@@ -148,11 +154,13 @@ export interface HttpsServiceParams extends IncommingMessageResolverParams, Http
 export class HttpService implements Service {
   public port: number;
   public hostname?: string;
+  public name?: string;
   public server: https.Server | http.Server;
 
   constructor(public params: HttpServiceParams | HttpsServiceParams) {
     this.port = params.port ?? (process.env.LAMINAR_HTTP_PORT ? Number(process.env.LAMINAR_HTTP_PORT) : 3300);
     this.hostname = params.hostname ?? process.env.LAMINAR_HTTP_HOST;
+    this.name = params.name ?? '⛲ Laminar';
 
     const requestListener = toRequestListener(toIncommingMessageResolver(params));
 
@@ -179,6 +187,6 @@ export class HttpService implements Service {
   }
 
   describe(): string {
-    return `⛲ Laminar: ${this.url() ?? '-'}`;
+    return `${this.name}: ${this.url() ?? '-'}`;
   }
 }
