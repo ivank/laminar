@@ -26,6 +26,6 @@ export const hydrationMeterReadsRoute: PathV1HydrationMeterreadsPost<QueueContex
     });
     return jsonOk({ success: true });
   } else {
-    return jsonBadRequest({ message: items.message, key: items.key });
+    return jsonBadRequest({ message: items.message, details: items.details });
   }
 };

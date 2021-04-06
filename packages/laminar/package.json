@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar",
-  "version": "0.11.0-alpha.6",
+  "version": "0.11.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
@@ -11,19 +11,19 @@
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
     "@types/cookie": "^0.4.0",
-    "@types/jest": "^26.0.20",
-    "@types/jsonwebtoken": "^8.5.0",
+    "@types/jest": "^26.0.22",
+    "@types/jsonwebtoken": "^8.5.1",
     "@types/mime-types": "^2.1.0",
-    "@types/node": "^14.14.35",
+    "@types/node": "^14.14.37",
     "@types/tough-cookie": "^4.0.0",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
+    "@typescript-eslint/eslint-plugin": "^4.21.0",
+    "@typescript-eslint/parser": "^4.21.0",
     "axios": "^0.21.1",
     "axios-cookiejar-support": "^1.0.1",
     "csv-parse": "^4.15.3",
     "csv-stringify": "^5.6.2",
-    "eslint": "^7.22.0",
+    "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "form-data": "^4.0.0",
     "jest": "^26.6.3",
@@ -32,7 +32,7 @@
     "prettier": "^2.2.1",
     "stream-mock": "^2.0.5",
     "tough-cookie": "^4.0.0",
-    "ts-jest": "^26.5.3",
+    "ts-jest": "^26.5.4",
     "ts-node": "^9.1.1",
     "ts-retry-promise": "^0.6.0",
     "typescript": "^4.2.3",
@@ -48,8 +48,8 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.11.0-alpha.0",
-    "mime-types": "^2.1.29",
+    "@ovotech/json-schema": "^0.11.0",
+    "mime-types": "^2.1.30",
     "openapi-schemas": "^2.0.4",
     "openapi3-ts": "^2.0.1"
   }

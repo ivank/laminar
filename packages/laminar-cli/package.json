@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-cli",
-  "version": "0.11.0-alpha.4",
+  "version": "0.11.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar",
@@ -10,19 +10,19 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
-    "@ovotech/laminar": "^0.11.0-alpha.6",
-    "@types/jest": "^26.0.20",
-    "@types/node": "^14.14.35",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
+    "@ovotech/laminar": "^0.11.0",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@typescript-eslint/eslint-plugin": "^4.21.0",
+    "@typescript-eslint/parser": "^4.21.0",
     "axios": "^0.21.1",
-    "eslint": "^7.22.0",
+    "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "jest": "^26.6.3",
     "nock": "^13.0.11",
     "pg": "^8.5.1",
     "prettier": "^2.2.1",
-    "ts-jest": "^26.5.3",
+    "ts-jest": "^26.5.4",
     "typescript": "^4.2.3"
   },
   "bin": {
@@ -52,12 +52,12 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.11.0-alpha.0",
-    "@ovotech/ts-compose": "^0.17.0-alpha.0",
+    "@ovotech/json-schema": "^0.11.0",
+    "@ovotech/ts-compose": "^0.17.0",
     "ansi-regex": "^5.0.0",
-    "avsc": "^5.5.6",
+    "avsc": "^5.6.1",
     "chalk": "^4.1.0",
-    "commander": "^7.1.0",
+    "commander": "^7.2.0",
     "openapi-schemas": "^2.0.4",
     "openapi3-ts": "^2.0.1",
     "yaml": "^1.10.2"

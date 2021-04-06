@@ -43,3 +43,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `jsonNoContent`, `htmlNoContent` and `textNoContent` no longer accept a body argument, as there should be no content
 - `start` and `stop` laminar calls now return the server object, so it can be easily described later.
+
+## [0.11.0] - 2021-04-06
+
+### Changed
+
+- Implemented "Service" architecture to organise various node services and their lifecycles
+- Multipart/form parser built in
+- Removed cookie dependency
+- Implemented LoggerLike interface and various middlewares / functions that support it
+- All http listener functions now need to be async. This allows much more simple types throughout the app
+- Middleware types refactored - Middleware type allows you to write middlewares that can be used with different services (not just http) with the same type, as well as building your own function specific middlewares with AbstractMiddleware. HttpMiddleware is now implemented using AbstractMiddleware
