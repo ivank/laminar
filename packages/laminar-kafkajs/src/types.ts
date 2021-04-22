@@ -16,8 +16,9 @@ import { AbstractMiddleware, Empty } from '@ovotech/laminar';
  *
  * @typeParam TValue The decodeed type of the the kafka message value
  */
-export interface DecodedKafkaMessage<TValue> extends KafkaMessage {
+export interface DecodedKafkaMessage<TValue, TKey> extends KafkaMessage {
   decodedValue: TValue | null;
+  decodedKey: TKey | null;
 }
 
 /**
@@ -26,9 +27,9 @@ export interface DecodedKafkaMessage<TValue> extends KafkaMessage {
  *
  * @typeParam TValue The decodeed type of the the kafka message value
  */
-export interface DecodedEachMessagePayload<TValue> extends EachMessagePayload {
+export interface DecodedEachMessagePayload<TValue, TKey> extends EachMessagePayload {
   schemaRegistry: SchemaRegistry;
-  message: DecodedKafkaMessage<TValue>;
+  message: DecodedKafkaMessage<TValue, TKey>;
 }
 
 /**
@@ -36,8 +37,8 @@ export interface DecodedEachMessagePayload<TValue> extends EachMessagePayload {
  *
  * @typeParam TValue The decodeed type of the the kafka message value
  */
-export interface DecodedBatch<TValue> extends Batch {
-  messages: DecodedKafkaMessage<TValue>[];
+export interface DecodedBatch<TValue, TKey> extends Batch {
+  messages: DecodedKafkaMessage<TValue, TKey>[];
 }
 
 /**
@@ -46,9 +47,9 @@ export interface DecodedBatch<TValue> extends Batch {
  *
  * @typeParam TValue The decodeed type of the the kafka message value
  */
-export interface DecodedEachBatchPayload<TValue> extends EachBatchPayload {
+export interface DecodedEachBatchPayload<TValue, TKey> extends EachBatchPayload {
   schemaRegistry: SchemaRegistry;
-  batch: DecodedBatch<TValue>;
+  batch: DecodedBatch<TValue, TKey>;
 }
 
 /**
@@ -57,8 +58,8 @@ export interface DecodedEachBatchPayload<TValue> extends EachBatchPayload {
  * @typeParam TValue The decodeed type of the the kafka message value
  * @typeParam TContext The context that this consumer requires to exeecute
  */
-export type EachMessageConsumer<TValue, TContext extends Empty = Empty> = (
-  payload: DecodedEachMessagePayload<TValue> & TContext,
+export type EachMessageConsumer<TValue, TKey, TContext extends Empty = Empty> = (
+  payload: DecodedEachMessagePayload<TValue, TKey> & TContext,
 ) => Promise<void>;
 
 /**
@@ -67,8 +68,8 @@ export type EachMessageConsumer<TValue, TContext extends Empty = Empty> = (
  * @typeParam TValue The decodeed type of the the kafka message value
  * @typeParam TContext The context that this consumer requires to exeecute
  */
-export type EachBatchConsumer<TValue, TContext extends Empty = Empty> = (
-  payload: DecodedEachBatchPayload<TValue> & TContext,
+export type EachBatchConsumer<TValue, TKey, TContext extends Empty = Empty> = (
+  payload: DecodedEachBatchPayload<TValue, TKey> & TContext,
 ) => Promise<void>;
 
 /**
@@ -77,9 +78,11 @@ export type EachBatchConsumer<TValue, TContext extends Empty = Empty> = (
  *
  * @typeParam TValue The decodeed type of the the kafka message value
  */
-export interface SchemaRegistryConsumerRunConfig<TValue> extends Omit<ConsumerRunConfig, 'eachMessage' | 'eachBatch'> {
-  eachMessage?: EachMessageConsumer<TValue>;
-  eachBatch?: EachBatchConsumer<TValue>;
+export interface SchemaRegistryConsumerRunConfig<TValue, TKey = Buffer | null>
+  extends Omit<ConsumerRunConfig, 'eachMessage' | 'eachBatch'> {
+  decodeKey?: boolean;
+  eachMessage?: EachMessageConsumer<TValue, TKey>;
+  eachBatch?: EachBatchConsumer<TValue, TKey>;
 }
 
 /**
@@ -87,30 +90,32 @@ export interface SchemaRegistryConsumerRunConfig<TValue> extends Omit<ConsumerRu
  *
  * @typeParam TValue The type of the the kafka message value, before its encoded
  */
-export interface EncodedMessage<TValue> extends Omit<Message, 'value'> {
+export interface EncodedMessage<TValue, TKey> extends Omit<Message, 'value' | 'key'> {
   value: TValue;
+  key: TKey | null;
 }
 
 /**
  * @typeParam TValue The type of the the kafka message value, before its encoded
  */
-export interface EncodedProducerRecord<TValue> extends Omit<ProducerRecord, 'messages'> {
-  messages: EncodedMessage<TValue>[];
+export interface EncodedProducerRecord<TValue, TKey> extends Omit<ProducerRecord, 'messages'> {
+  messages: EncodedMessage<TValue, TKey>[];
 }
 
 /**
  * @typeParam TValue The type of the the kafka message value, before its encoded
  */
-export interface EncodedSchemaProducerRecord<TValue> extends EncodedProducerRecord<TValue> {
+export interface EncodedSchemaProducerRecord<TValue, TKey> extends EncodedProducerRecord<TValue, TKey> {
   schema: ConfluentSchema | RawAvroSchema;
+  keySchema?: ConfluentSchema | RawAvroSchema;
 }
 
 /**
  * Middleware for {@link EachMessageConsumer}
  */
-export type EachMessageeMiddleware = AbstractMiddleware<DecodedEachMessagePayload<unknown>, void>;
+export type EachMessageeMiddleware = AbstractMiddleware<DecodedEachMessagePayload<unknown, unknown>, void>;
 
 /**
  * Middleware for {@link EachBatchConsumer}
  */
-export type EachBatchMiddleware = AbstractMiddleware<DecodedEachBatchPayload<unknown>, void>;
+export type EachBatchMiddleware = AbstractMiddleware<DecodedEachBatchPayload<unknown, unknown>, void>;

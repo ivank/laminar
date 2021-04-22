@@ -61,7 +61,7 @@
 					<a href="_ovotech_laminar_kafkajs.decodedeachbatchpayload.html">DecodedEachBatchPayload</a>
 				</li>
 			</ul>
-			<h1>Interface DecodedEachBatchPayload&lt;TValue&gt;</h1>
+			<h1>Interface DecodedEachBatchPayload&lt;TValue, TKey&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -86,6 +86,9 @@
 								<p>The decodeed type of the the kafka message value</p>
 							</div>
 						</div>
+					</li>
+					<li>
+						<h4>TKey</h4>
 					</li>
 				</ul>
 			</section>
@@ -132,11 +135,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="batch" class="tsd-anchor"></a>
 					<h3>batch</h3>
-					<div class="tsd-signature tsd-kind-icon">batch<span class="tsd-signature-symbol">:</span> <a href="_ovotech_laminar_kafkajs.decodedbatch.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedBatch</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">batch<span class="tsd-signature-symbol">:</span> <a href="_ovotech_laminar_kafkajs.decodedbatch.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedBatch</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides EachBatchPayload.batch</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L51">packages/laminar-kafkajs/src/types.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L52">packages/laminar-kafkajs/src/types.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -146,7 +149,7 @@
 					<div class="tsd-signature tsd-kind-icon">schema<wbr>Registry<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">default</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L50">packages/laminar-kafkajs/src/types.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L51">packages/laminar-kafkajs/src/types.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>

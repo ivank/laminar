@@ -84,7 +84,7 @@ That should take care of the REST part - when we geet the comm, we hit the exter
 > [examples/comms/src/feedback.consumer.ts:(consumer)](https://github.com/ovotech/laminar/tree/main/examples/comms/src/feedback.consumer.ts#L5-L14)
 
 ```typescript
-export const feedbackConsumer: EachMessageConsumer<Feedback, PgContext> = async ({ db, message }) => {
+export const feedbackConsumer: EachMessageConsumer<Feedback, Buffer, PgContext> = async ({ db, message }) => {
   if (message.decodedValue) {
     await db.query('UPDATE comms SET status = $1 WHERE comm_id = $2', [
       message.decodedValue.status,
@@ -177,7 +177,7 @@ Of course, you can skip that pre-register and use the `sendWithSchema` which wil
 ```typescript
 await producer.send<Feedback>({
   topic: env.TOPIC,
-  messages: [{ value: { commId: `test-${uniqueTestRun}`, status: 'Delivered' } }],
+  messages: [{ value: { commId: `test-${uniqueTestRun}`, status: 'Delivered' }, key: uniqueTestRun }],
 });
 ```
 

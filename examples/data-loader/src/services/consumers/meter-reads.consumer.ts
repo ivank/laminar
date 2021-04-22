@@ -10,7 +10,7 @@ const toMeterRead = ({ serialNumber, date, value }: MeterReading): InsertMeterRe
   value: value.toString(),
 });
 
-export const meterReadsConsumer: EachMessageConsumer<MeterReading, PgContext & LoggerContext> = async ({
+export const meterReadsConsumer: EachMessageConsumer<MeterReading, Buffer, PgContext & LoggerContext> = async ({
   message,
   logger,
   db,

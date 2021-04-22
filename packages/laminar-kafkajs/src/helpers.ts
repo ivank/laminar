@@ -21,9 +21,9 @@ export function kafkaLogCreator(logger: LoggerLike): logCreator {
  *
  * @typeParam TValue The type of the the kafka message value, before its encoded
  */
-export type Produce<TValue> = (
+export type Produce<TValue, TKey> = (
   producer: KafkaProducerService,
-  messages: EncodedMessage<TValue>[],
+  messages: EncodedMessage<TValue, TKey>[],
 ) => Promise<RecordMetadata[]>;
 
 /**
@@ -36,6 +36,10 @@ export type Produce<TValue> = (
  *
  * @typeParam TValue The type of the the kafka message value, before its encoded
  */
-export function produce<TValue>(config: { topic: string; schema: ConfluentSchema }): Produce<TValue> {
-  return (producer, messages) => producer.sendWithSchema<TValue>({ ...config, messages });
+export function produce<TValue, TKey = Buffer | string | null>(config: {
+  topic: string;
+  schema: ConfluentSchema;
+  keySchema?: ConfluentSchema;
+}): Produce<TValue, TKey> {
+  return (producer, messages) => producer.sendWithSchema<TValue, TKey>({ ...config, messages });
 }

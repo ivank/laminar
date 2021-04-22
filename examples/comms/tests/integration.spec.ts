@@ -59,7 +59,7 @@ describe('Comms Integration Tests', () => {
      */
     // << KafkaProducerService
     const producer = new KafkaProducerService(kafka, schemaRegistry, {
-      register: registerSchemas({ [env.TOPIC]: readAVSC(join(__dirname, '../avro/feedback.avsc')) }),
+      register: registerSchemas({ [`${env.TOPIC}-value`]: readAVSC(join(__dirname, '../avro/feedback.avsc')) }),
     });
     // KafkaProducerService
     const db = new PgService(pool);
@@ -96,7 +96,7 @@ describe('Comms Integration Tests', () => {
       // << send
       await producer.send<Feedback>({
         topic: env.TOPIC,
-        messages: [{ value: { commId: `test-${uniqueTestRun}`, status: 'Delivered' } }],
+        messages: [{ value: { commId: `test-${uniqueTestRun}`, status: 'Delivered' }, key: uniqueTestRun }],
       });
       // send
 

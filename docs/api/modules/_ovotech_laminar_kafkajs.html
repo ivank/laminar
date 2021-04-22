@@ -123,10 +123,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="eachbatchconsumer" class="tsd-anchor"></a>
 					<h3>Each<wbr>Batch<wbr>Consumer</h3>
-					<div class="tsd-signature tsd-kind-icon">Each<wbr>Batch<wbr>Consumer&lt;TValue, TContext&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachbatchpayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachBatchPayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Each<wbr>Batch<wbr>Consumer&lt;TValue, TKey, TContext&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachbatchpayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachBatchPayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L70">packages/laminar-kafkajs/src/types.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L71">packages/laminar-kafkajs/src/types.ts:71</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -143,6 +143,9 @@
 							</div>
 						</li>
 						<li>
+							<h4>TKey</h4>
+						</li>
+						<li>
 							<h4>TContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Empty</span> = <span class="tsd-signature-type">Empty</span></h4>
 							<div class="tsd-comment tsd-typography">
 								<p>The context that this consumer requires to exeecute</p>
@@ -154,14 +157,14 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachbatchpayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachBatchPayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachbatchpayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachBatchPayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>payload: <a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachbatchpayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachBatchPayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span></h5>
+												<h5>payload: <a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachbatchpayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachBatchPayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -174,10 +177,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="eachmessageconsumer" class="tsd-anchor"></a>
 					<h3>Each<wbr>Message<wbr>Consumer</h3>
-					<div class="tsd-signature tsd-kind-icon">Each<wbr>Message<wbr>Consumer&lt;TValue, TContext&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachmessagepayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachMessagePayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Each<wbr>Message<wbr>Consumer&lt;TValue, TKey, TContext&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachmessagepayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachMessagePayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L60">packages/laminar-kafkajs/src/types.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L61">packages/laminar-kafkajs/src/types.ts:61</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -194,6 +197,9 @@
 							</div>
 						</li>
 						<li>
+							<h4>TKey</h4>
+						</li>
+						<li>
 							<h4>TContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Empty</span> = <span class="tsd-signature-type">Empty</span></h4>
 							<div class="tsd-comment tsd-typography">
 								<p>The context that this consumer requires to exeecute</p>
@@ -205,14 +211,14 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachmessagepayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachMessagePayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachmessagepayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachMessagePayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>payload: <a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachmessagepayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachMessagePayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span></h5>
+												<h5>payload: <a href="../interfaces/_ovotech_laminar_kafkajs.decodedeachmessagepayload.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedEachMessagePayload</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TContext</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -225,7 +231,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="produce" class="tsd-anchor"></a>
 					<h3>Produce</h3>
-					<div class="tsd-signature tsd-kind-icon">Produce&lt;TValue&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>producer<span class="tsd-signature-symbol">: </span><a href="../classes/_ovotech_laminar_kafkajs.kafkaproducerservice.html" class="tsd-signature-type" data-tsd-kind="Class">KafkaProducerService</a>, messages<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.encodedmessage.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RecordMetadata</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Produce&lt;TValue, TKey&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>producer<span class="tsd-signature-symbol">: </span><a href="../classes/_ovotech_laminar_kafkajs.kafkaproducerservice.html" class="tsd-signature-type" data-tsd-kind="Class">KafkaProducerService</a>, messages<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.encodedmessage.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RecordMetadata</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/helpers.ts#L24">packages/laminar-kafkajs/src/helpers.ts:24</a></li>
@@ -245,13 +251,16 @@
 								<p>The type of the the kafka message value, before its encoded</p>
 							</div>
 						</li>
+						<li>
+							<h4>TKey</h4>
+						</li>
 					</ul>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>producer<span class="tsd-signature-symbol">: </span><a href="../classes/_ovotech_laminar_kafkajs.kafkaproducerservice.html" class="tsd-signature-type" data-tsd-kind="Class">KafkaProducerService</a>, messages<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.encodedmessage.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RecordMetadata</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>producer<span class="tsd-signature-symbol">: </span><a href="../classes/_ovotech_laminar_kafkajs.kafkaproducerservice.html" class="tsd-signature-type" data-tsd-kind="Class">KafkaProducerService</a>, messages<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.encodedmessage.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RecordMetadata</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -261,7 +270,7 @@
 												<h5>producer: <a href="../classes/_ovotech_laminar_kafkajs.kafkaproducerservice.html" class="tsd-signature-type" data-tsd-kind="Class">KafkaProducerService</a></h5>
 											</li>
 											<li>
-												<h5>messages: <a href="../interfaces/_ovotech_laminar_kafkajs.encodedmessage.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+												<h5>messages: <a href="../interfaces/_ovotech_laminar_kafkajs.encodedmessage.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RecordMetadata</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -382,7 +391,7 @@
 					<a name="produce-1" class="tsd-anchor"></a>
 					<h3>produce</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">produce&lt;TValue&gt;<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol">; </span>topic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_ovotech_laminar_kafkajs.html#produce" class="tsd-signature-type" data-tsd-kind="Type alias">Produce</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">produce&lt;TValue, TKey&gt;<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>keySchema<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol">; </span>topic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_ovotech_laminar_kafkajs.html#produce" class="tsd-signature-type" data-tsd-kind="Type alias">Produce</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -407,12 +416,18 @@
 										<p>The type of the the kafka message value, before its encoded</p>
 									</div>
 								</li>
+								<li>
+									<h4>TKey = <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Buffer</span></h4>
+								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>config: <span class="tsd-signature-symbol">{ </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol">; </span>topic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>config: <span class="tsd-signature-symbol">{ </span>keySchema<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol">; </span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol">; </span>topic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> key<wbr>Schema<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ConfluentSchema</span></h5>
+										</li>
 										<li class="tsd-parameter">
 											<h5>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ConfluentSchema</span></h5>
 										</li>
@@ -422,7 +437,7 @@
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_ovotech_laminar_kafkajs.html#produce" class="tsd-signature-type" data-tsd-kind="Type alias">Produce</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_ovotech_laminar_kafkajs.html#produce" class="tsd-signature-type" data-tsd-kind="Type alias">Produce</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -464,7 +479,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/kafka-producer.service.ts#L53">packages/laminar-kafkajs/src/kafka-producer.service.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/kafka-producer.service.ts#L65">packages/laminar-kafkajs/src/kafka-producer.service.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -478,7 +493,7 @@
 									<h5>register: <span class="tsd-signature-symbol">{}</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-index-signature">
-											<h5><span class="tsd-signature-symbol">[</span>topic: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RawAvroSchema</span></h5>
+											<h5><span class="tsd-signature-symbol">[</span>subject: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">ConfluentSchema</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RawAvroSchema</span></h5>
 										</li>
 									</ul>
 								</li>
@@ -491,13 +506,13 @@
 					<a name="toproducerrecord" class="tsd-anchor"></a>
 					<h3>to<wbr>Producer<wbr>Record</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Producer<wbr>Record&lt;TValue&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, schemaRegistry<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SchemaRegistry</span>, __namedParameters<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ovotech_laminar_kafkajs.encodedproducerrecord.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedProducerRecord</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ProducerRecord</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Producer<wbr>Record&lt;TValue, TKey&gt;<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ToProducerRecordConfig</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ProducerRecord</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/kafka-producer.service.ts#L37">packages/laminar-kafkajs/src/kafka-producer.service.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/kafka-producer.service.ts#L43">packages/laminar-kafkajs/src/kafka-producer.service.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -510,17 +525,14 @@
 								<li>
 									<h4>TValue</h4>
 								</li>
+								<li>
+									<h4>TKey = <span class="tsd-signature-type">Buffer</span></h4>
+								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>id: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>schemaRegistry: <span class="tsd-signature-type">SchemaRegistry</span></h5>
-								</li>
-								<li>
-									<h5>__namedParameters: <a href="../interfaces/_ovotech_laminar_kafkajs.encodedproducerrecord.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodedProducerRecord</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>__namedParameters: <span class="tsd-signature-type">ToProducerRecordConfig</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ProducerRecord</span><span class="tsd-signature-symbol">&gt;</span></h4>

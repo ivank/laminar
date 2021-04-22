@@ -11,13 +11,13 @@ import { SchemaRegistryConsumerRunConfig, DecodedKafkaMessage, DecodedEachBatchP
  *
  * @typeParam TValue The decodeed type of the the kafka message value
  */
-export class KafkaConsumerService<TValue> implements Service {
+export class KafkaConsumerService<TValue, TKey = Buffer> implements Service {
   public consumer: Consumer;
 
   constructor(
     public kafka: Kafka,
     public schemaRegistry: SchemaRegistry,
-    public config: SchemaRegistryConsumerRunConfig<TValue> & ConsumerConfig & ConsumerSubscribeTopic,
+    public config: SchemaRegistryConsumerRunConfig<TValue, TKey> & ConsumerConfig & ConsumerSubscribeTopic,
   ) {
     this.consumer = kafka.consumer(config);
   }
@@ -38,6 +38,9 @@ export class KafkaConsumerService<TValue> implements Service {
               message: {
                 ...payload.message,
                 decodedValue: payload.message.value ? await this.schemaRegistry.decode(payload.message.value) : null,
+                decodedKey: this.config.decodeKey
+                  ? await this.schemaRegistry.decode(payload.message.key)
+                  : payload.message.key,
               },
             })
         : undefined,
@@ -45,11 +48,15 @@ export class KafkaConsumerService<TValue> implements Service {
         ? async (payload) => {
             for (const i in payload.batch.messages) {
               const value = payload.batch.messages[i].value;
-              (payload.batch.messages[i] as DecodedKafkaMessage<TValue>).decodedValue = value
+              (payload.batch.messages[i] as DecodedKafkaMessage<TValue, TKey>).decodedValue = value
                 ? await this.schemaRegistry.decode(value)
                 : null;
+              const key = payload.batch.messages[i].key;
+              (payload.batch.messages[i] as DecodedKafkaMessage<TValue, TKey>).decodedKey = this.config.decodeKey
+                ? await this.schemaRegistry.decode(key)
+                : key;
             }
-            return eachBatch(payload as DecodedEachBatchPayload<TValue>);
+            return eachBatch(payload as DecodedEachBatchPayload<TValue, TKey>);
           }
         : undefined,
     });

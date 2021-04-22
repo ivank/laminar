@@ -61,7 +61,7 @@
 					<a href="_ovotech_laminar_kafkajs.decodedbatch.html">DecodedBatch</a>
 				</li>
 			</ul>
-			<h1>Interface DecodedBatch&lt;TValue&gt;</h1>
+			<h1>Interface DecodedBatch&lt;TValue, TKey&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -85,6 +85,9 @@
 								<p>The decodeed type of the the kafka message value</p>
 							</div>
 						</div>
+					</li>
+					<li>
+						<h4>TKey</h4>
 					</li>
 				</ul>
 			</section>
@@ -143,11 +146,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
 					<a name="messages" class="tsd-anchor"></a>
 					<h3>messages</h3>
-					<div class="tsd-signature tsd-kind-icon">messages<span class="tsd-signature-symbol">:</span> <a href="_ovotech_laminar_kafkajs.decodedkafkamessage.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedKafkaMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">messages<span class="tsd-signature-symbol">:</span> <a href="_ovotech_laminar_kafkajs.decodedkafkamessage.html" class="tsd-signature-type" data-tsd-kind="Interface">DecodedKafkaMessage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TKey</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides Batch.messages</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L40">packages/laminar-kafkajs/src/types.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar-kafkajs/src/types.ts#L41">packages/laminar-kafkajs/src/types.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>

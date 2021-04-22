@@ -31,18 +31,30 @@ export function producerMiddleware(producer: KafkaProducerService): Middleware<P
   return (next) => (payload) => next({ ...payload, producer });
 }
 
+export interface ToProducerRecordConfig<TValue, TKey = Buffer> extends EncodedProducerRecord<TValue, TKey> {
+  schemaId: number;
+  keySchemaId?: number;
+  schemaRegistry: SchemaRegistry;
+}
+
 /**
  * Encode a the record value, using schemaRegistry and a given registry schema id.
  */
-export async function toProducerRecord<TValue>(
-  id: number,
-  schemaRegistry: SchemaRegistry,
-  { messages, ...rest }: EncodedProducerRecord<TValue>,
-): Promise<ProducerRecord> {
+export async function toProducerRecord<TValue, TKey = Buffer>({
+  keySchemaId,
+  schemaId,
+  schemaRegistry,
+  messages,
+  ...rest
+}: ToProducerRecordConfig<TValue, TKey>): Promise<ProducerRecord> {
   return {
     ...rest,
     messages: await Promise.all(
-      messages.map(async (message) => ({ ...message, value: await schemaRegistry.encode(id, message.value) })),
+      messages.map(async (message) => ({
+        ...message,
+        value: await schemaRegistry.encode(schemaId, message.value),
+        key: keySchemaId ? await schemaRegistry.encode(keySchemaId, message.key) : (message.key as Buffer | null),
+      })),
     ),
   };
 }
@@ -50,12 +62,11 @@ export async function toProducerRecord<TValue>(
 /**
  * Pre-register schemas in the schema registry. This will add / load them from the registry and cache them, so they can be used for producing records
  */
-export function registerSchemas(register: { [topic: string]: ConfluentSchema | RawAvroSchema }): RegisterSchemas {
+export function registerSchemas(register: { [subject: string]: ConfluentSchema | RawAvroSchema }): RegisterSchemas {
   return async (schemaRegistry) =>
     new Map(
       await Promise.all(
-        Object.entries(register).map<Promise<[string, number]>>(async ([topic, schema]) => {
-          const subject = `${topic}-value`;
+        Object.entries(register).map<Promise<[string, number]>>(async ([subject, schema]) => {
           const { id } = await schemaRegistry.register(schema, { subject });
           return [subject, id];
         }),
@@ -82,24 +93,38 @@ export class KafkaProducerService implements Service {
   /**
    * Produce messages to a given topic. Topic must be pre-registered when constructing the {@link KafkaProducerService} instance
    */
-  public async send<TValue>(record: EncodedProducerRecord<TValue>): Promise<RecordMetadata[]> {
-    const subject = `${record.topic}-value`;
-    const id = this.register.get(subject);
-    if (!id) {
+  public async send<TValue, TKey = Buffer | string | null>(
+    record: EncodedProducerRecord<TValue, TKey>,
+  ): Promise<RecordMetadata[]> {
+    const valueSubject = `${record.topic}-value`;
+    const schemaId = this.register.get(valueSubject);
+    if (!schemaId) {
       throw new Error(
-        `Cannot produce message, no schema registered for subject ${subject}. You need to add it to the topics config of the ProducerService or use sendWithSchema method.`,
+        `Cannot produce message, no schema registered for subject ${valueSubject}. You need to add it to the topics config of the ProducerService or use sendWithSchema method.`,
       );
     }
 
-    return await this.producer.send(await toProducerRecord(id, this.schemaRegistry, record));
+    const keySubject = `${record.topic}-key`;
+    const keySchemaId = this.register.get(keySubject);
+
+    return await this.producer.send(
+      await toProducerRecord({ schemaId, keySchemaId, schemaRegistry: this.schemaRegistry, ...record }),
+    );
   }
 
   /**
    * Produce messages with a given schema.
    */
-  public async sendWithSchema<TValue>(record: EncodedSchemaProducerRecord<TValue>): Promise<RecordMetadata[]> {
-    const { id } = await this.schemaRegistry.register(record.schema, { subject: `${record.topic}-value` });
-    return await this.producer.send(await toProducerRecord(id, this.schemaRegistry, record));
+  public async sendWithSchema<TValue, TKey = Buffer | string | null>(
+    record: EncodedSchemaProducerRecord<TValue, TKey>,
+  ): Promise<RecordMetadata[]> {
+    const { id: schemaId } = await this.schemaRegistry.register(record.schema, { subject: `${record.topic}-value` });
+    const { id: keySchemaId } = record.keySchema
+      ? await this.schemaRegistry.register(record.keySchema, { subject: `${record.topic}-key` })
+      : { id: undefined };
+    return await this.producer.send(
+      await toProducerRecord({ schemaId, keySchemaId, schemaRegistry: this.schemaRegistry, ...record }),
+    );
   }
 
   /**

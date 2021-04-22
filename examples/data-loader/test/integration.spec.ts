@@ -159,6 +159,7 @@ describe('Data Loader Integration Tests', () => {
                 value: new Decimal(3.2),
                 date: new Date('2020-02-02T00:00:00.000Z'),
               },
+              key: `${uniqueTestRun}-1`,
             },
             {
               value: {
@@ -167,6 +168,7 @@ describe('Data Loader Integration Tests', () => {
                 value: new Decimal(6.2),
                 date: new Date('2020-03-02T00:00:00.000Z'),
               },
+              key: `${uniqueTestRun}-2`,
             },
           ],
         });

@@ -29,20 +29,30 @@ export interface Event1 {
 export interface Event2 {
   field2: string;
 }
+export interface Key2 {
+  id: string;
+}
 
 export const Event1Schema = {
-  type: 'record' as const,
+  type: 'record',
   namespace: 'com.example.event',
-  name: 'Event',
+  name: 'Event1',
   fields: [{ name: 'field1', type: 'string' }],
-};
+} as const;
 
 export const Event2Schema = {
-  type: 'record' as const,
-  name: 'Event',
+  type: 'record',
+  name: 'Event2',
   namespace: 'com.example.event',
   fields: [{ name: 'field2', type: 'string' }],
-};
+} as const;
+
+export const Key2Schema = {
+  type: 'record',
+  name: 'Key2',
+  namespace: 'com.example.event',
+  fields: [{ name: 'id', type: 'string' }],
+} as const;
 
 const topic1 = `test-single-${uuid.v4()}`;
 const topic2 = `test-batch-${uuid.v4()}`;
@@ -53,19 +63,20 @@ const groupId2 = `test-group-2-${uuid.v4()}`;
 const groupId3 = `test-group-3-${uuid.v4()}`;
 const data: { [key: number]: string[] } = { 0: [], 1: [], 2: [] };
 
-const sendEvent3 = produce<Event2>({
+const sendEvent3 = produce<Event2, Key2>({
   topic: topic3,
   schema: { type: SchemaType.AVRO, schema: JSON.stringify(Event2Schema) },
+  keySchema: { type: SchemaType.AVRO, schema: JSON.stringify(Key2Schema) },
 });
 
-const eachEvent1: EachMessageConsumer<Event1, LoggerContext> = async ({ message, partition, logger }) => {
+const eachEvent1: EachMessageConsumer<Event1, Buffer, LoggerContext> = async ({ message, partition, logger }) => {
   if (message.decodedValue) {
     data[partition].push(message.decodedValue.field1);
     logger.info(message.decodedValue.field1);
   }
 };
 
-const eachEvent2: EachBatchConsumer<Event2, LoggerContext> = async ({ batch, logger }) => {
+const eachEvent2: EachBatchConsumer<Event2, Buffer, LoggerContext> = async ({ batch, logger }) => {
   for (const msg of batch.messages) {
     if (msg.decodedValue) {
       data[batch.partition].push(msg.decodedValue.field2);
@@ -114,12 +125,13 @@ describe('Integration', () => {
       eachBatch: logging(eachEvent2),
     });
 
-    const event3Service = new KafkaConsumerService<Event2>(kafka, schemaRegistry, {
+    const event3Service = new KafkaConsumerService<Event2, Key2>(kafka, schemaRegistry, {
       topic: topic3,
       fromBeginning: true,
       groupId: groupId3,
       autoCommitInterval: 20000,
       autoCommitThreshold: 2,
+      decodeKey: true,
       eachBatch: chunkBatchMiddleware({ size: 2 })(
         async ({ batch: { messages, partition, firstOffset, lastOffset } }) => {
           const commitedOffset = await admin.client.fetchOffsets({ groupId: groupId3, topic: topic3 });
@@ -132,7 +144,7 @@ describe('Integration', () => {
               offset: +offset,
               partition,
             })),
-            messages: messages.map(({ decodedValue }) => decodedValue?.field2),
+            messages: messages.map(({ decodedValue, decodedKey }) => `${decodedValue?.field2} - ${decodedKey?.id}`),
           });
         },
       ),
@@ -140,8 +152,8 @@ describe('Integration', () => {
 
     const producer = new KafkaProducerService(kafka, schemaRegistry, {
       register: registerSchemas({
-        [topic1]: { type: SchemaType.AVRO, schema: JSON.stringify(Event1Schema) },
-        [topic2]: { type: SchemaType.AVRO, schema: JSON.stringify(Event2Schema) },
+        [`${topic1}-value`]: { type: SchemaType.AVRO, schema: JSON.stringify(Event1Schema) },
+        [`${topic2}-value`]: { type: SchemaType.AVRO, schema: JSON.stringify(Event2Schema) },
       }),
     });
 
@@ -151,29 +163,29 @@ describe('Integration', () => {
       await start({ initOrder, logger });
 
       await Promise.all([
-        producer.send<Event1>({ topic: topic1, messages: [{ value: { field1: 'test1' }, partition: 0 }] }),
+        producer.send<Event1>({ topic: topic1, messages: [{ value: { field1: 'test1' }, partition: 0, key: '1' }] }),
         producer.send<Event1>({
           topic: topic1,
           messages: [
-            { value: { field1: 'test2' }, partition: 1 },
-            { value: { field1: 'test3' }, partition: 2 },
-            { value: { field1: 'test4' }, partition: 0 },
+            { value: { field1: 'test2' }, partition: 1, key: '2' },
+            { value: { field1: 'test3' }, partition: 2, key: '3' },
+            { value: { field1: 'test4' }, partition: 0, key: '4' },
           ],
         }),
         producer.send<Event2>({
           topic: topic2,
           messages: [
-            { value: { field2: 'test5' }, partition: 1 },
-            { value: { field2: 'test6' }, partition: 1 },
-            { value: { field2: 'test7' }, partition: 0 },
+            { value: { field2: 'test5' }, partition: 1, key: '5' },
+            { value: { field2: 'test6' }, partition: 1, key: '6' },
+            { value: { field2: 'test7' }, partition: 0, key: '7' },
           ],
         }),
         sendEvent3(producer, [
-          { value: { field2: 'p0m1' }, partition: 0 },
-          { value: { field2: 'p0m2' }, partition: 0 },
-          { value: { field2: 'p0m3' }, partition: 0 },
-          { value: { field2: 'p0m4' }, partition: 0 },
-          { value: { field2: 'p0m5' }, partition: 0 },
+          { value: { field2: 'p0m1' }, partition: 0, key: { id: 'k1' } },
+          { value: { field2: 'p0m2' }, partition: 0, key: { id: 'k2' } },
+          { value: { field2: 'p0m3' }, partition: 0, key: { id: 'k3' } },
+          { value: { field2: 'p0m4' }, partition: 0, key: { id: 'k4' } },
+          { value: { field2: 'p0m5' }, partition: 0, key: { id: 'k5' } },
         ]),
       ]);
 
@@ -195,21 +207,21 @@ describe('Integration', () => {
 
           expect(batchSizer).toHaveBeenCalledWith({
             partition: 0,
-            messages: ['p0m1', 'p0m2'],
+            messages: ['p0m1 - k1', 'p0m2 - k2'],
             firstOffset: '0',
             lastOffset: '1',
             commitedOffset: expect.arrayContaining([{ partition: 0, offset: -1 }]),
           });
           expect(batchSizer).toHaveBeenCalledWith({
             partition: 0,
-            messages: ['p0m3', 'p0m4'],
+            messages: ['p0m3 - k3', 'p0m4 - k4'],
             firstOffset: '2',
             lastOffset: '3',
             commitedOffset: expect.arrayContaining([{ partition: 0, offset: 2 }]),
           });
           expect(batchSizer).toHaveBeenCalledWith({
             partition: 0,
-            messages: ['p0m5'],
+            messages: ['p0m5 - k5'],
             firstOffset: '4',
             lastOffset: '4',
             commitedOffset: expect.arrayContaining([{ partition: 0, offset: 4 }]),
