@@ -54,3 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented LoggerLike interface and various middlewares / functions that support it
 - All http listener functions now need to be async. This allows much more simple types throughout the app
 - Middleware types refactored - Middleware type allows you to write middlewares that can be used with different services (not just http) with the same type, as well as building your own function specific middlewares with AbstractMiddleware. HttpMiddleware is now implemented using AbstractMiddleware
+
+## [0.11.1] - 2021-04-23
+
+### Changed
+
+- Fixed OpenApi type coersers

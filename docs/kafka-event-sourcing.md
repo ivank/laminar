@@ -162,7 +162,7 @@ Starting it all up is just a matter of calling `init` on the application itself,
 
 ```typescript
 const producer = new KafkaProducerService(kafka, schemaRegistry, {
-  register: registerSchemas({ [env.TOPIC]: readAVSC(join(__dirname, '../avro/feedback.avsc')) }),
+  register: registerSchemas({ [`${env.TOPIC}-value`]: readAVSC(join(__dirname, '../avro/feedback.avsc')) }),
 });
 ```
 

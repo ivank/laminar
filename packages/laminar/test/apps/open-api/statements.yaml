@@ -11,6 +11,10 @@ paths:
       summary: Get Meters, associated with an account, and its service start and end dates (SSD...SED)
       parameters:
         - { $ref: '#/components/parameters/accountId' }
+        - { $ref: '#/components/parameters/coerceBoolean' }
+        - { $ref: '#/components/parameters/coerceNumber' }
+        - { $ref: '#/components/parameters/coerceInteger' }
+        - { $ref: '#/components/parameters/coerceObject' }
       responses:
         'default': { $ref: '#/components/responses/HttpErrorResponse' }
         '200':
@@ -37,6 +41,39 @@ components:
         type: string
       required: true
 
+    coerceBoolean:
+      name: bool
+      in: query
+      description: Should test boolean
+      schema:
+        type: boolean
+
+    coerceNumber:
+      name: num
+      in: query
+      description: Should test number
+      schema:
+        type: number
+
+    coerceInteger:
+      name: int
+      in: query
+      description: Should test integer
+      schema:
+        type: integer
+
+    coerceObject:
+      name: obj
+      in: query
+      description: Should test boolean
+      schema:
+        type: object
+        properties:
+          bool:
+            type: boolean
+          int:
+            type: integer
+
   schemas:
     HttpError:
       additionalProperties: false
@@ -53,6 +90,16 @@ components:
           type: string
         plan:
           type: string
+        objBool:
+          type: boolean
+        objInt:
+          type: integer
+        bool:
+          type: boolean
+        int:
+          type: integer
+        num:
+          type: number
         address:
           type: string
         postCode:

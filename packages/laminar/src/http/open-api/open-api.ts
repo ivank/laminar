@@ -2,7 +2,7 @@ import { validateCompiled, toSchemaObject, compileInContext, ResultError } from 
 import { Empty } from '../../types';
 import { jsonBadRequest, jsonInternalServerError, jsonNotFound } from '../response';
 import { OapiContext, OapiConfig, Route } from './types';
-import { compileOapi } from './compile-oapi';
+import { compileOapi, resolveRef } from './compile-oapi';
 import { toRoutes, selectRoute } from './routes';
 import { toMatchPattern } from '../../helpers';
 import { isSecurityResponse, validateSecurity } from './security';
@@ -13,11 +13,11 @@ import { HttpContext, HttpResponse, HttpListener } from '../types';
  * Attempt to return the most information in order to help the user correct the error
  */
 function toRequestError<TContext>(result: ResultError, route: Route<TContext>, ctx: HttpContext): HttpResponse {
-  const contentMediaTypes = Object.entries(route.operation.requestBody?.content ?? {});
+  const contentMediaTypes = Object.entries(resolveRef(route.schema, route.operation.requestBody)?.content ?? {});
   const mediaType =
     contentMediaTypes.find(([mimeType]) =>
       new RegExp(toMatchPattern(mimeType)).test(ctx.headers['content-type'] ?? ''),
-    )?.[1] ?? route.operation.requestBody?.content['default'];
+    )?.[1] ?? resolveRef(route.schema, route.operation.requestBody)?.content['default'];
 
   return jsonBadRequest({
     message: `Request for "${ctx.method} ${ctx.url.pathname}" does not match OpenApi Schema`,
@@ -50,7 +50,7 @@ export const defaultOapiNotFound: HttpListener = async (ctx) =>
  */
 export async function openApi<TContext extends Empty>(config: OapiConfig<TContext>): Promise<HttpListener<TContext>> {
   const oapi = await compileOapi(config);
-  const routes = toRoutes<TContext>(toSchemaObject(oapi), config.paths);
+  const routes = toRoutes<TContext>(oapi, toSchemaObject(oapi), config.paths);
   const notFound = config.notFound ?? defaultOapiNotFound;
 
   return async (ctx) => {
@@ -78,6 +78,7 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
     }
 
     const security = await validateSecurity<TContext>(
+      oapi,
       reqOapi,
       select.route.security,
       oapi.schema.components?.securitySchemes,

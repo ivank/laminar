@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Schema } from '@ovotech/json-schema';
+import { ResolvedSchema, Schema } from '@ovotech/json-schema';
 import { Empty } from '../../types';
-import { ResolvedOperationObject } from './resolved-openapi-object';
-import { OpenAPIObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
+import { OpenAPIObject, OperationObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
 import { HttpContext, HttpListener, HttpResponse } from '../types';
 
 /**
@@ -118,7 +117,8 @@ export interface Route<TContext extends Empty> {
   request: Schema;
   coerce: Coerce<TContext>;
   response: Schema;
-  operation: ResolvedOperationObject;
+  operation: OperationObject;
+  schema: ResolvedSchema;
   security?: SecurityRequirementObject[];
   listener: HttpListener<TContext & OapiContext & SecurityOk>;
 }

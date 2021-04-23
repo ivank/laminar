@@ -8,9 +8,14 @@ describe('Statements', () => {
       api: join(__dirname, 'statements.yaml'),
       paths: {
         '/accounts/{accountId}/meters': {
-          get: async () =>
+          get: async ({ query }) =>
             jsonOk([
               {
+                bool: query.bool,
+                int: query.int,
+                num: query.num,
+                objBool: query.obj.bool,
+                objInt: query.obj.int,
                 meterType: 'gas',
                 mpxn: '111111111',
                 plan: 'PA_G_WM_R_25',
@@ -23,6 +28,11 @@ describe('Statements', () => {
                 postCode: 'TT123EE',
               },
               {
+                bool: query.bool,
+                int: query.int,
+                num: query.num,
+                objBool: query.obj.bool,
+                objInt: query.obj.int,
                 meterType: 'elec',
                 mpxn: '14111111',
                 plan: 'PA_E_14_R_1_25',
@@ -46,7 +56,7 @@ describe('Statements', () => {
 
     await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8064' });
-      const { data } = await api.get('/accounts/123/meters');
+      const { data } = await api.get('/accounts/123/meters?bool=true&obj[bool]=false&obj[int]=123&int=222&num=12.32');
 
       expect(data).toMatchSnapshot();
     });
