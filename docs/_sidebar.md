@@ -1,5 +1,5 @@
 - [Home](/)
-- [API](https://ovotech.github.com/laminar/api/index.html)
+- [API](api/index.html)
 - [Getting Started](getting-started.md)
 - [Application](application.md)
 - [CLI](cli.md)
