@@ -12,7 +12,7 @@ This is an attempt to implement the concepts of [Design-First, Evolve with Code]
 | ----------------------------------------- | ----------------------------------------- |
 | ![OpenAPI Code](docs/assets/api.yaml.png) | ![Http Service](docs/assets/index.ts.png) |
 
-For detailed documentation, refer to https://ovotech.github.com/laminar
+For detailed documentation, refer to https://ovotech.github.io/laminar/#/
 
 ## Why?
 
