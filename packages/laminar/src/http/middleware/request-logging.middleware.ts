@@ -19,9 +19,9 @@ export function requestLoggingMiddleware(source: LoggerLike): HttpMiddleware<Log
     try {
       const res = await next({ ...ctx, logger });
       if (res.status >= 200 && res.status < 300) {
-        logger.info(`Status: ${res.status}`);
+        logger.info(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status });
       } else {
-        logger.error(`Status: ${res.status}`, { body: res.body });
+        logger.error(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status, body: res.body });
       }
       return res;
     } catch (error) {

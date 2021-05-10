@@ -444,7 +444,7 @@ __metadata:
   resolution: "@examples/comms@workspace:examples/comms"
   dependencies:
     "@kafkajs/confluent-schema-registry": ^2.0.1
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
     "@ovotech/laminar-kafkajs": ^0.12.0
     "@ovotech/laminar-pg": ^0.11.0
@@ -475,7 +475,7 @@ __metadata:
     "@kafkajs/confluent-schema-registry": ^2.0.1
     "@ovotech/avro-decimal": ^0.1.5
     "@ovotech/avro-timestamp-millis": ^0.1.5
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
     "@ovotech/laminar-jwt": ^0.11.0
     "@ovotech/laminar-kafkajs": ^0.12.0
@@ -513,7 +513,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/docs@workspace:examples/docs"
   dependencies:
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
     "@ovotech/laminar-pg": ^0.11.0
     "@types/jest": ^26.0.22
@@ -537,7 +537,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/petstore@workspace:examples/petstore"
   dependencies:
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
     "@ovotech/laminar-jwt": ^0.11.0
     "@ovotech/laminar-pg": ^0.11.0
@@ -562,7 +562,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/security@workspace:examples/security"
   dependencies:
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
     "@ovotech/laminar-jwt": ^0.11.0
     "@types/jest": ^26.0.22
@@ -603,7 +603,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/split@workspace:examples/split"
   dependencies:
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-pg": ^0.11.0
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
@@ -1969,7 +1969,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": ^1.1.1
     "@ovotech/json-schema": ^0.11.0
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/ts-compose": ^0.17.0
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
@@ -2001,7 +2001,7 @@ __metadata:
   resolution: "@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars"
   dependencies:
     "@ikerin/build-readme": ^1.1.1
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
     "@typescript-eslint/eslint-plugin": ^4.21.0
@@ -2026,7 +2026,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": ^1.1.1
     "@ovotech/json-schema": ^0.11.0
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
     "@types/jest": ^26.0.22
     "@types/jsonwebtoken": ^8.5.1
@@ -2058,7 +2058,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": ^1.1.1
     "@kafkajs/confluent-schema-registry": ^2.0.1
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
@@ -2100,7 +2100,7 @@ __metadata:
   resolution: "@ovotech/laminar-pg@workspace:packages/laminar-pg"
   dependencies:
     "@ikerin/build-readme": ^1.1.1
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
@@ -2127,7 +2127,7 @@ __metadata:
   resolution: "@ovotech/laminar-pgboss@workspace:packages/laminar-pgboss"
   dependencies:
     "@ikerin/build-readme": ^1.1.1
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@types/cookie": ^0.4.0
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
@@ -2155,7 +2155,7 @@ __metadata:
   resolution: "@ovotech/laminar-winston@workspace:packages/laminar-winston"
   dependencies:
     "@ikerin/build-readme": ^1.1.1
-    "@ovotech/laminar": ^0.11.1
+    "@ovotech/laminar": ^0.11.2
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
     "@typescript-eslint/eslint-plugin": ^4.21.0
@@ -2175,7 +2175,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar@^0.11.0, @ovotech/laminar@^0.11.1, @ovotech/laminar@workspace:packages/laminar":
+"@ovotech/laminar@^0.11.0, @ovotech/laminar@^0.11.2, @ovotech/laminar@workspace:packages/laminar":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar@workspace:packages/laminar"
   dependencies:

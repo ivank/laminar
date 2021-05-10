@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@kafkajs/confluent-schema-registry": "^2.0.1",
-    "@ovotech/laminar": "^0.11.1",
+    "@ovotech/laminar": "^0.11.2",
     "@ovotech/laminar-kafkajs": "^0.12.0",
     "@ovotech/laminar-pg": "^0.11.0",
     "kafkajs": "^1.15.0",

@@ -6,9 +6,9 @@ import { format } from 'winston';
  * To show a nicer log in the console, like:
  *
  * ```
- * info: Status: 200 { request: 'GET /v1/meter-reads' }
- * info: Status: 200 { request: 'POST /v1/hydration/meter-reads' }
- * info: Status: 200 { request: 'GET /v1/meter-reads' }
+ * info: GET /v1/meter-reads': 200 { request: 'GET /v1/meter-reads' }
+ * info: POST /v1/hydration/meter-reads: 200 { request: 'POST /v1/hydration/meter-reads' }
+ * info: GET /v1/meter-reads: 200 { request: 'GET /v1/meter-reads' }
  * ```
  */
 export const consoleTransportFormat = format.combine(

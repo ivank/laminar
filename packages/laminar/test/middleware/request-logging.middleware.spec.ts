@@ -71,7 +71,7 @@ describe('httpLoggingMiddleware middleware', () => {
         data: 'OK',
       });
 
-      expect(logger.info).toHaveBeenNthCalledWith(1, 'Status: 200', { request: 'GET /test/23' });
+      expect(logger.info).toHaveBeenNthCalledWith(1, 'GET /test/23: 200', { status: 200, request: 'GET /test/23' });
 
       expect(logger.info).toHaveBeenCalledTimes(1);
       expect(logger.error).not.toHaveBeenCalled();

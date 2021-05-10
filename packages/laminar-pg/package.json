@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
-    "@ovotech/laminar": "^0.11.1",
+    "@ovotech/laminar": "^0.11.2",
     "@types/cookie": "^0.4.0",
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.37",

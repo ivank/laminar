@@ -347,7 +347,8 @@ describe('Integration', () => {
         data: { id: '30', name: 'Added' },
       });
 
-      expect(logger.error).toHaveBeenNthCalledWith(1, 'Status: 404', {
+      expect(logger.error).toHaveBeenNthCalledWith(1, 'GET /unknown-url: 404', {
+        status: 404,
         request: 'GET /unknown-url',
         body: 'Test url /unknown-url not found',
       });
