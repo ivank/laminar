@@ -34,16 +34,19 @@ describe('Integration', () => {
     const testTokenWithoutScopes = createSession(signOptions, { email: 'tester' }).jwt;
 
     const testTokenWithOtherServiceRoles = createSession(signOptions, {
+      clientId: 'tester',
       email: 'tester',
       resource_access: { 'service-1': { roles: ['test1'] } },
     }).jwt;
 
     const testTokenWithServiceRolesOther = createSession(signOptions, {
+      clientId: 'tester',
       email: 'tester',
       resource_access: { 'test-service': { roles: ['test2'] } },
     }).jwt;
 
     const testTokenWithServiceRoles = createSession(signOptions, {
+      clientId: 'tester',
       email: 'tester',
       resource_access: { 'test-service': { roles: ['test1'] } },
     }).jwt;
@@ -62,14 +65,15 @@ describe('Integration', () => {
     await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
-      const { data: data1 } = await api.get('/test', {
+      const result1 = api.get('/test', {
         headers: { authorization: `Bearer ${testTokenWithoutScopes}` },
       });
 
-      expect(data1).toEqual({
-        text: 'Test',
-        email: 'tester',
-        iat: expect.any(Number),
+      await expect(result1.catch((error) => error.response)).resolves.toMatchObject({
+        status: 403,
+        data: {
+          message: 'Malformed jwt data - resource_access missing, probably not a keycloack jwt',
+        },
       });
 
       const result2 = api.get('/test-scopes', {
@@ -79,7 +83,7 @@ describe('Integration', () => {
       await expect(result2.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
         data: {
-          message: 'Unauthorized. User does not have required roles: [test1] for test-service',
+          message: 'Client tester does not have required roles: [test1] for test-service',
         },
       });
 
@@ -90,7 +94,7 @@ describe('Integration', () => {
       await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
         data: {
-          message: 'Unauthorized. User does not have required roles: [test1] for test-service',
+          message: 'Client tester does not have required roles: [test1] for test-service',
         },
       });
 
@@ -101,6 +105,8 @@ describe('Integration', () => {
       expect(data4).toEqual({
         text: 'Test',
         email: 'tester',
+        scopes: ['test1'],
+        clientId: 'tester',
         resource_access: { 'test-service': { roles: ['test1'] } },
         iat: expect.any(Number),
       });

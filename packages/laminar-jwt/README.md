@@ -590,7 +590,7 @@ When this is running, you can test it with calls like this (requires curl and jq
 > [examples/keycloak.sh](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/keycloak.sh)
 
 ```bash
-JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
+JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"clientId":"test","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
 curl --request POST --header "Authorization: Bearer ${JWT}" http://localhost:3333/test
 ```
 
@@ -652,7 +652,7 @@ When this is running, this can be again test with (requires curl and jq):
 > [examples/oapi-keycloak.sh](https://github.com/ovotech/laminar/tree/main/packages/laminar-jwt/examples/oapi-keycloak.sh)
 
 ```bash
-JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"email":"test@example.com","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
+JWT=`curl --silent --request POST 'http://localhost:3333/session' --header 'Content-Type: application/json' --data '{"clientId":"test","resource_access":{"my-service-name":{"roles":["admin"]}}}' | jq '.jwt' -r`
 curl --request POST --header "Authorization: Bearer ${JWT}" http://localhost:3333/test
 ```
 

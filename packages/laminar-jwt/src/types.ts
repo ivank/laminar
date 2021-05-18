@@ -1,8 +1,7 @@
+import { HttpResponse, SecurityOk } from '@ovotech/laminar';
 import { SignOptions, VerifyCallback, Secret, GetPublicKeyOrSecret, VerifyOptions } from 'jsonwebtoken';
 
 export interface JWTData {
-  email: string;
-  scopes?: string[];
   iat?: number;
   nbf?: number;
   exp?: number;
@@ -15,24 +14,24 @@ export interface User {
   [key: string]: unknown;
 }
 
-export interface Session<TUser extends User = User> {
+export interface Session {
   jwt: string;
   expiresAt?: string;
   notBefore?: string;
-  user: TUser;
+  user: User;
 }
 
-export interface RequestAuthInfo<TUser extends JWTData = JWTData> {
-  authInfo: TUser;
+export interface RequestAuthInfo {
+  authInfo: User;
 }
 
-export interface RequestSign<TUser extends User = User> {
-  sign: (user: TUser) => Session<TUser>;
+export interface RequestSign {
+  sign: (user: User) => Session;
 }
 
 export type VerifiedJWTData = Parameters<VerifyCallback>[1];
 
-export type ScopeError<TUser extends JWTData = JWTData> = (user: TUser, scopes?: string[]) => undefined | string;
+export type VerifyJWTData = (data: JWTData, scopes?: string[]) => SecurityOk<User> | HttpResponse;
 
 export interface JWTSign {
   secret: Secret;
@@ -42,5 +41,5 @@ export interface JWTSign {
 export interface JWTVerify {
   secret: string | Buffer | GetPublicKeyOrSecret;
   options?: VerifyOptions;
-  scopeError?: ScopeError;
+  verify?: VerifyJWTData;
 }
