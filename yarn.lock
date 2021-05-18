@@ -477,7 +477,7 @@ __metadata:
     "@ovotech/avro-timestamp-millis": ^0.1.5
     "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
-    "@ovotech/laminar-jwt": ^0.11.0
+    "@ovotech/laminar-jwt": ^0.12.0
     "@ovotech/laminar-kafkajs": ^0.12.0
     "@ovotech/laminar-pg": ^0.11.0
     "@ovotech/laminar-pgboss": ^0.11.0
@@ -539,7 +539,7 @@ __metadata:
   dependencies:
     "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
-    "@ovotech/laminar-jwt": ^0.11.0
+    "@ovotech/laminar-jwt": ^0.12.0
     "@ovotech/laminar-pg": ^0.11.0
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
@@ -564,7 +564,7 @@ __metadata:
   dependencies:
     "@ovotech/laminar": ^0.11.2
     "@ovotech/laminar-cli": ^0.11.0
-    "@ovotech/laminar-jwt": ^0.11.0
+    "@ovotech/laminar-jwt": ^0.12.0
     "@types/jest": ^26.0.22
     "@types/node": ^14.14.37
     "@typescript-eslint/eslint-plugin": ^4.21.0
@@ -2020,7 +2020,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ovotech/laminar-jwt@^0.11.0, @ovotech/laminar-jwt@workspace:packages/laminar-jwt":
+"@ovotech/laminar-jwt@^0.12.0, @ovotech/laminar-jwt@workspace:packages/laminar-jwt":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-jwt@workspace:packages/laminar-jwt"
   dependencies:
