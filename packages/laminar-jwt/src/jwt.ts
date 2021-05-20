@@ -15,7 +15,6 @@ import {
   Empty,
   jsonUnauthorized,
   jsonBadRequest,
-  HttpResponse,
   jsonForbidden,
   jsonInternalServerError,
   isSecurityOk,
@@ -23,6 +22,7 @@ import {
   Security,
   securityOk,
   Middleware,
+  ResponseOapi,
 } from '@ovotech/laminar';
 
 const isJWTData = (data: VerifiedJWTData | string | null): data is JWTData => data !== null && typeof data === 'object';
@@ -68,7 +68,14 @@ export const verifyToken = async (
   { secret, options, verify = verifyJWT }: JWTVerify,
   token: string,
   scopes?: string[],
-): Promise<Security<User> | HttpResponse> => {
+): Promise<
+  | Security<User>
+  | ResponseOapi<{ message: string; expiredAt: Date }, 403, 'application/json'>
+  | ResponseOapi<{ message: string; date: Date }, 403, 'application/json'>
+  | ResponseOapi<{ message: string; inner: Date }, 403, 'application/json'>
+  | ResponseOapi<{ message: string }, 500, 'application/json'>
+  | ResponseOapi<{ message: string }, 401, 'application/json'>
+> => {
   try {
     const data = await new Promise<VerifiedJWTData>((resolve, reject) =>
       jsonwebtoken.verify(token, secret, options, (err, data) => (err ? reject(err) : resolve(data))),
@@ -103,15 +110,21 @@ export const verifyBearer = async (
   options: JWTVerify,
   authorization?: string,
   scopes?: string[],
-): Promise<Security<User> | HttpResponse> => {
+): Promise<
+  | Security<User>
+  | ResponseOapi<{ message: string; expiredAt: Date }, 403, 'application/json'>
+  | ResponseOapi<{ message: string; date: Date }, 403, 'application/json'>
+  | ResponseOapi<{ message: string; inner: Date }, 403, 'application/json'>
+  | ResponseOapi<{ message: string }, 500, 'application/json'>
+  | ResponseOapi<{ message: string }, 401, 'application/json'>
+  | ResponseOapi<{ message: string }, 400, 'application/json'>
+> => {
   if (!authorization) {
     return jsonBadRequest({ message: 'Authorization header missing' });
   }
   const token = authorization.match(/^Bearer (.*)$/)?.[1];
   if (!token) {
-    return jsonUnauthorized(401, {
-      message: 'Authorization header is invalid. Needs to be "Bearer ${token}"',
-    });
+    return jsonUnauthorized(401, { message: 'Authorization header is invalid. Needs to be "Bearer ${token}"' });
   }
 
   return verifyToken(options, token, scopes);
