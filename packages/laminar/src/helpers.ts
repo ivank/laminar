@@ -13,7 +13,7 @@ const isObj = (obj: unknown): obj is Obj => typeof obj === 'object' && obj !== n
 
 const setQuery = (path: string[], value: unknown, obj: Obj): Obj | unknown[] => {
   const [current, ...rest] = path;
-  if (current) {
+  if (current && !/^\d+$/.test(current)) {
     const currentValue = obj[current];
     return {
       ...obj,
