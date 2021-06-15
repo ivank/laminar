@@ -145,7 +145,11 @@ function toRequestSchema(
  * Since query parameters come only as string, but we still want to type them as "integer" or "boolean"
  * We attempt to coerce the type to the desired one
  */
-type Coercer = (value: string, schema: ResolvedSchema, valueSchema: SchemaObject | undefined) => unknown;
+type Coercer = (
+  value: string | Record<string, string> | string[],
+  schema: ResolvedSchema,
+  valueSchema: SchemaObject | undefined,
+) => unknown;
 
 const trueString = ['true', 'yes', '1'];
 const falseString = ['false', 'no', '0'];
@@ -159,8 +163,23 @@ const coercers: { [key: string]: Coercer | undefined } = {
     const num = Number(value);
     return Number.isNaN(num) ? value : num;
   },
-  boolean: (value) => (trueString.includes(value) ? true : falseString.includes(value) ? false : value),
+  boolean: (value) =>
+    typeof value === 'string'
+      ? trueString.includes(value)
+        ? true
+        : falseString.includes(value)
+        ? false
+        : value
+      : value,
   null: (value) => (value === 'null' ? null : value),
+  array: (value, schema, valueSchema: SchemaObject | undefined) =>
+    Array.isArray(value)
+      ? value.map((itemValue) => {
+          const propertySchema = resolveRef(schema, valueSchema?.items);
+          const coercer = coercers[propertySchema?.type ?? ''];
+          return coercer ? coercer(itemValue, schema, propertySchema) : itemValue;
+        })
+      : value,
   object: (value, schema, valueSchema: SchemaObject | undefined) =>
     Object.entries(value).reduce((acc, [name, propertyValue]) => {
       const propertySchema = resolveRef(schema, valueSchema?.properties?.[name]);

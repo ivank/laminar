@@ -66,3 +66,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated default http request log to be more readable in object loggers
+
+## [0.11.4] - 2021-06-15
+
+### Changed
+
+- Fixed coercions of query types, based on the defined types. There was a problem with complex types (arrays / objects)

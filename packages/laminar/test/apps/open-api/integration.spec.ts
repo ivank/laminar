@@ -78,7 +78,7 @@ describe('Integration', () => {
       paths: {
         '/about': { get: async () => file(join(__dirname, 'about.html')) },
         '/pets': {
-          get: async ({ logger, query: { limit, price, isKitten, pagination } }) => {
+          get: async ({ logger, query: { ids, limit, price, isKitten, pagination } }) => {
             logger('Get all');
             let pets = db;
 
@@ -92,6 +92,10 @@ describe('Integration', () => {
 
             if (limit !== undefined) {
               pets = pets.slice(0, limit);
+            }
+
+            if (ids !== undefined) {
+              pets = pets.filter((pet) => ids.includes(pet.id));
             }
 
             if (pagination) {
@@ -163,6 +167,40 @@ describe('Integration', () => {
           { id: 111, name: 'Catty', tag: 'kitten' },
           { id: 222, name: 'Doggy' },
         ],
+      });
+
+      await expect(api.get('/pets?ids[0]=111')).resolves.toMatchObject({
+        status: 200,
+        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+      });
+
+      await expect(api.get('/pets?ids[]=111')).resolves.toMatchObject({
+        status: 200,
+        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+      });
+
+      await expect(api.get('/pets?ids[0]=111&ids[1]=222')).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 111, name: 'Catty', tag: 'kitten' },
+          { id: 222, name: 'Doggy' },
+        ],
+      });
+
+      await expect(api.get('/pets?ids[]=111&ids[]=222')).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 111, name: 'Catty', tag: 'kitten' },
+          { id: 222, name: 'Doggy' },
+        ],
+      });
+
+      await expect(api.get('/pets?ids[0]=test').catch((error) => error.response)).resolves.toMatchObject({
+        status: 400,
+        data: {
+          message: 'Request for "GET /pets" does not match OpenApi Schema',
+          errors: ['[request.query.ids.0] (type) should be of type integer'],
+        },
       });
 
       await expect(
@@ -514,18 +552,22 @@ describe('Integration', () => {
       expect(log).toHaveBeenNthCalledWith(1, 'Get all');
       expect(log).toHaveBeenNthCalledWith(2, 'Get all');
       expect(log).toHaveBeenNthCalledWith(3, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(4, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(4, 'Get all');
       expect(log).toHaveBeenNthCalledWith(5, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(6, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(7, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(6, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(7, 'Get all');
       expect(log).toHaveBeenNthCalledWith(8, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(9, 'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
+      expect(log).toHaveBeenNthCalledWith(9, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(10, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(11, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(12, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(13, 'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
       expect(log).toHaveBeenNthCalledWith(
-        10,
+        14,
         'new pet Cookie Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
       );
-      expect(log).toHaveBeenNthCalledWith(11, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(12, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(15, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(16, 'Get all');
     });
   });
 });

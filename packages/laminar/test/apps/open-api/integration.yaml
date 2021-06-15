@@ -69,6 +69,13 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: ids
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
         - name: isKitten
           in: query
           description: if true only show pets tagged as kittens
