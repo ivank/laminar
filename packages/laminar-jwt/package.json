@@ -19,15 +19,15 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@ovotech/json-schema": "^0.11.0",
+    "@ovotech/json-schema": "^0.11.1",
     "axios": "^0.21.1",
     "jsonwebtoken": "^8.5.1",
     "lru-cache": "^6.0.0"
   },
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
-    "@ovotech/laminar": "^0.11.4",
-    "@ovotech/laminar-cli": "^0.11.0",
+    "@ovotech/laminar": "^0.11.5",
+    "@ovotech/laminar-cli": "^0.11.1",
     "@types/jest": "^26.0.22",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/lru-cache": "^5.1.0",

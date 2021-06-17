@@ -1,0 +1,31 @@
+---
+openapi: 3.0.0
+info:
+  title: Simple API
+  version: 1.0.0
+servers:
+  - url: 'http: //localhost:3333'
+paths:
+  '/user':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'file://./oapi-split-types.yaml#/components/schemas/User'
+      responses:
+        '200':
+          description: Newly Created User
+          content:
+            application/json:
+              schema:
+                $ref: 'oapi-split-types.yaml#/components/schemas/NewUser'
+    get:
+      responses:
+        '200':
+          description: Loaded User
+          content:
+            application/json:
+              schema:
+                $ref: './oapi-split-types.yaml#/components/schemas/User'

@@ -459,6 +459,27 @@ describe('json-refs', () => {
     });
   });
 
+  it('Should resolve local refs with file:://', async () => {
+    const schema = { properties: { test: { $ref: 'file://./assets/test.json#/UserResponse' } } };
+
+    expect(await resolve(schema, { cwd: __dirname })).toEqual({
+      schema: { properties: { test: { $ref: 'file://./assets/test.json#/UserResponse' } } },
+      refs: {
+        'file://./assets/test.json': {
+          UserResponse: {
+            type: 'object',
+            properties: { id: { type: 'string' }, name: { type: 'string' } },
+          },
+        },
+        'file://./assets/test.json#/UserResponse': {
+          type: 'object',
+          properties: { id: { type: 'string' }, name: { type: 'string' } },
+        },
+      },
+      uris: [expect.stringContaining('file://')],
+    });
+  });
+
   it('Should resolve local refs from yaml', async () => {
     const schema = { properties: { test: { $ref: 'assets/test.yaml#/UserResponse' } } };
 

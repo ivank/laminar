@@ -1,0 +1,17 @@
+components:
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    NewUser:
+      properties:
+        result:
+          type: string
+        user:
+          '$ref': '#/components/schemas/User'
+      required:
+        - result
+        - user

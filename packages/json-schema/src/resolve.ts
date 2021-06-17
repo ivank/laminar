@@ -150,15 +150,16 @@ export const extractUrls = (schema: Schema, namedRefs: string[] = [], fileContex
 
 const loadFile = async (uri: string, { cwd }: FileContext = {}): Promise<LoadedJsonObject> => {
   const url = toUrl(uri);
-  if (url) {
+  if (url && !url.startsWith('file://')) {
     const { data } = await axios.get(uri);
     return { uri: url, content: typeof data === 'string' ? YAML.parse(data) : data };
   } else {
-    const file = cwd ? join(cwd, uri) : uri;
+    const localUri = uri.startsWith('file://') ? uri.slice(7) : uri;
+    const file = cwd ? join(cwd, localUri) : localUri;
     const content = readFileSync(file, 'utf8');
     const newCwd = dirname(file);
 
-    if (uri.endsWith('.yaml') || uri.endsWith('.yml')) {
+    if (localUri.endsWith('.yaml') || localUri.endsWith('.yml')) {
       return { uri: `file://${file}`, content: YAML.parse(content), cwd: newCwd };
     } else {
       return { uri: `file://${file}`, content: JSON.parse(content), cwd: newCwd };

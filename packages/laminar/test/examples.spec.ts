@@ -156,6 +156,60 @@ describe('Example files', () => {
       { email: 'me@example.com' },
     ],
     [
+      'examples/oapi-split.ts',
+      {
+        method: 'GET',
+        url: '/user',
+      },
+      { email: 'me@example.com' },
+    ],
+    [
+      'examples/oapi-split.ts',
+      {
+        method: 'POST',
+        url: '/user',
+        data: { wrong: 'other@example.com' },
+      },
+      {
+        errors: ['[request.body] (required) is missing [email] keys'],
+        message: 'Request for "POST /user" does not match OpenApi Schema',
+        requestBody: {
+          schema: {
+            $ref: 'file://./oapi-split-types.yaml#/components/schemas/User',
+          },
+        },
+        schema: {
+          allOf: [
+            {
+              discriminator: {
+                propertyName: 'headers',
+              },
+              oneOf: [
+                {
+                  properties: {
+                    body: {
+                      $ref: 'file://./oapi-split-types.yaml#/components/schemas/User',
+                    },
+                    headers: {
+                      properties: {
+                        'content-type': {
+                          pattern: 'application\\/json',
+                          type: 'string',
+                        },
+                      },
+                      required: ['content-type'],
+                      type: 'object',
+                    },
+                  },
+                },
+              ],
+              required: ['body'],
+            },
+          ],
+        },
+      },
+    ],
+    [
       'examples/oapi-undocumented-routes.ts',
       {
         method: 'GET',
@@ -200,7 +254,7 @@ describe('Example files', () => {
         );
       });
       const api = axios.create({ baseURL: `http://localhost:${port}` });
-      const { data } = await api.request(config);
+      const { data } = await api.request(config).catch((error) => error?.response);
       expect(data).toEqual(expected);
     } finally {
       /**

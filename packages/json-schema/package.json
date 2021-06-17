@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/json-schema",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A lightweight a json-schema. Depends only on yaml package and node-fetch.",
