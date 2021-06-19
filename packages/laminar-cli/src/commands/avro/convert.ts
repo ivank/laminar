@@ -11,6 +11,7 @@ import { isEnumType, convertEnumType } from './types/enum';
 import { isPrimitiveType, convertPrimitiveType } from './types/primitive';
 import { isFixedType, convertFixedType } from './types/fixed';
 import { fullName, firstUpperCase, nameParts, convertNamespace } from './helpers';
+import { convertNamedType, isNamedType } from './types/named';
 import * as ts from 'typescript';
 
 export const addRef = (type: schema.RecordType | schema.EnumType, context: Context): Context => ({
@@ -57,6 +58,8 @@ export const convertType: Convert = (context, type) => {
     return convertFixedType(context, type);
   } else if (isPrimitiveType(type)) {
     return convertPrimitiveType(context, type);
+  } else if (isNamedType(type)) {
+    return convertNamedType(context, type);
   } else if (typeof type === 'string') {
     const [name, nameNamespace] = nameParts(type);
     const namespace = nameNamespace ?? context.namespace;
