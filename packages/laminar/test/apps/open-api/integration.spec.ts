@@ -161,7 +161,7 @@ describe('Integration', () => {
         data: [{ id: 222, name: 'Doggy' }],
       });
 
-      await expect(api.get('/pets?pagination[page]=0&pagination[perPage]=2')).resolves.toMatchObject({
+      await expect(api.get('/pets?pagination[perPage]=2')).resolves.toMatchObject({
         status: 200,
         data: [
           { id: 111, name: 'Catty', tag: 'kitten' },

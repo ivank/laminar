@@ -145,11 +145,11 @@ export interface GetApiV2AccountsAccountIdTransactions {
         /**
          * Start date for the search period (inclusive)
          */
-        fromDate: string;
+        fromDate?: string;
         /**
          * End date for the search period (inclusive)
          */
-        toDate: string;
+        toDate?: string;
         /**
          * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
          */

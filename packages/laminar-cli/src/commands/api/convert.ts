@@ -74,6 +74,7 @@ const convertParameters = (
   const astParams = parameters.reduce<AstParameters>(
     (node, paramOrRef) => {
       const param = getReferencedObject(paramOrRef, isParameterObject, node.context);
+      const schema = getReferencedObject(param.schema, isSchemaObject, node.context);
       const paramNode = param.schema ? convertSchema(node.context, param.schema) : document(node.context, Type.Any);
       const params = node.in[toParamLocation(param.in)] ?? [];
       return {
@@ -86,7 +87,7 @@ const convertParameters = (
               name: toParamName(param.in, param.name),
               jsDoc: documentation(param.description),
               type: paramNode.type,
-              isOptional: !param.required,
+              isOptional: !param.required && schema?.default === undefined,
             }),
           ],
         },

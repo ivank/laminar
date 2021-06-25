@@ -144,6 +144,8 @@ function toRequestSchema(
  * Coerce raw string value into its intended type, based on the Json Schema
  * Since query parameters come only as string, but we still want to type them as "integer" or "boolean"
  * We attempt to coerce the type to the desired one
+ *
+ * Additionally, we assign default values where appropriate
  */
 type Coercer = (
   value: string | Record<string, string> | string[],
@@ -180,15 +182,23 @@ const coercers: { [key: string]: Coercer | undefined } = {
           return coercer ? coercer(itemValue, schema, propertySchema) : itemValue;
         })
       : value,
-  object: (value, schema, valueSchema: SchemaObject | undefined) =>
-    Object.entries(value).reduce((acc, [name, propertyValue]) => {
-      const propertySchema = resolveRef(schema, valueSchema?.properties?.[name]);
-      const coercer = coercers[propertySchema?.type ?? ''];
-      return {
-        ...acc,
-        [name]: coercer && propertyValue !== undefined ? coercer(propertyValue, schema, propertySchema) : propertyValue,
-      };
-    }, {}),
+  object: (value, schema, valueSchema: SchemaObject | undefined) => {
+    const properties = valueSchema?.properties;
+    if (properties && typeof value === 'object' && !Array.isArray(value)) {
+      return Object.entries(properties).reduce((acc, [name, propertySchema]) => {
+        const resolvedPropertySchema = resolveRef(schema, propertySchema);
+        const coercer = coercers[resolvedPropertySchema?.type ?? ''];
+        const resolvedPropertyValue = value?.[name] ?? resolvedPropertySchema?.default;
+        const coercedPropertyValue =
+          resolvedPropertyValue !== undefined && coercer
+            ? coercer(resolvedPropertyValue, schema, resolvedPropertySchema)
+            : resolvedPropertyValue;
+        return { ...acc, [name]: coercedPropertyValue };
+      }, {});
+    } else {
+      return value;
+    }
+  },
 };
 
 /**
@@ -202,14 +212,17 @@ function toParameterCoerce<TContext extends Empty>(
   schema: ResolvedSchema,
   parameter: ParameterObject,
 ): Coerce<TContext> | undefined {
-  const coercer = coercers[resolveRef(schema, parameter.schema)?.type ?? ''];
+  const resolvedSchema = resolveRef(schema, parameter.schema);
+  const coercer = coercers[resolvedSchema?.type ?? ''];
   if (coercer) {
     return (ctx) => {
       const location = toParamLocation(parameter.in);
       const rawValue = ctx[location]?.[parameter.name];
       if (rawValue !== undefined) {
-        const value = coercer(ctx[location][parameter.name], schema, resolveRef(schema, parameter.schema));
+        const value = coercer(ctx[location][parameter.name], schema, resolvedSchema);
         return { ...ctx, [location]: { ...ctx[location], [parameter.name]: value } };
+      } else if (resolvedSchema?.default) {
+        return { ...ctx, [location]: { ...ctx[location], [parameter.name]: resolvedSchema.default } };
       } else {
         return ctx;
       }

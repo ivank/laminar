@@ -54,14 +54,13 @@ paths:
               page:
                 type: integer
                 minimum: 0
+                default: 0
               perPage:
                 type: integer
                 minimum: 1
                 maximum: 100
+                default: 25
             additionalProperties: false
-            required:
-              - page
-              - perPage
         - name: limit
           in: query
           description: maximum number of results to return
@@ -69,6 +68,7 @@ paths:
           schema:
             type: integer
             format: int32
+            default: 1000
         - name: ids
           in: query
           required: false

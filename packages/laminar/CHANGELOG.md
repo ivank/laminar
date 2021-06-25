@@ -72,3 +72,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Fixed coercions of query types, based on the defined types. There was a problem with complex types (arrays / objects)
+
+## [0.11.6] - 2021-06-25
+
+### Changed
+
+- Added support for default values in parameters

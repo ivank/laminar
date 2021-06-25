@@ -423,7 +423,7 @@ export interface RequestV2NameDelete<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -451,7 +451,7 @@ export interface RequestV2NameDelete<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -778,7 +778,7 @@ export interface RequestV2NameGet<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -806,7 +806,7 @@ export interface RequestV2NameGet<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
         /**
          * The response_view specifies which subset of the Task will be
          * returned.
@@ -1106,7 +1106,7 @@ export interface RequestV2NamePatch<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1134,7 +1134,7 @@ export interface RequestV2NamePatch<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
         /**
          * A mask used to specify which fields of the queue are being updated.
          *
@@ -1252,7 +1252,7 @@ export interface RequestV2NameLocationsGet<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1280,7 +1280,7 @@ export interface RequestV2NameLocationsGet<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
         /**
          * The standard list filter.
          */
@@ -1340,7 +1340,7 @@ export interface RequestV2NamepausePost<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1368,7 +1368,7 @@ export interface RequestV2NamepausePost<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -1423,7 +1423,7 @@ export interface RequestV2NamepurgePost<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1451,7 +1451,7 @@ export interface RequestV2NamepurgePost<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -1512,7 +1512,7 @@ export interface RequestV2NameresumePost<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1540,7 +1540,7 @@ export interface RequestV2NameresumePost<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -1634,7 +1634,7 @@ export interface RequestV2NamerunPost<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1662,7 +1662,7 @@ export interface RequestV2NamerunPost<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -1747,7 +1747,7 @@ export interface RequestV2ParentQueuesGet<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1775,7 +1775,7 @@ export interface RequestV2ParentQueuesGet<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
         /**
          * \`filter\` can be used to specify a subset of queues. Any Queue
          * field can be used as a filter and several operators as supported.
@@ -1862,7 +1862,7 @@ export interface RequestV2ParentQueuesPost<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1890,7 +1890,7 @@ export interface RequestV2ParentQueuesPost<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -1971,7 +1971,7 @@ export interface RequestV2ParentTasksGet<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -1999,7 +1999,7 @@ export interface RequestV2ParentTasksGet<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
         /**
          * Maximum page size.
          *
@@ -2108,7 +2108,7 @@ export interface RequestV2ParentTasksPost<TAuthInfo> extends OapiContext {
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -2136,7 +2136,7 @@ export interface RequestV2ParentTasksPost<TAuthInfo> extends OapiContext {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -2295,7 +2295,7 @@ export interface RequestV2ResourcegetIamPolicyPost<TAuthInfo> extends OapiContex
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -2323,7 +2323,7 @@ export interface RequestV2ResourcegetIamPolicyPost<TAuthInfo> extends OapiContex
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -2386,7 +2386,7 @@ export interface RequestV2ResourcesetIamPolicyPost<TAuthInfo> extends OapiContex
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -2414,7 +2414,7 @@ export interface RequestV2ResourcesetIamPolicyPost<TAuthInfo> extends OapiContex
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
@@ -2490,7 +2490,7 @@ export interface RequestV2ResourcetestIamPermissionsPost<TAuthInfo> extends Oapi
         /**
          * Returns response with indentations and line breaks.
          */
-        prettyPrint?: boolean;
+        prettyPrint: boolean;
         /**
          * Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
          */
@@ -2518,7 +2518,7 @@ export interface RequestV2ResourcetestIamPermissionsPost<TAuthInfo> extends Oapi
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt: \\"json\\" | \\"media\\" | \\"proto\\";
     };
     path: {
         /**
