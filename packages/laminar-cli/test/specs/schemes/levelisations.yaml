@@ -1,0 +1,214 @@
+# All the types for levelisation and account-levelisation resources in react-admin
+
+components:
+  schemas:
+    LevelisationList:
+      properties:
+        id: { type: number }
+        quarter: { $ref: '#/components/schemas/LevelisationQuarter' }
+        startOn: { type: string, format: 'date-time' }
+        endOn: { type: string, format: 'date-time' }
+        isAccepted: { type: boolean }
+      required:
+        - id
+        - quarter
+        - isAccepted
+
+    LevelisationQuarter:
+      type: string
+      pattern: '^F\d+Q[1234]$'
+
+    Levelisation:
+      allOf:
+        - { $ref: '#/components/schemas/LevelisationList' }
+        - properties:
+            totalCount: { type: number }
+            pendingCount: { type: number }
+            doneCount: { type: number }
+            totalGenerationPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+            totalExportPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+            totalMeteredExportEnergy: { type: number }
+            totalMeteredExportPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+            totalDeemedExportEnergy: { type: number }
+            totalDeemedExportPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+
+
+    AccountLevelisationState:
+      enum: ['Pending', 'Done']
+
+    AccountLevelisationList:
+      properties:
+        id: { type: number }
+        levelisationId: { type: number }
+        accountId: { type: number }
+        installationId: { type: number }
+        state: { $ref: '#/components/schemas/AccountLevelisationState' }
+        cfrFitId: { type: string }
+        isAccepted: { type: boolean }
+        generationStartReadOn: { type: string, format: 'date-time' }
+        generationStartReadValue: { type: number }
+        generationEndReadOn: { type: string, format: 'date-time' }
+        generationEndReadValue: { type: number }
+        generationPercentageSplit: { type: number }
+        generationPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+        generationEnergy: { type: number }
+        exportStartReadOn: { type: string, format: 'date-time' }
+        exportStartReadValue: { type: number }
+        exportEndReadOn: { type: string, format: 'date-time' }
+        exportEndReadValue: { type: number }
+        exportPercentageSplit: { type: number }
+        exportPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+        exportEnergy: { type: number }
+        totalPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+        vatPayment: { $ref: 'components.yaml#/components/schemas/Pennies' }
+      required:
+        - id
+        - levelisationId
+        - accountId
+        - installationId
+        - state
+        - cfrFitId
+        - isAccepted
+
+    LevelisationMeterRead:
+      properties:
+        dateOn: { type: string, format: 'date-time' }
+        value: { type: number }
+      required:
+        - dateOn
+        - value
+
+    LevelisationRate:
+      properties:
+        startOn: { type: string, format: 'date-time' }
+        endOn: { type: string, format: 'date-time' }
+        rate: { type: number }
+      required:
+        - startOn
+        - endOn
+        - rate
+
+    PeriodWithCalculatedAmount:
+      properties:
+        start: { $ref: '#/components/schemas/LevelisationMeterRead' }
+        end: { $ref: '#/components/schemas/LevelisationMeterRead' }
+        rate: { $ref: '#/components/schemas/LevelisationRate' }
+        percentageSplit: { type: number }
+        energy: { type: number }
+        amount: { type: string }
+      requiered:
+        - start
+        - end
+        - rate
+        - percentage
+        - energy
+        - amount
+
+    AccountLevelisation:
+      allOf:
+        - { $ref: '#/components/schemas/AccountLevelisationList' }
+        - properties:
+            generationPeriods:
+              items: { $ref: '#/components/schemas/PeriodWithCalculatedAmount' }
+            exportPeriods:
+              items: { $ref: '#/components/schemas/PeriodWithCalculatedAmount' }
+
+    LevelisationCreate:
+      properties:
+        quarter: { $ref: '#/components/schemas/LevelisationQuarter' }
+      required:
+        - quarter
+
+    LevelisationSave:
+      properties:
+        isAccepted: { type: boolean }
+        isRestarted: { type: boolean }
+      required:
+        - isAccepted
+
+    AccountLevelisationSave:
+      properties:
+        id: { type: number }
+        isAccepted: { type: boolean }
+      required:
+        - id
+        - isAccepted
+
+    BulkAccountLevelisationSave:
+      properties:
+        isAccepted: { type: boolean }
+      required:
+        - isAccepted
+  responses:
+    LevelisationResponse:
+      description: Levelisation calculations for whole quarter
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Levelisation'
+
+    AccountLevelisationResponse:
+      description: Levelisation calculations for a single account
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountLevelisation'
+
+    AccountLevelisationTariffResponse:
+      description: Levelisation calculations for a single account
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountLevelisation'
+
+    LevelisationListResponse:
+      description: List of Levelisations
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: 'components.yaml#/components/schemas/List'
+              - properties: { data: { items: { $ref: '#/components/schemas/LevelisationList' } } }
+
+    AccountLevelisationListResponse:
+      description: List of Levelisations for specific accounts
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: 'components.yaml#/components/schemas/List'
+              - properties: { data: { items: { $ref: '#/components/schemas/AccountLevelisation' } } }
+
+  requestBodies:
+    LevelisationCreateRequest:
+      required: true
+      description: Create a new Levelisation process
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/LevelisationCreate' }
+
+    LevelisationSaveRequest:
+      required: true
+      description: Update a Levelisation entity
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/LevelisationSave' }
+
+    AccountLevelisationSaveRequest:
+      required: true
+      description: Update an Account Levelisation entity
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AccountLevelisationSave' }
+
+    AccountLevelisationBulkSaveRequest:
+      required: true
+      description: Update multiple Account levelisation entities
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: 'components.yaml#/components/schemas/BulkUpdate'
+              - properties: { data: { $ref: '#/components/schemas/BulkAccountLevelisationSave' } }
+                required:
+                  - data

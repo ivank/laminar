@@ -1,0 +1,126 @@
+# Shared component schemas, taht are used throughout api.yaml and various endpoints
+components:
+  parameters:
+    pagination:
+      name: pagination
+      in: query
+      description: React admin pagination object
+      examples:
+        firstPage:
+          summary: First page
+          value: '{ "page": 1 }'
+        secondPage:
+          summary: Second page
+          value: '{ "page": 2 }'
+        customPerPage:
+          summary: Page with custom page size
+          value: '{ "page": 1, "perPage": 200 }'
+      schema:
+        type: object
+        properties:
+          page:
+            type: integer
+            minimum: 1
+            default: 1
+          perPage:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+        additionalProperties: false
+        default:
+          page: 1,
+          perPage: 100
+
+    sort:
+      name: sort
+      in: query
+      description: React admin sort object
+      example: '{ "field": "createdAt", "order": "ASC" }'
+      schema:
+        type: object
+        properties:
+          field:
+            type: string
+          order:
+            enum: ['ASC', 'DESC']
+            default: 'ASC'
+        additionalProperties: false
+        required:
+          - field
+        default: {}
+
+    filter:
+      name: filter
+      in: query
+      description: React admin filter object. It should contain different filters, for example "q" is for a search.
+      example: '{ "q": "test" }'
+      schema:
+        type: object
+        default: {}
+
+    ids:
+      name: ids
+      in: query
+      description: Retern individual records from the list, matching the specified ids
+      schema:
+        type: array
+        items:
+          type: integer
+
+    traceToken:
+      name: X-Trace-Token
+      in: header
+      description: An optional trace token to be passed to the service and used for logging
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    List:
+      properties:
+        total:
+          type: integer
+      required:
+        - total
+
+    ListOfIds:
+      type: array
+      items:
+        type: integer
+
+    ListOfStrings:
+      type: array
+      items:
+        type: string
+
+    BulkUpdate:
+      properties:
+        ids: { $ref: '#/components/schemas/ListOfIds'}
+      required:
+        - ids
+
+    BulkDelete:
+      properties:
+        ids: { $ref: '#/components/schemas/ListOfIds'}
+      required:
+        - ids
+
+    Pennies:
+      type: number
+      description: Payment amount in pennies. (140 represnets £1.40)
+
+  responses:
+    TextResponse:
+      description: Yaml File
+      content:
+        '*/*':
+          schema:
+            type: string
+
+    ListOfIdsResonse:
+      description: List of Ids that were affected
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ListOfIds'

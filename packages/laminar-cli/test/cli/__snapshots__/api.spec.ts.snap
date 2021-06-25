@@ -3117,6 +3117,1744 @@ export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
 "
 `;
 
+exports[`Types Content Test schemes.yaml 1`] = `
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from \\"@ovotech/laminar\\";
+
+import { Readable } from \\"stream\\";
+
+export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<HttpListener<R>> => openApi(config);
+
+export interface HttpError {
+    message: string;
+}
+
+export type ResponseWellknownHealthcheckGet = ResponseOapi<{
+    success: boolean;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Health check endpoint
+ */
+export type PathWellknownHealthcheckGet<R extends Empty = Empty> = (req: OapiContext & R) => Promise<ResponseWellknownHealthcheckGet>;
+
+export type ResponseWellknownOpenapiyamlGet = ResponseOapi<string | Readable | Buffer, 200, string>;
+
+/**
+ * The open api spec for the service. OpenAPI v3.
+ */
+export type PathWellknownOpenapiyamlGet<R extends Empty = Empty> = (req: OapiContext & R) => Promise<ResponseWellknownOpenapiyamlGet>;
+
+export type ResponseWellknownComponentsyamlGet = ResponseOapi<string | Readable | Buffer, 200, string>;
+
+/**
+ * Shared schemas for the open api spec. OpenAPI v3.
+ */
+export type PathWellknownComponentsyamlGet<R extends Empty = Empty> = (req: OapiContext & R) => Promise<ResponseWellknownComponentsyamlGet>;
+
+export type ResponseWellknownLevelisationsyamlGet = ResponseOapi<string | Readable | Buffer, 200, string>;
+
+/**
+ * Schemas for Levelisation endpoints. OpenAPI v3.
+ */
+export type PathWellknownLevelisationsyamlGet<R extends Empty = Empty> = (req: OapiContext & R) => Promise<ResponseWellknownLevelisationsyamlGet>;
+
+export type ResponseWellknownReadchecksyamlGet = ResponseOapi<string | Readable | Buffer, 200, string>;
+
+/**
+ * Schemas for Read Checks endpoints. OpenAPI v3.
+ */
+export type PathWellknownReadchecksyamlGet<R extends Empty = Empty> = (req: OapiContext & R) => Promise<ResponseWellknownReadchecksyamlGet>;
+
+export type ResponseWellknownOpenapihtmlGet = ResponseOapi<string | Readable | Buffer, 200, \\"text/html\\">;
+
+/**
+ * The open api spec for the service. OpenAPI v3.
+ */
+export type PathWellknownOpenapihtmlGet<R extends Empty = Empty> = (req: OapiContext & R) => Promise<ResponseWellknownOpenapihtmlGet>;
+
+export interface Session {
+    jwt: string;
+    expiresAt?: string;
+    user: {
+        fullName?: string;
+        email: string;
+        avatar?: string;
+        scopes?: string[];
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+}
+
+export type ResponseV1SessionPost = ResponseOapi<Session, 200, \\"application/json\\"> | ResponseOapi<HttpError, 400, \\"application/json\\"> | ResponseOapi<HttpError, 401, \\"application/json\\"> | ResponseOapi<HttpError, 403, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Create a session for the current user
+ */
+export interface RequestV1SessionPost extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    body: {
+        type: \\"oauth\\" | \\"jwt\\";
+        token: string;
+    };
+}
+
+export type PathV1SessionPost<R extends Empty = Empty> = (req: RequestV1SessionPost & R) => Promise<ResponseV1SessionPost>;
+
+export interface List {
+    total: number;
+    [key: string]: unknown;
+}
+
+export interface CommBatchList {
+    id: number;
+    type: CommBatchType;
+    filename: string;
+    itemsPending?: number;
+    itemsDelivered?: number;
+    itemsScheduled?: number;
+    itemsFailed?: number;
+    itemsExpired?: number;
+    createdAt: string;
+    updatedAt?: string;
+}
+
+export type CommBatchType = \\"FITMeterInspectionDue\\" | \\"Statement\\";
+
+export type ResponseV1CommbatchesGet = ResponseOapi<List & {
+    data: CommBatchList[];
+    [key: string]: unknown;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get Comm Batches.
+ */
+export interface RequestV1CommbatchesGet<TAuthInfo> extends OapiContext {
+    query: {
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+    };
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+export type PathV1CommbatchesGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV1CommbatchesGet<TAuthInfo> & R) => Promise<ResponseV1CommbatchesGet>;
+
+export type NewCommBatch = NewCommBatchFITMeterInspectionDue | NewCommBatchStatement;
+
+export interface NewCommBatchFITMeterInspectionDue {
+    type: \\"FITMeterInspectionDue\\";
+    filename: string;
+    items: {
+        templateParams: {
+            fitId: string;
+        };
+        contactAddress?: CommContactAddress;
+    }[];
+    [key: string]: unknown;
+}
+
+export type CommContactAddress = CommsEmailAddress | CommsPostalAddress | CommsPhoneNumber;
+
+export interface CommsEmailAddress {
+    emailAddress: string;
+}
+
+export interface CommsPostalAddress {
+    postalAddress: Address;
+}
+
+export interface Address {
+    contactName?: string;
+    company?: string;
+    line1?: string;
+    line2?: string;
+    line3?: string;
+    town?: string;
+    county?: string;
+    postcode: string;
+    country: string;
+}
+
+export interface CommsPhoneNumber {
+    phoneNumber: string;
+}
+
+export interface NewCommBatchStatement {
+    type: \\"Statement\\";
+    filename: string;
+    items: {
+        templateParams: {
+            accountNumber: string;
+            payment: {
+                startDate: string;
+                startDateLong?: string;
+                endDate: string;
+                endDateLong?: string;
+                generation?: {
+                    endDate?: string;
+                    value?: string;
+                };
+                deemedExport?: {
+                    endDate?: string;
+                    value?: string;
+                };
+                export?: {
+                    endDate?: string;
+                    value?: string;
+                };
+                vat?: string;
+                total: string;
+            };
+            reads?: {
+                generationOpening?: {
+                    date?: string;
+                    value?: string;
+                };
+                generationClosing?: {
+                    date?: string;
+                    value?: string;
+                };
+                exportOpening?: {
+                    date?: string;
+                    value?: string;
+                };
+                exportClosing?: {
+                    date?: string;
+                    value?: string;
+                };
+                percentageSplit?: string;
+            };
+            rates?: {
+                from?: string;
+                export?: string;
+                generationOld?: string;
+                exportOld?: string;
+                generation?: string;
+                genPeriod?: string;
+                expPeriod?: string;
+            };
+            emailAddress?: string;
+        };
+        contactAddress?: CommContactAddress;
+    }[];
+    [key: string]: unknown;
+}
+
+export interface CommBatch {
+    id: number;
+    createdAt: string;
+    itemsPending?: number;
+    itemsDelivered?: number;
+    itemsScheduled?: number;
+    itemsFailed?: number;
+    itemsExpired?: number;
+    type: CommBatchType;
+    filename: string;
+    items: {
+        id: number;
+        commId?: string;
+        commBatchId: number;
+        status: CommBatchItemStatus;
+        createdAt: string;
+        updatedAt?: string;
+        error?: string;
+        templateParams: any;
+        contactAddress: any;
+    }[];
+}
+
+export type CommBatchItemStatus = \\"Scheduled\\" | \\"Pending\\" | \\"Delivered\\" | \\"Expired\\" | \\"Failed\\";
+
+export type ResponseV1CommbatchesPost = ResponseOapi<CommBatch, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Create New Comm Batch
+ * Create new Comm Batch that will be processed and can be monitored responses
+ *
+ */
+export interface RequestV1CommbatchesPost<TAuthInfo> extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    body: NewCommBatch;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * Create new Comm Batch that will be processed and can be monitored responses
+ *
+ */
+export type PathV1CommbatchesPost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV1CommbatchesPost<TAuthInfo> & R) => Promise<ResponseV1CommbatchesPost>;
+
+export type ResponseV1CommbatchesIdGet = ResponseOapi<CommBatch, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get Comm Batch by ID
+ */
+export interface RequestV1CommbatchesIdGet<TAuthInfo> extends OapiContext {
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+export type PathV1CommbatchesIdGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV1CommbatchesIdGet<TAuthInfo> & R) => Promise<ResponseV1CommbatchesIdGet>;
+
+export type ResponseV1ProcessMeterreadstolerancePost = ResponseOapi<{
+    success: boolean;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Do a tolerance checks for all the reads that have not been checked
+ */
+export interface RequestV1ProcessMeterreadstolerancePost<TAuthInfo> extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    authInfo: TAuthInfo;
+}
+
+export type PathV1ProcessMeterreadstolerancePost<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestV1ProcessMeterreadstolerancePost<TAuthInfo> & R) => Promise<ResponseV1ProcessMeterreadstolerancePost>;
+
+export interface MeterReadCheck {
+    id: number;
+    cfrFitId: string;
+    accountId: number;
+    dateOn: string;
+    value: number;
+    type: \\"Closing\\" | \\"Meter Verification\\" | \\"Opening\\" | \\"Quarterly\\";
+    reason?: string;
+    createdAt: string;
+    tolerance?: MeterReadTolerance;
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export interface MeterReadTolerance {
+    previousRead?: MeterReadToleranceRead;
+    expected?: MeterReadToleranceRead;
+    error?: string;
+    [key: string]: unknown;
+}
+
+export interface MeterReadToleranceRead {
+    dateOn: string;
+    value: number;
+    [key: string]: unknown;
+}
+
+export type ResponseV1ReadchecksGet = ResponseOapi<List & {
+    data?: MeterReadCheck[];
+    [key: string]: unknown;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Tolerance checks
+ * List of Meter Reads that have failed their tolernace checks and need to be reviewed
+ */
+export interface RequestV1ReadchecksGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+    };
+}
+
+/**
+ * List of Meter Reads that have failed their tolernace checks and need to be reviewed
+ */
+export type PathV1ReadchecksGet<R extends Empty = Empty> = (req: RequestV1ReadchecksGet & R) => Promise<ResponseV1ReadchecksGet>;
+
+export interface BulkUpdate {
+    ids: ListOfIds;
+    [key: string]: unknown;
+}
+
+export type ListOfIds = number[];
+
+export interface MeterReadCheckSave {
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export type ResponseV1ReadchecksPut = ResponseOapi<ListOfIds, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Bulk Save Tolerance Check
+ * Update Multiple Tolerance check details at once
+ */
+export interface RequestV1ReadchecksPut extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    body: BulkUpdate & {
+        data: MeterReadCheckSave;
+        [key: string]: unknown;
+    };
+}
+
+/**
+ * Update Multiple Tolerance check details at once
+ */
+export type PathV1ReadchecksPut<R extends Empty = Empty> = (req: RequestV1ReadchecksPut & R) => Promise<ResponseV1ReadchecksPut>;
+
+export interface BulkDelete {
+    ids: ListOfIds;
+    [key: string]: unknown;
+}
+
+export type ResponseV1ReadchecksDelete = ResponseOapi<ListOfIds, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Save Tolerance Check
+ * Update Tolerance check details
+ */
+export interface RequestV1ReadchecksDelete extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    body: BulkDelete;
+}
+
+/**
+ * Update Tolerance check details
+ */
+export type PathV1ReadchecksDelete<R extends Empty = Empty> = (req: RequestV1ReadchecksDelete & R) => Promise<ResponseV1ReadchecksDelete>;
+
+export type ResponseV1ReadchecksIdGet = ResponseOapi<MeterReadCheck, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Single Tolerance check
+ * Details on the meter read tolerance check
+ */
+export interface RequestV1ReadchecksIdGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Details on the meter read tolerance check
+ */
+export type PathV1ReadchecksIdGet<R extends Empty = Empty> = (req: RequestV1ReadchecksIdGet & R) => Promise<ResponseV1ReadchecksIdGet>;
+
+export type ResponseV1ReadchecksIdPut = ResponseOapi<MeterReadCheck, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Save Tolerance Check
+ * Update Tolerance check details
+ */
+export interface RequestV1ReadchecksIdPut extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+    body: MeterReadCheckSave;
+}
+
+/**
+ * Update Tolerance check details
+ */
+export type PathV1ReadchecksIdPut<R extends Empty = Empty> = (req: RequestV1ReadchecksIdPut & R) => Promise<ResponseV1ReadchecksIdPut>;
+
+export type ResponseV1ReadchecksIdDelete = ResponseOapi<{
+    success: boolean;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Save Tolerance Check
+ * Update Tolerance check details
+ */
+export interface RequestV1ReadchecksIdDelete extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Update Tolerance check details
+ */
+export type PathV1ReadchecksIdDelete<R extends Empty = Empty> = (req: RequestV1ReadchecksIdDelete & R) => Promise<ResponseV1ReadchecksIdDelete>;
+
+export interface LevelisationList {
+    id: number;
+    quarter: LevelisationQuarter;
+    startOn?: string;
+    endOn?: string;
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export type LevelisationQuarter = string;
+
+export type ResponseV1LevelisationsGet = ResponseOapi<List & {
+    data?: LevelisationList[];
+    [key: string]: unknown;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Levelisations
+ * List of Levelisation processes by quarters
+ */
+export interface RequestV1LevelisationsGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+    };
+}
+
+/**
+ * List of Levelisation processes by quarters
+ */
+export type PathV1LevelisationsGet<R extends Empty = Empty> = (req: RequestV1LevelisationsGet & R) => Promise<ResponseV1LevelisationsGet>;
+
+export interface LevelisationCreate {
+    quarter: LevelisationQuarter;
+    [key: string]: unknown;
+}
+
+export type Levelisation = LevelisationList & {
+    totalCount?: number;
+    pendingCount?: number;
+    doneCount?: number;
+    totalGenerationPayment?: Pennies;
+    totalExportPayment?: Pennies;
+    totalMeteredExportEnergy?: number;
+    totalMeteredExportPayment?: Pennies;
+    totalDeemedExportEnergy?: number;
+    totalDeemedExportPayment?: Pennies;
+    [key: string]: unknown;
+};
+
+export type Pennies = number;
+
+export type ResponseV1LevelisationsPost = ResponseOapi<Levelisation, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Create new Levelisation
+ * Create a new Levelisation
+ */
+export interface RequestV1LevelisationsPost extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    body: LevelisationCreate;
+}
+
+/**
+ * Create a new Levelisation
+ */
+export type PathV1LevelisationsPost<R extends Empty = Empty> = (req: RequestV1LevelisationsPost & R) => Promise<ResponseV1LevelisationsPost>;
+
+export type ResponseV1LevelisationsIdGet = ResponseOapi<Levelisation, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Quater levelisation
+ * Levelisation calculation for all accounts
+ */
+export interface RequestV1LevelisationsIdGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Levelisation calculation for all accounts
+ */
+export type PathV1LevelisationsIdGet<R extends Empty = Empty> = (req: RequestV1LevelisationsIdGet & R) => Promise<ResponseV1LevelisationsIdGet>;
+
+export interface LevelisationSave {
+    isAccepted: boolean;
+    isRestarted?: boolean;
+    [key: string]: unknown;
+}
+
+export type ResponseV1LevelisationsIdPut = ResponseOapi<Levelisation, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Save Levelisation
+ * Update Levelisation
+ */
+export interface RequestV1LevelisationsIdPut extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+    body: LevelisationSave;
+}
+
+/**
+ * Update Levelisation
+ */
+export type PathV1LevelisationsIdPut<R extends Empty = Empty> = (req: RequestV1LevelisationsIdPut & R) => Promise<ResponseV1LevelisationsIdPut>;
+
+export type AccountLevelisation = AccountLevelisationList & {
+    generationPeriods?: PeriodWithCalculatedAmount[];
+    exportPeriods?: PeriodWithCalculatedAmount[];
+    [key: string]: unknown;
+};
+
+export interface AccountLevelisationList {
+    id: number;
+    levelisationId: number;
+    accountId: number;
+    installationId: number;
+    state: AccountLevelisationState;
+    cfrFitId: string;
+    isAccepted: boolean;
+    generationStartReadOn?: string;
+    generationStartReadValue?: number;
+    generationEndReadOn?: string;
+    generationEndReadValue?: number;
+    generationPercentageSplit?: number;
+    generationPayment?: Pennies;
+    generationEnergy?: number;
+    exportStartReadOn?: string;
+    exportStartReadValue?: number;
+    exportEndReadOn?: string;
+    exportEndReadValue?: number;
+    exportPercentageSplit?: number;
+    exportPayment?: Pennies;
+    exportEnergy?: number;
+    totalPayment?: Pennies;
+    vatPayment?: Pennies;
+    [key: string]: unknown;
+}
+
+export type AccountLevelisationState = \\"Pending\\" | \\"Done\\";
+
+export interface PeriodWithCalculatedAmount {
+    start?: LevelisationMeterRead;
+    end?: LevelisationMeterRead;
+    rate?: LevelisationRate;
+    percentageSplit?: number;
+    energy?: number;
+    amount?: string;
+    [key: string]: unknown;
+}
+
+export interface LevelisationMeterRead {
+    dateOn: string;
+    value: number;
+    [key: string]: unknown;
+}
+
+export interface LevelisationRate {
+    startOn: string;
+    endOn: string;
+    rate: number;
+    [key: string]: unknown;
+}
+
+export type ResponseV1AccountlevelisationsGet = ResponseOapi<List & {
+    data?: AccountLevelisation[];
+    [key: string]: unknown;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Levelisations
+ * List of Levelisation processes by quarters
+ */
+export interface RequestV1AccountlevelisationsGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+    };
+}
+
+/**
+ * List of Levelisation processes by quarters
+ */
+export type PathV1AccountlevelisationsGet<R extends Empty = Empty> = (req: RequestV1AccountlevelisationsGet & R) => Promise<ResponseV1AccountlevelisationsGet>;
+
+export interface BulkAccountLevelisationSave {
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export type ResponseV1AccountlevelisationsPut = ResponseOapi<ListOfIds, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Bulk Save Account Levelisations
+ * Update Account Levelisations at once
+ */
+export interface RequestV1AccountlevelisationsPut extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    body: BulkUpdate & {
+        data: BulkAccountLevelisationSave;
+        [key: string]: unknown;
+    };
+}
+
+/**
+ * Update Account Levelisations at once
+ */
+export type PathV1AccountlevelisationsPut<R extends Empty = Empty> = (req: RequestV1AccountlevelisationsPut & R) => Promise<ResponseV1AccountlevelisationsPut>;
+
+export type ResponseV1AccountlevelisationsIdGet = ResponseOapi<AccountLevelisation, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Account levelisation tariff
+ * Levelisation tariff for a single account
+ */
+export interface RequestV1AccountlevelisationsIdGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Levelisation tariff for a single account
+ */
+export type PathV1AccountlevelisationsIdGet<R extends Empty = Empty> = (req: RequestV1AccountlevelisationsIdGet & R) => Promise<ResponseV1AccountlevelisationsIdGet>;
+
+export interface AccountLevelisationSave {
+    id: number;
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export type ResponseV1AccountlevelisationsIdPut = ResponseOapi<AccountLevelisation, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Save Account Levelisation
+ * Update Account Levelisation
+ */
+export interface RequestV1AccountlevelisationsIdPut extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+    body: AccountLevelisationSave;
+}
+
+/**
+ * Update Account Levelisation
+ */
+export type PathV1AccountlevelisationsIdPut<R extends Empty = Empty> = (req: RequestV1AccountlevelisationsIdPut & R) => Promise<ResponseV1AccountlevelisationsIdPut>;
+
+export type ResponseV1PaymentexportGet = ResponseOapi<string | Readable | Buffer, 200, \\"text/csv\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Payment CSV Export
+ * Cheque Payments
+ */
+export interface RequestV1PaymentexportGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * Just single page parameter
+         */
+        page: number;
+    };
+    body: {
+        paymentType: \\"Cheque\\" | \\"BACS\\";
+        quarter: string;
+    };
+}
+
+/**
+ * Cheque Payments
+ */
+export type PathV1PaymentexportGet<R extends Empty = Empty> = (req: RequestV1PaymentexportGet & R) => Promise<ResponseV1PaymentexportGet>;
+
+export interface AccountListItem {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email?: string;
+    state?: AccountStateType;
+    address?: string;
+    fitIds?: ListOfStrings;
+    [key: string]: unknown;
+}
+
+export type AccountStateType = \\"Active\\" | \\"Pending\\" | \\"Dispute\\" | \\"Closed\\";
+
+export type ListOfStrings = string[];
+
+export type ResponseV1AccountGet = ResponseOapi<List & {
+    data: AccountListItem[];
+    [key: string]: unknown;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Accounts
+ * A list of fit and seg accounts
+ */
+export interface RequestV1AccountGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+    };
+}
+
+/**
+ * A list of fit and seg accounts
+ */
+export type PathV1AccountGet<R extends Empty = Empty> = (req: RequestV1AccountGet & R) => Promise<ResponseV1AccountGet>;
+
+export interface MeterRead {
+    id: number;
+    meterId: number;
+    dateOn: string;
+    value: number;
+    type: MeterReadType;
+    reason?: string;
+    createdAt: string;
+    updatedAt?: string;
+    sourceSystemId?: number;
+}
+
+export type MeterReadType = \\"Closing\\" | \\"Meter Verification\\" | \\"Opening\\" | \\"Quarterly\\";
+
+export type ResponseV1AccountIdReadsGet = ResponseOapi<MeterRead[], 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get reads for the account
+ * Account reads
+ */
+export interface RequestV1AccountIdReadsGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Account reads
+ */
+export type PathV1AccountIdReadsGet<R extends Empty = Empty> = (req: RequestV1AccountIdReadsGet & R) => Promise<ResponseV1AccountIdReadsGet>;
+
+export interface Account {
+    id: number;
+    state: AccountStateType;
+    companyRegNumber?: string;
+    companyVatNumber?: string;
+    companyName?: string;
+    primaryContactId?: number;
+    secondaryContactId?: number;
+    primaryContact?: Contact;
+    secondaryContact?: Contact;
+    paymentSuspended: boolean;
+    beneficiaryName?: string;
+    beneficiarySortCode?: string;
+    beneficiaryAccountNumber?: string;
+    paymentPlan?: \\"Cheque\\" | \\"BACS\\";
+    startOn?: string;
+    endOn?: string;
+    tosReceived: boolean;
+    contracts?: AccountContract[];
+}
+
+export interface Contact {
+    id: number;
+    title?: string;
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    addressLine1?: string;
+    addressLine2?: string;
+    addressLine3?: string;
+    city?: string;
+    country?: string;
+    county?: string;
+    postCode?: string;
+}
+
+export interface AccountContract {
+    contractId: number;
+    schemeAccountReference: string;
+    schemeType: SchemeType;
+    createdAt?: string;
+    confirmationOn?: string;
+    exportSplit?: number;
+    generationSplit?: number;
+    tosAgreed?: boolean;
+    installationId: number;
+    contactId?: number;
+    generationTariffId?: number;
+    exportTariffId?: number;
+    genTariffCode?: string;
+    expTariffCode?: string;
+    title?: string;
+    fullName?: string;
+}
+
+export type SchemeType = \\"FIT\\" | \\"SEG\\";
+
+export type ResponseV1AccountIdGet = ResponseOapi<Account, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get reads for the account
+ * Account reads
+ */
+export interface RequestV1AccountIdGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Account reads
+ */
+export type PathV1AccountIdGet<R extends Empty = Empty> = (req: RequestV1AccountIdGet & R) => Promise<ResponseV1AccountIdGet>;
+
+export type Contract = any;
+
+export type ResponseV1AccountIdContractsGet = ResponseOapi<Contract[], 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get reads for the account
+ * Account reads
+ */
+export interface RequestV1AccountIdContractsGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Account reads
+ */
+export type PathV1AccountIdContractsGet<R extends Empty = Empty> = (req: RequestV1AccountIdContractsGet & R) => Promise<ResponseV1AccountIdContractsGet>;
+
+export type ResponseV1ContactIdGet = ResponseOapi<Contact, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get contact by id
+ * Contacts
+ */
+export interface RequestV1ContactIdGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Contacts
+ */
+export type PathV1ContactIdGet<R extends Empty = Empty> = (req: RequestV1ContactIdGet & R) => Promise<ResponseV1ContactIdGet>;
+
+export interface Payment {
+    id: number;
+    accountId: number;
+    sentAt?: string;
+    amount: number;
+    type: PaymentType;
+    genMeterId: number;
+    genMeterStartReadDate?: string;
+    genMeterStartReadId?: number;
+    genMeterStartReadValue?: number;
+    genMeterEndReadDate?: string;
+    genMeterEndReadId?: number;
+    genMeterEndReadValue?: number;
+    genMeterTotalOutput?: number;
+    exportMeterId?: number;
+    exportMeterStartReadDate?: string;
+    exportMeterStartReadId?: number;
+    exportMeterStartReadValue?: number;
+    exportMeterEndReadDate?: string;
+    exportMeterEndReadId?: number;
+    exportMeterEndReadValue?: number;
+    exportTotalOutput?: number;
+    deemedTotalOutput?: number;
+    expTariffCode?: string;
+    genTariffCode?: string;
+    periods?: PaymentPeriods;
+    isCompany?: boolean;
+    createdAt?: string;
+    fitReference: string;
+    comment?: string;
+    levelisationReference?: string;
+}
+
+export type PaymentType = \\"Levelisation\\";
+
+export interface PaymentPeriods {
+    deemed?: Period[];
+    export?: Period[];
+    generation?: Period[];
+    [key: string]: unknown;
+}
+
+export interface Period {
+    start: SimpleMeterRead;
+    end: SimpleMeterRead;
+    rate: number;
+    energy?: number;
+    amount: string;
+    percentageSplit?: number;
+}
+
+export interface SimpleMeterRead {
+    dateOn: string;
+    value: number;
+}
+
+export type ResponseV1PaymentGet = ResponseOapi<{
+    data: Payment[];
+    total: number;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get contact by id
+ * Contacts
+ */
+export interface RequestV1PaymentGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Contacts
+ */
+export type PathV1PaymentGet<R extends Empty = Empty> = (req: RequestV1PaymentGet & R) => Promise<ResponseV1PaymentGet>;
+
+export interface Installation {
+    id: number;
+    accountId?: number;
+    name?: string;
+    type: InstallationType;
+    schemeReference?: string;
+    confirmationOn?: string;
+    generationPercentageSplit?: number;
+    exportPercentageSplit?: number;
+    termsAndConditionsAgreed?: boolean;
+    scheme?: SchemeType;
+    technologyType?: TechnologyType;
+    propertyType: PropertyType;
+    exportType?: ExportType;
+    commissionedOn?: string;
+    decommissionedOn?: string;
+    installedOn: string;
+    verifiedOn?: string;
+    reverifiedOn?: string;
+    inspectedOn?: string;
+    mcsReference?: string;
+    maxCapacity?: number;
+    dncReference?: number;
+    exportTariffId?: number;
+    generationTariffId?: number;
+    roofitReference?: string;
+    hasBatteryStorage?: string;
+    batteryInstallationDateOn?: string;
+    tariffRates?: TariffRate[];
+    exportMpan?: string;
+    sourceSystemId?: number;
+    nameOfGrant?: string;
+    valueOfGrant?: number;
+    eligibilityStartOn?: string;
+    eligibilityEndOn?: string;
+    dateGrantRepaid?: string;
+    epcRate?: string;
+    epcDate?: string;
+    epcNumber?: number;
+    legacyFitDbId?: string;
+    supplyMpan?: string;
+    switchedFrom?: string;
+    switchedTo?: string;
+    address?: Address;
+    meters?: InstallationMeter[];
+    createdAt: string;
+    updatedAt?: string;
+    addressId?: number;
+    contracts?: AccountContract[];
+}
+
+export type InstallationType = \\"None\\" | \\"Extension of an existing FiT-accredited installation\\" | \\"Standalone\\" | \\"New build\\" | \\"Retrofit\\";
+
+export type TechnologyType = \\"CHP\\" | \\"AD\\" | \\"W\\" | \\"H\\" | \\"PV\\";
+
+export type PropertyType = \\"Other\\" | \\"School/Education\\" | \\"Not for profit\\" | \\"Industrial\\" | \\"Farm\\" | \\"Commercial\\" | \\"Domestic\\";
+
+export type ExportType = \\"PPA\\" | \\"Off Grid\\" | \\"Metered Export\\" | \\"Deemed\\";
+
+export interface TariffRate {
+    startOn: string;
+    endOn?: string;
+    rate: number;
+    tariffId: number;
+    tariffCode: string;
+    tariffType: TariffType;
+}
+
+export type TariffType = \\"Export\\" | \\"Generation\\" | \\"SEG\\";
+
+export interface InstallationMeter {
+    id: number;
+    type: MeterType;
+    meterId: number;
+    installationId?: number;
+    startOn?: string;
+    endOn?: string;
+    mpan?: string;
+    shared: boolean;
+    msn: string;
+    make?: string;
+    model?: string;
+    gsp?: string;
+    distributionRegion?: string;
+    addedToInstallationAt: string;
+    updatedAt?: string;
+}
+
+export type MeterType = \\"Export\\" | \\"Generation\\";
+
+export type ResponseV1InstallationGet = ResponseOapi<{
+    data: Installation[];
+    total: number;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get installations
+ * Installations
+ */
+export interface RequestV1InstallationGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Installations
+ */
+export type PathV1InstallationGet<R extends Empty = Empty> = (req: RequestV1InstallationGet & R) => Promise<ResponseV1InstallationGet>;
+
+export interface Meter {
+    id: number;
+    mpan?: string;
+    shared?: boolean;
+    msn: string;
+    make?: string;
+    model?: string;
+    isExport: boolean;
+    gsp?: string;
+    distributionRegion?: string;
+    createdAt: string;
+    updatedAt?: string;
+}
+
+export type ResponseV1MeterIdGet = ResponseOapi<Meter, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get meter
+ * Meter
+ */
+export interface RequestV1MeterIdGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    path: {
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Meter
+ */
+export type PathV1MeterIdGet<R extends Empty = Empty> = (req: RequestV1MeterIdGet & R) => Promise<ResponseV1MeterIdGet>;
+
+export type ResponseV1MeterGet = ResponseOapi<{
+    data: Meter[];
+    total: number;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get meters
+ * Meters
+ */
+export interface RequestV1MeterGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+/**
+ * Meters
+ */
+export type PathV1MeterGet<R extends Empty = Empty> = (req: RequestV1MeterGet & R) => Promise<ResponseV1MeterGet>;
+
+export type ResponseV1ReadGet = ResponseOapi<{
+    data: MeterRead[];
+    total: number;
+}, 200, \\"application/json\\"> | ResponseOapi<HttpError, 404, \\"application/json\\"> | ResponseOapi<HttpError, 500, \\"application/json\\">;
+
+/**
+ * Get meter reads
+ * Meter reads
+ */
+export interface RequestV1ReadGet extends OapiContext {
+    headers: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    query: {
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter: any;
+        /**
+         * React admin pagination object
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+/**
+ * Meter reads
+ */
+export type PathV1ReadGet<R extends Empty = Empty> = (req: RequestV1ReadGet & R) => Promise<ResponseV1ReadGet>;
+
+export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
+    paths: {
+        \\"/.well-known/health-check\\": {
+            /**
+             * Health check endpoint
+             */
+            get: PathWellknownHealthcheckGet<R>;
+        };
+        \\"/.well-known/openapi.yaml\\": {
+            /**
+             * The open api spec for the service. OpenAPI v3.
+             */
+            get: PathWellknownOpenapiyamlGet<R>;
+        };
+        \\"/.well-known/components.yaml\\": {
+            /**
+             * Shared schemas for the open api spec. OpenAPI v3.
+             */
+            get: PathWellknownComponentsyamlGet<R>;
+        };
+        \\"/.well-known/levelisations.yaml\\": {
+            /**
+             * Schemas for Levelisation endpoints. OpenAPI v3.
+             */
+            get: PathWellknownLevelisationsyamlGet<R>;
+        };
+        \\"/.well-known/read-checks.yaml\\": {
+            /**
+             * Schemas for Read Checks endpoints. OpenAPI v3.
+             */
+            get: PathWellknownReadchecksyamlGet<R>;
+        };
+        \\"/.well-known/openapi.html\\": {
+            /**
+             * The open api spec for the service. OpenAPI v3.
+             */
+            get: PathWellknownOpenapihtmlGet<R>;
+        };
+        \\"/v1/session\\": {
+            post: PathV1SessionPost<R>;
+        };
+        \\"/v1/comm-batches\\": {
+            get: PathV1CommbatchesGet<R, TAuthInfo>;
+            /**
+             * Create new Comm Batch that will be processed and can be monitored responses
+             *
+             */
+            post: PathV1CommbatchesPost<R, TAuthInfo>;
+        };
+        \\"/v1/comm-batches/{id}\\": {
+            get: PathV1CommbatchesIdGet<R, TAuthInfo>;
+        };
+        \\"/v1/process/meter-reads-tolerance\\": {
+            post: PathV1ProcessMeterreadstolerancePost<R, TAuthInfo>;
+        };
+        \\"/v1/read-checks\\": {
+            /**
+             * List of Meter Reads that have failed their tolernace checks and need to be reviewed
+             */
+            get: PathV1ReadchecksGet<R>;
+            /**
+             * Update Multiple Tolerance check details at once
+             */
+            put: PathV1ReadchecksPut<R>;
+            /**
+             * Update Tolerance check details
+             */
+            delete: PathV1ReadchecksDelete<R>;
+        };
+        \\"/v1/read-checks/{id}\\": {
+            /**
+             * Details on the meter read tolerance check
+             */
+            get: PathV1ReadchecksIdGet<R>;
+            /**
+             * Update Tolerance check details
+             */
+            put: PathV1ReadchecksIdPut<R>;
+            /**
+             * Update Tolerance check details
+             */
+            delete: PathV1ReadchecksIdDelete<R>;
+        };
+        \\"/v1/levelisations\\": {
+            /**
+             * List of Levelisation processes by quarters
+             */
+            get: PathV1LevelisationsGet<R>;
+            /**
+             * Create a new Levelisation
+             */
+            post: PathV1LevelisationsPost<R>;
+        };
+        \\"/v1/levelisations/{id}\\": {
+            /**
+             * Levelisation calculation for all accounts
+             */
+            get: PathV1LevelisationsIdGet<R>;
+            /**
+             * Update Levelisation
+             */
+            put: PathV1LevelisationsIdPut<R>;
+        };
+        \\"/v1/account-levelisations\\": {
+            /**
+             * List of Levelisation processes by quarters
+             */
+            get: PathV1AccountlevelisationsGet<R>;
+            /**
+             * Update Account Levelisations at once
+             */
+            put: PathV1AccountlevelisationsPut<R>;
+        };
+        \\"/v1/account-levelisations/{id}\\": {
+            /**
+             * Levelisation tariff for a single account
+             */
+            get: PathV1AccountlevelisationsIdGet<R>;
+            /**
+             * Update Account Levelisation
+             */
+            put: PathV1AccountlevelisationsIdPut<R>;
+        };
+        \\"/v1/payment-export\\": {
+            /**
+             * Cheque Payments
+             */
+            get: PathV1PaymentexportGet<R>;
+        };
+        \\"/v1/account\\": {
+            /**
+             * A list of fit and seg accounts
+             */
+            get: PathV1AccountGet<R>;
+        };
+        \\"/v1/account/{id}/reads\\": {
+            /**
+             * Account reads
+             */
+            get: PathV1AccountIdReadsGet<R>;
+        };
+        \\"/v1/account/{id}\\": {
+            /**
+             * Account reads
+             */
+            get: PathV1AccountIdGet<R>;
+        };
+        \\"/v1/account/{id}/contracts\\": {
+            /**
+             * Account reads
+             */
+            get: PathV1AccountIdContractsGet<R>;
+        };
+        \\"/v1/contact/{id}\\": {
+            /**
+             * Contacts
+             */
+            get: PathV1ContactIdGet<R>;
+        };
+        \\"/v1/payment\\": {
+            /**
+             * Contacts
+             */
+            get: PathV1PaymentGet<R>;
+        };
+        \\"/v1/installation\\": {
+            /**
+             * Installations
+             */
+            get: PathV1InstallationGet<R>;
+        };
+        \\"/v1/meter/{id}\\": {
+            /**
+             * Meter
+             */
+            get: PathV1MeterIdGet<R>;
+        };
+        \\"/v1/meter\\": {
+            /**
+             * Meters
+             */
+            get: PathV1MeterGet<R>;
+        };
+        \\"/v1/read\\": {
+            /**
+             * Meter reads
+             */
+            get: PathV1ReadGet<R>;
+        };
+    };
+    security: {
+        JWTSecurity: OapiSecurityResolver<R, TAuthInfo>;
+        ProductIdentitySecurity: OapiSecurityResolver<R, TAuthInfo>;
+    };
+}
+"
+`;
+
 exports[`Types Content Test statements.yaml 1`] = `
 "import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from \\"@ovotech/laminar\\";
 

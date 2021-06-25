@@ -2520,6 +2520,1487 @@ export interface AxiosOapiInstance {
 "
 `;
 
+exports[`Axios Content Test schemes.yaml 1`] = `
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+
+/**
+ * Schemes
+ *
+ * Version: 1.0.0
+ */
+export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
+    /**
+     * Health Check
+     * Health check endpoint
+     */
+    \\"GET /.well-known/health-check\\": config => api.get<{
+        success: boolean;
+    }>(\`/.well-known/health-check\`, config),
+    /**
+     * OpenApi
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.yaml\\": config => api.get<string>(\`/.well-known/openapi.yaml\`, config),
+    /**
+     * OpenApi Components
+     * Shared schemas for the open api spec. OpenAPI v3.
+     */
+    \\"GET /.well-known/components.yaml\\": config => api.get<string>(\`/.well-known/components.yaml\`, config),
+    /**
+     * OpenApi Levelisation
+     * Schemas for Levelisation endpoints. OpenAPI v3.
+     */
+    \\"GET /.well-known/levelisations.yaml\\": config => api.get<string>(\`/.well-known/levelisations.yaml\`, config),
+    /**
+     * OpenApi Read Checks
+     * Schemas for Read Checks endpoints. OpenAPI v3.
+     */
+    \\"GET /.well-known/read-checks.yaml\\": config => api.get<string>(\`/.well-known/read-checks.yaml\`, config),
+    /**
+     * OpenApi HTML
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.html\\": config => api.get(\`/.well-known/openapi.html\`, config),
+    /**
+     * Create a session for the current user
+     */
+    \\"POST /v1/session\\": (data, config) => api.post<Session>(\`/v1/session\`, data, config),
+    /**
+     * Get Comm Batches.
+     */
+    \\"GET /v1/comm-batches\\": config => api.get<List & {
+        data: CommBatchList[];
+        [key: string]: unknown;
+    }>(\`/v1/comm-batches\`, config),
+    /**
+     * Create New Comm Batch
+     * Create new Comm Batch that will be processed and can be monitored responses
+     *
+     */
+    \\"POST /v1/comm-batches\\": (data, config) => api.post<CommBatch>(\`/v1/comm-batches\`, data, config),
+    /**
+     * Get Comm Batch by ID
+     */
+    \\"GET /v1/comm-batches/{id}\\": (id, config) => api.get<CommBatch>(\`/v1/comm-batches/\${id}\`, config),
+    /**
+     * Do a tolerance checks for all the reads that have not been checked
+     */
+    \\"POST /v1/process/meter-reads-tolerance\\": (data, config) => api.post<{
+        success: boolean;
+    }>(\`/v1/process/meter-reads-tolerance\`, data, config),
+    /**
+     * Tolerance checks
+     * List of Meter Reads that have failed their tolernace checks and need to be reviewed
+     */
+    \\"GET /v1/read-checks\\": config => api.get<List & {
+        data?: MeterReadCheck[];
+        [key: string]: unknown;
+    }>(\`/v1/read-checks\`, config),
+    /**
+     * Bulk Save Tolerance Check
+     * Update Multiple Tolerance check details at once
+     */
+    \\"PUT /v1/read-checks\\": (data, config) => api.put<ListOfIds>(\`/v1/read-checks\`, data, config),
+    /**
+     * Save Tolerance Check
+     * Update Tolerance check details
+     */
+    \\"DELETE /v1/read-checks\\": config => api.delete<ListOfIds>(\`/v1/read-checks\`, config),
+    /**
+     * Single Tolerance check
+     * Details on the meter read tolerance check
+     */
+    \\"GET /v1/read-checks/{id}\\": (id, config) => api.get<MeterReadCheck>(\`/v1/read-checks/\${id}\`, config),
+    /**
+     * Save Tolerance Check
+     * Update Tolerance check details
+     */
+    \\"PUT /v1/read-checks/{id}\\": (id, data, config) => api.put<MeterReadCheck>(\`/v1/read-checks/\${id}\`, data, config),
+    /**
+     * Save Tolerance Check
+     * Update Tolerance check details
+     */
+    \\"DELETE /v1/read-checks/{id}\\": (id, config) => api.delete<{
+        success: boolean;
+    }>(\`/v1/read-checks/\${id}\`, config),
+    /**
+     * Levelisations
+     * List of Levelisation processes by quarters
+     */
+    \\"GET /v1/levelisations\\": config => api.get<List & {
+        data?: LevelisationList[];
+        [key: string]: unknown;
+    }>(\`/v1/levelisations\`, config),
+    /**
+     * Create new Levelisation
+     * Create a new Levelisation
+     */
+    \\"POST /v1/levelisations\\": (data, config) => api.post<Levelisation>(\`/v1/levelisations\`, data, config),
+    /**
+     * Quater levelisation
+     * Levelisation calculation for all accounts
+     */
+    \\"GET /v1/levelisations/{id}\\": (id, config) => api.get<Levelisation>(\`/v1/levelisations/\${id}\`, config),
+    /**
+     * Save Levelisation
+     * Update Levelisation
+     */
+    \\"PUT /v1/levelisations/{id}\\": (id, data, config) => api.put<Levelisation>(\`/v1/levelisations/\${id}\`, data, config),
+    /**
+     * Levelisations
+     * List of Levelisation processes by quarters
+     */
+    \\"GET /v1/account-levelisations\\": config => api.get<List & {
+        data?: AccountLevelisation[];
+        [key: string]: unknown;
+    }>(\`/v1/account-levelisations\`, config),
+    /**
+     * Bulk Save Account Levelisations
+     * Update Account Levelisations at once
+     */
+    \\"PUT /v1/account-levelisations\\": (data, config) => api.put<ListOfIds>(\`/v1/account-levelisations\`, data, config),
+    /**
+     * Account levelisation tariff
+     * Levelisation tariff for a single account
+     */
+    \\"GET /v1/account-levelisations/{id}\\": (id, config) => api.get<AccountLevelisation>(\`/v1/account-levelisations/\${id}\`, config),
+    /**
+     * Save Account Levelisation
+     * Update Account Levelisation
+     */
+    \\"PUT /v1/account-levelisations/{id}\\": (id, data, config) => api.put<AccountLevelisation>(\`/v1/account-levelisations/\${id}\`, data, config),
+    /**
+     * Payment CSV Export
+     * Cheque Payments
+     */
+    \\"GET /v1/payment-export\\": config => api.get(\`/v1/payment-export\`, config),
+    /**
+     * Accounts
+     * A list of fit and seg accounts
+     */
+    \\"GET /v1/account\\": config => api.get<List & {
+        data: AccountListItem[];
+        [key: string]: unknown;
+    }>(\`/v1/account\`, config),
+    /**
+     * Get reads for the account
+     * Account reads
+     */
+    \\"GET /v1/account/{id}/reads\\": (id, config) => api.get<MeterRead[]>(\`/v1/account/\${id}/reads\`, config),
+    /**
+     * Get reads for the account
+     * Account reads
+     */
+    \\"GET /v1/account/{id}\\": (id, config) => api.get<Account>(\`/v1/account/\${id}\`, config),
+    /**
+     * Get reads for the account
+     * Account reads
+     */
+    \\"GET /v1/account/{id}/contracts\\": (id, config) => api.get<Contract[]>(\`/v1/account/\${id}/contracts\`, config),
+    /**
+     * Get contact by id
+     * Contacts
+     */
+    \\"GET /v1/contact/{id}\\": (id, config) => api.get<Contact>(\`/v1/contact/\${id}\`, config),
+    /**
+     * Get contact by id
+     * Contacts
+     */
+    \\"GET /v1/payment\\": config => api.get<{
+        data: Payment[];
+        total: number;
+    }>(\`/v1/payment\`, config),
+    /**
+     * Get installations
+     * Installations
+     */
+    \\"GET /v1/installation\\": config => api.get<{
+        data: Installation[];
+        total: number;
+    }>(\`/v1/installation\`, config),
+    /**
+     * Get meter
+     * Meter
+     */
+    \\"GET /v1/meter/{id}\\": (id, config) => api.get<Meter>(\`/v1/meter/\${id}\`, config),
+    /**
+     * Get meters
+     * Meters
+     */
+    \\"GET /v1/meter\\": config => api.get<{
+        data: Meter[];
+        total: number;
+    }>(\`/v1/meter\`, config),
+    /**
+     * Get meter reads
+     * Meter reads
+     */
+    \\"GET /v1/read\\": config => api.get<{
+        data: MeterRead[];
+        total: number;
+    }>(\`/v1/read\`, config),
+    api: api
+});
+
+export interface Session {
+    jwt: string;
+    expiresAt?: string;
+    user: {
+        fullName?: string;
+        email: string;
+        avatar?: string;
+        scopes?: string[];
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+}
+
+export interface PostV1Session {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface List {
+    total: number;
+    [key: string]: unknown;
+}
+
+export interface CommBatchList {
+    id: number;
+    type: CommBatchType;
+    filename: string;
+    itemsPending?: number;
+    itemsDelivered?: number;
+    itemsScheduled?: number;
+    itemsFailed?: number;
+    itemsExpired?: number;
+    createdAt: string;
+    updatedAt?: string;
+}
+
+export type CommBatchType = \\"FITMeterInspectionDue\\" | \\"Statement\\";
+
+export interface GetV1Commbatches {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+    };
+}
+
+export type NewCommBatch = NewCommBatchFITMeterInspectionDue | NewCommBatchStatement;
+
+export interface NewCommBatchFITMeterInspectionDue {
+    type: \\"FITMeterInspectionDue\\";
+    filename: string;
+    items: {
+        templateParams: {
+            fitId: string;
+        };
+        contactAddress?: CommContactAddress;
+    }[];
+    [key: string]: unknown;
+}
+
+export type CommContactAddress = CommsEmailAddress | CommsPostalAddress | CommsPhoneNumber;
+
+export interface CommsEmailAddress {
+    emailAddress: string;
+}
+
+export interface CommsPostalAddress {
+    postalAddress: Address;
+}
+
+export interface Address {
+    contactName?: string;
+    company?: string;
+    line1?: string;
+    line2?: string;
+    line3?: string;
+    town?: string;
+    county?: string;
+    postcode: string;
+    country: string;
+}
+
+export interface CommsPhoneNumber {
+    phoneNumber: string;
+}
+
+export interface NewCommBatchStatement {
+    type: \\"Statement\\";
+    filename: string;
+    items: {
+        templateParams: {
+            accountNumber: string;
+            payment: {
+                startDate: string;
+                startDateLong?: string;
+                endDate: string;
+                endDateLong?: string;
+                generation?: {
+                    endDate?: string;
+                    value?: string;
+                };
+                deemedExport?: {
+                    endDate?: string;
+                    value?: string;
+                };
+                export?: {
+                    endDate?: string;
+                    value?: string;
+                };
+                vat?: string;
+                total: string;
+            };
+            reads?: {
+                generationOpening?: {
+                    date?: string;
+                    value?: string;
+                };
+                generationClosing?: {
+                    date?: string;
+                    value?: string;
+                };
+                exportOpening?: {
+                    date?: string;
+                    value?: string;
+                };
+                exportClosing?: {
+                    date?: string;
+                    value?: string;
+                };
+                percentageSplit?: string;
+            };
+            rates?: {
+                from?: string;
+                export?: string;
+                generationOld?: string;
+                exportOld?: string;
+                generation?: string;
+                genPeriod?: string;
+                expPeriod?: string;
+            };
+            emailAddress?: string;
+        };
+        contactAddress?: CommContactAddress;
+    }[];
+    [key: string]: unknown;
+}
+
+export interface CommBatch {
+    id: number;
+    createdAt: string;
+    itemsPending?: number;
+    itemsDelivered?: number;
+    itemsScheduled?: number;
+    itemsFailed?: number;
+    itemsExpired?: number;
+    type: CommBatchType;
+    filename: string;
+    items: {
+        id: number;
+        commId?: string;
+        commBatchId: number;
+        status: CommBatchItemStatus;
+        createdAt: string;
+        updatedAt?: string;
+        error?: string;
+        templateParams: any;
+        contactAddress: any;
+    }[];
+}
+
+export type CommBatchItemStatus = \\"Scheduled\\" | \\"Pending\\" | \\"Delivered\\" | \\"Expired\\" | \\"Failed\\";
+
+export interface PostV1Commbatches {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1CommbatchesId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface PostV1ProcessMeterreadstolerance {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface MeterReadCheck {
+    id: number;
+    cfrFitId: string;
+    accountId: number;
+    dateOn: string;
+    value: number;
+    type: \\"Closing\\" | \\"Meter Verification\\" | \\"Opening\\" | \\"Quarterly\\";
+    reason?: string;
+    createdAt: string;
+    tolerance?: MeterReadTolerance;
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export interface MeterReadTolerance {
+    previousRead?: MeterReadToleranceRead;
+    expected?: MeterReadToleranceRead;
+    error?: string;
+    [key: string]: unknown;
+}
+
+export interface MeterReadToleranceRead {
+    dateOn: string;
+    value: number;
+    [key: string]: unknown;
+}
+
+export interface GetV1Readchecks {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+    };
+}
+
+export interface BulkUpdate {
+    ids: ListOfIds;
+    [key: string]: unknown;
+}
+
+export type ListOfIds = number[];
+
+export interface MeterReadCheckSave {
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export interface PutV1Readchecks {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface BulkDelete {
+    ids: ListOfIds;
+    [key: string]: unknown;
+}
+
+export interface DeleteV1Readchecks {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1ReadchecksId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface PutV1ReadchecksId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface DeleteV1ReadchecksId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface LevelisationList {
+    id: number;
+    quarter: LevelisationQuarter;
+    startOn?: string;
+    endOn?: string;
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export type LevelisationQuarter = string;
+
+export interface GetV1Levelisations {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+    };
+}
+
+export interface LevelisationCreate {
+    quarter: LevelisationQuarter;
+    [key: string]: unknown;
+}
+
+export type Levelisation = LevelisationList & {
+    totalCount?: number;
+    pendingCount?: number;
+    doneCount?: number;
+    totalGenerationPayment?: Pennies;
+    totalExportPayment?: Pennies;
+    totalMeteredExportEnergy?: number;
+    totalMeteredExportPayment?: Pennies;
+    totalDeemedExportEnergy?: number;
+    totalDeemedExportPayment?: Pennies;
+    [key: string]: unknown;
+};
+
+export type Pennies = number;
+
+export interface PostV1Levelisations {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1LevelisationsId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface LevelisationSave {
+    isAccepted: boolean;
+    isRestarted?: boolean;
+    [key: string]: unknown;
+}
+
+export interface PutV1LevelisationsId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export type AccountLevelisation = AccountLevelisationList & {
+    generationPeriods?: PeriodWithCalculatedAmount[];
+    exportPeriods?: PeriodWithCalculatedAmount[];
+    [key: string]: unknown;
+};
+
+export interface AccountLevelisationList {
+    id: number;
+    levelisationId: number;
+    accountId: number;
+    installationId: number;
+    state: AccountLevelisationState;
+    cfrFitId: string;
+    isAccepted: boolean;
+    generationStartReadOn?: string;
+    generationStartReadValue?: number;
+    generationEndReadOn?: string;
+    generationEndReadValue?: number;
+    generationPercentageSplit?: number;
+    generationPayment?: Pennies;
+    generationEnergy?: number;
+    exportStartReadOn?: string;
+    exportStartReadValue?: number;
+    exportEndReadOn?: string;
+    exportEndReadValue?: number;
+    exportPercentageSplit?: number;
+    exportPayment?: Pennies;
+    exportEnergy?: number;
+    totalPayment?: Pennies;
+    vatPayment?: Pennies;
+    [key: string]: unknown;
+}
+
+export type AccountLevelisationState = \\"Pending\\" | \\"Done\\";
+
+export interface PeriodWithCalculatedAmount {
+    start?: LevelisationMeterRead;
+    end?: LevelisationMeterRead;
+    rate?: LevelisationRate;
+    percentageSplit?: number;
+    energy?: number;
+    amount?: string;
+    [key: string]: unknown;
+}
+
+export interface LevelisationMeterRead {
+    dateOn: string;
+    value: number;
+    [key: string]: unknown;
+}
+
+export interface LevelisationRate {
+    startOn: string;
+    endOn: string;
+    rate: number;
+    [key: string]: unknown;
+}
+
+export interface GetV1Accountlevelisations {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+    };
+}
+
+export interface BulkAccountLevelisationSave {
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export interface PutV1Accountlevelisations {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1AccountlevelisationsId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface AccountLevelisationSave {
+    id: number;
+    isAccepted: boolean;
+    [key: string]: unknown;
+}
+
+export interface PutV1AccountlevelisationsId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1Paymentexport {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * Just single page parameter
+         */
+        page: number;
+    };
+}
+
+export interface AccountListItem {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email?: string;
+    state?: AccountStateType;
+    address?: string;
+    fitIds?: ListOfStrings;
+    [key: string]: unknown;
+}
+
+export type AccountStateType = \\"Active\\" | \\"Pending\\" | \\"Dispute\\" | \\"Closed\\";
+
+export type ListOfStrings = string[];
+
+export interface GetV1Account {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Retern individual records from the list, matching the specified ids
+         */
+        ids?: number[];
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+    };
+}
+
+export interface MeterRead {
+    id: number;
+    meterId: number;
+    dateOn: string;
+    value: number;
+    type: MeterReadType;
+    reason?: string;
+    createdAt: string;
+    updatedAt?: string;
+    sourceSystemId?: number;
+}
+
+export type MeterReadType = \\"Closing\\" | \\"Meter Verification\\" | \\"Opening\\" | \\"Quarterly\\";
+
+export interface GetV1AccountIdReads {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+    };
+}
+
+export interface Account {
+    id: number;
+    state: AccountStateType;
+    companyRegNumber?: string;
+    companyVatNumber?: string;
+    companyName?: string;
+    primaryContactId?: number;
+    secondaryContactId?: number;
+    primaryContact?: Contact;
+    secondaryContact?: Contact;
+    paymentSuspended: boolean;
+    beneficiaryName?: string;
+    beneficiarySortCode?: string;
+    beneficiaryAccountNumber?: string;
+    paymentPlan?: \\"Cheque\\" | \\"BACS\\";
+    startOn?: string;
+    endOn?: string;
+    tosReceived: boolean;
+    contracts?: AccountContract[];
+}
+
+export interface Contact {
+    id: number;
+    title?: string;
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    addressLine1?: string;
+    addressLine2?: string;
+    addressLine3?: string;
+    city?: string;
+    country?: string;
+    county?: string;
+    postCode?: string;
+}
+
+export interface AccountContract {
+    contractId: number;
+    schemeAccountReference: string;
+    schemeType: SchemeType;
+    createdAt?: string;
+    confirmationOn?: string;
+    exportSplit?: number;
+    generationSplit?: number;
+    tosAgreed?: boolean;
+    installationId: number;
+    contactId?: number;
+    generationTariffId?: number;
+    exportTariffId?: number;
+    genTariffCode?: string;
+    expTariffCode?: string;
+    title?: string;
+    fullName?: string;
+}
+
+export type SchemeType = \\"FIT\\" | \\"SEG\\";
+
+export interface GetV1AccountId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export type Contract = any;
+
+export interface GetV1AccountIdContracts {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1ContactId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface Payment {
+    id: number;
+    accountId: number;
+    sentAt?: string;
+    amount: number;
+    type: PaymentType;
+    genMeterId: number;
+    genMeterStartReadDate?: string;
+    genMeterStartReadId?: number;
+    genMeterStartReadValue?: number;
+    genMeterEndReadDate?: string;
+    genMeterEndReadId?: number;
+    genMeterEndReadValue?: number;
+    genMeterTotalOutput?: number;
+    exportMeterId?: number;
+    exportMeterStartReadDate?: string;
+    exportMeterStartReadId?: number;
+    exportMeterStartReadValue?: number;
+    exportMeterEndReadDate?: string;
+    exportMeterEndReadId?: number;
+    exportMeterEndReadValue?: number;
+    exportTotalOutput?: number;
+    deemedTotalOutput?: number;
+    expTariffCode?: string;
+    genTariffCode?: string;
+    periods?: PaymentPeriods;
+    isCompany?: boolean;
+    createdAt?: string;
+    fitReference: string;
+    comment?: string;
+    levelisationReference?: string;
+}
+
+export type PaymentType = \\"Levelisation\\";
+
+export interface PaymentPeriods {
+    deemed?: Period[];
+    export?: Period[];
+    generation?: Period[];
+    [key: string]: unknown;
+}
+
+export interface Period {
+    start: SimpleMeterRead;
+    end: SimpleMeterRead;
+    rate: number;
+    energy?: number;
+    amount: string;
+    percentageSplit?: number;
+}
+
+export interface SimpleMeterRead {
+    dateOn: string;
+    value: number;
+}
+
+export interface GetV1Payment {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+export interface Installation {
+    id: number;
+    accountId?: number;
+    name?: string;
+    type: InstallationType;
+    schemeReference?: string;
+    confirmationOn?: string;
+    generationPercentageSplit?: number;
+    exportPercentageSplit?: number;
+    termsAndConditionsAgreed?: boolean;
+    scheme?: SchemeType;
+    technologyType?: TechnologyType;
+    propertyType: PropertyType;
+    exportType?: ExportType;
+    commissionedOn?: string;
+    decommissionedOn?: string;
+    installedOn: string;
+    verifiedOn?: string;
+    reverifiedOn?: string;
+    inspectedOn?: string;
+    mcsReference?: string;
+    maxCapacity?: number;
+    dncReference?: number;
+    exportTariffId?: number;
+    generationTariffId?: number;
+    roofitReference?: string;
+    hasBatteryStorage?: string;
+    batteryInstallationDateOn?: string;
+    tariffRates?: TariffRate[];
+    exportMpan?: string;
+    sourceSystemId?: number;
+    nameOfGrant?: string;
+    valueOfGrant?: number;
+    eligibilityStartOn?: string;
+    eligibilityEndOn?: string;
+    dateGrantRepaid?: string;
+    epcRate?: string;
+    epcDate?: string;
+    epcNumber?: number;
+    legacyFitDbId?: string;
+    supplyMpan?: string;
+    switchedFrom?: string;
+    switchedTo?: string;
+    address?: Address;
+    meters?: InstallationMeter[];
+    createdAt: string;
+    updatedAt?: string;
+    addressId?: number;
+    contracts?: AccountContract[];
+}
+
+export type InstallationType = \\"None\\" | \\"Extension of an existing FiT-accredited installation\\" | \\"Standalone\\" | \\"New build\\" | \\"Retrofit\\";
+
+export type TechnologyType = \\"CHP\\" | \\"AD\\" | \\"W\\" | \\"H\\" | \\"PV\\";
+
+export type PropertyType = \\"Other\\" | \\"School/Education\\" | \\"Not for profit\\" | \\"Industrial\\" | \\"Farm\\" | \\"Commercial\\" | \\"Domestic\\";
+
+export type ExportType = \\"PPA\\" | \\"Off Grid\\" | \\"Metered Export\\" | \\"Deemed\\";
+
+export interface TariffRate {
+    startOn: string;
+    endOn?: string;
+    rate: number;
+    tariffId: number;
+    tariffCode: string;
+    tariffType: TariffType;
+}
+
+export type TariffType = \\"Export\\" | \\"Generation\\" | \\"SEG\\";
+
+export interface InstallationMeter {
+    id: number;
+    type: MeterType;
+    meterId: number;
+    installationId?: number;
+    startOn?: string;
+    endOn?: string;
+    mpan?: string;
+    shared: boolean;
+    msn: string;
+    make?: string;
+    model?: string;
+    gsp?: string;
+    distributionRegion?: string;
+    addedToInstallationAt: string;
+    updatedAt?: string;
+}
+
+export type MeterType = \\"Export\\" | \\"Generation\\";
+
+export interface GetV1Installation {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+export interface Meter {
+    id: number;
+    mpan?: string;
+    shared?: boolean;
+    msn: string;
+    make?: string;
+    model?: string;
+    isExport: boolean;
+    gsp?: string;
+    distributionRegion?: string;
+    createdAt: string;
+    updatedAt?: string;
+}
+
+export interface GetV1MeterId {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1Meter {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+}
+
+export interface GetV1Read {
+    headers?: {
+        /**
+         * An optional trace token to be passed to the service and used for logging
+         */
+        \\"x-trace-token\\"?: string;
+    };
+    params?: {
+        /**
+         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         */
+        filter?: any;
+        /**
+         * React admin pagination object
+         */
+        pagination?: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort?: {
+            field: string;
+            order: \\"ASC\\" | \\"DESC\\";
+        };
+        /**
+         * Single resource identifier
+         */
+        id: number;
+    };
+}
+
+export interface AxiosOapiInstance {
+    /**
+     * Health Check
+     * Health check endpoint
+     */
+    \\"GET /.well-known/health-check\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<{
+        success: boolean;
+    }>>;
+    /**
+     * OpenApi
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    /**
+     * OpenApi Components
+     * Shared schemas for the open api spec. OpenAPI v3.
+     */
+    \\"GET /.well-known/components.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    /**
+     * OpenApi Levelisation
+     * Schemas for Levelisation endpoints. OpenAPI v3.
+     */
+    \\"GET /.well-known/levelisations.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    /**
+     * OpenApi Read Checks
+     * Schemas for Read Checks endpoints. OpenAPI v3.
+     */
+    \\"GET /.well-known/read-checks.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    /**
+     * OpenApi HTML
+     * The open api spec for the service. OpenAPI v3.
+     */
+    \\"GET /.well-known/openapi.html\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    /**
+     * Create a session for the current user
+     */
+    \\"POST /v1/session\\": (data: {
+        type: \\"oauth\\" | \\"jwt\\";
+        token: string;
+    }, config?: AxiosRequestConfig & PostV1Session) => Promise<AxiosResponse<Session>>;
+    /**
+     * Get Comm Batches.
+     */
+    \\"GET /v1/comm-batches\\": (config?: AxiosRequestConfig & GetV1Commbatches) => Promise<AxiosResponse<List & {
+        data: CommBatchList[];
+        [key: string]: unknown;
+    }>>;
+    /**
+     * Create New Comm Batch
+     * Create new Comm Batch that will be processed and can be monitored responses
+     *
+     */
+    \\"POST /v1/comm-batches\\": (data: NewCommBatch, config?: AxiosRequestConfig & PostV1Commbatches) => Promise<AxiosResponse<CommBatch>>;
+    /**
+     * Get Comm Batch by ID
+     */
+    \\"GET /v1/comm-batches/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1CommbatchesId) => Promise<AxiosResponse<CommBatch>>;
+    /**
+     * Do a tolerance checks for all the reads that have not been checked
+     */
+    \\"POST /v1/process/meter-reads-tolerance\\": (data?: unknown, config?: AxiosRequestConfig & PostV1ProcessMeterreadstolerance) => Promise<AxiosResponse<{
+        success: boolean;
+    }>>;
+    /**
+     * Tolerance checks
+     * List of Meter Reads that have failed their tolernace checks and need to be reviewed
+     */
+    \\"GET /v1/read-checks\\": (config?: AxiosRequestConfig & GetV1Readchecks) => Promise<AxiosResponse<List & {
+        data?: MeterReadCheck[];
+        [key: string]: unknown;
+    }>>;
+    /**
+     * Bulk Save Tolerance Check
+     * Update Multiple Tolerance check details at once
+     */
+    \\"PUT /v1/read-checks\\": (data: BulkUpdate & {
+        data: MeterReadCheckSave;
+        [key: string]: unknown;
+    }, config?: AxiosRequestConfig & PutV1Readchecks) => Promise<AxiosResponse<ListOfIds>>;
+    /**
+     * Save Tolerance Check
+     * Update Tolerance check details
+     */
+    \\"DELETE /v1/read-checks\\": (config?: AxiosRequestConfig & DeleteV1Readchecks) => Promise<AxiosResponse<ListOfIds>>;
+    /**
+     * Single Tolerance check
+     * Details on the meter read tolerance check
+     */
+    \\"GET /v1/read-checks/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1ReadchecksId) => Promise<AxiosResponse<MeterReadCheck>>;
+    /**
+     * Save Tolerance Check
+     * Update Tolerance check details
+     */
+    \\"PUT /v1/read-checks/{id}\\": (id: number, data: MeterReadCheckSave, config?: AxiosRequestConfig & PutV1ReadchecksId) => Promise<AxiosResponse<MeterReadCheck>>;
+    /**
+     * Save Tolerance Check
+     * Update Tolerance check details
+     */
+    \\"DELETE /v1/read-checks/{id}\\": (id: number, config?: AxiosRequestConfig & DeleteV1ReadchecksId) => Promise<AxiosResponse<{
+        success: boolean;
+    }>>;
+    /**
+     * Levelisations
+     * List of Levelisation processes by quarters
+     */
+    \\"GET /v1/levelisations\\": (config?: AxiosRequestConfig & GetV1Levelisations) => Promise<AxiosResponse<List & {
+        data?: LevelisationList[];
+        [key: string]: unknown;
+    }>>;
+    /**
+     * Create new Levelisation
+     * Create a new Levelisation
+     */
+    \\"POST /v1/levelisations\\": (data: LevelisationCreate, config?: AxiosRequestConfig & PostV1Levelisations) => Promise<AxiosResponse<Levelisation>>;
+    /**
+     * Quater levelisation
+     * Levelisation calculation for all accounts
+     */
+    \\"GET /v1/levelisations/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1LevelisationsId) => Promise<AxiosResponse<Levelisation>>;
+    /**
+     * Save Levelisation
+     * Update Levelisation
+     */
+    \\"PUT /v1/levelisations/{id}\\": (id: number, data: LevelisationSave, config?: AxiosRequestConfig & PutV1LevelisationsId) => Promise<AxiosResponse<Levelisation>>;
+    /**
+     * Levelisations
+     * List of Levelisation processes by quarters
+     */
+    \\"GET /v1/account-levelisations\\": (config?: AxiosRequestConfig & GetV1Accountlevelisations) => Promise<AxiosResponse<List & {
+        data?: AccountLevelisation[];
+        [key: string]: unknown;
+    }>>;
+    /**
+     * Bulk Save Account Levelisations
+     * Update Account Levelisations at once
+     */
+    \\"PUT /v1/account-levelisations\\": (data: BulkUpdate & {
+        data: BulkAccountLevelisationSave;
+        [key: string]: unknown;
+    }, config?: AxiosRequestConfig & PutV1Accountlevelisations) => Promise<AxiosResponse<ListOfIds>>;
+    /**
+     * Account levelisation tariff
+     * Levelisation tariff for a single account
+     */
+    \\"GET /v1/account-levelisations/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1AccountlevelisationsId) => Promise<AxiosResponse<AccountLevelisation>>;
+    /**
+     * Save Account Levelisation
+     * Update Account Levelisation
+     */
+    \\"PUT /v1/account-levelisations/{id}\\": (id: number, data: AccountLevelisationSave, config?: AxiosRequestConfig & PutV1AccountlevelisationsId) => Promise<AxiosResponse<AccountLevelisation>>;
+    /**
+     * Payment CSV Export
+     * Cheque Payments
+     */
+    \\"GET /v1/payment-export\\": (config?: AxiosRequestConfig & GetV1Paymentexport) => Promise<AxiosResponse>;
+    /**
+     * Accounts
+     * A list of fit and seg accounts
+     */
+    \\"GET /v1/account\\": (config?: AxiosRequestConfig & GetV1Account) => Promise<AxiosResponse<List & {
+        data: AccountListItem[];
+        [key: string]: unknown;
+    }>>;
+    /**
+     * Get reads for the account
+     * Account reads
+     */
+    \\"GET /v1/account/{id}/reads\\": (id: number, config?: AxiosRequestConfig & GetV1AccountIdReads) => Promise<AxiosResponse<MeterRead[]>>;
+    /**
+     * Get reads for the account
+     * Account reads
+     */
+    \\"GET /v1/account/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1AccountId) => Promise<AxiosResponse<Account>>;
+    /**
+     * Get reads for the account
+     * Account reads
+     */
+    \\"GET /v1/account/{id}/contracts\\": (id: number, config?: AxiosRequestConfig & GetV1AccountIdContracts) => Promise<AxiosResponse<Contract[]>>;
+    /**
+     * Get contact by id
+     * Contacts
+     */
+    \\"GET /v1/contact/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1ContactId) => Promise<AxiosResponse<Contact>>;
+    /**
+     * Get contact by id
+     * Contacts
+     */
+    \\"GET /v1/payment\\": (config?: AxiosRequestConfig & GetV1Payment) => Promise<AxiosResponse<{
+        data: Payment[];
+        total: number;
+    }>>;
+    /**
+     * Get installations
+     * Installations
+     */
+    \\"GET /v1/installation\\": (config?: AxiosRequestConfig & GetV1Installation) => Promise<AxiosResponse<{
+        data: Installation[];
+        total: number;
+    }>>;
+    /**
+     * Get meter
+     * Meter
+     */
+    \\"GET /v1/meter/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1MeterId) => Promise<AxiosResponse<Meter>>;
+    /**
+     * Get meters
+     * Meters
+     */
+    \\"GET /v1/meter\\": (config?: AxiosRequestConfig & GetV1Meter) => Promise<AxiosResponse<{
+        data: Meter[];
+        total: number;
+    }>>;
+    /**
+     * Get meter reads
+     * Meter reads
+     */
+    \\"GET /v1/read\\": (config?: AxiosRequestConfig & GetV1Read) => Promise<AxiosResponse<{
+        data: MeterRead[];
+        total: number;
+    }>>;
+    api: AxiosInstance;
+}
+"
+`;
+
 exports[`Axios Content Test statements.yaml 1`] = `
 "import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
 

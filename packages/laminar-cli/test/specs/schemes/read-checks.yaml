@@ -1,0 +1,91 @@
+# All the types for read-checks resource in react-admin
+
+components:
+  schemas:
+    MeterReadCheck:
+      properties:
+        id: { type: number }
+        cfrFitId: { type: string }
+        accountId: { type: number }
+        dateOn: { type: string, format: 'date-time' }
+        value: { type: number }
+        type: { enum: ['Closing', 'Meter Verification', 'Opening', 'Quarterly'] }
+        reason: { type: string }
+        createdAt: { type: string, format: 'date-time' }
+        tolerance: { $ref: '#/components/schemas/MeterReadTolerance' }
+        isAccepted: { type: boolean }
+      required:
+        - id
+        - accountId
+        - cfrFitId
+        - dateOn
+        - value
+        - type
+        - createdAt
+        - isAccepted
+
+    MeterReadCheckSave:
+      properties:
+        isAccepted: { type: boolean }
+      required:
+        - isAccepted
+
+    MeterReadTolerance:
+      properties:
+        previousRead: { $ref: '#/components/schemas/MeterReadToleranceRead' }
+        expected: { $ref: '#/components/schemas/MeterReadToleranceRead' }
+        error: { type: string }
+
+    MeterReadToleranceRead:
+      properties:
+        dateOn: { type: string, format: 'date-time' }
+        value: { type: number }
+      required:
+        - dateOn
+        - value
+
+  responses:
+
+    MeterReadCheckResponse:
+      description: Meter Read tolerance check
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MeterReadCheck'
+
+    MeterReadCheckListResponse:
+      description: List of Meter Reads with tolernace failures
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: 'components.yaml#/components/schemas/List'
+              - properties: { data: { items: { $ref: '#/components/schemas/MeterReadCheck' } } }
+
+  requestBodies:
+
+    MeterReadCheckSaveRequest:
+      required: true
+      description: Update a MeterReadCheck entity
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/MeterReadCheckSave' }
+
+    MeterReadBulkCheckSaveRequest:
+      required: true
+      description: Update multiple MeterReadCheck entities
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: 'components.yaml#/components/schemas/BulkUpdate'
+              - properties: { data: { $ref: '#/components/schemas/MeterReadCheckSave' } }
+                required:
+                  - data
+
+    MeterReadBulkCheckDeleteRequest:
+      required: true
+      description: Delete multiple MeterReadCheck entities
+      content:
+        application/json:
+          schema: { $ref: 'components.yaml#/components/schemas/BulkDelete' }
