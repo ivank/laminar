@@ -217,12 +217,11 @@ function toParameterCoerce<TContext extends Empty>(
   if (coercer) {
     return (ctx) => {
       const location = toParamLocation(parameter.in);
-      const rawValue = ctx[location]?.[parameter.name];
+      const rawValue = ctx[location]?.[parameter.name] ?? resolvedSchema?.default;
+
       if (rawValue !== undefined) {
-        const value = coercer(ctx[location][parameter.name], schema, resolvedSchema);
+        const value = coercer(rawValue, schema, resolvedSchema);
         return { ...ctx, [location]: { ...ctx[location], [parameter.name]: value } };
-      } else if (resolvedSchema?.default) {
-        return { ...ctx, [location]: { ...ctx[location], [parameter.name]: resolvedSchema.default } };
       } else {
         return ctx;
       }
