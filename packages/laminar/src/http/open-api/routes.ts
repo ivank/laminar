@@ -193,7 +193,7 @@ const coercers: { [key: string]: Coercer | undefined } = {
           resolvedPropertyValue !== undefined && coercer
             ? coercer(resolvedPropertyValue, schema, resolvedPropertySchema)
             : resolvedPropertyValue;
-        return { ...acc, [name]: coercedPropertyValue };
+        return coercedPropertyValue === undefined ? acc : { ...acc, [name]: coercedPropertyValue };
       }, {});
     } else {
       return value;

@@ -3,7 +3,7 @@ import { compile, Schema } from '@ovotech/json-schema';
 import { document, Document, mapWithContext, printDocument, Type, withIdentifier } from '@ovotech/ts-compose';
 import { SchemaObject } from 'openapi3-ts';
 import * as ts from 'typescript';
-import { AstContext, AstConvert, isSchemaObject, isReferenceObject } from './traverse';
+import { AstContext, AstConvert, isSchemaObject, isReferenceObject, getReferencedObject } from './traverse';
 
 const nodeType = (type: string): ts.LiteralTypeNode | ts.KeywordTypeNode | ts.ArrayTypeNode => {
   switch (type) {
@@ -116,19 +116,11 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
       additional.context,
       Object.entries(schema.properties),
       (propContext, [name, value]) => {
+        const propSchema = getReferencedObject(value, isSchemaObject, propContext);
         const item = convertSchema(propContext, value);
         const isOptional =
-          !(Array.isArray(schema.required) && schema.required.includes(name)) && schema.default === undefined;
-
-        return document(
-          item.context,
-          Type.Prop({
-            name,
-            type: item.type,
-            isOptional,
-            jsDoc: !isReferenceObject(value) ? value.description : undefined,
-          }),
-        );
+          !(Array.isArray(schema.required) && schema.required.includes(name)) && propSchema.default === undefined;
+        return document(item.context, Type.Prop({ name, type: item.type, isOptional, jsDoc: propSchema.description }));
       },
     );
 

@@ -8,13 +8,13 @@ components:
       examples:
         firstPage:
           summary: First page
-          value: '{ "page": 1 }'
+          value: { "page": 1 }
         secondPage:
           summary: Second page
-          value: '{ "page": 2 }'
+          value: { "page": 2 }
         customPerPage:
           summary: Page with custom page size
-          value: '{ "page": 1, "perPage": 200 }'
+          value: { "page": 1, "perPage": 200 }
       schema:
         type: object
         properties:
@@ -29,7 +29,7 @@ components:
             default: 100
         additionalProperties: false
         default:
-          page: 1,
+          page: 1
           perPage: 100
 
     sort:
@@ -46,8 +46,6 @@ components:
             enum: ['ASC', 'DESC']
             default: 'ASC'
         additionalProperties: false
-        required:
-          - field
         default: {}
 
     filter:

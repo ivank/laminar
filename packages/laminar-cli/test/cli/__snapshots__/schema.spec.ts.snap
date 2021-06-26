@@ -551,7 +551,7 @@ Object {
     },
   },
   "ts": "{
-    bar?: string;
+    bar: string;
     [key: string]: unknown;
 }
 ",
@@ -569,7 +569,7 @@ Object {
     },
   },
   "ts": "{
-    foo?: number;
+    foo: number;
     [key: string]: unknown;
 }
 ",
@@ -584,38 +584,41 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    id: string;
-    $schema: string;
-    title: string;
-    description: string;
-    default: any;
-    multipleOf: number;
-    maximum: number;
+    id?: string;
+    $schema?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    multipleOf?: number;
+    maximum?: number;
     exclusiveMaximum: boolean;
-    minimum: number;
+    minimum?: number;
     exclusiveMinimum: boolean;
-    maxLength: positiveInteger;
-    minLength: positiveIntegerDefault0;
-    pattern: string;
+    maxLength?: positiveInteger;
+    minLength?: positiveIntegerDefault0;
+    pattern?: string;
     additionalItems: boolean | #;
     items: # | schemaArray;
-    maxItems: positiveInteger;
-    minItems: positiveIntegerDefault0;
+    maxItems?: positiveInteger;
+    minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
-    maxProperties: positiveInteger;
-    minProperties: positiveIntegerDefault0;
-    required: stringArray;
+    maxProperties?: positiveInteger;
+    minProperties?: positiveIntegerDefault0;
+    required?: stringArray;
     additionalProperties: boolean | #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    dependencies?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
+    /**
+     * Core schema meta-schema
+     */
     not: #;
     [key: string]: unknown;
 }
@@ -625,38 +628,41 @@ export type positiveInteger = number;
 export type positiveIntegerDefault0 = positiveInteger & any;
 
 export interface # {
-    id: string;
-    $schema: string;
-    title: string;
-    description: string;
-    default: any;
-    multipleOf: number;
-    maximum: number;
+    id?: string;
+    $schema?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    multipleOf?: number;
+    maximum?: number;
     exclusiveMaximum: boolean;
-    minimum: number;
+    minimum?: number;
     exclusiveMinimum: boolean;
-    maxLength: positiveInteger;
-    minLength: positiveIntegerDefault0;
-    pattern: string;
+    maxLength?: positiveInteger;
+    minLength?: positiveIntegerDefault0;
+    pattern?: string;
     additionalItems: boolean | #;
     items: # | schemaArray;
-    maxItems: positiveInteger;
-    minItems: positiveIntegerDefault0;
+    maxItems?: positiveInteger;
+    minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
-    maxProperties: positiveInteger;
-    minProperties: positiveIntegerDefault0;
-    required: stringArray;
+    maxProperties?: positiveInteger;
+    minProperties?: positiveIntegerDefault0;
+    required?: stringArray;
     additionalProperties: boolean | #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    dependencies?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
+    /**
+     * Core schema meta-schema
+     */
     not: #;
     [key: string]: unknown;
 }
@@ -678,38 +684,41 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    id: string;
-    $schema: string;
-    title: string;
-    description: string;
-    default: any;
-    multipleOf: number;
-    maximum: number;
+    id?: string;
+    $schema?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    multipleOf?: number;
+    maximum?: number;
     exclusiveMaximum: boolean;
-    minimum: number;
+    minimum?: number;
     exclusiveMinimum: boolean;
-    maxLength: positiveInteger;
-    minLength: positiveIntegerDefault0;
-    pattern: string;
+    maxLength?: positiveInteger;
+    minLength?: positiveIntegerDefault0;
+    pattern?: string;
     additionalItems: boolean | #;
     items: # | schemaArray;
-    maxItems: positiveInteger;
-    minItems: positiveIntegerDefault0;
+    maxItems?: positiveInteger;
+    minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
-    maxProperties: positiveInteger;
-    minProperties: positiveIntegerDefault0;
-    required: stringArray;
+    maxProperties?: positiveInteger;
+    minProperties?: positiveIntegerDefault0;
+    required?: stringArray;
     additionalProperties: boolean | #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    dependencies?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
+    /**
+     * Core schema meta-schema
+     */
     not: #;
     [key: string]: unknown;
 }
@@ -719,38 +728,41 @@ export type positiveInteger = number;
 export type positiveIntegerDefault0 = positiveInteger & any;
 
 export interface # {
-    id: string;
-    $schema: string;
-    title: string;
-    description: string;
-    default: any;
-    multipleOf: number;
-    maximum: number;
+    id?: string;
+    $schema?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    multipleOf?: number;
+    maximum?: number;
     exclusiveMaximum: boolean;
-    minimum: number;
+    minimum?: number;
     exclusiveMinimum: boolean;
-    maxLength: positiveInteger;
-    minLength: positiveIntegerDefault0;
-    pattern: string;
+    maxLength?: positiveInteger;
+    minLength?: positiveIntegerDefault0;
+    pattern?: string;
     additionalItems: boolean | #;
     items: # | schemaArray;
-    maxItems: positiveInteger;
-    minItems: positiveIntegerDefault0;
+    maxItems?: positiveInteger;
+    minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
-    maxProperties: positiveInteger;
-    minProperties: positiveIntegerDefault0;
-    required: stringArray;
+    maxProperties?: positiveInteger;
+    minProperties?: positiveIntegerDefault0;
+    required?: stringArray;
     additionalProperties: boolean | #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    dependencies?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
+    /**
+     * Core schema meta-schema
+     */
     not: #;
     [key: string]: unknown;
 }
@@ -1841,6 +1853,9 @@ Object {
 
 export interface node# {
     value: number;
+    /**
+     * tree of nodes
+     */
     subtree?: tree#;
     [key: string]: unknown;
 }
@@ -2061,38 +2076,41 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    id: string;
-    $schema: string;
-    title: string;
-    description: string;
-    default: any;
-    multipleOf: number;
-    maximum: number;
+    id?: string;
+    $schema?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    multipleOf?: number;
+    maximum?: number;
     exclusiveMaximum: boolean;
-    minimum: number;
+    minimum?: number;
     exclusiveMinimum: boolean;
-    maxLength: positiveInteger;
-    minLength: positiveIntegerDefault0;
-    pattern: string;
+    maxLength?: positiveInteger;
+    minLength?: positiveIntegerDefault0;
+    pattern?: string;
     additionalItems: boolean | #;
     items: # | schemaArray;
-    maxItems: positiveInteger;
-    minItems: positiveIntegerDefault0;
+    maxItems?: positiveInteger;
+    minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
-    maxProperties: positiveInteger;
-    minProperties: positiveIntegerDefault0;
-    required: stringArray;
+    maxProperties?: positiveInteger;
+    minProperties?: positiveIntegerDefault0;
+    required?: stringArray;
     additionalProperties: boolean | #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    dependencies?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
+    /**
+     * Core schema meta-schema
+     */
     not: #;
     [key: string]: unknown;
 }
@@ -2102,38 +2120,41 @@ export type positiveInteger = number;
 export type positiveIntegerDefault0 = positiveInteger & any;
 
 export interface # {
-    id: string;
-    $schema: string;
-    title: string;
-    description: string;
-    default: any;
-    multipleOf: number;
-    maximum: number;
+    id?: string;
+    $schema?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    multipleOf?: number;
+    maximum?: number;
     exclusiveMaximum: boolean;
-    minimum: number;
+    minimum?: number;
     exclusiveMinimum: boolean;
-    maxLength: positiveInteger;
-    minLength: positiveIntegerDefault0;
-    pattern: string;
+    maxLength?: positiveInteger;
+    minLength?: positiveIntegerDefault0;
+    pattern?: string;
     additionalItems: boolean | #;
     items: # | schemaArray;
-    maxItems: positiveInteger;
-    minItems: positiveIntegerDefault0;
+    maxItems?: positiveInteger;
+    minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
-    maxProperties: positiveInteger;
-    minProperties: positiveIntegerDefault0;
-    required: stringArray;
+    maxProperties?: positiveInteger;
+    minProperties?: positiveIntegerDefault0;
+    required?: stringArray;
     additionalProperties: boolean | #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    dependencies?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
+    /**
+     * Core schema meta-schema
+     */
     not: #;
     [key: string]: unknown;
 }
@@ -3460,7 +3481,7 @@ Object {
     },
   },
   "ts": "{
-    bar?: string;
+    bar: string;
     [key: string]: unknown;
 }
 ",
@@ -3478,7 +3499,7 @@ Object {
     },
   },
   "ts": "{
-    foo?: number;
+    foo: number;
     [key: string]: unknown;
 }
 ",
@@ -3493,43 +3514,43 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    title: string;
-    description: string;
-    default: any;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -3539,43 +3560,43 @@ export type nonNegativeInteger = number;
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
 export interface # {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    title: string;
-    description: string;
-    default: any;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -3597,43 +3618,43 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    title: string;
-    description: string;
-    default: any;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -3643,43 +3664,43 @@ export type nonNegativeInteger = number;
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
 export interface # {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    title: string;
-    description: string;
-    default: any;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -5002,6 +5023,9 @@ Object {
 
 export interface node# {
     value: number;
+    /**
+     * tree of nodes
+     */
     subtree?: tree#;
     [key: string]: unknown;
 }
@@ -5222,43 +5246,43 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    title: string;
-    description: string;
-    default: any;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -5268,43 +5292,43 @@ export type nonNegativeInteger = number;
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
 export interface # {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    title: string;
-    description: string;
-    default: any;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -6647,7 +6671,7 @@ Object {
     },
   },
   "ts": "{
-    bar?: string;
+    bar: string;
     [key: string]: unknown;
 }
 ",
@@ -6665,7 +6689,7 @@ Object {
     },
   },
   "ts": "{
-    foo?: number;
+    foo: number;
     [key: string]: unknown;
 }
 ",
@@ -6680,50 +6704,50 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    $comment: string;
-    title: string;
-    description: string;
-    default: any;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    $comment?: string;
+    title?: string;
+    description?: string;
+    default?: any;
     readOnly: boolean;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    contentMediaType: string;
-    contentEncoding: string;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    contentMediaType?: string;
+    contentEncoding?: string;
     if: #;
     then: #;
     else: #;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -6733,50 +6757,50 @@ export type nonNegativeInteger = number;
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
 export interface # {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    $comment: string;
-    title: string;
-    description: string;
-    default: any;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    $comment?: string;
+    title?: string;
+    description?: string;
+    default?: any;
     readOnly: boolean;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    contentMediaType: string;
-    contentEncoding: string;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    contentMediaType?: string;
+    contentEncoding?: string;
     if: #;
     then: #;
     else: #;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -6798,50 +6822,50 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    $comment: string;
-    title: string;
-    description: string;
-    default: any;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    $comment?: string;
+    title?: string;
+    description?: string;
+    default?: any;
     readOnly: boolean;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    contentMediaType: string;
-    contentEncoding: string;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    contentMediaType?: string;
+    contentEncoding?: string;
     if: #;
     then: #;
     else: #;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -6851,50 +6875,50 @@ export type nonNegativeInteger = number;
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
 export interface # {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    $comment: string;
-    title: string;
-    description: string;
-    default: any;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    $comment?: string;
+    title?: string;
+    description?: string;
+    default?: any;
     readOnly: boolean;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    contentMediaType: string;
-    contentEncoding: string;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    contentMediaType?: string;
+    contentEncoding?: string;
     if: #;
     then: #;
     else: #;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -8439,6 +8463,9 @@ Object {
 
 export interface node# {
     value: number;
+    /**
+     * tree of nodes
+     */
     subtree?: tree#;
     [key: string]: unknown;
 }
@@ -8659,50 +8686,50 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    $comment: string;
-    title: string;
-    description: string;
-    default: any;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    $comment?: string;
+    title?: string;
+    description?: string;
+    default?: any;
     readOnly: boolean;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    contentMediaType: string;
-    contentEncoding: string;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    contentMediaType?: string;
+    contentEncoding?: string;
     if: #;
     then: #;
     else: #;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -8712,50 +8739,50 @@ export type nonNegativeInteger = number;
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
 export interface # {
-    $id: string;
-    $schema: string;
-    $ref: string;
-    $comment: string;
-    title: string;
-    description: string;
-    default: any;
+    $id?: string;
+    $schema?: string;
+    $ref?: string;
+    $comment?: string;
+    title?: string;
+    description?: string;
+    default?: any;
     readOnly: boolean;
-    examples: any[];
-    multipleOf: number;
-    maximum: number;
-    exclusiveMaximum: number;
-    minimum: number;
-    exclusiveMinimum: number;
-    maxLength: nonNegativeInteger;
-    minLength: nonNegativeIntegerDefault0;
-    pattern: string;
+    examples?: any[];
+    multipleOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+    maxLength?: nonNegativeInteger;
+    minLength?: nonNegativeIntegerDefault0;
+    pattern?: string;
     additionalItems: #;
     items: # | schemaArray;
-    maxItems: nonNegativeInteger;
-    minItems: nonNegativeIntegerDefault0;
+    maxItems?: nonNegativeInteger;
+    minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
     contains: #;
-    maxProperties: nonNegativeInteger;
-    minProperties: nonNegativeIntegerDefault0;
+    maxProperties?: nonNegativeInteger;
+    minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
     additionalProperties: #;
     definitions: any;
     properties: any;
     patternProperties: any;
-    dependencies: any;
+    dependencies?: any;
     propertyNames: #;
-    const: any;
-    enum: any[];
-    type: simpleTypes | simpleTypes[];
-    format: string;
-    contentMediaType: string;
-    contentEncoding: string;
+    const?: any;
+    enum?: any[];
+    type?: simpleTypes | simpleTypes[];
+    format?: string;
+    contentMediaType?: string;
+    contentEncoding?: string;
     if: #;
     then: #;
     else: #;
-    allOf: schemaArray;
-    anyOf: schemaArray;
-    oneOf: schemaArray;
+    allOf?: schemaArray;
+    anyOf?: schemaArray;
+    oneOf?: schemaArray;
     not: #;
     [key: string]: unknown;
 }
@@ -10141,7 +10168,7 @@ Object {
     },
   },
   "ts": "{
-    bar?: string;
+    bar: string;
     [key: string]: unknown;
 }
 ",
@@ -10159,7 +10186,7 @@ Object {
     },
   },
   "ts": "{
-    foo?: number;
+    foo: number;
     [key: string]: unknown;
 }
 ",
@@ -10174,8 +10201,8 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $defs?: any;
-    definitions?: any;
+    $defs: any;
+    definitions: any;
     dependencies?: any;
     [key: string]: unknown;
 }
@@ -10191,8 +10218,8 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $defs?: any;
-    definitions?: any;
+    $defs: any;
+    definitions: any;
     dependencies?: any;
     [key: string]: unknown;
 }
@@ -10680,8 +10707,8 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $defs?: any;
-    definitions?: any;
+    $defs: any;
+    definitions: any;
     dependencies?: any;
     [key: string]: unknown;
 }
@@ -10697,8 +10724,8 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $defs?: any;
-    definitions?: any;
+    $defs: any;
+    definitions: any;
     dependencies?: any;
     [key: string]: unknown;
 }
@@ -10714,8 +10741,8 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $defs?: any;
-    definitions?: any;
+    $defs: any;
+    definitions: any;
     dependencies?: any;
     [key: string]: unknown;
 }
@@ -11855,6 +11882,9 @@ Object {
 
 export interface node# {
     value: number;
+    /**
+     * tree of nodes
+     */
     subtree?: tree#;
     [key: string]: unknown;
 }
@@ -12099,8 +12129,8 @@ Object {
   "ts": "schema#
 
 export interface schema# {
-    $defs?: any;
-    definitions?: any;
+    $defs: any;
+    definitions: any;
     dependencies?: any;
     [key: string]: unknown;
 }

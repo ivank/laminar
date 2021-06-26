@@ -78,7 +78,7 @@ describe('Integration', () => {
       paths: {
         '/about': { get: async () => file(join(__dirname, 'about.html')) },
         '/pets': {
-          get: async ({ logger, query: { ids, limit, price, isKitten, pagination } }) => {
+          get: async ({ logger, query: { ids, limit, price, isKitten, pagination, sort } }) => {
             logger('Get all');
             let pets = db;
 
@@ -98,8 +98,18 @@ describe('Integration', () => {
               pets = pets.filter((pet) => ids.includes(pet.id));
             }
 
-            if (pagination) {
-              pets = pets.slice(pagination.page * pagination.perPage, (pagination.page + 1) * pagination.perPage);
+            pets = pets.slice(pagination.page * pagination.perPage, (pagination.page + 1) * pagination.perPage);
+
+            if (sort.field) {
+              pets = [...pets].sort((a, b) =>
+                sort.order === 'ASC'
+                  ? (a[sort.field] as string) > (b[sort.field] as string)
+                    ? 1
+                    : -1
+                  : (a[sort.field] as string) < (b[sort.field] as string)
+                  ? 1
+                  : -1,
+              );
             }
 
             return jsonOk(pets);
@@ -151,6 +161,22 @@ describe('Integration', () => {
     await run({ initOrder: [http] }, async () => {
       const api = axios.create({ baseURL: 'http://localhost:8063' });
 
+      await expect(api.get('/pets?sort[field]=id')).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 111, name: 'Catty', tag: 'kitten' },
+          { id: 222, name: 'Doggy' },
+        ],
+      });
+
+      await expect(api.get('/pets?sort[field]=id&sort[order]=DESC')).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 222, name: 'Doggy' },
+          { id: 111, name: 'Catty', tag: 'kitten' },
+        ],
+      });
+
       await expect(api.get('/pets?pagination[page]=0&pagination[perPage]=1')).resolves.toMatchObject({
         status: 200,
         data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
@@ -188,6 +214,14 @@ describe('Integration', () => {
       });
 
       await expect(api.get('/pets?ids[]=111&ids[]=222')).resolves.toMatchObject({
+        status: 200,
+        data: [
+          { id: 111, name: 'Catty', tag: 'kitten' },
+          { id: 222, name: 'Doggy' },
+        ],
+      });
+
+      await expect(api.get('/pets?ids=111&ids=222')).resolves.toMatchObject({
         status: 200,
         data: [
           { id: 111, name: 'Catty', tag: 'kitten' },
@@ -556,18 +590,21 @@ describe('Integration', () => {
       expect(log).toHaveBeenNthCalledWith(5, 'Get all');
       expect(log).toHaveBeenNthCalledWith(6, 'Get all');
       expect(log).toHaveBeenNthCalledWith(7, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(8, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(8, 'Get all');
       expect(log).toHaveBeenNthCalledWith(9, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(10, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(10, 'Get all');
       expect(log).toHaveBeenNthCalledWith(11, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(12, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(13, 'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
+      expect(log).toHaveBeenNthCalledWith(12, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(13, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(14, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(15, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(16, 'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
       expect(log).toHaveBeenNthCalledWith(
-        14,
+        17,
         'new pet Cookie Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
       );
-      expect(log).toHaveBeenNthCalledWith(15, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(16, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(18, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(19, 'Get all');
     });
   });
 });

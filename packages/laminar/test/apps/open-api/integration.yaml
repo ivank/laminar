@@ -64,6 +64,20 @@ paths:
             default:
               page: 0
               perPage: 25
+        - name: sort
+          in: query
+          description: React admin sort object
+          example: { "field": "createdAt", "order": "ASC" }
+          schema:
+            type: object
+            properties:
+              field:
+                type: string
+              order:
+                enum: ['ASC', 'DESC']
+                default: 'ASC'
+            additionalProperties: false
+            default: {}
         - name: limit
           in: query
           description: maximum number of results to return
