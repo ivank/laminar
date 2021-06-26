@@ -35,7 +35,7 @@
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@ovotech/laminar": "^0.11.6",
+    "@ovotech/laminar": "^0.11.7",
     "@ovotech/laminar-jwt": "^0.12.0"
   }
 }

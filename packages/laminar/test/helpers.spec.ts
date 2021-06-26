@@ -8,6 +8,7 @@ describe('queryParserMiddleware', () => {
     ${'param=test,other,next'}                     | ${{ param: ['test', 'other', 'next'] }}
     ${'param=test&other=test'}                     | ${{ param: 'test', other: 'test' }}
     ${'this[one][two]=other&arr[]=111'}            | ${{ this: { one: { two: 'other' } }, arr: ['111'] }}
+    ${'arr=test&arr=other&arr=next'}               | ${{ arr: ['test', 'other', 'next'] }}
     ${'arr[]=test&arr[]=other'}                    | ${{ arr: ['test', 'other'] }}
     ${'arr[0]=test&arr[1]=other'}                  | ${{ arr: ['test', 'other'] }}
     ${'params[ids][0]=1&params[ids][1]=2'}         | ${{ params: { ids: ['1', '2'] } }}

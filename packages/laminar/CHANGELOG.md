@@ -78,3 +78,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added support for default values in parameters
+
+## [0.11.7] - 2021-06-26
+
+### Changed
+
+- Added support for form style array parameters

@@ -10,17 +10,21 @@ export function toArray<T = unknown>(value: T | T[]): T[] {
 type Obj = Record<string, unknown>;
 
 const isObj = (obj: unknown): obj is Obj => typeof obj === 'object' && obj !== null;
+const isPrimitive = (obj: unknown): obj is string => obj !== undefined && !(typeof obj === 'object');
 
 const setQuery = (path: string[], value: unknown, obj: Obj): Obj | unknown[] => {
   const [current, ...rest] = path;
   if (current && !/^\d+$/.test(current)) {
     const currentValue = obj[current];
+
     return {
       ...obj,
-      [current]: rest.length
-        ? Array.isArray(currentValue)
-          ? [...currentValue, value]
-          : setQuery(rest, value, isObj(currentValue) ? currentValue : {})
+      [current]: Array.isArray(currentValue)
+        ? [...currentValue, value]
+        : rest.length
+        ? setQuery(rest, value, isObj(currentValue) ? currentValue : {})
+        : isPrimitive(currentValue)
+        ? [currentValue, value]
         : value,
     };
   } else {
