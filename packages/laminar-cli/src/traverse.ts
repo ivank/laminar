@@ -48,15 +48,16 @@ export const isSchemaObject = (item: unknown): item is SchemaObject =>
 export const getReferencedObject = <T>(
   item: T | ReferenceObject,
   guard: (item: unknown) => item is T,
+  type: string,
   context: AstContext,
 ): T => {
   if (isReferenceObject(item)) {
     if (!context.refs[item.$ref]) {
-      throw new Error(`Reference Error [${item.$ref}] not found`);
+      throw new Error(`Reference Error [${JSON.stringify(item)}] not found`);
     }
     const resolved = context.refs[item.$ref];
     if (!guard(resolved)) {
-      throw new Error(`Reference Error [${item.$ref}] was not the correct type`);
+      throw new Error(`Reference Error [${JSON.stringify(item)}] was not the expected type ${type}`);
     }
     return resolved;
   } else {

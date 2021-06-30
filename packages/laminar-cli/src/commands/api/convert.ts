@@ -73,8 +73,8 @@ const convertParameters = (
 ): Document<ts.TypeLiteralNode, AstContext> => {
   const astParams = parameters.reduce<AstParameters>(
     (node, paramOrRef) => {
-      const param = getReferencedObject(paramOrRef, isParameterObject, node.context);
-      const schema = getReferencedObject(param.schema, isSchemaObject, node.context);
+      const param = getReferencedObject(paramOrRef, isParameterObject, 'parameter', node.context);
+      const schema = getReferencedObject(param.schema, isSchemaObject, 'schema', node.context);
       const paramNode = param.schema ? convertSchema(node.context, param.schema) : document(node.context, Type.Any);
       const params = node.in[toParamLocation(param.in)] ?? [];
       return {
@@ -134,7 +134,7 @@ const convertResponse = (
   schemaOrRef?: SchemaObject | ReferenceObject,
 ): Document<ts.TypeNode | undefined, AstContext> => {
   if (schemaOrRef) {
-    const schema = getReferencedObject(schemaOrRef, isSchemaObject, context);
+    const schema = getReferencedObject(schemaOrRef, isSchemaObject, 'schema', context);
     const responseDocument = convertSchema(context, schemaOrRef);
     if (schema.type === 'string') {
       return document(
@@ -157,14 +157,14 @@ const convertResponses = (
   const responseEntries = Object.entries<ResponseObject | ReferenceObject>(responses);
 
   const params = mapWithContext(context, responseEntries, (responseContext, [status, responseOrRef]) => {
-    const response = getReferencedObject(responseOrRef, isResponseObject, responseContext);
+    const response = getReferencedObject(responseOrRef, isResponseObject, 'response', responseContext);
     const responseMediaTypes = Object.entries<MediaTypeObject | ReferenceObject>(response.content ?? { '*': {} });
 
     const { items, context: mediaTypesContext } = mapWithContext(
       responseContext,
       responseMediaTypes,
       (mediaTypeContext, [type, mediaTypeOrRef]) => {
-        const mediaType = getReferencedObject(mediaTypeOrRef, isMediaTypeObject, mediaTypeContext);
+        const mediaType = getReferencedObject(mediaTypeOrRef, isMediaTypeObject, 'media-type', mediaTypeContext);
         const typeString = type.includes('*') ? Type.String : Type.Literal(type);
         const typeStatus = status === 'default' ? Type.Number : Type.Literal(Number(status));
 
@@ -201,7 +201,7 @@ const convertRequestBody = (
   context: AstContext,
   requestBodyOrRef: RequestBodyObject | ReferenceObject,
 ): Document<ts.TypeLiteralNode, AstContext> => {
-  const requestBody = getReferencedObject(requestBodyOrRef, isRequestBodyObject, context);
+  const requestBody = getReferencedObject(requestBodyOrRef, isRequestBodyObject, 'request-body', context);
   const schema = requestBody.content['application/json'] ? requestBody.content['application/json'].schema : {};
   const node = schema ? convertSchema(context, schema) : document(context, Type.Any);
   return document(
@@ -218,7 +218,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
     Object.entries<PathItemObject>(api.paths),
     (pathContext, [path, pathApiOrRef]) => {
       const { parameters, description, summary, ...methodsApiOrRef } = pathApiOrRef;
-      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, context);
+      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, 'schema', context);
 
       const methods = mapWithContext(
         pathContext,

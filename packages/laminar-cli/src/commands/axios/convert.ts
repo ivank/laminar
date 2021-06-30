@@ -121,7 +121,7 @@ const convertResponses = (
     .map(([, response]) => response);
 
   const astResponses = mapWithContext(context, responseEntries, (responseContext, responseOrRef) => {
-    const response = getReferencedObject(responseOrRef, isResponseObject, responseContext);
+    const response = getReferencedObject(responseOrRef, isResponseObject, 'response', responseContext);
     const schema = response?.content?.['application/json']?.schema ?? response?.content?.['*/*']?.schema;
 
     return schema ? convertSchema(responseContext, schema) : document(responseContext, undefined);
@@ -140,7 +140,7 @@ const convertRequestBody = (
   requestBodyOrRef?: RequestBodyObject | ReferenceObject,
 ): Document<{ isOptional: boolean; body: ts.TypeNode }, AstContext> => {
   const requestBody = requestBodyOrRef
-    ? getReferencedObject(requestBodyOrRef, isRequestBodyObject, context)
+    ? getReferencedObject(requestBodyOrRef, isRequestBodyObject, 'request-body', context)
     : undefined;
   const schema = requestBody?.content['application/json']?.schema;
   const convertedSchema = schema ? convertSchema(context, schema) : document(context, Type.Unknown);
@@ -156,11 +156,11 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
     Object.entries<PathItemObject>(api.paths),
     (pathContext, [path, pathApiOrRef]) => {
       const { parameters, description, summary, ...methodsApiOrRef } = pathApiOrRef;
-      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, context);
+      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, 'schema', context);
 
       const methods = mapWithContext(pathContext, Object.entries(pathApi), (methodContext, [method, operation]) => {
         const combinedParameters = [...(parameters ?? []), ...(operation.parameters ?? [])].map((item) =>
-          getReferencedObject<ParameterObject>(item, isParameterObject, methodContext),
+          getReferencedObject<ParameterObject>(item, isParameterObject, 'parameter', methodContext),
         );
 
         const requestName = `${method.toUpperCase()} ${path}`;

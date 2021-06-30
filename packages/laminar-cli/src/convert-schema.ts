@@ -116,7 +116,7 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
       additional.context,
       Object.entries(schema.properties),
       (propContext, [name, value]) => {
-        const propSchema = getReferencedObject(value, isSchemaObject, propContext);
+        const propSchema = getReferencedObject(value, isSchemaObject, 'schema', propContext);
         const item = convertSchema(propContext, value);
         const isOptional =
           !(Array.isArray(schema.required) && schema.required.includes(name)) && propSchema.default === undefined;
