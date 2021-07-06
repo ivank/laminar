@@ -7,10 +7,10 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "private": true,
   "scripts": {
-    "test": "lerna run test --stream",
-    "lint": "lerna run lint --stream",
-    "build": "lerna run build --stream",
-    "publish": "lerna run publish",
+    "test": "yarn workspaces foreach --verbose run test",
+    "lint": "yarn workspaces foreach --parallel --verbose run lint",
+    "build": "yarn workspaces foreach --parallel --topological-dev --verbose run build",
+    "publish": "yarn workspaces foreach --verbose npm publish --tolerate-republish",
     "build:readme": "build-readme README.md 'https://github.com/ovotech/laminar/tree/main' && bash -c 'for f in docs/*.md; do yarn build-readme $f https://github.com/ovotech/laminar/tree/main; done' && typedoc"
   },
   "workspaces": [
@@ -28,7 +28,6 @@
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "lerna": "^4.0.0",
     "prettier": "^2.2.1",
     "typedoc": "^0.20.35",
     "typescript": "^4.2.3"

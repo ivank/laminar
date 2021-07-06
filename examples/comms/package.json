@@ -10,7 +10,7 @@
   "homepage": "https://github.com/ovotech/laminar/tree/main/examples/comms#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar-cli": "^0.11.6",
+    "@ovotech/laminar-cli": "*",
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.37",
     "@types/pg": "^7.14.11",
@@ -41,9 +41,9 @@
   },
   "dependencies": {
     "@kafkajs/confluent-schema-registry": "^2.0.1",
-    "@ovotech/laminar": "^0.11.9",
-    "@ovotech/laminar-kafkajs": "^0.12.0",
-    "@ovotech/laminar-pg": "^0.11.0",
+    "@ovotech/laminar": "*",
+    "@ovotech/laminar-kafkajs": "*",
+    "@ovotech/laminar-pg": "*",
     "kafkajs": "^1.15.0",
     "pg": "^8.5.1"
   }
