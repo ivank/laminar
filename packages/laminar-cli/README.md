@@ -244,9 +244,7 @@ const simple = axiosOapi(axios.create({ baseURL: 'http://simple.example.com' }))
 
 simple['GET /test/{id}']('20').then(({ data }) => console.log(data));
 
-simple['POST /test/{id}']('30', { email: 'test2example.com' }).then(({ data }) =>
-  console.log(data),
-);
+simple['POST /test/{id}']('30', { email: 'test2example.com' }).then(({ data }) => console.log(data));
 ```
 
 ## Complex example
@@ -320,7 +318,7 @@ yarn lint
 
 ## Deployment
 
-Deployment is preferment by lerna automatically on merge / push to main, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
+Deployment is preferment by yarn automatically on merge / push to main, but you'll need to bump the package version numbers yourself. Only updated packages with newer versions will be pushed to the npm registry.
 
 ## Contributing
 
