@@ -10,7 +10,7 @@
     "test": "yarn workspaces foreach --verbose run test",
     "lint": "yarn workspaces foreach --parallel --verbose run lint",
     "build": "yarn workspaces foreach --parallel --topological-dev --verbose run build",
-    "publish": "yarn workspaces foreach --verbose npm publish --tolerate-republish --access public",
+    "publish": "yarn workspaces foreach --no-private --verbose npm publish --tolerate-republish --access public",
     "build:readme": "build-readme README.md 'https://github.com/ovotech/laminar/tree/main' && bash -c 'for f in docs/*.md; do yarn build-readme $f https://github.com/ovotech/laminar/tree/main; done' && typedoc"
   },
   "workspaces": [
