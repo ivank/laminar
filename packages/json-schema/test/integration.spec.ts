@@ -135,12 +135,8 @@ describe('Helper isEqual', () => {
     const value = { animal: 'cat', weight: 12 };
     const value2 = { animal: 'other', weight: '12' };
 
-    await expect(
-      ensureValid<AnimalType>({ schema: animalSchema, value: value }),
-    ).resolves.toMatchObject({ value });
-    await expect(
-      ensureValid<AnimalType>({ schema: animalSchema, value: value2 }),
-    ).rejects.toMatchObject({
+    await expect(ensureValid<AnimalType>({ schema: animalSchema, value: value })).resolves.toMatchObject({ value });
+    await expect(ensureValid<AnimalType>({ schema: animalSchema, value: value2 })).rejects.toMatchObject({
       message:
         'Invalid value\n[value.animal] (pattern) should match /cat|dog/\n[value.weight] (type) should be of type number,integer\n',
     });

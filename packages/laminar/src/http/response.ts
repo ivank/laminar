@@ -597,9 +597,7 @@ export function jsonOk<TResponseBody>(
  *
  * @category HttpResponse
  */
-export function jsonNoContent(
-  headers: OutgoingHttpHeaders = {},
-): {
+export function jsonNoContent(headers: OutgoingHttpHeaders = {}): {
   status: 204;
   body: undefined;
   headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
@@ -862,9 +860,7 @@ export function textOk<TResponseBody>(
  *
  * @category HttpResponse
  */
-export function textNoContent(
-  headers: OutgoingHttpHeaders = {},
-): {
+export function textNoContent(headers: OutgoingHttpHeaders = {}): {
   status: 204;
   body: undefined;
   headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
@@ -1113,9 +1109,7 @@ export function htmlOk<TResponseBody>(
  *
  * @category HttpResponse
  */
-export function htmlNoContent(
-  headers: OutgoingHttpHeaders = {},
-): {
+export function htmlNoContent(headers: OutgoingHttpHeaders = {}): {
   status: 204;
   body: undefined;
   headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;

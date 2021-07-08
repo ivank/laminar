@@ -7,8 +7,11 @@ import { SimpleQueue, Boss } from './simple-queue';
 export interface BossContext<TData> {
   boss: Boss<TData>;
 }
-export const bossMiddleware = <TData>(boss: Boss<TData>): Middleware<BossContext<TData>> => (next) => (ctx) =>
-  next({ ...ctx, boss });
+export const bossMiddleware =
+  <TData>(boss: Boss<TData>): Middleware<BossContext<TData>> =>
+  (next) =>
+  (ctx) =>
+    next({ ...ctx, boss });
 
 describe('Services', () => {
   it('Should start and stop services', async () => {

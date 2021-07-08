@@ -39,7 +39,7 @@ export function isSecurityResponse(item: Security): item is HttpResponse {
  */
 export async function validateSecurity<
   TContext extends Empty = Empty,
-  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo
+  TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo,
 >(
   schema: ResolvedSchema,
   ctx: TContext & HttpContext & OapiContext,

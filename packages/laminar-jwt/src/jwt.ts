@@ -130,15 +130,22 @@ export const verifyBearer = async (
   return verifyToken(options, token, scopes);
 };
 
-export const authMiddleware = (options: JWTVerify): ((scopes?: string[]) => HttpMiddleware<RequestAuthInfo>) => (
-  scopes,
-) => (next) => async (req) => {
-  const result = await verifyBearer(options, req.incommingMessage.headers.authorization, scopes);
-  return isSecurityOk(result) ? next({ ...req, ...result }) : result;
-};
+export const authMiddleware =
+  (options: JWTVerify): ((scopes?: string[]) => HttpMiddleware<RequestAuthInfo>) =>
+  (scopes) =>
+  (next) =>
+  async (req) => {
+    const result = await verifyBearer(options, req.incommingMessage.headers.authorization, scopes);
+    return isSecurityOk(result) ? next({ ...req, ...result }) : result;
+  };
 
-export const jwtSecurityResolver = (options: JWTVerify): OapiSecurityResolver<Empty, User> => ({ headers, scopes }) =>
-  verifyBearer(options, headers.authorization, scopes);
+export const jwtSecurityResolver =
+  (options: JWTVerify): OapiSecurityResolver<Empty, User> =>
+  ({ headers, scopes }) =>
+    verifyBearer(options, headers.authorization, scopes);
 
-export const createSessionMiddleware = (options: JWTSign): Middleware<RequestSign> => (next) => async (req) =>
-  next({ ...req, sign: (user) => createSession(options, user) });
+export const createSessionMiddleware =
+  (options: JWTSign): Middleware<RequestSign> =>
+  (next) =>
+  async (req) =>
+    next({ ...req, sign: (user) => createSession(options, user) });

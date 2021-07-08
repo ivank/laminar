@@ -34,7 +34,7 @@ export interface Service {
  * ```
  */
 export type AbstractMiddleware<TRequest, TResponse, TProvide extends Empty = Empty, TRequire extends Empty = Empty> = <
-  TInherit extends TRequest
+  TInherit extends TRequest,
 >(
   next: (ctx: TProvide & TRequire & TInherit) => Promise<TResponse>,
 ) => (ctx: TRequire & TInherit) => Promise<TResponse>;

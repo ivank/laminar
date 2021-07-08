@@ -24,3 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added named type for avro
+
+## [0.11.7] - 2021-07-08
+
+### Changed
+
+- Switched to using typescript 3.4.5

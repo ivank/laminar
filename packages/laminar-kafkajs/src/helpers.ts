@@ -10,9 +10,10 @@ const stringLevel = { [0]: 'error', [1]: 'error', [2]: 'warn', [4]: 'info', [5]:
  * Convert a {@link LoggerLike} logger into a kafkajs logger.
  */
 export function kafkaLogCreator(logger: LoggerLike): logCreator {
-  return () => ({ level, log: { message, ...extra } }) => {
-    logger[stringLevel[level]](message, extra);
-  };
+  return () =>
+    ({ level, log: { message, ...extra } }) => {
+      logger[stringLevel[level]](message, extra);
+    };
 }
 
 /**

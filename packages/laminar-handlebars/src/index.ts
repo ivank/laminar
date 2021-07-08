@@ -45,7 +45,10 @@ export interface RequestHandlebars {
   hbs: HandlebarsRender;
 }
 
-const hasExtension = (extension: string) => (file: string): boolean => file.endsWith(extension);
+const hasExtension =
+  (extension: string) =>
+  (file: string): boolean =>
+    file.endsWith(extension);
 
 export const deepReaddirSync = ({ dir, extension }: CompileTemplatesOptions): string[] =>
   readdirSync(dir, { withFileTypes: true })

@@ -60,6 +60,12 @@ export const messages: Messages = {
       : `[${name}] (anyOf) should match at least 1 schema`,
 };
 
-export const toMessage = (messages: Messages) => (error: Invalid): string => messages[error.code](error);
-export const toMessages = (messages: Messages) => (validation: Validation): string[] =>
-  errors(validation).map(toMessage(messages));
+export const toMessage =
+  (messages: Messages) =>
+  (error: Invalid): string =>
+    messages[error.code](error);
+
+export const toMessages =
+  (messages: Messages) =>
+  (validation: Validation): string[] =>
+    errors(validation).map(toMessage(messages));

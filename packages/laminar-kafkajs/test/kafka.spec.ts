@@ -20,8 +20,11 @@ export interface LoggerContext {
   logger: LoggerLike;
 }
 
-export const loggerMiddleware = (logger: LoggerLike): Middleware<LoggerContext> => (next) => (ctx) =>
-  next({ ...ctx, logger });
+export const loggerMiddleware =
+  (logger: LoggerLike): Middleware<LoggerContext> =>
+  (next) =>
+  (ctx) =>
+    next({ ...ctx, logger });
 
 export interface Event1 {
   field1: string;
@@ -227,7 +230,7 @@ describe('Integration', () => {
             commitedOffset: expect.arrayContaining([{ partition: 0, offset: 4 }]),
           });
         },
-        { delay: 1000, retries: 20 },
+        { delay: 1000, retries: 30 },
       );
     } finally {
       await stop({ initOrder, logger });

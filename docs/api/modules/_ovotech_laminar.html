@@ -295,19 +295,6 @@
 							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/types.ts#L36">packages/laminar/src/types.ts:36</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A type to help with creating specific middlewares.
-								Allows you to say create a middleware for a function that takes those specific arguments and returns a specific type.
-							This is used throughout laminar to define type like <a href="_ovotech_laminar.html#httpmiddleware"></a> and <a href="_ovotech_laminar_pgboss.html#workermiddleware">WorkerMiddleware</a></p>
-						</div>
-						<p>For example this will create a middlware type for function that would always accept <code>MyRequest</code> type.</p>
-						<pre><code class="language-typescript"><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">MyRequest</span><span style="color: #000000"> {</span>
-<span style="color: #000000">   </span><span style="color: #001080">text</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
-<span style="color: #000000">}</span>
-<span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">MyMiddleware</span><span style="color: #000000">&lt;</span><span style="color: #267F99">TProvide</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Empty</span><span style="color: #000000"> = </span><span style="color: #267F99">Empty</span><span style="color: #000000">, </span><span style="color: #267F99">TRequire</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Empty</span><span style="color: #000000"> = </span><span style="color: #267F99">Empty</span><span style="color: #000000">&gt; = </span><span style="color: #267F99">AbstractMiddleware</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MyRequest</span><span style="color: #000000">, </span><span style="color: #267F99">void</span><span style="color: #000000">, </span><span style="color: #267F99">TProvide</span><span style="color: #000000">, </span><span style="color: #267F99">Trequire</span><span style="color: #000000">&gt;;</span>
-</code></pre>
-					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -332,6 +319,19 @@
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>A type to help with creating specific middlewares.
+													Allows you to say create a middleware for a function that takes those specific arguments and returns a specific type.
+												This is used throughout laminar to define type like <a href="_ovotech_laminar.html#httpmiddleware"></a> and <a href="_ovotech_laminar_pgboss.html#workermiddleware">WorkerMiddleware</a></p>
+											</div>
+											<p>For example this will create a middlware type for function that would always accept <code>MyRequest</code> type.</p>
+											<pre><code class="language-typescript"><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">MyRequest</span><span style="color: #000000"> {</span>
+<span style="color: #000000">   </span><span style="color: #001080">text</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+<span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">MyMiddleware</span><span style="color: #000000">&lt;</span><span style="color: #267F99">TProvide</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Empty</span><span style="color: #000000"> = </span><span style="color: #267F99">Empty</span><span style="color: #000000">, </span><span style="color: #267F99">TRequire</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Empty</span><span style="color: #000000"> = </span><span style="color: #267F99">Empty</span><span style="color: #000000">&gt; = </span><span style="color: #267F99">AbstractMiddleware</span><span style="color: #000000">&lt;</span><span style="color: #267F99">MyRequest</span><span style="color: #000000">, </span><span style="color: #267F99">void</span><span style="color: #000000">, </span><span style="color: #267F99">TProvide</span><span style="color: #000000">, </span><span style="color: #267F99">Trequire</span><span style="color: #000000">&gt;;</span>
+</code></pre>
+										</div>
 										<h4 class="tsd-type-parameters-title">Type parameters</h4>
 										<ul class="tsd-type-parameters">
 											<li>
@@ -447,11 +447,6 @@
 							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/http/types.ts#L107">packages/laminar/src/http/types.ts:107</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A pure function to convert an <a href="../interfaces/_ovotech_laminar.httpcontext.html">HttpContext</a> into a <a href="../interfaces/_ovotech_laminar.httpresponse.html">HttpResponse</a> object</p>
-						</div>
-					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -470,6 +465,11 @@
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>A pure function to convert an <a href="../interfaces/_ovotech_laminar.httpcontext.html">HttpContext</a> into a <a href="../interfaces/_ovotech_laminar.httpresponse.html">HttpResponse</a> object</p>
+											</div>
+										</div>
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
@@ -583,7 +583,7 @@
 					<div class="tsd-signature tsd-kind-icon">Json&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-symbol">{ </span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Buffer&quot;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-symbol">{</span><span class="tsd-signature-symbol">[ </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol"> in </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> U<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><a href="_ovotech_laminar.html#json" class="tsd-signature-type" data-tsd-kind="Type alias">Json</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><a href="_ovotech_laminar.html#json" class="tsd-signature-type" data-tsd-kind="Type alias">Json</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/helpers.ts#L137">packages/laminar/src/helpers.ts:137</a></li>
+							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/helpers.ts#L141">packages/laminar/src/helpers.ts:141</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -615,25 +615,6 @@
 							<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/types.ts#L62">packages/laminar/src/types.ts:62</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>An middleware that uses <a href="../interfaces/_ovotech_laminar.httpcontext.html">HttpContext</a> and modifies it to be used by the app or the downstream middlewares</p>
-						</div>
-						<p>You can compose middlewares in order to build a larger app.
-						Each middlewares would process the request parameters and add new ones, that would be available to downstream components.</p>
-						<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">app</span><span style="color: #000000">: </span><span style="color: #267F99">App</span><span style="color: #000000"> = ...;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">middleware1</span><span style="color: #000000">: </span><span style="color: #267F99">Middleware</span><span style="color: #000000"> = ...;</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">middleware2</span><span style="color: #000000">: </span><span style="color: #267F99">Middleware</span><span style="color: #000000"> = ...;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">appWithMiddlewares</span><span style="color: #000000"> = </span><span style="color: #795E26">middleware1</span><span style="color: #000000">(</span><span style="color: #795E26">middleware2</span><span style="color: #000000">(</span><span style="color: #001080">app</span><span style="color: #000000">));</span>
-</code></pre>
-						<dl class="tsd-comment-tags">
-							<dt>returns</dt>
-							<dd><p>A function to compose with other middlewares over an app</p>
-							</dd>
-						</dl>
-					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -658,6 +639,20 @@
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>An middleware that uses <a href="../interfaces/_ovotech_laminar.httpcontext.html">HttpContext</a> and modifies it to be used by the app or the downstream middlewares</p>
+											</div>
+											<p>You can compose middlewares in order to build a larger app.
+											Each middlewares would process the request parameters and add new ones, that would be available to downstream components.</p>
+											<pre><code class="language-typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">app</span><span style="color: #000000">: </span><span style="color: #267F99">App</span><span style="color: #000000"> = ...;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">middleware1</span><span style="color: #000000">: </span><span style="color: #267F99">Middleware</span><span style="color: #000000"> = ...;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">middleware2</span><span style="color: #000000">: </span><span style="color: #267F99">Middleware</span><span style="color: #000000"> = ...;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">appWithMiddlewares</span><span style="color: #000000"> = </span><span style="color: #795E26">middleware1</span><span style="color: #000000">(</span><span style="color: #795E26">middleware2</span><span style="color: #000000">(</span><span style="color: #001080">app</span><span style="color: #000000">));</span>
+</code></pre>
+										</div>
 										<h4 class="tsd-type-parameters-title">Type parameters</h4>
 										<ul class="tsd-type-parameters">
 											<li>
@@ -695,6 +690,7 @@
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TRequire</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TInherit</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResponse</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<p>A function to compose with other middlewares over an app</p>
 										<ul class="tsd-parameters">
 											<li class="tsd-parameter-signature">
 												<ul class="tsd-signatures tsd-kind-type-literal">
@@ -3849,7 +3845,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/helpers.ts#L37">packages/laminar/src/helpers.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/helpers.ts#L41">packages/laminar/src/helpers.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3956,7 +3952,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/helpers.ts#L157">packages/laminar/src/helpers.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/ovotech/laminar/blob/main/packages/laminar/src/helpers.ts#L161">packages/laminar/src/helpers.ts:161</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

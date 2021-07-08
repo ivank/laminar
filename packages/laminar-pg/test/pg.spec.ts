@@ -7,8 +7,11 @@ export interface LoggerContext {
   logger: LoggerLike;
 }
 
-export const loggerMiddleware = (logger: LoggerLike): Middleware<LoggerContext> => (next) => (ctx) =>
-  next({ ...ctx, logger });
+export const loggerMiddleware =
+  (logger: LoggerLike): Middleware<LoggerContext> =>
+  (next) =>
+  (ctx) =>
+    next({ ...ctx, logger });
 
 describe('Integration', () => {
   it('Should start and stop services', async () => {
