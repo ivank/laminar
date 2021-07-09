@@ -1,6 +1,6 @@
 import { green, red, yellow } from 'chalk';
-import * as commander from 'commander';
-import * as fs from 'fs';
+import commander from 'commander';
+import fs from 'fs';
 import { convertOapi } from './convert';
 import { printDocument } from '@ovotech/ts-compose';
 import { dirname } from 'path';

@@ -1,5 +1,5 @@
 import { schema, Schema } from 'avsc';
-import * as ts from 'typescript';
+import ts from 'typescript';
 import { Convert } from '../types';
 import { Type, document } from '@ovotech/ts-compose';
 

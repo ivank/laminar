@@ -2,7 +2,7 @@
 import { compile, Schema } from '@ovotech/json-schema';
 import { document, Document, mapWithContext, printDocument, Type, withIdentifier } from '@ovotech/ts-compose';
 import { SchemaObject } from 'openapi3-ts';
-import * as ts from 'typescript';
+import ts from 'typescript';
 import { AstContext, AstConvert, isSchemaObject, isReferenceObject, getReferencedObject } from './traverse';
 
 const nodeType = (type: string): ts.LiteralTypeNode | ts.KeywordTypeNode | ts.ArrayTypeNode => {

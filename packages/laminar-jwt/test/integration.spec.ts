@@ -5,7 +5,7 @@ import { jwtSecurityResolver, authMiddleware, jwkPublicKey, createSession } from
 import { openApiTyped } from './__generated__/integration';
 import { generateKeyPair } from 'crypto';
 import { promisify } from 'util';
-import * as nock from 'nock';
+import nock from 'nock';
 import { readFileSync } from 'fs';
 
 describe('Integration', () => {

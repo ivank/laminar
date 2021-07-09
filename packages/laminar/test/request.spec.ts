@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as FormData from 'form-data';
+import FormData from 'form-data';
 import { createReadStream, readFileSync, statSync } from 'fs';
 import { join } from 'path';
 import { Application, HttpService, run, textOk } from '../src';

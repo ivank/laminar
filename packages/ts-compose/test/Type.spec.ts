@@ -1,4 +1,4 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 import { printNode, Type } from '../src';
 
 describe('TS Compose', () => {

@@ -9,7 +9,7 @@ import {
   VerifiedJWTData,
   VerifyJWTData,
 } from './types';
-import * as jsonwebtoken from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 import {
   HttpMiddleware,
   Empty,

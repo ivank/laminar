@@ -101,8 +101,8 @@ const logCreator = kafkaLogCreator(logger);
 const batchSizer = jest.fn();
 
 describe('Integration', () => {
+  jest.setTimeout(30000);
   it('Should process response', async () => {
-    jest.setTimeout(30000);
     const kafka = new Kafka({ brokers: ['localhost:29092'], logCreator });
     const schemaRegistry = new SchemaRegistry({ host: 'http://localhost:8081' });
 

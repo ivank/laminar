@@ -37,3 +37,21 @@ export const parseSchema = (type: string, content: string): Schema => {
       throw new Error(`Unknown STDIN type: ${type}, accepts only "json" and "yaml"`);
   }
 };
+
+/**
+ * regex for matching ANSI escape codes.
+ *
+ * Example:
+ *
+ * ```js
+ *  '\u001B[4mcake\u001B[0m'.match(ansiRegex); => ['\u001B[4m', '\u001B[0m']
+ * ```
+ * Source: https://github.com/chalk/ansi-regex#readme
+ */
+export const ansiRegex = new RegExp(
+  [
+    '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+    '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))',
+  ].join('|'),
+  'g',
+);

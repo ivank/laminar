@@ -1,18 +1,18 @@
 import { readdirSync, readFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { convertCommand } from '../../../src/commands/avro';
-import * as ansiRegex from 'ansi-regex';
+import { ansiRegex } from '../../../src/helpers';
 
 class Logger {
   public std = '';
   public err = '';
 
   public info(line: string): void {
-    this.std += line.replace(ansiRegex(), '') + '\n';
+    this.std += line.replace(ansiRegex, '') + '\n';
   }
 
   public error(line: string): void {
-    this.err += line.replace(ansiRegex(), '') + '\n';
+    this.err += line.replace(ansiRegex, '') + '\n';
   }
 
   public clear(): void {

@@ -2,7 +2,7 @@ import { get, post, HttpService, router, init, jsonOk } from '@ovotech/laminar';
 import { jwkPublicKey, createSession, keycloakAuthMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import * as nock from 'nock';
+import nock from 'nock';
 
 /**
  * Make sure we have some response from a url

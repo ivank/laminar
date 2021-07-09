@@ -1,7 +1,7 @@
 import { Context } from './types';
 import { schema as avroSchema } from 'avsc';
 import { Document, Node, withIdentifier, document, Type } from '@ovotech/ts-compose';
-import * as ts from 'typescript';
+import ts from 'typescript';
 
 export const fullName = (context: Context, schema: avroSchema.RecordType | avroSchema.EnumType): string =>
   `${schema.namespace ?? context.namespace}.${schema.name}`;

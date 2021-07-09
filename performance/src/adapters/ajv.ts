@@ -1,4 +1,4 @@
-import * as Ajv from 'ajv';
+import Ajv from 'ajv';
 import fetch from 'node-fetch';
 import { Adapter } from '../types';
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as LRU from 'lru-cache';
+import LRU from 'lru-cache';
 import { validate, Schema } from '@ovotech/json-schema';
 import { GetPublicKeyOrSecret } from 'jsonwebtoken';
 import { certToPEM, rsaPublicKeyToPEM } from './helpers';

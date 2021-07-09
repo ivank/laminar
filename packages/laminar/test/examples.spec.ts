@@ -3,7 +3,7 @@ import { execSync, spawn } from 'child_process';
 import { readdirSync, readFileSync, unlinkSync } from 'fs';
 import { Agent } from 'https';
 import { join } from 'path';
-import * as nock from 'nock';
+import nock from 'nock';
 
 nock('http://example.com').get('/new/22').reply(200, { isNew: true });
 

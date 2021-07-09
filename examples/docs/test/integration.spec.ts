@@ -4,7 +4,7 @@ import { join } from 'path';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Client } from 'pg';
 import { Agent } from 'https';
-import * as nock from 'nock';
+import nock from 'nock';
 import { readFileSync } from 'fs';
 
 let port = 4300;

@@ -1,4 +1,4 @@
-import * as nock from 'nock';
+import nock from 'nock';
 import { Schema } from '../src';
 import { extractUrls, RefMap, extractNamedRefs, extractFiles, resolve } from '../src/resolve';
 

@@ -9,7 +9,14 @@ const examplesDir = join(__dirname, '../examples/');
 let port = 4900;
 
 describe('Example files', () => {
-  beforeAll(() => execSync('yarn tsc', { cwd: examplesDir }));
+  beforeAll(() => {
+    try {
+      execSync('yarn tsc', { cwd: examplesDir, env: process.env });
+    } catch (e) {
+      console.log(e.output[1].toString());
+      throw e;
+    }
+  });
   afterAll(() => {
     readdirSync(examplesDir)
       .filter((file) => file.endsWith('.js'))
@@ -19,6 +26,7 @@ describe('Example files', () => {
       .filter((file) => file.endsWith('.js'))
       .forEach((file) => unlinkSync(join(examplesDir, '__generated__', file)));
   });
+  jest.setTimeout(10000);
 
   it.each<[string, AxiosRequestConfig, unknown]>([
     [
@@ -38,7 +46,6 @@ describe('Example files', () => {
       { email: 'me@example.com', createdAt: '2020-01-01T12:00:00.000Z' },
     ],
   ])('Should process %s', async (file, config, expected) => {
-    jest.setTimeout(10000);
     port += 1;
     const service = spawn('yarn', ['node', file.replace('.ts', '.js')], {
       cwd: join(__dirname, '..'),

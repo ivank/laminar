@@ -158,7 +158,7 @@ Starting it all up is just a matter of calling `init` on the application itself,
 
 ## Producing Messages
 
-> [examples/comms/tests/integration.spec.ts:(KafkaProducerService)](https://github.com/ovotech/laminar/tree/main/examples/comms/tests/integration.spec.ts#L60-L64)
+> [examples/comms/tests/integration.spec.ts:(KafkaProducerService)](https://github.com/ovotech/laminar/tree/main/examples/comms/tests/integration.spec.ts#L59-L63)
 
 ```typescript
 const producer = new KafkaProducerService(kafka, schemaRegistry, {
@@ -172,7 +172,7 @@ the `registerSchemas` function will register the avsc schemas for each topic in 
 
 Of course, you can skip that pre-register and use the `sendWithSchema` which will do this ad-hoc.
 
-> [examples/comms/tests/integration.spec.ts:(send)](https://github.com/ovotech/laminar/tree/main/examples/comms/tests/integration.spec.ts#L96-L101)
+> [examples/comms/tests/integration.spec.ts:(send)](https://github.com/ovotech/laminar/tree/main/examples/comms/tests/integration.spec.ts#L95-L100)
 
 ```typescript
 await producer.send<Feedback>({

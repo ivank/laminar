@@ -1,7 +1,7 @@
-import * as ansiRegex from 'ansi-regex';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
+import { ansiRegex } from './helpers';
 
-export const ansiLength = (text: string): number => text.replace(ansiRegex(), '').length;
+export const ansiLength = (text: string): number => text.replace(ansiRegex, '').length;
 
 export const table = (rows: string[][]): string => {
   const columns = rows[0].map((_, index) => rows.map((row) => row[index]));

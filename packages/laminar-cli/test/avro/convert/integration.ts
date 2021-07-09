@@ -11,7 +11,7 @@ import { User as RecordWithUnion } from './__generated__/RecordWithUnion.avsc';
 import { User as SimpleRecord } from './__generated__/SimpleRecord.avsc';
 import { TradeCollection } from './__generated__/TradeCollection.avsc';
 import { User } from './__generated__/User.avsc';
-import * as moment from 'moment';
+import moment from 'moment';
 
 const complexRecord: ComplexRecord = {
   id: 123,

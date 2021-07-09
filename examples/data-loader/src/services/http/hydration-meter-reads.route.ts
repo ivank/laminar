@@ -2,7 +2,7 @@ import { jsonBadRequest, jsonOk } from '@ovotech/laminar';
 import { QueueContext } from '@ovotech/laminar-pgboss';
 import { PathV1HydrationMeterreadsPost } from '../../__generated__/schema';
 import { Record, String, Array, Static } from 'runtypes';
-import * as parse from 'csv-parse/lib/sync';
+import parse from 'csv-parse/lib/sync';
 import { InsertMeterRead } from '../../queries/meter-reads-insert.query';
 
 const CsvRow = Record({ serialNumber: String, value: String, date: String });

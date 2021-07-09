@@ -2,7 +2,7 @@
    as they should
  */
 import { UkCoBoostpowerSupportKafkaMessages as Messages } from './__generated__/ComplexUnionLogicalTypes.avsc';
-import * as moment from 'moment';
+import moment from 'moment';
 
 const complexUnionLogicalTypes: Messages.AccountMigrationEvent = {
   event: {

@@ -1,4 +1,4 @@
-import type * as PgBoss from 'pg-boss';
+import type PgBoss from 'pg-boss';
 import { Service } from '@ovotech/laminar';
 import { Queue, Publish, Subscribe } from './types';
 

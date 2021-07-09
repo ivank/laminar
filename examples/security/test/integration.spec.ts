@@ -3,8 +3,8 @@ import { join } from 'path';
 import axios from 'axios';
 
 describe('Security App Integration Tests', () => {
+  jest.setTimeout(10000);
   it('Should work as an app', async () => {
-    jest.setTimeout(10000);
     const service = spawn('yarn', ['ts-node', 'src/index.ts'], {
       cwd: join(__dirname, '..'),
       detached: true,

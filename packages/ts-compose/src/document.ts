@@ -1,4 +1,4 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 import { Node } from './node';
 import { printNode } from './print';
 

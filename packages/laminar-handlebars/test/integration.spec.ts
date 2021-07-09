@@ -38,14 +38,14 @@ describe('Integration', () => {
     });
   });
 
+  jest.setTimeout(10000);
+
   it.each`
     cacheType    | expectedData
     ${'expiry'}  | ${'<html><body>Layout 2 <span>Generated 2</span></body></html>'}
     ${'none'}    | ${'<html><body>Layout 2 <span>Generated 2</span></body></html>'}
     ${'preload'} | ${'<html><body>Layout <span>Generated</span></body></html>'}
   `('Should process changing handlebars tempaltes with $cacheType', async ({ cacheType, expectedData }) => {
-    jest.setTimeout(10000);
-
     const dir = join(__dirname, '__generated__/root');
     mkdirSync(join(dir, 'views'), { recursive: true });
     mkdirSync(join(dir, 'partials'), { recursive: true });

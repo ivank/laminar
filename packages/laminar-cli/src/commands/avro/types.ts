@@ -1,4 +1,4 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 import { Document, DocumentContext } from '@ovotech/ts-compose';
 import { Schema } from 'avsc';
 

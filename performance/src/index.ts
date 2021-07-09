@@ -1,6 +1,6 @@
-import * as Benchmark from 'benchmark';
+import Benchmark from 'benchmark';
 import { readdirSync, readFileSync } from 'fs';
-import * as nock from 'nock';
+import nock from 'nock';
 import { join } from 'path';
 import { adapter as ajv } from './adapters/ajv';
 import { adapter as jsonSchema } from './adapters/json-schema';
@@ -78,9 +78,7 @@ for (const adapter of adapters) {
       for (const testFolder of testFolders) {
         const testFiles = readdirSync(join(testSuiteFolder, 'tests', testFolder))
           .filter((file) => file.endsWith('.json'))
-          .map<Suite[]>((file) =>
-            JSON.parse(String(readFileSync(join(testSuiteFolder, 'tests', testFolder, file)))),
-          );
+          .map<Suite[]>((file) => JSON.parse(String(readFileSync(join(testSuiteFolder, 'tests', testFolder, file)))));
 
         for (const suites of testFiles) {
           for (const suite of suites) {
@@ -88,9 +86,7 @@ for (const adapter of adapters) {
             for (const test of suite.tests) {
               const result = validator(test.data);
               if (result !== test.valid) {
-                throw new Error(
-                  `Invalid test ${testFolder} ${suite.description} ${test.description}`,
-                );
+                throw new Error(`Invalid test ${testFolder} ${suite.description} ${test.description}`);
               }
             }
           }

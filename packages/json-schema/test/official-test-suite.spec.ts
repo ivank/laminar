@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from 'fs';
-import * as nock from 'nock';
+import nock from 'nock';
 import { join } from 'path';
 import { validate, Schema } from '../src';
 

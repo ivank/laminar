@@ -1,7 +1,7 @@
 import { Schema } from '@ovotech/json-schema';
-import * as commander from 'commander';
-import * as fs from 'fs';
-import * as YAML from 'yaml';
+import commander from 'commander';
+import fs from 'fs';
+import YAML from 'yaml';
 import { printDocument } from '@ovotech/ts-compose';
 import { convertOapi } from './convert';
 import { green, yellow } from 'chalk';

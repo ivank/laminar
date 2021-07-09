@@ -7,7 +7,7 @@ import { readAVSC, SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import { run } from '@ovotech/laminar';
 import { kafkaLogCreator, KafkaProducerService, KafkaAdminService, registerSchemas } from '@ovotech/laminar-kafkajs';
 import { PgService } from '@ovotech/laminar-pg';
-import * as nock from 'nock';
+import nock from 'nock';
 import { retry } from 'ts-retry-promise';
 import { createApplication } from '../src/application';
 import { EnvVars } from '../src/env';
@@ -36,12 +36,11 @@ const env: EnvVars = {
 const logger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
 
 describe('Comms Integration Tests', () => {
+  /**
+   * All the kafka connections takes a lot of time, so we need to wait a bit more than 5 seconds
+   */
+  jest.setTimeout(15000);
   it('Should work as a comms services', async () => {
-    /**
-     * All the kafka connections takes a lot of time, so we need to wait a bit more than 5 seconds
-     */
-    jest.setTimeout(15000);
-
     const app = await createApplication(env, logger);
 
     /**

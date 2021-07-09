@@ -8,7 +8,7 @@ import {
   MediaTypeObject,
   SecuritySchemeObject,
 } from 'openapi3-ts';
-import * as ts from 'typescript';
+import ts from 'typescript';
 
 export interface AstRefMap {
   [ref: string]: unknown;

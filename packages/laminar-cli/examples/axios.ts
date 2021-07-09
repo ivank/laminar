@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { axiosOapi } from './__generated__/axios.yaml';
-import * as nock from 'nock';
+import nock from 'nock';
 
 /**
  * Mock the simple rest api so we can test it out
@@ -18,6 +18,4 @@ const simple = axiosOapi(axios.create({ baseURL: 'http://simple.example.com' }))
 
 simple['GET /test/{id}']('20').then(({ data }) => console.log(data));
 
-simple['POST /test/{id}']('30', { email: 'test2example.com' }).then(({ data }) =>
-  console.log(data),
-);
+simple['POST /test/{id}']('30', { email: 'test2example.com' }).then(({ data }) => console.log(data));

@@ -14,8 +14,8 @@ export const bossMiddleware =
     next({ ...ctx, boss });
 
 describe('Services', () => {
+  jest.setTimeout(10000);
   it('Should start and stop services', async () => {
-    jest.setTimeout(10000);
     const port = 8060;
     const logger = {
       info: jest.fn(),

@@ -4,7 +4,7 @@ import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService
 import { PgService, pgMiddleware } from '@ovotech/laminar-pg';
 import { KafkaConsumerService, kafkaLogCreator } from '@ovotech/laminar-kafkajs';
 import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
-import * as PgBoss from 'pg-boss';
+import PgBoss from 'pg-boss';
 import { Kafka, logLevel } from 'kafkajs';
 import { Pool } from 'pg';
 import { meterReadsConsumer } from './services/consumers/meter-reads.consumer';
@@ -46,7 +46,14 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
     { forSchemaOptions: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any } },
   );
   const pool = new Pool({ connectionString: env.DB_CONNECTION });
-  const pgBoss = new PgBoss({ connectionString: env.DB_CONNECTION });
+  const pgBoss = new PgBoss({
+    connectionString: env.DB_CONNECTION,
+    /**
+     * Remove timekeep / maintenance / scheduling, so the tests can finish faster
+     */
+    noScheduling: true,
+    noSupervisor: true,
+  });
 
   /**
    * Internal services

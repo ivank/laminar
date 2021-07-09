@@ -27,12 +27,11 @@ import { AvroDecimal } from '@ovotech/avro-decimal';
  * The external interface is also the one that should be changing the least, since other services / people will be dependent on it.
  */
 describe('Data Loader Integration Tests', () => {
+  /**
+   * Since this is going to be a long "story" driven test, we need to increase the default jest timeout of 5s
+   */
+  jest.setTimeout(20000);
   it('Should work as a data loader', async () => {
-    /**
-     * Since this is going to be a long "story" driven test, we need to increase the default jest timeout of 5s
-     */
-    jest.setTimeout(20000);
-
     /**
      * We define a unique token that will be used through this test,
      * ensuring that we maintain test isolation and we can run this test many times and in parallel with others

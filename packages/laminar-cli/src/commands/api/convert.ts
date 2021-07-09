@@ -22,7 +22,7 @@ import {
   SchemaObject,
   SecuritySchemeObject,
 } from 'openapi3-ts';
-import * as ts from 'typescript';
+import ts from 'typescript';
 import { convertSchema } from '../../convert-schema';
 import {
   AstContext,

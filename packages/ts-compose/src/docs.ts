@@ -1,4 +1,4 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 
 const jsDoc = (doc: string): string =>
   `*\n${doc

@@ -1,9 +1,9 @@
-import * as commander from 'commander';
+import commander from 'commander';
 import { toTypeScript, toExternalContext } from './convert';
 import { Schema } from 'avsc';
 import { join, basename, relative, dirname } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { inspect } from 'util';
 import { table } from '../../output';
 import { Logger } from '../../types';

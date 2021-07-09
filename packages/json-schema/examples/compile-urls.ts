@@ -1,5 +1,5 @@
 import { validate, compile } from '@ovotech/json-schema';
-import * as nock from 'nock';
+import nock from 'nock';
 
 const mainSchema = `
 {

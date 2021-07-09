@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { queueMiddleware, QueueService, QueueWorkerService, QueueWorkersService } from '../src';
 import { HttpService, loggerMiddleware, textOk, run } from '@ovotech/laminar';
-import * as PgBoss from 'pg-boss';
+import PgBoss from 'pg-boss';
 
 describe('Integration', () => {
   it('Should work through a queue with a single worker', async () => {
@@ -18,7 +18,11 @@ describe('Integration', () => {
       .mockResolvedValueOnce('Test Completed');
 
     const queue = new QueueService(
-      new PgBoss({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' }),
+      new PgBoss({
+        connectionString: 'postgres://example-admin:example-pass@localhost:5432/example',
+        noScheduling: true,
+        noSupervisor: true,
+      }),
       { test: { retryLimit: 1, retryDelay: 1 } },
     );
     const withQueue = queueMiddleware(queue);
@@ -66,7 +70,11 @@ describe('Integration', () => {
     const logging = loggerMiddleware(logger);
 
     const queue = new QueueService(
-      new PgBoss({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' }),
+      new PgBoss({
+        connectionString: 'postgres://example-admin:example-pass@localhost:5432/example',
+        noScheduling: true,
+        noSupervisor: true,
+      }),
     );
     const withQueue = queueMiddleware(queue);
 

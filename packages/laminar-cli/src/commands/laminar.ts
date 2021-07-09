@@ -1,4 +1,4 @@
-import * as commander from 'commander';
+import commander from 'commander';
 import { apiCommand } from './api';
 import { axiosCommand } from './axios';
 import { jsonSchemaCommand } from './json-shema';

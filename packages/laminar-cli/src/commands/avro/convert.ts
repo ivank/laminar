@@ -12,7 +12,7 @@ import { isPrimitiveType, convertPrimitiveType } from './types/primitive';
 import { isFixedType, convertFixedType } from './types/fixed';
 import { fullName, firstUpperCase, nameParts, convertNamespace } from './helpers';
 import { convertNamedType, isNamedType } from './types/named';
-import * as ts from 'typescript';
+import ts from 'typescript';
 
 export const addRef = (type: schema.RecordType | schema.EnumType, context: Context): Context => ({
   ...context,

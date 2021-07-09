@@ -14,9 +14,8 @@ export const loggerMiddleware =
     next({ ...ctx, logger });
 
 describe('Integration', () => {
+  jest.setTimeout(10000);
   it('Should start and stop services', async () => {
-    jest.setTimeout(10000);
-
     const port = 10060;
     const loggerMock = {
       info: jest.fn(),

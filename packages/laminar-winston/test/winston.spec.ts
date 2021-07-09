@@ -16,8 +16,8 @@ export const bossMiddleware =
     next({ ...ctx, boss });
 
 describe('Services', () => {
+  jest.setTimeout(10000);
   it('Should start and stop services', async () => {
-    jest.setTimeout(10000);
     const logFile = join(__dirname, 'test.log');
     if (existsSync(logFile)) {
       unlinkSync(logFile);
