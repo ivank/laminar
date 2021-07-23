@@ -177,7 +177,7 @@ main();
 
 ## API
 
-Api for laminar and supporting packages: https://ovotech.github.com/laminar/api
+Api for laminar and supporting packages: https://ovotech.github.io/laminar/api
 
 ## Functioning examples
 
@@ -202,6 +202,7 @@ Laminar includes packages that are used internally or are additions to its core 
 - [@ovotech/laminar-winston](https://github.com/ovotech/laminar/tree/main/packages/laminar-winston) - Use winston logger
 - [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/main/packages/laminar-kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
 - [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/main/packages/laminar-pgboss) - Use pgboss to schedule jobs
+- [@ovotech/laminar-fixtures](https://github.com/ovotech/laminar/tree/main/packages/laminar-fixtures) - Fixtures for pg with relationships
 
 ## Running the tests
 

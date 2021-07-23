@@ -18,11 +18,36 @@ commands:
           key: v3-{{ checksum "yarn.lock" }}
           paths: ['.yarn/cache']
 
+  update-submodules:
+    description: Update git submodules
+    steps:
+      - run:
+          name: 'Update Submodules'
+          command: |
+            git submodule sync
+            git submodule update --init
+  init-postgres:
+    description: Initialize postgres client and data
+    steps:
+      - postgres/install_postgres_client
+      - run:
+          name: 'Run install scripts for examples'
+          command: |
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/docs/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/comms/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/petstore/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/split/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < examples/data-loader/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < packages/laminar/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < packages/laminar-fixtures/init.sql
 jobs:
   test:
     parameters:
       node-image:
         type: string
+      subset:
+        type: enum
+        enum: ['packages', 'examples']
     docker:
       - image: << parameters.node-image >>
       - image: postgres:11
@@ -59,26 +84,13 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: 'Update Submodules'
-          command: |
-            git submodule sync
-            git submodule update --init
+      - update-submodules
       - yarn-install
       - yarn-save-cache
-      - run: yarn lint
+      - run: yarn lint:<< parameters.subset >>
       - run: yarn build
-      - postgres/install_postgres_client
-      - run:
-          name: 'Run install scripts for examples'
-          command: |
-            psql postgres://example-admin:example-pass@localhost:5432/example < examples/docs/init.sql
-            psql postgres://example-admin:example-pass@localhost:5432/example < examples/comms/init.sql
-            psql postgres://example-admin:example-pass@localhost:5432/example < examples/petstore/init.sql
-            psql postgres://example-admin:example-pass@localhost:5432/example < examples/split/init.sql
-            psql postgres://example-admin:example-pass@localhost:5432/example < examples/data-loader/init.sql
-            psql postgres://example-admin:example-pass@localhost:5432/example < packages/laminar/init.sql
-      - run: yarn test
+      - init-postgres
+      - run: yarn test:<< parameters.subset >>
 
   publish:
     docker:
@@ -99,15 +111,18 @@ workflows:
           matrix:
             parameters:
               node-image: ['circleci/node:12', 'circleci/node:14']
+              subset: ['packages', 'examples']
           filters:
             branches:
               ignore: main
+
   deploy:
     jobs:
       - test:
           matrix:
             parameters:
               node-image: ['circleci/node:14']
+              subset: ['packages', 'examples']
           filters:
             branches:
               only: main

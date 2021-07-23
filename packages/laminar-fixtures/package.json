@@ -1,12 +1,12 @@
 {
-  "name": "@ovotech/laminar-pg",
+  "name": "@ovotech/laminar-fixtures",
   "version": "0.11.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "Use pg with @ovotech/laminar",
+  "description": "Fixtures for pg with relationships",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar-pg#readme",
+  "homepage": "https://github.com/ovotech/laminar/tree/main/packages/laminar-fixtures#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
@@ -16,19 +16,18 @@
     "@types/pg": "^8.6.1",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
-    "axios": "^0.21.1",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.0.6",
     "pg": "^8.6.0",
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.3",
-    "ts-retry-promise": "^0.6.0",
+    "ts-node": "^10.0.0",
     "typescript": "^4.3.5"
   },
   "scripts": {
     "build": "tsc --declaration",
-    "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-pg",
+    "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/laminar-fixtures",
     "test": "jest test --runInBand",
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
@@ -36,7 +35,6 @@
     "preset": "../../jest.json"
   },
   "peerDependencies": {
-    "@ovotech/laminar": "*",
     "pg": "*"
   }
 }

@@ -11,10 +11,10 @@
     "skipLibCheck": true,
     "strict": true,
     "module": "commonjs",
-    "target": "es2018",
+    "target": "es2019",
     "sourceMap": false,
     "lib": [
-      "es2018"
+      "es2019"
     ],
     "outDir": "dist"
   },

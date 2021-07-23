@@ -1250,6 +1250,30 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@ovotech/laminar-fixtures@workspace:packages/laminar-fixtures":
+  version: 0.0.0-use.local
+  resolution: "@ovotech/laminar-fixtures@workspace:packages/laminar-fixtures"
+  dependencies:
+    "@ikerin/build-readme": ^1.1.1
+    "@ovotech/laminar": "workspace:*"
+    "@types/jest": ^26.0.24
+    "@types/node": ^14.17.5
+    "@types/pg": ^8.6.1
+    "@typescript-eslint/eslint-plugin": ^4.28.2
+    "@typescript-eslint/parser": ^4.28.2
+    eslint: ^7.30.0
+    eslint-config-prettier: ^8.3.0
+    jest: ^27.0.6
+    pg: ^8.6.0
+    prettier: ^2.3.2
+    ts-jest: ^27.0.3
+    ts-node: ^10.0.0
+    typescript: ^4.3.5
+  peerDependencies:
+    pg: "*"
+  languageName: unknown
+  linkType: soft
+
 "@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars":
   version: 0.0.0-use.local
   resolution: "@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars"
@@ -1357,7 +1381,6 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": ^1.1.1
     "@ovotech/laminar": "workspace:*"
-    "@types/cookie": ^0.4.1
     "@types/jest": ^26.0.24
     "@types/node": ^14.17.5
     "@types/pg": ^8.6.1

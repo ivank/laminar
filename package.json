@@ -10,6 +10,12 @@
     "test": "yarn workspaces foreach --verbose run test",
     "lint": "yarn workspaces foreach --parallel --verbose run lint",
     "build": "yarn workspaces foreach --parallel --topological-dev --verbose run build",
+    "test:examples": "yarn workspaces foreach --verbose --include '@examples/*' run test",
+    "lint:examples": "yarn workspaces foreach --parallel --include '@examples/*' --verbose run lint",
+    "build:examples": "yarn workspaces foreach --parallel --include '@examples/*' --topological-dev --verbose run build",
+    "test:packages": "yarn workspaces foreach --verbose --exclude '@examples/*' --exclude 'laminar' run test",
+    "lint:packages": "yarn workspaces foreach --parallel --exclude '@examples/*' --exclude 'laminar' --verbose run lint",
+    "build:packages": "yarn workspaces foreach --parallel --exclude '@examples/*' --exclude 'laminar' --topological-dev --verbose run build",
     "publish": "yarn workspaces foreach --no-private --verbose npm publish --tolerate-republish --access public",
     "build:readme": "build-readme README.md 'https://github.com/ovotech/laminar/tree/main' && bash -c 'for f in docs/*.md; do yarn build-readme $f https://github.com/ovotech/laminar/tree/main; done' && typedoc"
   },
