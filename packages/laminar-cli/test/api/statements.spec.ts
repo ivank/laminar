@@ -61,7 +61,11 @@ describe('Statements', () => {
             });
           },
           post: async ({ path: { type }, body }) => {
-            reportsService.set(type, 'date' in body ? body.date : `${body.fromDate}-${body.toDate}`, 'report');
+            reportsService.set(
+              type,
+              'date' in body ? body.date.toISOString() : `${body.fromDate.toISOString()}-${body.toDate.toISOString()}`,
+              'report',
+            );
             return jsonOk({ success: true });
           },
         },

@@ -16,6 +16,15 @@ servers:
 security:
   - BearerAuth: []
 paths:
+  /about:
+    get:
+      description: 'About text for the service'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            '*/*':
+              schema: { type: string }
   /pets:
     get:
       description: |
@@ -35,6 +44,54 @@ paths:
             type: array
             items:
               type: string
+        - name: pagination
+          in: query
+          description: Container for all pagination params
+          required: false
+          schema:
+            type: object
+            properties:
+              page:
+                type: integer
+                minimum: 0
+                default: 0
+              perPage:
+                type: integer
+                minimum: 1
+                maximum: 100
+                default: 25
+            additionalProperties: false
+            default:
+              page: 0
+              perPage: 25
+        - name: sort
+          in: query
+          description: React admin sort object
+          example: { "field": "createdAt", "order": "ASC" }
+          schema:
+            type: object
+            properties:
+              field:
+                enum: ['name', 'tag']
+              order:
+                enum: ['ASC', 'DESC']
+                default: 'ASC'
+            additionalProperties: false
+            default: {}
+        - name: afterDateTime
+          in: query
+          description: After certain iso timestamp
+          example: '2020-01-01T00:00:00.000Z'
+          schema:
+            type: string
+            format: 'date-time'
+        - name: afterDate
+          in: query
+          description: After certain date
+          example: '2020-01-01'
+          schema:
+            type: string
+            format: 'date'
         - name: limit
           in: query
           description: maximum number of results to return
@@ -42,6 +99,26 @@ paths:
           schema:
             type: integer
             format: int32
+            default: 1000
+        - name: ids
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: isKitten
+          in: query
+          description: if true only show pets tagged as kittens
+          required: false
+          schema:
+            type: boolean
+        - name: price
+          in: query
+          description: Show pets of certain price
+          required: false
+          schema:
+            type: number
       responses:
         '200':
           description: pet response
@@ -58,21 +135,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
+      security:
+        - BearerAuth: []
+          ApiKeyAuth: []
+        - CookieAuth: []
       description: Creates a new pet in the store.  Duplicates are allowed
       operationId: addPet
       parameters:
         - name: X-Trace-Token
           in: header
           description: a trace token to trace posts
-          example: '112233'
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         description: Pet to add to the store
         required: true
         content:
           application/json:
+            examples:
+              simple:
+                summary: A simple example
+                value:
+                  name: Charlie
+                  type: dog
             schema:
               $ref: '#/components/schemas/NewPet'
       responses:
@@ -89,19 +176,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   /pets/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: ID of pet to delete
+        required: true
+        schema:
+          type: string
+          format: \d+
     get:
       description: Returns a user based on a single ID, if the user does not have access to the pet
       operationId: find pet by id
       security:
         - BasicAuth: []
-      parameters:
-        - name: id
-          in: path
-          description: ID of pet to fetch
-          required: true
-          schema:
-            type: string
-            format: \d+
+      parameters: []
       responses:
         '200':
           description: pet response
@@ -120,14 +208,8 @@ paths:
       operationId: deletePet
       security:
         - ApiKeyAuth: []
-      parameters:
-        - name: id
-          in: path
-          description: ID of pet to delete
-          required: true
-          schema:
-            type: string
-            format: \d+
+        - BasicAuth: []
+      parameters: []
       responses:
         '204':
           description: pet deleted
@@ -149,6 +231,10 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth
   schemas:
     PetCreated:
       properties:
@@ -173,12 +259,14 @@ components:
           type: string
         tag:
           type: string
+        addedOn:
+          type: string
+          format: date-time
 
     Error:
       required:
         - code
         - message
-      additionalProperties: false
       properties:
         code:
           type: integer

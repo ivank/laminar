@@ -17,6 +17,7 @@ export interface AstRefMap {
 export interface AstContext extends DocumentContext {
   root: SchemaObject;
   refs: AstRefMap;
+  convertDates?: boolean;
 }
 
 export type AstConvert<TAstType = ts.TypeNode> = (

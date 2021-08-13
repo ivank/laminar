@@ -10,7 +10,6 @@ import {
   jsonNotFound,
   jsonUnauthorized,
   jsonForbidden,
-  optional,
   jsonNoContent,
   run,
 } from '../../../src';
@@ -20,13 +19,13 @@ import { LoggerContext, withLogger } from './middleware/logger';
 
 type Pet = NewPet & {
   id: number;
-  [key: string]: unknown;
+  addedOn?: Date;
 };
 
 interface NewPet {
   name: string;
   tag?: string;
-  [key: string]: unknown;
+  addedOn?: Date;
 }
 
 interface PathWithId {
@@ -39,6 +38,23 @@ interface AuthInfo {
   };
 }
 
+interface GetPetsQuery {
+  ids?: number[];
+  limit?: number;
+  price?: number;
+  isKitten?: boolean;
+  pagination: {
+    perPage: number;
+    page: number;
+  };
+  sort: {
+    field?: 'name' | 'tag';
+    order: 'ASC' | 'DESC';
+  };
+  afterDate?: Date;
+  afterDateTime?: Date;
+}
+
 const isBodyNewPet = (body: unknown): body is NewPet => typeof body === 'object' && body !== null && 'name' in body;
 
 const isPathWithId = (path: unknown): path is PathWithId => typeof path === 'object' && path !== null && 'id' in path;
@@ -47,7 +63,7 @@ describe('Integration', () => {
   it('Should process response', async () => {
     const db: Pet[] = [
       { id: 111, name: 'Catty', tag: 'kitten' },
-      { id: 222, name: 'Doggy' },
+      { id: 222, name: 'Doggy', addedOn: new Date('2021-01-01') },
     ];
     const log = jest.fn();
 
@@ -78,9 +94,10 @@ describe('Integration', () => {
       paths: {
         '/about': { get: async () => file(join(__dirname, 'about.html')) },
         '/pets': {
-          get: async ({ logger, query: { ids, limit, price, isKitten, pagination, sort } }) => {
+          get: async ({ logger, query }) => {
+            const { ids, limit, price, isKitten, pagination, sort, afterDate, afterDateTime }: GetPetsQuery = query;
             logger('Get all');
-            let pets = db;
+            let pets = [...db];
 
             if (price !== undefined) {
               pets = pets.filter((pet) => pet.name.length > price);
@@ -98,18 +115,23 @@ describe('Integration', () => {
               pets = pets.filter((pet) => ids.includes(pet.id));
             }
 
+            if (afterDate !== undefined) {
+              pets = pets.filter((pet) => pet.addedOn && pet.addedOn > afterDate);
+            }
+
+            if (afterDateTime !== undefined) {
+              pets = pets.filter((pet) => pet.addedOn && pet.addedOn > afterDateTime);
+            }
+
             pets = pets.slice(pagination.page * pagination.perPage, (pagination.page + 1) * pagination.perPage);
 
             if (sort.field) {
-              pets = [...pets].sort((a, b) =>
-                sort.order === 'ASC'
-                  ? (a[sort.field] as string) > (b[sort.field] as string)
-                    ? 1
-                    : -1
-                  : (a[sort.field] as string) < (b[sort.field] as string)
-                  ? 1
-                  : -1,
-              );
+              const { field, order } = sort;
+              pets = [...pets].sort((a, b) => {
+                const af = a[field];
+                const bf = b[field];
+                return af && bf ? (order === 'ASC' ? (af > bf ? 1 : -1) : af < bf ? 1 : -1) : 0;
+              });
             }
 
             return jsonOk(pets);
@@ -134,7 +156,7 @@ describe('Integration', () => {
               return jsonOk(JSON.parse(JSON.stringify({ something: 'else' })));
             }
             const item = db.find((item) => item.id === Number(path.id));
-            return optional(jsonOk, item) ?? jsonNotFound({ code: 123, message: 'Not Found' });
+            return item ? jsonOk(item) : jsonNotFound({ code: 123, message: 'Not Found' });
           },
           delete: async ({ path }) => {
             if (!isPathWithId(path)) {
@@ -159,429 +181,456 @@ describe('Integration', () => {
     const http = new HttpService({ listener: logger(oapi), port: 8063 });
 
     await run({ initOrder: [http] }, async () => {
-      const api = axios.create({ baseURL: 'http://localhost:8063' });
+      try {
+        const api = axios.create({ baseURL: 'http://localhost:8063' });
 
-      await expect(api.get('/pets?sort[field]=id')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-        ],
-      });
+        expect(await api.get('/pets?afterDate=2020-01-01')).toMatchObject({
+          status: 200,
+          data: [{ id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' }],
+        });
 
-      await expect(api.get('/pets?sort[field]=id&sort[order]=DESC')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 222, name: 'Doggy' },
-          { id: 111, name: 'Catty', tag: 'kitten' },
-        ],
-      });
+        expect(await api.get('/pets?afterDate=3020-01-01')).toMatchObject({
+          status: 200,
+          data: [],
+        });
 
-      await expect(api.get('/pets?pagination[page]=0&pagination[perPage]=1')).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
-      });
+        expect(await api.get('/pets?afterDateTime=2020-01-01T00:00:00.000Z')).toMatchObject({
+          status: 200,
+          data: [{ id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' }],
+        });
 
-      await expect(api.get('/pets?pagination[page]=1&pagination[perPage]=1')).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 222, name: 'Doggy' }],
-      });
+        expect(await api.get('/pets?afterDateTime=3020-01-01T00:00:00.000Z')).toMatchObject({
+          status: 200,
+          data: [],
+        });
 
-      await expect(api.get('/pets?pagination[perPage]=2')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-        ],
-      });
-
-      await expect(api.get('/pets?ids[0]=111')).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
-      });
-
-      await expect(api.get('/pets?ids[]=111')).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
-      });
-
-      await expect(api.get('/pets?ids[0]=111&ids[1]=222')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-        ],
-      });
-
-      await expect(api.get('/pets?ids[]=111&ids[]=222')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-        ],
-      });
-
-      await expect(api.get('/pets?ids=111&ids=222')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-        ],
-      });
-
-      await expect(api.get('/pets?ids[0]=test').catch((error) => error.response)).resolves.toMatchObject({
-        status: 400,
-        data: {
-          message: 'Request for "GET /pets" does not match OpenApi Schema',
-          errors: ['[request.query.ids.0] (type) should be of type integer'],
-        },
-      });
-
-      await expect(
-        api.get('/pets?pagination[page]=-2&pagination[perPage]=2').catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: {
-          message: 'Request for "GET /pets" does not match OpenApi Schema',
-          errors: ['[request.query.pagination.page] (minimum) should be >= 0'],
-        },
-      });
-
-      await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
-        status: 404,
-        data: {
-          message: 'Request for "GET /unknown-url" did not match any of the paths defined in the OpenApi Schema',
-        },
-      });
-
-      await expect(api.get('/about', { headers: { Authorization: 'Bearer 123' } })).resolves.toMatchObject({
-        status: 200,
-        headers: {
-          'content-type': 'text/html',
-        },
-        data: `<html>\n  <body>\n    ABOUT TEXT\n  </body>\n</html>`,
-      });
-
-      await expect(api.get('/pets')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-        ],
-      });
-
-      await expect(api.post('/pets', { other: 'New Puppy' }).catch((error) => error.response)).resolves.toMatchObject({
-        status: 400,
-        data: {
-          errors: [
-            '[request.headers] (required) is missing [x-trace-token] keys',
-            '[request.body] (required) is missing [name] keys',
+        expect(await api.get('/pets?sort[field]=name')).toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
           ],
-          requestBody: {
-            examples: {
-              simple: {
-                summary: 'A simple example',
-                value: {
-                  name: 'Charlie',
-                  type: 'dog',
+        });
+
+        expect(await api.get('/pets?sort[field]=name&sort[order]=DESC')).toMatchObject({
+          status: 200,
+          data: [
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+            { id: 111, name: 'Catty', tag: 'kitten' },
+          ],
+        });
+
+        expect(await api.get('/pets?pagination[page]=0&pagination[perPage]=1')).toMatchObject({
+          status: 200,
+          data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+        });
+
+        expect(await api.get('/pets?pagination[page]=1&pagination[perPage]=1')).toMatchObject({
+          status: 200,
+          data: [{ id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' }],
+        });
+
+        expect(await api.get('/pets?pagination[perPage]=2')).toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+          ],
+        });
+
+        expect(await api.get('/pets?ids[0]=111')).toMatchObject({
+          status: 200,
+          data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+        });
+
+        expect(await api.get('/pets?ids[]=111')).toMatchObject({
+          status: 200,
+          data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+        });
+
+        expect(await api.get('/pets?ids[0]=111&ids[1]=222')).toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+          ],
+        });
+
+        expect(await api.get('/pets?ids[]=111&ids[]=222')).toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+          ],
+        });
+
+        expect(await api.get('/pets?ids=111&ids=222')).toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+          ],
+        });
+
+        await expect(api.get('/pets?ids[0]=test').catch((error) => error.response)).resolves.toMatchObject({
+          status: 400,
+          data: {
+            message: 'Request for "GET /pets" does not match OpenApi Schema',
+            errors: ['[request.query.ids.0] (type) should be of type integer'],
+          },
+        });
+
+        await expect(
+          api.get('/pets?pagination[page]=-2&pagination[perPage]=2').catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: {
+            message: 'Request for "GET /pets" does not match OpenApi Schema',
+            errors: ['[request.query.pagination.page] (minimum) should be >= 0'],
+          },
+        });
+
+        await expect(api.get('/unknown-url').catch((error) => error.response)).resolves.toMatchObject({
+          status: 404,
+          data: {
+            message: 'Request for "GET /unknown-url" did not match any of the paths defined in the OpenApi Schema',
+          },
+        });
+
+        await expect(api.get('/about', { headers: { Authorization: 'Bearer 123' } })).resolves.toMatchObject({
+          status: 200,
+          headers: {
+            'content-type': 'text/html',
+          },
+          data: `<html>\n  <body>\n    ABOUT TEXT\n  </body>\n</html>`,
+        });
+
+        await expect(api.get('/pets')).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+          ],
+        });
+
+        await expect(api.post('/pets', { other: 'New Puppy' }).catch((error) => error.response)).resolves.toMatchObject(
+          {
+            status: 400,
+            data: {
+              errors: [
+                '[request.headers] (required) is missing [x-trace-token] keys',
+                '[request.body] (required) is missing [name] keys',
+              ],
+              requestBody: {
+                examples: {
+                  simple: {
+                    summary: 'A simple example',
+                    value: {
+                      name: 'Charlie',
+                      type: 'dog',
+                    },
+                  },
+                },
+                schema: {
+                  $ref: '#/components/schemas/NewPet',
                 },
               },
-            },
-            schema: {
-              $ref: '#/components/schemas/NewPet',
+              description: 'Creates a new pet in the store.  Duplicates are allowed',
+              message: 'Request for "POST /pets" does not match OpenApi Schema',
             },
           },
-          description: 'Creates a new pet in the store.  Duplicates are allowed',
-          message: 'Request for "POST /pets" does not match OpenApi Schema',
-        },
-      });
+        );
 
-      await expect(
-        api
-          .post('/pets', { name: 'New Puppy' }, { headers: { 'X-Trace-Token': '123' } })
-          .catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: {
-          errors: ['[request.headers.x-trace-token] (format) should match uuid format'],
-          message: 'Request for "POST /pets" does not match OpenApi Schema',
-        },
-      });
+        await expect(
+          api
+            .post('/pets', { name: 'New Puppy' }, { headers: { 'X-Trace-Token': '123' } })
+            .catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: {
+            errors: ['[request.headers.x-trace-token] (format) should match uuid format'],
+            message: 'Request for "POST /pets" does not match OpenApi Schema',
+          },
+        });
 
-      await expect(
-        api
-          .post('/pets', { name: 'New Puppy' }, { headers: { Authorization: 'Be 000' } })
-          .catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: {
-          errors: ['[request.headers] (required) is missing [x-trace-token] keys'],
-          message: 'Request for "POST /pets" does not match OpenApi Schema',
-        },
-      });
+        await expect(
+          api
+            .post('/pets', { name: 'New Puppy' }, { headers: { Authorization: 'Be 000' } })
+            .catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: {
+            errors: ['[request.headers] (required) is missing [x-trace-token] keys'],
+            message: 'Request for "POST /pets" does not match OpenApi Schema',
+          },
+        });
 
-      await expect(
-        api
-          .post(
+        await expect(
+          api
+            .post(
+              '/pets',
+              { name: 'New Puppy' },
+              {
+                headers: {
+                  Authorization: 'Bearer 000',
+                  'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+                },
+              },
+            )
+            .catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 401,
+          data: { message: 'Unathorized user' },
+        });
+
+        await expect(
+          api
+            .post(
+              '/pets',
+              { other: 'New Puppy' },
+              {
+                headers: {
+                  Authorization: 'Bearer 123',
+                  'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+                },
+              },
+            )
+            .catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: {
+            errors: ['[request.body] (required) is missing [name] keys'],
+            message: 'Request for "POST /pets" does not match OpenApi Schema',
+          },
+        });
+
+        await expect(
+          api
+            .post(
+              '/pets',
+              { name: 'New Puppy' },
+              {
+                headers: {
+                  Authorization: 'Bearer 123',
+                  'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+                },
+              },
+            )
+            .catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 401,
+          data: { message: 'Unathorized user' },
+        });
+
+        await expect(
+          api
+            .post(
+              '/pets',
+              { name: 'New Puppy' },
+              {
+                headers: {
+                  Authorization: 'Bearer 123',
+                  'X-API-KEY': 'Not Me',
+                  'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
+                },
+              },
+            )
+            .catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 401,
+          data: { message: 'Unathorized user' },
+        });
+
+        await expect(
+          api.post(
             '/pets',
             { name: 'New Puppy' },
             {
               headers: {
-                Authorization: 'Bearer 000',
-                'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
-              },
-            },
-          )
-          .catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 401,
-        data: { message: 'Unathorized user' },
-      });
-
-      await expect(
-        api
-          .post(
-            '/pets',
-            { other: 'New Puppy' },
-            {
-              headers: {
                 Authorization: 'Bearer 123',
+                'X-API-KEY': 'Me',
                 'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
               },
             },
-          )
-          .catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: {
-          errors: ['[request.body] (required) is missing [name] keys'],
-          message: 'Request for "POST /pets" does not match OpenApi Schema',
-        },
-      });
+          ),
+        ).resolves.toMatchObject({
+          status: 200,
+          data: { pet: { id: 223, name: 'New Puppy' }, user: 'dinkey' },
+        });
 
-      await expect(
-        api
-          .post(
+        await expect(
+          api.post(
             '/pets',
-            { name: 'New Puppy' },
+            { name: 'Cookie Puppy' },
             {
-              headers: {
-                Authorization: 'Bearer 123',
-                'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
-              },
+              headers: { Cookie: 'auth=Me', 'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000' },
+              withCredentials: true,
             },
-          )
-          .catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 401,
-        data: { message: 'Unathorized user' },
-      });
+          ),
+        ).resolves.toMatchObject({
+          status: 200,
+          data: { pet: { id: 224, name: 'Cookie Puppy' }, user: 'cookie' },
+        });
 
-      await expect(
-        api
-          .post(
-            '/pets',
-            { name: 'New Puppy' },
-            {
-              headers: {
-                Authorization: 'Bearer 123',
-                'X-API-KEY': 'Not Me',
-                'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
-              },
-            },
-          )
-          .catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 401,
-        data: { message: 'Unathorized user' },
-      });
+        await expect(api.get('/pets/111', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
+          status: 200,
+          data: { id: 111, name: 'Catty', tag: 'kitten' },
+        });
 
-      await expect(
-        api.post(
-          '/pets',
-          { name: 'New Puppy' },
-          {
-            headers: {
-              Authorization: 'Bearer 123',
-              'X-API-KEY': 'Me',
-              'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
-            },
+        await expect(
+          api.get('/pets/10000', { headers: { Authorization: 'Basic 123' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 500,
+          data: {
+            message: 'Server response for "GET /pets/10000" does not match OpenApi Schema',
+            errors: [
+              '[response.body] (required) is missing [name] keys',
+              '[response.body] (required) is missing [id] keys',
+            ],
           },
-        ),
-      ).resolves.toMatchObject({
-        status: 200,
-        data: { pet: { id: 223, name: 'New Puppy' }, user: 'dinkey' },
-      });
+        });
 
-      await expect(
-        api.post(
-          '/pets',
-          { name: 'Cookie Puppy' },
-          {
-            headers: { Cookie: 'auth=Me', 'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000' },
-            withCredentials: true,
-          },
-        ),
-      ).resolves.toMatchObject({
-        status: 200,
-        data: { pet: { id: 224, name: 'Cookie Puppy' }, user: 'cookie' },
-      });
+        await expect(
+          api.get('/pets/000', { headers: { Authorization: 'Basic 123' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({ status: 404, data: { code: 123, message: 'Not Found' } });
 
-      await expect(api.get('/pets/111', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
-        status: 200,
-        data: { id: 111, name: 'Catty', tag: 'kitten' },
-      });
+        await expect(api.get('/pets/223', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
+          status: 200,
+          data: { id: 223, name: 'New Puppy' },
+        });
 
-      await expect(
-        api.get('/pets/10000', { headers: { Authorization: 'Basic 123' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 500,
-        data: {
-          message: 'Server response for "GET /pets/10000" does not match OpenApi Schema',
-          errors: [
-            '[response.body] (required) is missing [name] keys',
-            '[response.body] (required) is missing [id] keys',
+        await expect(api.get('/pets')).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+            { id: 223, name: 'New Puppy' },
+            { id: 224, name: 'Cookie Puppy' },
           ],
-        },
-      });
+        });
 
-      await expect(
-        api.get('/pets/000', { headers: { Authorization: 'Basic 123' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({ status: 404, data: { code: 123, message: 'Not Found' } });
+        await expect(api.get('/pets', { params: { limit: 3 } })).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+            { id: 223, name: 'New Puppy' },
+          ],
+        });
 
-      await expect(api.get('/pets/223', { headers: { Authorization: 'Basic 123' } })).resolves.toMatchObject({
-        status: 200,
-        data: { id: 223, name: 'New Puppy' },
-      });
+        await expect(
+          api.get('/pets', { params: { limit: '3.2' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: expect.objectContaining({
+            errors: ['[request.query.limit] (type) should be of type integer'],
+          }),
+        });
 
-      await expect(api.get('/pets')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-          { id: 223, name: 'New Puppy' },
-          { id: 224, name: 'Cookie Puppy' },
-        ],
-      });
+        await expect(
+          api.get('/pets', { params: { limit: 'three' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: expect.objectContaining({
+            errors: ['[request.query.limit] (type) should be of type integer'],
+          }),
+        });
 
-      await expect(api.get('/pets', { params: { limit: 3 } })).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 222, name: 'Doggy' },
-          { id: 223, name: 'New Puppy' },
-        ],
-      });
+        await expect(api.get('/pets', { params: { isKitten: true } })).resolves.toMatchObject({
+          status: 200,
+          data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+        });
 
-      await expect(
-        api.get('/pets', { params: { limit: '3.2' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: expect.objectContaining({
-          errors: ['[request.query.limit] (type) should be of type integer'],
-        }),
-      });
+        await expect(api.get('/pets', { params: { isKitten: 'yes' } })).resolves.toMatchObject({
+          status: 200,
+          data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+        });
 
-      await expect(
-        api.get('/pets', { params: { limit: 'three' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: expect.objectContaining({
-          errors: ['[request.query.limit] (type) should be of type integer'],
-        }),
-      });
+        await expect(api.get('/pets', { params: { isKitten: 1 } })).resolves.toMatchObject({
+          status: 200,
+          data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+        });
 
-      await expect(api.get('/pets', { params: { isKitten: true } })).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
-      });
+        await expect(api.get('/pets', { params: { isKitten: '1' } })).resolves.toMatchObject({
+          status: 200,
+          data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
+        });
 
-      await expect(api.get('/pets', { params: { isKitten: 'yes' } })).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
-      });
+        await expect(
+          api.get('/pets', { params: { isKitten: 'test' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: expect.objectContaining({
+            errors: ['[request.query.isKitten] (type) should be of type boolean'],
+          }),
+        });
 
-      await expect(api.get('/pets', { params: { isKitten: 1 } })).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
-      });
+        await expect(api.get('/pets', { params: { price: 6.8 } })).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 223, name: 'New Puppy' },
+            { id: 224, name: 'Cookie Puppy' },
+          ],
+        });
 
-      await expect(api.get('/pets', { params: { isKitten: '1' } })).resolves.toMatchObject({
-        status: 200,
-        data: [{ id: 111, name: 'Catty', tag: 'kitten' }],
-      });
+        await expect(
+          api.get('/pets', { params: { price: 'test' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({
+          status: 400,
+          data: expect.objectContaining({
+            errors: ['[request.query.price] (type) should be of type number,integer'],
+          }),
+        });
 
-      await expect(
-        api.get('/pets', { params: { isKitten: 'test' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: expect.objectContaining({
-          errors: ['[request.query.isKitten] (type) should be of type boolean'],
-        }),
-      });
+        await expect(api.get('/pets', { params: { isKitten: false, limit: 2 } })).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+            { id: 223, name: 'New Puppy' },
+          ],
+        });
 
-      await expect(api.get('/pets', { params: { price: 6.8 } })).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 223, name: 'New Puppy' },
-          { id: 224, name: 'Cookie Puppy' },
-        ],
-      });
+        await expect(api.get('/pets', { params: { isKitten: 'no', limit: 2 } })).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+            { id: 223, name: 'New Puppy' },
+          ],
+        });
 
-      await expect(
-        api.get('/pets', { params: { price: 'test' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({
-        status: 400,
-        data: expect.objectContaining({
-          errors: ['[request.query.price] (type) should be of type number,integer'],
-        }),
-      });
+        await expect(api.get('/pets', { params: { isKitten: '0', limit: 2 } })).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
+            { id: 223, name: 'New Puppy' },
+          ],
+        });
 
-      await expect(api.get('/pets', { params: { isKitten: false, limit: 2 } })).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 222, name: 'Doggy' },
-          { id: 223, name: 'New Puppy' },
-        ],
-      });
+        await expect(
+          api.delete('/pets/228', { headers: { 'X-API-KEY': 'Me' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({ status: 404, data: { code: 12, message: 'Item not found' } });
 
-      await expect(api.get('/pets', { params: { isKitten: 'no', limit: 2 } })).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 222, name: 'Doggy' },
-          { id: 223, name: 'New Puppy' },
-        ],
-      });
+        await expect(
+          api.delete('/pets/222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
+        ).resolves.toMatchObject({ status: 401, data: { message: 'Unathorized user' } });
 
-      await expect(api.get('/pets', { params: { isKitten: '0', limit: 2 } })).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 222, name: 'Doggy' },
-          { id: 223, name: 'New Puppy' },
-        ],
-      });
+        await expect(api.delete('/pets/222', { headers: { 'X-API-KEY': 'Me' } })).resolves.toMatchObject({
+          status: 204,
+          data: {},
+        });
 
-      await expect(
-        api.delete('/pets/228', { headers: { 'X-API-KEY': 'Me' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({ status: 404, data: { code: 12, message: 'Item not found' } });
-
-      await expect(
-        api.delete('/pets/222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
-      ).resolves.toMatchObject({ status: 401, data: { message: 'Unathorized user' } });
-
-      await expect(api.delete('/pets/222', { headers: { 'X-API-KEY': 'Me' } })).resolves.toMatchObject({
-        status: 204,
-        data: {},
-      });
-
-      await expect(api.get('/pets')).resolves.toMatchObject({
-        status: 200,
-        data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
-          { id: 223, name: 'New Puppy' },
-          { id: 224, name: 'Cookie Puppy' },
-        ],
-      });
+        await expect(api.get('/pets')).resolves.toMatchObject({
+          status: 200,
+          data: [
+            { id: 111, name: 'Catty', tag: 'kitten' },
+            { id: 223, name: 'New Puppy' },
+            { id: 224, name: 'Cookie Puppy' },
+          ],
+        });
+      } catch (error) {
+        console.log(error.response?.data);
+        throw error;
+      }
 
       expect(log).toHaveBeenNthCalledWith(1, 'Get all');
       expect(log).toHaveBeenNthCalledWith(2, 'Get all');
@@ -593,18 +642,22 @@ describe('Integration', () => {
       expect(log).toHaveBeenNthCalledWith(8, 'Get all');
       expect(log).toHaveBeenNthCalledWith(9, 'Get all');
       expect(log).toHaveBeenNthCalledWith(10, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(11, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(11, 'Get all');
       expect(log).toHaveBeenNthCalledWith(12, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(13, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(14, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(13, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(14, 'Get all');
       expect(log).toHaveBeenNthCalledWith(15, 'Auth Successful');
-      expect(log).toHaveBeenNthCalledWith(16, 'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
+      expect(log).toHaveBeenNthCalledWith(16, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(17, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(18, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(19, 'Auth Successful');
+      expect(log).toHaveBeenNthCalledWith(20, 'new pet New Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000');
       expect(log).toHaveBeenNthCalledWith(
-        17,
+        21,
         'new pet Cookie Puppy, trace token: 123e4567-e89b-12d3-a456-426655440000',
       );
-      expect(log).toHaveBeenNthCalledWith(18, 'Get all');
-      expect(log).toHaveBeenNthCalledWith(19, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(22, 'Get all');
+      expect(log).toHaveBeenNthCalledWith(23, 'Get all');
     });
   });
 });

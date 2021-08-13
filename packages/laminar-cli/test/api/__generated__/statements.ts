@@ -105,7 +105,7 @@ export interface RequestV2StatementsPost<TAuthInfo> extends OapiContext {
         accountId: string;
         force?: boolean;
         forceLossType?: LossType;
-        forceLossDate?: string;
+        forceLossDate?: Date;
     };
     authInfo: TAuthInfo;
 }
@@ -520,10 +520,10 @@ export interface RequestV2ReportsTypePost<TAuthInfo> extends OapiContext {
         type: "errors" | "foundation" | "statements" | "memos" | "refunds";
     };
     body: {
-        date: string;
+        date: Date;
     } | {
-        fromDate: string;
-        toDate: string;
+        fromDate: Date;
+        toDate: Date;
     };
     authInfo: TAuthInfo;
 }

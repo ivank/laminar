@@ -49,7 +49,7 @@ export interface RequestV1MeterreadsGet<TAuthInfo> extends OapiContext {
         /**
          * Filter by date
          */
-        date?: string;
+        date?: Date;
     };
     authInfo: TAuthInfo;
 }

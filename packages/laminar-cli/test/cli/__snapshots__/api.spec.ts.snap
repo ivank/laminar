@@ -159,11 +159,11 @@ export interface RequestApiV2AccountsAccountIdTransactionsGet<TAuthInfo> extends
         /**
          * Start date for the search period (inclusive)
          */
-        fromDate: string;
+        fromDate: Date;
         /**
          * End date for the search period (inclusive)
          */
-        toDate: string;
+        toDate: Date;
         /**
          * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
          */
@@ -186,7 +186,7 @@ export interface AdjustBalanceRequest {
     /**
      * Adjustment date-time
      */
-    transactionDateTime?: string;
+    transactionDateTime?: Date;
     /**
      * CamelCased cause why the adjustment is needed, e.g. 'GoodWill', 'WarmHomeDiscount', 'DiscretionaryCredit'
      */
@@ -291,11 +291,11 @@ export interface RequestApiV3AccountsAccountIdTransactionsGet<TAuthInfo> extends
         /**
          * Start date for the search period (inclusive)
          */
-        fromDate: string;
+        fromDate: Date;
         /**
          * End date for the search period (inclusive)
          */
-        toDate: string;
+        toDate: Date;
         /**
          * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
          */

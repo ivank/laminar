@@ -36,6 +36,14 @@ const convertBooleanSchema: AstConvert<ts.KeywordTypeNode> = (context, schema) =
 const convertBoolean: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
   isSchemaObject(schema) && schema.type === 'boolean' ? document(context, Type.Boolean) : null;
 
+const convertDateString: AstConvert<ts.TypeReferenceType> = (context, schema) =>
+  isSchemaObject(schema) &&
+  context.convertDates &&
+  schema.type === 'string' &&
+  (schema.format === 'date-time' || schema.format === 'date')
+    ? document(context, Type.TypeExpression({ name: 'Date' }))
+    : null;
+
 const convertString: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
   isSchemaObject(schema) &&
   (schema.type === 'string' ||
@@ -191,6 +199,7 @@ const converters: AstConvert[] = [
   convertBooleanSchema,
   convertEnum,
   convertBoolean,
+  convertDateString,
   convertString,
   convertNumber,
   convertRef,

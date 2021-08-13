@@ -3,7 +3,7 @@ import { MeterReadRow } from './types';
 import sql from 'sql-template-tag';
 
 interface QueryParams {
-  date?: string;
+  date?: Date;
   serialNumber?: string;
 }
 

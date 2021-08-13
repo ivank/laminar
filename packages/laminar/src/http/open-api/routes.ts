@@ -153,10 +153,27 @@ type Coercer = (
   valueSchema: SchemaObject | undefined,
 ) => unknown;
 
+interface Coercers {
+  [key: string]: Coercer | undefined;
+}
+
 const trueString = ['true', 'yes', '1'];
 const falseString = ['false', 'no', '0'];
 
-const coercers: { [key: string]: Coercer | undefined } = {
+function toCoercerType(schema?: SchemaObject): string {
+  return schema?.type ?? (schema?.properties ? 'object' : '');
+}
+
+function coerce(coercers: Coercers, schema: ResolvedSchema<Schema>, valueSchema: SchemaObject | undefined) {
+  return (value: string | Record<string, string> | string[] | undefined): string => {
+    const key = valueSchema?.type ?? (valueSchema?.properties ? 'object' : '');
+    const coercer = coercers[key];
+
+    return value === undefined ? valueSchema?.default : coercer ? coercer(value, schema, valueSchema) : value;
+  };
+}
+
+const coercers: Coercers = {
   integer: (value) => {
     const num = Number(value);
     return Number.isInteger(num) ? num : value;
@@ -175,24 +192,34 @@ const coercers: { [key: string]: Coercer | undefined } = {
       : value,
   null: (value) => (value === 'null' ? null : value),
   array: (value, schema, valueSchema: SchemaObject | undefined) =>
-    Array.isArray(value)
-      ? value.map((itemValue) => {
-          const propertySchema = resolveRef(schema, valueSchema?.items);
-          const coercer = coercers[propertySchema?.type ?? ''];
-          return coercer ? coercer(itemValue, schema, propertySchema) : itemValue;
-        })
-      : value,
+    Array.isArray(value) ? value.map(coerce(coercers, schema, resolveRef(schema, valueSchema?.items))) : value,
   object: (value, schema, valueSchema: SchemaObject | undefined) => {
     const properties = valueSchema?.properties;
     if (properties && typeof value === 'object' && !Array.isArray(value)) {
       return Object.entries(properties).reduce((acc, [name, propertySchema]) => {
         const resolvedPropertySchema = resolveRef(schema, propertySchema);
-        const coercer = coercers[resolvedPropertySchema?.type ?? ''];
-        const resolvedPropertyValue = value?.[name] ?? resolvedPropertySchema?.default;
-        const coercedPropertyValue =
-          resolvedPropertyValue !== undefined && coercer
-            ? coercer(resolvedPropertyValue, schema, resolvedPropertySchema)
-            : resolvedPropertyValue;
+        const coercedPropertyValue = coerce(coercers, schema, resolvedPropertySchema)(value?.[name]);
+        return coercedPropertyValue === undefined ? acc : { ...acc, [name]: coercedPropertyValue };
+      }, {});
+    } else {
+      return value;
+    }
+  },
+};
+
+const converters: Coercers = {
+  string: (value, schema, valueSchema: SchemaObject | undefined) =>
+    typeof value === 'string' && value && (valueSchema?.format === 'date-time' || valueSchema?.format === 'date')
+      ? new Date(value)
+      : value,
+  array: (value, schema, valueSchema: SchemaObject | undefined) =>
+    Array.isArray(value) ? value.map(coerce(converters, schema, resolveRef(schema, valueSchema?.items))) : value,
+  object: (value, schema, valueSchema: SchemaObject | undefined) => {
+    const properties = valueSchema?.properties;
+    if (properties && typeof value === 'object' && !Array.isArray(value)) {
+      return Object.entries(properties).reduce((acc, [name, propertySchema]) => {
+        const resolvedPropertySchema = resolveRef(schema, propertySchema);
+        const coercedPropertyValue = coerce(converters, schema, resolvedPropertySchema)(value?.[name]);
         return coercedPropertyValue === undefined ? acc : { ...acc, [name]: coercedPropertyValue };
       }, {});
     } else {
@@ -211,9 +238,10 @@ const coercers: { [key: string]: Coercer | undefined } = {
 function toParameterCoerce<TContext extends Empty>(
   schema: ResolvedSchema,
   parameter: ParameterObject,
+  coercers: Coercers,
 ): Coerce<TContext> | undefined {
   const resolvedSchema = resolveRef(schema, parameter.schema);
-  const coercer = coercers[resolvedSchema?.type ?? ''];
+  const coercer = coercers[toCoercerType(resolvedSchema)];
   if (coercer) {
     return (ctx) => {
       const location = toParamLocation(parameter.in);
@@ -232,6 +260,47 @@ function toParameterCoerce<TContext extends Empty>(
 }
 
 /**
+ * Convert the request based on the schema. Coerce request body data from json
+ */
+function toRequestBodyCoerce<TContext extends Empty>(
+  schema: ResolvedSchema,
+  requestBody: RequestBodyObject,
+  coercers: Coercers,
+): Coerce<TContext> {
+  return (ctx) => {
+    const content = resolveRef(schema, requestBody);
+    const requestBodySchema = content
+      ? Object.entries(content).find(([mimeType]) =>
+          new RegExp(toMatchPattern(mimeType)).test(ctx.headers['content-type']),
+        )?.[1].schema
+      : undefined;
+    const coercer = coerce(coercers, schema, resolveRef(schema, requestBodySchema));
+    return { ...ctx, body: coercer(ctx.body) };
+  };
+}
+
+/**
+ * If a request has parameters, defined to be integer, attempt to convert the string value to integer first
+ * Since all parameter values would be strings, this allows us to validate even numeric values
+ *
+ * @category http
+ */
+function toRequestConvert<TContext extends Empty>(
+  schema: ResolvedSchema,
+  { parameters, requestBody }: OperationObject,
+  { parameters: commonParameters }: Pick<PathItemObject, 'parameters'>,
+): Coerce<TContext> {
+  const allParameters = (parameters ?? []).concat(commonParameters ?? []);
+
+  const coerceParameters = allParameters
+    .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), converters))
+    .filter((item): item is Coerce<TContext> => Boolean(item))
+    .concat(requestBody ? toRequestBodyCoerce<TContext>(schema, resolveRef(schema, requestBody), converters) : []);
+
+  return (ctx) => coerceParameters.reduce((acc, coerce) => coerce(acc), ctx);
+}
+
+/**
  * If a request has parameters, defined to be integer, attempt to convert the string value to integer first
  * Since all parameter values would be strings, this allows us to validate even numeric values
  *
@@ -245,7 +314,7 @@ function toRequestCoerce<TContext extends Empty>(
   const allParameters = (parameters ?? []).concat(commonParameters ?? []);
 
   const coerceParameters = allParameters
-    .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item)))
+    .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), coercers))
     .filter((item): item is Coerce<TContext> => Boolean(item));
 
   return (ctx) => coerceParameters.reduce((acc, coerce) => coerce(acc), ctx);
@@ -329,6 +398,7 @@ export function toRoutes<TContext extends Empty>(
             operation,
             schema,
             coerce: toRequestCoerce(schema, operation, { parameters }),
+            convertRequest: toRequestConvert(schema, operation, { parameters }),
             security: operation.security || api.security,
             matcher: toMatcher(path, method),
             listener: oapiPaths[path][method],

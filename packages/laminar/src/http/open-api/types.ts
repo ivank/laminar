@@ -109,6 +109,12 @@ export type Coerce<TContext extends Empty = Empty> = (
 ) => TContext & HttpContext & OapiContext;
 
 /**
+ * A function that will convert a request into desired types.
+ * @category http
+ */
+export type ConvertResponse = (response: HttpResponse) => HttpResponse;
+
+/**
  * @typeParam TContext pass the request properties that the app requires. Usually added by the middlewares
  * @category http
  */
@@ -116,6 +122,7 @@ export interface Route<TContext extends Empty> {
   matcher: Matcher;
   request: Schema;
   coerce: Coerce<TContext>;
+  convertRequest: Coerce<TContext>;
   response: Schema;
   operation: OperationObject;
   schema: ResolvedSchema;

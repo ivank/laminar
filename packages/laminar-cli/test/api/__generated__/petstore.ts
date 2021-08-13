@@ -1,6 +1,22 @@
+import { Readable } from "stream";
+
 import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@ovotech/laminar";
 
 export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<HttpListener<R>> => openApi(config);
+
+export type ResponseAboutGet = ResponseOapi<string | Readable | Buffer, 200, string>;
+
+/**
+ * About text for the service
+ */
+export interface RequestAboutGet<TAuthInfo> extends OapiContext {
+    authInfo: TAuthInfo;
+}
+
+/**
+ * About text for the service
+ */
+export type PathAboutGet<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestAboutGet<TAuthInfo> & R) => Promise<ResponseAboutGet>;
 
 export type Pet = NewPet & {
     id: number;
@@ -10,12 +26,14 @@ export type Pet = NewPet & {
 export interface NewPet {
     name: string;
     tag?: string;
+    addedOn?: string;
     [key: string]: unknown;
 }
 
 export interface Error {
     code: number;
     message: string;
+    [key: string]: unknown;
 }
 
 export type ResponsePetsGet = ResponseOapi<Pet[], 200, "application/json"> | ResponseOapi<Error, number, "application/json">;
@@ -34,9 +52,40 @@ export interface RequestPetsGet<TAuthInfo> extends OapiContext {
          */
         tags?: string[];
         /**
+         * Container for all pagination params
+         */
+        pagination: {
+            page: number;
+            perPage: number;
+        };
+        /**
+         * React admin sort object
+         */
+        sort: {
+            field?: "name" | "tag";
+            order: "ASC" | "DESC";
+        };
+        /**
+         * After certain iso timestamp
+         */
+        afterDateTime?: Date;
+        /**
+         * After certain date
+         */
+        afterDate?: Date;
+        /**
          * maximum number of results to return
          */
-        limit?: number;
+        limit: number;
+        ids?: number[];
+        /**
+         * if true only show pets tagged as kittens
+         */
+        isKitten?: boolean;
+        /**
+         * Show pets of certain price
+         */
+        price?: number;
     };
     authInfo: TAuthInfo;
 }
@@ -85,7 +134,7 @@ export type ResponsePetsIdGet = ResponseOapi<Pet, 200, "application/json"> | Res
 export interface RequestPetsIdGet<TAuthInfo> extends OapiContext {
     path: {
         /**
-         * ID of pet to fetch
+         * ID of pet to delete
          */
         id: string;
     };
@@ -119,6 +168,12 @@ export type PathPetsIdDelete<R extends Empty = Empty, TAuthInfo extends OapiAuth
 
 export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
     paths: {
+        "/about": {
+            /**
+             * About text for the service
+             */
+            get: PathAboutGet<R, TAuthInfo>;
+        };
         "/pets": {
             /**
              * Returns all pets from the system that the user has access to
@@ -148,5 +203,6 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
         BasicAuth: OapiSecurityResolver<R, TAuthInfo>;
         BearerAuth: OapiSecurityResolver<R, TAuthInfo>;
         ApiKeyAuth: OapiSecurityResolver<R, TAuthInfo>;
+        CookieAuth: OapiSecurityResolver<R, TAuthInfo>;
     };
 }

@@ -89,7 +89,8 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
       return security;
     }
 
-    const res = await select.route.listener({ ...reqOapi, authInfo: undefined, ...security });
+    const convertedReqOapi = select.route.convertRequest(reqOapi);
+    const res = await select.route.listener({ ...convertedReqOapi, authInfo: undefined, ...security });
 
     const checkResponse = validateCompiled({
       schema: compileInContext(select.route.response, oapi),

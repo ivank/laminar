@@ -72,12 +72,26 @@ paths:
             type: object
             properties:
               field:
-                type: string
+                enum: ['name', 'tag']
               order:
                 enum: ['ASC', 'DESC']
                 default: 'ASC'
             additionalProperties: false
             default: {}
+        - name: afterDateTime
+          in: query
+          description: After certain iso timestamp
+          example: '2020-01-01T00:00:00.000Z'
+          schema:
+            type: string
+            format: 'date-time'
+        - name: afterDate
+          in: query
+          description: After certain date
+          example: '2020-01-01'
+          schema:
+            type: string
+            format: 'date'
         - name: limit
           in: query
           description: maximum number of results to return
@@ -245,6 +259,9 @@ components:
           type: string
         tag:
           type: string
+        addedOn:
+          type: string
+          format: date-time
 
     Error:
       required:

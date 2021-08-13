@@ -218,12 +218,13 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
     Object.entries<PathItemObject>(api.paths),
     (pathContext, [path, pathApiOrRef]) => {
       const { parameters, description, summary, ...methodsApiOrRef } = pathApiOrRef;
-      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, 'schema', context);
+      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, 'schema', pathContext);
 
       const methods = mapWithContext(
         pathContext,
         Object.entries<OperationObject>(pathApi),
-        (methodContext, [method, operation]) => {
+        (methodContextOriginal, [method, operation]) => {
+          const methodContext = { ...methodContextOriginal, convertDates: true };
           const astParams =
             operation.parameters || parameters
               ? convertParameters(methodContext, [...(parameters ?? []), ...(operation.parameters ?? [])])
@@ -255,7 +256,11 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
               })
             : undefined;
 
-          const responseAst = convertResponses(astRequestBody.context, responseIdentifier, operation.responses);
+          const responseAst = convertResponses(
+            { ...astRequestBody.context, convertDates: false },
+            responseIdentifier,
+            operation.responses,
+          );
 
           const pathType = Type.Alias({
             name: pathIdentifier,
