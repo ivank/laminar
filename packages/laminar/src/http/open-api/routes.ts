@@ -200,7 +200,7 @@ const coercers: Coercers = {
         const resolvedPropertySchema = resolveRef(schema, propertySchema);
         const coercedPropertyValue = coerce(coercers, schema, resolvedPropertySchema)(value?.[name]);
         return coercedPropertyValue === undefined ? acc : { ...acc, [name]: coercedPropertyValue };
-      }, {});
+      }, value);
     } else {
       return value;
     }
@@ -221,7 +221,7 @@ const converters: Coercers = {
         const resolvedPropertySchema = resolveRef(schema, propertySchema);
         const coercedPropertyValue = coerce(converters, schema, resolvedPropertySchema)(value?.[name]);
         return coercedPropertyValue === undefined ? acc : { ...acc, [name]: coercedPropertyValue };
-      }, {});
+      }, value);
     } else {
       return value;
     }
@@ -268,7 +268,7 @@ function toRequestBodyCoerce<TContext extends Empty>(
   coercers: Coercers,
 ): Coerce<TContext> {
   return (ctx) => {
-    const content = resolveRef(schema, requestBody);
+    const content = resolveRef(schema, requestBody)?.content;
     const requestBodySchema = content
       ? Object.entries(content).find(([mimeType]) =>
           new RegExp(toMatchPattern(mimeType)).test(ctx.headers['content-type']),

@@ -140,6 +140,9 @@ describe('Integration', () => {
             if (!isBodyNewPet(body)) {
               return jsonBadRequest({ message: 'Wrong body' });
             }
+            if (body.addedOn && !(body.addedOn instanceof Date)) {
+              return jsonBadRequest({ message: 'Not a date' });
+            }
             const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             logger(`new pet ${pet.name}, trace token: ${headers['x-trace-token']}`);
 
@@ -370,12 +373,7 @@ describe('Integration', () => {
             .post(
               '/pets',
               { name: 'New Puppy' },
-              {
-                headers: {
-                  Authorization: 'Bearer 000',
-                  'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
-                },
-              },
+              { headers: { Authorization: 'Bearer 000', 'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000' } },
             )
             .catch((error) => error.response),
         ).resolves.toMatchObject({
@@ -388,12 +386,7 @@ describe('Integration', () => {
             .post(
               '/pets',
               { other: 'New Puppy' },
-              {
-                headers: {
-                  Authorization: 'Bearer 123',
-                  'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
-                },
-              },
+              { headers: { Authorization: 'Bearer 123', 'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000' } },
             )
             .catch((error) => error.response),
         ).resolves.toMatchObject({
@@ -409,12 +402,7 @@ describe('Integration', () => {
             .post(
               '/pets',
               { name: 'New Puppy' },
-              {
-                headers: {
-                  Authorization: 'Bearer 123',
-                  'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000',
-                },
-              },
+              { headers: { Authorization: 'Bearer 123', 'X-Trace-Token': '123e4567-e89b-12d3-a456-426655440000' } },
             )
             .catch((error) => error.response),
         ).resolves.toMatchObject({
@@ -444,7 +432,7 @@ describe('Integration', () => {
         await expect(
           api.post(
             '/pets',
-            { name: 'New Puppy' },
+            { name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
             {
               headers: {
                 Authorization: 'Bearer 123',
@@ -455,7 +443,7 @@ describe('Integration', () => {
           ),
         ).resolves.toMatchObject({
           status: 200,
-          data: { pet: { id: 223, name: 'New Puppy' }, user: 'dinkey' },
+          data: { pet: { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' }, user: 'dinkey' },
         });
 
         await expect(
@@ -504,7 +492,7 @@ describe('Integration', () => {
           data: [
             { id: 111, name: 'Catty', tag: 'kitten' },
             { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
-            { id: 223, name: 'New Puppy' },
+            { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
             { id: 224, name: 'Cookie Puppy' },
           ],
         });
@@ -514,7 +502,7 @@ describe('Integration', () => {
           data: [
             { id: 111, name: 'Catty', tag: 'kitten' },
             { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
-            { id: 223, name: 'New Puppy' },
+            { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
           ],
         });
 
@@ -568,7 +556,7 @@ describe('Integration', () => {
         await expect(api.get('/pets', { params: { price: 6.8 } })).resolves.toMatchObject({
           status: 200,
           data: [
-            { id: 223, name: 'New Puppy' },
+            { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
             { id: 224, name: 'Cookie Puppy' },
           ],
         });
@@ -586,7 +574,7 @@ describe('Integration', () => {
           status: 200,
           data: [
             { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
-            { id: 223, name: 'New Puppy' },
+            { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
           ],
         });
 
@@ -594,7 +582,7 @@ describe('Integration', () => {
           status: 200,
           data: [
             { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
-            { id: 223, name: 'New Puppy' },
+            { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
           ],
         });
 
@@ -602,7 +590,7 @@ describe('Integration', () => {
           status: 200,
           data: [
             { id: 222, name: 'Doggy', addedOn: '2021-01-01T00:00:00.000Z' },
-            { id: 223, name: 'New Puppy' },
+            { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
           ],
         });
 
@@ -623,7 +611,7 @@ describe('Integration', () => {
           status: 200,
           data: [
             { id: 111, name: 'Catty', tag: 'kitten' },
-            { id: 223, name: 'New Puppy' },
+            { id: 223, name: 'New Puppy', addedOn: '2021-02-01T00:00:00.000Z' },
             { id: 224, name: 'Cookie Puppy' },
           ],
         });
