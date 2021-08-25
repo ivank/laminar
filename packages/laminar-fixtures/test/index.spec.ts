@@ -1,10 +1,10 @@
 import { Client } from 'pg';
-import { generate, setUp, tearDown, toSetupQueries, toTeardownQueries } from '../src';
+import { generate, setUp, tearDown, toSetupQueries, toTeardownQueries, Fixture } from '../src';
 import { id, fixture, rel, template, alternate, cloneFixture } from '../src';
 
 describe('Laminar fixtures', () => {
   it('Should start and stop services', async () => {
-    const address = fixture('addresses', {
+    const address: Fixture = fixture('addresses', {
       id,
       city: template('City %s'),
       county: template('County %s'),

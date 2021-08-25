@@ -11,3 +11,12 @@ export {
 } from './fixtures';
 export { toTeardownQueries, toSetupQueries } from './queries';
 export { tearDown, setUp } from './run';
+export {
+  ColumnBuilder,
+  RelColumnBuilder,
+  FixtureColumn,
+  EntityColumns,
+  FixtureColumns,
+  Fixture,
+  Entity,
+} from './types';
