@@ -19,4 +19,9 @@ export {
   FixtureColumns,
   Fixture,
   Entity,
+  FixtureValue,
+  FixtureValues,
+  ExtractFixtureValue,
+  BuildFixture,
+  BuildColumns,
 } from './types';

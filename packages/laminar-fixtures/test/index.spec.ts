@@ -151,8 +151,8 @@ describe('Laminar fixtures', () => {
 
     await db.connect();
     try {
-      await setUp({ db, fixtures: [contract, generationInstallationMeter, exportInstallationMeter] });
-      await tearDown({ db, fixtures: [contract, generationInstallationMeter, exportInstallationMeter] });
+      await setUp({ db, fixtures });
+      await tearDown({ db, fixtures });
     } finally {
       await db.end();
     }

@@ -14,6 +14,12 @@ export const toString = async (stream: NodeJS.ReadStream): Promise<string> => {
   });
 };
 
+export const toTitleCase = (str: string): string =>
+  str
+    .replace('_', ' ')
+    .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+    .replace(' ', '');
+
 export const toContext = async (
   fileName: string,
 ): Promise<{ context: AstContext; uris: string[]; value: OpenAPIObject }> => {

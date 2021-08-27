@@ -4,6 +4,7 @@ import { axiosCommand } from './axios';
 import { jsonSchemaCommand } from './json-shema';
 import { convertCommand } from './avro';
 import { Logger } from '../types';
+import { fixturesCommand } from './fixtures';
 
 export const laminarCommand = (output: Logger = console): commander.Command =>
   commander
@@ -24,14 +25,19 @@ laminar json-schema
 laminar avro
   Convert avro to typescript types
 
+laminar fixtures
+  Load pg tables and generate @ovotech/laminar-fixtures types from them
+
 Example:
   laminar api --file openapi.yaml --output src/__generated__/openapi.yaml.ts
   curl http://example.com/openapi.yaml | laminar api --stdin-type yaml | prettier --stdin-filepath openapi.yamlts > src/__generated__/openapi.yaml.ts
   laminar api --file openapi.yaml --output src/__generated__/openapi.yaml.ts --watch
   laminar avro path/to/*.avsc --output-dir src/__generated__ --logical-type timestamp-millis=Date
+  laminar fixtures postgres://example-admin:example-pass@localhost:5432/example --output src/__generated__/fixtures.ts
 `,
     )
     .addCommand(apiCommand(output))
     .addCommand(axiosCommand(output))
     .addCommand(jsonSchemaCommand(output))
-    .addCommand(convertCommand(output));
+    .addCommand(convertCommand(output))
+    .addCommand(fixturesCommand(output));

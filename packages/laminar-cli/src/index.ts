@@ -17,4 +17,5 @@ export const schemaContent = ({ schema, refs }: ResolvedSchema): string =>
   printDocument(convertSchema({ root: schema as SchemaObject, refs }, schema));
 
 export { toTypeScript as avroConvert } from './commands/avro/convert';
+export { toTypeScript as fixturesConvert } from './commands/fixtures/convert';
 export { toExternalContext as avroExternalConvert } from './commands/avro/convert';

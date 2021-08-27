@@ -1,12 +1,13 @@
 import { format } from 'util';
 import {
+  BuildColumns,
   ColumnBuilder,
   Context,
   Entity,
   EntityColumns,
+  ExtractFixtureValue,
   Fixture,
   FixtureColumn,
-  FixtureColumns,
   GenerateId,
   RelColumnBuilder,
 } from './types';
@@ -19,12 +20,14 @@ const isColumnBuilder = (value: unknown): value is ColumnBuilder =>
   typeof value === 'object' && value !== null && ColumnBuilder in value;
 const isRelColumnBuilder = (value: unknown): value is RelColumnBuilder => isColumnBuilder(value) && 'fixture' in value;
 
-const toColumnBuilder = (value: FixtureColumn): ColumnBuilder =>
-  isColumnBuilder(value)
+const toColumnBuilder = <TFixtureColumn extends FixtureColumn>(
+  value: TFixtureColumn,
+): ColumnBuilder<ExtractFixtureValue<TFixtureColumn>> =>
+  (isColumnBuilder(value)
     ? value
     : typeof value === 'function'
     ? { [ColumnBuilder]: (id, context) => ({ value: value(id, context), context }) }
-    : { [ColumnBuilder]: (_, context) => ({ value, context }) };
+    : { [ColumnBuilder]: (_, context) => ({ value, context }) }) as ColumnBuilder<ExtractFixtureValue<TFixtureColumn>>;
 
 const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Context =>
   fixtures.reduce((current, fixture) => {
@@ -64,7 +67,7 @@ const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Cont
  * [{ table: 'mytable', columns: { id: 1 } }]
  * ```
  */
-export const id: ColumnBuilder = { [ColumnBuilder]: (id, context) => ({ value: id, context }) };
+export const id: ColumnBuilder<number> = { [ColumnBuilder]: (id, context) => ({ value: id, context }) };
 
 /**
  * Generate a column value using the current entity id.
@@ -78,7 +81,7 @@ export const id: ColumnBuilder = { [ColumnBuilder]: (id, context) => ({ value: i
  * [{ table: 'mytable', columns: { name: 'My column 1' }}]
  * ```
  */
-export const template = (value: string): ColumnBuilder => ({
+export const template = (value: string): ColumnBuilder<string> => ({
   [ColumnBuilder]: (id, context) => ({ value: format(value, id), context }),
 });
 
@@ -103,10 +106,10 @@ export const template = (value: string): ColumnBuilder => ({
  * ]
  * ```
  */
-export const rel = <TFixtureColumns extends FixtureColumns>(
-  fixture: Fixture<TFixtureColumns>,
-  column: keyof Fixture<TFixtureColumns>['columns'],
-): RelColumnBuilder => ({
+export const rel = <TFixture extends Fixture, TColumn extends keyof TFixture['columns']>(
+  fixture: TFixture,
+  column: TColumn,
+): RelColumnBuilder<ExtractFixtureValue<TFixture['columns'][TColumn]>> => ({
   fixture,
   [ColumnBuilder]: (_, context, currentFixture) => {
     const entity = context?.entities?.get(currentFixture);
@@ -137,7 +140,9 @@ export const rel = <TFixtureColumns extends FixtureColumns>(
  * ]
  * ```
  */
-export const alternate = (...items: FixtureColumn[]): ColumnBuilder => ({
+export const alternate = <TFixtureColumn extends FixtureColumn>(
+  ...items: Array<TFixtureColumn>
+): ColumnBuilder<ExtractFixtureValue<TFixtureColumn>> => ({
   [ColumnBuilder]: (id, context) => toColumnBuilder(items[(id - 1) % items.length])[ColumnBuilder](id, context),
 });
 
@@ -162,10 +167,8 @@ export const alternate = (...items: FixtureColumn[]): ColumnBuilder => ({
  *   { table: 'mytable', columns: { type: 'Export' } },
  * ]
  * ``` */
-export const fixture = <TFixtureColumns extends FixtureColumns>(
-  table: string,
-  columns: TFixtureColumns,
-): Fixture<TFixtureColumns> => ({ table, columns });
+export const fixture = <TFixture extends Fixture>(table: string, columns: TFixture['columns']): TFixture =>
+  ({ table, columns } as TFixture);
 
 /**
  * Create a copy of the fixture, with optionally some columns altered.
@@ -188,8 +191,8 @@ export const fixture = <TFixtureColumns extends FixtureColumns>(
  * ]
  * ```
  * */
-export const cloneFixture = <TFixtureColumns extends FixtureColumns>(
-  fixture: Fixture<TFixtureColumns>,
+export const cloneFixture = <TFixture extends Fixture>(
+  fixture: TFixture,
   {
     columns = {},
     deep = false,
@@ -201,23 +204,24 @@ export const cloneFixture = <TFixtureColumns extends FixtureColumns>(
     /**
      * Optionally overwrite values for some or all columns
      */
-    columns?: Partial<Record<keyof TFixtureColumns, FixtureColumn>>;
+    columns?: BuildColumns<TFixture>;
   } = {
     deep: false,
     columns: {},
   },
-): Fixture<TFixtureColumns> => ({
-  table: fixture.table,
-  columns: {
-    ...(deep
-      ? mapValues(
-          (column) => (isRelColumnBuilder(column) ? { ...column, fixture: cloneFixture(column.fixture) } : column),
-          fixture.columns,
-        )
-      : fixture.columns),
-    ...columns,
-  },
-});
+): TFixture =>
+  ({
+    table: fixture.table,
+    columns: {
+      ...(deep
+        ? mapValues(
+            (column) => (isRelColumnBuilder(column) ? { ...column, fixture: cloneFixture(column.fixture) } : column),
+            fixture.columns,
+          )
+        : fixture.columns),
+      ...columns,
+    } as TFixture['columns'],
+  } as TFixture);
 
 /**
  * The default entity id generator. Generates a serial autoincrement value

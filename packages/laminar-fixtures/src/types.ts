@@ -26,37 +26,47 @@ export interface Context {
   generateId?: GenerateId;
 }
 
+export type FixtureValue = string | number | boolean | null | Date;
+export type FixtureValues = Record<string, FixtureValue>;
+export type ExtractFixtureValue<TValue> = TValue extends FixtureColumn<infer X> ? X : never;
+
 /**
  * A function converting the current table id and context into a column.
  */
-export interface ColumnBuilder {
-  [ColumnBuilder]: (id: number, context: Context) => { value: unknown; context: Context };
+export interface ColumnBuilder<TValue = FixtureValue> {
+  [ColumnBuilder]: (id: number, context: Context) => { value: TValue; context: Context };
 }
 
 /**
  * A special variant of {@link ColumnBuilder} that keeps track of the fixture its referencing,
  * so that it can be changed before the entity has been generated.
  */
-export interface RelColumnBuilder {
+export interface RelColumnBuilder<TValue = FixtureValue> {
   fixture: Fixture;
-  [ColumnBuilder]: (id: number, context: Context, fixture: Fixture) => { value: unknown; context: Context };
+  [ColumnBuilder]: (id: number, context: Context, fixture: Fixture) => { value: TValue; context: Context };
 }
 
-export type FixtureColumn =
-  | ColumnBuilder
-  | RelColumnBuilder
-  | string
-  | number
-  | boolean
-  | null
-  | Date
-  | ((id: number, context: Context) => unknown);
+export type FixtureColumn<TValue = FixtureValue> =
+  | ColumnBuilder<TValue>
+  | RelColumnBuilder<TValue>
+  | TValue
+  | ((id: number, context: Context) => TValue);
 
-export type EntityColumns = Record<string, unknown>;
-export type FixtureColumns = Record<string, FixtureColumn>;
+export type EntityColumns = Record<string, FixtureValue>;
 
-export type Fixture<TFixtureColumns extends FixtureColumns = FixtureColumns> = {
-  columns: TFixtureColumns;
+export type FixtureColumns<TValues extends Record<string, FixtureValue> = Record<string, FixtureValue>> = {
+  [Property in keyof TValues]: FixtureColumn<TValues[Property]>;
+};
+
+export type Fixture<TFixtureValues extends FixtureValues = FixtureValues> = {
+  columns: FixtureColumns<TFixtureValues>;
   table: string;
 };
 export type Entity = { columns: EntityColumns; table: string };
+
+export type BuildColumns<TFixture extends Fixture> = Partial<TFixture['columns']>;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type BuildFixture<TFixture extends Fixture, Rels extends Record<string, Fixture> = {}> = (
+  params?: { columns?: BuildColumns<TFixture> } & Rels,
+) => TFixture;
