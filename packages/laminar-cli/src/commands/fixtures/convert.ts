@@ -12,7 +12,7 @@ import { toTitleCase } from '../../helpers';
 
 export interface Table {
   columns: Array<{
-    isNullable: boolean;
+    isOptional: boolean;
     name: string;
     type: string;
   }>;
@@ -74,7 +74,7 @@ const build${tableName}: BuildFixture<${tableName}> => ({ columns }) => fixture(
                 props: columns.map((column) => {
                   const columnEnum = enums.find(({ name }) => name === column.type);
                   return Type.Prop({
-                    isOptional: column.isNullable,
+                    isOptional: column.isOptional,
                     name: column.name,
                     type: columnEnum
                       ? Type.Union(columnEnum.enum.map((item) => Type.Literal(item)))

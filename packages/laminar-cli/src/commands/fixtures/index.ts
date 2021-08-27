@@ -24,6 +24,7 @@ const columnsSql = `
     table_name AS "table",
     column_name AS "column",
     is_nullable AS "isNullable",
+    column_default AS "columnDefault",
     udt_name AS "recordName",
     data_type AS "dataType"
   FROM information_schema.columns
@@ -36,6 +37,7 @@ interface Column {
   table: string;
   column: string;
   isNullable: 'YES' | 'NO';
+  columnDefault: string | null;
   recordName: string;
   dataType: string;
 }
@@ -73,7 +75,9 @@ export const fixturesCommand = (logger: Logger = console): commander.Command =>
                 ...(current[column.table]?.columns ?? []),
                 {
                   name: column.column,
-                  isNullable: column.isNullable === 'YES',
+                  isOptional:
+                    column.isNullable === 'YES' ||
+                    (column.columnDefault !== null && !column.columnDefault.match(/nextval\('(.*)_seq'::regclass\)/)),
                   type: column.dataType === 'USER-DEFINED' ? column.recordName : column.dataType,
                 },
               ],

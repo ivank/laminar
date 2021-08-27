@@ -4,13 +4,13 @@ const tables = [
   {
     name: 'test',
     columns: [
-      { name: 'id', type: 'integer', isNullable: false },
-      { name: 'name', type: 'varchar', isNullable: true },
-      { name: 'title', type: 'test_title', isNullable: false },
-      { name: 'created_at', type: 'timestamp', isNullable: false },
-      { name: 'updated_at', type: 'timestamp without time zone', isNullable: true },
-      { name: 'end_on', type: 'date', isNullable: true },
-      { name: 'is_active', type: 'boolean', isNullable: false },
+      { name: 'id', type: 'integer', isOptional: false },
+      { name: 'name', type: 'varchar', isOptional: true },
+      { name: 'title', type: 'test_title', isOptional: false },
+      { name: 'created_at', type: 'timestamp', isOptional: false },
+      { name: 'updated_at', type: 'timestamp without time zone', isOptional: true },
+      { name: 'end_on', type: 'date', isOptional: true },
+      { name: 'is_active', type: 'boolean', isOptional: false },
     ],
   },
 ];

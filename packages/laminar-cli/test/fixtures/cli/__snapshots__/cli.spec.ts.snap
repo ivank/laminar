@@ -25,13 +25,13 @@ exports[`Cli Should generate fixtures file 1`] = `
 export type accounts = Fixture<{
     id: number;
     customer_id: number;
-    state: \\"Pending\\" | \\"Active\\" | \\"Dispute\\" | \\"Closed\\";
+    state?: \\"Pending\\" | \\"Active\\" | \\"Dispute\\" | \\"Closed\\";
     beneficiary_name?: string;
     beneficiary_sort_code?: string;
     beneficiary_account_number?: string;
     payment_plan?: \\"BACs\\" | \\"Internal Transfer\\" | \\"Cheque\\";
     payment_suspended?: boolean;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
     start_on?: Date;
@@ -59,7 +59,7 @@ export type addresses = Fixture<{
     city?: string;
     country: string;
     postcode: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     county?: string;
     address_line_1?: string;
@@ -135,7 +135,7 @@ export type contacts = Fixture<{
     last_name: string;
     email?: string;
     phone?: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -162,7 +162,7 @@ export type contracts = Fixture<{
     scheme_account_reference: string;
     confirmation_on?: Date;
     terms_and_conditions_agreed: boolean;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     installation_id: number;
     generation_tariff_id?: number;
@@ -200,7 +200,7 @@ export type customers = Fixture<{
     company_reg_number?: string;
     company_name?: string;
     company_vat_number?: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     billing_address_id?: number;
     source_system_id?: number;
@@ -272,7 +272,7 @@ export type installation_meters = Fixture<{
     installation_id: number;
     start_on?: Date;
     end_on?: Date;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -312,7 +312,7 @@ export type installations = Fixture<{
     roofit_reference?: string;
     has_battery_storage?: boolean;
     battery_installation_date_on?: Date;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     export_mpan?: string;
     source_system_id?: number;
@@ -381,7 +381,7 @@ export type meters = Fixture<{
     hh_metered: boolean;
     gsp?: string;
     distribution_region?: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -430,7 +430,7 @@ export type tariff_rates = Fixture<{
     rate: string;
     start_date_on: Date;
     end_date_on?: Date;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -455,7 +455,7 @@ export type tariffs = Fixture<{
     id: number;
     code: string;
     type: \\"Export\\" | \\"SEG\\" | \\"Generation\\";
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -509,13 +509,13 @@ exports[`Cli Should generate fixtures file with suffix and title case 1`] = `
 export type AccountsFixture = Fixture<{
     id: number;
     customer_id: number;
-    state: \\"Pending\\" | \\"Active\\" | \\"Dispute\\" | \\"Closed\\";
+    state?: \\"Pending\\" | \\"Active\\" | \\"Dispute\\" | \\"Closed\\";
     beneficiary_name?: string;
     beneficiary_sort_code?: string;
     beneficiary_account_number?: string;
     payment_plan?: \\"BACs\\" | \\"Internal Transfer\\" | \\"Cheque\\";
     payment_suspended?: boolean;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
     start_on?: Date;
@@ -543,7 +543,7 @@ export type AddressesFixture = Fixture<{
     city?: string;
     country: string;
     postcode: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     county?: string;
     address_line_1?: string;
@@ -619,7 +619,7 @@ export type ContactsFixture = Fixture<{
     last_name: string;
     email?: string;
     phone?: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -646,7 +646,7 @@ export type ContractsFixture = Fixture<{
     scheme_account_reference: string;
     confirmation_on?: Date;
     terms_and_conditions_agreed: boolean;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     installation_id: number;
     generation_tariff_id?: number;
@@ -684,7 +684,7 @@ export type CustomersFixture = Fixture<{
     company_reg_number?: string;
     company_name?: string;
     company_vat_number?: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     billing_address_id?: number;
     source_system_id?: number;
@@ -756,7 +756,7 @@ export type InstallationMetersFixture = Fixture<{
     installation_id: number;
     start_on?: Date;
     end_on?: Date;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -796,7 +796,7 @@ export type InstallationsFixture = Fixture<{
     roofit_reference?: string;
     has_battery_storage?: boolean;
     battery_installation_date_on?: Date;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     export_mpan?: string;
     source_system_id?: number;
@@ -865,7 +865,7 @@ export type MetersFixture = Fixture<{
     hh_metered: boolean;
     gsp?: string;
     distribution_region?: string;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -914,7 +914,7 @@ export type TariffRatesFixture = Fixture<{
     rate: string;
     start_date_on: Date;
     end_date_on?: Date;
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
@@ -939,7 +939,7 @@ export type TariffsFixture = Fixture<{
     id: number;
     code: string;
     type: \\"Export\\" | \\"SEG\\" | \\"Generation\\";
-    created_at: Date;
+    created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
 }>;
