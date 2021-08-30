@@ -152,6 +152,9 @@ describe('Laminar fixtures', () => {
     await db.connect();
     try {
       await setUp({ db, fixtures });
+      await expect(db.query(`SELECT nextval('meters_id_seq'::regclass)`)).resolves.toMatchObject({
+        rows: [{ nextval: '3' }],
+      });
       await tearDown({ db, fixtures });
     } finally {
       await db.end();

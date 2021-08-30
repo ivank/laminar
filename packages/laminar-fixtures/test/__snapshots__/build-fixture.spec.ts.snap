@@ -13,6 +13,7 @@ Array [
       "postcode": "BST SW1",
       "source_system_id": 1,
     },
+    "serialColumn": "id",
     "table": "addresses",
   },
   Object {
@@ -25,6 +26,7 @@ Array [
       "phone": "11111 %s",
       "title": "Mr",
     },
+    "serialColumn": "id",
     "table": "contacts",
   },
   Object {
@@ -38,6 +40,7 @@ Array [
       "postcode": "BST SW2",
       "source_system_id": 2,
     },
+    "serialColumn": "id",
     "table": "addresses",
   },
   Object {
@@ -50,6 +53,7 @@ Array [
       "phone": "11111 %s",
       "title": "Mrs",
     },
+    "serialColumn": "id",
     "table": "contacts",
   },
   Object {
@@ -63,6 +67,7 @@ Array [
       "postcode": "BST SW3",
       "source_system_id": 3,
     },
+    "serialColumn": "id",
     "table": "addresses",
   },
   Object {
@@ -75,6 +80,7 @@ Array [
       "secondary_contact_id": 2,
       "source_system_id": 1,
     },
+    "serialColumn": "id",
     "table": "customers",
   },
   Object {
@@ -82,10 +88,11 @@ Array [
       "customer_id": 1,
       "end_on": undefined,
       "id": 1,
-      "payment_plan": "BACS",
+      "payment_plan": "BACs",
       "start_on": 2020-01-01T00:00:00.000Z,
       "state": "Active",
     },
+    "serialColumn": "id",
     "table": "accounts",
   },
   Object {
@@ -99,6 +106,7 @@ Array [
       "postcode": "BST SW4",
       "source_system_id": 4,
     },
+    "serialColumn": "id",
     "table": "addresses",
   },
   Object {
@@ -120,6 +128,7 @@ Array [
       "tic_reference": 1000,
       "type": "Retrofit",
     },
+    "serialColumn": "id",
     "table": "installations",
   },
   Object {
@@ -129,6 +138,7 @@ Array [
       "source_system_id": 1,
       "type": "Generation",
     },
+    "serialColumn": "id",
     "table": "tariffs",
   },
   Object {
@@ -138,6 +148,7 @@ Array [
       "source_system_id": 2,
       "type": "Export",
     },
+    "serialColumn": "id",
     "table": "tariffs",
   },
   Object {
@@ -151,6 +162,7 @@ Array [
       "postcode": "BST SW5",
       "source_system_id": 5,
     },
+    "serialColumn": "id",
     "table": "addresses",
   },
   Object {
@@ -163,6 +175,7 @@ Array [
       "phone": "11111 %s",
       "title": "Mr",
     },
+    "serialColumn": "id",
     "table": "contacts",
   },
   Object {
@@ -178,6 +191,7 @@ Array [
       "source_system_id": 1,
       "terms_and_conditions_agreed": true,
     },
+    "serialColumn": "id",
     "table": "contracts",
   },
   Object {
@@ -192,6 +206,7 @@ Array [
       "shared": false,
       "source_system_id": 1,
     },
+    "serialColumn": "id",
     "table": "meters",
   },
   Object {
@@ -203,6 +218,7 @@ Array [
       "source_system_id": 1,
       "start_on": 2020-01-01T00:00:00.000Z,
     },
+    "serialColumn": "id",
     "table": "installation_meters",
   },
   Object {
@@ -217,6 +233,7 @@ Array [
       "shared": false,
       "source_system_id": 2,
     },
+    "serialColumn": "id",
     "table": "meters",
   },
   Object {
@@ -228,6 +245,7 @@ Array [
       "source_system_id": 2,
       "start_on": 2020-01-01T00:00:00.000Z,
     },
+    "serialColumn": "id",
     "table": "installation_meters",
   },
   Object {
@@ -239,6 +257,7 @@ Array [
       "start_date_on": 2000-01-01T00:00:00.000Z,
       "tariff_id": 1,
     },
+    "serialColumn": "id",
     "table": "tariff_rates",
   },
   Object {
@@ -250,6 +269,7 @@ Array [
       "start_date_on": 2000-01-01T00:00:00.000Z,
       "tariff_id": 1,
     },
+    "serialColumn": "id",
     "table": "tariff_rates",
   },
   Object {
@@ -267,7 +287,8 @@ Array [
       "type": "Opening",
       "value": 0,
     },
-    "table": "meter_reads",
+    "serialColumn": "id",
+    "table": "fixtures_meter_reads",
   },
   Object {
     "columns": Object {
@@ -284,7 +305,8 @@ Array [
       "type": "Quarterly",
       "value": 100,
     },
-    "table": "meter_reads",
+    "serialColumn": "id",
+    "table": "fixtures_meter_reads",
   },
   Object {
     "columns": Object {
@@ -301,7 +323,8 @@ Array [
       "type": "Opening",
       "value": 0,
     },
-    "table": "meter_reads",
+    "serialColumn": "id",
+    "table": "fixtures_meter_reads",
   },
   Object {
     "columns": Object {
@@ -318,7 +341,8 @@ Array [
       "type": "Quarterly",
       "value": 100,
     },
-    "table": "meter_reads",
+    "serialColumn": "id",
+    "table": "fixtures_meter_reads",
   },
 ]
 `;
@@ -371,6 +395,10 @@ Array [
     ],
   },
   Object {
+    "text": "SELECT setval(pg_get_serial_sequence('addresses', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"addresses\\";",
+    "values": Array [],
+  },
+  Object {
     "text": "INSERT INTO \\"contacts\\" (\\"id\\", \\"address_id\\", \\"title\\", \\"first_name\\", \\"last_name\\", \\"email\\", \\"phone\\") VALUES ($1,$2,$3,$4,$5,$6,$7),($8,$9,$10,$11,$12,$13,$14),($15,$16,$17,$18,$19,$20,$21)",
     "values": Array [
       1,
@@ -397,6 +425,10 @@ Array [
     ],
   },
   Object {
+    "text": "SELECT setval(pg_get_serial_sequence('contacts', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"contacts\\";",
+    "values": Array [],
+  },
+  Object {
     "text": "INSERT INTO \\"customers\\" (\\"id\\", \\"customer_reference\\", \\"primary_contact_id\\", \\"secondary_contact_id\\", \\"billing_address_id\\", \\"source_system_id\\", \\"generator_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7)",
     "values": Array [
       1,
@@ -409,15 +441,23 @@ Array [
     ],
   },
   Object {
+    "text": "SELECT setval(pg_get_serial_sequence('customers', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"customers\\";",
+    "values": Array [],
+  },
+  Object {
     "text": "INSERT INTO \\"accounts\\" (\\"id\\", \\"customer_id\\", \\"state\\", \\"payment_plan\\", \\"start_on\\", \\"end_on\\") VALUES ($1,$2,$3,$4,$5,$6)",
     "values": Array [
       1,
       1,
       "Active",
-      "BACS",
+      "BACs",
       2020-01-01T00:00:00.000Z,
       undefined,
     ],
+  },
+  Object {
+    "text": "SELECT setval(pg_get_serial_sequence('accounts', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"accounts\\";",
+    "values": Array [],
   },
   Object {
     "text": "INSERT INTO \\"installations\\" (\\"id\\", \\"name\\", \\"type\\", \\"technology_type\\", \\"property_type\\", \\"export_type\\", \\"commissioned_on\\", \\"installed_on\\", \\"mcs_reference\\", \\"tic_reference\\", \\"dnc_reference\\", \\"export_mpan\\", \\"source_system_id\\", \\"legacy_fit_db_id\\", \\"supply_mpan\\", \\"address_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)",
@@ -441,6 +481,10 @@ Array [
     ],
   },
   Object {
+    "text": "SELECT setval(pg_get_serial_sequence('installations', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"installations\\";",
+    "values": Array [],
+  },
+  Object {
     "text": "INSERT INTO \\"tariffs\\" (\\"id\\", \\"code\\", \\"type\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4),($5,$6,$7,$8)",
     "values": Array [
       1,
@@ -452,6 +496,10 @@ Array [
       "Export",
       2,
     ],
+  },
+  Object {
+    "text": "SELECT setval(pg_get_serial_sequence('tariffs', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"tariffs\\";",
+    "values": Array [],
   },
   Object {
     "text": "INSERT INTO \\"contracts\\" (\\"id\\", \\"scheme_type\\", \\"scheme_account_reference\\", \\"terms_and_conditions_agreed\\", \\"installation_id\\", \\"generation_tariff_id\\", \\"export_tariff_id\\", \\"source_system_id\\", \\"contact_id\\", \\"account_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
@@ -467,6 +515,10 @@ Array [
       3,
       1,
     ],
+  },
+  Object {
+    "text": "SELECT setval(pg_get_serial_sequence('contracts', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"contracts\\";",
+    "values": Array [],
   },
   Object {
     "text": "INSERT INTO \\"meters\\" (\\"id\\", \\"mpan\\", \\"shared\\", \\"serial_number\\", \\"make\\", \\"model\\", \\"hh_metered\\", \\"gsp\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9),($10,$11,$12,$13,$14,$15,$16,$17,$18)",
@@ -492,6 +544,10 @@ Array [
     ],
   },
   Object {
+    "text": "SELECT setval(pg_get_serial_sequence('meters', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"meters\\";",
+    "values": Array [],
+  },
+  Object {
     "text": "INSERT INTO \\"installation_meters\\" (\\"id\\", \\"meter_type\\", \\"meter_id\\", \\"installation_id\\", \\"start_on\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4,$5,$6),($7,$8,$9,$10,$11,$12)",
     "values": Array [
       1,
@@ -507,6 +563,10 @@ Array [
       2020-01-01T00:00:00.000Z,
       2,
     ],
+  },
+  Object {
+    "text": "SELECT setval(pg_get_serial_sequence('installation_meters', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"installation_meters\\";",
+    "values": Array [],
   },
   Object {
     "text": "INSERT INTO \\"tariff_rates\\" (\\"id\\", \\"tariff_id\\", \\"rate\\", \\"start_date_on\\", \\"end_date_on\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4,$5,$6),($7,$8,$9,$10,$11,$12)",
@@ -526,7 +586,11 @@ Array [
     ],
   },
   Object {
-    "text": "INSERT INTO \\"meter_reads\\" (\\"id\\", \\"meter_id\\", \\"date_on\\", \\"value\\", \\"type\\", \\"reason\\", \\"source_system_id\\", \\"tolerance\\", \\"is_accepted\\", \\"deleted_at\\", \\"submitted_at\\", \\"history\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12),($13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24),($25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36),($37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48)",
+    "text": "SELECT setval(pg_get_serial_sequence('tariff_rates', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"tariff_rates\\";",
+    "values": Array [],
+  },
+  Object {
+    "text": "INSERT INTO \\"fixtures_meter_reads\\" (\\"id\\", \\"meter_id\\", \\"date_on\\", \\"value\\", \\"type\\", \\"reason\\", \\"source_system_id\\", \\"tolerance\\", \\"is_accepted\\", \\"deleted_at\\", \\"submitted_at\\", \\"history\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12),($13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24),($25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36),($37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48)",
     "values": Array [
       1,
       1,
@@ -578,13 +642,17 @@ Array [
       "[]",
     ],
   },
+  Object {
+    "text": "SELECT setval(pg_get_serial_sequence('fixtures_meter_reads', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"fixtures_meter_reads\\";",
+    "values": Array [],
+  },
 ]
 `;
 
 exports[`Laminar fixtures Should start and stop services: Teardown Queries 1`] = `
 Array [
   Object {
-    "text": "DELETE FROM \\"meter_reads\\" WHERE id IN ($1, $2, $3, $4)",
+    "text": "DELETE FROM \\"fixtures_meter_reads\\" WHERE id IN ($1, $2, $3, $4)",
     "values": Array [
       1,
       2,

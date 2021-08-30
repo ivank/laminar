@@ -209,3 +209,22 @@ CREATE TABLE installation_meters (
     updated_at timestamp without time zone,
     source_system_id integer
 );
+
+CREATE TYPE meter_reads_types as ENUM('Opening', 'Closing', 'Quarterly', 'Meter Verification');
+
+CREATE TABLE fixtures_meter_reads (
+    id SERIAL PRIMARY KEY,
+    meter_id integer NOT NULL REFERENCES meters(id),
+    date_on date NOT NULL,
+    value integer NOT NULL,
+    type meter_reads_types NOT NULL,
+    reason character varying,
+    created_at timestamp without time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone,
+    source_system_id integer,
+    tolerance jsonb,
+    is_accepted boolean NOT NULL DEFAULT false,
+    deleted_at date,
+    submitted_at date,
+    history jsonb NOT NULL DEFAULT '[]'::jsonb
+);

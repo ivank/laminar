@@ -194,7 +194,7 @@ const buildAccount: BuildFixture<AccountFixture, { customer?: CustomerFixture }>
     id,
     customer_id: rel(customer, 'id'),
     state: 'Active',
-    payment_plan: 'BACS',
+    payment_plan: 'BACs',
     start_on: new Date('2020-01-01'),
     end_on: undefined,
     ...columns,
@@ -324,7 +324,7 @@ const buildMeterRead: BuildFixture<MeterReadFixture, { meter?: MeterFixture }> =
   columns,
   meter = buildMeter(),
 } = {}) =>
-  fixture('meter_reads', {
+  fixture('fixtures_meter_reads', {
     id,
     meter_id: rel(meter, 'id'),
     date_on: new Date('2020-01-01'),

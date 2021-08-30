@@ -25,11 +25,11 @@ exports[`Cli Should generate fixtures file 1`] = `
 export type accounts = Fixture<{
     id: number;
     customer_id: number;
-    state?: \\"Pending\\" | \\"Active\\" | \\"Dispute\\" | \\"Closed\\";
+    state?: \\"Active\\" | \\"Pending\\" | \\"Dispute\\" | \\"Closed\\";
     beneficiary_name?: string;
     beneficiary_sort_code?: string;
     beneficiary_account_number?: string;
-    payment_plan?: \\"BACs\\" | \\"Internal Transfer\\" | \\"Cheque\\";
+    payment_plan?: \\"BACs\\" | \\"Cheque\\" | \\"Internal Transfer\\";
     payment_suspended?: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -130,7 +130,7 @@ export type comms = Fixture<{
 export type contacts = Fixture<{
     id: number;
     address_id: number;
-    title?: \\"Ms\\" | \\"Mr\\" | \\"Miss\\" | \\"Dr\\" | \\"Mrs\\";
+    title?: \\"Mrs\\" | \\"Miss\\" | \\"Dr\\" | \\"Ms\\" | \\"Mr\\";
     first_name: string;
     last_name: string;
     email?: string;
@@ -158,7 +158,7 @@ export type contacts = Fixture<{
  */
 export type contracts = Fixture<{
     id: number;
-    scheme_type: \\"SEG\\" | \\"FIT\\";
+    scheme_type: \\"FIT\\" | \\"SEG\\";
     scheme_account_reference: string;
     confirmation_on?: Date;
     terms_and_conditions_agreed: boolean;
@@ -250,6 +250,39 @@ export type db_users2 = Fixture<{
 }>;
 
 /**
+ * Fixture type for table \\"fixtures_meter_reads\\" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@ovotech/laminar-fixtures';
+ * const myfixtures_meter_reads = fixture<fixtures_meter_reads>({
+ *   // ...
+ * });
+ *
+ * const buildfixtures_meter_reads: BuildFixture<fixtures_meter_reads> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type fixtures_meter_reads = Fixture<{
+    id: number;
+    meter_id: number;
+    date_on: Date;
+    value: number;
+    type: \\"Opening\\" | \\"Closing\\" | \\"Quarterly\\" | \\"Meter Verification\\";
+    reason?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+    tolerance?: string;
+    is_accepted?: boolean;
+    deleted_at?: Date;
+    submitted_at?: Date;
+    history?: string;
+}>;
+
+/**
  * Fixture type for table \\"installation_meters\\" with column types loaded from the database
  * You can use the type with a fixutre, or by creating a fixture builder
  *
@@ -267,7 +300,7 @@ export type db_users2 = Fixture<{
  */
 export type installation_meters = Fixture<{
     id: number;
-    meter_type: \\"Generation\\" | \\"Export\\";
+    meter_type: \\"Export\\" | \\"Generation\\";
     meter_id: number;
     installation_id: number;
     start_on?: Date;
@@ -296,10 +329,10 @@ export type installation_meters = Fixture<{
 export type installations = Fixture<{
     id: number;
     name?: string;
-    type: \\"None\\" | \\"Extension of an existing FiT-accredited installation\\" | \\"Standalone\\" | \\"New build\\" | \\"Retrofit\\";
+    type: \\"Retrofit\\" | \\"New build\\" | \\"Standalone\\" | \\"Extension of an existing FiT-accredited installation\\" | \\"None\\";
     technology_type: \\"PV\\" | \\"H\\" | \\"W\\" | \\"AD\\" | \\"CHP\\";
-    property_type: \\"Other\\" | \\"School/Education\\" | \\"Domestic\\" | \\"Not for profit\\" | \\"Industrial\\" | \\"Farm\\" | \\"Commercial\\";
-    export_type?: \\"PPA\\" | \\"Off Grid\\" | \\"Metered Export\\" | \\"Deemed\\";
+    property_type: \\"Domestic\\" | \\"Commercial\\" | \\"Farm\\" | \\"Industrial\\" | \\"Not for profit\\" | \\"School/Education\\" | \\"Other\\";
+    export_type?: \\"Deemed\\" | \\"Metered Export\\" | \\"Off Grid\\" | \\"PPA\\";
     commissioned_on?: Date;
     decommissioned_on?: Date;
     installed_on: Date;
@@ -454,7 +487,7 @@ export type tariff_rates = Fixture<{
 export type tariffs = Fixture<{
     id: number;
     code: string;
-    type: \\"Export\\" | \\"SEG\\" | \\"Generation\\";
+    type: \\"Export\\" | \\"Generation\\" | \\"SEG\\";
     created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
@@ -509,11 +542,11 @@ exports[`Cli Should generate fixtures file with suffix and title case 1`] = `
 export type AccountsFixture = Fixture<{
     id: number;
     customer_id: number;
-    state?: \\"Pending\\" | \\"Active\\" | \\"Dispute\\" | \\"Closed\\";
+    state?: \\"Active\\" | \\"Pending\\" | \\"Dispute\\" | \\"Closed\\";
     beneficiary_name?: string;
     beneficiary_sort_code?: string;
     beneficiary_account_number?: string;
-    payment_plan?: \\"BACs\\" | \\"Internal Transfer\\" | \\"Cheque\\";
+    payment_plan?: \\"BACs\\" | \\"Cheque\\" | \\"Internal Transfer\\";
     payment_suspended?: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -614,7 +647,7 @@ export type CommsFixture = Fixture<{
 export type ContactsFixture = Fixture<{
     id: number;
     address_id: number;
-    title?: \\"Ms\\" | \\"Mr\\" | \\"Miss\\" | \\"Dr\\" | \\"Mrs\\";
+    title?: \\"Mrs\\" | \\"Miss\\" | \\"Dr\\" | \\"Ms\\" | \\"Mr\\";
     first_name: string;
     last_name: string;
     email?: string;
@@ -642,7 +675,7 @@ export type ContactsFixture = Fixture<{
  */
 export type ContractsFixture = Fixture<{
     id: number;
-    scheme_type: \\"SEG\\" | \\"FIT\\";
+    scheme_type: \\"FIT\\" | \\"SEG\\";
     scheme_account_reference: string;
     confirmation_on?: Date;
     terms_and_conditions_agreed: boolean;
@@ -734,6 +767,39 @@ export type DbUsers2Fixture = Fixture<{
 }>;
 
 /**
+ * Fixture type for table \\"fixtures_meter_reads\\" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@ovotech/laminar-fixtures';
+ * const myFixturesMeter_readsFixture = fixture<FixturesMeter_readsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildFixturesMeter_readsFixture: BuildFixture<FixturesMeter_readsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type FixturesMeter_readsFixture = Fixture<{
+    id: number;
+    meter_id: number;
+    date_on: Date;
+    value: number;
+    type: \\"Opening\\" | \\"Closing\\" | \\"Quarterly\\" | \\"Meter Verification\\";
+    reason?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+    tolerance?: string;
+    is_accepted?: boolean;
+    deleted_at?: Date;
+    submitted_at?: Date;
+    history?: string;
+}>;
+
+/**
  * Fixture type for table \\"installation_meters\\" with column types loaded from the database
  * You can use the type with a fixutre, or by creating a fixture builder
  *
@@ -751,7 +817,7 @@ export type DbUsers2Fixture = Fixture<{
  */
 export type InstallationMetersFixture = Fixture<{
     id: number;
-    meter_type: \\"Generation\\" | \\"Export\\";
+    meter_type: \\"Export\\" | \\"Generation\\";
     meter_id: number;
     installation_id: number;
     start_on?: Date;
@@ -780,10 +846,10 @@ export type InstallationMetersFixture = Fixture<{
 export type InstallationsFixture = Fixture<{
     id: number;
     name?: string;
-    type: \\"None\\" | \\"Extension of an existing FiT-accredited installation\\" | \\"Standalone\\" | \\"New build\\" | \\"Retrofit\\";
+    type: \\"Retrofit\\" | \\"New build\\" | \\"Standalone\\" | \\"Extension of an existing FiT-accredited installation\\" | \\"None\\";
     technology_type: \\"PV\\" | \\"H\\" | \\"W\\" | \\"AD\\" | \\"CHP\\";
-    property_type: \\"Other\\" | \\"School/Education\\" | \\"Domestic\\" | \\"Not for profit\\" | \\"Industrial\\" | \\"Farm\\" | \\"Commercial\\";
-    export_type?: \\"PPA\\" | \\"Off Grid\\" | \\"Metered Export\\" | \\"Deemed\\";
+    property_type: \\"Domestic\\" | \\"Commercial\\" | \\"Farm\\" | \\"Industrial\\" | \\"Not for profit\\" | \\"School/Education\\" | \\"Other\\";
+    export_type?: \\"Deemed\\" | \\"Metered Export\\" | \\"Off Grid\\" | \\"PPA\\";
     commissioned_on?: Date;
     decommissioned_on?: Date;
     installed_on: Date;
@@ -938,7 +1004,7 @@ export type TariffRatesFixture = Fixture<{
 export type TariffsFixture = Fixture<{
     id: number;
     code: string;
-    type: \\"Export\\" | \\"SEG\\" | \\"Generation\\";
+    type: \\"Export\\" | \\"Generation\\" | \\"SEG\\";
     created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;

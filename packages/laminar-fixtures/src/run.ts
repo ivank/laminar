@@ -45,6 +45,7 @@ const queryWithError = async (db: ClientBase, queries: QueryConfig[]): Promise<v
     await db.query('COMMIT');
   } catch (error) {
     await db.query('ROLLBACK');
+    throw error;
   }
 };
 

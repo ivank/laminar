@@ -48,7 +48,11 @@ const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Cont
 
     return {
       ...entityContext,
-      entities: (entityContext?.entities ?? new Map()).set(fixture, { table: fixture.table, columns }),
+      entities: (entityContext?.entities ?? new Map()).set(fixture, {
+        table: fixture.table,
+        columns,
+        serialColumn: fixture.serialColumn,
+      }),
     };
   }, initialContext);
 
@@ -167,8 +171,11 @@ export const alternate = <TFixtureColumn extends FixtureColumn>(
  *   { table: 'mytable', columns: { type: 'Export' } },
  * ]
  * ``` */
-export const fixture = <TFixture extends Fixture>(table: string, columns: TFixture['columns']): TFixture =>
-  ({ table, columns } as TFixture);
+export const fixture = <TFixture extends Fixture>(
+  table: string,
+  columns: TFixture['columns'],
+  serialColumn = 'id',
+): TFixture => ({ table, columns, serialColumn } as TFixture);
 
 /**
  * Create a copy of the fixture, with optionally some columns altered.
@@ -209,19 +216,18 @@ export const cloneFixture = <TFixture extends Fixture>(
     deep: false,
     columns: {},
   },
-): TFixture =>
-  ({
-    table: fixture.table,
-    columns: {
-      ...(deep
-        ? mapValues(
-            (column) => (isRelColumnBuilder(column) ? { ...column, fixture: cloneFixture(column.fixture) } : column),
-            fixture.columns,
-          )
-        : fixture.columns),
-      ...columns,
-    } as TFixture['columns'],
-  } as TFixture);
+): TFixture => ({
+  ...fixture,
+  columns: {
+    ...(deep
+      ? mapValues(
+          (column) => (isRelColumnBuilder(column) ? { ...column, fixture: cloneFixture(column.fixture) } : column),
+          fixture.columns,
+        )
+      : fixture.columns),
+    ...columns,
+  },
+});
 
 /**
  * The default entity id generator. Generates a serial autoincrement value

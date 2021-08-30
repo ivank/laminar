@@ -9,13 +9,19 @@ import { groupByMap, chunk } from './util';
 export const toSetupQueries = (chunkSize: number, entities: Entity[]): QueryConfig[] =>
   [...groupByMap((entity) => entity.table, entities).entries()].flatMap(([table, tableEntities]) => {
     const columns = Object.keys(tableEntities[0].columns);
+    const serialColumn = tableEntities[0].serialColumn;
 
-    return chunk(chunkSize, tableEntities).map((entities) => ({
-      text: `INSERT INTO "${table}" (${columns.map((column) => `"${column}"`).join(', ')}) VALUES ${entities.map(
-        (_, e) => `(${columns.map((_, c, all) => `\$${c + e * all.length + 1}`).join(',')})`,
-      )}`,
-      values: entities.flatMap((entity) => columns.map((name) => entity.columns[name])),
-    }));
+    return chunk(chunkSize, tableEntities)
+      .map((entities) => ({
+        text: `INSERT INTO "${table}" (${columns.map((column) => `"${column}"`).join(', ')}) VALUES ${entities.map(
+          (_, e) => `(${columns.map((_, c, all) => `\$${c + e * all.length + 1}`).join(',')})`,
+        )}`,
+        values: entities.flatMap((entity) => columns.map((name) => entity.columns[name])),
+      }))
+      .concat({
+        text: `SELECT setval(pg_get_serial_sequence('${table}', '${serialColumn}'), coalesce(max(id), 0)+1 , false) FROM "${table}";`,
+        values: [],
+      });
   });
 
 /**
