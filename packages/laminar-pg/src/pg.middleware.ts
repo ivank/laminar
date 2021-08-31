@@ -60,7 +60,8 @@ export function pgMiddleware<TConfig extends PgMiddlewareConfig>(config: TConfig
     const pgContext = (
       await Promise.all(
         Object.entries(config).map(
-          async ([key, pool]) => [key, new PgClient(await pool.connect())] as [keyof TConfig, PgClient],
+          async ([key, pool]) =>
+            [key, new PgClient(await pool.connect(), pool.logger, pool.config)] as [keyof TConfig, PgClient],
         ),
       )
     ).reduce((all, [key, client]) => ({ ...all, [key]: client }), {} as PgContext<TConfig>);

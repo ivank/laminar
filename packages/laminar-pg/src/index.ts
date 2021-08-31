@@ -4,4 +4,4 @@
  */
 export { PgContext, pgMiddleware } from './pg.middleware';
 export { PgService } from './pg.service';
-export { PgClient } from './pg.client';
+export { PgClient, PgClientConfig } from './pg.client';
