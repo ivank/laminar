@@ -3,6 +3,10 @@ import { LoggerLike, LaminarError } from '@ovotech/laminar';
 
 export interface PgClientConfig {
   /**
+   * Specify if the client is part of a transaction.
+   */
+  transaction?: boolean;
+  /**
    * Log values alongside requests themselves
    */
   logValues?: boolean;
@@ -63,6 +67,37 @@ export class PgClient {
         query: typeof queryTextOrConfig === 'string' ? queryTextOrConfig : queryTextOrConfig.text,
         position: error.position,
       });
+    }
+  }
+
+  /**
+   * Wrap the operations in a transaction, commit it when the Promise is resolved and rollback if there is an exception.
+   * Supports nested transactions, but only the outermost transaction is used.
+   * The result of a transaction is the return of its "operations" function.
+   *
+   * ```typescript
+   * const result = await db.transaction(await (tr) => {
+   *   await tr.query('...');
+   *   await tr.query('...');
+   *   return 'value';
+   * });
+   * ```
+   */
+  async transaction<T>(operation: (db: PgClient) => Promise<T>): Promise<T> {
+    if (!this.config.transaction) {
+      await this.client.query('BEGIN');
+    }
+    try {
+      const result = await operation(new PgClient(this.client, this.logger, { ...this.config, transaction: true }));
+      if (!this.config.transaction) {
+        await this.client.query('COMMIT');
+      }
+      return result;
+    } catch (error) {
+      if (!this.config.transaction) {
+        await this.client.query('ROLLBACK');
+      }
+      throw error;
     }
   }
 }
