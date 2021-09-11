@@ -84,3 +84,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added support for form style array parameters
+
+## [0.12.2] - 2021-09-11
+
+### Changed
+
+- Deep coercion with support for most json-schmea composition logic

@@ -1,7 +1,7 @@
 import { HttpContext } from '../types';
 import { Empty } from '../../types';
 import { OapiPaths, Route, Matcher, OapiPath, Coerce } from './types';
-import { ResolvedSchema, Schema } from '@ovotech/json-schema';
+import { ResolvedSchema, Schema, coerceCompiled, withinContext } from '@ovotech/json-schema';
 import { toMatchPattern, toPathKeys, toPathRe } from '../../helpers';
 import {
   SecurityRequirementObject,
@@ -141,94 +141,6 @@ function toRequestSchema(
 }
 
 /**
- * Coerce raw string value into its intended type, based on the Json Schema
- * Since query parameters come only as string, but we still want to type them as "integer" or "boolean"
- * We attempt to coerce the type to the desired one
- *
- * Additionally, we assign default values where appropriate
- */
-type Coercer = (
-  value: string | Record<string, string> | string[],
-  schema: ResolvedSchema,
-  valueSchema: SchemaObject | undefined,
-) => unknown;
-
-interface Coercers {
-  [key: string]: Coercer | undefined;
-}
-
-const trueString = ['true', 'yes', '1'];
-const falseString = ['false', 'no', '0'];
-
-function toCoercerType(schema?: SchemaObject): string {
-  return schema?.type ?? (schema?.properties ? 'object' : '');
-}
-
-function coerce(coercers: Coercers, schema: ResolvedSchema<Schema>, valueSchema: SchemaObject | undefined) {
-  return (value: string | Record<string, string> | string[] | undefined): string => {
-    const key = valueSchema?.type ?? (valueSchema?.properties ? 'object' : '');
-    const coercer = coercers[key];
-
-    return value === undefined ? valueSchema?.default : coercer ? coercer(value, schema, valueSchema) : value;
-  };
-}
-
-const coercers: Coercers = {
-  integer: (value) => {
-    const num = Number(value);
-    return Number.isInteger(num) ? num : value;
-  },
-  number: (value) => {
-    const num = Number(value);
-    return Number.isNaN(num) ? value : num;
-  },
-  boolean: (value) =>
-    typeof value === 'string'
-      ? trueString.includes(value)
-        ? true
-        : falseString.includes(value)
-        ? false
-        : value
-      : value,
-  null: (value) => (value === 'null' ? null : value),
-  array: (value, schema, valueSchema: SchemaObject | undefined) =>
-    Array.isArray(value) ? value.map(coerce(coercers, schema, resolveRef(schema, valueSchema?.items))) : value,
-  object: (value, schema, valueSchema: SchemaObject | undefined) => {
-    const properties = valueSchema?.properties;
-    if (properties && typeof value === 'object' && !Array.isArray(value)) {
-      return Object.entries(properties).reduce((acc, [name, propertySchema]) => {
-        const resolvedPropertySchema = resolveRef(schema, propertySchema);
-        const coercedPropertyValue = coerce(coercers, schema, resolvedPropertySchema)(value?.[name]);
-        return coercedPropertyValue === undefined ? acc : { ...acc, [name]: coercedPropertyValue };
-      }, value);
-    } else {
-      return value;
-    }
-  },
-};
-
-const converters: Coercers = {
-  string: (value, schema, valueSchema: SchemaObject | undefined) =>
-    typeof value === 'string' && value && (valueSchema?.format === 'date-time' || valueSchema?.format === 'date')
-      ? new Date(value)
-      : value,
-  array: (value, schema, valueSchema: SchemaObject | undefined) =>
-    Array.isArray(value) ? value.map(coerce(converters, schema, resolveRef(schema, valueSchema?.items))) : value,
-  object: (value, schema, valueSchema: SchemaObject | undefined) => {
-    const properties = valueSchema?.properties;
-    if (properties && typeof value === 'object' && !Array.isArray(value)) {
-      return Object.entries(properties).reduce((acc, [name, propertySchema]) => {
-        const resolvedPropertySchema = resolveRef(schema, propertySchema);
-        const coercedPropertyValue = coerce(converters, schema, resolvedPropertySchema)(value?.[name]);
-        return coercedPropertyValue === undefined ? acc : { ...acc, [name]: coercedPropertyValue };
-      }, value);
-    } else {
-      return value;
-    }
-  },
-};
-
-/**
  * If a parameter is defined to be integer, attempt to convert the string value to integer first
  * Since all parameter values would be strings, this allows us to validate even numeric values
  * @param parameter
@@ -236,23 +148,19 @@ const converters: Coercers = {
  * @category http
  */
 function toParameterCoerce<TContext extends Empty>(
-  schema: ResolvedSchema,
+  openapiSchema: ResolvedSchema,
   parameter: ParameterObject,
-  coercers: Coercers,
+  type: 'query' | 'json',
 ): Coerce<TContext> | undefined {
-  const resolvedSchema = resolveRef(schema, parameter.schema);
-  const coercer = coercers[toCoercerType(resolvedSchema)];
-  if (coercer) {
+  const schema = resolveRef(openapiSchema, parameter.schema) as Schema | undefined;
+  if (schema) {
     return (ctx) => {
       const location = toParamLocation(parameter.in);
-      const rawValue = ctx[location]?.[parameter.name] ?? resolvedSchema?.default;
-
-      if (rawValue !== undefined) {
-        const value = coercer(rawValue, schema, resolvedSchema);
-        return { ...ctx, [location]: { ...ctx[location], [parameter.name]: value } };
-      } else {
-        return ctx;
-      }
+      const value = ctx[location]?.[parameter.name];
+      const coercedValue = coerceCompiled({ schema: withinContext(schema, openapiSchema), type, value });
+      return coercedValue !== undefined
+        ? { ...ctx, [location]: { ...ctx[location], [parameter.name]: coercedValue } }
+        : ctx;
     };
   } else {
     return undefined;
@@ -263,19 +171,23 @@ function toParameterCoerce<TContext extends Empty>(
  * Convert the request based on the schema. Coerce request body data from json
  */
 function toRequestBodyCoerce<TContext extends Empty>(
-  schema: ResolvedSchema,
+  openapiSchema: ResolvedSchema,
   requestBody: RequestBodyObject,
-  coercers: Coercers,
 ): Coerce<TContext> {
   return (ctx) => {
-    const content = resolveRef(schema, requestBody)?.content;
+    const content = resolveRef(openapiSchema, requestBody)?.content;
     const requestBodySchema = content
       ? Object.entries(content).find(([mimeType]) =>
           new RegExp(toMatchPattern(mimeType)).test(ctx.headers['content-type']),
         )?.[1].schema
       : undefined;
-    const coercer = coerce(coercers, schema, resolveRef(schema, requestBodySchema));
-    return { ...ctx, body: coercer(ctx.body) };
+    const schema = resolveRef(openapiSchema, requestBodySchema) as Schema | undefined;
+    return schema
+      ? {
+          ...ctx,
+          body: coerceCompiled({ schema: withinContext(schema, openapiSchema), type: 'json', value: ctx.body }),
+        }
+      : ctx;
   };
 }
 
@@ -293,9 +205,9 @@ function toRequestConvert<TContext extends Empty>(
   const allParameters = (parameters ?? []).concat(commonParameters ?? []);
 
   const coerceParameters = allParameters
-    .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), converters))
+    .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), 'json'))
     .filter((item): item is Coerce<TContext> => Boolean(item))
-    .concat(requestBody ? toRequestBodyCoerce<TContext>(schema, resolveRef(schema, requestBody), converters) : []);
+    .concat(requestBody ? toRequestBodyCoerce<TContext>(schema, resolveRef(schema, requestBody)) : []);
 
   return (ctx) => coerceParameters.reduce((acc, coerce) => coerce(acc), ctx);
 }
@@ -314,7 +226,7 @@ function toRequestCoerce<TContext extends Empty>(
   const allParameters = (parameters ?? []).concat(commonParameters ?? []);
 
   const coerceParameters = allParameters
-    .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), coercers))
+    .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), 'query'))
     .filter((item): item is Coerce<TContext> => Boolean(item));
 
   return (ctx) => coerceParameters.reduce((acc, coerce) => coerce(acc), ctx);

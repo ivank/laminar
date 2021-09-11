@@ -479,8 +479,8 @@ You can achieve that by writing your own parser that will preserve the `Readable
 ```typescript
 import { HttpService, HttpListener, BodyParser, defaultBodyParsers, csv, ok, init } from '@ovotech/laminar';
 import { pipeline, Readable, Transform } from 'stream';
-import * as parse from 'csv-parse';
-import * as stringify from 'csv-stringify';
+import parse from 'csv-parse';
+import stringify from 'csv-stringify';
 
 const csvParser: BodyParser = {
   name: 'CsvParser',

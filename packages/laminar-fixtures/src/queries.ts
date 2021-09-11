@@ -3,12 +3,20 @@ import { Entity } from './types';
 import { groupByMap, chunk } from './util';
 
 /**
+ * Get all the unique column names from all the entites
+ * Different entities might have different sets of columns
+ */
+const toColumnsFromEntites = (entites: Entity[]): string[] => [
+  ...new Set(entites.flatMap(({ columns }) => Object.keys(columns))),
+];
+
+/**
  * Create insert postgres queries from entites.
  * Chunk size modifies how many rows per insert query
  */
 export const toSetupQueries = (chunkSize: number, entities: Entity[]): QueryConfig[] =>
   [...groupByMap((entity) => entity.table, entities).entries()].flatMap(([table, tableEntities]) => {
-    const columns = Object.keys(tableEntities[0].columns);
+    const columns = toColumnsFromEntites(tableEntities);
     const serialColumn = tableEntities[0].serialColumn;
 
     return chunk(chunkSize, tableEntities)

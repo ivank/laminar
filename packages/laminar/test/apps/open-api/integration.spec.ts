@@ -16,6 +16,7 @@ import {
 import axios from 'axios';
 import { join } from 'path';
 import { LoggerContext, withLogger } from './middleware/logger';
+import { inspect } from 'util';
 
 type Pet = NewPet & {
   id: number;
@@ -616,7 +617,9 @@ describe('Integration', () => {
           ],
         });
       } catch (error) {
-        console.log(error.response?.data);
+        if (error.response?.data) {
+          console.error(inspect(error.response?.data, { depth: 10, colors: true }));
+        }
         throw error;
       }
 

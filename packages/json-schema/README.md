@@ -61,7 +61,7 @@ If we assume we have those 2 http resources at the given URLs, You can compile t
 
 ```typescript
 import { validate, compile } from '@ovotech/json-schema';
-import * as nock from 'nock';
+import nock from 'nock';
 
 const mainSchema = `
 {
@@ -94,13 +94,11 @@ compile('https://example.com/schema').then((schema) => {
   const correct = { size: 10, color: 'red' };
   const incorrect = { size: 'big', color: 'orange' };
 
-  validate({ schema, value: correct }).then((result) => {
-    console.log(result.valid, result.errors);
-  });
+  const correctResult = validate({ schema, value: correct });
+  console.log(correctResult.valid, correctResult.errors);
 
-  validate({ schema, value: incorrect }).then((result) => {
-    console.log(result.valid, result.errors);
-  });
+  const incorrectResult = validate({ schema, value: incorrect });
+  console.log(incorrectResult.valid, incorrectResult.errors);
 });
 ```
 
@@ -131,35 +129,22 @@ compile({ schema }).then((compiledSchema) => {
 
 **validate** validate given data with a schema. The schema can be a path to a yaml / json file, or a url to one, as well as plain old js object with the said schema.
 
-```typescript
-function async validate(schema: Schema | string | CompiledSchema, data: unkown) => Promise<{
-  schema: Schema,
-  valid: boolean,
-  errors: string[],
-}>
-```
-
 **compile** Compile a schema by downloading any dependencies, resolving json refs or loading yaml / json files from URLs or file paths. The result can be passed to validate to skip the downloading.
-
-```typescript
-function async compile(schema: Schema | string) => Promise<CompiledSchema>
-```
 
 **validateCompiled** You can pass the compiled schema and it will process the schema synchronously, without the use of Promises.
 
-```typescript
-function async validateCompiled(schema: CompiledSchema, data: unkown) => {
-  schema: Schema,
-  valid: boolean,
-  errors: string[],
-}
-```
-
 **ensureValid** Ensure that a given value is of a typescript type, using json-schema
 
-```typescript
-function async ensureValid<T>(schema: CompiledSchema, data: unkown) => data as T
-```
+**coerce** Coerce a given value, using the provided json schema.
+
+- With type: 'json'
+  This is used to convert json validated with json schema into javascript objects.
+  Namely it converts all the strings with format date and date-time into Date objects.
+- With type: 'query'
+  To convert a value coming from a URL query string to the type you want it to be,
+  for example '12' with type: 'integer' will be converted to 12 so the validation can succeed.
+
+Additionally, we assign default values where appropriate.
 
 ### Develop
 

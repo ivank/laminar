@@ -1,4 +1,4 @@
-import { compile, compileInContext, ensureValid, ResolvedSchema, Schema, toSchemaObject } from '@ovotech/json-schema';
+import { compile, withinContext, ensureValid, ResolvedSchema, Schema, toSchemaObject } from '@ovotech/json-schema';
 import { openapiV3 } from 'openapi-schemas';
 import { OapiConfig } from './types';
 import { Empty } from '../../types';
@@ -60,10 +60,10 @@ export async function compileOapi<TRequest extends Empty>({
   };
 
   await ensureValid({
-    schema: compileInContext(schema, compiledApi),
+    schema: withinContext(schema, compiledApi),
     name: 'createOapiOptions',
     value: { paths, security },
   });
 
-  return compileInContext(oapi, compiledApi);
+  return withinContext(oapi, compiledApi);
 }

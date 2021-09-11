@@ -1,4 +1,4 @@
-import { validateCompiled, toSchemaObject, compileInContext, ResultError } from '@ovotech/json-schema';
+import { validate, toSchemaObject, withinContext, ResultError } from '@ovotech/json-schema';
 import { Empty } from '../../types';
 import { jsonBadRequest, jsonInternalServerError, jsonNotFound } from '../response';
 import { OapiContext, OapiConfig, Route } from './types';
@@ -66,8 +66,8 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
       path: select.path,
     });
 
-    const checkRequest = validateCompiled({
-      schema: compileInContext(select.route.request, oapi),
+    const checkRequest = validate({
+      schema: withinContext(select.route.request, oapi),
       draft: 'openapi3',
       name: 'request',
       value: reqOapi,
@@ -92,8 +92,8 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
     const convertedReqOapi = select.route.convertRequest(reqOapi);
     const res = await select.route.listener({ ...convertedReqOapi, authInfo: undefined, ...security });
 
-    const checkResponse = validateCompiled({
-      schema: compileInContext(select.route.response, oapi),
+    const checkResponse = validate({
+      schema: withinContext(select.route.response, oapi),
       value: res,
       draft: 'openapi3',
       name: 'response',

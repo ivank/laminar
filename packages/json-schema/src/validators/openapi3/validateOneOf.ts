@@ -5,11 +5,7 @@ import { Validator, hasErrors, error, empty, validateSchema, Options, errors } f
 const findSchema = (schemas: Schema[], name: string, value: unknown, options: Options): Schema | undefined =>
   schemas.find(
     (item) =>
-      isJsonSchema(item) &&
-      'type' in item &&
-      item.type === 'object' &&
-      !!item.properties &&
-      !hasErrors(validateSchema(item.properties[name], value, options)),
+      isJsonSchema(item) && !!item.properties && !hasErrors(validateSchema(item.properties[name], value, options)),
   );
 
 export const validateOneOf: Validator = (schema, value, options) => {

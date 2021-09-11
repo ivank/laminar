@@ -29,17 +29,16 @@ export {
 } from './validation';
 export { Schema } from './schema';
 export { toMessages, toMessage, messages } from './messages';
-export { ResolvedSchema, resolve, resolveFile } from './resolve';
+export { isCompiled, withinContext, toSchemaObject, compile, ResolvedSchema, resolve, resolveFile } from './resolve';
 export {
   validate,
   validateCompiled,
   ensureValid,
-  isCompiled,
-  compile,
+  ensureValidCompiled,
   ValidateOptions,
   Result,
   ResultError,
   ResultSuccess,
-  compileInContext,
-  toSchemaObject,
 } from './validate';
+export { CoerceCompiledOptions, CoerceSchemaOptions, CoerceOptions, coerce, coerceCompiled } from './coerce';
+export { coerceSchema, coercers, CoercerOptions, Coercer } from './coercion';

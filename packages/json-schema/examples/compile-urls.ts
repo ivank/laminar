@@ -32,11 +32,9 @@ compile('https://example.com/schema').then((schema) => {
   const correct = { size: 10, color: 'red' };
   const incorrect = { size: 'big', color: 'orange' };
 
-  validate({ schema, value: correct }).then((result) => {
-    console.log(result.valid, result.errors);
-  });
+  const correctResult = validate({ schema, value: correct });
+  console.log(correctResult.valid, correctResult.errors);
 
-  validate({ schema, value: incorrect }).then((result) => {
-    console.log(result.valid, result.errors);
-  });
+  const incorrectResult = validate({ schema, value: incorrect });
+  console.log(incorrectResult.valid, incorrectResult.errors);
 });

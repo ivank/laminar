@@ -170,7 +170,8 @@ export const alternate = <TFixtureColumn extends FixtureColumn>(
  *   { table: 'mytable', columns: { type: 'Generation' } },
  *   { table: 'mytable', columns: { type: 'Export' } },
  * ]
- * ``` */
+ * ```
+ */
 export const fixture = <TFixture extends Fixture>(
   table: string,
   columns: TFixture['columns'],

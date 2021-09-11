@@ -259,3 +259,19 @@ export const resolveFile = async (file: string): Promise<ResolvedSchema> => {
   const resolved = await resolve(content, { cwd });
   return { ...resolved, uris: [uri, ...resolved.uris] };
 };
+
+export const compile = async (schema: Schema | string): Promise<ResolvedSchema> =>
+  typeof schema === 'string' ? resolveFile(schema) : resolve(schema);
+
+export const toSchemaObject = <T extends Schema = Schema>(schema: ResolvedSchema<T>): T => schema.schema;
+
+/**
+ * Get a schema within the context of refs and uris of another compiled schema
+ */
+export const withinContext = <T extends Schema = Schema>(
+  schema: T,
+  contextSchema: ResolvedSchema,
+): ResolvedSchema<T> => ({ ...contextSchema, schema });
+
+export const isCompiled = (schema: Schema | ResolvedSchema | string): schema is ResolvedSchema =>
+  typeof schema === 'object' && 'schema' in schema && 'refs' in schema && 'uris' in schema;
