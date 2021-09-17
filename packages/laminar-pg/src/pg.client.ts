@@ -1,4 +1,4 @@
-import type { QueryResult, QueryConfig, QueryResultRow, PoolClient } from 'pg';
+import { QueryResult, QueryConfig, QueryResultRow, PoolClient, DatabaseError } from 'pg';
 import { LoggerLike, LaminarError } from '@ovotech/laminar';
 
 export interface PgClientConfig {
@@ -63,9 +63,9 @@ export class PgClient {
       }
       return result;
     } catch (error) {
-      throw new LaminarError(`PG Client: ${error.message}`, {
+      throw new LaminarError(`PG Client: ${error instanceof Error ? error.message : String(error)}`, {
         query: typeof queryTextOrConfig === 'string' ? queryTextOrConfig : queryTextOrConfig.text,
-        position: error.position,
+        position: error instanceof DatabaseError ? error.position : undefined,
       });
     }
   }

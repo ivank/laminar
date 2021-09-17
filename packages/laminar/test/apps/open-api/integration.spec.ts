@@ -616,9 +616,9 @@ describe('Integration', () => {
             { id: 224, name: 'Cookie Puppy' },
           ],
         });
-      } catch (error) {
-        if (error.response?.data) {
-          console.error(inspect(error.response?.data, { depth: 10, colors: true }));
+      } catch (error: any) {
+        if (error?.response?.data) {
+          console.error(inspect(error?.response?.data, { depth: 10, colors: true }));
         }
         throw error;
       }

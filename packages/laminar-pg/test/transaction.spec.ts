@@ -102,7 +102,7 @@ describe('Transaction', () => {
           throw new Error('Transaction Test Error');
         });
       } catch (error) {
-        if (error.message !== 'Transaction Test Error') {
+        if (error instanceof Error && error.message !== 'Transaction Test Error') {
           throw error;
         }
       }
@@ -148,7 +148,7 @@ describe('Transaction', () => {
           });
         });
       } catch (error) {
-        if (error.message !== 'Transaction Test Error') {
+        if (error instanceof Error && error.message !== 'Transaction Test Error') {
           throw error;
         }
       }

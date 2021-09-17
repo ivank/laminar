@@ -1,4 +1,4 @@
-import { ClientBase, QueryConfig } from 'pg';
+import { ClientBase, QueryConfig, DatabaseError } from 'pg';
 import { generate } from './fixtures';
 import { toSetupQueries, toTeardownQueries } from './queries';
 import { Entity, Fixture, GenerateId } from './types';
@@ -39,7 +39,11 @@ const queryWithError = async (db: ClientBase, queries: QueryConfig[]): Promise<v
         await db.query(query);
       } catch (error) {
         const values = JSON.stringify(query.values, undefined, 2);
-        throw new Error(`Problem in query: ${error.message}: ${error.position}\n${query.text}\n ${values}`);
+        if (error instanceof DatabaseError) {
+          throw new Error(`Problem in query: ${error.message}: ${error.position}\n${query.text}\n ${values}`);
+        } else {
+          throw error;
+        }
       }
     }
     await db.query('COMMIT');

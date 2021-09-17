@@ -605,8 +605,8 @@ describe('Integration', () => {
             { id: 224, name: 'Cookie Puppy' },
           ],
         });
-      } catch (error) {
-        console.log(error.response?.data);
+      } catch (error: any) {
+        console.log(error?.response?.data);
         throw error;
       }
 

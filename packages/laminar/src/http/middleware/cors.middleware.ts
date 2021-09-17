@@ -118,8 +118,10 @@ export function corsMiddleware({
         } catch (error) {
           if (error instanceof HttpError) {
             throw new HttpError(error.code, error.body, { ...error.headers, ...headers }, error.stack);
-          } else {
+          } else if (error instanceof Error) {
             throw new HttpError(500, { message: error.message }, headers, error.stack);
+          } else {
+            throw new HttpError(500, { message: String(error) }, headers);
           }
         }
       }

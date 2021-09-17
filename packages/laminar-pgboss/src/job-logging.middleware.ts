@@ -21,7 +21,11 @@ export function jobLoggingMiddleware(source: LoggerLike): WorkerMiddleware<Logge
       logger.info(`Queue Worker Success`);
       return res;
     } catch (error) {
-      logger.error(error.message, toErrorMetadata(error));
+      if (error instanceof Error) {
+        logger.error(error.message, toErrorMetadata(error));
+      } else {
+        logger.error(String(error));
+      }
       throw error;
     }
   };

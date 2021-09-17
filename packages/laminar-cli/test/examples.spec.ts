@@ -12,9 +12,9 @@ describe('Example files', () => {
   beforeAll(() => {
     try {
       execSync('yarn tsc', { cwd: examplesDir, env: process.env });
-    } catch (e) {
-      console.log(e.output[1].toString());
-      throw e;
+    } catch (error: any) {
+      console.log(error?.output[1].toString());
+      throw error;
     }
   });
   afterAll(() => {

@@ -101,7 +101,7 @@ export const fixturesCommand = (logger: Logger = console): commander.Command =>
           process.stdout.write(result);
         }
       } catch (error) {
-        logger.error(red(error.message));
+        logger.error(red(error instanceof Error ? error.message : String(error)));
       } finally {
         await client.end();
       }

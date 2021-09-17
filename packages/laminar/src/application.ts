@@ -126,6 +126,9 @@ export async function init<TApplication extends Application>(app: TApplication):
   return app;
 }
 
+const isAxiosError = (error: Error): error is Error & { response: { status: number; data: unknown } } =>
+  'response' in error;
+
 /**
  * Run {@link start}, execute the predicate, and when its finished, call {@link stop}.
  * Useful for testing out the application as you can put your test code in the predicate
@@ -137,7 +140,9 @@ export async function run(app: Application, predicate: (app: Application) => Pro
   try {
     await predicate(app);
   } catch (error) {
-    throw error.response ? new AxiosError(error.response.status, error.response.data, error.stack) : error;
+    throw error instanceof Error && isAxiosError(error)
+      ? new AxiosError(error.response.status, error.message, error.response.data, error.stack)
+      : error;
   } finally {
     await stop(app);
   }

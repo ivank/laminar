@@ -6,10 +6,11 @@ const listener = async () => {
 
 // << errorHandler
 const globalErrorHandler: HttpErrorHandler = async ({ url, error }) => {
+  const message = error instanceof Error ? error.message : String(error);
   if (url.pathname.endsWith('html')) {
-    return htmlBadRequest(`<html><body>${error.message}</body></html>`);
+    return htmlBadRequest(`<html><body>${message}</body></html>`);
   } else {
-    return jsonBadRequest({ message: error.message });
+    return jsonBadRequest({ message });
   }
 };
 

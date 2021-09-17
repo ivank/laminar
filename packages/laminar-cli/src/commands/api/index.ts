@@ -54,12 +54,12 @@ export const apiCommand = (logger: Logger = console): commander.Command =>
                 fs.writeFileSync(output, update.content);
                 logger.info(`Updated OpenAPI Schema ${green(output)} -> ${yellow(output)} (trigger ${trigger})`);
               } catch (error) {
-                logger.error(red(error.message));
+                logger.error(red(error instanceof Error ? error.message : String(error)));
               }
             }),
           );
         }
       } catch (error) {
-        logger.error(red(error.message));
+        logger.error(red(error instanceof Error ? error.message : String(error)));
       }
     });

@@ -14,7 +14,7 @@ interface Suite {
   schema: Schema;
   tests: Test[];
 }
-jest.addMatchers;
+
 /* eslint-disable @typescript-eslint/no-namespace */
 declare global {
   namespace jest {

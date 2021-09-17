@@ -6,7 +6,7 @@ import { HttpMiddleware, HttpResponse, HttpContext } from '../types';
  * Request parameters added by the {@link errorsMiddleware}
  */
 export interface RequestError {
-  error: Error;
+  error: unknown;
 }
 
 export type HttpErrorHandler = (ctx: HttpContext & RequestError) => Promise<HttpResponse>;
@@ -18,7 +18,7 @@ export type HttpErrorHandler = (ctx: HttpContext & RequestError) => Promise<Http
 export const defaultErrorHandler: HttpErrorHandler = async ({ error }) => {
   return error instanceof HttpError
     ? json({ body: error.body, headers: error.headers, status: error.code, stack: error.stack })
-    : jsonInternalServerError({ message: error.message });
+    : jsonInternalServerError({ message: error instanceof Error ? error.message : String(error) });
 };
 
 /**

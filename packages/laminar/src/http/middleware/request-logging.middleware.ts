@@ -25,7 +25,11 @@ export function requestLoggingMiddleware(source: LoggerLike): HttpMiddleware<Log
       }
       return res;
     } catch (error) {
-      logger.error(error.message, toErrorMetadata(error));
+      if (error instanceof Error) {
+        logger.error(error.message, toErrorMetadata(error));
+      } else {
+        logger.error(String(error));
+      }
       throw error;
     }
   };

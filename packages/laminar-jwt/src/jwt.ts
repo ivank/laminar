@@ -102,7 +102,7 @@ export const verifyToken = async (
       });
     }
 
-    return jsonInternalServerError({ message: error.message });
+    return jsonInternalServerError(error instanceof Error ? { message: error.message } : { message: String(error) });
   }
 };
 
