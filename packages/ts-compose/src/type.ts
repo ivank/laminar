@@ -18,26 +18,125 @@ export interface InterfaceExtend {
 }
 
 export const Type = {
+  /**
+   * "any" type
+   * ```typescript
+   * Node.Const({ type: Type.Any, name: 'a', })
+   * // Would generate
+   * const a: any;
+   * ```
+   */
   Any: ts.factory.createToken(ts.SyntaxKind.AnyKeyword),
 
+  /**
+   * "string" type
+   * ```typescript
+   * Node.Const({ type: Type.String, name: 'a', })
+   * // Would generate
+   * const a: string;
+   * ```
+   */
   String: ts.factory.createToken(ts.SyntaxKind.StringKeyword),
 
+  /**
+   * "number" type
+   * ```typescript
+   * Node.Const({ type: Type.Number, name: 'a', })
+   * // Would generate
+   * const a: number;
+   * ```
+   */
   Number: ts.factory.createToken(ts.SyntaxKind.NumberKeyword),
 
+  /**
+   * "null" type
+   * ```typescript
+   * Node.Const({ type: Type.Union([Type.Number, Type.Null]), name: 'a' })
+   * // Would generate
+   * const a: number | null;
+   * ```
+   */
   Null: ts.factory.createLiteralTypeNode(ts.factory.createToken(ts.SyntaxKind.NullKeyword)),
 
+  /**
+   * "boolean" type
+   * ```typescript
+   * Node.Const({ type: Type.Boolean, name: 'a', })
+   * // Would generate
+   * const a: boolean;
+   * ```
+   */
   Boolean: ts.factory.createToken(ts.SyntaxKind.BooleanKeyword),
 
+  /**
+   * "object" type
+   * ```typescript
+   * Node.Const({ type: Type.Object, name: 'a', })
+   * // Would generate
+   * const a: object;
+   * ```
+   */
   Object: ts.factory.createToken(ts.SyntaxKind.ObjectKeyword),
 
+  /**
+   * "void" type
+   * ```typescript
+   * Node.Const({ type: Type.Union([Type.Number, Type.Void]), name: 'a' })
+   * // Would generate
+   * const a: number | void;
+   * ```
+   */
   Void: ts.factory.createToken(ts.SyntaxKind.VoidKeyword),
 
+  /**
+   * "unknown" type
+   * ```typescript
+   * Node.Const({ type: Type.Unknown, name: 'a' })
+   * // Would generate
+   * const a: unknown;
+   * ```
+   */
   Unknown: ts.factory.createToken(ts.SyntaxKind.UnknownKeyword),
 
+  /**
+   * "never" type
+   * ```typescript
+   * Node.Const({ type: Type.Union([Type.Number, Type.Never]), name: 'a' })
+   * // Would generate
+   * const a: number | never;
+   * ```
+   */
   Never: ts.factory.createToken(ts.SyntaxKind.NeverKeyword),
 
+  /**
+   * "undefined" type
+   * ```typescript
+   * Node.Const({ type: Type.Union([Type.Number, Type.Undefined]), name: 'a' })
+   * // Would generate
+   * const a: number | undefined;
+   * ```
+   */
   Undefined: ts.factory.createToken(ts.SyntaxKind.UndefinedKeyword),
 
+  /**
+   * Type literal
+   * ```typescript
+   * Node.Const({
+   *   name: 'a',
+   *   type: Type.TypeLiteral({
+   *     props: [
+   *       Type.Prop({ name: 'test1', type: Type.String, isOptional: true }),
+   *       Type.Prop({ name: 'test2', type: Type.Number }),
+   *     ],
+   *   }),
+   * })
+   * // Would generate
+   * const a: {
+   *   test1?: string;
+   *   test2: number;
+   * };
+   * ```
+   */
   TypeLiteral: ({
     props = [],
     index,
@@ -46,12 +145,55 @@ export const Type = {
     index?: ts.IndexSignatureDeclaration;
   } = {}): ts.TypeLiteralNode => ts.factory.createTypeLiteralNode([...props, ...(index ? [index] : [])]),
 
+  /**
+   * Array type, can be nested
+   * ```typescript
+   * Node.Const({ type: Type.Array(Type.String), name: 'a' })
+   * // Would generate
+   * const a: string[];
+   * ```
+   * ```typescript
+   * Node.Const({ type: Type.Array(Type.Array(Type.String)), name: 'a' })
+   * // Would generate
+   * const a: string[][];
+   * ```
+   */
   Array: (type: ts.TypeNode): ts.ArrayTypeNode => ts.factory.createArrayTypeNode(type),
 
+  /**
+   * union type
+   * ```typescript
+   * Node.Const({ type: Type.Union([Type.String, Type.Number]), name: 'a' })
+   * // Would generate
+   * const a: string | number;
+   * ```
+   */
   Union: (types: ts.TypeNode[]): ts.UnionTypeNode => ts.factory.createUnionTypeNode(types),
 
+  /**
+   * intersection type
+   * ```typescript
+   * Node.Const({
+   *   type: Type.Intersection([
+   *     Type.TypeLiteral({ props: [Type.Prop({ name: 'b', type: Type.String })] }),
+   *     Type.TypeLiteral({ props: [Type.Prop({ name: 'c', type: Type.String })] }),
+   *   ]),
+   *   name: 'a',
+   * })
+   * // Would generate
+   * const a: { b: string } & { c: string };
+   * ```
+   */
   Intersection: (types: ts.TypeNode[]): ts.IntersectionTypeNode => ts.factory.createIntersectionTypeNode(types),
 
+  /**
+   * A type of a literal value
+   * ```typescript
+   * Node.Const({ type: Type.Union([Type.Literal(1), Type.Literal(2)]), name: 'a' })
+   * // Would generate
+   * const a: 1 | 2;
+   * ```
+   */
   Literal: (value: unknown): ts.LiteralTypeNode | ts.KeywordTypeNode => {
     switch (typeof value) {
       case 'number':
@@ -65,23 +207,55 @@ export const Type = {
     }
   },
 
+  /**
+   * A literal string type.
+   * Useful in situations where you need a ts.StringLiteral specifically
+   * ```typescript
+   * Node.Const({ type: Type.Union([Type.LiteralString("one"), Type.LiteralString("two")]), name: 'a' })
+   * // Would generate
+   * const a: "one" | "two";
+   * ```
+   */
   LiteralString: (value: string): ts.StringLiteral => ts.factory.createStringLiteral(value),
 
+  /**
+   * Arrow function type
+   * ```typescript
+   * Type.Arrow({ args: [Type.Param({ name: 'a', type: Type.String })], ret: Type.Number })
+   * // Would generate
+   * (a: string) => number
+   * ```
+   */
   Arrow: ({ args, ret }: { args: ts.ParameterDeclaration[]; ret: ts.TypeNode }): ts.FunctionTypeNode =>
     ts.factory.createFunctionTypeNode(undefined, args, ret),
 
+  /**
+   * Set something as optional - used internally throughout the types
+   */
   Optional: (isOptional?: boolean): ts.Token<ts.SyntaxKind.QuestionToken> | undefined =>
     isOptional ? ts.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined,
 
+  /**
+   * Set something as public - used internally throughout the types
+   */
   Public: (isPublic?: boolean): ts.Token<ts.SyntaxKind.PublicKeyword>[] =>
     isPublic ? [ts.factory.createModifier(ts.SyntaxKind.PublicKeyword)] : [],
 
+  /**
+   * Set something as readonly - used internally throughout the types
+   */
   Readonly: (isReadonly?: boolean): ts.Token<ts.SyntaxKind.ReadonlyKeyword>[] =>
     isReadonly ? [ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)] : [],
 
+  /**
+   * Set something as private - used internally throughout the types
+   */
   Private: (isPrivate?: boolean): ts.Token<ts.SyntaxKind.PrivateKeyword>[] =>
     isPrivate ? [ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)] : [],
 
+  /**
+   * Set something as exported - used internally throughout the types
+   */
   Export: (
     isExport?: boolean,
     isDefault?: boolean,
@@ -90,9 +264,38 @@ export const Type = {
     ...(isDefault ? [ts.factory.createModifier(ts.SyntaxKind.DefaultKeyword)] : []),
   ],
 
+  /**
+   * Set something as protected - used internally throughout the types
+   */
   Protected: (isProtected?: boolean): ts.Token<ts.SyntaxKind.ProtectedKeyword>[] =>
     isProtected ? [ts.factory.createModifier(ts.SyntaxKind.ProtectedKeyword)] : [],
 
+  /**
+   * Define a method type
+   *
+   * ```typescript
+   * Type.Interface({
+   *   name: 'test',
+   *   props: [
+   *     Type.Method({
+   *       name: 'get',
+   *       params: [Type.Param({ name: 'T1', type: Type.Number })],
+   *     }),
+   *     Type.Method({
+   *       name: 'get',
+   *       typeArgs: [Type.TypeArg({ name: 'T2' })],
+   *       params: [Type.Param({ name: 'T3', type: Type.String, isOptional: true })],
+   *       type: Type.Any,
+   *     }),
+   *   ],
+   * })
+   * // Would generate
+   * interface test {
+   *   get(T1: number);
+   *   get<T2>(T3?: string): any;
+   * }
+   * ```
+   */
   Method: ({
     typeArgs,
     name,
@@ -113,6 +316,17 @@ export const Type = {
       ts.factory.createMethodSignature(undefined, name, Type.Optional(isOptional), typeArgs, params, type),
     ),
 
+  /**
+   * Define a property type for an interface / type literal
+   *
+   * ```typescript
+   * Type.Interface({ name: 'test', props: [Type.Prop({ name: '11231', type: Type.String })] })
+   * // Would generate
+   * interface test {
+   *   "11231": string;
+   * }
+   * ```
+   */
   Prop: ({
     name,
     type,
@@ -150,6 +364,15 @@ export const Type = {
       ),
     ),
 
+  /**
+   * Define a parameter function types, arrow function types and method types
+   *
+   * ```typescript
+   * Type.Arrow({ args: [Type.Param({ name: 'a', type: Type.String })], ret: Type.Number })
+   * // Would generate
+   * (a: string) => number
+   * ```
+   */
   Param: ({
     name,
     type,
@@ -171,6 +394,16 @@ export const Type = {
       undefined,
     ),
 
+  /**
+   * Type arg for interfaces and type aliases
+   *
+   * ```typescript
+   * Type.Interface({ name: 'Test', typeArgs: [Type.TypeArg({ name: 'Best' })] })
+   * // Would generate
+   * interface Test<Best> {
+   * }
+   * ```
+   */
   TypeArg: ({
     name,
     ext,
@@ -181,6 +414,19 @@ export const Type = {
     defaultType?: ts.TypeNode;
   }): ts.TypeParameterDeclaration => ts.factory.createTypeParameterDeclaration(name, ext, defaultType),
 
+  /**
+   * Index signature for alias
+   * ```typescript
+   * Type.Interface({
+   *   name: 'Test',
+   *   index: Type.Index({ name: 'index', nameType: Type.Number, type: Type.Any }),
+   * })
+   * // Would generate
+   * interface Test {
+   *   [index: number]: any;
+   * }
+   * ```
+   */
   Index: ({
     name,
     nameType,
@@ -194,6 +440,14 @@ export const Type = {
   }): ts.IndexSignatureDeclaration =>
     ts.factory.createIndexSignature(undefined, Type.Readonly(isReadonly), [Type.Param({ name, type: nameType })], type),
 
+  /**
+   * References a type alias
+   * ```typescript
+   * Type.Referance('MyType', [Type.String])
+   * // Would generate
+   * MyType<string>
+   * ```
+   */
   Referance: (name: string | ts.Identifier | string[], types?: ts.TypeNode[]): ts.TypeReferenceNode => {
     const fullName = Array.isArray(name)
       ? name.reduce<ts.QualifiedName | ts.Identifier | undefined>(
@@ -205,8 +459,27 @@ export const Type = {
     return ts.factory.createTypeReferenceNode(fullName ?? '', types);
   },
 
+  /**
+   * Tuple type
+   * ```typescript
+   * Type.Tuple([Type.String, Type.Number])
+   * // Would generate
+   * [
+   *   string,
+   *   number,
+   * ]
+   * ```
+   */
   Tuple: (types: ts.TypeNode[]): ts.TupleTypeNode => ts.factory.createTupleTypeNode(types),
 
+  /**
+   * Raw type expression
+   * ```typescript
+   * Type.TypeExpression({ name: 'T' })
+   * // Would generate
+   * T
+   * ```
+   */
   TypeExpression: ({
     name,
     types,
@@ -216,6 +489,14 @@ export const Type = {
   }): ts.ExpressionWithTypeArguments =>
     ts.factory.createExpressionWithTypeArguments(typeof name === 'string' ? ts.createIdentifier(name) : name, types),
 
+  /**
+   * Type alias
+   * ```typescript
+   * Type.Alias({ name: 'mytype', type: Type.String })
+   * // Would generate
+   * type mytype = string;
+   * ```
+   */
   Alias: ({
     name,
     type,
@@ -236,6 +517,20 @@ export const Type = {
       ts.factory.createTypeAliasDeclaration(undefined, Type.Export(isExport, isDefault), name, typeArgs, type),
     ),
 
+  /**
+   * Define a method type
+   *
+   * ```typescript
+   * Type.Interface({
+   *   name: 'test',
+   *   props: [Type.Prop({ name: 'val', type: Type.Number })],
+   * })
+   * // Would generate
+   * interface test {
+   *   val: number;
+   * }
+   * ```
+   */
   Interface: ({
     name,
     props = [],

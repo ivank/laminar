@@ -15,9 +15,40 @@ const isTsNode = (item: {}): item is ts.Node =>
 const isIdentiferString = (item: string): boolean => /^[0-9a-zA-Z_$]+$/.test(item);
 
 export const Node = {
+  /**
+   * An identifier expression
+   *
+   * ```typescript
+   * Node.Call({ expression: Node.Identifier('create'), args: [Node.Identifier('axiosConfig')] })
+   * // Would generate
+   * create(axiosConfig)
+   * ```
+   */
   Identifier: (name: string | ts.Identifier): ts.Identifier =>
     typeof name === 'string' ? ts.factory.createIdentifier(name) : name,
 
+  /**
+   * Arrow function
+   *
+   * ```typescript
+   * Node.Arrow({ args: [], body: Node.Literal({ value: 'something' }) })
+   * // would generate
+   * () => "something"
+   * ```
+   * A more complex example with a function block:
+   * ```typescript
+   * Node.Arrow({
+   *   args: [Type.Param({ name: 'a', type: Type.Number })],
+   *   body: Node.Block({
+   *     statements: [
+   *       Node.Return(Node.Call({ expression: Node.Identifier('otherFunction'), args: [Node.Identifier('a')] })),
+   *     ],
+   *   }),
+   * }),
+   * // would generate
+   * (a: number) => { return otherFunction(a); }
+   * ```
+   */
   Arrow: ({
     typeArgs,
     args,
@@ -30,11 +61,54 @@ export const Node = {
     body: ts.ConciseBody;
   }): ts.ArrowFunction => ts.factory.createArrowFunction(undefined, typeArgs, args, ret, undefined, body),
 
+  /**
+   * A block of statements (code wrapped in "{" and "}"). Must contain items of type "statement"
+   * ```typescript
+   * Node.Block({
+   *   statements: [
+   *     Node.ExpressionStatement(Node.Call({ expression: Node.Identifier('one'), args: [] })),
+   *     Node.ExpressionStatement(Node.Call({ expression: Node.Identifier('two'), args: [] })),
+   *   ],
+   * });
+   * // would generate
+   * {
+   *   one();
+   *   two();
+   * }
+   * ```
+   */
   Block: ({ statements, multiline }: { statements: ts.Statement[]; multiline?: boolean }): ts.Block =>
     ts.factory.createBlock(statements, multiline),
 
+  /**
+   * Create a generic expression statement.
+   * ```typescript
+   * Node.ExpressionStatement(Node.Call({ expression: Node.Identifier('one'), args: [] }))
+   * // would generate
+   * one();
+   * ```
+   */
+  ExpressionStatement: (expression: ts.Expression): ts.Statement => ts.factory.createExpressionStatement(expression),
+
+  /**
+   * A return statement
+   * ```typescript
+   * Node.Return(Node.Call({ expression: Node.Identifier('one'), args: [] }))
+   * // would generate
+   * return one();
+   * ```
+   */
   Return: (expression: ts.Expression): ts.ReturnStatement => ts.factory.createReturnStatement(expression),
 
+  /**
+   * A call expression
+   *
+   * ```typescript
+   * Node.Call({ expression: Node.Identifier('otherFunction'), args: [Node.Identifier('a')] })
+   * // would generate
+   * otherFunction(a)
+   * ```
+   */
   Call: ({
     expression,
     args,
@@ -45,6 +119,30 @@ export const Node = {
     typeArgs?: ts.TypeNode[];
   }): ts.CallExpression => ts.factory.createCallExpression(expression, typeArgs, args),
 
+  /**
+   * An import declaration statement
+   *
+   * ```typescript
+   * Node.Import({ defaultAs: 'Axios', module: 'axios' })
+   * // would generate
+   * import Axios from "axios";
+   * ```
+   * ```typescript
+   * Node.Import({ allAs: 'axios', module: 'axios' })
+   * // would generate
+   * import * as axios from "axios";
+   * ```
+   * ```typescript
+   * Node.Import({ named: [{ name: 'AxiosInstance' }, { name: 'AxiosRequestConfig' }], module: 'axios' })
+   * // would generate
+   * import { AxiosInstance, AxiosRequestConfig } from "axios";
+   * ```
+   * ```typescript
+   * Node.Import({ named: [{ name: 'AxiosInstance', as: 'a' }], module: 'axios' })
+   * // would generate
+   * import { AxiosInstance as a } from "axios";
+   * ```
+   */
   Import: ({
     named,
     allAs,
@@ -76,8 +174,24 @@ export const Node = {
       ),
       ts.factory.createStringLiteral(module),
     ),
+  /**
+   * Template string (backticks)
+   * ```typescript
+   * Node.TemplateString('test${var}')
+   * // would generate
+   * `test${var}`
+   * ```
+   */
   TemplateString: (text: string): ts.TemplateLiteral => ts.factory.createNoSubstitutionTemplateLiteral(text, text),
 
+  /**
+   * Object literal ({ })
+   * ```typescript
+   * Node.ObjectLiteral({ props: [Node.ObjectLiteralProp({ key: 'test', value: 10 })] })
+   * // would generate
+   * { test: 10 }
+   * ```
+   */
   ObjectLiteral: ({
     jsDoc,
     props,
@@ -88,6 +202,14 @@ export const Node = {
     multiline?: boolean;
   }) => withJSDoc(jsDoc, ts.factory.createObjectLiteralExpression(props, multiline)),
 
+  /**
+   * Property for object literal
+   * ```typescript
+   * Node.ObjectLiteral({ props: [Node.ObjectLiteralProp({ key: 'test', value: 10 })] })
+   * // would generate
+   * { test: 10 }
+   * ```
+   */
   ObjectLiteralProp: ({
     key,
     value,
@@ -102,6 +224,31 @@ export const Node = {
     const escapedKey = isIdentiferString(key) ? key : Type.LiteralString(key);
     return withJSDoc(jsDoc, ts.factory.createPropertyAssignment(escapedKey, Node.Literal({ value, multiline })));
   },
+
+  /**
+   * A helper to create different literals.
+   *
+   * ```typescript
+   * Node.Literal({ value: 'test' })
+   * // would generate
+   * 'test'
+   * ```
+   * ```typescript
+   * Node.Literal({ value: true })
+   * // would generate
+   * true
+   * ```
+   * ```typescript
+   * Node.Literal({ value: 10 })
+   * // would generate
+   * 10
+   * ```
+   * ```typescript
+   * Node.Literal({ value: { key: 'test' } })
+   * // would generate
+   * { key: 'test' }
+   * ```
+   */
   Literal: ({
     value,
     multiline,
@@ -142,6 +289,14 @@ export const Node = {
     }
   },
 
+  /**
+   * Enum member
+   * ```typescript
+   * Node.Enum({ name: 'Animals' members: [Node.EnumMember({ name: 'Cat' }), Node.EnumMember({ name: 'Dog' })] })
+   * // would generate
+   * enum Animals { Cat, Dog }
+   * ```
+   */
   EnumMember: ({ name, value }: { name: string | ts.Identifier; value?: string | number }): ts.EnumMember =>
     ts.factory.createEnumMember(
       name,
@@ -152,6 +307,14 @@ export const Node = {
         : undefined,
     ),
 
+  /**
+   * Enum
+   * ```typescript
+   * Node.Enum({ name: 'Animals' members: [Node.EnumMember({ name: 'Cat' }), Node.EnumMember({ name: 'Dog' })] })
+   * // would generate
+   * enum Animals { Cat, Dog }
+   * ```
+   */
   Enum: ({
     name,
     members,
@@ -167,6 +330,19 @@ export const Node = {
   }): ts.EnumDeclaration =>
     withJSDoc(jsDoc, ts.factory.createEnumDeclaration([], Type.Export(isExport, isDefault), name, members)),
 
+  /**
+   * A const statement
+   * ```typescript
+   * Node.Const({ name: 'n', value: '10' })
+   * // would generate
+   * const n = 10;
+   * ```
+   * ```typescript
+   * Node.Const({ name: 'o', value: { test: 10 } })
+   * // would generate
+   * const o = { test: 10 };
+   * ```
+   */
   Const: ({
     name,
     type,

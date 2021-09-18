@@ -1,13 +1,15 @@
 import ts from 'typescript';
-import { printNode, Type } from '../src';
+import { printNode, Type, Node } from '../src';
 
 describe('TS Compose', () => {
   it.each<[string, ts.Node]>([
+    ['const a: any;', Node.Const({ type: Type.Any, name: 'a' })],
     ['any', Type.Any],
     ['unknown', Type.Unknown],
     ['undefined', Type.Undefined],
     ['boolean', Type.Boolean],
     ['void', Type.Void],
+    ['const a: number | null;', Node.Const({ type: Type.Union([Type.Number, Type.Null]), name: 'a' })],
     ['null', Type.Null],
     ['never', Type.Never],
     ['object', Type.Object],
@@ -39,12 +41,35 @@ describe('TS Compose', () => {
     ['private test: string;', Type.Prop({ name: 'test', type: Type.String, isPrivate: true })],
     ['protected test: string;', Type.Prop({ name: 'test', type: Type.String, isProtected: true })],
     [
+      `const a: {\n    b: string;\n} & {\n    c: string;\n};`,
+      Node.Const({
+        type: Type.Intersection([
+          Type.TypeLiteral({ props: [Type.Prop({ name: 'b', type: Type.String })] }),
+          Type.TypeLiteral({ props: [Type.Prop({ name: 'c', type: Type.String })] }),
+        ]),
+        name: 'a',
+      }),
+    ],
+    ['(a: string) => number', Type.Arrow({ args: [Type.Param({ name: 'a', type: Type.String })], ret: Type.Number })],
+    [
       `{\n    test1?: string;\n    test2: number;\n}`,
       Type.TypeLiteral({
         props: [
           Type.Prop({ name: 'test1', type: Type.String, isOptional: true }),
           Type.Prop({ name: 'test2', type: Type.Number }),
         ],
+      }),
+    ],
+    [
+      `const a: {\n    test1?: string;\n    test2: number;\n};`,
+      Node.Const({
+        name: 'a',
+        type: Type.TypeLiteral({
+          props: [
+            Type.Prop({ name: 'test1', type: Type.String, isOptional: true }),
+            Type.Prop({ name: 'test2', type: Type.Number }),
+          ],
+        }),
       }),
     ],
     [
@@ -62,6 +87,7 @@ describe('TS Compose', () => {
         }),
       }),
     ],
+    ['const a: 1 | 2;', Node.Const({ type: Type.Union([Type.Literal(1), Type.Literal(2)]), name: 'a' })],
     [
       `{\n    test1: string;\n    [index: number]: any;\n}`,
       Type.TypeLiteral({
@@ -69,12 +95,21 @@ describe('TS Compose', () => {
         index: Type.Index({ name: 'index', nameType: Type.Number, type: Type.Any }),
       }),
     ],
+    [
+      `interface Test {\n    [index: number]: any;\n}`,
+      Type.Interface({
+        name: 'Test',
+        index: Type.Index({ name: 'index', nameType: Type.Number, type: Type.Any }),
+      }),
+    ],
     ['type mytype = string;', Type.Alias({ name: 'mytype', type: Type.String })],
+    ['MyType<string>', Type.Referance('MyType', [Type.String])],
     ['export type mytype = string;', Type.Alias({ name: 'mytype', type: Type.String, isExport: true })],
     [
       'export default type mytype = string;',
       Type.Alias({ name: 'mytype', type: Type.String, isExport: true, isDefault: true }),
     ],
+    ['interface Test<Best> {\n}', Type.Interface({ name: 'Test', typeArgs: [Type.TypeArg({ name: 'Best' })] })],
     [
       'type mytype<Best = any> = number;',
       Type.Alias({

@@ -3,6 +3,11 @@ import { Node, printNode, Type } from '../src';
 
 describe('TS Compose', () => {
   it.each<[string, ts.Node]>([
+    ['my_Name', Node.Identifier('my_Name')],
+    [
+      'create(axiosConfig)',
+      Node.Call({ expression: Node.Identifier('create'), args: [Node.Identifier('axiosConfig')] }),
+    ],
     ['import Axios from "axios";', Node.Import({ defaultAs: 'Axios', module: 'axios' })],
     ['import * as axios from "axios";', Node.Import({ allAs: 'axios', module: 'axios' })],
     [
@@ -51,6 +56,10 @@ describe('TS Compose', () => {
         block: [Node.Const({ name: 'a', value: 10 }), Node.Const({ name: 'b', value: true })],
       }),
     ],
+    ['"test"', Node.Literal({ value: 'test' })],
+    ['true', Node.Literal({ value: true })],
+    ['10', Node.Literal({ value: 10 })],
+    ['{ key: "test" }', Node.Literal({ value: { key: 'test' } })],
     ['const a;', Node.Const({ name: 'a' })],
     ['const s = "10";', Node.Const({ name: 's', value: '10' })],
     ['const b = true;', Node.Const({ name: 'b', value: true })],
@@ -99,6 +108,28 @@ describe('TS Compose', () => {
             jsDoc: 'string',
           }),
         ],
+      }),
+    ],
+    ['() => "something"', Node.Arrow({ args: [], body: Node.Literal({ value: 'something' }) })],
+    [
+      '{\n    one();\n    two();\n}',
+      Node.Block({
+        statements: [
+          Node.ExpressionStatement(Node.Call({ expression: Node.Identifier('one'), args: [] })),
+          Node.ExpressionStatement(Node.Call({ expression: Node.Identifier('two'), args: [] })),
+        ],
+      }),
+    ],
+    ['return one();', Node.Return(Node.Call({ expression: Node.Identifier('one'), args: [] }))],
+    [
+      '(a: number) => { return otherFunction(a); }',
+      Node.Arrow({
+        args: [Type.Param({ name: 'a', type: Type.Number })],
+        body: Node.Block({
+          statements: [
+            Node.Return(Node.Call({ expression: Node.Identifier('otherFunction'), args: [Node.Identifier('a')] })),
+          ],
+        }),
       }),
     ],
     [
