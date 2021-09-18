@@ -94,7 +94,7 @@ jobs:
 
   publish:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
     steps:
       - checkout
       - yarn-install
