@@ -54,8 +54,8 @@
     "decimal.js": "^10.2.1",
     "dotenv": "^10.0.0",
     "kafkajs": "^1.15.0",
-    "pg": "^8.6.0",
-    "pg-boss": "^5.2.3",
+    "pg": "^8.7.1",
+    "pg-boss": "^6.2.1",
     "runtypes": "^6.3.1",
     "sql-template-tag": "^4.0.0",
     "winston": "^3.3.3"

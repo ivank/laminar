@@ -730,7 +730,7 @@ __metadata:
     jest: ^27.0.6
     kafkajs: ^1.15.0
     nock: ^13.1.1
-    pg: ^8.6.0
+    pg: ^8.7.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     ts-node: ^10.2.1
@@ -767,8 +767,8 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     jest: ^27.0.6
     kafkajs: ^1.15.0
-    pg: ^8.6.0
-    pg-boss: ^5.2.3
+    pg: ^8.7.1
+    pg-boss: ^6.2.1
     prettier: ^2.3.2
     runtypes: ^6.3.1
     sql-template-tag: ^4.0.0
@@ -796,7 +796,7 @@ __metadata:
     eslint: ^7.32.0
     jest: ^27.0.6
     nock: ^13.1.1
-    pg: ^8.6.0
+    pg: ^8.7.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     typescript: ^4.4.3
@@ -821,7 +821,7 @@ __metadata:
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     jest: ^27.0.6
-    pg: ^8.6.0
+    pg: ^8.7.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     ts-node: ^10.2.1
@@ -884,7 +884,7 @@ __metadata:
     axios: ^0.21.1
     eslint: ^7.32.0
     jest: ^27.0.6
-    pg: ^8.6.0
+    pg: ^8.7.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     ts-node: ^10.2.1
@@ -1257,7 +1257,7 @@ __metadata:
     nock: ^13.1.1
     openapi-schemas: ^2.1.0
     openapi3-ts: ^2.0.1
-    pg: ^8.6.0
+    pg: ^8.7.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     typescript: ^4.4.3
@@ -1281,7 +1281,7 @@ __metadata:
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     jest: ^27.0.6
-    pg: ^8.6.0
+    pg: ^8.7.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     ts-node: ^10.2.1
@@ -1407,7 +1407,7 @@ __metadata:
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     jest: ^27.0.6
-    pg: ^8.6.0
+    pg: ^8.7.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     ts-retry-promise: ^0.6.0
@@ -1434,7 +1434,7 @@ __metadata:
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     jest: ^27.0.6
-    pg-boss: ^5.2.3
+    pg-boss: ^6.2.1
     prettier: ^2.3.2
     ts-jest: ^27.0.5
     ts-retry-promise: ^0.6.0
@@ -4938,6 +4938,13 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: a3f527d22c548f43ae31c861ada88b2637eb48ac6aa3eb56e82d44917971b8aa96fbb37aa60efea674dc4ee8c42074f90f7b1f772e9db375435f6c83a19b3bc6
+  languageName: node
+  linkType: hard
+
 "lodash.includes@npm:^4.3.0":
   version: 4.3.0
   resolution: "lodash.includes@npm:4.3.0"
@@ -5589,16 +5596,17 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"pg-boss@npm:^5.2.3":
-  version: 5.2.3
-  resolution: "pg-boss@npm:5.2.3"
+"pg-boss@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "pg-boss@npm:6.2.1"
   dependencies:
     cron-parser: ^3.3.0
     delay: ^5.0.0
+    lodash.debounce: ^4.0.8
     p-map: ^4.0.0
     pg: ^8.5.1
     uuid: ^8.3.2
-  checksum: d200218cf29b67ae072f3737a20b53ea8733b39fa37a6648ea89044278cb3f15b3fd295c74387861bebee18407df7a6da3a1e14a5b56d7d54cf3c8b020508b84
+  checksum: 3b06ac714726bfa902f3c98d339837020a0ccfc9fe141e1b484aadf0e2ed83e0e07ad689a84c4b1a7b13ad33f01db9cff4b74187068623ceef6ccd191a5dc480
   languageName: node
   linkType: hard
 
@@ -5632,12 +5640,12 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "pg-pool@npm:3.3.0"
+"pg-pool@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "pg-pool@npm:3.4.1"
   peerDependencies:
     pg: ">=8.0"
-  checksum: f85cef5b3f40005c4ab06be0d985447c1518fd90b2f0436e5855a6c95b1c0033f3f9d40cd2b27b10a690fb2a09255828ecc9f6ec44644d01a7388a1efa42f6ed
+  checksum: 50d68bd99a5c7ca32ad93ba97462528d6a8df87c5cf5a0743a3f0946bc57be82a45025e67eb8a6e522ed25316747864e5ce043339577a71f8f430e1364da2727
   languageName: node
   linkType: hard
 
@@ -5688,14 +5696,14 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"pg@npm:^8.6.0":
-  version: 8.6.0
-  resolution: "pg@npm:8.6.0"
+"pg@npm:^8.7.1":
+  version: 8.7.1
+  resolution: "pg@npm:8.7.1"
   dependencies:
     buffer-writer: 2.0.0
     packet-reader: 1.0.0
     pg-connection-string: ^2.5.0
-    pg-pool: ^3.3.0
+    pg-pool: ^3.4.1
     pg-protocol: ^1.5.0
     pg-types: ^2.1.0
     pgpass: 1.x
@@ -5704,7 +5712,7 @@ fsevents@^2.3.2:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 37d5d656bf827409c33b3f44cbefc2a435238252f69dfae38112dc35c191090194ab2d5b221ae7b8dc9beed24c71f7f8a97f891130272c6db831d2f9f689d07c
+  checksum: 3a17d9a73df9c9f5f99400751144f9d5e8dbe1948ca44f5b5eecb2166ad78cab36d070c2a97438cd3a5d1d083e70af1d3e0aad4554a45fe74b77d98ed4487242
   languageName: node
   linkType: hard
 

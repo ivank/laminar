@@ -50,6 +50,6 @@ export interface Subscribe<TData extends Empty = Empty, TContext extends Empty =
  */
 export interface Queue {
   publish<TData>(request: Publish<TData>): Promise<string | null>;
-  subscribe<TData>(request: Subscribe<TData>): Promise<void>;
-  unsubscribe(name: string): Promise<boolean>;
+  subscribe<TData>(request: Subscribe<TData>): Promise<string>;
+  unsubscribe(name: string): Promise<void>;
 }

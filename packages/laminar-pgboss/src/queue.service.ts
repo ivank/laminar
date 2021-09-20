@@ -23,13 +23,13 @@ export class QueueService implements Queue, Service {
     return await this.boss.publish({ options: { ...this.publishOptions?.[ctx.name], ...ctx.options }, ...ctx });
   }
 
-  async subscribe<ReqData>(ctx: Subscribe<ReqData>): Promise<void> {
+  async subscribe<ReqData>(ctx: Subscribe<ReqData>): Promise<string> {
     return await this.boss.subscribe<ReqData, void>(ctx.name, ctx.options ?? {}, (job) =>
       ctx.worker({ ...job, queue: this }),
     );
   }
 
-  async unsubscribe(name: string): Promise<boolean> {
+  async unsubscribe(name: string): Promise<void> {
     return await this.boss.unsubscribe(name);
   }
 

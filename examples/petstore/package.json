@@ -40,6 +40,6 @@
     "@ovotech/laminar": "*",
     "@ovotech/laminar-jwt": "*",
     "@ovotech/laminar-pg": "*",
-    "pg": "^8.6.0"
+    "pg": "^8.7.1"
   }
 }
