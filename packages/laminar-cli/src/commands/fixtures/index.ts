@@ -1,5 +1,5 @@
 import { green, red, yellow } from 'chalk';
-import commander from 'commander';
+import { Command, createCommand } from 'commander';
 import fs from 'fs';
 import { Enum, Table, toTypeScript } from './convert';
 import { dirname } from 'path';
@@ -42,9 +42,8 @@ interface Column {
   dataType: string;
 }
 
-export const fixturesCommand = (logger: Logger = console): commander.Command =>
-  commander
-    .createCommand('fixtures')
+export const fixturesCommand = (logger: Logger = console): Command =>
+  createCommand('fixtures')
     .description('Load pg tables and generate @ovotech/laminar-fixtures types from them')
     .argument('connection-string', 'Connection string uri for the postgres database')
     .option<string[]>(

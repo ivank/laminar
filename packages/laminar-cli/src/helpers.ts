@@ -4,7 +4,7 @@ import { OpenAPIObject } from 'openapi3-ts';
 import { AstContext } from './traverse';
 import * as YAML from 'yaml';
 
-export const toString = async (stream: NodeJS.ReadStream): Promise<string> => {
+export const concatStreamToString = async (stream: NodeJS.ReadStream): Promise<string> => {
   let str = '';
 
   return new Promise((resolve, reject) => {
@@ -20,6 +20,11 @@ export const toTitleCase = (str: string): string =>
     .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
     .replace(' ', '');
 
+/**
+ * Compile an openapi schema, converting it into a context.
+ * This context allows you to use it in conjuction with parts of the schema as
+ * all the urls have been resolved and the validation can be done statically
+ */
 export const toContext = async (
   fileName: string,
 ): Promise<{ context: AstContext; uris: string[]; value: OpenAPIObject }> => {
@@ -33,14 +38,16 @@ export const toContext = async (
   return { context: { root: value, refs }, value, uris };
 };
 
-export const parseSchema = (type: string, content: string): Schema => {
+/**
+ * Parse a string into a Schema object.
+ * Supports 'json' and 'yaml'
+ */
+export const parseSchema = (type: 'json' | 'yaml', content: string): Schema => {
   switch (type) {
     case 'json':
       return JSON.parse(content);
     case 'yaml':
       return YAML.parse(content);
-    default:
-      throw new Error(`Unknown STDIN type: ${type}, accepts only "json" and "yaml"`);
   }
 };
 

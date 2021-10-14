@@ -1,4 +1,4 @@
-import commander from 'commander';
+import { Command, createCommand } from 'commander';
 import { toTypeScript, toExternalContext } from './convert';
 import { Schema } from 'avsc';
 import { join, basename, relative, dirname } from 'path';
@@ -17,9 +17,8 @@ interface Options {
   defaultsAsOptional?: boolean;
 }
 
-export const convertCommand = (logger: Logger = console): commander.Command =>
-  commander
-    .createCommand('avro')
+export const convertCommand = (logger: Logger = console): Command =>
+  createCommand('avro')
     .arguments('[input...]')
     .option('-O, --output-dir <outputDir>', 'Directory to write typescript files to')
     .option('-e, --defaults-as-optional', 'Fields with defaults as optional')

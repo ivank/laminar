@@ -1,11 +1,11 @@
 import { green, red, yellow } from 'chalk';
-import commander from 'commander';
-import fs from 'fs';
+import { Command, createCommand, Option } from 'commander';
+import { mkdirSync, watchFile, writeFileSync } from 'fs';
 import { convertOapi } from './convert';
 import { printDocument } from '@ovotech/ts-compose';
 import { dirname } from 'path';
 import { Logger } from '../../types';
-import { parseSchema, toContext, toString } from '../../helpers';
+import { parseSchema, toContext, concatStreamToString } from '../../helpers';
 
 export const processFile = async (fileName: string): Promise<{ content: string; uris: string[] }> => {
   const { context, uris, value } = await toContext(fileName);
@@ -15,23 +15,22 @@ export const processFile = async (fileName: string): Promise<{ content: string; 
 export const toFiles = (uris: string[]): string[] =>
   uris.filter((uri) => uri.startsWith('file://')).map((uri) => uri.substring('file://'.length));
 
-export const apiCommand = (logger: Logger = console): commander.Command =>
-  commander
-    .createCommand('api')
+export const apiCommand = (logger: Logger = console): Command =>
+  createCommand('api')
     .description('Convert openapi schemas to typescript types')
     .option('-w, --watch', 'Watch for file changes and update live, required --file and --output options')
     .option('-f, --file <file>', 'Filename to process, uses STDIN if not specified')
-    .option('-t, --stdin-type <type>', 'Type of STDIN data: "json" or "yaml"', 'json')
+    .addOption(new Option('-t, --stdin-type <type>', 'Type of STDIN data').default('json').choices(['json', 'yaml']))
     .option('-o, --output <output>', 'File to output to, uses STDOUT if not specified')
     .action(async ({ file, output, stdinType, watch }) => {
       try {
-        const input = file ? file : parseSchema(stdinType, await toString(process.stdin));
+        const input = file ? file : parseSchema(stdinType, await concatStreamToString(process.stdin));
         const { content, uris } = await processFile(input);
 
         if (output) {
-          fs.mkdirSync(dirname(output), { recursive: true });
+          mkdirSync(dirname(output), { recursive: true });
           logger.info(`OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} laminar types`);
-          fs.writeFileSync(output, content);
+          writeFileSync(output, content);
         } else {
           process.stdout.write(content);
         }
@@ -48,10 +47,10 @@ export const apiCommand = (logger: Logger = console): commander.Command =>
           }
 
           toFiles(uris).forEach((trigger) =>
-            fs.watchFile(trigger, async () => {
+            watchFile(trigger, async () => {
               try {
                 const update = await processFile(file);
-                fs.writeFileSync(output, update.content);
+                writeFileSync(output, update.content);
                 logger.info(`Updated OpenAPI Schema ${green(output)} -> ${yellow(output)} (trigger ${trigger})`);
               } catch (error) {
                 logger.error(red(error instanceof Error ? error.message : String(error)));
