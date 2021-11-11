@@ -157,7 +157,8 @@ export const Node = {
     ts.factory.createImportDeclaration(
       undefined,
       undefined,
-      ts.createImportClause(
+      ts.factory.createImportClause(
+        false,
         defaultAs ? Node.Identifier(defaultAs) : undefined,
         named
           ? ts.factory.createNamedImports(
