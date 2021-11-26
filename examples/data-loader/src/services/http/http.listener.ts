@@ -1,4 +1,4 @@
-import { HttpListener, jsonOk, ok, yaml, file, LoggerContext } from '@ovotech/laminar';
+import { HttpListener, jsonOk, yamlOk, LoggerContext } from '@ovotech/laminar';
 import { PgContext } from '@ovotech/laminar-pg';
 import { QueueContext } from '@ovotech/laminar-pgboss';
 import { jwtSecurityResolver } from '@ovotech/laminar-jwt';
@@ -7,6 +7,7 @@ import { openApiTyped } from '../../__generated__/schema';
 import { EnvVars } from '../../env';
 import { hydrationMeterReadsRoute } from './hydration-meter-reads.route';
 import { meterReadsRoute } from './meter-reads.route';
+import { readFileSync } from 'fs';
 
 export type HttpListenerContext = PgContext & LoggerContext & QueueContext;
 
@@ -22,7 +23,7 @@ export const httpListener = async (env: EnvVars): Promise<HttpListener<HttpListe
         get: async () => jsonOk({ healthy: true }),
       },
       '/.well-known/openapi.yaml': {
-        get: async () => yaml(ok(file(schemaFilename))),
+        get: async () => yamlOk(readFileSync(schemaFilename, 'utf-8')),
       },
       '/v1/hydration/meter-reads': {
         post: hydrationMeterReadsRoute,

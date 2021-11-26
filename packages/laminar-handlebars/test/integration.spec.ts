@@ -1,4 +1,4 @@
-import { get, post, router, HttpService, run } from '@ovotech/laminar';
+import { get, post, router, HttpService, run, htmlOk, htmlCreated } from '@ovotech/laminar';
 import axios, { AxiosResponse } from 'axios';
 import { writeFileSync, mkdirSync } from 'fs';
 import { retry } from 'ts-retry-promise';
@@ -24,8 +24,8 @@ describe('Integration', () => {
       port: 8062,
       listener: handlebars(
         router(
-          get('/', async ({ hbs }) => hbs('index')),
-          post('/result', async ({ hbs, body: { name } }) => hbs('result', { name }, { status: 201 })),
+          get('/', async ({ hbs }) => htmlOk(hbs('index'))),
+          post('/result', async ({ hbs, body: { name } }) => htmlCreated(hbs('result', { name }))),
         ),
       ),
     });
@@ -58,7 +58,7 @@ describe('Integration', () => {
 
     const http = new HttpService({
       port: 8062,
-      listener: handlebars(router(get('/', async ({ hbs }) => hbs('index')))),
+      listener: handlebars(router(get('/', async ({ hbs }) => htmlOk(hbs('index'))))),
     });
 
     const api = axios.create({ baseURL: 'http://localhost:8062' });

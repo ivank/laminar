@@ -168,6 +168,23 @@ export function ok<TResponseBody, TResponse extends Partial<HttpResponse<TRespon
 /**
  * A helper to set the status of a {@link HttpResponse} to a specific type literal constant.
  *
+ * Status: `201`
+ *
+ * Standard response for successful HTTP requests.
+ * The request has been fulfilled, resulting in the creation of a new resource
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
+ *
+ * @category HttpResponse
+ */
+export function created<TResponseBody, TResponse extends Partial<HttpResponse<TResponseBody>>>(res: TResponse) {
+  return { ...res, status: 201 as const };
+}
+
+/**
+ * A helper to set the status of a {@link HttpResponse} to a specific type literal constant.
+ *
  * Status: `204`
  *
  * The server successfully processed the request, and is not returning any content.
@@ -591,6 +608,29 @@ export function jsonOk<TResponseBody>(
  * No body is specified as this response should not have any content
  *
  * Content-Type: `application/json`
+ * Status: `201`
+ *
+ * The request has been fulfilled, resulting in the creation of a new resource
+ *
+ * @category HttpResponse
+ */
+export function jsonCreated<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 201;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/json' } & OutgoingHttpHeaders;
+} {
+  return json(created({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link json} and {@link noContent}
+ * No body is specified as this response should not have any content
+ *
+ * Content-Type: `application/json`
  * Status: `204`
  *
  * The server successfully processed the request, and is not returning any content.
@@ -852,6 +892,31 @@ export function textOk<TResponseBody>(
  * No body is specified as this response should not have any content
  *
  * Content-Type: `text/plain`
+ * Status: `201`
+ *
+ * The request has been fulfilled, resulting in the creation of a new resource.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function textCreated<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 201;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/plain' } & OutgoingHttpHeaders;
+} {
+  return text(created({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link text} and {@link noContent}
+ * No body is specified as this response should not have any content
+ *
+ * Content-Type: `text/plain`
  * Status: `204`
  *
  * The server successfully processed the request, and is not returning any content.
@@ -1101,6 +1166,31 @@ export function htmlOk<TResponseBody>(
  * No body is specified as this response should not have any content
  *
  * Content-Type: `text/html`
+ * Status: `201`
+ *
+ * The request has been fulfilled, resulting in the creation of a new resource.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function htmlCreated<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 201;
+  body: TResponseBody;
+  headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
+} {
+  return html(created({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link html} and {@link noContent}
+ * No body is specified as this response should not have any content
+ *
+ * Content-Type: `text/html`
  * Status: `204`
  *
  * The server successfully processed the request, and is not returning any content.
@@ -1319,4 +1409,285 @@ export function htmlInternalServerError<TResponseBody>(
   headers: { 'content-type': 'text/html' } & OutgoingHttpHeaders;
 } {
   return html(internalServerError({ body, headers }));
+}
+
+/**
+ * Yaml
+ * ===========================================================================================
+ */
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link ok}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `200`
+ *
+ * Standard response for successful HTTP requests.
+ * The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the response will contain an entity describing or containing the result of the action.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlOk<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 200;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(ok({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link noContent}
+ * No body is specified as this response should not have any content
+ *
+ * Content-Type: `application/yaml`
+ * Status: `201`
+ *
+ * The request has been fulfilled, resulting in the creation of a new resource.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlCreated<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 201;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(created({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link noContent}
+ * No body is specified as this response should not have any content
+ *
+ * Content-Type: `application/yaml`
+ * Status: `204`
+ *
+ * The server successfully processed the request, and is not returning any content.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlNoContent(headers: OutgoingHttpHeaders = {}): {
+  status: 204;
+  body: undefined;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(noContent({ body: undefined, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link movedPermanently}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `301`
+ *
+ * This and all future requests should be directed to the given URI.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlMovedPermanently<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 301;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(movedPermanently({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link found}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `302`
+ *
+ * Tells the client to look at (browse to) another URL. 302 has been superseded by 303 and 307.
+ * This is an example of industry practice contradicting the standard.
+ * The HTTP/1.0 specification (RFC 1945) required the client to perform a temporary redirect (the original describing phrase was "Moved Temporarily"),
+ * but popular browsers implemented 302 with the functionality of a 303 See Other.
+ * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
+ * However, some Web applications and frameworks use the 302 status code as if it were the 303.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 302;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(found({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link seeOther}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `303`
+ *
+ * The response to the request can be found under another URI using the GET method.
+ * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlSeeOther<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 303;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(seeOther({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link badRequest}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `400`
+ *
+ * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlBadRequest<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 400;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(badRequest({ body, headers }));
+}
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link unauthorized}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `401`
+ *
+ * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
+ * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
+ * See Basic access authentication and Digest access authentication.
+ * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlUnauthorized<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 401;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(unauthorized({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link forbidden}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `403`
+ *
+ * The request contained valid data and was understood by the server, but the server is refusing action.
+ * This may be due to the user not having the necessary permissions for a resource or needing an account of some sort, or attempting a prohibited action (e.g. creating a duplicate record where only one is allowed).
+ * This code is also typically used if the request provided authentication by answering the WWW-Authenticate header field challenge, but the server did not accept that authentication.
+ * The request should not be repeated.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlForbidden<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 403;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(forbidden({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link notFound}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `404`
+ *
+ * The requested resource could not be found but may be available in the future.
+ * Subsequent requests by the client are permissible.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlNotFound<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 404;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(notFound({ body, headers }));
+}
+
+/**
+ * A helper to create a {@link HttpResponse} object with specific type literal constants for Status and Content-Type Header.
+ * A combination of {@link yaml} and {@link internalServerError}
+ *
+ * Content-Type: `application/yaml`
+ * Status: `500`
+ *
+ * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+ *
+ * @typeParam TResponseBody Strictly type the response body
+ *
+ * @category HttpResponse
+ */
+export function yamlInternalServerError<TResponseBody>(
+  body: TResponseBody,
+  headers: OutgoingHttpHeaders = {},
+): {
+  status: 500;
+  body: TResponseBody;
+  headers: { 'content-type': 'application/yaml' } & OutgoingHttpHeaders;
+} {
+  return yaml(internalServerError({ body, headers }));
 }

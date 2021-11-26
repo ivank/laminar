@@ -18,9 +18,9 @@ import {
   html,
   xml,
   pdf,
-  yaml,
   optional,
   run,
+  yamlOk,
 } from '../src';
 
 const api = axios.create({ baseURL: 'http://localhost:8052' });
@@ -314,7 +314,7 @@ describe('Requests', () => {
   it('Should process response type yaml', async () => {
     const http = new HttpService({
       port: 8052,
-      listener: async () => yaml(ok({ body: 'tmp' })),
+      listener: async () => yamlOk('tmp'),
     });
     await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test')).resolves.toMatchObject({

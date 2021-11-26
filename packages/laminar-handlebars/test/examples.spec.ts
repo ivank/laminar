@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { execSync, spawn } from 'child_process';
 import { readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
+import { URLSearchParams } from 'url';
 
 const examplesDir = join(__dirname, '../examples/');
 
@@ -47,6 +48,23 @@ describe('Example files', () => {
         url: '/swagger.yaml',
       },
       `openapi: '3.0.0'\ninfo:\n  version: 10\n`,
+    ],
+    [
+      'examples/api.ts',
+      {
+        method: 'GET',
+        url: '/test',
+      },
+      `<body>\n  <div>HEADER</div>\n  Named me@example.com\n</body>\n`,
+    ],
+    [
+      'examples/api.ts',
+      {
+        method: 'POST',
+        url: '/test',
+        data: new URLSearchParams({ email: 'test@example.com' }),
+      },
+      `<body>\n  <div>HEADER</div>\n  Named test@example.com\n</body>\n`,
     ],
   ])('Should process %s', async (file, config, expected) => {
     jest.setTimeout(10000);

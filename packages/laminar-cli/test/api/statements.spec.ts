@@ -4,7 +4,6 @@ import {
   jsonOk,
   ok,
   csv,
-  yaml,
   pdf,
   jsonNotFound,
   jsonUnauthorized,
@@ -12,6 +11,7 @@ import {
   loggerMiddleware,
   run,
   LoggerContext,
+  yamlOk,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
@@ -44,7 +44,7 @@ describe('Statements', () => {
           get: async () => htmlOk(createReadStream(join(__dirname, 'statements.html'))),
         },
         '/.well-known/openapi.yaml': {
-          get: async () => yaml(ok({ body: createReadStream(join(__dirname, 'statements.yaml')) })),
+          get: async () => yamlOk(createReadStream(join(__dirname, 'statements.yaml'))),
         },
         '/v2/reports/daily': {
           post: async () => {

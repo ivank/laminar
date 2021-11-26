@@ -90,3 +90,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Deep coercion with support for most json-schmea composition logic
+
+## [0.12.4] - 2021-11-26
+
+### Changed
+
+- Added yamlOk, yamlNotFound etc helper functions, as well as "created" status code helper functions

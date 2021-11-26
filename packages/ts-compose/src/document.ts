@@ -81,23 +81,27 @@ const mergeImportNamed = (source: ImportNamed[], destin: ImportNamed[]): ImportN
 ];
 
 export const withImports = <TContext extends DocumentContext = DocumentContext>(
-  context: TContext,
-  value: ImportNode,
+  initialContext: TContext,
+  ...values: ImportNode[]
 ): TContext => {
-  const current = context.imports?.[value.module];
+  return values.reduce((context, value) => {
+    const current = context.imports?.[value.module];
 
-  return {
-    ...context,
-    imports: {
-      ...context.imports,
-      [value.module]: {
-        ...current,
-        ...value,
-        named:
-          value.named && current?.named ? mergeImportNamed(value.named, current.named) : value.named ?? current?.named,
+    return {
+      ...context,
+      imports: {
+        ...context.imports,
+        [value.module]: {
+          ...current,
+          ...value,
+          named:
+            value.named && current?.named
+              ? mergeImportNamed(value.named, current.named)
+              : value.named ?? current?.named,
+        },
       },
-    },
-  };
+    };
+  }, initialContext);
 };
 
 export const withHeader = <TContext extends DocumentContext = DocumentContext>(

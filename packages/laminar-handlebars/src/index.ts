@@ -3,11 +3,10 @@
  * @module @ovotech/laminar-handlebars
  */
 
-import { Middleware, HttpResponse, response } from '@ovotech/laminar';
+import { Middleware } from '@ovotech/laminar';
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { compile, RuntimeOptions, TemplateDelegate } from 'handlebars';
 import { join, relative } from 'path';
-import { OutgoingHttpHeaders } from 'http';
 import { statSync } from 'fs';
 
 export type Cache = Map<string, { template: TemplateDelegate; mtime: Date }>;
@@ -27,7 +26,6 @@ export interface TemplateConfig {
   extension?: string;
   views?: string;
   cacheType?: CacheType;
-  headers?: OutgoingHttpHeaders;
 }
 
 export interface CompileTemplatesOptions {
@@ -35,13 +33,9 @@ export interface CompileTemplatesOptions {
   extension: string;
 }
 
-export type HandlebarsRender = (
-  view: string,
-  data?: Record<string, unknown>,
-  options?: Partial<HttpResponse>,
-) => HttpResponse;
+export type HandlebarsRender = (view: string, data?: Record<string, unknown>) => string;
 
-export interface RequestHandlebars {
+export interface HandlebarsContext {
   hbs: HandlebarsRender;
 }
 
@@ -107,27 +101,20 @@ export const handlebars = ({
   partials = 'partials',
   views = 'views',
   cacheType = 'preload',
-  headers,
 }: TemplateConfig): HandlebarsRender => {
-  const defaultHeaders = { 'content-type': 'text/html', ...headers };
   const cache = cacheType === 'preload' ? loadTemplates(new Map(), { dir, extension }) : new Map();
   const partialTemplates = cacheType === 'preload' ? loadPartials({ dir: join(dir, partials), extension }) : undefined;
 
-  return (name, data = {}, options = {}) => {
+  return (name: string, data: Record<string, unknown> = {}) => {
     const template = loadTemplate(name, cache, cacheType, { dir: join(dir, views), extension });
-    return response({
-      body: template(data, {
-        helpers,
-        partials: partialTemplates ?? loadPartials({ dir: join(dir, partials), extension }),
-      }),
-      status: 200 as const,
-      ...options,
-      headers: { ...defaultHeaders, ...options.headers },
+    return template(data, {
+      helpers,
+      partials: partialTemplates ?? loadPartials({ dir: join(dir, partials), extension }),
     });
   };
 };
 
-export const handlebarsMiddleware = (config: TemplateConfig): Middleware<RequestHandlebars> => {
+export const handlebarsMiddleware = (config: TemplateConfig): Middleware<HandlebarsContext> => {
   const hbs = handlebars(config);
   return (next) => (req) => next({ ...req, hbs });
 };

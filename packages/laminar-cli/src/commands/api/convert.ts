@@ -202,7 +202,11 @@ const convertRequestBody = (
   requestBodyOrRef: RequestBodyObject | ReferenceObject,
 ): Document<ts.TypeLiteralNode, AstContext> => {
   const requestBody = getReferencedObject(requestBodyOrRef, isRequestBodyObject, 'request-body', context);
-  const schema = requestBody.content['application/json'] ? requestBody.content['application/json'].schema : {};
+  const schema =
+    requestBody.content['application/json']?.schema ??
+    requestBody.content['application/x-www-form-urlencoded']?.schema ??
+    requestBody.content['multipart/form-data']?.schema ??
+    {};
   const node = schema ? convertSchema(context, schema) : document(context, Type.Any);
   return document(
     node.context,

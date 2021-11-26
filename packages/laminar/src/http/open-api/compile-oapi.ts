@@ -59,11 +59,7 @@ export async function compileOapi<TRequest extends Empty>({
     },
   };
 
-  await ensureValid({
-    schema: withinContext(schema, compiledApi),
-    name: 'createOapiOptions',
-    value: { paths, security },
-  });
+  ensureValid({ schema: withinContext(schema, compiledApi), name: 'createOapiOptions', value: { paths, security } });
 
   return withinContext(oapi, compiledApi);
 }

@@ -244,6 +244,19 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
     },
   );
 
+  const jsDoc = [
+    api.info.title,
+    api.info.version ? `\n\nVersion: ${api.info.version}` : '',
+    api.info.description ? `\n\nDescription:\n${api.info.description}` : '',
+  ].join('');
+
+  const endpoints = Node.ObjectLiteral({
+    multiline: true,
+    props: paths.items
+      .reduce<ts.PropertyAssignment[]>((all, path) => all.concat(path.map((item) => item.node)), [])
+      .concat(Node.ObjectLiteralProp({ key: 'api', value: Node.Identifier('api') })),
+  });
+
   return document(
     withIdentifier(
       withImports(paths.context, {
@@ -261,20 +274,11 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
     Node.Const({
       name: 'axiosOapi',
       isExport: true,
-      jsDoc: [
-        api.info.title,
-        api.info.version ? `\n\nVersion: ${api.info.version}` : '',
-        api.info.description ? `\n\nDescription:\n${api.info.description}` : '',
-      ].join(''),
+      jsDoc,
       value: Node.Arrow({
         args: [Type.Param({ name: 'api', type: Type.Referance('AxiosInstance') })],
         ret: Type.Referance('AxiosOapiInstance'),
-        body: Node.ObjectLiteral({
-          multiline: true,
-          props: paths.items
-            .reduce<ts.PropertyAssignment[]>((all, path) => all.concat(path.map((item) => item.node)), [])
-            .concat(Node.ObjectLiteralProp({ key: 'api', value: Node.Identifier('api') })),
-        }),
+        body: endpoints,
       }),
     }),
   );

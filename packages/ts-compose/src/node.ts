@@ -51,6 +51,7 @@ export const Node = {
    */
   Arrow: ({
     typeArgs,
+    isAsync,
     args,
     ret,
     body,
@@ -59,7 +60,16 @@ export const Node = {
     args: ts.ParameterDeclaration[];
     ret?: ts.TypeNode;
     body: ts.ConciseBody;
-  }): ts.ArrowFunction => ts.factory.createArrowFunction(undefined, typeArgs, args, ret, undefined, body),
+    isAsync?: boolean;
+  }): ts.ArrowFunction =>
+    ts.factory.createArrowFunction(
+      isAsync ? [ts.factory.createToken(ts.SyntaxKind.AsyncKeyword)] : undefined,
+      typeArgs,
+      args,
+      ret,
+      undefined,
+      body,
+    ),
 
   /**
    * A block of statements (code wrapped in "{" and "}"). Must contain items of type "statement"
@@ -79,6 +89,34 @@ export const Node = {
    */
   Block: ({ statements, multiline }: { statements: ts.Statement[]; multiline?: boolean }): ts.Block =>
     ts.factory.createBlock(statements, multiline),
+
+  /**
+   * Assignment
+   * ```typescript
+   * Node.Assignment(
+   *   Node.Identifier('one'),
+   *   Node.Literal(4)
+   * );
+   * // would generate
+   * one = 4
+   * ```
+   */
+  Assignment: (
+    left: ts.Expression | ts.ObjectLiteralExpression | ts.ArrayLiteralExpression,
+    right: ts.Expression,
+  ): ts.AssignmentExpression<ts.EqualsToken> | ts.DestructuringAssignment => ts.factory.createAssignment(left, right),
+
+  /**
+   * Await
+   * ```typescript
+   * Node.Await(
+   *   Node.Call({ expression: Node.Identifier('one')}),
+   * );
+   * // would generate
+   * await one();
+   * ```
+   */
+  Await: (body: ts.Expression): ts.AwaitExpression => ts.factory.createAwaitExpression(body),
 
   /**
    * Create a generic expression statement.

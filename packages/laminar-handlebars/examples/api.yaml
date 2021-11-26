@@ -1,0 +1,40 @@
+---
+openapi: 3.0.0
+info:
+  title: Test
+  version: 1.0.0
+servers:
+  - url: http://localhost:3333
+paths:
+  '/test':
+    post:
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              additionalProperties: false
+              properties:
+                email:
+                  type: string
+                scopes:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - email
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/html:
+              schema:
+                type: string
+    get:
+      responses:
+        '200':
+          description: A Test Object
+          content:
+            text/html:
+              schema:
+                type: string

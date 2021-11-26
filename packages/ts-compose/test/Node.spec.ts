@@ -111,6 +111,9 @@ describe('TS Compose', () => {
       }),
     ],
     ['() => "something"', Node.Arrow({ args: [], body: Node.Literal({ value: 'something' }) })],
+    ['async () => "something"', Node.Arrow({ isAsync: true, args: [], body: Node.Literal({ value: 'something' }) })],
+    ['one = 5', Node.Assignment(Node.Identifier('one'), Node.Literal({ value: 5 }))],
+    ['await one()', Node.Await(Node.Call({ expression: Node.Identifier('one') }))],
     [
       '{\n    one();\n    two();\n}',
       Node.Block({
