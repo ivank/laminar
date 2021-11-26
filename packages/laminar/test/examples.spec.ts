@@ -4,6 +4,7 @@ import { readdirSync, readFileSync, unlinkSync } from 'fs';
 import { Agent } from 'https';
 import { join } from 'path';
 import nock from 'nock';
+import { OutgoingHttpHeaders } from 'http2';
 
 nock('http://example.com').get('/new/22').reply(200, { isNew: true });
 
@@ -19,7 +20,7 @@ describe('Example files', () => {
       .forEach((file) => unlinkSync(join(examplesDir, file))),
   );
 
-  it.each<[string, AxiosRequestConfig, unknown]>([
+  it.each<[string, AxiosRequestConfig, unknown, OutgoingHttpHeaders]>([
     [
       'examples/body-parser.ts',
       {
@@ -29,6 +30,7 @@ describe('Example files', () => {
         headers: { 'Content-Type': 'text/csv' },
       },
       ['one', 'two', 'three'],
+      {},
     ],
     [
       'examples/cors.ts',
@@ -38,6 +40,7 @@ describe('Example files', () => {
         headers: { Origin: 'http://example.com' },
       },
       { health: 'ok' },
+      {},
     ],
     [
       'examples/default-route.ts',
@@ -47,6 +50,7 @@ describe('Example files', () => {
         validateStatus: (status) => status === 404,
       },
       'Woopsy',
+      {},
     ],
     [
       'examples/echo-auth-log-db.ts',
@@ -56,6 +60,7 @@ describe('Example files', () => {
         headers: { Authorization: 'Me' },
       },
       { url: 'http://localhost:4804/', user: 'Me' },
+      {},
     ],
     [
       'examples/echo-auth-log.ts',
@@ -66,6 +71,7 @@ describe('Example files', () => {
         headers: { Authorization: 'Me' },
       },
       'Testing',
+      {},
     ],
     [
       'examples/echo-auth.ts',
@@ -75,6 +81,7 @@ describe('Example files', () => {
         headers: { Authorization: 'Me' },
       },
       'http://localhost:4806/tmp',
+      {},
     ],
     [
       'examples/echo.ts',
@@ -85,6 +92,7 @@ describe('Example files', () => {
         headers: { 'Content-Type': 'text/plain' },
       },
       'data',
+      {},
     ],
     [
       'examples/logging.ts',
@@ -95,6 +103,7 @@ describe('Example files', () => {
         headers: { 'Content-Type': 'application/json' },
       },
       'Tester',
+      {},
     ],
     [
       'examples/response.ts',
@@ -103,6 +112,7 @@ describe('Example files', () => {
         url: '/html/object',
       },
       '<html>OK</html>',
+      {},
     ],
     [
       'examples/response.ts',
@@ -111,6 +121,7 @@ describe('Example files', () => {
         url: '/text-stream',
       },
       'one\n',
+      {},
     ],
     [
       'examples/router.ts',
@@ -119,8 +130,9 @@ describe('Example files', () => {
         url: '/users/2',
       },
       'Foo',
+      {},
     ],
-    ['examples/simple.ts', { method: 'GET', url: '/.well-known/health-check' }, { health: 'ok' }],
+    ['examples/simple.ts', { method: 'GET', url: '/.well-known/health-check' }, { health: 'ok' }, {}],
     [
       'examples/simple-https.ts',
       {
@@ -129,6 +141,7 @@ describe('Example files', () => {
         httpsAgent: new Agent({ ca: readFileSync(join(__dirname, '../examples/ca.pem')) }),
       },
       { health: 'ok' },
+      {},
     ],
     [
       'examples/static-assets.ts',
@@ -137,6 +150,7 @@ describe('Example files', () => {
         url: '/my-folder/texts/one.txt',
       },
       `one\n`,
+      {},
     ],
     [
       'examples/oapi-security.ts',
@@ -146,6 +160,7 @@ describe('Example files', () => {
         headers: { Authorization: 'Bearer my-secret-token' },
       },
       { email: 'me@example.com' },
+      {},
     ],
     [
       'examples/oapi.ts',
@@ -154,6 +169,17 @@ describe('Example files', () => {
         url: '/user',
       },
       { email: 'me@example.com' },
+      {},
+    ],
+    [
+      'examples/oapi-cookie.ts',
+      {
+        method: 'POST',
+        url: '/user',
+        data: { email: 'with-cookie@example.com' },
+      },
+      { result: 'ok', user: { email: 'with-cookie@example.com' } },
+      { 'set-cookie': ['session=me%40example.com'] },
     ],
     [
       'examples/oapi-split.ts',
@@ -162,6 +188,7 @@ describe('Example files', () => {
         url: '/user',
       },
       { email: 'me@example.com' },
+      {},
     ],
     [
       'examples/oapi-split.ts',
@@ -208,6 +235,7 @@ describe('Example files', () => {
           ],
         },
       },
+      {},
     ],
     [
       'examples/oapi-undocumented-routes.ts',
@@ -216,6 +244,7 @@ describe('Example files', () => {
         url: '/old/22',
       },
       { isNew: true },
+      {},
     ],
     [
       'examples/convertion.ts',
@@ -224,6 +253,7 @@ describe('Example files', () => {
         url: '/user',
       },
       { email: 'me@example.com', createdAt: '2020-01-01T12:00:00.000Z' },
+      {},
     ],
     [
       'examples/streaming-parser.ts',
@@ -236,8 +266,9 @@ describe('Example files', () => {
         data: 'column1,column2\na,b\nc,d',
       },
       'COLUMN1,COLUMN2\nA,B\nC,D\n',
+      {},
     ],
-  ])('Should process %s', async (file, config, expected) => {
+  ])('Should process %s', async (file, config, expected, expectedHeaders) => {
     port += 1;
     const service = spawn('yarn', ['node', file.replace('.ts', '.js')], {
       cwd: join(__dirname, '..'),
@@ -254,8 +285,11 @@ describe('Example files', () => {
         );
       });
       const api = axios.create({ baseURL: `http://localhost:${port}` });
-      const { data } = await api.request(config).catch((error) => error?.response);
+      const { data, headers } = await api.request(config).catch((error) => error?.response);
       expect(data).toEqual(expected);
+      if (expectedHeaders) {
+        expect(headers).toMatchObject(expectedHeaders);
+      }
     } finally {
       /**
        * Since we need to kill the service and _all of its children_ we need to kill the whole group itself

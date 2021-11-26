@@ -23,7 +23,10 @@ export interface SetCookie extends CookieOptions {
  *
  * @category HttpResponse
  */
-export const setCookie = (cookies: { [key: string]: string | SetCookie }, res: HttpResponse): HttpResponse => ({
+export const setCookie = <THttpResponse extends HttpResponse>(
+  cookies: { [key: string]: string | SetCookie },
+  res: THttpResponse,
+): THttpResponse => ({
   ...res,
   headers: {
     ...res.headers,

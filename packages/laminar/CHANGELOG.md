@@ -96,3 +96,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added yamlOk, yamlNotFound etc helper functions, as well as "created" status code helper functions
+
+## [0.12.5] - 2021-11-26
+
+### Changed
+
+- Fixed types for setCookie to work with strictly typed responses
