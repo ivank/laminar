@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ResolvedSchema, Schema } from '@ovotech/json-schema';
+import { ResolvedSchema, ResultError, Schema } from '@ovotech/json-schema';
 import { Empty } from '../../types';
 import { OpenAPIObject, OperationObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
 import { HttpContext, HttpListener, HttpResponse } from '../types';
@@ -85,6 +85,11 @@ export interface OapiPaths<TContext extends Empty> {
   [path: string]: { [method: string]: AppRouteOapi<TContext> };
 }
 
+export interface RequestErrorContext<TContext extends Empty> {
+  route: Route<TContext>;
+  result: ResultError;
+}
+
 /**
  * @category http
  */
@@ -93,6 +98,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   paths: OapiPaths<TContext>;
   security?: OapiSecurity<TContext, TOapiAuthInfo>;
   notFound?: HttpListener<TContext>;
+  requestError?: HttpListener<TContext & RequestErrorContext<TContext>>;
 }
 
 /**

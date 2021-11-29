@@ -102,3 +102,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Fixed types for setCookie to work with strictly typed responses
+
+## [0.12.6] - 2021-11-29
+
+### Changed
+
+- Added custom request error handler
