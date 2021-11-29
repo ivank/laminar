@@ -173,6 +173,7 @@ function toParameterCoerce<TContext extends Empty>(
 function toRequestBodyCoerce<TContext extends Empty>(
   openapiSchema: ResolvedSchema,
   requestBody: RequestBodyObject,
+  type: 'query' | 'json',
 ): Coerce<TContext> {
   return (ctx) => {
     const content = resolveRef(openapiSchema, requestBody)?.content;
@@ -183,10 +184,7 @@ function toRequestBodyCoerce<TContext extends Empty>(
       : undefined;
     const schema = resolveRef(openapiSchema, requestBodySchema) as Schema | undefined;
     return schema
-      ? {
-          ...ctx,
-          body: coerceCompiled({ schema: withinContext(schema, openapiSchema), type: 'json', value: ctx.body }),
-        }
+      ? { ...ctx, body: coerceCompiled({ schema: withinContext(schema, openapiSchema), type, value: ctx.body }) }
       : ctx;
   };
 }
@@ -207,7 +205,7 @@ function toRequestConvert<TContext extends Empty>(
   const coerceParameters = allParameters
     .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), 'json'))
     .filter((item): item is Coerce<TContext> => Boolean(item))
-    .concat(requestBody ? toRequestBodyCoerce<TContext>(schema, resolveRef(schema, requestBody)) : []);
+    .concat(requestBody ? toRequestBodyCoerce<TContext>(schema, resolveRef(schema, requestBody), 'json') : []);
 
   return (ctx) => coerceParameters.reduce((acc, coerce) => coerce(acc), ctx);
 }
@@ -220,14 +218,15 @@ function toRequestConvert<TContext extends Empty>(
  */
 function toRequestCoerce<TContext extends Empty>(
   schema: ResolvedSchema,
-  { parameters }: OperationObject,
+  { parameters, requestBody }: OperationObject,
   { parameters: commonParameters }: Pick<PathItemObject, 'parameters'>,
 ): Coerce<TContext> {
   const allParameters = (parameters ?? []).concat(commonParameters ?? []);
 
   const coerceParameters = allParameters
     .map((item) => toParameterCoerce<TContext>(schema, resolveRef(schema, item), 'query'))
-    .filter((item): item is Coerce<TContext> => Boolean(item));
+    .filter((item): item is Coerce<TContext> => Boolean(item))
+    .concat(requestBody ? toRequestBodyCoerce<TContext>(schema, resolveRef(schema, requestBody), 'query') : []);
 
   return (ctx) => coerceParameters.reduce((acc, coerce) => coerce(acc), ctx);
 }

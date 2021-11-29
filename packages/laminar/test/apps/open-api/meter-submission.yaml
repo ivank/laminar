@@ -1,0 +1,78 @@
+openapi: '3.0.0'
+
+info:
+  title: 'Schemes public'
+  description: |
+    REST API for http://public-schemes.bizval.ovotech.org.uk
+    Source: https://github.com/ovotech/schemes
+  version: 1.0.0
+
+servers:
+  - url: https://public-schemes.bizval-nonprod.ovotech.org.uk
+    description: Nonprod server
+  - url: https://public-schemes.bizval.ovotech.org.uk
+    description: Production server
+
+paths:
+  /meters:
+    get:
+      summary: Meters Page
+      description: Where you can submit your quarterly meter readings
+      responses:
+        '200':
+          $ref: '#/components/responses/HtmlResponse'
+
+  /meters/{id}/reading:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Meter Read Submission Page
+      description: Where you can submit your quarterly meter readings
+      responses:
+        '200':
+          $ref: '#/components/responses/HtmlResponse'
+        '404':
+          $ref: '#/components/responses/HtmlResponse'
+    post:
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              additionalProperties: false
+              properties:
+                date:
+                  type: string
+                  format: date
+                value:
+                  type: integer
+                isOutsideOfTolerance:
+                  type: boolean
+              required:
+                - date
+                - value
+      responses:
+        '200':
+          $ref: '#/components/responses/HtmlResponse'
+        '404':
+          $ref: '#/components/responses/HtmlResponse'
+
+# Shared component schemas, taht are used throughout api.yaml and various endpoints
+components:
+  responses:
+    HtmlResponse:
+      description: Html File
+      content:
+        text/html:
+          schema:
+            type: string
+    TextResponse:
+      description: Text File
+      content:
+        '*/*':
+          schema:
+            type: string

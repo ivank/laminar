@@ -108,3 +108,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added custom request error handler
+
+## [0.12.7] - 2021-11-29
+
+### Changed
+
+- Fixed coercing of form data for request bodies
