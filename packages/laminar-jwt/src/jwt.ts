@@ -53,7 +53,7 @@ export const createSession = <TUser extends User = User>({ secret, options }: JW
 };
 
 export const verifyToken = async <TUser extends User>(
-  { secret, options, verify = verifyJWT }: JWTVerify,
+  { secret, options, verify = verifyJWT }: JWTVerify<TUser>,
   token: string,
   scopes?: string[],
 ): Promise<Security<TUser>> => {
@@ -90,7 +90,7 @@ export const verifyToken = async <TUser extends User>(
 };
 
 export const verifyBearer = async <TUser extends User>(
-  options: JWTVerify,
+  options: JWTVerify<TUser>,
   authorization?: string,
   scopes?: string[],
 ): Promise<Security<TUser>> => {
@@ -119,7 +119,7 @@ export const authMiddleware =
   };
 
 export const jwtSecurityResolver =
-  <TUser extends User = User>(options: JWTVerify): OapiSecurityResolver<Empty, TUser> =>
+  <TUser extends User = User>(options: JWTVerify<TUser>): OapiSecurityResolver<Empty, TUser> =>
   ({ headers, scopes }) =>
     verifyBearer(options, headers.authorization, scopes);
 

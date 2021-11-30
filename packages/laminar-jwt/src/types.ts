@@ -29,15 +29,15 @@ export interface RequestSign<TUser extends User = User> {
   sign: (user: TUser) => Session;
 }
 
-export type VerifyJWTData = <TUser extends User = User>(data: JWTData, scopes?: string[]) => Security<TUser>;
+export type VerifyJWTData<TUser extends User = User> = (data: JWTData, scopes?: string[]) => Security<TUser>;
 
 export interface JWTSign {
   secret: Secret;
   options?: SignOptions;
 }
 
-export interface JWTVerify {
+export interface JWTVerify<TUser extends User = User> {
   secret: string | Buffer | GetPublicKeyOrSecret;
   options?: VerifyOptions;
-  verify?: VerifyJWTData;
+  verify?: VerifyJWTData<TUser>;
 }
