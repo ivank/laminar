@@ -1,4 +1,4 @@
-import { HttpService, router, get, post, jsonOk, run } from '@ovotech/laminar';
+import { HttpService, router, get, post, jsonOk, run, Empty } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { jwtSecurityResolver, authMiddleware, jwkPublicKey, createSession } from '../src';
@@ -11,14 +11,19 @@ import { readFileSync } from 'fs';
 describe('Integration', () => {
   it('Should process response for secret', async () => {
     const secret = '123';
-    const jwtSecurity = jwtSecurityResolver({ secret });
+    interface TestUser {
+      email: string;
+      scopes?: string[];
+      [key: string]: unknown;
+    }
+    const jwtSecurity = jwtSecurityResolver<TestUser>({ secret });
 
-    const listener = await openApiTyped({
+    const listener = await openApiTyped<Empty>({
       api: join(__dirname, 'integration.yaml'),
       security: { JWTSecurity: jwtSecurity },
       paths: {
         '/session': {
-          post: async ({ body: { email, scopes } }) => jsonOk(createSession({ secret }, { email, scopes })),
+          post: async ({ body: { email, scopes } }) => jsonOk(createSession<TestUser>({ secret }, { email, scopes })),
         },
         '/test': {
           get: async ({ authInfo }) => jsonOk({ text: 'Test', ...authInfo }),

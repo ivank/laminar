@@ -1,4 +1,4 @@
-import { HttpMiddleware, Empty, OapiSecurityResolver, securityOk, securityError } from '@ovotech/laminar';
+import { HttpMiddleware, Empty, OapiSecurityResolver, securityOk, securityError, Security } from '@ovotech/laminar';
 import { authMiddleware, jwtSecurityResolver, toMissing } from './jwt';
 import { JWTVerify, RequestAuthInfo, User, JWTData, VerifyJWTData } from './types';
 
@@ -17,7 +17,7 @@ const isJWTDataKeycloak = (data: JWTData): data is JWTDataKeycloak =>
 
 export const verifyKeycloack =
   (service: string): VerifyJWTData =>
-  (data, scopes = []) => {
+  <TUser extends User = User>(data: JWTData, scopes: string[] = []): Security<TUser> => {
     if (!isJWTDataKeycloak(data)) {
       return securityError({ message: `Malformed jwt data - resource_access missing, probably not a keycloack jwt` });
     }
@@ -30,11 +30,7 @@ export const verifyKeycloack =
         service,
       });
     }
-    return securityOk({
-      ...data,
-      email: data.email ?? data?.clientId ?? 'unknown',
-      scopes: clientScopes,
-    });
+    return securityOk<TUser>({ ...data, email: data.email ?? data?.clientId, scopes: clientScopes } as TUser);
   };
 
 export const keycloakAuthMiddleware = (

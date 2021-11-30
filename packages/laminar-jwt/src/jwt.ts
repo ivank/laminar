@@ -1,4 +1,4 @@
-import { User, JWTSign, Session, JWTVerify, JWTData, RequestAuthInfo, RequestSign, VerifyJWTData } from './types';
+import { User, JWTSign, Session, JWTVerify, JWTData, RequestAuthInfo, RequestSign } from './types';
 import jsonwebtoken from 'jsonwebtoken';
 import {
   HttpMiddleware,
@@ -15,13 +15,13 @@ import {
 const isJWTData = (data: jsonwebtoken.JwtPayload | string | null): data is JWTData =>
   data !== null && typeof data === 'object';
 
-const isUser = (data: JWTData): data is User => 'email' in data;
+const isUser = <TUser extends User = User>(data: JWTData): data is TUser => typeof data === 'object' && data !== null;
 
 export const toMissing = (userScopes: string[], requiredScopes: string[]): string[] =>
   requiredScopes.filter((requiredScope) => !userScopes.find((userScope) => requiredScope === userScope));
 
-export const verifyJWT: VerifyJWTData = (data, scopes = []) => {
-  if (!isUser(data)) {
+export const verifyJWT = <TUser extends User = User>(data: JWTData, scopes: string[] = []): Security<TUser> => {
+  if (!isUser<TUser>(data)) {
     return securityError({
       message:
         'Unauthorized. Authorization token malformed, needs to be an object like { email: "...", scopes: ["...","..."] }',
@@ -33,10 +33,10 @@ export const verifyJWT: VerifyJWTData = (data, scopes = []) => {
       message: `Unauthorized. User does not have required scopes: [${missingScopes.join(', ')}]`,
     });
   }
-  return securityOk(data);
+  return securityOk<TUser>(data);
 };
 
-export const createSession = <TUser extends User = User>({ secret, options }: JWTSign, user: TUser): Session => {
+export const createSession = <TUser extends User = User>({ secret, options }: JWTSign, user: TUser): Session<TUser> => {
   const jwt = jsonwebtoken.sign(user, secret, options);
   const data = jsonwebtoken.decode(jwt);
   if (!isJWTData(data)) {
@@ -52,11 +52,11 @@ export const createSession = <TUser extends User = User>({ secret, options }: JW
   };
 };
 
-export const verifyToken = async (
+export const verifyToken = async <TUser extends User>(
   { secret, options, verify = verifyJWT }: JWTVerify,
   token: string,
   scopes?: string[],
-): Promise<Security<User>> => {
+): Promise<Security<TUser>> => {
   try {
     const data = await new Promise<jsonwebtoken.JwtPayload>((resolve, reject) =>
       jsonwebtoken.verify(token, secret, options, (err, data) =>
@@ -89,11 +89,11 @@ export const verifyToken = async (
   }
 };
 
-export const verifyBearer = async (
+export const verifyBearer = async <TUser extends User>(
   options: JWTVerify,
   authorization?: string,
   scopes?: string[],
-): Promise<Security<User>> => {
+): Promise<Security<TUser>> => {
   if (!authorization) {
     return securityError({ message: 'Authorization header missing' });
   }
@@ -119,7 +119,7 @@ export const authMiddleware =
   };
 
 export const jwtSecurityResolver =
-  (options: JWTVerify): OapiSecurityResolver<Empty, User> =>
+  <TUser extends User = User>(options: JWTVerify): OapiSecurityResolver<Empty, TUser> =>
   ({ headers, scopes }) =>
     verifyBearer(options, headers.authorization, scopes);
 

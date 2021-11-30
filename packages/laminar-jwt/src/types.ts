@@ -9,27 +9,27 @@ export interface JWTData {
 }
 
 export interface User {
-  email: string;
+  email?: string;
   scopes?: string[];
   [key: string]: unknown;
 }
 
-export interface Session {
+export interface Session<TUser extends User = User> {
   jwt: string;
   expiresAt?: string;
   notBefore?: string;
-  user: User;
+  user: TUser;
 }
 
-export interface RequestAuthInfo {
-  authInfo: User;
+export interface RequestAuthInfo<TUser extends User = User> {
+  authInfo: TUser;
 }
 
-export interface RequestSign {
-  sign: (user: User) => Session;
+export interface RequestSign<TUser extends User = User> {
+  sign: (user: TUser) => Session;
 }
 
-export type VerifyJWTData = (data: JWTData, scopes?: string[]) => Security<User>;
+export type VerifyJWTData = <TUser extends User = User>(data: JWTData, scopes?: string[]) => Security<TUser>;
 
 export interface JWTSign {
   secret: Secret;
