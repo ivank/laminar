@@ -1,5 +1,5 @@
-import { HttpResponse, SecurityOk } from '@ovotech/laminar';
-import { SignOptions, VerifyCallback, Secret, GetPublicKeyOrSecret, VerifyOptions } from 'jsonwebtoken';
+import { Security } from '@ovotech/laminar';
+import { SignOptions, Secret, GetPublicKeyOrSecret, VerifyOptions } from 'jsonwebtoken';
 
 export interface JWTData {
   iat?: number;
@@ -29,9 +29,7 @@ export interface RequestSign {
   sign: (user: User) => Session;
 }
 
-export type VerifiedJWTData = Parameters<VerifyCallback>[1];
-
-export type VerifyJWTData = (data: JWTData, scopes?: string[]) => SecurityOk<User> | HttpResponse;
+export type VerifyJWTData = (data: JWTData, scopes?: string[]) => Security<User>;
 
 export interface JWTSign {
   secret: Secret;

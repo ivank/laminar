@@ -236,7 +236,7 @@ describe('Docs examples', () => {
           req: { url: '/user/10', headers: { Authorization: 'Bearer my-secret-token' } },
           res: { status: 200, data: { user: { id: '10', name: 'John' }, auth: { email: 'me@example.com' } } },
         },
-        { req: { url: '/user/10' }, res: { status: 401 } },
+        { req: { url: '/user/10' }, res: { status: 403 } },
       ],
     ],
     [
@@ -246,7 +246,7 @@ describe('Docs examples', () => {
           req: { url: '/user/10', headers: { Authorization: 'Bearer my-secret-token' } },
           res: { status: 200, data: { user: { id: '10', name: 'John' }, auth: { email: 'me@example.com' } } },
         },
-        { req: { url: '/user/10' }, res: { status: 401 } },
+        { req: { url: '/user/10' }, res: { status: 403 } },
       ],
     ],
     [

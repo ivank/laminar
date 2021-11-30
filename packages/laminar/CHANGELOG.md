@@ -114,3 +114,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Fixed coercing of form data for request bodies
+
+## [0.13.0] - 2021-11-30
+
+### Changed
+
+- Made security and error handling more generic, so it can be used by both JSON and HTML services.

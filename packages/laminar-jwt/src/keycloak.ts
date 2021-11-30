@@ -1,4 +1,4 @@
-import { HttpMiddleware, Empty, OapiSecurityResolver, jsonForbidden, securityOk } from '@ovotech/laminar';
+import { HttpMiddleware, Empty, OapiSecurityResolver, securityOk, securityError } from '@ovotech/laminar';
 import { authMiddleware, jwtSecurityResolver, toMissing } from './jwt';
 import { JWTVerify, RequestAuthInfo, User, JWTData, VerifyJWTData } from './types';
 
@@ -19,13 +19,13 @@ export const verifyKeycloack =
   (service: string): VerifyJWTData =>
   (data, scopes = []) => {
     if (!isJWTDataKeycloak(data)) {
-      return jsonForbidden({ message: `Malformed jwt data - resource_access missing, probably not a keycloack jwt` });
+      return securityError({ message: `Malformed jwt data - resource_access missing, probably not a keycloack jwt` });
     }
 
     const clientScopes = data.resource_access?.[service]?.roles ?? [];
     const missingScopes = toMissing(clientScopes, scopes);
     if (missingScopes.length) {
-      return jsonForbidden({
+      return securityError({
         message: `Client ${data.clientId} does not have required roles: [${missingScopes.join(', ')}] for ${service}`,
         service,
       });

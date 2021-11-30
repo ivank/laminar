@@ -1,17 +1,40 @@
 import { Empty } from '../../types';
-import { HttpContext, HttpResponse } from '../types';
+import { HttpContext } from '../types';
 import { ReferenceObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
 import { OapiAuthInfo, OapiSecurity, OapiContext, Security, SecurityOk } from './types';
 import { ResolvedSchema } from '@ovotech/json-schema';
 import { resolveRef } from './compile-oapi';
+import { HttpError, isHttpError } from '../http-error';
+import { OutgoingHttpHeaders } from 'http';
 
 /**
  * Return a {@link SecurityOk} object, indicating a successfull security check. Should be returned by a {@link OapiSecurityResolver}
  *
  * @category http
  */
-export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(authInfo: TOapiAuthInfo): Security<TOapiAuthInfo> {
+export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(authInfo: TOapiAuthInfo): SecurityOk<TOapiAuthInfo> {
   return { authInfo };
+}
+
+/**
+ * Return a {@link HttpError} object, indicating a faild security check. Should be returned by a {@link OapiSecurityResolver}
+ *
+ * @category http
+ */
+export function securityError(body: { message: string; [key: string]: unknown }): HttpError {
+  return new HttpError(403, body);
+}
+
+/**
+ * Return a {@link HttpError} object, indicating a faild security check, to redirect to a new page Should be returned by a {@link OapiSecurityResolver}
+ *
+ * @category http
+ */
+export function securityRedirect(
+  location: string,
+  { body, headers = {} }: { body?: { message: string; [key: string]: unknown }; headers?: OutgoingHttpHeaders },
+): HttpError {
+  return new HttpError(302, body ?? { message: `Redirecting to ${location}` }, { ...headers, location: location });
 }
 
 /**
@@ -19,17 +42,8 @@ export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(authInfo: TOapiAu
  *
  * @category http
  */
-export function isSecurityOk(item: Security): item is SecurityOk {
-  return 'authInfo' in item;
-}
-
-/**
- * Check if a response from {@link OapiSecurityResolver} is a {@link HttpResponse} object, indicating a failed security check
- *
- * @category http
- */
-export function isSecurityResponse(item: Security): item is HttpResponse {
-  return 'status' in item;
+export function isSecurityOk(item: unknown): item is SecurityOk {
+  return typeof item === 'object' && item !== null && 'authInfo' in item;
 }
 
 /**
@@ -62,7 +76,7 @@ export async function validateSecurity<
   );
 
   const combinedResultGroups = resultGroups.map((group) =>
-    group.every(isSecurityOk) ? group[0] : group.filter(isSecurityResponse)[0],
+    group.every(isSecurityOk) ? group[0] : group.filter(isHttpError)[0],
   );
-  return combinedResultGroups.find(isSecurityOk) ?? combinedResultGroups.filter(isSecurityResponse)[0];
+  return combinedResultGroups.find(isSecurityOk) ?? combinedResultGroups.filter(isHttpError)[0];
 }

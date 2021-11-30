@@ -80,8 +80,10 @@ export {
   yamlInternalServerError,
   setCookie,
   SetCookie,
+  ResponseCreator,
+  FileOptions,
 } from './http/response';
-export { corsMiddleware, CorsConfig } from './http/middleware/cors.middleware';
+export { corsMiddleware, CorsConfig, OriginChecker } from './http/middleware/cors.middleware';
 export {
   BodyParser,
   parseJson,
@@ -94,7 +96,7 @@ export {
   parseBody,
 } from './http/middleware/body-parser.middleware';
 export { toHttpRequest } from './http/request';
-export { parseCookie, serializeCookie } from './http/cookie';
+export { parseCookie, serializeCookie, CookieOptions } from './http/cookie';
 export { parseQueryObjects, toJson, Json } from './helpers';
 export {
   responseTimeMiddleware,
@@ -128,7 +130,7 @@ export {
   HttpMiddleware,
   IncommingMessageResolver,
 } from './http/types';
-export { HttpError } from './http/http-error';
+export { HttpError, isHttpError } from './http/http-error';
 export {
   router,
   get,
@@ -141,14 +143,19 @@ export {
   staticAssets,
   RouteContext,
   AppRoute,
+  PathRoute,
+  PathRouteOptions,
+  StaticAssetsOptions,
+  Matcher,
 } from './http/router';
 export { Empty, Service, AbstractMiddleware, Middleware } from './types';
 export {
   openApi,
   securityOk,
+  securityError,
+  securityRedirect,
   isSecurityOk,
-  isSecurityResponse,
-  defaultOapiNotFound,
+  defaultError,
   OapiContext,
   AppRouteOapi,
   OapiPath,

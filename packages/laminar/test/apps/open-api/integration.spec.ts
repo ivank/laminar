@@ -8,10 +8,9 @@ import {
   jsonOk,
   jsonBadRequest,
   jsonNotFound,
-  jsonUnauthorized,
-  jsonForbidden,
   jsonNoContent,
   run,
+  securityError,
 } from '../../../src';
 import axios from 'axios';
 import { join } from 'path';
@@ -76,21 +75,21 @@ describe('Integration', () => {
             logger('Auth Successful');
             return securityOk({ user: 'dinkey' });
           } else {
-            return jsonUnauthorized({ message: 'Unathorized user' });
+            return securityError({ message: 'Unathorized user' });
           }
         },
         BasicAuth: ({ headers }) =>
           headers.authorization === 'Basic 123'
             ? securityOk({ user: 'apikey' })
-            : jsonUnauthorized({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unathorized user' }),
         ApiKeyAuth: ({ headers }) =>
           headers['x-api-key'] === 'Me'
             ? securityOk({ user: 'apikey' })
-            : jsonUnauthorized({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unathorized user' }),
         CookieAuth: ({ cookies, securityScheme: { name } }) =>
           name && cookies?.[name] === 'Me'
             ? securityOk({ user: 'cookie' })
-            : jsonForbidden({ message: 'Forbidden user' }),
+            : securityError({ message: 'Forbidden user' }),
       },
       paths: {
         '/about': { get: async () => file(join(__dirname, 'about.html')) },
@@ -325,21 +324,6 @@ describe('Integration', () => {
                 '[request.headers] (required) is missing [x-trace-token] keys',
                 '[request.body] (required) is missing [name] keys',
               ],
-              requestBody: {
-                examples: {
-                  simple: {
-                    summary: 'A simple example',
-                    value: {
-                      name: 'Charlie',
-                      type: 'dog',
-                    },
-                  },
-                },
-                schema: {
-                  $ref: '#/components/schemas/NewPet',
-                },
-              },
-              description: 'Creates a new pet in the store.  Duplicates are allowed',
               message: 'Request for "POST /pets" does not match OpenApi Schema',
             },
           },
@@ -378,7 +362,7 @@ describe('Integration', () => {
             )
             .catch((error) => error.response),
         ).resolves.toMatchObject({
-          status: 401,
+          status: 403,
           data: { message: 'Unathorized user' },
         });
 
@@ -407,7 +391,7 @@ describe('Integration', () => {
             )
             .catch((error) => error.response),
         ).resolves.toMatchObject({
-          status: 401,
+          status: 403,
           data: { message: 'Unathorized user' },
         });
 
@@ -426,7 +410,7 @@ describe('Integration', () => {
             )
             .catch((error) => error.response),
         ).resolves.toMatchObject({
-          status: 401,
+          status: 403,
           data: { message: 'Unathorized user' },
         });
 
@@ -601,7 +585,7 @@ describe('Integration', () => {
 
         await expect(
           api.delete('/pets/222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
-        ).resolves.toMatchObject({ status: 401, data: { message: 'Unathorized user' } });
+        ).resolves.toMatchObject({ status: 403, data: { message: 'Unathorized user' } });
 
         await expect(api.delete('/pets/222', { headers: { 'X-API-KEY': 'Me' } })).resolves.toMatchObject({
           status: 204,

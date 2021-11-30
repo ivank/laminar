@@ -1,4 +1,4 @@
-import { HttpService, init, jsonOk, jsonForbidden, securityOk } from '@ovotech/laminar';
+import { HttpService, init, jsonOk, securityOk, securityError } from '@ovotech/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -15,7 +15,7 @@ const findUser = (id: string) => ({ id, name: 'John' });
 const validate = (authorizaitonHeader?: string) =>
   authorizaitonHeader === 'Secret Pass'
     ? securityOk({ email: 'me@example.com' })
-    : jsonForbidden({ message: 'Unkown user' });
+    : securityError({ message: 'Unkown user' });
 
 const main = async () => {
   const listener = await openApiTyped({

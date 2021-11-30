@@ -200,11 +200,6 @@ describe('Example files', () => {
       {
         errors: ['[request.body] (required) is missing [email] keys'],
         message: 'Request for "POST /user" does not match OpenApi Schema',
-        requestBody: {
-          schema: {
-            $ref: 'file://./oapi-split-types.yaml#/components/schemas/User',
-          },
-        },
         schema: {
           allOf: [
             {

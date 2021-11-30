@@ -172,14 +172,15 @@ You can use it to customize the global error handler. It accepts the whole reque
 
 By default it will process [HttpError](https://github.com/ovotech/laminar/tree/main/packages/laminar/src/http/http-error.ts) object by setting the correct status code and displaying all of its contents as a json response.
 
-> [examples/docs/src/http-service/error-handler.ts:(errorHandler)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service/error-handler.ts#L7-L20)
+> [examples/docs/src/http-service/error-handler.ts:(errorHandler)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service/error-handler.ts#L7-L21)
 
 ```typescript
 const globalErrorHandler: HttpErrorHandler = async ({ url, error }) => {
+  const message = error instanceof Error ? error.message : String(error);
   if (url.pathname.endsWith('html')) {
-    return htmlBadRequest(`<html><body>${error.message}</body></html>`);
+    return htmlBadRequest(`<html><body>${message}</body></html>`);
   } else {
-    return jsonBadRequest({ message: error.message });
+    return jsonBadRequest({ message });
   }
 };
 

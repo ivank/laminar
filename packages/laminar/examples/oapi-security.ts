@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, jsonUnauthorized, openApi, securityOk, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, openApi, securityOk, init, securityError } from '@ovotech/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi-security.yaml');
@@ -10,7 +10,7 @@ const main = async () => {
       MySecurity: ({ headers }) =>
         headers.authorization === 'Bearer my-secret-token'
           ? securityOk({ email: 'me@example.com' })
-          : jsonUnauthorized({ message: 'Unauthorized user' }),
+          : securityError({ message: 'Unauthorized user' }),
     },
     paths: {
       '/user': {

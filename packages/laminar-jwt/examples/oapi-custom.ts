@@ -2,12 +2,13 @@ import {
   HttpService,
   init,
   openApi,
-  redirect,
+  securityRedirect,
   isSecurityOk,
   securityOk,
   textOk,
   textForbidden,
   setCookie,
+  securityError,
 } from '@ovotech/laminar';
 import { createSession, verifyToken } from '@ovotech/laminar-jwt';
 import { join } from 'path';
@@ -23,14 +24,14 @@ const main = async () => {
        */
       CookieSecurity: async ({ cookies, scopes }) => {
         const result = await verifyToken({ secret }, cookies?.auth, scopes);
-        return isSecurityOk(result) ? result : redirect('/unauthorized');
+        return isSecurityOk(result) ? result : securityRedirect('/unauthorized', { body: { message: 'Redirect' } });
       },
       /**
        * Cloud Scheduler would ensure that this header is never sent outside of the app engine environment,
        * so we're safe just checking for the existance of the header.
        */
       CloudSchedulerSecurity: ({ headers }) =>
-        headers['x-cloudscheduler'] ? securityOk({}) : textForbidden('Not Cloud Scheduler Job'),
+        headers['x-cloudscheduler'] ? securityOk({}) : securityError({ message: 'Not Cloud Scheduler Job' }),
     },
     paths: {
       '/session': {

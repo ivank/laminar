@@ -6,7 +6,7 @@ import {
   csv,
   pdf,
   jsonNotFound,
-  jsonUnauthorized,
+  securityError,
   securityOk,
   loggerMiddleware,
   run,
@@ -33,7 +33,7 @@ describe('Statements', () => {
       security: {
         BearerAuth: ({ headers }) => {
           if (headers.authorization !== 'Bearer Me') {
-            return jsonUnauthorized({ message: 'Unauthorized' });
+            return securityError({ message: 'Unauthorized' });
           }
           return securityOk({ email: 'me@example.com' });
         },

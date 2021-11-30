@@ -50,7 +50,7 @@ If the user is authenticated, then laminar will add the user auth info in the `u
 > [examples/security/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/security/src/index.ts)
 
 ```typescript
-import { HttpService, init, jsonOk, jsonForbidden, securityOk } from '@ovotech/laminar';
+import { HttpService, init, jsonOk, securityOk, securityError } from '@ovotech/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -67,7 +67,7 @@ const findUser = (id: string) => ({ id, name: 'John' });
 const validate = (authorizaitonHeader?: string) =>
   authorizaitonHeader === 'Secret Pass'
     ? securityOk({ email: 'me@example.com' })
-    : jsonForbidden({ message: 'Unkown user' });
+    : securityError({ message: 'Unkown user' });
 
 const main = async () => {
   const listener = await openApiTyped({
@@ -417,12 +417,13 @@ import {
   HttpService,
   init,
   openApi,
-  redirect,
+  securityRedirect,
   isSecurityOk,
   securityOk,
   textOk,
   textForbidden,
   setCookie,
+  securityError,
 } from '@ovotech/laminar';
 import { createSession, verifyToken } from '@ovotech/laminar-jwt';
 import { join } from 'path';
@@ -438,14 +439,14 @@ const main = async () => {
        */
       CookieSecurity: async ({ cookies, scopes }) => {
         const result = await verifyToken({ secret }, cookies?.auth, scopes);
-        return isSecurityOk(result) ? result : redirect('/unauthorized');
+        return isSecurityOk(result) ? result : securityRedirect({ message: 'Redirect', location: '/unauthorized' });
       },
       /**
        * Cloud Scheduler would ensure that this header is never sent outside of the app engine environment,
        * so we're safe just checking for the existance of the header.
        */
       CloudSchedulerSecurity: ({ headers }) =>
-        headers['x-cloudscheduler'] ? securityOk({}) : textForbidden('Not Cloud Scheduler Job'),
+        headers['x-cloudscheduler'] ? securityOk({}) : securityError({ message: 'Not Cloud Scheduler Job' }),
     },
     paths: {
       '/session': {

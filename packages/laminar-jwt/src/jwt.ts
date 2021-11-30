@@ -1,31 +1,19 @@
-import {
-  User,
-  JWTSign,
-  Session,
-  JWTVerify,
-  JWTData,
-  RequestAuthInfo,
-  RequestSign,
-  VerifiedJWTData,
-  VerifyJWTData,
-} from './types';
+import { User, JWTSign, Session, JWTVerify, JWTData, RequestAuthInfo, RequestSign, VerifyJWTData } from './types';
 import jsonwebtoken from 'jsonwebtoken';
 import {
   HttpMiddleware,
   Empty,
-  jsonUnauthorized,
-  jsonBadRequest,
-  jsonForbidden,
-  jsonInternalServerError,
   isSecurityOk,
   OapiSecurityResolver,
   Security,
   securityOk,
   Middleware,
-  ResponseOapi,
+  securityError,
+  HttpError,
 } from '@ovotech/laminar';
 
-const isJWTData = (data: VerifiedJWTData | string | null): data is JWTData => data !== null && typeof data === 'object';
+const isJWTData = (data: jsonwebtoken.JwtPayload | string | null): data is JWTData =>
+  data !== null && typeof data === 'object';
 
 const isUser = (data: JWTData): data is User => 'email' in data;
 
@@ -34,14 +22,14 @@ export const toMissing = (userScopes: string[], requiredScopes: string[]): strin
 
 export const verifyJWT: VerifyJWTData = (data, scopes = []) => {
   if (!isUser(data)) {
-    return jsonUnauthorized({
+    return securityError({
       message:
         'Unauthorized. Authorization token malformed, needs to be an object like { email: "...", scopes: ["...","..."] }',
     });
   }
   const missingScopes = toMissing(data.scopes ?? [], scopes);
   if (missingScopes.length) {
-    return jsonForbidden({
+    return securityError({
       message: `Unauthorized. User does not have required scopes: [${missingScopes.join(', ')}]`,
     });
   }
@@ -68,41 +56,36 @@ export const verifyToken = async (
   { secret, options, verify = verifyJWT }: JWTVerify,
   token: string,
   scopes?: string[],
-): Promise<
-  | Security<User>
-  | ResponseOapi<{ message: string; expiredAt: Date }, 403, 'application/json'>
-  | ResponseOapi<{ message: string; date: Date }, 403, 'application/json'>
-  | ResponseOapi<{ message: string; inner: Date }, 403, 'application/json'>
-  | ResponseOapi<{ message: string }, 500, 'application/json'>
-  | ResponseOapi<{ message: string }, 401, 'application/json'>
-> => {
+): Promise<Security<User>> => {
   try {
-    const data = await new Promise<VerifiedJWTData>((resolve, reject) =>
-      jsonwebtoken.verify(token, secret, options, (err, data) => (err ? reject(err) : resolve(data))),
+    const data = await new Promise<jsonwebtoken.JwtPayload>((resolve, reject) =>
+      jsonwebtoken.verify(token, secret, options, (err, data) =>
+        err ? reject(err) : data ? resolve(data) : reject(new Error('Invalid jwt data')),
+      ),
     );
     if (!isJWTData(data)) {
-      return jsonUnauthorized({ message: 'Authorization token malformed, needs to be an jwt object' });
+      return securityError({ message: 'Authorization token malformed, needs to be an jwt object' });
     }
     return verify(data, scopes);
   } catch (error) {
     if (error instanceof jsonwebtoken.TokenExpiredError) {
-      return jsonForbidden({
+      return securityError({
         message: `Unauthorized. TokenExpiredError: ${error.message}`,
         expiredAt: error.expiredAt,
       });
     } else if (error instanceof jsonwebtoken.NotBeforeError) {
-      return jsonForbidden({
+      return securityError({
         message: `Unauthorized. NotBeforeError: ${error.message}`,
         date: error.date,
       });
     } else if (error instanceof jsonwebtoken.JsonWebTokenError) {
-      return jsonForbidden({
+      return securityError({
         message: `Unauthorized. JsonWebTokenError: ${error.message}`,
         inner: error.inner,
       });
     }
 
-    return jsonInternalServerError(error instanceof Error ? { message: error.message } : { message: String(error) });
+    return new HttpError(500, error instanceof Error ? { message: error.message } : { message: String(error) });
   }
 };
 
@@ -110,21 +93,13 @@ export const verifyBearer = async (
   options: JWTVerify,
   authorization?: string,
   scopes?: string[],
-): Promise<
-  | Security<User>
-  | ResponseOapi<{ message: string; expiredAt: Date }, 403, 'application/json'>
-  | ResponseOapi<{ message: string; date: Date }, 403, 'application/json'>
-  | ResponseOapi<{ message: string; inner: Date }, 403, 'application/json'>
-  | ResponseOapi<{ message: string }, 500, 'application/json'>
-  | ResponseOapi<{ message: string }, 401, 'application/json'>
-  | ResponseOapi<{ message: string }, 400, 'application/json'>
-> => {
+): Promise<Security<User>> => {
   if (!authorization) {
-    return jsonBadRequest({ message: 'Authorization header missing' });
+    return securityError({ message: 'Authorization header missing' });
   }
   const token = authorization.match(/^Bearer (.*)$/)?.[1];
   if (!token) {
-    return jsonUnauthorized(401, { message: 'Authorization header is invalid. Needs to be "Bearer ${token}"' });
+    return securityError({ message: 'Authorization header is invalid. Needs to be "Bearer ${token}"' });
   }
 
   return verifyToken(options, token, scopes);
@@ -136,7 +111,11 @@ export const authMiddleware =
   (next) =>
   async (req) => {
     const result = await verifyBearer(options, req.incommingMessage.headers.authorization, scopes);
-    return isSecurityOk(result) ? next({ ...req, ...result }) : result;
+    if (isSecurityOk(result)) {
+      return next({ ...req, ...result });
+    } else {
+      throw result;
+    }
   };
 
 export const jwtSecurityResolver =

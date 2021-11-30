@@ -1,50 +1,18 @@
 import { validate, toSchemaObject, withinContext } from '@ovotech/json-schema';
 import { Empty } from '../../types';
-import { jsonBadRequest, jsonInternalServerError, jsonNotFound } from '../response';
-import { OapiContext, OapiConfig, RequestErrorContext } from './types';
-import { compileOapi, resolveRef } from './compile-oapi';
+import { json } from '../response';
+import { OapiContext, OapiConfig } from './types';
+import { compileOapi } from './compile-oapi';
 import { toRoutes, selectRoute } from './routes';
-import { toMatchPattern } from '../../helpers';
-import { isSecurityResponse, validateSecurity } from './security';
-import { HttpContext, HttpListener, HttpResponse } from '../types';
+import { validateSecurity } from './security';
+import { HttpContext, HttpListener } from '../types';
+import { HttpError, isHttpError } from '../http-error';
 
 /**
- * If a request doesn't conform to the defined OpenApi schema,
- * Attempt to return the most information in order to help the user correct the error
- */
-export const defaultRequestErrorHandler = async <TContext>({
-  route,
-  result,
-  method,
-  url,
-  headers,
-}: HttpContext & RequestErrorContext<TContext> & TContext): Promise<HttpResponse> => {
-  const contentMediaTypes = Object.entries(resolveRef(route.schema, route.operation.requestBody)?.content ?? {});
-  const mediaType =
-    contentMediaTypes.find(([mimeType]) =>
-      new RegExp(toMatchPattern(mimeType)).test(headers['content-type'] ?? ''),
-    )?.[1] ?? resolveRef(route.schema, route.operation.requestBody)?.content['default'];
-
-  return jsonBadRequest({
-    message: `Request for "${method} ${url.pathname}" does not match OpenApi Schema`,
-    schema: route.request,
-    errors: result.errors,
-    ...(route.operation.summary ? { summary: route.operation.summary } : {}),
-    ...(route.operation.description ? { description: route.operation.description } : {}),
-    ...(route.operation.deprecated ? { deprecated: route.operation.deprecated } : {}),
-    ...(mediaType ? { requestBody: mediaType } : {}),
-  });
-};
-
-/**
- * If no path is found, this function would be called by default, Returning a 404 error
- *
  * @category http
  */
-export const defaultOapiNotFound: HttpListener = async (ctx) =>
-  jsonNotFound({
-    message: `Request for "${ctx.method} ${ctx.url.pathname}" did not match any of the paths defined in the OpenApi Schema`,
-  });
+export const defaultError: HttpListener<{ error: HttpError }> = async ({ error }) =>
+  json({ body: error.body, status: error.code, headers: error.headers });
 
 /**
  * Create an application using an OpenApi schema.
@@ -57,14 +25,18 @@ export const defaultOapiNotFound: HttpListener = async (ctx) =>
 export async function openApi<TContext extends Empty>(config: OapiConfig<TContext>): Promise<HttpListener<TContext>> {
   const oapi = await compileOapi(config);
   const routes = toRoutes<TContext>(oapi, toSchemaObject(oapi), config.paths);
-  const notFound = config.notFound ?? defaultOapiNotFound;
-  const requestError = config.requestError ?? defaultRequestErrorHandler;
+  const error = config.error ?? defaultError;
 
   return async (ctx) => {
     const select = selectRoute<TContext>(ctx, routes);
 
     if (!select) {
-      return notFound(ctx);
+      return error({
+        ...ctx,
+        error: new HttpError(404, {
+          message: `Request for "${ctx.method} ${ctx.url.pathname}" did not match any of the paths defined in the OpenApi Schema`,
+        }),
+      });
     }
 
     const reqOapi: TContext & HttpContext & OapiContext = select.route.coerce({
@@ -81,7 +53,14 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
     });
 
     if (!checkRequest.valid) {
-      return requestError({ ...ctx, route: select.route, result: checkRequest });
+      return error({
+        ...ctx,
+        error: new HttpError(400, {
+          message: `Request for "${ctx.method} ${ctx.url.pathname}" does not match OpenApi Schema`,
+          schema: select.route.request,
+          errors: checkRequest.errors,
+        }),
+      });
     }
 
     const security = await validateSecurity<TContext>(
@@ -92,8 +71,8 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
       config.security,
     );
 
-    if (security && isSecurityResponse(security)) {
-      return security;
+    if (security && isHttpError(security)) {
+      return error({ ...ctx, error: security });
     }
 
     const convertedReqOapi = select.route.convertRequest(reqOapi);
@@ -107,9 +86,12 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
     });
 
     if (!checkResponse.valid) {
-      return jsonInternalServerError({
-        message: `Server response for "${ctx.method} ${ctx.url.pathname}" does not match OpenApi Schema`,
-        errors: checkResponse.errors,
+      return error({
+        ...ctx,
+        error: new HttpError(500, {
+          message: `Server response for "${ctx.method} ${ctx.url.pathname}" does not match OpenApi Schema`,
+          errors: checkResponse.errors,
+        }),
       });
     }
 

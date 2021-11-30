@@ -26,3 +26,12 @@ export class HttpError extends Error {
     this.stack = stack;
   }
 }
+
+/**
+ * Check if a response from {@link OapiSecurityResolver} is a {@link HttpError} object, indicating a failed security check
+ *
+ * @category http
+ */
+export function isHttpError(item: unknown): item is HttpError {
+  return typeof item === 'object' && item !== null && 'code' in item && 'body' in item;
+}

@@ -41,7 +41,7 @@ interface Context {
   refs: RefMap;
 }
 
-interface FileContext {
+export interface FileContext {
   parentId?: string;
   cwd?: string;
   uris?: string[];

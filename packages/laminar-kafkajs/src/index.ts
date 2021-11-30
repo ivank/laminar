@@ -11,6 +11,7 @@ export {
   ProducerContext,
   registerSchemas,
   toProducerRecord,
+  ToProducerRecordConfig,
   RegisterSchemasConfig,
 } from './kafka-producer.service';
 export { kafkaLogCreator, produce, Produce } from './helpers';
@@ -25,5 +26,8 @@ export {
   EncodedMessage,
   EncodedProducerRecord,
   SchemaRegistryConsumerRunConfig,
+  EncodedSchemaProducerRecord,
+  EachMessageeMiddleware,
+  EachBatchMiddleware,
 } from './types';
-export { KafkaAdminService } from './kafka-admin.service';
+export { KafkaAdminService, CreateTopics } from './kafka-admin.service';

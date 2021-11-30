@@ -15,7 +15,7 @@ export interface CorsConfig {
   maxAge?: number;
   fallbackAllowOrigin?: string;
 }
-type OriginChecker = (requestOrigin: string) => boolean;
+export type OriginChecker = (requestOrigin: string) => boolean;
 
 const toAllowOrigin = (
   origin: CorsConfig['allowOrigin'],

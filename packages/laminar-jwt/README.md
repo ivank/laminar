@@ -361,12 +361,13 @@ import {
   HttpService,
   init,
   openApi,
-  redirect,
+  securityRedirect,
   isSecurityOk,
   securityOk,
   textOk,
   textForbidden,
   setCookie,
+  securityError,
 } from '@ovotech/laminar';
 import { createSession, verifyToken } from '@ovotech/laminar-jwt';
 import { join } from 'path';
@@ -382,14 +383,14 @@ const main = async () => {
        */
       CookieSecurity: async ({ cookies, scopes }) => {
         const result = await verifyToken({ secret }, cookies?.auth, scopes);
-        return isSecurityOk(result) ? result : redirect('/unauthorized');
+        return isSecurityOk(result) ? result : securityRedirect('/unauthorized', { message: 'Redirect', location });
       },
       /**
        * Cloud Scheduler would ensure that this header is never sent outside of the app engine environment,
        * so we're safe just checking for the existance of the header.
        */
       CloudSchedulerSecurity: ({ headers }) =>
-        headers['x-cloudscheduler'] ? securityOk({}) : textForbidden('Not Cloud Scheduler Job'),
+        headers['x-cloudscheduler'] ? securityOk({}) : securityError({ message: 'Not Cloud Scheduler Job' }),
     },
     paths: {
       '/session': {
@@ -463,7 +464,7 @@ import { get, post, init, router, HttpService, jsonOk } from '@ovotech/laminar';
 import { jwkPublicKey, createSession, authMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import * as nock from 'nock';
+import nock from 'nock';
 
 /**
  * Make sure we have some response from a url
@@ -544,7 +545,7 @@ import { get, post, HttpService, router, init, jsonOk } from '@ovotech/laminar';
 import { jwkPublicKey, createSession, keycloakAuthMiddleware } from '@ovotech/laminar-jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import * as nock from 'nock';
+import nock from 'nock';
 
 /**
  * Make sure we have some response from a url
@@ -603,7 +604,7 @@ import { init, HttpService, jsonOk, openApi } from '@ovotech/laminar';
 import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@ovotech/laminar-jwt';
 import { join } from 'path';
 import { readFileSync } from 'fs';
-import * as nock from 'nock';
+import nock from 'nock';
 
 /**
  * Make sure we have some response from a url

@@ -2,7 +2,18 @@ import axios from 'axios';
 import { sign, verify } from 'jsonwebtoken';
 import { join } from 'path';
 import { URL, URLSearchParams } from 'url';
-import { OapiConfig, openApi, securityOk, HttpService, jsonOk, redirect, jsonForbidden, setCookie } from '../../../src';
+import {
+  OapiConfig,
+  openApi,
+  securityOk,
+  HttpService,
+  jsonOk,
+  redirect,
+  jsonForbidden,
+  setCookie,
+  securityError,
+  securityRedirect,
+} from '../../../src';
 import axiosCookieJarSupport from 'axios-cookiejar-support';
 
 const globalSecret = 'oauth2-global';
@@ -29,7 +40,7 @@ describe('Oauth', () => {
               const user = verify(cookies.auth, tokenSecret);
               return securityOk(user);
             } catch (error) {
-              return jsonForbidden({ message: 'Access code invalid' });
+              return securityError({ message: 'Access code invalid' });
             }
           }
 
@@ -37,7 +48,7 @@ describe('Oauth', () => {
           const redirectUrl = 'http://localhost:8067/oauth.access';
           const original = url.toString();
           authUrl.search = new URLSearchParams({ redirectUrl, scopes, original }).toString();
-          return redirect(authUrl.toString());
+          return securityRedirect(authUrl.toString(), { body: { message: `Redirecting to auth` } });
         },
       },
       paths: {

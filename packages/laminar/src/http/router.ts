@@ -27,7 +27,7 @@ export interface RouteContext {
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
  * @category http
  */
-type Matcher<TContext> = (ctx: TContext & HttpContext) => RouteContext | false;
+export type Matcher<TContext> = (ctx: TContext & HttpContext) => RouteContext | false;
 
 /**
  * Captured path parameters to the route would be passed to the `path` property.
@@ -42,7 +42,7 @@ export type AppRoute<TContext extends Empty = Empty> = HttpListener<TContext & R
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
  * @category http
  */
-interface PathRoute<TContext extends Empty> {
+export interface PathRoute<TContext extends Empty> {
   matcher: Matcher<TContext>;
   listener: AppRoute<TContext>;
 }
@@ -53,7 +53,7 @@ interface PathRoute<TContext extends Empty> {
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
  * @category http
  */
-interface PathRouteOptions<TContext extends Empty> {
+export interface PathRouteOptions<TContext extends Empty> {
   /**
    * The http method to match. If omitted will match any method.
    */

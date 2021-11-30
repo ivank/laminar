@@ -169,7 +169,7 @@ components:
 > [examples/oapi-security.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/oapi-security.ts)
 
 ```typescript
-import { HttpService, jsonOk, jsonUnauthorized, openApi, securityOk, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, openApi, securityOk, init, securityError } from '@ovotech/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi-security.yaml');
@@ -181,7 +181,7 @@ const main = async () => {
       MySecurity: ({ headers }) =>
         headers.authorization === 'Bearer my-secret-token'
           ? securityOk({ email: 'me@example.com' })
-          : jsonUnauthorized({ message: 'Unauthorized user' }),
+          : securityError({ message: 'Unauthorized user' }),
     },
     paths: {
       '/user': {
@@ -262,23 +262,21 @@ import { join } from 'path';
 const api = join(__dirname, 'oapi.yaml');
 
 const main = async () => {
-  const listener = await openApi({
-    api,
-    paths: {
-      '/user': {
-        post: async ({ body }) => jsonOk({ result: 'ok', user: body }),
-        get: async () => jsonOk({ email: 'me@example.com' }),
+  const listener = router(
+    get('/old/{id}', async ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
+    get('/old/{id}/pdf', async ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
+    await openApi({
+      api,
+      paths: {
+        '/user': {
+          post: async ({ body }) => jsonOk({ result: 'ok', user: body }),
+          get: async () => jsonOk({ email: 'me@example.com' }),
+        },
       },
-    },
-    notFound: router(
-      get('/old/{id}', async ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
-      get('/old/{id}/pdf', async ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
-    ),
-  });
+    }),
+  );
 
-  const http = new HttpService({
-    listener,
-  });
+  const http = new HttpService({ listener });
   await init({ initOrder: [http], logger: console });
 };
 

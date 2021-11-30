@@ -3,10 +3,10 @@ import {
   jsonOk,
   jsonNoContent,
   jsonNotFound,
-  jsonUnauthorized,
   securityOk,
   optional,
   run,
+  securityError,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
@@ -32,15 +32,15 @@ describe('Integration', () => {
         BearerAuth: ({ headers }) =>
           headers.authorization === 'Bearer 123'
             ? securityOk({ user: 'dinkey' })
-            : jsonUnauthorized({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unathorized user' }),
         BasicAuth: ({ headers }) =>
           headers.authorization === 'Basic 123'
             ? securityOk({ user: 'basickey' })
-            : jsonUnauthorized({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unathorized user' }),
         ApiKeyAuth: ({ headers }) =>
           headers['x-api-key'] === 'Me'
             ? securityOk({ user: 'apikey' })
-            : jsonUnauthorized({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unathorized user' }),
       },
       paths: {
         '/pets': {
@@ -96,7 +96,7 @@ describe('Integration', () => {
           { headers: { Authorization: 'Bearer 000', 'x-trace-token': '123' } },
         ).catch((error) => error.response),
       ).resolves.toMatchObject({
-        status: 401,
+        status: 403,
         data: { message: 'Unathorized user' },
       });
 
@@ -154,7 +154,7 @@ describe('Integration', () => {
       await expect(
         api['DELETE /pets/{id}']('222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
       ).resolves.toMatchObject({
-        status: 401,
+        status: 403,
         data: { message: 'Unathorized user' },
       });
 

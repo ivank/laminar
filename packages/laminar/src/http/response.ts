@@ -392,7 +392,7 @@ export function json<TResponseBody, TResponse extends Partial<HttpResponse<TResp
 /**
  * A HttpResponse creator helper, used for {@link optional}
  */
-type ResponseCreator<TResponseBody, TStatus, THeaders> = (
+export type ResponseCreator<TResponseBody, TStatus, THeaders> = (
   body: TResponseBody,
   headers?: OutgoingHttpHeaders,
 ) => { status: TStatus; body: TResponseBody; headers: THeaders };

@@ -3,6 +3,7 @@ import { ResolvedSchema, ResultError, Schema } from '@ovotech/json-schema';
 import { Empty } from '../../types';
 import { OpenAPIObject, OperationObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
 import { HttpContext, HttpListener, HttpResponse } from '../types';
+import { HttpError } from '../http-error';
 
 /**
  * @category http
@@ -26,7 +27,7 @@ export interface SecurityOk<TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> {
 /**
  * @category http
  */
-export type Security<TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> = SecurityOk<TOapiAuthInfo> | HttpResponse;
+export type Security<TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> = SecurityOk<TOapiAuthInfo> | HttpError;
 
 /**
  * @category http
@@ -41,7 +42,7 @@ export interface RequestSecurityResolver {
  */
 export type OapiSecurityResolver<TContext extends Empty = Empty, TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (
   ctx: TContext & HttpContext & OapiContext & RequestSecurityResolver,
-) => Security<TOapiAuthInfo> | HttpResponse | Promise<Security<TOapiAuthInfo> | HttpResponse>;
+) => Security<TOapiAuthInfo> | Promise<Security<TOapiAuthInfo>>;
 
 /**
  * Oapi Security Resolvers
@@ -97,8 +98,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   api: OpenAPIObject | string;
   paths: OapiPaths<TContext>;
   security?: OapiSecurity<TContext, TOapiAuthInfo>;
-  notFound?: HttpListener<TContext>;
-  requestError?: HttpListener<TContext & RequestErrorContext<TContext>>;
+  error?: HttpListener<{ error: HttpError }>;
 }
 
 /**

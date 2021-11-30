@@ -1,4 +1,4 @@
-import { HttpListener, HttpService, init, jsonOk, jsonUnauthorized, openApi, securityOk } from '@ovotech/laminar';
+import { HttpListener, HttpService, init, jsonOk, openApi, securityError, securityOk } from '@ovotech/laminar';
 import { join } from 'path';
 
 /**
@@ -14,7 +14,7 @@ const createHttpListener = async (): Promise<HttpListener> => {
       MySecurity: async ({ headers }) =>
         headers.authorization === 'Bearer my-secret-token'
           ? securityOk({ email: 'me@example.com' })
-          : jsonUnauthorized({ message: 'Unauthorized user' }),
+          : securityError({ message: 'Unauthorized user' }),
     },
     paths: {
       '/user/{id}': {

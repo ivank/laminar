@@ -116,7 +116,7 @@ const createHttpListener = async (): Promise<HttpListener> => {
       MySecurity: async ({ headers }) =>
         headers.authorization === 'Bearer my-secret-token'
           ? securityOk({ email: 'me@example.com' })
-          : jsonUnauthorized({ message: 'Unauthorized user' }),
+          : securityError({ message: 'Unauthorized user' }),
     },
     paths: {
       '/user/{id}': {
@@ -137,23 +137,22 @@ This is a trivial example of a security resolver that you wouldn't use in practi
 
 You can define additional paths that are not defined by openapi schema. To do that you can use the `notFound` property, which accepts any laminar app.
 
-> [examples/docs/src/http-service-open-api/not-found.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/not-found.ts#L6-L21)
+> [examples/docs/src/http-service-open-api/not-found.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/not-found.ts#L6-L20)
 
 ```typescript
-const createHttpListener = async (): Promise<HttpListener> => {
-  return await openApi({
-    api: join(__dirname, '../../schema/api.yaml'),
-    paths: {
-      '/user/{id}': {
-        get: async ({ path }) => jsonOk(findUser(path.id)),
+const createHttpListener = async (): Promise<HttpListener> =>
+  router(
+    get('/old/{id}', async ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
+    get('/old/{id}/pdf', async ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
+    await openApi({
+      api: join(__dirname, '../../schema/api.yaml'),
+      paths: {
+        '/user/{id}': {
+          get: async ({ path }) => jsonOk(findUser(path.id)),
+        },
       },
-    },
-    notFound: router(
-      get('/old/{id}', async ({ path: { id } }) => redirect(`http://example.com/new/${id}`)),
-      get('/old/{id}/pdf', async ({ path: { id } }) => redirect(`http://example.com/new/${id}/pdf`)),
-    ),
-  });
-};
+    }),
+  );
 ```
 
 ## Middlewares

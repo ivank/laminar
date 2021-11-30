@@ -27,18 +27,31 @@ export {
   childOptions,
   validateSchema,
 } from './validation';
-export { Schema } from './schema';
+export { Schema, JsonSchema, PrimitiveType } from './schema';
 export { toMessages, toMessage, messages } from './messages';
-export { isCompiled, withinContext, toSchemaObject, compile, ResolvedSchema, resolve, resolveFile } from './resolve';
+export {
+  isCompiled,
+  withinContext,
+  toSchemaObject,
+  compile,
+  ResolvedSchema,
+  resolve,
+  resolveFile,
+  RefMap,
+  FileContext,
+} from './resolve';
 export {
   validate,
   validateCompiled,
   ensureValid,
   ensureValidCompiled,
   ValidateOptions,
+  ValidateSchemaOptions,
+  ValidateCompiledOptions,
   Result,
   ResultError,
   ResultSuccess,
+  Drafts,
 } from './validate';
 export { CoerceCompiledOptions, CoerceSchemaOptions, CoerceOptions, coerce, coerceCompiled } from './coerce';
 export { coerceSchema, coercers, CoercerOptions, Coercer } from './coercion';
