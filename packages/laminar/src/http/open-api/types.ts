@@ -98,7 +98,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   api: OpenAPIObject | string;
   paths: OapiPaths<TContext>;
   security?: OapiSecurity<TContext, TOapiAuthInfo>;
-  error?: HttpListener<{ error: HttpError }>;
+  error?: HttpListener<TContext & { error: HttpError }>;
 }
 
 /**
