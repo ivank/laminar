@@ -64,6 +64,83 @@ describe('Helper isEqual', () => {
     ]);
   });
 
+  it('Should validate schema without formatting messages', async () => {
+    const schema: Schema = {
+      oneOf: [
+        {
+          description: 'Balances for a PAYG+ customer.',
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            singleWalletBalance: {
+              allOf: [
+                {
+                  type: 'object',
+                  properties: {
+                    value: {
+                      description: 'The value of the balance. 1/1000ths of a penny. eg. 1000=1p, 100000=£1',
+                      type: 'integer',
+                      format: 'int32',
+                      example: '123000',
+                    },
+                    effectiveAt: {
+                      description: 'The last transaction date-time that updated the balance.',
+                      type: 'string',
+                      format: 'date-time',
+                      example: '2019-01-30T17:32:28Z',
+                    },
+                    updatedAt: {
+                      description: 'The date-time that the balance was updated.',
+                      type: 'string',
+                      format: 'date-time',
+                      example: '2019-01-30T17:53:28Z',
+                    },
+                  },
+                  required: ['value'],
+                },
+                {
+                  type: 'object',
+                  properties: {
+                    fuelType: {
+                      description: 'The fuel that the balance is for.',
+                      type: 'string',
+                      enum: ['DualFuel'],
+                    },
+                  },
+                  required: ['fuelType'],
+                },
+              ],
+            },
+          },
+        },
+      ],
+    };
+
+    const result = await validate({
+      schema,
+      value: { post: true, singleWalletBalance: { fuelType: '111' } },
+      formatErrors: false,
+    });
+
+    expect(result.errors).toEqual([
+      { code: 'additionalProperties', name: 'value', param: ['post'] },
+      { code: 'required', name: 'value.singleWalletBalance', param: ['value'] },
+      { code: 'enum', name: 'value.singleWalletBalance.fuelType', param: ['DualFuel'] },
+    ]);
+
+    const withErorrFormat = await validate({
+      schema,
+      value: { post: true, singleWalletBalance: { fuelType: '111' } },
+      formatErrors: true,
+    });
+
+    expect(withErorrFormat.errors).toEqual([
+      '[value] (additionalProperties) has unknown key post',
+      '[value.singleWalletBalance] (required) is missing [value] keys',
+      '[value.singleWalletBalance.fuelType] (enum) should be one of [DualFuel]',
+    ]);
+  });
+
   it('Should validate complex allOf anyOf', async () => {
     const schema: Schema = {
       allOf: [

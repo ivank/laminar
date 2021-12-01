@@ -439,7 +439,7 @@ const main = async () => {
        */
       CookieSecurity: async ({ cookies, scopes }) => {
         const result = await verifyToken({ secret }, cookies?.auth, scopes);
-        return isSecurityOk(result) ? result : securityRedirect({ message: 'Redirect', location: '/unauthorized' });
+        return isSecurityOk(result) ? result : securityRedirect('/unauthorized', { body: { message: 'Redirect' } });
       },
       /**
        * Cloud Scheduler would ensure that this header is never sent outside of the app engine environment,

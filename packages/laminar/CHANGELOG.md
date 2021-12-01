@@ -120,3 +120,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Made security and error handling more generic, so it can be used by both JSON and HTML services.
+
+## [0.13.3] - 2021-12-01
+
+### Changed
+
+- Updated json-schema to fix some bugs

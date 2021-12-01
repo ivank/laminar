@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ResolvedSchema, ResultError, Schema } from '@ovotech/json-schema';
+import { ResolvedSchema, ResultError, Schema, FormatErrors } from '@ovotech/json-schema';
 import { Empty } from '../../types';
 import { OpenAPIObject, OperationObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
 import { HttpContext, HttpListener, HttpResponse } from '../types';
@@ -98,7 +98,14 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   api: OpenAPIObject | string;
   paths: OapiPaths<TContext>;
   security?: OapiSecurity<TContext, TOapiAuthInfo>;
+  /**
+   * Define how to render HttpError responses
+   */
   error?: HttpListener<TContext & { error: HttpError }>;
+  /**
+   * Format json-schema errors.
+   */
+  formatErrors?: FormatErrors;
 }
 
 /**

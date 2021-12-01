@@ -1,4 +1,4 @@
-import { validateSchema, hasErrors, Validator, Validation } from './validation';
+import { validateSchema, hasErrors, Validator, Validation, Invalid } from './validation';
 import { messages, toMessages } from './messages';
 import { Schema } from './schema';
 import { ValidationError } from './ValidationError';
@@ -8,6 +8,7 @@ import { draft7 } from './drafts/draft7';
 import { draft6 } from './drafts/draft6';
 import { openapi3 } from './drafts/openapi3';
 import { ResolvedSchema, isCompiled, compile } from './resolve';
+import { errors } from '.';
 
 export interface Drafts {
   draft4: Validator[];
@@ -29,17 +30,19 @@ export interface ResultError {
   schema: ResolvedSchema;
   value: unknown;
   name: string;
-  errors: string[];
+  errors: (string | Invalid)[];
   valid: false;
 }
 
 export type Result<T> = ResultSuccess<T> | ResultError;
 
+export type FormatErrors = ((errors: Validation) => string[]) | boolean;
+
 interface ValidateOptionsBase {
   value: unknown;
   name?: string;
   draft?: keyof Drafts;
-  formatErrors?: (errors: Validation) => string[];
+  formatErrors?: FormatErrors;
 }
 
 export interface ValidateSchemaOptions extends ValidateOptionsBase {
@@ -69,8 +72,10 @@ export function validateCompiled<T>({
 }: ValidateCompiledOptions): Result<T> {
   const validators = drafts[draft];
   const validation = validateSchema(schema.schema, value, { validators, refs: schema.refs, name });
+  const toErrors = formatErrors === true ? toMessages(messages) : formatErrors === false ? errors : formatErrors;
+
   return hasErrors(validation)
-    ? { schema, value, name, errors: formatErrors(validation), valid: false }
+    ? { schema, value, name, errors: toErrors(validation), valid: false }
     : { schema, value: value as T, name, errors: [], valid: true };
 }
 

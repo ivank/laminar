@@ -52,6 +52,7 @@ export {
   ResultError,
   ResultSuccess,
   Drafts,
+  FormatErrors,
 } from './validate';
 export { CoerceCompiledOptions, CoerceSchemaOptions, CoerceOptions, coerce, coerceCompiled } from './coerce';
 export { coerceSchema, coercers, CoercerOptions, Coercer } from './coercion';

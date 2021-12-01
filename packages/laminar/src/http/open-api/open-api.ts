@@ -26,6 +26,7 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
   const oapi = await compileOapi(config);
   const routes = toRoutes<TContext>(oapi, toSchemaObject(oapi), config.paths);
   const error = config.error ?? defaultError;
+  const formatErrors = config.formatErrors;
 
   return async (ctx) => {
     const select = selectRoute<TContext>(ctx, routes);
@@ -50,6 +51,7 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
       draft: 'openapi3',
       name: 'request',
       value: reqOapi,
+      formatErrors,
     });
 
     if (!checkRequest.valid) {
@@ -83,6 +85,7 @@ export async function openApi<TContext extends Empty>(config: OapiConfig<TContex
       value: res,
       draft: 'openapi3',
       name: 'response',
+      formatErrors,
     });
 
     if (!checkResponse.valid) {
