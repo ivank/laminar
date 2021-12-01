@@ -4,12 +4,17 @@ import { Schema } from '../schema';
 import { hasErrors, validateSchema } from '../validation';
 
 const findSchema = (schemas: Schema[], name: string, value: unknown, options: CoercerOptions): Schema | undefined =>
-  schemas.find(
-    (item) =>
-      isJsonSchema(item) &&
-      !!item.properties &&
-      !hasErrors(validateSchema(item.properties[name], coerceSchema(item.properties[name], value, options), options)),
-  );
+  schemas.find((item) => {
+    const itemSchema = isJsonSchema(item) && '$ref' in item && item.$ref ? options.refs[item.$ref] : item;
+    return (
+      itemSchema &&
+      isJsonSchema(itemSchema) &&
+      !!itemSchema.properties &&
+      !hasErrors(
+        validateSchema(itemSchema.properties[name], coerceSchema(itemSchema.properties[name], value, options), options),
+      )
+    );
+  });
 
 export const coerceOneOf: Coercer = (schema, value, options) => {
   if (schema.oneOf && schema.oneOf.length > 0) {

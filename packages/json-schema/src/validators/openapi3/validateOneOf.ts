@@ -3,10 +3,15 @@ import { Schema } from '../../schema';
 import { Validator, hasErrors, error, empty, validateSchema, Options, errors } from '../../validation';
 
 const findSchema = (schemas: Schema[], name: string, value: unknown, options: Options): Schema | undefined =>
-  schemas.find(
-    (item) =>
-      isJsonSchema(item) && !!item.properties && !hasErrors(validateSchema(item.properties[name], value, options)),
-  );
+  schemas.find((item) => {
+    const itemSchema = isJsonSchema(item) && '$ref' in item && item.$ref ? options.refs[item.$ref] : item;
+    return (
+      itemSchema &&
+      isJsonSchema(itemSchema) &&
+      !!itemSchema.properties &&
+      !hasErrors(validateSchema(itemSchema.properties[name], value, options))
+    );
+  });
 
 export const validateOneOf: Validator = (schema, value, options) => {
   if (schema.oneOf && schema.oneOf.length > 0) {
