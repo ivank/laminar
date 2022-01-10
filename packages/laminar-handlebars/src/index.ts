@@ -20,12 +20,40 @@ export type Cache = Map<string, { template: TemplateDelegate; mtime: Date }>;
 export type CacheType = 'preload' | 'expiry' | 'none';
 
 export interface TemplateConfig {
+  /**
+   * Helper functions passed to handlebar templates
+   */
   helpers?: RuntimeOptions['helpers'];
+  /**
+   * Main directory where handlebar files should be located, defaults to current working directory.
+   * Looks for "partials" and "views" directories inside of it.
+   */
   dir?: string;
+  /**
+   * Directory where all the partials are located, inside the main 'dir' directory, defaults to 'partials'
+   */
   partials?: string;
+  /**
+   * Name of the handlebars file extension. Defaults to 'handlebars', so that only 'my-file.handlebars' kind of files are loaded.
+   */
   extension?: string;
+  /**
+   * Directory name where all the views are located, inside the main 'dir' directory, defaults to 'views'
+   */
   views?: string;
+  /**
+   * Cache types.
+   * - preload: load all the templates ones into memory
+   * - expiry: load partials when needed and keep them in cache, but check the file's mtime and reload template if changed
+   * - none: do not cache templates and load them on every request.
+   *
+   * Defaults to 'preload'
+   */
   cacheType?: CacheType;
+  /**
+   * Global data to be passed to every template
+   */
+  globalData?: Record<string, unknown>;
 }
 
 export interface CompileTemplatesOptions {
@@ -101,16 +129,17 @@ export const handlebars = ({
   partials = 'partials',
   views = 'views',
   cacheType = 'preload',
+  globalData = {},
 }: TemplateConfig): HandlebarsRender => {
   const cache = cacheType === 'preload' ? loadTemplates(new Map(), { dir, extension }) : new Map();
   const partialTemplates = cacheType === 'preload' ? loadPartials({ dir: join(dir, partials), extension }) : undefined;
 
   return (name: string, data: Record<string, unknown> = {}) => {
     const template = loadTemplate(name, cache, cacheType, { dir: join(dir, views), extension });
-    return template(data, {
-      helpers,
-      partials: partialTemplates ?? loadPartials({ dir: join(dir, partials), extension }),
-    });
+    return template(
+      { ...globalData, ...data },
+      { helpers, partials: partialTemplates ?? loadPartials({ dir: join(dir, partials), extension }) },
+    );
   };
 };
 

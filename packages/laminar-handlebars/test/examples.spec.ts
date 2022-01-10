@@ -66,6 +66,14 @@ describe('Example files', () => {
       },
       `<body>\n  <div>HEADER</div>\n  Named test@example.com\n</body>\n`,
     ],
+    [
+      'examples/global-data.ts',
+      {
+        method: 'GET',
+        url: '/',
+      },
+      `<body>\n  <span>Account Authenticated</span><div>HEADER</div>\n  INDEX\n</body>\n`,
+    ],
   ])('Should process %s', async (file, config, expected) => {
     jest.setTimeout(10000);
     port += 1;
