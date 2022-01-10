@@ -231,19 +231,20 @@ export const extractFiles = async (
   options: FileContext = {},
 ): Promise<{ refs: RefMap; uris: string[] }> => {
   const initialRefs = extractNamedRefs(schema);
-  const result = await Promise.all(
-    extractUrls(schema, Object.keys(initialRefs), options).map(async (url) => {
-      const { content, cwd, uri } = await loadFile(url, options);
-      const { refs, uris } = await extractFiles(content, { cwd });
-      const ref = resolveNestedRefs(content, { schema: content, refs }, { cwd });
-      return { uris: [...uris, uri], refs: { [url]: ref, ...refs } };
-    }),
-  );
 
-  return result.reduce((all, item) => ({ uris: [...all.uris, ...item.uris], refs: { ...all.refs, ...item.refs } }), {
-    uris: [],
-    refs: initialRefs,
-  });
+  let result: { refs: RefMap; uris: string[] } = { uris: options.uris ?? [], refs: initialRefs };
+  for (const url of extractUrls(schema, Object.keys(initialRefs), options)) {
+    const { content, cwd, uri } = await loadFile(url, options);
+    if (!result.uris?.includes(uri)) {
+      const { refs, uris } = await extractFiles(content, { cwd, uris: [...result.uris, uri] });
+      const ref = resolveNestedRefs(content, { schema: content, refs }, { cwd });
+      result = { uris, refs: { ...result.refs, ...refs, [url]: ref } };
+    } else {
+      const ref = resolveNestedRefs(content, { schema: content, refs: result.refs }, { cwd });
+      result = { uris: result.uris, refs: { ...result.refs, [url]: ref } };
+    }
+  }
+  return result;
 };
 
 export const resolve = async (original: Schema, fileContext: FileContext = {}): Promise<ResolvedSchema> => {

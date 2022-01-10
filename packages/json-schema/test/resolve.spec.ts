@@ -1,6 +1,7 @@
 import nock from 'nock';
+import { join } from 'path';
 import { Schema } from '../src';
-import { extractUrls, RefMap, extractNamedRefs, extractFiles, resolve } from '../src/resolve';
+import { extractUrls, RefMap, extractNamedRefs, extractFiles, resolve, compile } from '../src/resolve';
 
 describe('json-refs', () => {
   it.each<[string, Schema, string[]]>([
@@ -123,7 +124,7 @@ describe('json-refs', () => {
         'http://one.test/': { $ref: 'http://three.test/#' },
         'http://two.test/folder': { test: 2 },
       },
-      uris: ['http://four.test/', 'http://three.test/', 'http://one.test/', 'http://two.test/folder'],
+      uris: ['http://one.test/', 'http://three.test/', 'http://four.test/', 'http://two.test/folder'],
     };
 
     expect(await extractFiles(schema)).toEqual(expected);
@@ -603,5 +604,15 @@ describe('json-refs', () => {
     const schema2 = await resolve(schema);
 
     expect(schema1).toEqual(schema2);
+  });
+
+  it('Should resolve nested recursive', async () => {
+    const compiled = await compile(join(__dirname, 'assets/recursive/schema.yaml'));
+    expect(compiled.refs).toMatchSnapshot();
+  });
+
+  it('Should resolve complex recursive', async () => {
+    const compiled = await compile(join(__dirname, 'assets/schemes.yaml'));
+    expect(compiled.refs).toMatchSnapshot();
   });
 });

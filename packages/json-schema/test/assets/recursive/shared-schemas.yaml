@@ -1,0 +1,9 @@
+components:
+  schemas:
+    HttpError:
+      additionalProperties: false
+      properties:
+        message:
+          $ref: './schema.yaml#/components/schemas/Message'
+      required:
+        - message

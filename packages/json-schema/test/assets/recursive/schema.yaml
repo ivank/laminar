@@ -1,0 +1,37 @@
+openapi: '3.0.0'
+
+paths:
+  /v1/session:
+    post:
+      summary: Create Session
+      description: Create a session for the current user. It requires google's oauth identity token, as it uses it for authentication.
+      tags: ['auth']
+      requestBody: { $ref: '#/components/requestBodies/SessionRequest' }
+      responses:
+        '500':
+          $ref: 'shared-responses.yaml#/components/responses/HttpErrorResponse'
+        '200':
+          $ref: '#/components/responses/SessionResponse'
+
+components:
+  schemas:
+    Session:
+      properties:
+        jwt:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+      required:
+        - jwt
+
+    Message:
+      type: string
+
+  responses:
+    SessionResponse:
+      description: JWT Session
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Session'

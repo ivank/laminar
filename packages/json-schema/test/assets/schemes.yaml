@@ -1,0 +1,1447 @@
+openapi: '3.0.0'
+
+info:
+  title: 'Schemes'
+  version: 1.0.0
+paths:
+  /.well-known/health-check:
+    get:
+      summary: Health Check
+      description: Health check endpoint
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /.well-known/openapi.yaml:
+    get:
+      summary: OpenApi
+      description: The open api spec for the service. OpenAPI v3.
+      responses: { 200: { $ref: schemes/components.yaml#/components/responses/TextResponse } }
+
+  /.well-known/components.yaml:
+    get:
+      summary: OpenApi Components
+      description: Shared schemas for the open api spec. OpenAPI v3.
+      responses: { 200: { $ref: schemes/components.yaml#/components/responses/TextResponse } }
+
+  /.well-known/levelisations.yaml:
+    get:
+      summary: OpenApi Levelisation
+      description: Schemas for Levelisation endpoints. OpenAPI v3.
+      responses: { 200: { $ref: schemes/components.yaml#/components/responses/TextResponse } }
+
+  /.well-known/read-checks.yaml:
+    get:
+      summary: OpenApi Read Checks
+      description: Schemas for Read Checks endpoints. OpenAPI v3.
+      responses: { 200: { $ref: schemes/components.yaml#/components/responses/TextResponse } }
+
+  /.well-known/openapi.html:
+    get:
+      summary: OpenApi HTML
+      description: The open api spec for the service. OpenAPI v3.
+      responses:
+        '200':
+          $ref: '#/components/responses/HtmlResponse'
+
+  /v1/session:
+    post:
+      parameters:
+        - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      summary: Create a session for the current user
+      requestBody: { $ref: '#/components/requestBodies/SessionRequest' }
+      responses:
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '401':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '400':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '403':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '200':
+          $ref: '#/components/responses/SessionResponse'
+
+  /v1/comm-batches:
+    get:
+      security:
+        - JWTSecurity: ['admin']
+      parameters:
+        - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/ids' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      summary: Get Comm Batches.
+      responses:
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '200':
+          description: List of Comm Batches
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: 'schemes/components.yaml#/components/schemas/List'
+                  - properties: { data: { items: { $ref: '#/components/schemas/CommBatchList' } } }
+                    required:
+                      - data
+
+    post:
+      security:
+        - JWTSecurity: ['admin']
+      parameters:
+        - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      summary: Create New Comm Batch
+      requestBody: { $ref: '#/components/requestBodies/CommBatchRequest' }
+      description: |
+        Create new Comm Batch that will be processed and can be monitored responses
+      responses:
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '200':
+          description: Returns the created Comm Batch
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CommBatch' }
+
+  /v1/comm-batches/{id}:
+    parameters:
+      - { $ref: '#/components/parameters/id' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+    get:
+      security:
+        - JWTSecurity: ['admin']
+      summary: Get Comm Batch by ID
+      responses:
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '200':
+          description: Returns the Comm Batch with the corresponding ID
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CommBatch' }
+
+  /v1/process/meter-reads-tolerance:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+    post:
+      security:
+        - ProductIdentitySecurity: ['update']
+      summary: Do a tolerance checks for all the reads that have not been checked
+      responses:
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+
+  # Read Checks
+  # =====================================================================
+
+  /v1/read-checks:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+    get:
+      parameters:
+        - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/ids' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+      summary: Tolerance checks
+      description: List of Meter Reads that have failed their tolernace checks and need to be reviewed
+      responses:
+        '200':
+          $ref: 'schemes/read-checks.yaml#/components/responses/MeterReadCheckListResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    put:
+      summary: Bulk Save Tolerance Check
+      description: Update Multiple Tolerance check details at once
+      requestBody: { $ref: 'schemes/read-checks.yaml#/components/requestBodies/MeterReadBulkCheckSaveRequest' }
+      responses:
+        '200':
+          $ref: 'schemes/components.yaml#/components/responses/ListOfIdsResonse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    delete:
+      summary: Save Tolerance Check
+      description: Update Tolerance check details
+      requestBody: { $ref: 'schemes/read-checks.yaml#/components/requestBodies/MeterReadBulkCheckDeleteRequest' }
+      responses:
+        '200':
+          $ref: 'schemes/components.yaml#/components/responses/ListOfIdsResonse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/read-checks/{id}:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: '#/components/parameters/id' }
+    get:
+      summary: Single Tolerance check
+      description: Details on the meter read tolerance check
+      responses:
+        '200':
+          $ref: 'schemes/read-checks.yaml#/components/responses/MeterReadCheckResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    put:
+      summary: Save Tolerance Check
+      description: Update Tolerance check details
+      requestBody: { $ref: 'schemes/read-checks.yaml#/components/requestBodies/MeterReadCheckSaveRequest' }
+      responses:
+        '200':
+          $ref: 'schemes/read-checks.yaml#/components/responses/MeterReadCheckResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    delete:
+      summary: Save Tolerance Check
+      description: Update Tolerance check details
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  # Levelisation
+  # =====================================================================
+
+  /v1/levelisations:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+    get:
+      parameters:
+        - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/ids' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+      summary: Levelisations
+      description: List of Levelisation processes by quarters
+      responses:
+        '200':
+          $ref: 'schemes/levelisations.yaml#/components/responses/LevelisationListResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    post:
+      summary: Create new Levelisation
+      description: Create a new Levelisation
+      requestBody: { $ref: 'schemes/levelisations.yaml#/components/requestBodies/LevelisationCreateRequest' }
+      responses:
+        '200':
+          $ref: 'schemes/levelisations.yaml#/components/responses/LevelisationResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/levelisations/{id}:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: '#/components/parameters/id' }
+
+    get:
+      summary: Quater levelisation
+      description: Levelisation calculation for all accounts
+      responses:
+        '200':
+          $ref: 'schemes/levelisations.yaml#/components/responses/LevelisationResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+    put:
+      summary: Save Levelisation
+      description: Update Levelisation
+      requestBody: { $ref: 'schemes/levelisations.yaml#/components/requestBodies/LevelisationSaveRequest' }
+      responses:
+        '200':
+          $ref: 'schemes/levelisations.yaml#/components/responses/LevelisationResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  # Account Levelisation
+  # =====================================================================
+
+  /v1/account-levelisations:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+    get:
+      parameters:
+        - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/ids' }
+        - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+      summary: Levelisations
+      description: List of Levelisation processes by quarters
+      responses:
+        '200':
+          $ref: 'schemes/levelisations.yaml#/components/responses/AccountLevelisationListResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+    put:
+      summary: Bulk Save Account Levelisations
+      description: Update Account Levelisations at once
+      requestBody: { $ref: 'schemes/levelisations.yaml#/components/requestBodies/AccountLevelisationBulkSaveRequest' }
+      responses:
+        '200':
+          $ref: 'schemes/components.yaml#/components/responses/ListOfIdsResonse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/account-levelisations/{id}:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: '#/components/parameters/id' }
+    get:
+      summary: Account levelisation tariff
+      description: Levelisation tariff for a single account
+      responses:
+        '200':
+          $ref: 'schemes/levelisations.yaml#/components/responses/AccountLevelisationResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+    put:
+      summary: Save Account Levelisation
+      description: Update Account Levelisation
+      requestBody: { $ref: 'schemes/levelisations.yaml#/components/requestBodies/AccountLevelisationSaveRequest' }
+      responses:
+        '200':
+          $ref: 'schemes/levelisations.yaml#/components/responses/AccountLevelisationResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+  # Other
+  # =====================================================================
+
+  /v1/payment-export:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+    get:
+      parameters:
+        - { $ref: '#/components/parameters/page' }
+      summary: Payment CSV Export
+      description: Cheque Payments
+      requestBody: { $ref: '#/components/requestBodies/PaymentExport' }
+      responses:
+        '200':
+          $ref: '#/components/responses/CsvResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/account:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/ids' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+    get:
+      parameters:
+        - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+      summary: Accounts
+      description: A list of fit and seg accounts
+      responses:
+        '200':
+          $ref: '#/components/responses/AccountListItemsResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/account/{id}/reads:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+      - { $ref: '#/components/parameters/id' }
+    get:
+      summary: Get reads for the account
+      description: Account reads
+      responses:
+        '200':
+          $ref: '#/components/responses/MeterReadsResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/account/{id}:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: '#/components/parameters/id' }
+    get:
+      summary: Get reads for the account
+      description: Account reads
+      responses:
+        '200':
+          description: Returns account details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Account' }
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/account/{id}/contracts:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: '#/components/parameters/id' }
+    get:
+      summary: Get reads for the account
+      description: Account reads
+      responses:
+        '200':
+          $ref: '#/components/responses/ContractsResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/contact/{id}:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: '#/components/parameters/id' }
+    get:
+      summary: Get contact by id
+      description: Contacts
+      responses:
+        '200':
+          $ref: '#/components/responses/ContactResponse'
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/payment:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+      - { $ref: '#/components/parameters/queryId' }
+    get:
+      summary: Get contact by id
+      description: Contacts
+      responses:
+        '200':
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payment'
+                  total: { type: number }
+                required:
+                  - data
+                  - total
+
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/installation:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+      - { $ref: '#/components/parameters/queryId' }
+    get:
+      summary: Get installations
+      description: Installations
+      responses:
+        '200':
+          description: List of installations
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Installation'
+                  total: { type: number }
+                required:
+                  - data
+                  - total
+
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/meter/{id}:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: '#/components/parameters/id' }
+    get:
+      summary: Get meter
+      description: Meter
+      responses:
+        '200':
+          description: Single meter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meter'
+
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/meter:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+    get:
+      summary: Get meters
+      description: Meters
+      responses:
+        '200':
+          description: List of meters
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Meter'
+                  total: { type: number }
+                required:
+                  - data
+                  - total
+
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+  /v1/read:
+    parameters:
+      - { $ref: 'schemes/components.yaml#/components/parameters/traceToken' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/filter' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/pagination' }
+      - { $ref: 'schemes/components.yaml#/components/parameters/sort' }
+      - { $ref: '#/components/parameters/queryId' }
+    get:
+      summary: Get meter reads
+      description: Meter reads
+      responses:
+        '200':
+          description: List of meter reads
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MeterRead'
+                  total: { type: number }
+                required:
+                  - data
+                  - total
+
+        '404':
+          $ref: '#/components/responses/ItemNotFoundResponse'
+        '500':
+          $ref: '#/components/responses/HttpErrorResponse'
+
+components:
+  securitySchemes:
+    JWTSecurity:
+      type: http
+      scheme: bearer
+    ProductIdentitySecurity:
+      type: http
+      scheme: bearer
+  schemas:
+    Session:
+      properties:
+        jwt:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        user:
+          properties:
+            fullName:
+              type: string
+            email:
+              type: string
+            avatar:
+              type: string
+            scopes:
+              items:
+                type: string
+          required:
+            - email
+      required:
+        - jwt
+        - user
+
+    HttpError:
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    CommBatchType:
+      type: string
+      enum: ['FITMeterInspectionDue', 'Statement']
+
+    AccountStateType:
+      type: string
+      enum: ['Active', 'Pending', 'Dispute', 'Closed']
+
+    SchemeType:
+      type: string
+      enum: ['FIT', 'SEG']
+
+    CommBatchList:
+      additionalProperties: false
+      properties:
+        id: { type: integer }
+        type: { $ref: '#/components/schemas/CommBatchType' }
+        filename: { type: string }
+        itemsPending: { type: number }
+        itemsDelivered: { type: number }
+        itemsScheduled: { type: number }
+        itemsFailed: { type: number }
+        itemsExpired: { type: number }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required:
+        - id
+        - type
+        - filename
+        - createdAt
+
+    CommBatchItemStatus:
+      type: string
+      enum: ['Scheduled', 'Pending', 'Delivered', 'Expired', 'Failed']
+
+    MeterType:
+      type: string
+      enum: ['Export', 'Generation']
+
+    CommBatch:
+      additionalProperties: false
+      properties:
+        id: { type: integer }
+        createdAt: { type: string, format: date-time }
+        itemsPending: { type: number }
+        itemsDelivered: { type: number }
+        itemsScheduled: { type: number }
+        itemsFailed: { type: number }
+        itemsExpired: { type: number }
+        type: { $ref: '#/components/schemas/CommBatchType' }
+        filename: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              id: { type: integer }
+              commId: { type: string }
+              commBatchId: { type: number }
+              status: { $ref: '#/components/schemas/CommBatchItemStatus' }
+              createdAt: { type: string, format: date-time }
+              updatedAt: { type: string, format: date-time }
+              error: { type: string }
+              templateParams: { type: object }
+              contactAddress: { type: object }
+            required:
+              - id
+              - status
+              - createdAt
+              - commBatchId
+              - templateParams
+              - contactAddress
+      required:
+        - id
+        - type
+        - createdAt
+        - filename
+        - items
+
+    CommContactAddress:
+      oneOf:
+        - { $ref: '#/components/schemas/CommsEmailAddress' }
+        - { $ref: '#/components/schemas/CommsPostalAddress' }
+        - { $ref: '#/components/schemas/CommsPhoneNumber' }
+
+    NewCommBatchFITMeterInspectionDue:
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+          enum: ['FITMeterInspectionDue']
+        filename: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              templateParams:
+                type: object
+                additionalProperties: false
+                properties:
+                  fitId: { type: string }
+                required:
+                  - fitId
+              contactAddress: { $ref: '#/components/schemas/CommContactAddress' }
+            required:
+              - templateParams
+      required:
+        - type
+        - filename
+        - items
+
+    NewCommBatchStatement:
+      type: object
+      additionalProperties: true
+      properties:
+        type:
+          type: string
+          enum: ['Statement']
+        filename: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              templateParams:
+                type: object
+                additionalProperties: false
+                properties:
+                  accountNumber: { type: string }
+                  payment:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      startDate: { type: string }
+                      startDateLong: { type: string }
+                      endDate: { type: string }
+                      endDateLong: { type: string }
+                      generation:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          endDate: { type: string }
+                          value: { type: string }
+                      deemedExport:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          endDate: { type: string }
+                          value: { type: string }
+                      export:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          endDate: { type: string }
+                          value: { type: string }
+                      vat: { type: string }
+                      total: { type: string }
+                    required:
+                      - startDate
+                      - endDate
+                      - total
+                  reads:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      generationOpening:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          date: { type: string }
+                          value: { type: string }
+                      generationClosing:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          date: { type: string }
+                          value: { type: string }
+                      exportOpening:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          date: { type: string }
+                          value: { type: string }
+                      exportClosing:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          date: { type: string }
+                          value: { type: string }
+                      percentageSplit: { type: string }
+                  rates:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      from: { type: string }
+                      export: { type: string }
+                      generationOld: { type: string }
+                      exportOld: { type: string }
+                      generation: { type: string }
+                      genPeriod: { type: string }
+                      expPeriod: { type: string }
+                  emailAddress: { type: string, pattern: '@' }
+                required:
+                  - accountNumber
+                  - payment
+              contactAddress: { $ref: '#/components/schemas/CommContactAddress' }
+            required:
+              - templateParams
+
+      required:
+        - type
+        - filename
+        - items
+
+    NewCommBatch:
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: '#/components/schemas/NewCommBatchFITMeterInspectionDue'
+        - $ref: '#/components/schemas/NewCommBatchStatement'
+
+    CommsEmailAddress:
+      additionalProperties: false
+      type: object
+      properties:
+        emailAddress: { type: string, pattern: '@' }
+      required:
+        - emailAddress
+
+    CommsPhoneNumber:
+      additionalProperties: false
+      type: object
+      properties:
+        phoneNumber: { type: string, pattern: '[0-9 ]+' }
+      required:
+        - phoneNumber
+
+    Address:
+      type: object
+      additionalProperties: false
+      properties:
+        contactName: { type: string }
+        company: { type: string }
+        line1: { type: string }
+        line2: { type: string }
+        line3: { type: string }
+        town: { type: string }
+        county: { type: string }
+        postcode: { type: string }
+        country: { type: string }
+      required:
+        - country
+        - postcode
+
+    InstallationMeter:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: number }
+        type: { $ref: '#/components/schemas/MeterType' }
+        meterId: { type: number }
+        installationId: { type: number }
+        startOn: { type: string, format: 'date-time' }
+        endOn: { type: string, format: 'date-time' }
+        mpan: { type: string }
+        shared: { type: boolean }
+        msn: { type: string }
+        make: { type: string }
+        model: { type: string }
+        gsp: { type: string }
+        distributionRegion: { type: string }
+        addedToInstallationAt: { type: string, format: 'date-time' }
+        updatedAt: { type: string, format: 'date-time' }
+      required:
+        - id
+        - meterId
+        - type
+        - msn
+        - shared
+        - addedToInstallationAt
+
+    CommsPostalAddress:
+      additionalProperties: false
+      properties:
+        postalAddress: { $ref: '#/components/schemas/Address' }
+      required:
+        - postalAddress
+
+    MeterReadType:
+      type: string
+      enum: ['Closing', 'Meter Verification', 'Opening', 'Quarterly']
+
+    PropertyType:
+      type: string
+      enum: ['Other', 'School/Education', 'Not for profit', 'Industrial', 'Farm', 'Commercial', 'Domestic']
+
+    InstallationType:
+      type: string
+      enum: ['None', 'Extension of an existing FiT-accredited installation', 'Standalone', 'New build', 'Retrofit']
+
+    TechnologyType:
+      type: string
+      enum: ['CHP', 'AD', 'W', 'H', 'PV']
+
+    ExportType:
+      type: string
+      enum: ['PPA', 'Off Grid', 'Metered Export', 'Deemed']
+
+    TariffType:
+      type: string
+      enum: ['Export', 'Generation', 'SEG']
+
+    PaymentType:
+      type: string
+      enum: ['Levelisation']
+
+    PaymentPeriods:
+      type: object
+      properties:
+        deemed:
+          type: array
+          items: { $ref: '#/components/schemas/Period' }
+        export:
+          type: array
+          items: { $ref: '#/components/schemas/Period' }
+        generation:
+          type: array
+          items: { $ref: '#/components/schemas/Period' }
+
+    MeterRead:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: number }
+        meterId: { type: number }
+        dateOn: { type: string, format: 'date-time' }
+        value: { type: number }
+        type: { $ref: '#/components/schemas/MeterReadType' }
+        reason: { type: string }
+        createdAt: { type: string, format: 'date-time' }
+        updatedAt: { type: string, format: 'date-time' }
+        sourceSystemId: { type: number }
+      required:
+        - id
+        - meterId
+        - dateOn
+        - value
+        - type
+        - createdAt
+
+    SimpleMeterRead:
+      type: object
+      additionalProperties: false
+      properties:
+        dateOn: { type: string, format: 'date-time' }
+        value: { type: number }
+      required:
+        - dateOn
+        - value
+
+    Rate:
+      type: object
+      additionalProperties: false
+      properties:
+        startOn: { type: string, format: 'date-time' }
+        endOn: { type: string, format: 'date-time' }
+        rate: { type: number }
+      required:
+        - startOn
+        - endOn
+        - rate
+
+    TariffRate:
+      type: object
+      additionalProperties: false
+      properties:
+        startOn: { type: string, format: 'date-time' }
+        endOn: { type: string, format: 'date-time' }
+        rate: { type: number }
+        tariffId: { type: number }
+        tariffCode: { type: string }
+        tariffType: { $ref: '#/components/schemas/TariffType' }
+      required:
+        - tariffId
+        - tariffCode
+        - tariffType
+        - startOn
+        - rate
+
+    Account:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: number }
+        state: { $ref: '#/components/schemas/AccountStateType' }
+        companyRegNumber: { type: string }
+        companyVatNumber: { type: string }
+        companyName: { type: string }
+        primaryContactId: { type: number }
+        secondaryContactId: { type: number }
+        primaryContact: { $ref: '#/components/schemas/Contact' }
+        secondaryContact: { $ref: '#/components/schemas/Contact' }
+        paymentSuspended: { type: boolean }
+        beneficiaryName: { type: string }
+        beneficiarySortCode: { type: string }
+        beneficiaryAccountNumber: { type: string }
+        paymentPlan:
+          type: string
+          enum: ['Cheque', 'BACS']
+        startOn: { type: string, format: 'date-time' }
+        endOn: { type: string, format: 'date-time' }
+        tosReceived: { type: boolean }
+        contracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountContract'
+      required:
+        - id
+        - state
+        - paymentSuspended
+        - tosReceived
+
+    AccountContract:
+      type: object
+      additionalProperties: false
+      properties:
+        contractId: { type: number }
+        schemeAccountReference: { type: string }
+        schemeType: { $ref: '#/components/schemas/SchemeType' }
+        createdAt: { type: string, format: 'date-time' }
+        confirmationOn: { type: string, format: 'date-time' }
+        exportSplit: { type: number }
+        generationSplit: { type: number }
+        tosAgreed: { type: boolean }
+        installationId: { type: number }
+        contactId: { type: number }
+        generationTariffId: { type: number }
+        exportTariffId: { type: number }
+        genTariffCode: { type: string }
+        expTariffCode: { type: string }
+        title: { type: string }
+        fullName: { type: string }
+      required:
+        - contractId
+        - schemeAccountReference
+        - installationId
+        - schemeType
+
+    Period:
+      type: object
+      additionalProperties: false
+      properties:
+        start: { $ref: '#/components/schemas/SimpleMeterRead' }
+        end: { $ref: '#/components/schemas/SimpleMeterRead' }
+        rate: { type: number }
+        energy: { type: number }
+        amount: { type: string }
+        percentageSplit: { type: number }
+      required:
+        - start
+        - end
+        - rate
+        - amount
+
+    Contact:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: number }
+        title: { type: string }
+        fullName: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        addressLine1: { type: string }
+        addressLine2: { type: string }
+        addressLine3: { type: string }
+        city: { type: string }
+        country: { type: string }
+        county: { type: string }
+        postCode: { type: string }
+      required:
+        - id
+
+    Meter:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: number }
+        mpan: { type: string }
+        shared: { type: boolean }
+        msn: { type: string }
+        make: { type: string }
+        model: { type: string }
+        isExport: { type: boolean }
+        gsp: { type: string }
+        distributionRegion: { type: string }
+        createdAt: { type: string }
+        updatedAt: { type: string }
+      required:
+        - id
+        - msn
+        - isExport
+        - createdAt
+
+    Installation:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: number }
+        accountId: { type: number }
+        name: { type: string }
+        type: { $ref: '#/components/schemas/InstallationType' }
+        schemeReference: { type: string }
+        confirmationOn: { type: string, format: 'date-time' }
+        generationPercentageSplit: { type: number }
+        exportPercentageSplit: { type: number }
+        termsAndConditionsAgreed: { type: boolean }
+        scheme: { $ref: '#/components/schemas/SchemeType' }
+        technologyType: { $ref: '#/components/schemas/TechnologyType' }
+        propertyType: { $ref: '#/components/schemas/PropertyType' }
+        exportType: { $ref: '#/components/schemas/ExportType' }
+        commissionedOn: { type: string, format: 'date-time' }
+        decommissionedOn: { type: string, format: 'date-time' }
+        installedOn: { type: string, format: 'date-time' }
+        verifiedOn: { type: string, format: 'date-time' }
+        reverifiedOn: { type: string, format: 'date-time' }
+        inspectedOn: { type: string, format: 'date-time' }
+        mcsReference: { type: string }
+        maxCapacity: { type: number }
+        dncReference: { type: number }
+        exportTariffId: { type: number }
+        generationTariffId: { type: number }
+        roofitReference: { type: string }
+        hasBatteryStorage: { type: string }
+        batteryInstallationDateOn: { type: string }
+        tariffRates:
+          type: array
+          items:
+            $ref: '#/components/schemas/TariffRate'
+        exportMpan: { type: string }
+        sourceSystemId: { type: number }
+        nameOfGrant: { type: string }
+        valueOfGrant: { type: number }
+        eligibilityStartOn: { type: string, format: 'date-time' }
+        eligibilityEndOn: { type: string, format: 'date-time' }
+        dateGrantRepaid: { type: string, format: 'date-time' }
+        epcRate: { type: string }
+        epcDate: { type: string, format: 'date-time' }
+        epcNumber: { type: number }
+        legacyFitDbId: { type: string }
+        supplyMpan: { type: string }
+        switchedFrom: { type: string }
+        switchedTo: { type: string }
+        address: { $ref: '#/components/schemas/Address' }
+        meters:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstallationMeter'
+        createdAt: { type: string, format: 'date-time' }
+        updatedAt: { type: string, format: 'date-time' }
+        addressId: { type: number }
+        contracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountContract'
+      required:
+        - id
+        - type
+        - installedOn
+        - propertyType
+        - createdAt
+
+    Payment:
+      type: object
+      additionalProperties: false
+      properties:
+        id: { type: number }
+        accountId: { type: number }
+        sentAt: { type: string, format: 'date-time' }
+        amount: { type: number }
+        type: { $ref: '#/components/schemas/PaymentType' }
+        genMeterId: { type: number }
+        genMeterStartReadDate: { type: string, format: 'date-time' }
+        genMeterStartReadId: { type: number }
+        genMeterStartReadValue: { type: number }
+        genMeterEndReadDate: { type: string, format: 'date-time' }
+        genMeterEndReadId: { type: number }
+        genMeterEndReadValue: { type: number }
+        genMeterTotalOutput: { type: number }
+        exportMeterId: { type: number }
+        exportMeterStartReadDate: { type: string, format: 'date-time' }
+        exportMeterStartReadId: { type: number }
+        exportMeterStartReadValue: { type: number }
+        exportMeterEndReadDate: { type: string, format: 'date-time' }
+        exportMeterEndReadId: { type: number }
+        exportMeterEndReadValue: { type: number }
+        exportTotalOutput: { type: number }
+        deemedTotalOutput: { type: number }
+        expTariffCode: { type: string }
+        genTariffCode: { type: string }
+        periods: { $ref: '#/components/schemas/PaymentPeriods' }
+        isCompany: { type: boolean }
+        createdAt: { type: string, format: 'date-time' }
+        fitReference: { type: string }
+        comment: { type: string }
+        levelisationReference: { type: string }
+      required:
+        - id
+        - accountId
+        - amount
+        - type
+        - genMeterId
+        - fitReference
+
+    AccountListItem:
+      properties:
+        id: { type: integer }
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string }
+        state: { $ref: '#/components/schemas/AccountStateType' }
+        address: { type: string }
+        fitIds: { $ref: 'schemes/components.yaml#/components/schemas/ListOfStrings' }
+      required:
+        - id
+        - firstName
+        - lastName
+
+  responses:
+    HttpErrorResponse:
+      description: Unknown Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    ItemNotFoundResponse:
+      description: No item with that id has been found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    InvalidReportDatesResponse:
+      description: Error with the start and end dates for the report
+      content:
+        text/plain:
+          schema:
+            type: string
+    SuccessResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              success:
+                type: boolean
+            required:
+              - success
+    ErrorResponse:
+      description: Error
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              message:
+                type: string
+            required:
+              - error
+    HtmlResponse:
+      description: Html File
+      content:
+        text/html:
+          schema:
+            type: string
+    CsvResponse:
+      description: Csv File
+      content:
+        text/csv:
+          schema:
+            type: string
+    PdfResponse:
+      description: Statement PDF
+      content:
+        application/pdf:
+          schema:
+            type: string
+            format: binary
+    SessionResponse:
+      description: JWT Session
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Session'
+    MeterReadsResponse:
+      description: Return account
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/MeterRead'
+    AccountListItemsResponse:
+      description: A list of accounts with some data for each account
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: 'schemes/components.yaml#/components/schemas/List'
+              - properties: { data: { items: { $ref: '#/components/schemas/AccountListItem' } } }
+                required:
+                  - data
+
+    ContractsResponse:
+      description: Return accounts active contracts
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Contract'
+
+    ContactResponse:
+      description: Return contract
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Contact'
+
+    InstallationsResponse:
+      description: Return account owned installations array
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Installation'
+
+  parameters:
+    start:
+      name: start
+      in: query
+      description: Start Date of an interval
+      schema:
+        type: string
+        format: 'date-time'
+
+    end:
+      name: end
+      in: query
+      description: End Date of an interval
+      schema:
+        type: string
+        format: 'date-time'
+
+    target:
+      name: target
+      in: query
+      description: Related resource type
+      schema:
+        type: string
+      required: true
+
+    id:
+      name: id
+      in: path
+      description: Single resource identifier
+      schema: { type: integer }
+      required: true
+
+    queryId:
+      name: id
+      in: query
+      description: Single resource identifier
+      schema: { type: integer }
+      required: true
+
+    page:
+      name: page
+      in: query
+      description: Just single page parameter
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+
+  requestBodies:
+    CommBatchRequest:
+      required: true
+      description: All data needed for new Comm Job creation
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/NewCommBatch' }
+
+    SessionRequest:
+      required: true
+      description: Token to verify and create jwt session. Accepts google sign in id_token, or a valid jwt token.
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              type:
+                enum: ['oauth', 'jwt']
+              token:
+                type: string
+            required:
+              - token
+              - type
+
+    PaymentExport:
+      required: true
+      description: Payment Export parameters
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              paymentType:
+                type: string
+                enum: ['Cheque', 'BACS']
+              quarter:
+                type: string
+                pattern: '^F[0-9]{2}Q[1-4]$'
+            required:
+              - paymentType
+              - quarter

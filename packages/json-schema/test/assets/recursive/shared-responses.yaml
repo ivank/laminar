@@ -1,0 +1,8 @@
+components:
+  responses:
+    HttpErrorResponse:
+      description: Unknown Error
+      content:
+        application/json:
+          schema:
+            $ref: './shared-schemas.yaml#/components/schemas/HttpError'
