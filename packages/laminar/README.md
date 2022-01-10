@@ -88,17 +88,42 @@ const main = async () => {
 main();
 ```
 
-### Additional options
+### Configuration options
 
-`api` can be a filename, that would be loaded and parsed (json or yaml). Or it can be the an object representing OpenAPI schema directly. Typescript types would be used to validate that object, as well as using the official json schema to validate it at runtime as well.
+> [src/http/open-api/types.ts:(OapiConfig)](https://github.com/ovotech/laminar/tree/main/packages/laminar/src/http/open-api/types.ts#L94-L125)
 
-`paths` an object closely following the oapi `paths` config, with the "method" function being the actual resolver.
-
-All the validations in open api would be run before executing it.
-
-Validations on the response object shape would also be run, and would result in a 500 error if it doesn't match. This would mean that any clients of this api can be 100% certain they would receive objects in the specified shape.
-
-`security` An object implementing the security requirements, specified in the open api config. More on this later.
+```typescript
+/**
+ * @category http
+ */
+export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> {
+  /**
+   * Can be a filename, that would be loaded and parsed (json or yaml). Or it can be the an object representing OpenAPI schema directly. Typescript types would be used to validate that object, as well as using the official json schema to validate it at runtime as well.
+   */
+  api: OpenAPIObject | string;
+  /**
+   * Aan object closely following the oapi `paths` config, with the "method" function being the actual resolver.
+   * All the validations in open api would be run before executing it.
+   * Validations on the response object shape would also be run, and would result in a 500 error if it doesn't match.
+   * This would mean that any clients of this api can be 100% certain they would receive objects in the specified shape.
+   */
+  paths: OapiPaths<TContext>;
+  /**
+   * An object implementing the security requirements, specified in the open api config. More on this later.
+   */
+  security?: OapiSecurity<TContext, TOapiAuthInfo>;
+  /**
+   * Define how to render HttpError responses.
+   * This is a normal http listener that takes the the contexts as well as an "error" property holding the current error
+   */
+  error?: HttpListener<TContext & { error: HttpError }>;
+  /**
+   * Format json-schema errors.
+   * Refering to the `formatError` property in https://github.com/ovotech/laminar/tree/main/packages/json-schema#custom-error-messages
+   */
+  formatErrors?: FormatErrors;
+}
+```
 
 ### Security
 

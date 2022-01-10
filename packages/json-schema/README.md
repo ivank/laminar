@@ -125,6 +125,62 @@ compile({ schema }).then((compiledSchema) => {
 });
 ```
 
+#### Custom error messages
+
+You can customize error messages with `formatErrors` option. It gets the full validaiton with its errors, and should return an array of string error messages.
+
+> [examples/format-errors.ts:(format-errors)](https://github.com/ovotech/laminar/tree/main/packages/json-schema/examples/format-errors.ts#L10-L15)
+
+```typescript
+const formatErrors: FormatErrors = (validation) =>
+  validation.errors.map((error) => ` - ${error.code} : ${error.name} \n`);
+
+validate({ schema, value, formatErrors }).then((result) => console.log(result.valid, result.errors));
+```
+
+The possible error codes are:
+
+> [src/validation.ts:(error-codes)](https://github.com/ovotech/laminar/tree/main/packages/json-schema/src/validation.ts#L4-L32)
+
+```typescript
+export type InvalidCode =
+  | 'not'
+  | 'enum'
+  | 'type'
+  | 'multipleOf'
+  | 'minimum'
+  | 'exclusiveMinimum'
+  | 'maximum'
+  | 'exclusiveMaximum'
+  | 'pattern'
+  | 'format'
+  | 'false'
+  | 'maxLength'
+  | 'minLength'
+  | 'contains'
+  | 'additionalProperties'
+  | 'unevaluatedProperties'
+  | 'unevaluatedItems'
+  | 'required'
+  | 'minProperties'
+  | 'maxProperties'
+  | 'dependencies'
+  | 'uniqueItems'
+  | 'minItems'
+  | 'maxItems'
+  | 'oneOf'
+  | 'anyOf';
+```
+
+Alternatively, you can set `formatErrors` to false and receive the raw error message objects.
+
+> [examples/raw-errors.ts:(format-errors)](https://github.com/ovotech/laminar/tree/main/packages/json-schema/examples/raw-errors.ts#L10-L12)
+
+```typescript
+validate({ schema, value, formatErrors: false }).then((result) => console.log(result.valid, result.errors));
+```
+
+```
 ### API
 
 **validate** validate given data with a schema. The schema can be a path to a yaml / json file, or a url to one, as well as plain old js object with the said schema.
@@ -149,6 +205,10 @@ Additionally, we assign default values where appropriate.
 ### Develop
 
 ```
+
 yarn
 yarn test
+
+```
+
 ```

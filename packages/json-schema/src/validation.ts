@@ -1,6 +1,7 @@
 import { Schema, JsonSchema } from './schema';
 import { RefMap } from './resolve';
 
+// << error-codes
 export type InvalidCode =
   | 'not'
   | 'enum'
@@ -28,6 +29,7 @@ export type InvalidCode =
   | 'maxItems'
   | 'oneOf'
   | 'anyOf';
+// error-codes
 
 export interface Invalid<TParam = unknown> {
   code: InvalidCode;
