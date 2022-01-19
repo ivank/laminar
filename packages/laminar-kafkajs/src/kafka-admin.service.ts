@@ -18,13 +18,12 @@ export interface CreateTopics {
  * You can also declaratively set some topics to be created on start, and deleted on stop, used in testing
  */
 export class KafkaAdminService implements Service {
-  public client: Admin;
+  public client?: Admin;
 
-  constructor(public kafka: Kafka, public config?: AdminConfig & CreateTopics) {
-    this.client = kafka.admin(config);
-  }
+  constructor(public kafka: Kafka, public config?: AdminConfig & CreateTopics) {}
 
   public async start(): Promise<this> {
+    this.client = this.kafka.admin(this.config);
     await this.client.connect();
     if (this.config?.topics) {
       this.client.createTopics({ topics: this.config?.topics });
@@ -34,9 +33,9 @@ export class KafkaAdminService implements Service {
 
   public async stop(): Promise<this> {
     if (this.config?.topics) {
-      await this.client.deleteTopics({ topics: this.config?.topics.map((item) => item.topic) });
+      await this.client?.deleteTopics({ topics: this.config?.topics.map((item) => item.topic) });
     }
-    await this.client.disconnect();
+    await this.client?.disconnect();
     return this;
   }
 

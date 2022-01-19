@@ -12,17 +12,16 @@ import { SchemaRegistryConsumerRunConfig, DecodedKafkaMessage, DecodedEachBatchP
  * @typeParam TValue The decodeed type of the the kafka message value
  */
 export class KafkaConsumerService<TValue, TKey = Buffer> implements Service {
-  public consumer: Consumer;
+  public consumer?: Consumer;
 
   constructor(
     public kafka: Kafka,
     public schemaRegistry: SchemaRegistry,
     public config: SchemaRegistryConsumerRunConfig<TValue, TKey> & ConsumerConfig & ConsumerSubscribeTopic,
-  ) {
-    this.consumer = kafka.consumer(config);
-  }
+  ) {}
 
   public async start(): Promise<this> {
+    this.consumer = this.kafka.consumer(this.config);
     await this.consumer.connect();
     await this.consumer.subscribe(this.config);
 
@@ -65,7 +64,7 @@ export class KafkaConsumerService<TValue, TKey = Buffer> implements Service {
   }
 
   public async stop(): Promise<this> {
-    await this.consumer.disconnect();
+    await this.consumer?.disconnect();
     return this;
   }
 

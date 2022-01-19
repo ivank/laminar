@@ -137,13 +137,13 @@ describe('Integration', () => {
       decodeKey: true,
       eachBatch: chunkBatchMiddleware({ size: 2 })(
         async ({ batch: { messages, partition, firstOffset, lastOffset } }) => {
-          const commitedOffset = await admin.client.fetchOffsets({ groupId: groupId3, topic: topic3 });
+          const commitedOffset = await admin.client?.fetchOffsets({ groupId: groupId3, topic: topic3 });
 
           batchSizer({
             partition,
             firstOffset: firstOffset(),
             lastOffset: lastOffset(),
-            commitedOffset: commitedOffset.map(({ offset, partition }) => ({
+            commitedOffset: commitedOffset?.map(({ offset, partition }) => ({
               offset: +offset,
               partition,
             })),

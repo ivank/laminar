@@ -79,16 +79,14 @@ export function registerSchemas(register: { [subject: string]: ConfluentSchema |
  * It can also pre-load schema registries so they can be used for encoding messages.
  */
 export class KafkaProducerService implements Service {
-  public producer: Producer;
+  public producer?: Producer;
   public register: Map<string, number> = new Map();
 
   constructor(
     public kafka: Kafka,
     public schemaRegistry: SchemaRegistry,
     public config: ProducerConfig & RegisterSchemasConfig = {},
-  ) {
-    this.producer = kafka.producer(config);
-  }
+  ) {}
 
   /**
    * Produce messages to a given topic. Topic must be pre-registered when constructing the {@link KafkaProducerService} instance
@@ -96,6 +94,9 @@ export class KafkaProducerService implements Service {
   public async send<TValue, TKey = Buffer | string | null>(
     record: EncodedProducerRecord<TValue, TKey>,
   ): Promise<RecordMetadata[]> {
+    if (!this.producer) {
+      throw new Error(`Cannot produce message, producer not started.`);
+    }
     const valueSubject = `${record.topic}-value`;
     const schemaId = this.register.get(valueSubject);
     if (!schemaId) {
@@ -118,6 +119,10 @@ export class KafkaProducerService implements Service {
   public async sendWithSchema<TValue, TKey = Buffer | string | null>(
     record: EncodedSchemaProducerRecord<TValue, TKey>,
   ): Promise<RecordMetadata[]> {
+    if (!this.producer) {
+      throw new Error(`Cannot produce message, producer not started.`);
+    }
+
     const { id: schemaId } = await this.schemaRegistry.register(record.schema, { subject: `${record.topic}-value` });
     const { id: keySchemaId } = record.keySchema
       ? await this.schemaRegistry.register(record.keySchema, { subject: `${record.topic}-key` })
@@ -131,10 +136,15 @@ export class KafkaProducerService implements Service {
    * Send raw Buffer, without encoding with the schema registry
    */
   public async sendBuffer(record: ProducerRecord): Promise<RecordMetadata[]> {
+    if (!this.producer) {
+      throw new Error(`Cannot produce message, producer not started.`);
+    }
+
     return await this.producer.send(record);
   }
 
   public async start(): Promise<this> {
+    this.producer = this.kafka.producer(this.config);
     await this.producer.connect();
     if (this.config.register) {
       this.register = await this.config.register(this.schemaRegistry);
@@ -143,7 +153,7 @@ export class KafkaProducerService implements Service {
   }
 
   public async stop(): Promise<this> {
-    await this.producer.disconnect();
+    await this.producer?.disconnect();
     return this;
   }
 
