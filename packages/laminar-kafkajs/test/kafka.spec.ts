@@ -101,7 +101,7 @@ const logCreator = kafkaLogCreator(logger);
 const batchSizer = jest.fn();
 
 describe('Integration', () => {
-  jest.setTimeout(30000);
+  jest.setTimeout(60000);
   it('Should process response', async () => {
     const kafka = new Kafka({ brokers: ['localhost:29092'], logCreator });
     const schemaRegistry = new SchemaRegistry({ host: 'http://localhost:8081' });
@@ -230,7 +230,7 @@ describe('Integration', () => {
             commitedOffset: expect.arrayContaining([{ partition: 0, offset: 4 }]),
           });
         },
-        { delay: 1000, retries: 30 },
+        { delay: 1000, retries: 60 },
       );
     } finally {
       await stop({ initOrder, logger });

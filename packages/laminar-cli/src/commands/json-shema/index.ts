@@ -2,7 +2,7 @@ import { compile } from '@ovotech/json-schema';
 import { Command, createCommand } from 'commander';
 import fs from 'fs';
 import { printDocument, Type, document } from '@ovotech/ts-compose';
-import { green, yellow } from 'chalk';
+import chalk from 'chalk';
 import { dirname } from 'path';
 import { Logger } from '../../types';
 import { concatStreamToString, parseSchema } from '../../helpers';
@@ -28,7 +28,7 @@ export const jsonSchemaCommand = (logger: Logger = console): Command =>
 
       if (output) {
         fs.mkdirSync(dirname(output), { recursive: true });
-        logger.info(`OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} axios types`);
+        logger.info(`OpanAPI Schema ${chalk.green(file ? file : 'STDIN')} -> ${chalk.yellow(output)} axios types`);
         fs.writeFileSync(output, result);
       } else {
         process.stdout.write(result);

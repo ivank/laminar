@@ -1,4 +1,4 @@
-import { green, red, yellow } from 'chalk';
+import chalk from 'chalk';
 import { Command, createCommand } from 'commander';
 import fs from 'fs';
 import { Enum, Table, toTypeScript } from './convert';
@@ -94,13 +94,15 @@ export const fixturesCommand = (logger: Logger = console): Command =>
 
         if (output) {
           fs.mkdirSync(dirname(output), { recursive: true });
-          logger.info(`Fixture type data from ${green(connectionString)} -> ${yellow(output)} laminar fixture types`);
+          logger.info(
+            `Fixture type data from ${chalk.green(connectionString)} -> ${chalk.yellow(output)} laminar fixture types`,
+          );
           fs.writeFileSync(output, result);
         } else {
           process.stdout.write(result);
         }
       } catch (error) {
-        logger.error(red(error instanceof Error ? error.message : String(error)));
+        logger.error(chalk.red(error instanceof Error ? error.message : String(error)));
       } finally {
         await client.end();
       }

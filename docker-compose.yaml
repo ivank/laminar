@@ -22,31 +22,52 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
     ports:
-      - 2181:2181
+      - '2181:2181'
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  broker:
+  kafka:
     image: confluentinc/cp-kafka:6.2.0
     depends_on:
       - zookeeper
     ports:
-      - 9092:9092
-      - 29092:29092
+      - '29092:29092' # External
+      - '9092:9092' # Internal
     environment:
+      # Listeners:
+      # PLAINTEXT_HOST -> Expose kafka to the host network
+      # PLAINTEXT -> Used by kafka for inter broker communication / containers
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://karapace-registry:8081
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_BROKER_RACK: 'local'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,PLAINTEXT_HOST://localhost:29092
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:6.2.0
+  karapace-registry:
+    image: ghcr.io/aiven/karapace:develop
+    entrypoint:
+      - /bin/bash
+      - /opt/karapace/start.sh
+      - registry
     depends_on:
-      - zookeeper
-      - broker
+      - kafka
     ports:
-      - 8081:8081
+      - '8081:8081'
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+      KARAPACE_ADVERTISED_HOSTNAME: karapace-registry
+      KARAPACE_BOOTSTRAP_URI: kafka:9092
+      KARAPACE_PORT: 8081
+      KARAPACE_HOST: 0.0.0.0
+      KARAPACE_CLIENT_ID: karapace
+      KARAPACE_GROUP_ID: karapace-registry
+      KARAPACE_MASTER_ELIGIBITY: 'true'
+      KARAPACE_TOPIC_NAME: _schemas
+      KARAPACE_LOG_LEVEL: WARNING
+      KARAPACE_COMPATIBILITY: FULL

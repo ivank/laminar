@@ -14,7 +14,8 @@ import {
   securityError,
   securityRedirect,
 } from '../../../src';
-import axiosCookieJarSupport from 'axios-cookiejar-support';
+import { wrapper } from 'axios-cookiejar-support';
+import { CookieJar } from 'tough-cookie';
 
 const globalSecret = 'oauth2-global';
 const tokenSecret = 'oauth2-token';
@@ -47,7 +48,9 @@ describe('Oauth', () => {
           const authUrl = new URL('http://localhost:8068/oauth/authorize');
           const redirectUrl = 'http://localhost:8067/oauth.access';
           const original = url.toString();
-          authUrl.search = new URLSearchParams({ redirectUrl, scopes, original }).toString();
+          authUrl.search = new URLSearchParams(
+            scopes ? { redirectUrl, scopes, original } : { redirectUrl, original },
+          ).toString();
           return securityRedirect(authUrl.toString(), { body: { message: `Redirecting to auth` } });
         },
       },
@@ -75,9 +78,10 @@ describe('Oauth', () => {
     try {
       await http.start();
       await authorizationHttp.start();
+      const jar = new CookieJar();
 
-      const api = axiosCookieJarSupport(axios.create({ baseURL: 'http://localhost:8067' }));
-      const { data } = await api.get('/user', { withCredentials: true, jar: true });
+      const api = wrapper(axios.create({ baseURL: 'http://localhost:8067', jar }));
+      const { data } = await api.get('/user', { withCredentials: true });
 
       expect(data).toEqual({
         email: 'me@example.com',

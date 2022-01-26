@@ -20,7 +20,7 @@ export const hydrationMeterReadsRoute: PathV1HydrationMeterreadsPost<QueueContex
 }) => {
   const items = Array(CsvRow).validate(parse(body, { columns: true }));
   if (items.success) {
-    await queue.publish({
+    await queue.send({
       name: 'import',
       data: { csv: items.value.map(toMeterRead), traceToken: headers['x-trace-token'] },
     });

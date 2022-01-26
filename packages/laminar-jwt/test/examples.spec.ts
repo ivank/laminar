@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import axiosCookieJarSupport from 'axios-cookiejar-support';
+import { wrapper } from 'axios-cookiejar-support';
 import { execSync, spawn } from 'child_process';
 import { URLSearchParams } from 'url';
 import { join } from 'path';
@@ -174,14 +174,14 @@ describe('Example files', () => {
       await new Promise((resolve) => {
         service.stdout.on('data', (data) => (String(data).includes('Started') ? resolve(undefined) : undefined));
       });
-      const api = axiosCookieJarSupport(axios.create({ baseURL: `http://localhost:${port}` }));
-      const jwtResponse = await api.request({ ...jwtRequest, jar });
+      const api = wrapper(axios.create({ baseURL: `http://localhost:${port}`, jar }));
+      const jwtResponse = await api.request({ ...jwtRequest });
 
       if (typeof jwtResponse.data !== 'string') {
         expect(jwtResponse.data).toMatchObject({ jwt: expect.any(String) });
       }
       const headers = { Authorization: `Bearer ${jwtResponse.data.jwt}` };
-      const { data } = await api.request({ ...testRequest, headers, withCredentials: true, jar });
+      const { data } = await api.request({ ...testRequest, headers, withCredentials: true });
       expect(data).toEqual(expected);
     } finally {
       /**

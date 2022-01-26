@@ -1,19 +1,19 @@
 import { Service } from '@ovotech/laminar';
-import { Queue, Subscribe } from './types';
+import { Queue, Worker } from './types';
 
 /**
  * Start a queue worker {@link Service}, by subscribing to the queue on start.
  */
-export class QueueWorkerService<ReqData> implements Service {
-  constructor(public queue: Queue, public subscribe: Subscribe<ReqData>) {}
+export class QueueWorkerService<TData extends object> implements Service {
+  constructor(public queue: Queue, public subscribe: Worker<TData>) {}
 
   async start(): Promise<this> {
-    await this.queue.subscribe(this.subscribe);
+    await this.queue.work(this.subscribe);
     return this;
   }
 
   async stop(): Promise<this> {
-    await this.queue.unsubscribe(this.subscribe.name);
+    await this.queue.offWork(this.subscribe.name);
     return this;
   }
 

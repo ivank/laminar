@@ -202,6 +202,7 @@ export const Node = {
           ? ts.factory.createNamedImports(
               named.map((item) =>
                 ts.factory.createImportSpecifier(
+                  false,
                   item.as ? Node.Identifier(item.name) : undefined,
                   item.as ? Node.Identifier(item.as) : Node.Identifier(item.name),
                 ),

@@ -1,14 +1,14 @@
 import { AbstractMiddleware, Empty } from '@ovotech/laminar';
-import type { PublishOptions, SubscribeOptions } from 'pg-boss';
+import type { WorkOptions, SendOptions } from 'pg-boss';
 
 /**
- * Publish a job to a queue.
- * You can read in [PgBoss for docs about publish options](https://github.com/timgit/pg-boss/blob/master/docs/configuration.md#publish-options)
+ * Send a job to a queue.
+ * You can read in [PgBoss for docs about publish options](https://github.com/timgit/pg-boss/blob/master/docs/configuration.md#send-options)
  */
-export interface Publish<TData extends Empty = Empty> {
+export interface Send<TData extends Empty = Empty> {
   name: string;
   data?: TData;
-  options?: PublishOptions;
+  options?: SendOptions;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -37,19 +37,19 @@ export type JobWorker<TData extends Empty, TContext extends Empty = Empty> = (
 ) => Promise<void>;
 
 /**
- * Subscribe to a queue using a job worker
+ * Job queue worker
  */
-export interface Subscribe<TData extends Empty = Empty, TContext extends Empty = Empty> {
+export interface Worker<TData extends Empty = Empty, TContext extends Empty = Empty> {
   name: string;
   worker: JobWorker<TData, TContext>;
-  options?: SubscribeOptions;
+  options?: WorkOptions;
 }
 
 /**
  * An abstract interfacee for a queue, backed by [PgBoss](https://github.com/timgit/pg-boss)
  */
 export interface Queue {
-  publish<TData>(request: Publish<TData>): Promise<string | null>;
-  subscribe<TData>(request: Subscribe<TData>): Promise<string>;
-  unsubscribe(name: string): Promise<void>;
+  send<TData extends object>(request: Send<TData>): Promise<string | null>;
+  work<TData extends object>(request: Worker<TData>): Promise<string>;
+  offWork(name: string): Promise<void>;
 }

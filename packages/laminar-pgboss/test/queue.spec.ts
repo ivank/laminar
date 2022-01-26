@@ -27,7 +27,7 @@ describe('Integration', () => {
     );
     const withQueue = queueMiddleware(queue);
 
-    const worker = new QueueWorkerService<string>(queue, {
+    const worker = new QueueWorkerService<object>(queue, {
       name: 'test',
       worker: logging(async ({ data, logger }) => {
         const result = await workerResponse();
@@ -42,7 +42,7 @@ describe('Integration', () => {
         logging(async ({ logger, queue, query: { data } }) => {
           logger.info('test');
           for (const item of data) {
-            queue.publish({ name: 'test', data: item });
+            queue.send({ name: 'test', data: item });
           }
           return textOk('OK');
         }),
@@ -101,7 +101,7 @@ describe('Integration', () => {
         logging(async ({ logger, queue, query: { name, data } }) => {
           logger.info('test');
           for (const item of data) {
-            queue.publish({ name, data: item });
+            queue.send({ name, data: item });
           }
           return textOk('OK');
         }),

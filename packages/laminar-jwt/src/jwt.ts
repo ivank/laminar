@@ -58,7 +58,7 @@ export const verifyToken = async <TUser extends User>(
   scopes?: string[],
 ): Promise<Security<TUser>> => {
   try {
-    const data = await new Promise<jsonwebtoken.JwtPayload>((resolve, reject) =>
+    const data = await new Promise<jsonwebtoken.JwtPayload | string>((resolve, reject) =>
       jsonwebtoken.verify(token, secret, options, (err, data) =>
         err ? reject(err) : data ? resolve(data) : reject(new Error('Invalid jwt data')),
       ),

@@ -2,7 +2,7 @@ import { Command, createCommand, Option } from 'commander';
 import fs from 'fs';
 import { printDocument } from '@ovotech/ts-compose';
 import { convertOapi } from './convert';
-import { green, yellow } from 'chalk';
+import chalk from 'chalk';
 import { dirname } from 'path';
 import { Logger } from '../../types';
 import { toContext, concatStreamToString, parseSchema } from '../../helpers';
@@ -24,7 +24,7 @@ export const axiosCommand = (logger: Logger = console): Command =>
 
       if (output) {
         fs.mkdirSync(dirname(output), { recursive: true });
-        logger.info(`OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} axios types`);
+        logger.info(`OpanAPI Schema ${chalk.green(file ? file : 'STDIN')} -> ${chalk.yellow(output)} axios types`);
         fs.writeFileSync(output, result);
       } else {
         process.stdout.write(result);

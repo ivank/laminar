@@ -1,4 +1,4 @@
-import { green, red, yellow } from 'chalk';
+import chalk from 'chalk';
 import { Command, createCommand, Option } from 'commander';
 import { mkdirSync, watchFile, writeFileSync } from 'fs';
 import { convertOapi } from './convert';
@@ -29,7 +29,7 @@ export const apiCommand = (logger: Logger = console): Command =>
 
         if (output) {
           mkdirSync(dirname(output), { recursive: true });
-          logger.info(`OpanAPI Schema ${green(file ? file : 'STDIN')} -> ${yellow(output)} laminar types`);
+          logger.info(`OpanAPI Schema ${chalk.green(file ? file : 'STDIN')} -> ${chalk.yellow(output)} laminar types`);
           writeFileSync(output, content);
         } else {
           process.stdout.write(content);
@@ -51,14 +51,16 @@ export const apiCommand = (logger: Logger = console): Command =>
               try {
                 const update = await processFile(file);
                 writeFileSync(output, update.content);
-                logger.info(`Updated OpenAPI Schema ${green(output)} -> ${yellow(output)} (trigger ${trigger})`);
+                logger.info(
+                  `Updated OpenAPI Schema ${chalk.green(output)} -> ${chalk.yellow(output)} (trigger ${trigger})`,
+                );
               } catch (error) {
-                logger.error(red(error instanceof Error ? error.message : String(error)));
+                logger.error(chalk.red(error instanceof Error ? error.message : String(error)));
               }
             }),
           );
         }
       } catch (error) {
-        logger.error(red(error instanceof Error ? error.message : String(error)));
+        logger.error(chalk.red(error instanceof Error ? error.message : String(error)));
       }
     });
