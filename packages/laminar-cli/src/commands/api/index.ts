@@ -55,12 +55,18 @@ export const apiCommand = (logger: Logger = console): Command =>
                   `Updated OpenAPI Schema ${chalk.green(output)} -> ${chalk.yellow(output)} (trigger ${trigger})`,
                 );
               } catch (error) {
-                logger.error(chalk.red(error instanceof Error ? error.message : String(error)));
+                logger.error(
+                  chalk.red(
+                    error instanceof Error ? (process.env.LAMINAR_DEBUG ? error.stack : error.message) : String(error),
+                  ),
+                );
               }
             }),
           );
         }
       } catch (error) {
-        logger.error(chalk.red(error instanceof Error ? error.message : String(error)));
+        logger.error(
+          chalk.red(error instanceof Error ? (process.env.LAMINAR_DEBUG ? error.stack : error.message) : String(error)),
+        );
       }
     });

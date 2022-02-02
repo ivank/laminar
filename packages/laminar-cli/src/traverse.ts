@@ -7,6 +7,7 @@ import {
   ParameterObject,
   MediaTypeObject,
   SecuritySchemeObject,
+  PathItemObject,
 } from 'openapi3-ts';
 import ts from 'typescript';
 
@@ -44,6 +45,9 @@ export const isSecuritySchemaObject = (item: unknown): item is SecuritySchemeObj
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'type' in item;
 
 export const isSchemaObject = (item: unknown): item is SchemaObject =>
+  !isReferenceObject(item) && typeof item === 'object' && !!item;
+
+export const isPathItemObject = (item: unknown): item is PathItemObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item;
 
 export const getReferencedObject = <T>(

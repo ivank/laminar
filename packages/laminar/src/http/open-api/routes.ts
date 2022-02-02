@@ -297,7 +297,7 @@ export function toRoutes<TContext extends Empty>(
   oapiPaths: OapiPaths<TContext>,
 ): Route<TContext>[] {
   return Object.entries<PathItemObject>(api.paths).reduce<Route<TContext>[]>((pathRoutes, [path, pathParameters]) => {
-    const { parameters, summary, description, ...methods } = pathParameters;
+    const { parameters, summary, description, ...methods } = resolveRef(schema, pathParameters);
     return [
       ...pathRoutes,
       ...Object.entries(methods).reduce<Route<TContext>[]>((methodRoutes, [method, operation]) => {

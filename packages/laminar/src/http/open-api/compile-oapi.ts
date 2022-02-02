@@ -1,8 +1,14 @@
-import { compile, withinContext, ensureValid, ResolvedSchema, Schema, toSchemaObject } from '@ovotech/json-schema';
+import { compile, withinContext, ensureValid, Schema, ResolvedSchema, toSchemaObject } from '@ovotech/json-schema';
 import { openapiV3 } from 'openapi-schemas';
 import { OapiConfig } from './types';
 import { Empty } from '../../types';
-import { isReferenceObject, OpenAPIObject, ReferenceObject, ISpecificationExtension } from 'openapi3-ts';
+import {
+  isReferenceObject,
+  OpenAPIObject,
+  ReferenceObject,
+  ISpecificationExtension,
+  PathItemObject,
+} from 'openapi3-ts';
 
 /**
  * Resolve $ref schemas by using context resolved schema
@@ -48,10 +54,13 @@ export async function compileOapi<TRequest extends Empty>({
     properties: {
       paths: {
         required: Object.keys(oapi.paths),
-        properties: Object.entries(oapi.paths).reduce((all, [path, pathParameters]) => {
-          const { parameters, summary, description, ...methods } = pathParameters;
-          return { ...all, [path]: { required: Object.keys(methods) } };
-        }, {}),
+        properties: Object.entries<PathItemObject | ReferenceObject>(oapi.paths).reduce(
+          (all, [path, pathParameters]) => {
+            const { parameters, summary, description, ...methods } = resolveRef(compiledApi, pathParameters);
+            return { ...all, [path]: { required: Object.keys(methods) } };
+          },
+          {},
+        ),
       },
       ...(oapi.components?.securitySchemes
         ? { security: { required: Object.keys(oapi.components.securitySchemes) } }

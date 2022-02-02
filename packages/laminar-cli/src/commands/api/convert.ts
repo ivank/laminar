@@ -32,6 +32,7 @@ import {
   isRequestBodyObject,
   isParameterObject,
   isMediaTypeObject,
+  isPathItemObject,
 } from '../../traverse';
 
 interface AstParameters {
@@ -221,8 +222,12 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
     context,
     Object.entries<PathItemObject>(api.paths),
     (pathContext, [path, pathApiOrRef]) => {
-      const { parameters, description, summary, ...methodsApiOrRef } = pathApiOrRef;
-      const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, 'schema', pathContext);
+      const { parameters, description, summary, ...pathApi } = getReferencedObject(
+        pathApiOrRef,
+        isPathItemObject,
+        'path',
+        pathContext,
+      );
 
       const methods = mapWithContext(
         pathContext,
