@@ -12,15 +12,20 @@ type Obj = Record<string, unknown>;
 const isObj = (obj: unknown): obj is Obj => typeof obj === 'object' && obj !== null;
 const isPrimitive = (obj: unknown): obj is string => obj !== undefined && !(typeof obj === 'object');
 
-const setQuery = (path: string[], value: unknown, obj: Obj): Obj | unknown[] => {
+const setQuery = (path: string[], value: unknown, obj: any): Obj | unknown[] => {
   const [current, ...rest] = path;
   if (current && !/^\d+$/.test(current)) {
     const currentValue = obj[current];
-
     return {
       ...obj,
       [current]: Array.isArray(currentValue)
-        ? [...currentValue, value]
+        ? rest.length > 1
+          ? [
+              ...currentValue.slice(0, Number(rest[0])),
+              setQuery(rest.slice(1), value, currentValue[Number(rest[0])]),
+              ...currentValue.slice(Number(rest[0]) + 1),
+            ]
+          : [...currentValue, value]
         : rest.length
         ? setQuery(rest, value, isObj(currentValue) ? currentValue : {})
         : isPrimitive(currentValue)

@@ -10,7 +10,7 @@ export {
   generate,
 } from './fixtures';
 export { toTeardownQueries, toSetupQueries } from './queries';
-export { tearDown, setUp } from './run';
+export { tearDown, setUp, Config } from './run';
 export {
   ColumnBuilder,
   RelColumnBuilder,
