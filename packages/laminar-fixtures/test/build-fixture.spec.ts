@@ -140,6 +140,17 @@ type MeterReadFixture = Fixture<{
   history: string;
 }>;
 
+type FitAccountFixture = Fixture<{
+  id: number;
+  primary_contact_id: number;
+}>;
+
+type FitContactFixture = Fixture<{
+  id: number;
+  account_id: number;
+  title: string;
+}>;
+
 const minDate = new Date('2000-01-01T00:00:00.000Z');
 const maxDate = new Date('3000-01-01T00:00:00.000Z');
 
@@ -456,7 +467,32 @@ const oneInstallationAccount = ({ firstName }: { firstName: string }): Fixture[]
   return [account, contract, ...installationMeters, ...tariffRates, ...meterReads];
 };
 
+const buildFitConcact: BuildFixture<FitContactFixture, { account?: FitAccountFixture }> = ({ columns } = {}) =>
+  fixture('fit_contact', {
+    id,
+    account_id: 1,
+    title: template('contact %s'),
+    ...columns,
+  });
+
+const buildFitAccount: BuildFixture<FitAccountFixture> = ({ columns } = {}) => {
+  const contact = buildFitConcact();
+  const account: FitAccountFixture = fixture('fit_account', {
+    id,
+    primary_contact_id: rel(contact, 'id'),
+    ...columns,
+  });
+
+  contact.columns.account_id = rel(account, 'id');
+
+  return account;
+};
+
 describe('Laminar fixtures', () => {
+  it('Should resolve circular refs', () => {
+    expect(generate([buildFitAccount(), buildFitAccount()])).toMatchSnapshot();
+  });
+
   it('Should start and stop services', async () => {
     const fixtures = oneInstallationAccount({ firstName: 'Test' });
 

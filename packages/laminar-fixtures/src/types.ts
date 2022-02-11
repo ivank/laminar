@@ -24,6 +24,11 @@ export interface Context {
    * The function to generate new ids with
    */
   generateId?: GenerateId;
+
+  /**
+   * Map of currently building fixtures to resolve circular deps
+   */
+  fixtureIds?: Map<Fixture, number>;
 }
 
 export type FixtureValue = string | number | boolean | null | Date;

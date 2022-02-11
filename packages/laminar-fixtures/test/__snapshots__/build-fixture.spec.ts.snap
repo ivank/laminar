@@ -1,5 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Laminar fixtures Should resolve circular refs 1`] = `
+Array [
+  Object {
+    "columns": Object {
+      "account_id": 1,
+      "id": 1,
+      "title": "contact 1",
+    },
+    "serialColumn": "id",
+    "table": "fit_contact",
+  },
+  Object {
+    "columns": Object {
+      "id": 1,
+      "primary_contact_id": 1,
+    },
+    "serialColumn": "id",
+    "table": "fit_account",
+  },
+  Object {
+    "columns": Object {
+      "account_id": 2,
+      "id": 2,
+      "title": "contact 2",
+    },
+    "serialColumn": "id",
+    "table": "fit_contact",
+  },
+  Object {
+    "columns": Object {
+      "id": 2,
+      "primary_contact_id": 2,
+    },
+    "serialColumn": "id",
+    "table": "fit_account",
+  },
+]
+`;
+
 exports[`Laminar fixtures Should start and stop services: Entites 1`] = `
 Array [
   Object {

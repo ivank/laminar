@@ -33,7 +33,11 @@ const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Cont
   fixtures.reduce((current, fixture) => {
     const generateId = current?.generateId ?? generateIdSequnce;
     const id = generateId(current?.idMap?.[fixture.table], fixture.table);
-    const idContext = { ...current, idMap: { ...current.idMap, [fixture.table]: id } };
+    const idContext = {
+      ...current,
+      fixtureIds: (current.fixtureIds ?? new Map()).set(fixture, id),
+      idMap: { ...current.idMap, [fixture.table]: id },
+    };
 
     const initColumns: { columns: EntityColumns; context: Context } = { columns: {}, context: idContext };
     const { columns, context: entityContext } = Object.entries(fixture.columns).reduce(
@@ -45,7 +49,6 @@ const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Cont
       },
       initColumns,
     );
-
     return {
       ...entityContext,
       entities: (entityContext?.entities ?? new Map()).set(fixture, {
@@ -119,6 +122,8 @@ export const rel = <TFixture extends Fixture, TColumn extends keyof TFixture['co
     const entity = context?.entities?.get(currentFixture);
     if (entity) {
       return { value: entity.columns[column as string], context };
+    } else if (column === 'id' && context.fixtureIds?.has(currentFixture)) {
+      return { value: context.fixtureIds.get(currentFixture), context };
     } else {
       const entityContext = entitiesWithContext(context, [currentFixture]);
       return {
