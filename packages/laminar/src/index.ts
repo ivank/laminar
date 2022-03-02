@@ -103,7 +103,7 @@ export {
   ResponseTimeConfig,
   defaultResponseTimeHeader,
 } from './http/middleware/response-time.middleware';
-export { requestLoggingMiddleware } from './http/middleware/request-logging.middleware';
+export { requestLoggingMiddleware, RequestLoggingMiddlewareParams } from './http/middleware/request-logging.middleware';
 
 export { LoggerMetadata, LoggerLike, withStaticMetadata, LoggerContext, loggerMiddleware } from './logger/index';
 

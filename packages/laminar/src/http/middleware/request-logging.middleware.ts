@@ -1,6 +1,16 @@
 import { toErrorMetadata } from '../../errors';
 import { withStaticMetadata, LoggerContext, LoggerLike } from '../../logger';
-import { HttpMiddleware } from '../types';
+import { HttpContext, HttpMiddleware } from '../types';
+
+export interface RequestLoggingMiddlewareParams {
+  /**
+   * If present, will filter requests coming in from logging.
+   * Only ones that return true will be logged.
+   *
+   * Errors are still logged either way.
+   */
+  filter?: (ctx: HttpContext) => boolean;
+}
 
 /**
  * A middleware to log the response of a request, as well as any errors
@@ -9,7 +19,10 @@ import { HttpMiddleware } from '../types';
  *
  * @category http
  */
-export function requestLoggingMiddleware(source: LoggerLike): HttpMiddleware<LoggerContext> {
+export function requestLoggingMiddleware(
+  source: LoggerLike,
+  { filter }: RequestLoggingMiddlewareParams = {},
+): HttpMiddleware<LoggerContext> {
   return (next) => async (ctx) => {
     const logger = withStaticMetadata(source, {
       request: `${ctx.method} ${ctx.url.pathname}`,
@@ -18,10 +31,12 @@ export function requestLoggingMiddleware(source: LoggerLike): HttpMiddleware<Log
 
     try {
       const res = await next({ ...ctx, logger });
-      if (res.status >= 200 && res.status < 300) {
-        logger.info(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status });
-      } else {
-        logger.error(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status, body: res.body });
+      if (!filter || filter(ctx)) {
+        if (res.status >= 200 && res.status < 300) {
+          logger.info(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status });
+        } else {
+          logger.error(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status, body: res.body });
+        }
       }
       return res;
     } catch (error) {
