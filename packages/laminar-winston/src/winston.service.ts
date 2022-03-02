@@ -13,19 +13,19 @@ export class WinstonService implements Service, LoggerLike {
   constructor(public source: Logger) {}
 
   debug(message: any, metadata?: LoggerMetadata): void {
-    this.source.log({ level: 'debug', message, metadata });
+    this.source.log({ level: 'debug', message, ...metadata });
   }
 
   info(message: any, metadata?: LoggerMetadata): void {
-    this.source.log({ level: 'info', message, metadata });
+    this.source.log({ level: 'info', message, ...metadata });
   }
 
   warn(message: any, metadata?: LoggerMetadata): void {
-    this.source.log({ level: 'warn', message, metadata });
+    this.source.log({ level: 'warn', message, ...metadata });
   }
 
   error(message: any, metadata?: LoggerMetadata): void {
-    this.source.log({ level: 'error', message, metadata });
+    this.source.log({ level: 'error', message, ...metadata });
   }
 
   async start(): Promise<this> {

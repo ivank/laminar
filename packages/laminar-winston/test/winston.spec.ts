@@ -32,7 +32,7 @@ describe('Services', () => {
     const queue = new SimpleQueue<number>(boss, [
       {
         queue: 'one',
-        app: async ({ data }) => logger.info(String(data)),
+        app: async ({ data }) => logger.info('Data', { data }),
       },
     ]);
 
