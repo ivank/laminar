@@ -8,7 +8,7 @@ const findUser = (id: string) => ({ id, name: 'John' });
 
 // << app
 const createHttpListener = async () => {
-  return await openApi<LoggerContext>({
+  return await openApi<LoggerContext<Console>>({
     api: join(__dirname, '../../schema/api.yaml'),
     paths: {
       '/user/{id}': {

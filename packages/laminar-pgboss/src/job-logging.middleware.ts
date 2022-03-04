@@ -7,7 +7,9 @@ import { WorkerMiddleware } from './types';
  *
  * @param logger Logger instance, must implement `info` and `error`. You can use `console` to output to stdout
  */
-export function jobLoggingMiddleware(source: LoggerLike): WorkerMiddleware<LoggerContext> {
+export function jobLoggingMiddleware<TLogger extends LoggerLike>(
+  source: TLogger,
+): WorkerMiddleware<LoggerContext<TLogger>> {
   return (next) => async (ctx) => {
     const data = ctx.data as Record<string, unknown> | undefined;
     const logger = withStaticMetadata(source, {

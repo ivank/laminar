@@ -1,4 +1,4 @@
-import { loggerMiddleware, HttpService, init } from '@ovotech/laminar';
+import { loggerMiddleware, HttpService, init, LoggerLike } from '@ovotech/laminar';
 import { pgMiddleware, PgService } from '@ovotech/laminar-pg';
 import { Pool } from 'pg';
 import { routes } from './routes';
@@ -13,8 +13,8 @@ const main = async () => {
   }
 
   const pg = new PgService(new Pool({ connectionString: process.env.PG }));
-
-  const withLogger = loggerMiddleware(console);
+  const logger: LoggerLike = console;
+  const withLogger = loggerMiddleware(logger);
   const withDb = pgMiddleware({ db: pg });
 
   const listener = withLogger(withDb(routes));

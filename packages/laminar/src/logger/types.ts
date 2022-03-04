@@ -16,8 +16,8 @@ export interface LoggerMetadata {
  *
  * @category logger
  */
-export interface LoggerContext {
-  logger: LoggerLike;
+export interface LoggerContext<TLogger extends LoggerLike = LoggerLike> {
+  logger: TLogger;
 }
 
 /**
@@ -52,8 +52,13 @@ export interface LoggerLike {
  *
  * @category logger
  */
-export function withStaticMetadata(logger: LoggerLike, staticMetadata: LoggerMetadata): LoggerLike {
+export function withStaticMetadata<TLogger extends LoggerLike>(
+  logger: TLogger,
+  staticMetadata: LoggerMetadata,
+): TLogger {
   return {
+    ...logger,
+
     info(message, metadata) {
       logger.info(message, { ...metadata, ...staticMetadata });
     },

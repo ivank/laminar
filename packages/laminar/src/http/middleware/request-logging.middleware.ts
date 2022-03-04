@@ -19,10 +19,10 @@ export interface RequestLoggingMiddlewareParams {
  *
  * @category http
  */
-export function requestLoggingMiddleware(
-  source: LoggerLike,
+export function requestLoggingMiddleware<TLogger extends LoggerLike>(
+  source: TLogger,
   { filter }: RequestLoggingMiddlewareParams = {},
-): HttpMiddleware<LoggerContext> {
+): HttpMiddleware<LoggerContext<TLogger>> {
   return (next) => async (ctx) => {
     const logger = withStaticMetadata(source, {
       request: `${ctx.method} ${ctx.url.pathname}`,

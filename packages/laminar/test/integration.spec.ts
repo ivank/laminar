@@ -21,6 +21,7 @@ import {
   HttpError,
   HttpListener,
   run,
+  LoggerLike,
 } from '../src';
 import { join } from 'path';
 import { readFileSync, createReadStream } from 'fs';
@@ -71,7 +72,7 @@ describe('Integration', () => {
 
   it('Should process response', async () => {
     const logger = { info: jest.fn(), error: jest.fn(), debug: jest.fn(), warn: jest.fn() };
-    const logging = requestLoggingMiddleware(logger);
+    const logging = requestLoggingMiddleware<LoggerLike>(logger);
     const responseTime = responseTimeMiddleware();
 
     interface DBContext {

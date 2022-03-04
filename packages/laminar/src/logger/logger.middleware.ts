@@ -19,6 +19,6 @@ import { Middleware } from '../types';
  *
  * @category logger
  */
-export function loggerMiddleware(logger: LoggerLike): Middleware<LoggerContext> {
+export function loggerMiddleware<TLogger extends LoggerLike>(logger: TLogger): Middleware<LoggerContext<TLogger>> {
   return (next) => (ctx) => next({ ...ctx, logger });
 }

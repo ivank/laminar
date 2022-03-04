@@ -10,7 +10,7 @@ const findUser = (id: string) => ({ id, name: 'John' });
 import { openApiTyped } from './__generated__/api.yaml';
 
 const createHttpListener = async () => {
-  return await openApiTyped<LoggerContext>({
+  return await openApiTyped<LoggerContext<Console>>({
     api: join(__dirname, '../../schema/api.yaml'),
     paths: {
       '/user/{id}': {

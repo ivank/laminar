@@ -1,4 +1,4 @@
-import { Application, HttpService, loggerMiddleware, requestLoggingMiddleware } from '@ovotech/laminar';
+import { Application, HttpService, LoggerLike, loggerMiddleware, requestLoggingMiddleware } from '@ovotech/laminar';
 import { WinstonService } from '@ovotech/laminar-winston';
 import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService } from '@ovotech/laminar-pgboss';
 import { PgService, pgMiddleware } from '@ovotech/laminar-pg';
@@ -65,7 +65,7 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
 
   const pg = new PgService(pool);
   const queue = new QueueService(pgBoss);
-  const logger = new WinstonService(winston);
+  const logger: LoggerLike = new WinstonService(winston);
 
   /**
    * Middlewares

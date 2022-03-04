@@ -11,6 +11,7 @@ import {
   jsonBadRequest,
   file,
   ResponseOapi,
+  LoggerLike,
 } from '@ovotech/laminar';
 import axios from 'axios';
 import { join } from 'path';
@@ -153,7 +154,7 @@ describe('Integration', () => {
       },
     });
 
-    const logger = loggerMiddleware(log);
+    const logger = loggerMiddleware<LoggerLike>(log);
 
     const http = new HttpService({ listener: logger(oapi), port: 8063 });
 
