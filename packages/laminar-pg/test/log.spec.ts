@@ -30,9 +30,7 @@ describe('Integration', () => {
         connectionString: 'postgres://example-admin:example-pass@localhost:5432/example',
         max: 5,
       }),
-      'db',
-      loggerMock,
-      { logValues: true, logResults: true, logLevel: 'debug' },
+      { logger: loggerMock, logValues: true, logResults: true, logLevel: 'debug' },
     );
     const withDb = pgMiddleware({ db: pool });
 

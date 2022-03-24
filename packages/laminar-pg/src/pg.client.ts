@@ -2,6 +2,10 @@ import { QueryResult, QueryConfig, QueryResultRow, PoolClient, DatabaseError } f
 import { LoggerLike, LaminarError } from '@ovotech/laminar';
 
 export interface PgClientConfig {
+  name?: string;
+
+  logger?: LoggerLike;
+
   /**
    * Specify if the client is part of a transaction.
    */
@@ -15,6 +19,7 @@ export interface PgClientConfig {
    */
   logResults?: boolean;
   logLevel?: 'debug' | 'info' | 'warn' | 'error';
+  initEnumTypeParsers?: boolean;
 }
 
 /**
@@ -32,7 +37,7 @@ export interface PgClientConfig {
  * @category pg
  */
 export class PgClient {
-  constructor(public client: PoolClient, public logger?: LoggerLike, public config: PgClientConfig = {}) {}
+  constructor(public client: PoolClient, public config: PgClientConfig = {}) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async query<R extends QueryResultRow = any, I extends any[] = any[]>(
@@ -42,8 +47,8 @@ export class PgClient {
     try {
       const startAt = process.hrtime();
       const level = this.config?.logLevel ?? 'info';
-      if (this.logger) {
-        this.logger[level]('PG Client: Query', {
+      if (this.config.logger) {
+        this.config.logger[level]('PG Client: Query', {
           query: typeof queryTextOrConfig === 'string' ? queryTextOrConfig : queryTextOrConfig.text,
           ...(this.config.logValues
             ? { values: typeof queryTextOrConfig === 'string' ? values : queryTextOrConfig.values }
@@ -51,11 +56,11 @@ export class PgClient {
         });
       }
       const result = await this.client.query(queryTextOrConfig, values);
-      if (this.logger) {
+      if (this.config.logger) {
         const diff = process.hrtime(startAt);
         const time = diff[0] * 1e3 + diff[1] * 1e-6;
 
-        this.logger[level]('PG Client: Result', {
+        this.config.logger[level]('PG Client: Result', {
           milliseconds: time.toFixed(3),
           query: typeof queryTextOrConfig === 'string' ? queryTextOrConfig : queryTextOrConfig.text,
           ...(this.config.logResults ? { result: result.rows } : {}),
@@ -88,7 +93,7 @@ export class PgClient {
       await this.client.query('BEGIN');
     }
     try {
-      const result = await operation(new PgClient(this.client, this.logger, { ...this.config, transaction: true }));
+      const result = await operation(new PgClient(this.client, { ...this.config, transaction: true }));
       if (!this.config.transaction) {
         await this.client.query('COMMIT');
       }

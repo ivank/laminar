@@ -30,8 +30,8 @@ describe('Services', () => {
     const pool1 = new Pool({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' });
     const pool2 = new Pool({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' });
 
-    const pg1 = new PgService(pool1, 'db1');
-    const pg2 = new PgService(pool2, 'db2');
+    const pg1 = new PgService(pool1, { name: 'db1' });
+    const pg2 = new PgService(pool2, { name: 'db2' });
 
     const withBoss = bossMiddleware(boss);
     const withDatabases = pgMiddleware({ db1: pg1, db2: pg2 });
