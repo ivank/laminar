@@ -17,7 +17,7 @@
     "@types/pg": "^8.6.4",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
-    "axios": "^0.25.0",
+    "axios": "^0.26.1",
     "eslint": "^8.7.0",
     "jest": "^27.4.7",
     "nock": "^13.2.2",

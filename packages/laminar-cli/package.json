@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-cli",
-  "version": "0.13.10",
+  "version": "0.13.11",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @ovotech/laminar",
@@ -16,7 +16,7 @@
     "@types/pg": "^8.6.4",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
-    "axios": "^0.25.0",
+    "axios": "^0.26.1",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.4.7",
