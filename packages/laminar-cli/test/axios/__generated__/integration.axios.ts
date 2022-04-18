@@ -29,6 +29,10 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * deletes a single pet based on the ID supplied
      */
     "DELETE /pets/{id}": (id, config) => api.delete<Error>(`/pets/${id}`, config),
+    /**
+     * modify tags
+     */
+    "PATCH /pets/{id}": (id, data, config) => api.patch<Pet | Error>(`/pets/${id}`, data, config),
     api: api
 });
 
@@ -76,6 +80,11 @@ export interface PostPets {
     };
 }
 
+export interface ChangeTag {
+    tag: string;
+    [key: string]: unknown;
+}
+
 export interface AxiosOapiInstance {
     /**
      * Returns all pets from the system that the user has access to
@@ -97,5 +106,9 @@ export interface AxiosOapiInstance {
      * deletes a single pet based on the ID supplied
      */
     "DELETE /pets/{id}": (id: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Error>>;
+    /**
+     * modify tags
+     */
+    "PATCH /pets/{id}": (id: number, data: ChangeTag, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pet | Error>>;
     api: AxiosInstance;
 }

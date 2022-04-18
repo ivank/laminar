@@ -314,7 +314,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
      * this method.
      */
-    \\"PATCH /v2/{+name}\\": (+name, config) => api.patch<Queue>(\`/v2/\${+name}\`, config),
+    \\"PATCH /v2/{+name}\\": (+name, data, config) => api.patch<Queue>(\`/v2/\${+name}\`, data, config),
     /**
      * Lists information about the supported locations for this service.
      */
@@ -2309,7 +2309,7 @@ export interface AxiosOapiInstance {
      * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
      * this method.
      */
-    \\"PATCH /v2/{+name}\\": (+name: string, config?: AxiosRequestConfig & PatchV2Name) => Promise<AxiosResponse<Queue>>;
+    \\"PATCH /v2/{+name}\\": (+name: string, data?: Queue, config?: AxiosRequestConfig & PatchV2Name) => Promise<AxiosResponse<Queue>>;
     /**
      * Lists information about the supported locations for this service.
      */

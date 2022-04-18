@@ -117,6 +117,32 @@ export interface RequestPetsIdDelete<TAuthInfo> extends OapiContext {
  */
 export type PathPetsIdDelete<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdDelete<TAuthInfo> & R) => Promise<ResponsePetsIdDelete>;
 
+export interface ChangeTag {
+    tag: string;
+    [key: string]: unknown;
+}
+
+export type ResponsePetsIdPatch = ResponseOapi<Pet, 200, "application/json"> | ResponseOapi<Error, number, "application/json">;
+
+/**
+ * modify tags
+ */
+export interface RequestPetsIdPatch<TAuthInfo> extends OapiContext {
+    path: {
+        /**
+         * ID of pet to delete
+         */
+        id: number;
+    };
+    body: ChangeTag;
+    authInfo: TAuthInfo;
+}
+
+/**
+ * modify tags
+ */
+export type PathPetsIdPatch<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> = (req: RequestPetsIdPatch<TAuthInfo> & R) => Promise<ResponsePetsIdPatch>;
+
 export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo> extends OapiConfig<R> {
     paths: {
         "/pets": {
@@ -142,6 +168,10 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
              * deletes a single pet based on the ID supplied
              */
             delete: PathPetsIdDelete<R, TAuthInfo>;
+            /**
+             * modify tags
+             */
+            patch: PathPetsIdPatch<R, TAuthInfo>;
         };
     };
     security: {

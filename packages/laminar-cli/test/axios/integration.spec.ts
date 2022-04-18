@@ -66,6 +66,15 @@ describe('Integration', () => {
               return jsonNotFound({ code: 12, message: 'Item not found' });
             }
           },
+          patch: async ({ path, body }) => {
+            const index = db.findIndex((item) => item.id === path.id);
+            if (index !== -1) {
+              db[index].tag = body.tag;
+              return jsonOk(db[index]);
+            } else {
+              return jsonNotFound({ code: 12, message: 'Item not found' });
+            }
+          },
         },
       },
     });
@@ -142,6 +151,13 @@ describe('Integration', () => {
       });
 
       await expect(
+        api['PATCH /pets/{id}'](111, { tag: 'alien' }, { headers: { 'X-API-KEY': 'Me' } }),
+      ).resolves.toMatchObject({
+        status: 200,
+        data: { id: 111, name: 'Catty', tag: 'alien' },
+      });
+
+      await expect(
         api['DELETE /pets/{id}']('228', { headers: { 'X-API-KEY': 'Me' } }).catch((error) => error.response),
       ).resolves.toMatchObject({
         status: 404,
@@ -166,7 +182,7 @@ describe('Integration', () => {
       await expect(api['GET /pets']()).resolves.toMatchObject({
         status: 200,
         data: [
-          { id: 111, name: 'Catty', tag: 'kitten' },
+          { id: 111, name: 'Catty', tag: 'alien' },
           { id: 223, name: 'New Puppy' },
         ],
       });

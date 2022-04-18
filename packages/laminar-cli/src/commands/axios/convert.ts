@@ -173,7 +173,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
 
         const responseAst = convertResponses(astRequestBody.context, operation.responses);
 
-        const hasData = method === 'post' || method === 'put';
+        const hasData = method === 'post' || method === 'put' || method === 'patch';
         const configDataIdentifier = pathToIdentifier(method, path);
         const configDataContext = configParams.type.length
           ? withIdentifier(

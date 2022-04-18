@@ -137,6 +137,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    patch:
+      description: modify tags
+      operationId: deletePet
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to delete
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Modify tags
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeTag'
+      responses:
+        '200':
+          description: pet tag updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   securitySchemes:
     BasicAuth:
@@ -171,6 +203,13 @@ components:
       properties:
         name:
           type: string
+        tag:
+          type: string
+
+    ChangeTag:
+      required:
+        - tag
+      properties:
         tag:
           type: string
 
