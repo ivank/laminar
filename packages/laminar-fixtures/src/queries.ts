@@ -24,7 +24,7 @@ export const toSetupQueries = (chunkSize: number, entities: Entity[]): QueryConf
         text: `INSERT INTO "${table}" (${columns.map((column) => `"${column}"`).join(', ')}) VALUES ${entities.map(
           (_, e) => `(${columns.map((_, c, all) => `\$${c + e * all.length + 1}`).join(',')})`,
         )}`,
-        values: entities.flatMap((entity) => columns.map((name) => entity.columns[name])),
+        values: entities.flatMap((entity) => columns.map((name) => entity.columns[name] ?? null)),
       }))
       .concat({
         text: `SELECT setval(pg_get_serial_sequence('${table}', '${serialColumn}'), coalesce(max(id), 0)+1 , false) FROM "${table}";`,
