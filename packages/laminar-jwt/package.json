@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-jwt",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A json web token middleware for laminar",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@ovotech/json-schema": "workspace:*",
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "jsonwebtoken": "^8.5.1",
     "lru-cache": "^6.0.0"
   },

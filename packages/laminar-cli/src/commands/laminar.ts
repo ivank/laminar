@@ -9,7 +9,7 @@ import { fixturesCommand } from './fixtures';
 export const laminarCommand = (output: Logger = console): commander.Command =>
   commander
     .createCommand('laminar')
-    .version('0.13.14')
+    .version('0.13.15')
     .description(
       `Laminar CLI - a tool for converting OpenApi and Avro Schemas to appropriate typescript types
 

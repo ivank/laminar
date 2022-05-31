@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/json-schema",
-  "version": "0.12.5",
+  "version": "0.12.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A lightweight a json-schema. Depends only on yaml package and node-fetch.",
@@ -32,7 +32,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "yaml": "^1.10.2"
   }
 }
