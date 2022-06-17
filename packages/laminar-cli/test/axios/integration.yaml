@@ -42,6 +42,23 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: filter
+          in: query
+          description: maximum number of results to return
+          style: deepObject
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              q:
+                type: string
+                description: Search for a specific levelisation by CFR Fit ID
+                default: ''
+              levelisationId:
+                type: integer
+                description: Limit account levelisations to just ones for a single levelisation. Required.
+            required:
+              - levelisationId
       responses:
         '200':
           description: pet response

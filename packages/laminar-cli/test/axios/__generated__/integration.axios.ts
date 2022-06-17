@@ -62,6 +62,19 @@ export interface GetPets {
          * maximum number of results to return
          */
         limit?: number;
+        /**
+         * maximum number of results to return
+         */
+        filter?: {
+            /**
+             * Search for a specific levelisation by CFR Fit ID
+             */
+            q?: string;
+            /**
+             * Limit account levelisations to just ones for a single levelisation. Required.
+             */
+            levelisationId: number;
+        };
     };
 }
 

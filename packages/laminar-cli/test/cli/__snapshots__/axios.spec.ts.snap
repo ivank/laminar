@@ -2993,15 +2993,15 @@ export interface GetV1Commbatches {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
@@ -3206,15 +3206,15 @@ export interface GetV1Readchecks {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -3312,8 +3312,8 @@ export interface GetV1Levelisations {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -3324,7 +3324,7 @@ export interface GetV1Levelisations {
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
@@ -3480,15 +3480,15 @@ export interface GetV1Accountlevelisations {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -3582,7 +3582,7 @@ export interface GetV1Account {
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -3596,8 +3596,8 @@ export interface GetV1Account {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
     };
 }
@@ -3628,8 +3628,8 @@ export interface GetV1AccountIdReads {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
     };
 }
@@ -3792,15 +3792,15 @@ export interface GetV1Payment {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Single resource identifier
@@ -3915,15 +3915,15 @@ export interface GetV1Installation {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Single resource identifier
@@ -3980,15 +3980,15 @@ export interface GetV1Read {
          * React admin pagination object
          */
         pagination?: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort?: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Single resource identifier

@@ -3436,15 +3436,15 @@ export interface RequestV1CommbatchesGet<TAuthInfo> extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
@@ -3706,15 +3706,15 @@ export interface RequestV1ReadchecksGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -3907,8 +3907,8 @@ export interface RequestV1LevelisationsGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -3919,7 +3919,7 @@ export interface RequestV1LevelisationsGet extends OapiContext {
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
@@ -4136,15 +4136,15 @@ export interface RequestV1AccountlevelisationsGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -4317,7 +4317,7 @@ export interface RequestV1AccountGet extends OapiContext {
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Retern individual records from the list, matching the specified ids
@@ -4331,8 +4331,8 @@ export interface RequestV1AccountGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
     };
 }
@@ -4374,8 +4374,8 @@ export interface RequestV1AccountIdReadsGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
     };
     path: {
@@ -4609,15 +4609,15 @@ export interface RequestV1PaymentGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Single resource identifier
@@ -4746,15 +4746,15 @@ export interface RequestV1InstallationGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Single resource identifier
@@ -4856,15 +4856,15 @@ export interface RequestV1ReadGet extends OapiContext {
          * React admin pagination object
          */
         pagination: {
-            page: number;
-            perPage: number;
+            page?: number;
+            perPage?: number;
         };
         /**
          * React admin sort object
          */
         sort: {
             field?: string;
-            order: \\"ASC\\" | \\"DESC\\";
+            order?: \\"ASC\\" | \\"DESC\\";
         };
         /**
          * Single resource identifier
@@ -5218,15 +5218,15 @@ export interface RequestDatasetVersionRecordsPost extends OapiContext {
         /**
          * Uses Lucene Query Syntax in the format of propertyName:value, propertyName:[num1 TO num2] and date range format: propertyName:[yyyyMMdd TO yyyyMMdd]. In the response please see the 'docs' element which has the list of record objects. Each record structure would consist of all the fields and their corresponding values.
          */
-        criteria: string;
+        criteria?: string;
         /**
          * Starting record number. Default value is 0.
          */
-        start: number;
+        start?: number;
         /**
          * Specify number of rows to be returned. If you run the search with default values, in the response you will see 'numFound' attribute which will tell the number of records available in the dataset.
          */
-        rows: number;
+        rows?: number;
         [key: string]: unknown;
     };
 }

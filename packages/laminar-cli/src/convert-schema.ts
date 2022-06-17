@@ -127,7 +127,7 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
         const propSchema = getReferencedObject(value, isSchemaObject, 'schema', propContext);
         const item = convertSchema(propContext, value);
         const isOptional =
-          !(Array.isArray(schema.required) && schema.required.includes(name)) && propSchema.default === undefined;
+          !(Array.isArray(schema.required) && schema.required.includes(name)) || propSchema.default !== undefined;
         return document(item.context, Type.Prop({ name, type: item.type, isOptional, jsDoc: propSchema.description }));
       },
     );
