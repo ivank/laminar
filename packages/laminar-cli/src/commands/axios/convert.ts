@@ -158,87 +158,92 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
       const { parameters, description, summary, ...methodsApiOrRef } = pathApiOrRef;
       const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, 'schema', context);
 
-      const methods = mapWithContext(pathContext, Object.entries(pathApi), (methodContext, [method, operation]) => {
-        const combinedParameters = [...(parameters ?? []), ...(operation.parameters ?? [])].map((item) =>
-          getReferencedObject<ParameterObject>(item, isParameterObject, 'parameter', methodContext),
-        );
+      const methods = mapWithContext(
+        pathContext,
+        Object.entries(pathApi),
+        (methodContextOriginal, [method, operation]) => {
+          const methodContext = { ...methodContextOriginal, optionalDefaults: true };
+          const combinedParameters = [...(parameters ?? []), ...(operation.parameters ?? [])].map((item) =>
+            getReferencedObject<ParameterObject>(item, isParameterObject, 'parameter', methodContext),
+          );
 
-        const requestName = `${method.toUpperCase()} ${path}`;
-        const pathItems = convertPathParams(methodContext, path, combinedParameters);
-        const configParams = convertConfigParams(pathItems.context, combinedParameters);
+          const requestName = `${method.toUpperCase()} ${path}`;
+          const pathItems = convertPathParams(methodContext, path, combinedParameters);
+          const configParams = convertConfigParams(pathItems.context, combinedParameters);
 
-        const astRequestBody = convertRequestBody(configParams.context, operation.requestBody);
+          const astRequestBody = convertRequestBody(configParams.context, operation.requestBody);
 
-        const doc = documentation(operation.summary || summary, operation.description || description);
+          const doc = documentation(operation.summary || summary, operation.description || description);
 
-        const responseAst = convertResponses(astRequestBody.context, operation.responses);
+          const responseAst = convertResponses(astRequestBody.context, operation.responses);
 
-        const hasData = method === 'post' || method === 'put' || method === 'patch';
-        const configDataIdentifier = pathToIdentifier(method, path);
-        const configDataContext = configParams.type.length
-          ? withIdentifier(
-              responseAst.context,
-              Type.Interface({
-                name: configDataIdentifier,
-                props: configParams.type,
-                isExport: true,
-              }),
-            )
-          : responseAst.context;
+          const hasData = method === 'post' || method === 'put' || method === 'patch';
+          const configDataIdentifier = pathToIdentifier(method, path);
+          const configDataContext = configParams.type.length
+            ? withIdentifier(
+                responseAst.context,
+                Type.Interface({
+                  name: configDataIdentifier,
+                  props: configParams.type,
+                  isExport: true,
+                }),
+              )
+            : responseAst.context;
 
-        const node = Node.ObjectLiteralProp({
-          key: requestName,
-          jsDoc: doc,
-          value: Node.Arrow({
-            args: [
-              ...pathItems.items.map(({ name }) => Type.Param({ name })),
-              ...(hasData ? [Type.Param({ name: 'data' })] : []),
-              Type.Param({ name: 'config' }),
-            ],
-            body: Node.Call({
-              expression: Node.Identifier(`api.${method.toLowerCase()}`),
-              typeArgs: responseAst.type ? [responseAst.type] : undefined,
+          const node = Node.ObjectLiteralProp({
+            key: requestName,
+            jsDoc: doc,
+            value: Node.Arrow({
               args: [
-                Node.TemplateString(path.replace(/\{/g, '${')),
-                ...(hasData ? [Node.Identifier('data')] : []),
-                Node.Identifier('config'),
+                ...pathItems.items.map(({ name }) => Type.Param({ name })),
+                ...(hasData ? [Type.Param({ name: 'data' })] : []),
+                Type.Param({ name: 'config' }),
               ],
-            }),
-          }),
-        });
-
-        const type = Type.Prop({
-          name: requestName,
-          jsDoc: doc,
-          type: Type.Arrow({
-            args: [
-              ...pathItems.items.map(Type.Param),
-              ...(hasData
-                ? [
-                    Type.Param({
-                      name: 'data',
-                      type: astRequestBody.type.body,
-                      isOptional: astRequestBody.type.isOptional,
-                    }),
-                  ]
-                : []),
-              Type.Param({
-                name: 'config',
-                isOptional: true,
-                type: Type.Intersection([
-                  Type.Referance('AxiosRequestConfig'),
-                  ...(configParams.type.length ? [Type.Referance(configDataIdentifier)] : []),
-                ]),
+              body: Node.Call({
+                expression: Node.Identifier(`api.${method.toLowerCase()}`),
+                typeArgs: responseAst.type ? [responseAst.type] : undefined,
+                args: [
+                  Node.TemplateString(path.replace(/\{/g, '${')),
+                  ...(hasData ? [Node.Identifier('data')] : []),
+                  Node.Identifier('config'),
+                ],
               }),
-            ],
-            ret: Type.Referance('Promise', [
-              Type.Referance('AxiosResponse', responseAst.type ? [responseAst.type] : undefined),
-            ]),
-          }),
-        });
+            }),
+          });
 
-        return document(configDataContext, { node, type });
-      });
+          const type = Type.Prop({
+            name: requestName,
+            jsDoc: doc,
+            type: Type.Arrow({
+              args: [
+                ...pathItems.items.map(Type.Param),
+                ...(hasData
+                  ? [
+                      Type.Param({
+                        name: 'data',
+                        type: astRequestBody.type.body,
+                        isOptional: astRequestBody.type.isOptional,
+                      }),
+                    ]
+                  : []),
+                Type.Param({
+                  name: 'config',
+                  isOptional: true,
+                  type: Type.Intersection([
+                    Type.Referance('AxiosRequestConfig'),
+                    ...(configParams.type.length ? [Type.Referance(configDataIdentifier)] : []),
+                  ]),
+                }),
+              ],
+              ret: Type.Referance('Promise', [
+                Type.Referance('AxiosResponse', responseAst.type ? [responseAst.type] : undefined),
+              ]),
+            }),
+          });
+
+          return document(configDataContext, { node, type });
+        },
+      );
 
       return document(methods.context, methods.items);
     },
