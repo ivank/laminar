@@ -2717,6 +2717,2478 @@ export interface AxiosOapiInstance {
 "
 `;
 
+exports[`Axios Content Test pol.yaml 1`] = `
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+
+/**
+ * Payment Orchestration Layer
+ *
+ * Version: 1.0.0
+ *
+ * Description:
+ * Overview
+ */
+export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
+    /**
+     * Request a Bearer token
+     */
+    \\"POST /authentication/v1.0.0/oauth/token\\": (data, config) => api.post<Response200AuthenticationTokenRead>(\`/authentication/v1.0.0/oauth/token\`, data, config),
+    /**
+     * Retrieve information on a UK bank account
+     *
+     * Required OAuth Audience: <code>BankAccounts</code>
+     */
+    \\"POST /bank-account/uk/v1.0.0/information\\": (data, config) => api.post<Response200UKBankAccountInformation>(\`/bank-account/uk/v1.0.0/information\`, data, config),
+    /**
+     * Create Direct Debit Collections
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"POST /direct-debit/v1.0.0/instructions/{MandateIdentification}/collections\\": (MandateIdentification, data, config) => api.post<Response200DirectDebitCollectionRead>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}/collections\`, data, config),
+    /**
+     * Create Direct Debit Instruction
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"POST /direct-debit/v1.0.0/instructions\\": (data, config) => api.post<Response200DirectDebitInstructionRead>(\`/direct-debit/v1.0.0/instructions\`, data, config),
+    /**
+     * Update Direct Debit Instruction
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}\\": (MandateIdentification, data, config) => api.put<Response200UpdateDirectDebitInstructionRead>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}\`, data, config),
+    /**
+     * Update Direct Debit Instruction Status
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}/status\\": (MandateIdentification, data, config) => api.put<Response200DirectDebitInstructionUpdateStatus>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}/status\`, data, config),
+    /**
+     * Upload a Direct Debit collection file
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     *
+     * Example file content:
+     *
+     * <code>{
+     * \\"document\\": {
+     *  \\"fi_to_fi_customer_direct_debit\\": {
+     *    \\"group_header\\": {
+     *      \\"message_identification\\": \\"cc60bfc5-7876-4fba-ae24-2d9c3e32e0b0\\",
+     *      \\"creation_date_time\\": \\"2021-07-23T10:46:56.697Z\\",
+     *      \\"number_of_transactions\\": 3
+     *    },
+     *    \\"direct_debit_transaction_information\\": [
+     *      {
+     *        \\"payment_identification\\": {
+     *          \\"end_to_end_identification\\": \\"5231998b-d704-40e1-aea4-3ac952aa757b\\"
+     *        },
+     *        \\"interbank_settlement_amount\\": {
+     *          \\"active_currency\\": \\"GBP\\",
+     *          \\"currency_amount\\": \\"10.00\\"
+     *        },
+     *        \\"interbank_settlement_date\\": \\"2021-07-23\\",
+     *        \\"direct_debit_transaction\\": {
+     *          \\"mandate_related_information\\": {
+     *            \\"mandate_id\\": \\"EXE-123456\\"
+     *          }
+     *        }
+     *      }
+     *    ]
+     *  }
+     * }
+     * }</code>
+     */
+    \\"POST /bulk-collections/v1.0.0/collection-files\\": (data, config) => api.post<Response200BulkCollectionsFileRead>(\`/bulk-collections/v1.0.0/collection-files\`, data, config),
+    /**
+     * Get the status of a Direct Debit collection file
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"GET /bulk-collections/v1.0.0/collection-files/{CollectionFileIdentification}\\": (CollectionFileIdentification, config) => api.get<Response200BulkCollectionsFileProgressRead>(\`/bulk-collections/v1.0.0/collection-files/\${CollectionFileIdentification}\`, config),
+    /**
+     * AUDDIS Bank Returned Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices\`, data, config),
+    /**
+     * ARUDD Unpaid Direct Debit Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices\`, data, config),
+    /**
+     * ADDACS Amendments Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/addacs-amendments-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/addacs-amendments-advices\`, data, config),
+    /**
+     * ADDACS Cancellations Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/addacs-cancellations-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/addacs-cancellations-advices\`, data, config),
+    /**
+     * DDIC Indemnity Claim Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices\`, data, config),
+    /**
+     * Collection Advices
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/collection-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/collection-advices\`, data, config),
+    /**
+     * Create Direct Credit
+     *
+     * Required OAuth Audience: <code>DirectCredits</code>
+     */
+    \\"POST /direct-credit/v1.0.0/instructions\\": (data, config) => api.post<Response200DirectCreditInstructionRead>(\`/direct-credit/v1.0.0/instructions\`, data, config),
+    /**
+     * AWACS Wrong Account for Credits Advice
+     */
+    \\"POST /direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices\\": (data, config) => api.post(\`/direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices\`, data, config),
+    /**
+     * ARUCS Unapplied Credits Advice
+     */
+    \\"POST /direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices\\": (data, config) => api.post(\`/direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices\`, data, config),
+    /**
+     * Request Payment Session
+     *
+     * Required OAuth Audience: <code>PaymentSession</code>
+     */
+    \\"POST /payments/v1.0.0/sessions\\": (data, config) => api.post(\`/payments/v1.0.0/sessions\`, data, config),
+    /**
+     * Payment approved
+     */
+    \\"POST /webhook/v1.0.0/approved\\": (data, config) => api.post(\`/webhook/v1.0.0/approved\`, data, config),
+    /**
+     * Payment voided
+     */
+    \\"POST /webhook/v1.0.0/voided\\": (data, config) => api.post(\`/webhook/v1.0.0/voided\`, data, config),
+    /**
+     * Payment captured
+     */
+    \\"POST /webhook/v1.0.0/captured\\": (data, config) => api.post(\`/webhook/v1.0.0/captured\`, data, config),
+    /**
+     * Payment declined
+     */
+    \\"POST /webhook/v1.0.0/declined\\": (data, config) => api.post(\`/webhook/v1.0.0/declined\`, data, config),
+    /**
+     * Payment refund declined
+     */
+    \\"POST /webhook/v1.0.0/refund-declined\\": (data, config) => api.post(\`/webhook/v1.0.0/refund-declined\`, data, config),
+    /**
+     * Payment Refund
+     * Request Payment Refund
+     *
+     * Required OAuth Audience: <code>PaymentSession</code>
+     */
+    \\"POST /payments/v1.0.0/{id}/refunds\\": (id, data, config) => api.post<SuccessResponseBody>(\`/payments/v1.0.0/\${id}/refunds\`, data, config),
+    \\"POST /inbound-transactions/v1.0.0/transactions/{id}/commit\\": (id, data, config) => api.post<{
+        /**
+         * Provides further details on an entry in the report.
+         */
+        Data: OBTransaction6;
+        [key: string]: unknown;
+    }>(\`/inbound-transactions/v1.0.0/transactions/\${id}/commit\`, data, config),
+    \\"GET /inbound-transactions/v1.0.0/accounts/{accountId}/transactions\\": (accountId, config) => api.get<OBReadTransaction6>(\`/inbound-transactions/v1.0.0/accounts/\${accountId}/transactions\`, config),
+    \\"GET /inbound-transactions/v1.0.0/transactions\\": config => api.get<OBReadTransaction6>(\`/inbound-transactions/v1.0.0/transactions\`, config),
+    \\"PATCH /inbound-transactions/v1.0.0/transactions/{id}\\": (id, data, config) => api.patch<{
+        /**
+         * Provides further details on an entry in the report.
+         */
+        Data: OBTransaction6;
+        [key: string]: unknown;
+    }>(\`/inbound-transactions/v1.0.0/transactions/\${id}\`, data, config),
+    /**
+     *
+     * NewAccountNumber and New only required if ReasonCode === \\"3\\" || ReasonCode === \\"C\\"
+     */
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/addacs\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/addacs\`, data, config),
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/arucs\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/arucs\`, data, config),
+    /**
+     *
+     * User will either need to provide both returnCode and returnDescription fields or leave both fields as \\"\\"
+     */
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/arudd\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/arudd\`, data, config),
+    /**
+     * NewAccountNumber and NewSortcode only required if ReasonCode === \\"C\\"
+     */
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/auddis\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/auddis\`, data, config),
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/awacs\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/awacs\`, data, config),
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/ddic\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/ddic\`, data, config),
+    api: api
+});
+
+export interface CreateAuthorizationToken {
+    Data: {
+        Audience: Audience;
+        /**
+         * Stringified UUIDv4.
+         * See [RFC 4112](https://tools.ietf.org/html/rfc4122)
+         */
+        ClientSecret: UUID;
+        /**
+         * Stringified UUIDv4.
+         * See [RFC 4112](https://tools.ietf.org/html/rfc4122)
+         */
+        ClientId: UUID;
+        GrantType: \\"client_credentials\\";
+        [key: string]: unknown;
+    };
+}
+
+export type Audience = \\"BankAccounts\\" | \\"DirectDebits\\" | \\"PaymentSession\\" | \\"DirectCredits\\" | \\"InboundTransactions\\" | \\"FakeCoEvents\\" | \\"PlatformDatabaseApi\\";
+
+export type UUID = string;
+
+export type Response200AuthenticationTokenRead = AuthenticationToken;
+
+export interface AuthenticationToken {
+    Data: {
+        ExpiresIn: number;
+        TokenType: \\"Bearer\\";
+        AccessToken: string;
+        [key: string]: unknown;
+    };
+}
+
+export interface CreateUKBankAccountInformation {
+    Data: {
+        AccountNumber: AccountNumber;
+        SortCode: SortCode;
+        [key: string]: unknown;
+    };
+}
+
+export type AccountNumber = string;
+
+export type SortCode = string;
+
+export type Response200UKBankAccountInformation = BankAccountResponse;
+
+export interface BankAccountResponse {
+    Data: {
+        SupportsFasterPayments: boolean;
+        SupportsDirectCredits: boolean;
+        SupportsDirectDebits: boolean;
+        AccountNumberExistsAtSortCode: boolean;
+        AccountNumber: AccountNumber;
+        SortCode: SortCode;
+        [key: string]: unknown;
+    };
+}
+
+export type IdempotencyKey = string;
+
+export interface CreateDirectDebitCollection {
+    Data: {
+        DirectDebitCollection?: OBCreateDirectDebitCollection;
+        [key: string]: unknown;
+    };
+}
+
+export interface OBCreateDirectDebitCollection {
+    /**
+     *
+     * The Amount object allows users to submit an amount and currency.
+     */
+    PaymentAmount: Amount;
+    PaymentDate: string;
+}
+
+export interface Amount {
+    /**
+     * A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+     */
+    Amount: string;
+    Currency: \\"GBP\\";
+}
+
+export type Response200DirectDebitCollectionRead = OBReadDirectDebitCollection;
+
+export interface OBReadDirectDebitCollection {
+    Data: {
+        DirectDebitCollection?: OBDirectDebitCollection;
+        [key: string]: unknown;
+    };
+}
+
+export interface OBDirectDebitCollection {
+    /**
+     * Direct Debit reference. For AUDDIS service users provide Core Reference. For non AUDDIS service users provide Core reference if possible or last used reference.
+     */
+    CollectionIdentification: string;
+    PaymentAmount: {
+        Currency: \\"GBP\\";
+        Amount: string;
+        [key: string]: unknown;
+    };
+    PaymentDate: string;
+}
+
+export interface PostDirectdebitV100InstructionsMandateIdentificationCollections {
+    headers?: {
+        /**
+         * A GUID representing the operation (if the key has been used previously
+         * the original response is returned).
+         */
+        \\"x-idempotency-key\\": IdempotencyKey;
+    };
+}
+
+export interface DirectDebitInstruction {
+    Data: {
+        DirectDebitInstruction?: OBCreateDirectDebitInstruction;
+        [key: string]: unknown;
+    };
+    /**
+     * MetaData
+     * Meta Data relevant to the payload
+     */
+    Meta?: Meta;
+}
+
+export interface OBCreateDirectDebitInstruction {
+    /**
+     *
+     * The Debtor object allows users to submit name of the client.
+     */
+    Debtor: Debtor;
+    /**
+     *
+     * The DebtorAccount object allows users to submit direct debit account information.
+     */
+    DebtorAccount: DebtorAccount;
+    Frequency: Frequency;
+    /**
+     *
+     * The Amount object allows users to submit an amount and currency.
+     */
+    RecurringPaymentAmount?: Amount;
+    FirstPaymentDate?: string;
+    /**
+     *
+     * The Amount object allows users to submit an amount and currency.
+     */
+    FirstPaymentAmount?: Amount;
+}
+
+export interface Debtor {
+    Name: string;
+}
+
+export interface DebtorAccount {
+    SchemeName: \\"SortCodeAccountNumber\\";
+    Identification: string;
+    Name: string;
+}
+
+export interface Frequency {
+    Schedule: \\"Ad-hoc\\" | \\"Ad-hoc Plus\\" | \\"Monthly\\";
+    /**
+     * Required if Schedule is \`Monthly\`. Zero-indexed, max value 30
+     */
+    DayOfMonth?: number;
+}
+
+export type Meta = any;
+
+export type Response200DirectDebitInstructionRead = OBReadDirectDebit;
+
+export interface OBReadDirectDebit {
+    Data: {
+        /**
+         * Account to or from which a cash entry is made.
+         */
+        DirectDebitInstruction?: OBDirectDebit;
+        [key: string]: unknown;
+    };
+    /**
+     * MetaData
+     * Meta Data relevant to the payload
+     */
+    Meta?: Meta;
+}
+
+export interface OBDirectDebit {
+    /**
+     * Direct Debit reference. For AUDDIS service users provide Core Reference. For non AUDDIS service users provide Core reference if possible or last used reference.
+     */
+    MandateIdentification: string;
+    /**
+     *
+     * The Debtor object allows users to submit name of the client.
+     */
+    Debtor: Debtor;
+    /**
+     *
+     * The DebtorAccount object allows users to submit direct debit account information.
+     */
+    DebtorAccount: DebtorAccount;
+    Frequency: Frequency;
+    /**
+     *
+     * The Amount object allows users to submit an amount and currency.
+     */
+    RecurringPaymentAmount?: Amount;
+    /**
+     * Specifies the status of the direct debit in code form.
+     */
+    StatusCode: StatusCode;
+    FirstPaymentDate?: string;
+    /**
+     *
+     * The Amount object allows users to submit an amount and currency.
+     */
+    FirstPaymentAmount?: Amount;
+}
+
+export type StatusCode = \\"Active\\" | \\"Suspended\\" | \\"Cancelled\\" | \\"Inactive\\";
+
+export interface PostDirectdebitV100Instructions {
+    headers?: {
+        /**
+         * A GUID representing the operation (if the key has been used previously
+         * the original response is returned).
+         */
+        \\"x-idempotency-key\\": IdempotencyKey;
+    };
+}
+
+export interface OBReadUpdateDirectDebit {
+    /**
+     * MetaData
+     * Meta Data relevant to the payload
+     */
+    Meta: Meta;
+}
+
+export type Response200UpdateDirectDebitInstructionRead = OBReadUpdateDirectDebit;
+
+export interface UpdateDirectDebitInstructionStatus {
+    Data: {
+        /**
+         * Specifies the status of the direct debit in code form.
+         */
+        StatusCode: StatusCode;
+        [key: string]: unknown;
+    };
+}
+
+export type Response200DirectDebitInstructionUpdateStatus = UpdateDirectDebitInstructionStatus;
+
+export interface Response200BulkCollectionsFileRead {
+    Data: {
+        CollectionFileIdentification: string;
+        [key: string]: unknown;
+    };
+}
+
+export interface PostBulkcollectionsV100Collectionfiles {
+    headers?: {
+        /**
+         * A GUID representing the operation (if the key has been used previously
+         * the original response is returned).
+         */
+        \\"x-idempotency-key\\": IdempotencyKey;
+    };
+}
+
+export interface Response200BulkCollectionsFileProgressRead {
+    Data: {
+        NumberOfProcessingErrors: number;
+        ProcessingPercentageComplete: number;
+        Status: BulkCollectionStatus;
+        CollectionFileIdentification: string;
+        [key: string]: unknown;
+    };
+}
+
+export type BulkCollectionStatus = \\"INITIALISING\\" | \\"PROCESSING\\" | \\"PENDING_UPLOAD\\" | \\"COMPLETED\\";
+
+export interface AuddisBankReturnedReportBody {
+    document: Document;
+    [key: string]: unknown;
+}
+
+export interface Document {
+    mandate_acceptance_report: MandateAcceptanceReportV07;
+    [key: string]: unknown;
+}
+
+export interface MandateAcceptanceReportV07 {
+    group_header: GroupHeader80;
+    underlying_acceptance_details: MandateAcceptance7[];
+    [key: string]: unknown;
+}
+
+export interface GroupHeader80 {
+    message_identification: Max35Text;
+    creation_date_time: schemas_ISODateTime;
+    [key: string]: unknown;
+}
+
+export type Max35Text = string & string;
+
+export type schemas_ISODateTime = string;
+
+export interface MandateAcceptance7 {
+    acceptance_result: AcceptanceResult6;
+    original_mandate?: OriginalMandate8Choice;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface AcceptanceResult6 {
+    accepted: YesNoIndicator;
+    reject_reason?: MandateReason1Choice;
+    additional_reject_reason_information?: Max105Text[];
+    [key: string]: unknown;
+}
+
+export type YesNoIndicator = boolean;
+
+export interface MandateReason1Choice {
+    proprietary: Max35Text;
+    [key: string]: unknown;
+}
+
+export type Max105Text = string & string;
+
+export interface OriginalMandate8Choice {
+    original_mandate: Mandate16;
+    [key: string]: unknown;
+}
+
+export interface Mandate16 {
+    mandate_identification: Max35Text;
+    type: MandateTypeInformation2;
+    occurrences?: MandateOccurrences5Modified;
+    creditor: PartyIdentification135;
+    creditor_account: CashAccount40;
+    creditor_agent: BranchAndFinancialInstitutionIdentification6;
+    debtor: PartyIdentification135Modification1;
+    debtor_account: CashAccount40;
+    debtor_agent: BranchAndFinancialInstitutionIdentification6;
+    [key: string]: unknown;
+}
+
+export interface MandateTypeInformation2 {
+    local_instrument?: LocalInstrument2Choice;
+    [key: string]: unknown;
+}
+
+export interface LocalInstrument2Choice {
+    proprietary: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface MandateOccurrences5Modified {
+    first_collection_date?: ISODate;
+    [key: string]: unknown;
+}
+
+export type ISODate = string;
+
+export interface PartyIdentification135 {
+    identification?: Party38Choice;
+    [key: string]: unknown;
+}
+
+export interface Party38Choice {
+    organisation_identification: OrganisationIdentification29;
+    [key: string]: unknown;
+}
+
+export interface OrganisationIdentification29 {
+    other?: GenericOrganisationIdentification1[];
+    [key: string]: unknown;
+}
+
+export interface GenericOrganisationIdentification1 {
+    identification: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface CashAccount40 {
+    identification?: AccountIdentification4Choice;
+    name?: Max70Text;
+    [key: string]: unknown;
+}
+
+export interface AccountIdentification4Choice {
+    other: GenericAccountIdentification1;
+    [key: string]: unknown;
+}
+
+export interface GenericAccountIdentification1 {
+    identification: Max34Text;
+    [key: string]: unknown;
+}
+
+export type Max34Text = string & string;
+
+export type Max70Text = string & string;
+
+export interface BranchAndFinancialInstitutionIdentification6 {
+    financial_institution_identification: FinancialInstitutionIdentification18;
+    [key: string]: unknown;
+}
+
+export interface FinancialInstitutionIdentification18 {
+    clearing_system_member_identification?: ClearingSystemMemberIdentification2;
+    [key: string]: unknown;
+}
+
+export interface ClearingSystemMemberIdentification2 {
+    member_identification: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface PartyIdentification135Modification1 {
+    name?: Max140Text;
+    [key: string]: unknown;
+}
+
+export type Max140Text = string & string;
+
+export interface SupplementaryData1 {
+    place_and_name?: Max350Text;
+    envelope: SupplementaryDataEnvelope1;
+    [key: string]: unknown;
+}
+
+export type Max350Text = string & string;
+
+export type SupplementaryDataEnvelope1 = string;
+
+export interface PostDirectdebitwebhooksV100Auddisbankreturnedadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface AruddReportBody {
+    document: schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface schemas_Document {
+    bank_to_customer_debit_credit_notification: BankToCustomerDebitCreditNotificationV09;
+    [key: string]: unknown;
+}
+
+export interface BankToCustomerDebitCreditNotificationV09 {
+    group_header: GroupHeader81;
+    notification: AccountNotification19[];
+    [key: string]: unknown;
+}
+
+export interface GroupHeader81 {
+    message_identification: Max35Text;
+    creation_date_time: schemas_ISODateTime;
+    [key: string]: unknown;
+}
+
+export interface AccountNotification19 {
+    identification: Max35Text;
+    creation_date_time?: schemas_ISODateTime;
+    account: CashAccount41;
+    entry?: ReportEntry11[];
+    [key: string]: unknown;
+}
+
+export interface CashAccount41 {
+    identification?: AccountIdentification4Choice;
+    [key: string]: unknown;
+}
+
+export interface ReportEntry11 {
+    reversal_indicator?: FixedFalseModified1;
+    credit_debit_indicator?: CreditDebitCode;
+    amount: ActiveOrHistoricCurrencyAndAmountModified1;
+    status: EntryStatus1Choice;
+    bank_transaction_code: BankTransactionCodeStructure4;
+    entry_details?: EntryDetails10[];
+    [key: string]: unknown;
+}
+
+export type FixedFalseModified1 = false;
+
+export type CreditDebitCode = \\"DBIT\\";
+
+export type ActiveOrHistoricCurrencyAndAmountModified1 = string;
+
+export interface EntryStatus1Choice {
+    proprietary: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface BankTransactionCodeStructure4 {
+    domain?: BankTransactionCodeStructure5;
+    proprietary?: ProprietaryBankTransactionCodeStructure1;
+    [key: string]: unknown;
+}
+
+export interface BankTransactionCodeStructure5 {
+    code: ExternalBankTransactionDomain1CodeModified1;
+    family: BankTransactionCodeStructure6;
+    [key: string]: unknown;
+}
+
+export type ExternalBankTransactionDomain1CodeModified1 = \\"PMNT\\";
+
+export interface BankTransactionCodeStructure6 {
+    code: ExternalBankTransactionFamily1CodeModified1;
+    sub_family_code: ExternalBankTransactionSubFamily1CodeModified1;
+    [key: string]: unknown;
+}
+
+export type ExternalBankTransactionFamily1CodeModified1 = \\"IDDT\\";
+
+export type ExternalBankTransactionSubFamily1CodeModified1 = \\"UPDD\\";
+
+export interface ProprietaryBankTransactionCodeStructure1 {
+    code: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface EntryDetails10 {
+    transaction_details?: EntryTransaction11[];
+    [key: string]: unknown;
+}
+
+export interface EntryTransaction11 {
+    references?: TransactionReferences6;
+    amount?: ActiveOrHistoricCurrencyAndAmountModified1;
+    credit_debit_indicator?: CreditDebitCode;
+    bank_transaction_code?: BankTransactionCodeStructure4;
+    related_parties?: TransactionParties9;
+    related_agents?: TransactionAgents5;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface TransactionReferences6 {
+    instruction_identification?: Max35Text;
+    end_to_end_identification?: Max35TextNullable;
+    [key: string]: unknown;
+}
+
+export type Max35TextNullable = string;
+
+export interface TransactionParties9 {
+    debtor_account?: CashAccount40;
+    creditor?: Party40Choice;
+    creditor_account?: CashAccount40Modified1;
+    [key: string]: unknown;
+}
+
+export interface Party40Choice {
+    party: schemas_PartyIdentification135;
+    [key: string]: unknown;
+}
+
+export interface schemas_PartyIdentification135 {
+    name?: Max140Text;
+    identification?: Party38Choice;
+    [key: string]: unknown;
+}
+
+export interface CashAccount40Modified1 {
+    identification?: AccountIdentification4Choice;
+    [key: string]: unknown;
+}
+
+export interface TransactionAgents5 {
+    debtor_agent?: BranchAndFinancialInstitutionIdentification6Modified2;
+    creditor_agent?: BranchAndFinancialInstitutionIdentification6Modified1;
+    [key: string]: unknown;
+}
+
+export interface BranchAndFinancialInstitutionIdentification6Modified2 {
+    financial_institution_identification: schemas_FinancialInstitutionIdentification18;
+    branch_identification?: BranchData3;
+    [key: string]: unknown;
+}
+
+export interface schemas_FinancialInstitutionIdentification18 {
+    clearing_system_member_identification?: ClearingSystemMemberIdentification2;
+    name?: Max140Text;
+    [key: string]: unknown;
+}
+
+export interface BranchData3 {
+    name?: Max140Text;
+    [key: string]: unknown;
+}
+
+export interface BranchAndFinancialInstitutionIdentification6Modified1 {
+    financial_institution_identification: schemas_FinancialInstitutionIdentification18;
+    [key: string]: unknown;
+}
+
+export interface PostDirectdebitwebhooksV100Aruddunpaiddirectdebitadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface AddacsAmendmentsReportBody {
+    document: components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_Document {
+    mandate_amendment_request: MandateAmendmentRequestV07;
+    [key: string]: unknown;
+}
+
+export interface MandateAmendmentRequestV07 {
+    group_header: schemas_GroupHeader80;
+    underlying_amendment_details: MandateAmendment7[];
+    [key: string]: unknown;
+}
+
+export interface schemas_GroupHeader80 {
+    message_identification: Max35Text;
+    creation_date_time: schemas_ISODateTime;
+    [key: string]: unknown;
+}
+
+export interface MandateAmendment7 {
+    amendment_reason: MandateAmendmentReason2;
+    mandate: Mandate18;
+    original_mandate: OriginalMandate9Choice;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface MandateAmendmentReason2 {
+    reason: schemas_MandateReason1Choice;
+    [key: string]: unknown;
+}
+
+export interface schemas_MandateReason1Choice {
+    proprietary: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface Mandate18 {
+    debtor_account?: CashAccount40Modified1;
+    debtor_agent?: BranchAndFinancialInstitutionIdentification6;
+    tracking_indicator: TrueFalseIndicator;
+    mandate_identification: Max35Text;
+    [key: string]: unknown;
+}
+
+export type TrueFalseIndicator = boolean;
+
+export interface OriginalMandate9Choice {
+    original_mandate: Mandate17;
+    [key: string]: unknown;
+}
+
+export interface Mandate17 {
+    mandate_identification: Max35Text;
+    creditor: PartyIdentification135;
+    debtor_account?: CashAccount40;
+    debtor_agent: BranchAndFinancialInstitutionIdentification6;
+    tracking_indicator: TrueFalseIndicator;
+    debtor: PartyIdentification135Modified1;
+    [key: string]: unknown;
+}
+
+export interface PartyIdentification135Modified1 {
+    name?: Max140Text;
+    [key: string]: unknown;
+}
+
+export interface PostDirectdebitwebhooksV100Addacsamendmentsadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface AddacsCancellationsReportBody {
+    document: addacs_cancellations_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface addacs_cancellations_components_schemas_Document {
+    mandate_cancellation_request: MandateCancellationRequestV07;
+    [key: string]: unknown;
+}
+
+export interface MandateCancellationRequestV07 {
+    group_header: schemas_GroupHeader80;
+    underlying_cancellation_details: MandateCancellation7[];
+    [key: string]: unknown;
+}
+
+export interface MandateCancellation7 {
+    cancellation_reason: MandateCancellationReason1;
+    original_mandate: schemas_OriginalMandate9Choice;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface MandateCancellationReason1 {
+    reason: schemas_MandateReason1Choice;
+    [key: string]: unknown;
+}
+
+export interface schemas_OriginalMandate9Choice {
+    original_mandate: schemas_Mandate17;
+    [key: string]: unknown;
+}
+
+export interface schemas_Mandate17 {
+    mandate_identification: Max35Text;
+    tracking_indicator: TrueFalseIndicator;
+    creditor: schemas_PartyIdentification135Modified1;
+    debtor: components_schemas_PartyIdentification135;
+    debtor_account?: CashAccount40;
+    debtor_agent: BranchAndFinancialInstitutionIdentification6;
+    [key: string]: unknown;
+}
+
+export interface schemas_PartyIdentification135Modified1 {
+    identification?: Party38ChoiceModified1;
+    [key: string]: unknown;
+}
+
+export interface Party38ChoiceModified1 {
+    organisation_identification: OrganisationIdentification29;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_PartyIdentification135 {
+    name?: Max140Text;
+    [key: string]: unknown;
+}
+
+export interface PostDirectdebitwebhooksV100Addacscancellationsadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface DdicReportBody {
+    document: ddic_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface ddic_components_schemas_Document {
+    bank_to_customer_debit_credit_notification: schemas_BankToCustomerDebitCreditNotificationV09;
+    [key: string]: unknown;
+}
+
+export interface schemas_BankToCustomerDebitCreditNotificationV09 {
+    group_header: GroupHeader81;
+    notification: schemas_AccountNotification19[];
+    [key: string]: unknown;
+}
+
+export interface schemas_AccountNotification19 {
+    identification: Max35Text;
+    creation_date_time?: schemas_ISODateTime;
+    account: CashAccount41;
+    entry?: schemas_ReportEntry11[];
+    [key: string]: unknown;
+}
+
+export interface schemas_ReportEntry11 {
+    additional_entry_information?: Max500Text;
+    reversal_indicator?: FixedTrueModified1;
+    credit_debit_indicator?: CreditDebitCodeModified1;
+    amount: ActiveOrHistoricCurrencyAndAmountModified1;
+    status: EntryStatus1Choice;
+    bank_transaction_code: schemas_BankTransactionCodeStructure4;
+    entry_details?: schemas_EntryDetails10[];
+    [key: string]: unknown;
+}
+
+export type Max500Text = string & string;
+
+export type FixedTrueModified1 = true;
+
+export type CreditDebitCodeModified1 = \\"DBIT\\";
+
+export interface schemas_BankTransactionCodeStructure4 {
+    domain?: schemas_BankTransactionCodeStructure5;
+    proprietary?: ProprietaryBankTransactionCodeStructure1;
+    [key: string]: unknown;
+}
+
+export interface schemas_BankTransactionCodeStructure5 {
+    code: ExternalBankTransactionDomain1CodeModified1;
+    family: schemas_BankTransactionCodeStructure6;
+    [key: string]: unknown;
+}
+
+export interface schemas_BankTransactionCodeStructure6 {
+    code: ExternalBankTransactionFamily1CodeModified1;
+    sub_family_code: schemas_ExternalBankTransactionSubFamily1CodeModified1;
+    [key: string]: unknown;
+}
+
+export type schemas_ExternalBankTransactionSubFamily1CodeModified1 = \\"PRDD\\";
+
+export interface schemas_EntryDetails10 {
+    transaction_details?: schemas_EntryTransaction11[];
+    [key: string]: unknown;
+}
+
+export interface schemas_EntryTransaction11 {
+    references?: schemas_TransactionReferences6;
+    amount?: ActiveOrHistoricCurrencyAndAmountModified1;
+    credit_debit_indicator?: CreditDebitCodeModified1;
+    bank_transaction_code?: schemas_BankTransactionCodeStructure4;
+    related_parties?: schemas_TransactionParties9;
+    related_agents?: schemas_TransactionAgents5;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface schemas_TransactionReferences6 {
+    mandate_identification?: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface schemas_TransactionParties9 {
+    debtor_account?: CashAccount40;
+    [key: string]: unknown;
+}
+
+export interface schemas_TransactionAgents5 {
+    debtor_agent?: schemas_BranchAndFinancialInstitutionIdentification6Modified2;
+    [key: string]: unknown;
+}
+
+export interface schemas_BranchAndFinancialInstitutionIdentification6Modified2 {
+    financial_institution_identification: FinancialInstitutionIdentification18Modified1;
+    [key: string]: unknown;
+}
+
+export interface FinancialInstitutionIdentification18Modified1 {
+    name?: Max140Text;
+    [key: string]: unknown;
+}
+
+export interface PostDirectdebitwebhooksV100Ddicindemnityclaimadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface CollectionAdvicesReportBody {
+    document: collection_advices_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface collection_advices_components_schemas_Document {
+    bank_to_customer_debit_credit_notification: components_schemas_BankToCustomerDebitCreditNotificationV09;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_BankToCustomerDebitCreditNotificationV09 {
+    group_header: GroupHeader81;
+    notification: components_schemas_AccountNotification19[];
+    [key: string]: unknown;
+}
+
+export interface components_schemas_AccountNotification19 {
+    identification: Max35Text;
+    creation_date_time?: schemas_ISODateTime;
+    account: CashAccount41;
+    entry?: components_schemas_ReportEntry11[];
+    [key: string]: unknown;
+}
+
+export interface components_schemas_ReportEntry11 {
+    reversal_indicator?: FixedFalseModified1;
+    credit_debit_indicator?: schemas_CreditDebitCode;
+    amount: ActiveOrHistoricCurrencyAndAmountModified1;
+    status: EntryStatus1Choice;
+    bank_transaction_code: components_schemas_BankTransactionCodeStructure4;
+    entry_details?: components_schemas_EntryDetails10[];
+    [key: string]: unknown;
+}
+
+export type schemas_CreditDebitCode = \\"CRDT\\";
+
+export interface components_schemas_BankTransactionCodeStructure4 {
+    domain?: components_schemas_BankTransactionCodeStructure5;
+    proprietary?: ProprietaryBankTransactionCodeStructure1;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_BankTransactionCodeStructure5 {
+    code: ExternalBankTransactionDomain1CodeModified1;
+    family: components_schemas_BankTransactionCodeStructure6;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_BankTransactionCodeStructure6 {
+    code: ExternalBankTransactionFamily1CodeModified1;
+    sub_family_code: components_schemas_ExternalBankTransactionSubFamily1CodeModified1;
+    [key: string]: unknown;
+}
+
+export type components_schemas_ExternalBankTransactionSubFamily1CodeModified1 = \\"UPDD\\" | \\"PMDD\\";
+
+export interface components_schemas_EntryDetails10 {
+    transaction_details?: components_schemas_EntryTransaction11[];
+    [key: string]: unknown;
+}
+
+export interface components_schemas_EntryTransaction11 {
+    references?: TransactionReferences6;
+    amount?: ActiveOrHistoricCurrencyAndAmountModified1;
+    credit_debit_indicator?: schemas_CreditDebitCode;
+    bank_transaction_code?: components_schemas_BankTransactionCodeStructure4;
+    related_parties?: TransactionParties9;
+    related_agents?: components_schemas_TransactionAgents5;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface components_schemas_TransactionAgents5 {
+    debtor_agent?: components_schemas_BranchAndFinancialInstitutionIdentification6Modified2;
+    creditor_agent?: BranchAndFinancialInstitutionIdentification6Modified1;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_BranchAndFinancialInstitutionIdentification6Modified2 {
+    financial_institution_identification: schemas_FinancialInstitutionIdentification18Modified1;
+    branch_identification?: schemas_BranchData3;
+    [key: string]: unknown;
+}
+
+export interface schemas_FinancialInstitutionIdentification18Modified1 {
+    name?: Max140TextAndMin0;
+    clearing_system_member_identification?: ClearingSystemMemberIdentification2Modified;
+    [key: string]: unknown;
+}
+
+export type Max140TextAndMin0 = string & string;
+
+export interface ClearingSystemMemberIdentification2Modified {
+    member_identification: Max35TextAndMin0;
+    [key: string]: unknown;
+}
+
+export type Max35TextAndMin0 = string & string;
+
+export interface schemas_BranchData3 {
+    name?: Max140TextAndMin0;
+    [key: string]: unknown;
+}
+
+export interface PostDirectdebitwebhooksV100Collectionadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface CreateDirectCredit {
+    Data: {
+        /**
+         *
+         * The DirectCreditInstruction object allows users to submit a direct credit to be created.
+         */
+        DirectCreditInstruction: DirectCreditInstruction;
+        [key: string]: unknown;
+    };
+    Meta?: Meta1;
+}
+
+export interface DirectCreditInstruction {
+    Creditor: {
+        Name: string;
+        [key: string]: unknown;
+    };
+    CreditorAccount: CreditorAccount;
+    CreditAmount: CreditorAmount;
+    MandateIdentification?: string;
+}
+
+export interface CreditorAccount {
+    SchemeName: \\"SortCodeAccountNumber\\";
+    Identification: string;
+    Name: string;
+}
+
+export interface CreditorAmount {
+    /**
+     * A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+     */
+    Amount: string;
+    Currency: \\"GBP\\";
+}
+
+export type Meta1 = any;
+
+export type Response200DirectCreditInstructionRead = CreateDirectCredit;
+
+export interface PostDirectcreditV100Instructions {
+    headers?: {
+        /**
+         * A GUID representing the operation (if the key has been used previously
+         * the original response is returned).
+         */
+        \\"x-idempotency-key\\": IdempotencyKey;
+    };
+}
+
+export interface AwacsWrongAccountForCreditsReportBody {
+    document: awacs_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface awacs_components_schemas_Document {
+    identification_modification_advice: IdentificationModificationAdviceV03;
+    [key: string]: unknown;
+}
+
+export interface IdentificationModificationAdviceV03 {
+    assignment: IdentificationAssignment3;
+    original_transaction_reference?: OriginalTransactionReference30;
+    modification: IdentificationModification4[];
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface IdentificationAssignment3 {
+    message_identification: Max35Text;
+    creation_date_time: schemas_ISODateTime;
+    assigner: Party40Choice;
+    assignee: Party40Choice;
+    [key: string]: unknown;
+}
+
+export interface OriginalTransactionReference30 {
+    original_transaction?: PaymentIdentification5[];
+    [key: string]: unknown;
+}
+
+export interface PaymentIdentification5 {
+    instruction_identification?: Max35Text;
+    end_to_end_identification: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface IdentificationModification4 {
+    identification: Max35Text;
+    original_party_and_account_identification?: IdentificationInformation4;
+    updated_party_and_account_identification: IdentificationInformation4;
+    additional_information?: Max140Text;
+    [key: string]: unknown;
+}
+
+export interface IdentificationInformation4 {
+    party?: PartyIdentification135Modified1;
+    account?: schemas_CashAccount40;
+    agent?: BranchAndFinancialInstitutionIdentification6;
+    [key: string]: unknown;
+}
+
+export interface schemas_CashAccount40 {
+    identification?: AccountIdentification4Choice;
+    [key: string]: unknown;
+}
+
+export interface PostDirectcreditwebhooksV100Awacswrongaccountforcreditsadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface ArucsReportBody {
+    document: arucs_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_Document {
+    bank_to_customer_debit_credit_notification: arucs_components_schemas_BankToCustomerDebitCreditNotificationV09;
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_BankToCustomerDebitCreditNotificationV09 {
+    group_header: GroupHeader81;
+    notification: arucs_components_schemas_AccountNotification19[];
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_AccountNotification19 {
+    identification: Max35Text;
+    account: CashAccount41;
+    creation_date_time?: schemas_ISODateTime;
+    entry?: arucs_components_schemas_ReportEntry11[];
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_ReportEntry11 {
+    amount: ActiveOrHistoricCurrencyAndAmountModified1;
+    bank_transaction_code: arucs_components_schemas_BankTransactionCodeStructure4;
+    credit_debit_indicator: schemas_CreditDebitCode;
+    status: EntryStatus1Choice;
+    entry_details?: arucs_components_schemas_EntryDetails10[];
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_BankTransactionCodeStructure4 {
+    domain?: arucs_components_schemas_BankTransactionCodeStructure5;
+    proprietary?: ProprietaryBankTransactionCodeStructure1;
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_BankTransactionCodeStructure5 {
+    code: ExternalBankTransactionDomain1CodeModified1;
+    family: arucs_components_schemas_BankTransactionCodeStructure6;
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_BankTransactionCodeStructure6 {
+    code: schemas_ExternalBankTransactionFamily1CodeModified1;
+    sub_family_code: arucs_components_schemas_ExternalBankTransactionSubFamily1CodeModified1;
+    [key: string]: unknown;
+}
+
+export type schemas_ExternalBankTransactionFamily1CodeModified1 = \\"ICDT\\";
+
+export type arucs_components_schemas_ExternalBankTransactionSubFamily1CodeModified1 = \\"RRTN\\";
+
+export interface arucs_components_schemas_EntryDetails10 {
+    transaction_details?: arucs_components_schemas_EntryTransaction11[];
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_EntryTransaction11 {
+    amount?: ActiveOrHistoricCurrencyAndAmountModified1;
+    related_agents?: arucs_components_schemas_TransactionAgents5;
+    related_parties?: components_schemas_TransactionParties9;
+    credit_debit_indicator?: schemas_CreditDebitCode;
+    bank_transaction_code?: arucs_components_schemas_BankTransactionCodeStructure4;
+    references?: components_schemas_TransactionReferences6;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface arucs_components_schemas_TransactionAgents5 {
+    creditor_agent?: schemas_BranchAndFinancialInstitutionIdentification6;
+    debtor_agent?: schemas_BranchAndFinancialInstitutionIdentification6;
+    [key: string]: unknown;
+}
+
+export interface schemas_BranchAndFinancialInstitutionIdentification6 {
+    financial_institution_identification: schemas_FinancialInstitutionIdentification18;
+    branch_identification?: BranchData3Nullable;
+    [key: string]: unknown;
+}
+
+export interface BranchData3Nullable {
+    name?: Max140Text;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_TransactionParties9 {
+    creditor_account?: CashAccount40;
+    creditor?: Party40ChoiceModified1;
+    debtor_account?: CashAccount40;
+    debtor?: Party40Choice;
+    [key: string]: unknown;
+}
+
+export interface Party40ChoiceModified1 {
+    party: PartyIdentification135Modified1;
+    [key: string]: unknown;
+}
+
+export interface components_schemas_TransactionReferences6 {
+    instruction_identification?: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface PostDirectcreditwebhooksV100Arucsunappliedcreditsadvices {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export type UUID1 = string;
+
+export interface CreatePaymentSession {
+    Data: {
+        Initiation: OBCreatePaymentSession;
+        [key: string]: unknown;
+    };
+}
+
+export interface OBCreatePaymentSession {
+    LocalInstrument: LocalInstrument;
+    InstructedAmount?: {
+        Currency?: Currency;
+        Amount?: string;
+        [key: string]: unknown;
+    };
+    Metadata: {
+        CustomerAddressCountry?: string;
+        CustomerAddressPostCode?: string;
+        CustomerAddressCity?: string;
+        CustomerAddressCounty?: string;
+        CustomerAddressLine2?: string;
+        CustomerAddressLine1?: string;
+        CustomerEmail?: string;
+        [key: string]: any | undefined;
+    };
+}
+
+export type LocalInstrument = \\"UK.POL.All\\" | \\"UK.POL.Cards\\";
+
+export type Currency = \\"GBP\\";
+
+export interface PostPaymentsV100Sessions {
+    headers?: {
+        /**
+         * A GUID representing the operation (if the key has been used previously
+         * the original response is returned).
+         */
+        \\"x-idempotency-key\\": UUID1;
+    };
+}
+
+export interface PaymentApprovedEventBody {
+    document: payment_approved_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface payment_approved_components_schemas_Document {
+    acceptor_authorisation_response: AcceptorAuthorisationResponseV10;
+    [key: string]: unknown;
+}
+
+export interface AcceptorAuthorisationResponseV10 {
+    header: Header59;
+    authorisation_response: AcceptorAuthorisationResponse10;
+    [key: string]: unknown;
+}
+
+export interface Header59 {
+    message_function: MessageFunction42Code;
+    protocol_version: Max6Text;
+    exchange_identification: Max35Text;
+    creation_date_time: schemas_ISODateTime;
+    initiating_party: GenericIdentification176;
+    [key: string]: unknown;
+}
+
+export type MessageFunction42Code = \\"AUTQ\\" | \\"AUTP\\" | \\"CCAV\\" | \\"CCAK\\" | \\"CCAQ\\" | \\"CCAP\\" | \\"CMPV\\" | \\"CMPK\\" | \\"DCAV\\" | \\"DCRR\\" | \\"DCCQ\\" | \\"DCCP\\" | \\"DGNP\\" | \\"DGNQ\\" | \\"FAUQ\\" | \\"FAUP\\" | \\"FCMV\\" | \\"FCMK\\" | \\"FRVA\\" | \\"FRVR\\" | \\"RCLQ\\" | \\"RCLP\\" | \\"RVRA\\" | \\"RVRR\\" | \\"CDDQ\\" | \\"CDDK\\" | \\"CDDR\\" | \\"CDDP\\" | \\"TRNR\\" | \\"TRNA\\" | \\"NFRQ\\" | \\"NFRP\\" | \\"TRPQ\\" | \\"TRPP\\";
+
+export type Max6Text = string & string;
+
+export interface GenericIdentification176 {
+    identification: InitiatingPartyIdentification;
+    [key: string]: unknown;
+}
+
+export type InitiatingPartyIdentification = \\"CHECKOUT\\";
+
+export interface AcceptorAuthorisationResponse10 {
+    environment: CardPaymentEnvironment77;
+    transaction: CardPaymentTransaction111;
+    transaction_response: CardPaymentTransaction109;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface CardPaymentEnvironment77 {
+    card?: PaymentCard31;
+    cardholder?: Cardholder17;
+    [key: string]: unknown;
+}
+
+export interface PaymentCard31 {
+    issuer_bin?: Max15NumericText;
+    card_country_code?: Max3Text;
+    card_brand?: Max35TextNullable;
+    card_product_type?: CardProductType1Code;
+    [key: string]: unknown;
+}
+
+export type Max15NumericText = string;
+
+export type Max3Text = string;
+
+export type CardProductType1Code = \\"COMM\\" | \\"CONS\\" | any;
+
+export interface Cardholder17 {
+    identification?: PersonIdentification15;
+    [key: string]: unknown;
+}
+
+export interface PersonIdentification15 {
+    email_address?: string;
+    other?: GenericIdentification4[];
+    [key: string]: unknown;
+}
+
+export interface GenericIdentification4 {
+    identification: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface CardPaymentTransaction111 {
+    transaction_identification: TransactionIdentifier1;
+    transaction_details: CardPaymentTransactionDetails49;
+    [key: string]: unknown;
+}
+
+export interface TransactionIdentifier1 {
+    transaction_date_time: schemas_ISODateTime;
+    transaction_reference: Max35TextNullable;
+    [key: string]: unknown;
+}
+
+export interface CardPaymentTransactionDetails49 {
+    currency?: ActiveCurrencyCode;
+    total_amount: ImpliedCurrencyAndAmount;
+    authorised_amount?: DecimalNumberAsString;
+    account_type?: CardAccountType3Code;
+    [key: string]: unknown;
+}
+
+export type ActiveCurrencyCode = string;
+
+export type ImpliedCurrencyAndAmount = DecimalNumberAsString & number;
+
+export type DecimalNumberAsString = string;
+
+export type CardAccountType3Code = \\"CTDP\\" | \\"CHCK\\" | \\"CRDT\\" | \\"CURR\\" | \\"CDBT\\" | \\"DFLT\\" | \\"EPRS\\" | \\"HEQL\\" | \\"ISTL\\" | \\"INVS\\" | \\"LCDT\\" | \\"MBNW\\" | \\"MNMK\\" | \\"MNMC\\" | \\"MTGL\\" | \\"RTRM\\" | \\"RVLV\\" | \\"SVNG\\" | \\"STBD\\" | \\"UVRL\\" | \\"PRPD\\" | \\"FLTC\\" | any;
+
+export interface CardPaymentTransaction109 {
+    authorisation_result: AuthorisationResult14;
+    [key: string]: unknown;
+}
+
+export interface AuthorisationResult14 {
+    response_to_authorisation: ResponseType10;
+    authorisation_code?: Min5Max6Text;
+    [key: string]: unknown;
+}
+
+export interface ResponseType10 {
+    response: Response9Code;
+    [key: string]: unknown;
+}
+
+export type Response9Code = \\"APPR\\" | \\"DECL\\" | \\"PART\\" | \\"SUSP\\" | \\"TECH\\";
+
+export type Min5Max6Text = string & string;
+
+export interface PostWebhookV100Approved {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface PaymentVoidedEventBody {
+    document: payment_voided_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface payment_voided_components_schemas_Document {
+    acceptor_cancellation_response: AcceptorCancellationResponseV09;
+    [key: string]: unknown;
+}
+
+export interface AcceptorCancellationResponseV09 {
+    header: Header59;
+    cancellation_response: AcceptorCancellationResponse9;
+    [key: string]: unknown;
+}
+
+export interface AcceptorCancellationResponse9 {
+    environment: schemas_CardPaymentEnvironment77;
+    transaction: CardPaymentTransaction97;
+    transaction_response: CardPaymentTransaction105;
+    [key: string]: unknown;
+}
+
+export type schemas_CardPaymentEnvironment77 = any;
+
+export interface CardPaymentTransaction97 {
+    transaction_identification: TransactionIdentifier1;
+    transaction_details: CardPaymentTransactionDetails34;
+    [key: string]: unknown;
+}
+
+export interface CardPaymentTransactionDetails34 {
+    currency?: ActiveCurrencyCode;
+    total_amount: ImpliedCurrencyAndAmount;
+    [key: string]: unknown;
+}
+
+export interface CardPaymentTransaction105 {
+    authorisation_result: AuthorisationResult16;
+    [key: string]: unknown;
+}
+
+export interface AuthorisationResult16 {
+    response_to_authorisation: ResponseType10;
+    AuthstnCd?: Min6Max8Text;
+    [key: string]: unknown;
+}
+
+export type Min6Max8Text = string & string;
+
+export interface PostWebhookV100Voided {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface PaymentCapturedEventBody {
+    document: payment_captured_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface payment_captured_components_schemas_Document {
+    acceptor_completion_advice_response: AcceptorCompletionAdviceResponseV09;
+    [key: string]: unknown;
+}
+
+export interface AcceptorCompletionAdviceResponseV09 {
+    header: Header59;
+    completion_advice_response: AcceptorCompletionAdviceResponse9;
+    [key: string]: unknown;
+}
+
+export interface AcceptorCompletionAdviceResponse9 {
+    environment: schemas_CardPaymentEnvironment77;
+    transaction: CardPaymentTransactionAdviceResponse8;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface CardPaymentTransactionAdviceResponse8 {
+    transaction_identification: TransactionIdentifier1;
+    response: Response9Code;
+    [key: string]: unknown;
+}
+
+export interface PostWebhookV100Captured {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface PaymentDeclinedEventBody {
+    document: payment_declined_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface payment_declined_components_schemas_Document {
+    acceptor_cancellation_response: schemas_AcceptorCancellationResponseV09;
+    [key: string]: unknown;
+}
+
+export interface schemas_AcceptorCancellationResponseV09 {
+    header: Header59;
+    cancellation_response: schemas_AcceptorCancellationResponse9;
+    [key: string]: unknown;
+}
+
+export interface schemas_AcceptorCancellationResponse9 {
+    environment: components_schemas_CardPaymentEnvironment77;
+    transaction: schemas_CardPaymentTransaction111;
+    transaction_response: schemas_CardPaymentTransaction109;
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface components_schemas_CardPaymentEnvironment77 {
+    card?: schemas_PaymentCard31;
+    cardholder?: schemas_Cardholder17;
+    [key: string]: unknown;
+}
+
+export interface schemas_PaymentCard31 {
+    issuer_bin?: Max15NumericText;
+    card_country_code?: Max3Text;
+    card_brand?: Max35TextNullable;
+    card_product_type?: CardProductType1Code;
+    [key: string]: unknown;
+}
+
+export interface schemas_Cardholder17 {
+    identification?: schemas_PersonIdentification15;
+    [key: string]: unknown;
+}
+
+export interface schemas_PersonIdentification15 {
+    email_address?: string;
+    other?: GenericIdentification4[];
+    [key: string]: unknown;
+}
+
+export interface schemas_CardPaymentTransaction111 {
+    transaction_identification: TransactionIdentifier1;
+    initiator_transaction_identification?: Max35Text;
+    transaction_details: schemas_CardPaymentTransactionDetails49;
+    [key: string]: unknown;
+}
+
+export interface schemas_CardPaymentTransactionDetails49 {
+    currency?: ActiveCurrencyCode;
+    total_amount: ImpliedCurrencyAndAmount;
+    [key: string]: unknown;
+}
+
+export interface schemas_CardPaymentTransaction109 {
+    authorisation_result: schemas_AuthorisationResult14;
+    [key: string]: unknown;
+}
+
+export interface schemas_AuthorisationResult14 {
+    response_to_authorisation: ResponseType10;
+    authorisation_code?: Max6TextNullable;
+    [key: string]: unknown;
+}
+
+export type Max6TextNullable = string;
+
+export interface PostWebhookV100Declined {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface PaymentRefundDeclinedEventBody {
+    document: payment_refund_declined_components_schemas_Document;
+    [key: string]: unknown;
+}
+
+export interface payment_refund_declined_components_schemas_Document {
+    bank_to_customer_debit_credit_notification: BankToCustomerDebitCreditNotificationV10;
+    [key: string]: unknown;
+}
+
+export interface BankToCustomerDebitCreditNotificationV10 {
+    group_header: GroupHeader81;
+    notification: AccountNotification20[];
+    supplementary_data?: SupplementaryData1[];
+    [key: string]: unknown;
+}
+
+export interface AccountNotification20 {
+    identification: Max35Text;
+    account: schemas_CashAccount41;
+    entry?: ReportEntry12[];
+    [key: string]: unknown;
+}
+
+export interface schemas_CashAccount41 {
+    identification?: schemas_AccountIdentification4Choice;
+    [key: string]: unknown;
+}
+
+export interface schemas_AccountIdentification4Choice {
+    IBAN: IBAN2007Identifier;
+    other: schemas_GenericAccountIdentification1;
+    [key: string]: unknown;
+}
+
+export type IBAN2007Identifier = string & string;
+
+export interface schemas_GenericAccountIdentification1 {
+    identification: Max34Text;
+    schemeName?: AccountSchemeName1Choice;
+    issuer?: Max35Text;
+    [key: string]: unknown;
+}
+
+export interface AccountSchemeName1Choice {
+    code: ExternalAccountIdentification1Code;
+    proprietary: Max35Text;
+    [key: string]: unknown;
+}
+
+export type ExternalAccountIdentification1Code = string & string;
+
+export interface ReportEntry12 {
+    amount: ActiveOrHistoricCurrencyAndAmount;
+    credit_debit_indicator: components_schemas_CreditDebitCode;
+    reversal_indicator?: TrueFalseIndicator;
+    status: EntryStatus1Choice;
+    bank_transaction_code: payment_refund_declined_components_schemas_BankTransactionCodeStructure4;
+    [key: string]: unknown;
+}
+
+export interface ActiveOrHistoricCurrencyAndAmount {
+    currency: ActiveOrHistoricCurrencyCode;
+    value: ActiveOrHistoricCurrencyAndAmount_SimpleType;
+    [key: string]: unknown;
+}
+
+export type ActiveOrHistoricCurrencyCode = string & string;
+
+export type ActiveOrHistoricCurrencyAndAmount_SimpleType = string;
+
+export type components_schemas_CreditDebitCode = \\"CRDT\\" | \\"DBIT\\";
+
+export interface payment_refund_declined_components_schemas_BankTransactionCodeStructure4 {
+    domain?: payment_refund_declined_components_schemas_BankTransactionCodeStructure5;
+    [key: string]: unknown;
+}
+
+export interface payment_refund_declined_components_schemas_BankTransactionCodeStructure5 {
+    code: ExternalBankTransactionDomain1Code;
+    family: payment_refund_declined_components_schemas_BankTransactionCodeStructure6;
+    [key: string]: unknown;
+}
+
+export type ExternalBankTransactionDomain1Code = string & string;
+
+export interface payment_refund_declined_components_schemas_BankTransactionCodeStructure6 {
+    code: ExternalBankTransactionFamily1Code;
+    sub_family_code: ExternalBankTransactionSubFamily1Code;
+    [key: string]: unknown;
+}
+
+export type ExternalBankTransactionFamily1Code = string & string;
+
+export type ExternalBankTransactionSubFamily1Code = string & string;
+
+export interface PostWebhookV100Refunddeclined {
+    headers?: {
+        \\"x-client-signature\\": string;
+    };
+}
+
+export interface CreatePaymentRefund {
+    Data: {
+        Amount?: string;
+        [key: string]: unknown;
+    };
+}
+
+export interface SuccessResponseBody {
+    Data: {
+        RefundIdentifier: string;
+        Amount?: string;
+        [key: string]: unknown;
+    };
+}
+
+export interface PostPaymentsV100IdRefunds {
+    headers?: {
+        /**
+         * A GUID representing the operation (if the key has been used previously
+         * the original response is returned).
+         */
+        \\"x-idempotency-key\\": string;
+    };
+}
+
+export interface OBTransaction6 {
+    /**
+     * A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+     */
+    AccountId: AccountId;
+    /**
+     * Unique identifier for the transaction within an servicing institution. This identifier is both unique and immutable.
+     */
+    TransactionId?: TransactionId;
+    /**
+     * Unique reference for the transaction. This reference is optionally populated, and may as an example be the FPID in the Faster Payments context.
+     */
+    TransactionReference?: TransactionReference;
+    /**
+     * Indicates whether the transaction is a credit or a debit entry.
+     */
+    CreditDebitIndicator: OBCreditDebitCode1;
+    /**
+     * Status of a transaction entry on the books of the account servicer.
+     */
+    Status: OBEntryStatus1Code;
+    /**
+     * Date and time when a transaction entry is posted to an account on the account servicer's books.
+     * Usage: Booking date is the expected booking date, unless the status is booked, in which case it is the actual booking date.All dates in the JSON payloads are represented in ISO 8601 date-time format.
+     * All date-time fields in responses must include the timezone. An example is below:
+     * 2017-04-05T10:43:07+00:00
+     */
+    BookingDateTime: BookingDateTime;
+    /**
+     * Date and time at which assets become available to the account owner in case of a credit entry, or cease to be available to the account owner in case of a debit transaction entry.
+     * Usage: If transaction entry status is pending and value date is present, then the value date refers to an expected/requested value date.
+     * For transaction entries subject to availability/float and for which availability information is provided, the value date must not be used. In this case the availability component identifies the number of availability days.All dates in the JSON payloads are represented in ISO 8601 date-time format.
+     * All date-time fields in responses must include the timezone. An example is below:
+     * 2017-04-05T10:43:07+00:00
+     */
+    ValueDateTime?: ValueDateTime;
+    /**
+     * Amount of money in the cash transaction entry.
+     */
+    Amount: OBActiveOrHistoricCurrencyAndAmount9;
+    /**
+     * Set of elements used to define the balance as a numerical representation of the net increases and decreases in an account after a transaction entry is applied to the account.
+     */
+    Balance?: OBTransactionCashBalance;
+    /**
+     * Financial institution servicing an account for the creditor.
+     */
+    CreditorAgent?: OBBranchAndFinancialInstitutionIdentification61;
+    /**
+     * Unambiguous identification of the account of the creditor, in the case of a debit transaction.
+     */
+    CreditorAccount?: OBCashAccount60;
+    /**
+     * Financial institution servicing an account for the debtor.
+     */
+    DebtorAgent?: OBBranchAndFinancialInstitutionIdentification62;
+    /**
+     * Unambiguous identification of the account of the debtor, in the case of a crebit transaction.
+     */
+    DebtorAccount?: OBCashAccount61;
+    /**
+     * Construct a type with a set of properties K of type T
+     */
+    SupplementaryData?: OBSupplementaryData1;
+}
+
+export type AccountId = string;
+
+export type TransactionId = string;
+
+export type TransactionReference = string;
+
+export type OBCreditDebitCode1 = \\"Credit\\" | \\"Debit\\";
+
+export type OBEntryStatus1Code = \\"Booked\\" | \\"Pending\\" | \\"Rejected\\";
+
+export type BookingDateTime = string;
+
+export type ValueDateTime = string;
+
+export interface OBActiveOrHistoricCurrencyAndAmount9 {
+    /**
+     * A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+     */
+    Amount: OBActiveCurrencyAndAmountSimpleType;
+    /**
+     * A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \\"Codes for the representation of currencies and funds\\".
+     */
+    Currency: ActiveOrHistoricCurrencyCode1;
+}
+
+export type OBActiveCurrencyAndAmountSimpleType = string;
+
+export type ActiveOrHistoricCurrencyCode1 = string;
+
+export interface OBTransactionCashBalance {
+    /**
+     * Indicates whether the balance is a credit or a debit balance.
+     * Usage: A zero balance is considered to be a credit balance.
+     */
+    CreditDebitIndicator: OBCreditDebitCode2;
+    /**
+     * Balance type, in a coded form.
+     */
+    Type: OBBalanceType1Code;
+    /**
+     * Amount of money of the cash balance after a transaction entry is applied to the account..
+     */
+    Amount: {
+        /**
+         * A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \\"Codes for the representation of currencies and funds\\".
+         */
+        Currency: ActiveOrHistoricCurrencyCode1;
+        /**
+         * A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+         */
+        Amount: OBActiveCurrencyAndAmountSimpleType;
+        [key: string]: unknown;
+    };
+}
+
+export type OBCreditDebitCode2 = \\"Credit\\" | \\"Debit\\";
+
+export type OBBalanceType1Code = \\"ClosingAvailable\\" | \\"ClosingBooked\\" | \\"ClosingCleared\\" | \\"Expected\\" | \\"ForwardAvailable\\" | \\"Information\\" | \\"InterimAvailable\\" | \\"InterimBooked\\" | \\"InterimCleared\\" | \\"OpeningAvailable\\" | \\"OpeningBooked\\" | \\"OpeningCleared\\" | \\"PreviouslyClosedBooked\\";
+
+export interface OBBranchAndFinancialInstitutionIdentification61 {
+    /**
+     * Unique and unambiguous identification of a financial institution or a branch of a financial institution.
+     */
+    Identification?: Identification2;
+    /**
+     * Name by which an agent is known and which is usually used to identify that agent.
+     */
+    Name?: Name1;
+}
+
+export type Identification2 = string;
+
+export type Name1 = string;
+
+export interface OBCashAccount60 {
+    /**
+     * Name of the identification scheme, in a coded form as published in an external list.
+     */
+    SchemeName?: OBExternalAccountIdentification4Code;
+    /**
+     * Identification assigned by an institution to identify an account. This identification is known by the account owner.
+     */
+    Identification?: Identification0;
+    /**
+     * The account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels.
+     * Note, the account name is not the product name or the nickname of the account.
+     */
+    Name?: Name0;
+    /**
+     * This is secondary identification of the account, as assigned by the account servicing institution.
+     * This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).
+     */
+    SecondaryIdentification?: SecondaryIdentification;
+}
+
+export type OBExternalAccountIdentification4Code = \\"UK.OBIE.BBAN\\" | \\"UK.OBIE.IBAN\\" | \\"UK.OBIE.PAN\\" | \\"UK.OBIE.Paym\\" | \\"UK.OBIE.SortCodeAccountNumber\\";
+
+export type Identification0 = string;
+
+export type Name0 = string;
+
+export type SecondaryIdentification = string;
+
+export interface OBBranchAndFinancialInstitutionIdentification62 {
+    /**
+     * Unique and unambiguous identification of a financial institution or a branch of a financial institution.
+     */
+    Identification?: Identification2;
+    /**
+     * Name by which an agent is known and which is usually used to identify that agent.
+     */
+    Name?: Name1;
+}
+
+export interface OBCashAccount61 {
+    /**
+     * Name of the identification scheme, in a coded form as published in an external list.
+     */
+    SchemeName?: OBExternalAccountIdentification4Code;
+    /**
+     * Identification assigned by an institution to identify an account. This identification is known by the account owner.
+     */
+    Identification?: Identification0;
+    /**
+     * The account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels.
+     * Note, the account name is not the product name or the nickname of the account.
+     */
+    Name?: Name0;
+    /**
+     * This is secondary identification of the account, as assigned by the account servicing institution.
+     * This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).
+     */
+    SecondaryIdentification?: SecondaryIdentification;
+}
+
+export type OBSupplementaryData1 = Record_string.any_;
+
+export interface Record_string.any_ {
+    [key: string]: unknown;
+}
+
+export interface PostInboundtransactionsV100TransactionsIdCommit {
+    headers?: {
+        \\"x-idempotency-key\\": string;
+    };
+}
+
+export type PageParam = number;
+
+export type FromBookingDateTimeParam = string;
+
+export type ToBookingDateTimeParam = string;
+
+export interface OBReadTransaction6 {
+    Data: OBReadDataTransaction6;
+    /**
+     * Links relevant to the payload
+     */
+    Links: Links;
+    /**
+     * Meta Data relevant to the payload
+     */
+    Meta?: Meta2;
+}
+
+export interface OBReadDataTransaction6 {
+    Transaction?: OBTransaction6[];
+}
+
+export interface Links {
+    Self: string;
+    First?: string;
+    Prev?: string;
+    Next?: string;
+    Last?: string;
+}
+
+export interface Meta2 {
+    TotalPages?: number;
+    /**
+     * All dates in the JSON payloads are represented in ISO 8601 date-time format.
+     * All date-time fields in responses must include the timezone. An example is below:
+     * 2017-04-05T10:43:07+00:00
+     */
+    FirstAvailableDateTime?: ISODateTime;
+    /**
+     * All dates in the JSON payloads are represented in ISO 8601 date-time format.
+     * All date-time fields in responses must include the timezone. An example is below:
+     * 2017-04-05T10:43:07+00:00
+     */
+    LastAvailableDateTime?: ISODateTime;
+}
+
+export type ISODateTime = string;
+
+export interface GetInboundtransactionsV100AccountsAccountIdTransactions {
+    params?: {
+        page?: PageParam;
+        fromBookingDateTime?: FromBookingDateTimeParam;
+        toBookingDateTime?: ToBookingDateTimeParam;
+    };
+}
+
+export interface GetInboundtransactionsV100Transactions {
+    params?: {
+        page?: PageParam;
+        fromBookingDateTime?: FromBookingDateTimeParam;
+        toBookingDateTime?: ToBookingDateTimeParam;
+    };
+}
+
+export interface UpdateTransactionBody {
+    Data: {
+        Brand: BillingSystem;
+        CustomerAccountNumber: string;
+        [key: string]: unknown;
+    };
+}
+
+export type BillingSystem = \\"Gentrack\\" | \\"Orion\\";
+
+export interface AddacsReport {
+    Data: AddacsData;
+    UploadToSFTP: boolean;
+}
+
+export interface AddacsData {
+    AddacsRecordCount?: number;
+    PayerName?: string;
+    AccountNumber?: string;
+    SortCode?: string;
+    ReasonCode?: string;
+    NewAccountNumber?: string;
+    NewSortCode?: string;
+    DdiReference?: string;
+    Sun?: string;
+    InvalidBody?: boolean;
+}
+
+export interface DirectDebitReportResponse {
+    Data: DirectDebitReportResponseData;
+    UploadToSFTP: boolean;
+}
+
+export interface DirectDebitReportResponseData {
+    ReportId: string;
+    ReportType: DirectDebitReportType;
+    ReportContent: string;
+    ReportName: string;
+}
+
+export type DirectDebitReportType = \\"AUDDIS\\" | \\"ADDACS\\" | \\"ARUDD\\" | \\"DDIC\\" | \\"AWACS\\" | \\"ARUCS\\";
+
+export interface ArucsReport {
+    Data: ArucsData;
+    UploadToSFTP: boolean;
+}
+
+export interface ArucsData {
+    ArucsRecordCount?: number;
+    Amount?: number;
+    Currency?: string;
+    AccountNumber?: string;
+    DdiReference?: string;
+    AccountName?: string;
+    SortCode?: string;
+    BankName?: string;
+    BranchName?: string;
+    ReturnCode?: string;
+    ReturnDescription?: string;
+    Sun?: string;
+}
+
+export interface AruddReport {
+    Data: AruddData;
+    UploadToSFTP: boolean;
+}
+
+export interface AruddData {
+    AruddRecordCount?: number;
+    Amount?: number;
+    Currency?: string;
+    AccountNumber?: string;
+    DdiReference?: string;
+    AccountName?: string;
+    SortCode?: string;
+    AccountType?: string;
+    BankName?: string;
+    BranchName?: string;
+    returnCode?: string;
+    returnDescription?: string;
+    Sun?: string;
+    InvalidBody?: boolean;
+}
+
+export interface AuddisReport {
+    Data: AuddisData;
+    UploadToSFTP: boolean;
+}
+
+export interface AuddisData {
+    AuddisRecordCount?: number;
+    PayerName?: string;
+    PayerAccountNumber?: string;
+    PayerSortCode?: string;
+    ReasonCode?: string;
+    NewSortCode?: string;
+    NewAccountNumber?: string;
+    Sun?: string;
+    DdiReference?: string;
+    InvalidBody?: boolean;
+}
+
+export interface AwacsReport {
+    Data: AwacsData;
+    UploadToSFTP: boolean;
+}
+
+export interface AwacsData {
+    AwacsRecordCount?: number;
+    Sun?: string;
+    ReasonCode?: string;
+    PayerName?: string;
+    PayerAccountNumber?: string;
+    PayerSortCode?: string;
+    PayerNewSortCode?: string;
+    PayerNewAccountNumber?: string;
+    TransactionCode?: string;
+    OriginalSortCode?: string;
+    OriginalAccountNumber?: string;
+    DdiReference?: string;
+}
+
+export interface DDICReport {
+    Data: DDICData;
+    UploadToSFTP: boolean;
+}
+
+export interface DDICData {
+    DDICRecordCount?: number;
+    PayingBankReference?: string;
+    SUReference?: string;
+    ReasonCode?: string;
+    PayerSortCode?: string;
+    PayerAccount?: string;
+    PayerName?: string;
+    Sun?: string;
+    InvalidBody?: boolean;
+}
+
+export interface AxiosOapiInstance {
+    /**
+     * Request a Bearer token
+     */
+    \\"POST /authentication/v1.0.0/oauth/token\\": (data: CreateAuthorizationToken, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200AuthenticationTokenRead>>;
+    /**
+     * Retrieve information on a UK bank account
+     *
+     * Required OAuth Audience: <code>BankAccounts</code>
+     */
+    \\"POST /bank-account/uk/v1.0.0/information\\": (data: CreateUKBankAccountInformation, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200UKBankAccountInformation>>;
+    /**
+     * Create Direct Debit Collections
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"POST /direct-debit/v1.0.0/instructions/{MandateIdentification}/collections\\": (MandateIdentification: string, data: CreateDirectDebitCollection, config?: AxiosRequestConfig & PostDirectdebitV100InstructionsMandateIdentificationCollections) => Promise<AxiosResponse<Response200DirectDebitCollectionRead>>;
+    /**
+     * Create Direct Debit Instruction
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"POST /direct-debit/v1.0.0/instructions\\": (data: DirectDebitInstruction, config?: AxiosRequestConfig & PostDirectdebitV100Instructions) => Promise<AxiosResponse<Response200DirectDebitInstructionRead>>;
+    /**
+     * Update Direct Debit Instruction
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}\\": (MandateIdentification: string, data: OBReadUpdateDirectDebit, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200UpdateDirectDebitInstructionRead>>;
+    /**
+     * Update Direct Debit Instruction Status
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}/status\\": (MandateIdentification: string, data: UpdateDirectDebitInstructionStatus, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200DirectDebitInstructionUpdateStatus>>;
+    /**
+     * Upload a Direct Debit collection file
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     *
+     * Example file content:
+     *
+     * <code>{
+     * \\"document\\": {
+     *  \\"fi_to_fi_customer_direct_debit\\": {
+     *    \\"group_header\\": {
+     *      \\"message_identification\\": \\"cc60bfc5-7876-4fba-ae24-2d9c3e32e0b0\\",
+     *      \\"creation_date_time\\": \\"2021-07-23T10:46:56.697Z\\",
+     *      \\"number_of_transactions\\": 3
+     *    },
+     *    \\"direct_debit_transaction_information\\": [
+     *      {
+     *        \\"payment_identification\\": {
+     *          \\"end_to_end_identification\\": \\"5231998b-d704-40e1-aea4-3ac952aa757b\\"
+     *        },
+     *        \\"interbank_settlement_amount\\": {
+     *          \\"active_currency\\": \\"GBP\\",
+     *          \\"currency_amount\\": \\"10.00\\"
+     *        },
+     *        \\"interbank_settlement_date\\": \\"2021-07-23\\",
+     *        \\"direct_debit_transaction\\": {
+     *          \\"mandate_related_information\\": {
+     *            \\"mandate_id\\": \\"EXE-123456\\"
+     *          }
+     *        }
+     *      }
+     *    ]
+     *  }
+     * }
+     * }</code>
+     */
+    \\"POST /bulk-collections/v1.0.0/collection-files\\": (data: unknown, config?: AxiosRequestConfig & PostBulkcollectionsV100Collectionfiles) => Promise<AxiosResponse<Response200BulkCollectionsFileRead>>;
+    /**
+     * Get the status of a Direct Debit collection file
+     *
+     * Required OAuth Audience: <code>DirectDebits</code>
+     */
+    \\"GET /bulk-collections/v1.0.0/collection-files/{CollectionFileIdentification}\\": (CollectionFileIdentification: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200BulkCollectionsFileProgressRead>>;
+    /**
+     * AUDDIS Bank Returned Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices\\": (data: AuddisBankReturnedReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Auddisbankreturnedadvices) => Promise<AxiosResponse>;
+    /**
+     * ARUDD Unpaid Direct Debit Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices\\": (data: AruddReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Aruddunpaiddirectdebitadvices) => Promise<AxiosResponse>;
+    /**
+     * ADDACS Amendments Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/addacs-amendments-advices\\": (data: AddacsAmendmentsReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Addacsamendmentsadvices) => Promise<AxiosResponse>;
+    /**
+     * ADDACS Cancellations Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/addacs-cancellations-advices\\": (data: AddacsCancellationsReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Addacscancellationsadvices) => Promise<AxiosResponse>;
+    /**
+     * DDIC Indemnity Claim Advice
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices\\": (data: DdicReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Ddicindemnityclaimadvices) => Promise<AxiosResponse>;
+    /**
+     * Collection Advices
+     */
+    \\"POST /direct-debit-webhooks/v1.0.0/collection-advices\\": (data: CollectionAdvicesReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Collectionadvices) => Promise<AxiosResponse>;
+    /**
+     * Create Direct Credit
+     *
+     * Required OAuth Audience: <code>DirectCredits</code>
+     */
+    \\"POST /direct-credit/v1.0.0/instructions\\": (data: CreateDirectCredit, config?: AxiosRequestConfig & PostDirectcreditV100Instructions) => Promise<AxiosResponse<Response200DirectCreditInstructionRead>>;
+    /**
+     * AWACS Wrong Account for Credits Advice
+     */
+    \\"POST /direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices\\": (data: AwacsWrongAccountForCreditsReportBody, config?: AxiosRequestConfig & PostDirectcreditwebhooksV100Awacswrongaccountforcreditsadvices) => Promise<AxiosResponse>;
+    /**
+     * ARUCS Unapplied Credits Advice
+     */
+    \\"POST /direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices\\": (data: ArucsReportBody, config?: AxiosRequestConfig & PostDirectcreditwebhooksV100Arucsunappliedcreditsadvices) => Promise<AxiosResponse>;
+    /**
+     * Request Payment Session
+     *
+     * Required OAuth Audience: <code>PaymentSession</code>
+     */
+    \\"POST /payments/v1.0.0/sessions\\": (data: CreatePaymentSession, config?: AxiosRequestConfig & PostPaymentsV100Sessions) => Promise<AxiosResponse>;
+    /**
+     * Payment approved
+     */
+    \\"POST /webhook/v1.0.0/approved\\": (data: PaymentApprovedEventBody, config?: AxiosRequestConfig & PostWebhookV100Approved) => Promise<AxiosResponse>;
+    /**
+     * Payment voided
+     */
+    \\"POST /webhook/v1.0.0/voided\\": (data: PaymentVoidedEventBody, config?: AxiosRequestConfig & PostWebhookV100Voided) => Promise<AxiosResponse>;
+    /**
+     * Payment captured
+     */
+    \\"POST /webhook/v1.0.0/captured\\": (data: PaymentCapturedEventBody, config?: AxiosRequestConfig & PostWebhookV100Captured) => Promise<AxiosResponse>;
+    /**
+     * Payment declined
+     */
+    \\"POST /webhook/v1.0.0/declined\\": (data: PaymentDeclinedEventBody, config?: AxiosRequestConfig & PostWebhookV100Declined) => Promise<AxiosResponse>;
+    /**
+     * Payment refund declined
+     */
+    \\"POST /webhook/v1.0.0/refund-declined\\": (data: PaymentRefundDeclinedEventBody, config?: AxiosRequestConfig & PostWebhookV100Refunddeclined) => Promise<AxiosResponse>;
+    /**
+     * Payment Refund
+     * Request Payment Refund
+     *
+     * Required OAuth Audience: <code>PaymentSession</code>
+     */
+    \\"POST /payments/v1.0.0/{id}/refunds\\": (id: string, data?: CreatePaymentRefund, config?: AxiosRequestConfig & PostPaymentsV100IdRefunds) => Promise<AxiosResponse<SuccessResponseBody>>;
+    \\"POST /inbound-transactions/v1.0.0/transactions/{id}/commit\\": (id: string, data?: unknown, config?: AxiosRequestConfig & PostInboundtransactionsV100TransactionsIdCommit) => Promise<AxiosResponse<{
+        /**
+         * Provides further details on an entry in the report.
+         */
+        Data: OBTransaction6;
+        [key: string]: unknown;
+    }>>;
+    \\"GET /inbound-transactions/v1.0.0/accounts/{accountId}/transactions\\": (accountId: string, config?: AxiosRequestConfig & GetInboundtransactionsV100AccountsAccountIdTransactions) => Promise<AxiosResponse<OBReadTransaction6>>;
+    \\"GET /inbound-transactions/v1.0.0/transactions\\": (config?: AxiosRequestConfig & GetInboundtransactionsV100Transactions) => Promise<AxiosResponse<OBReadTransaction6>>;
+    \\"PATCH /inbound-transactions/v1.0.0/transactions/{id}\\": (id: string, data: UpdateTransactionBody, config?: AxiosRequestConfig) => Promise<AxiosResponse<{
+        /**
+         * Provides further details on an entry in the report.
+         */
+        Data: OBTransaction6;
+        [key: string]: unknown;
+    }>>;
+    /**
+     *
+     * NewAccountNumber and New only required if ReasonCode === \\"3\\" || ReasonCode === \\"C\\"
+     */
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/addacs\\": (data: AddacsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/arucs\\": (data: ArucsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    /**
+     *
+     * User will either need to provide both returnCode and returnDescription fields or leave both fields as \\"\\"
+     */
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/arudd\\": (data: AruddReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    /**
+     * NewAccountNumber and NewSortcode only required if ReasonCode === \\"C\\"
+     */
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/auddis\\": (data: AuddisReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/awacs\\": (data: AwacsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    \\"POST /direct-debit-test-harness/v1.0.0/reports/ddic\\": (data: DDICReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    api: AxiosInstance;
+}
+"
+`;
+
 exports[`Axios Content Test schemes.yaml 1`] = `
 "import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
 

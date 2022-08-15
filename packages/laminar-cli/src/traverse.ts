@@ -59,11 +59,15 @@ export const getReferencedObject = <T>(
 ): T => {
   if (isReferenceObject(item)) {
     if (!context.refs[item.$ref]) {
-      throw new Error(`Reference Error [${JSON.stringify(item)}] not found`);
+      throw new Error(`Reference Error |${JSON.stringify(item)}| not found`);
     }
-    const resolved = context.refs[item.$ref];
+    const resolved = getReferencedObject(context.refs[item.$ref], guard, type, context);
     if (!guard(resolved)) {
-      throw new Error(`Reference Error [${JSON.stringify(item)}] was not the expected type ${type}`);
+      throw new Error(
+        `Reference Error, the reference |${JSON.stringify(item)}| which was resolved to |${JSON.stringify(
+          resolved,
+        )}| was not the expected type "${type}"`,
+      );
     }
     return resolved;
   } else {

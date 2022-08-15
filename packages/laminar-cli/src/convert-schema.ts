@@ -25,6 +25,8 @@ const nodeType = (type: string): ts.LiteralTypeNode | ts.KeywordTypeNode | ts.Ar
   }
 };
 
+const toTypeScriptName = (name: string): string => name.replace(/-/g, '_');
+
 const convertArrayType: AstConvert<ts.UnionTypeNode> = (context, schema) =>
   isSchemaObject(schema) && Array.isArray(schema.type)
     ? document(context, Type.Union(schema.type.map(nodeType)))
@@ -74,7 +76,7 @@ const convertConst: AstConvert = (context, schema) =>
 
 const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
   if (isReferenceObject(schema)) {
-    const name = schema.$ref.split('/').reverse()[0];
+    const name = toTypeScriptName(schema.$ref.split('/').reverse()[0]);
     if (context.identifiers?.[name]) {
       return document(context, Type.Referance(name));
     } else {

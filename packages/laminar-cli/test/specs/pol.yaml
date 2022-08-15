@@ -1,0 +1,5621 @@
+---
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Payment Orchestration Layer
+  contact:
+    email: pol.team@example.com
+  x-logo:
+    url: logo.png
+  description: Overview
+servers:
+  - url: https://example.com
+paths:
+  '/authentication/v1.0.0/oauth/token':
+    post:
+      operationId: Generate an access token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200AuthenticationTokenRead'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '404':
+          description: Not Found
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: Request a Bearer token
+      tags:
+        - Authentication
+      security: []
+      parameters: []
+      requestBody:
+        description: Create Authorization Token Request
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateAuthorizationToken'
+  '/bank-account/uk/v1.0.0/information':
+    post:
+      operationId: Generate UK bank account information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200UKBankAccountInformation'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Retrieve information on a UK bank account
+
+        Required OAuth Audience: <code>BankAccounts</code>
+      tags:
+        - Bank Accounts
+      security:
+        - ClientCredentials: []
+      parameters: []
+      requestBody:
+        description: Create UK Bank Account Information Request
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateUKBankAccountInformation'
+  '/direct-debit/v1.0.0/instructions/{MandateIdentification}/collections':
+    post:
+      operationId: Create a Direct Debit collection
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200DirectDebitCollectionRead'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Create Direct Debit Collections
+
+        Required OAuth Audience: <code>DirectDebits</code>
+      tags:
+        - Direct Debits
+      security:
+        - ClientCredentials: []
+      parameters:
+        - in: path
+          name: MandateIdentification
+          required: true
+          schema:
+            type: string
+        - description: |-
+            A GUID representing the operation (if the key has been used previously
+            the original response is returned).
+          in: header
+          name: x-idempotency-key
+          required: true
+          schema:
+            '$ref': '#/components/schemas/IdempotencyKey'
+      requestBody:
+        description: Create Direct Debit Instruction Request
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateDirectDebitCollection'
+  '/direct-debit/v1.0.0/instructions':
+    post:
+      operationId: Create a Direct Debit instruction
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200DirectDebitInstructionRead'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Create Direct Debit Instruction
+
+        Required OAuth Audience: <code>DirectDebits</code>
+      tags:
+        - Direct Debits
+      security:
+        - ClientCredentials: []
+      parameters:
+        - description: |-
+            A GUID representing the operation (if the key has been used previously
+            the original response is returned).
+          in: header
+          name: x-idempotency-key
+          required: true
+          schema:
+            '$ref': '#/components/schemas/IdempotencyKey'
+      requestBody:
+        description: Create Direct Debit Instruction Request
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/DirectDebitInstruction'
+  '/direct-debit/v1.0.0/instructions/{MandateIdentification}':
+    put:
+      operationId: Update a Direct Debit instruction
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200UpdateDirectDebitInstructionRead'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Update Direct Debit Instruction
+
+        Required OAuth Audience: <code>DirectDebits</code>
+      tags:
+        - Direct Debits
+      security:
+        - ClientCredentials: []
+      parameters:
+        - description: The mandate identification (bacs reference)
+          in: path
+          name: MandateIdentification
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Create Direct Debit Instruction Request
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/OBReadUpdateDirectDebit'
+  '/direct-debit/v1.0.0/instructions/{MandateIdentification}/status':
+    put:
+      operationId: Update the status of a Direct Debit instruction
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200DirectDebitInstructionUpdateStatus'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Update Direct Debit Instruction Status
+
+        Required OAuth Audience: <code>DirectDebits</code>
+      tags:
+        - Direct Debits
+      security:
+        - ClientCredentials: []
+      parameters:
+        - description: The mandate identification (bacs reference)
+          in: path
+          name: MandateIdentification
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update Direct Debit Instruction Status Request
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/UpdateDirectDebitInstructionStatus'
+  '/bulk-collections/v1.0.0/collection-files':
+    post:
+      operationId: Upload a Direct Debit collection file
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200BulkCollectionsFileRead'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Upload a Direct Debit collection file
+
+        Required OAuth Audience: <code>DirectDebits</code>
+
+        Example file content:
+
+        <code>{
+        "document": {
+         "fi_to_fi_customer_direct_debit": {
+           "group_header": {
+             "message_identification": "cc60bfc5-7876-4fba-ae24-2d9c3e32e0b0",
+             "creation_date_time": "2021-07-23T10:46:56.697Z",
+             "number_of_transactions": 3
+           },
+           "direct_debit_transaction_information": [
+             {
+               "payment_identification": {
+                 "end_to_end_identification": "5231998b-d704-40e1-aea4-3ac952aa757b"
+               },
+               "interbank_settlement_amount": {
+                 "active_currency": "GBP",
+                 "currency_amount": "10.00"
+               },
+               "interbank_settlement_date": "2021-07-23",
+               "direct_debit_transaction": {
+                 "mandate_related_information": {
+                   "mandate_id": "EXE-123456"
+                 }
+               }
+             }
+           ]
+         }
+        }
+        }</code>
+      tags:
+        - Direct Debits
+      security:
+        - ClientCredentials: []
+      parameters:
+        - description: |-
+            A GUID representing the operation (if the key has been used previously
+            the original response is returned).
+          in: header
+          name: x-idempotency-key
+          required: true
+          schema:
+            '$ref': '#/components/schemas/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+  '/bulk-collections/v1.0.0/collection-files/{CollectionFileIdentification}':
+    get:
+      operationId: Get the status of a Direct Debit collection file
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200BulkCollectionsFileProgressRead'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Get the status of a Direct Debit collection file
+
+        Required OAuth Audience: <code>DirectDebits</code>
+      tags:
+        - Direct Debits
+      security:
+        - ClientCredentials: []
+      parameters:
+        - in: path
+          name: CollectionFileIdentification
+          required: true
+          schema:
+            type: string
+  '/direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices':
+    post:
+      tags:
+        - Direct Debit webhooks
+      summary: AUDDIS Bank Returned Advice
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more AUDDIS bank returned advice(s)
+
+          This data model translates Bacs AUDDIS Bank Returned Advice XML report(s) into the ISO20022 pain.012.001.07 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AuddisBankReturnedReportBody'
+            examples:
+              sun-123456-no-correlation-error-message:
+                summary: A JSON object sample for Bacs AUDDIS Bank Returns report.
+                  Sun 123456 and no correlation error message.
+                externalValue: '/examples/bacs-auddis-bank-returned-event-sun-123456-no-correlation-error-message.json'
+              sun-999999-no-correlation-error-message:
+                summary: A JSON object sample for Bacs AUDDIS Bank Returns report.
+                  Sun 999999 and no correlation error message.
+                externalValue: '/examples/bacs-auddis-bank-returned-event-sun-999999-no-correlation-error-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices':
+    post:
+      tags:
+        - Direct Debit webhooks
+      summary: ARUDD Unpaid Direct Debit Advice
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more ARUDD advice(s)
+
+          This data model translates Bacs ARUDD Advice XML report(s) into ISO20022 BankToCustomerDebitCreditNotification standard (camt.054.001.09)
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AruddReportBody'
+            examples:
+              jsonObject:
+                summary: A JSON object sample for Bacs ARUDD Bank Returns report.
+                  Sun 123456 and no correlation error message.
+                externalValue: '/examples/bacs-arudd-unpaid-direct-debit-event-sun-123456-no-correlation-error-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/direct-debit-webhooks/v1.0.0/addacs-amendments-advices':
+    post:
+      tags:
+        - Direct Debit webhooks
+      summary: ADDACS Amendments Advice
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more ADDACS amendments advice(s)
+
+          This data model translates Bacs ADDACS amendments Advice XML report(s) into the ISO20022 pain.010.001.07 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AddacsAmendmentsReportBody'
+            examples:
+              jsonObject:
+                summary: A JSON object sample for Bacs ADDACS Amendments report. Sun
+                  123456 and no correlation error message.
+                externalValue: '/examples/bacs-addacs-amendments-sun-123456-no-correlation-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/direct-debit-webhooks/v1.0.0/addacs-cancellations-advices':
+    post:
+      tags:
+        - Direct Debit webhooks
+      summary: ADDACS Cancellations Advice
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more ADDACS Cancellations advice(s)
+
+          This data model translates Bacs ADDACS Cancellations Advice XML report(s) into the ISO20022 pain.011.001.07 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AddacsCancellationsReportBody'
+            examples:
+              sun-123456-no-correlation-message:
+                summary: A JSON object sample for Bacs ADDACS Cancellations report.
+                  Sun 123456 and no correlation error message.
+                externalValue: '/examples/bacs-addacs-cancellations-event-sun-123456-no-correlation-error-message.json'
+              sun-999999-with-correlation-message:
+                summary: A JSON object sample for Bacs ADDACS Cancellations report.
+                  Sun 123456 with correlation error message.
+                externalValue: '/examples/bacs-addacs-cancellations-event-sun-999999-with-correlation-error-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices':
+    post:
+      tags:
+        - Direct Debit webhooks
+      summary: DDIC Indemnity Claim Advice
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more DDIC advice(s)
+
+          This data model translates Bacs DDIC Advice XML report(s) into ISO20022 BankToCustomerDebitCreditNotification standard (camt.054.001.09)
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/DdicReportBody'
+            examples:
+              jsonObject:
+                summary: A JSON object sample for Bacs DDIC report. Sun 123456 and
+                  no correlation error message.
+                externalValue: '/examples/bacs-ddic-indemnity-claim-sun-123456-no-correlation-error-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/direct-debit-webhooks/v1.0.0/collection-advices':
+    post:
+      tags:
+        - Direct Debit webhooks
+      summary: Collection Advices
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more Collection advice(s)
+
+          This data model translates Collection Advices XML report(s) into ISO20022 BankToCustomerDebitCreditNotification standard (camt.054.001.09)
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CollectionAdvicesReportBody'
+            examples:
+              jsonObject:
+                summary: A JSON object sample for Collection Advices report. Sun 123456
+                  and no correlation error message.
+                externalValue: '/examples/collection-advices-event-sun-123456-with-correlation-error-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/direct-credit/v1.0.0/instructions':
+    post:
+      operationId: Create a Direct Credit
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/Response200DirectCreditInstructionRead'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Create Direct Credit
+
+        Required OAuth Audience: <code>DirectCredits</code>
+      tags:
+        - Direct Credits
+      security:
+        - ClientCredentials: []
+      parameters:
+        - description: |-
+            A GUID representing the operation (if the key has been used previously
+            the original response is returned).
+          in: header
+          name: x-idempotency-key
+          required: true
+          schema:
+            '$ref': '#/components/schemas/IdempotencyKey'
+      requestBody:
+        description: Create Direct Credit Instruction Request
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateDirectCredit'
+  '/direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices':
+    post:
+      tags:
+        - Direct Credit webhooks
+      summary: AWACS Wrong Account for Credits Advice
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more AWACS wrong account for credits advice(s)
+
+          This data model translates Bacs AWACS Wrong Account for Credits Advice XML report(s) into the ISO20022 acmt.022.001.03 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AwacsWrongAccountForCreditsReportBody'
+            examples:
+              jsonObject:
+                summary: A JSON object sample for Bacs AWACS report. Sun 123456 and
+                  no correlation error message.
+                externalValue: '/examples/bacs-awacs-wrong-account-event-sun-123456-no-correlation-error-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices':
+    post:
+      tags:
+        - Direct Credit webhooks
+      summary: ARUCS Unapplied Credits Advice
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of one or more ARUCS unapplied credits advice(s)
+
+          This data model translates Bacs ARUCS Unapplied Credit Notifications XML report(s) into the ISO20022 camt.054.001.09 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/ArucsReportBody'
+            examples:
+              jsonObject:
+                summary: A JSON object sample for Bacs ARUCS report. Sun 123456 and
+                  no correlation error message.
+                externalValue: '/examples/bacs-arucs-unnaplied-credit-event-sun-123456-no-correlation-error-message.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/payments/v1.0.0/sessions':
+    post:
+      operationId: Create a payment session
+      responses:
+        '302':
+          description: Moved Temporarily
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/PolErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Request Payment Session
+
+        Required OAuth Audience: <code>PaymentSession</code>
+      tags:
+        - Cards & Wallets
+      security:
+        - ClientCredentials: []
+      parameters:
+        - description: |-
+            A GUID representing the operation (if the key has been used previously
+            the original response is returned).
+          in: header
+          name: x-idempotency-key
+          required: true
+          schema:
+            '$ref': '#/components/schemas/UUID1'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreatePaymentSession'
+  '/webhook/v1.0.0/approved':
+    post:
+      tags:
+        - Cards & Wallets webhooks
+      summary: Payment approved
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of approval of a payment
+
+          This data model translates upstream card acquirer events into the ISO20022 caaa.002.001.10 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/PaymentApprovedEventBody'
+            examples:
+              payment-approved:
+                summary: A JSON object sample for approved payment events
+                externalValue: '/examples/payment-approved-iso.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/webhook/v1.0.0/voided':
+    post:
+      tags:
+        - Cards & Wallets webhooks
+      summary: Payment voided
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of a payment voided
+
+          This data model translates upstream card acquirer events into the ISO20022 caaa.006.001.09 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/PaymentVoidedEventBody'
+            examples:
+              payment-voided:
+                summary: A JSON object sample for voided payment events
+                externalValue: '/examples/payment-voided-iso.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/webhook/v1.0.0/captured':
+    post:
+      tags:
+        - Cards & Wallets webhooks
+      summary: Payment captured
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of capture of a payment
+
+          This data model translates upstream card acquirer events into the ISO20022 caaa.004.001.09 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/PaymentCapturedEventBody'
+            examples:
+              payment-captured:
+                summary: A JSON object sample for captured payment events
+                externalValue: '/examples/payment-captured-iso.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/webhook/v1.0.0/declined':
+    post:
+      tags:
+        - Cards & Wallets webhooks
+      summary: Payment declined
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of a payment declined
+
+          This data model translates upstream card acquirer events into the ISO20022 caaa.006.001.09 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/PaymentDeclinedEventBody'
+            examples:
+              payment-declined:
+                summary: A JSON object sample for declined payment events
+                externalValue: '/examples/payment-declined-iso.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/webhook/v1.0.0/refund-declined':
+    post:
+      tags:
+        - Cards & Wallets webhooks
+      summary: Payment refund declined
+      parameters:
+        - in: header
+          name: x-client-signature
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: |
+          Notification of a payment refund declined
+
+          This data model translates upstream card acquirer events into the ISO20022 camt.054.001.10 format
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/PaymentRefundDeclinedEventBody'
+            examples:
+              refund-declined:
+                summary: A JSON object sample for declined refund events
+                externalValue: '/examples/payment-refund-declined-iso.json'
+      responses:
+        '200':
+          '$ref': '#/components/responses/200SuccessResponse'
+  '/payments/v1.0.0/{id}/refunds':
+    post:
+      summary: Payment Refund
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/SuccessResponseBody'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ErrorResponseBody'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ErrorResponseBody'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ErrorResponseBody'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ErrorResponseBody'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ErrorResponseBody'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |-
+        Request Payment Refund
+
+        Required OAuth Audience: <code>PaymentSession</code>
+      tags:
+        - Cards & Wallets
+      security:
+        - ClientCredentials: []
+      parameters:
+        - description: |-
+            A GUID representing the operation (if the key has been used previously
+            the original response is returned).
+          in: header
+          name: x-idempotency-key
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: A GUID representing the payment reference
+      requestBody:
+        description: Create Payment Refund Request
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreatePaymentRefund'
+  '/inbound-transactions/v1.0.0/transactions/{id}/commit':
+    post:
+      operationId: Commit Transaction
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  Data:
+                    '$ref': '#/components/schemas/OBTransaction6'
+                required:
+                  - Data
+                type: object
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      tags:
+        - Inbound Transactions
+      security:
+        - ClientCredentials: []
+      parameters:
+        - in: header
+          name: x-idempotency-key
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+  '/inbound-transactions/v1.0.0/accounts/{accountId}/transactions':
+    get:
+      operationId: Get Account Transactions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/OBReadTransaction6'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      tags:
+        - Inbound Transactions
+      security:
+        - ClientCredentials: []
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: false
+          schema:
+            '$ref': '#/components/schemas/PageParam'
+        - in: query
+          name: fromBookingDateTime
+          required: false
+          schema:
+            '$ref': '#/components/schemas/FromBookingDateTimeParam'
+        - in: query
+          name: toBookingDateTime
+          required: false
+          schema:
+            '$ref': '#/components/schemas/ToBookingDateTimeParam'
+  '/inbound-transactions/v1.0.0/transactions':
+    get:
+      operationId: Get Transactions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/OBReadTransaction6'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      tags:
+        - Inbound Transactions
+      security:
+        - ClientCredentials: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            '$ref': '#/components/schemas/PageParam'
+        - in: query
+          name: fromBookingDateTime
+          required: false
+          schema:
+            '$ref': '#/components/schemas/FromBookingDateTimeParam'
+        - in: query
+          name: toBookingDateTime
+          required: false
+          schema:
+            '$ref': '#/components/schemas/ToBookingDateTimeParam'
+  '/inbound-transactions/v1.0.0/transactions/{id}':
+    patch:
+      operationId: Update Transaction
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  Data:
+                    '$ref': '#/components/schemas/OBTransaction6'
+                required:
+                  - Data
+                type: object
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TransactionsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      tags:
+        - Inbound Transactions
+      security:
+        - ClientCredentials: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/UpdateTransactionBody'
+  '/direct-debit-test-harness/v1.0.0/reports/addacs':
+    post:
+      operationId: Create a test ADDACS report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/DirectDebitReportResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |2-
+
+        NewAccountNumber and New only required if ReasonCode === "3" || ReasonCode === "C"
+      tags:
+        - Test Harness
+      security:
+        - ClientCredentials: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AddacsReport'
+  '/direct-debit-test-harness/v1.0.0/reports/arucs':
+    post:
+      operationId: Create a test ARUCS report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/DirectDebitReportResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      tags:
+        - Test Harness
+      security:
+        - ClientCredentials: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/ArucsReport'
+  '/direct-debit-test-harness/v1.0.0/reports/arudd':
+    post:
+      operationId: Create a test ARUDD report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/DirectDebitReportResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: |2-
+
+        User will either need to provide both returnCode and returnDescription fields or leave both fields as ""
+      tags:
+        - Test Harness
+      security:
+        - ClientCredentials: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AruddReport'
+  '/direct-debit-test-harness/v1.0.0/reports/auddis':
+    post:
+      operationId: Create a test AUDDIS report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/DirectDebitReportResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      description: NewAccountNumber and NewSortcode only required if ReasonCode ===
+        "C"
+      tags:
+        - Test Harness
+      security:
+        - ClientCredentials: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AuddisReport'
+  '/direct-debit-test-harness/v1.0.0/reports/awacs':
+    post:
+      operationId: Create a test AWACS report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/DirectDebitReportResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      tags:
+        - Test Harness
+      security:
+        - ClientCredentials: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/AwacsReport'
+  '/direct-debit-test-harness/v1.0.0/reports/ddic':
+    post:
+      operationId: Create a test DDIC report
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/DirectDebitReportResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '401':
+          description: Unauthorized
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/BacsErrorResponse'
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '405':
+          description: Method Not Allowed
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+        '500':
+          description: Internal Server Error
+          headers:
+            ResponseHeader:
+              schema:
+                '$ref': '#/components/schemas/ResponseHeader'
+      tags:
+        - Test Harness
+      security:
+        - ClientCredentials: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/DDICReport'
+components:
+  schemas:
+    AuthenticationToken:
+      properties:
+        Data:
+          properties:
+            ExpiresIn:
+              type: number
+              format: double
+            TokenType:
+              type: string
+              enum:
+                - Bearer
+              nullable: false
+            AccessToken:
+              type: string
+          required:
+            - ExpiresIn
+            - TokenType
+            - AccessToken
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    Response200AuthenticationTokenRead:
+      '$ref': '#/components/schemas/AuthenticationToken'
+    PolErrorCode:
+      type: string
+      enum:
+        - Field.Expected
+        - Field.Invalid
+        - Field.InvalidDate
+        - Field.Missing
+        - Field.Unexpected
+        - Header.Invalid
+        - Header.Missing
+        - Reauthenticate
+        - Resource.ConsentMismatch
+        - Resource.InvalidConsentStatus
+        - Resource.InvalidFormat
+        - Resource.NotFound
+        - Rules.AfterCutOffDateTime
+        - Rules.DuplicateReference
+        - Signature.Invalid
+        - Signature.InvalidClaim
+        - Signature.Malformed
+        - Signature.Missing
+        - Signature.MissingClaim
+        - Signature.Unexpected
+        - UnexpectedError
+        - Unsupported.AccountIdentifier
+        - Unsupported.AccountSecondaryIdentifier
+        - Unsupported.Currency
+        - Unsupported.Frequency
+        - Unsupported.LocalInstrument
+        - Unsupported.Scheme
+        - Body.Malformed
+        - Conflict
+    OBError1_PolErrorCode_:
+      properties:
+        ErrorCode:
+          '$ref': '#/components/schemas/PolErrorCode'
+          description: Low level textual error code, e.g., Field.Missing
+        Message:
+          type: string
+          description: A description of the error that occurred. e.g. 'RequestedExecutionDateTime
+            must be in future'. OBIE doesn't standardise this field
+        Path:
+          type: string
+          description: Recommended but optional reference to the JSON Path of the
+            field with error, e.g., Data.Initiation.InstructedAmount.Currency
+        Url:
+          type: string
+          description: URL to help remediate the problem, or provide more information,
+            or to API Reference, or help etc
+      required:
+        - ErrorCode
+        - Message
+      type: object
+      additionalProperties: false
+    OBErrorResponse1_PolErrorCode_:
+      properties:
+        Code:
+          type: string
+          description: A high level textual error code, to help categorize the errors.
+            OBIE doesn't standardise this field.
+        Id:
+          type: string
+          description: A unique reference for the error instance, for audit purposes,
+            in case of unknown/unclassified errors.
+        Message:
+          type: string
+          description: Brief Error message, e.g., 'There is something wrong with the
+            request parameters provided'
+        Errors:
+          items:
+            '$ref': '#/components/schemas/OBError1_PolErrorCode_'
+          type: array
+          description: An array of detail error codes, and messages, and URLs to documentation
+            to help remediation.
+      required:
+        - Code
+        - Message
+        - Errors
+      type: object
+      additionalProperties: false
+    PolErrorResponse:
+      '$ref': '#/components/schemas/OBErrorResponse1_PolErrorCode_'
+    ResponseHeader:
+      properties:
+        x-fapi-interaction-id:
+          type: string
+          description: An RFC4122 UID used as a correlation id.
+      required:
+        - x-fapi-interaction-id
+      type: object
+      additionalProperties: false
+    UUID:
+      type: string
+      description: |-
+        Stringified UUIDv4.
+        See [RFC 4112](https://tools.ietf.org/html/rfc4122)
+      pattern: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
+    Audience:
+      enum:
+        - BankAccounts
+        - DirectDebits
+        - PaymentSession
+        - DirectCredits
+        - InboundTransactions
+        - FakeCoEvents
+        - PlatformDatabaseApi
+      type: string
+    CreateAuthorizationToken:
+      properties:
+        Data:
+          properties:
+            Audience:
+              '$ref': '#/components/schemas/Audience'
+            ClientSecret:
+              '$ref': '#/components/schemas/UUID'
+            ClientId:
+              '$ref': '#/components/schemas/UUID'
+            GrantType:
+              type: string
+              enum:
+                - client_credentials
+              nullable: false
+          required:
+            - Audience
+            - ClientSecret
+            - ClientId
+            - GrantType
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    SortCode:
+      type: string
+      pattern: "^\\d{6}$"
+    AccountNumber:
+      type: string
+      pattern: "^\\d{8}$"
+    BankAccountResponse:
+      properties:
+        Data:
+          properties:
+            SupportsFasterPayments:
+              type: boolean
+            SupportsDirectCredits:
+              type: boolean
+            SupportsDirectDebits:
+              type: boolean
+            AccountNumberExistsAtSortCode:
+              type: boolean
+            AccountNumber:
+              '$ref': '#/components/schemas/AccountNumber'
+            SortCode:
+              '$ref': '#/components/schemas/SortCode'
+          required:
+            - SupportsFasterPayments
+            - SupportsDirectCredits
+            - SupportsDirectDebits
+            - AccountNumberExistsAtSortCode
+            - AccountNumber
+            - SortCode
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    Response200UKBankAccountInformation:
+      '$ref': '#/components/schemas/BankAccountResponse'
+    CreateUKBankAccountInformation:
+      properties:
+        Data:
+          properties:
+            AccountNumber:
+              '$ref': '#/components/schemas/AccountNumber'
+            SortCode:
+              '$ref': '#/components/schemas/SortCode'
+          required:
+            - AccountNumber
+            - SortCode
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    OBDirectDebitCollection:
+      properties:
+        CollectionIdentification:
+          type: string
+          description: Direct Debit reference. For AUDDIS service users provide Core
+            Reference. For non AUDDIS service users provide Core reference if possible
+            or last used reference.
+        PaymentAmount:
+          properties:
+            Currency:
+              type: string
+              enum:
+                - GBP
+              nullable: false
+            Amount:
+              type: string
+          required:
+            - Currency
+            - Amount
+          type: object
+        PaymentDate:
+          type: string
+          format: date-time
+      required:
+        - CollectionIdentification
+        - PaymentAmount
+        - PaymentDate
+      type: object
+      additionalProperties: false
+    OBReadDirectDebitCollection:
+      properties:
+        Data:
+          properties:
+            DirectDebitCollection:
+              '$ref': '#/components/schemas/OBDirectDebitCollection'
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    Response200DirectDebitCollectionRead:
+      '$ref': '#/components/schemas/OBReadDirectDebitCollection'
+    BacsErrorCode:
+      type: string
+      enum:
+        - '0'
+        - '1'
+        - '6'
+        - A
+    OBError1_PolErrorCode-or-BacsErrorCode_:
+      properties:
+        ErrorCode:
+          anyOf:
+            - '$ref': '#/components/schemas/PolErrorCode'
+            - '$ref': '#/components/schemas/BacsErrorCode'
+          description: Low level textual error code, e.g., Field.Missing
+        Message:
+          type: string
+          description: A description of the error that occurred. e.g. 'RequestedExecutionDateTime
+            must be in future'. OBIE doesn't standardise this field
+        Path:
+          type: string
+          description: Recommended but optional reference to the JSON Path of the
+            field with error, e.g., Data.Initiation.InstructedAmount.Currency
+        Url:
+          type: string
+          description: URL to help remediate the problem, or provide more information,
+            or to API Reference, or help etc
+      required:
+        - ErrorCode
+        - Message
+      type: object
+      additionalProperties: false
+    OBErrorResponse1_PolErrorCode-or-BacsErrorCode_:
+      properties:
+        Code:
+          type: string
+          description: A high level textual error code, to help categorize the errors.
+            OBIE doesn't standardise this field.
+        Id:
+          type: string
+          description: A unique reference for the error instance, for audit purposes,
+            in case of unknown/unclassified errors.
+        Message:
+          type: string
+          description: Brief Error message, e.g., 'There is something wrong with the
+            request parameters provided'
+        Errors:
+          items:
+            '$ref': '#/components/schemas/OBError1_PolErrorCode-or-BacsErrorCode_'
+          type: array
+          description: An array of detail error codes, and messages, and URLs to documentation
+            to help remediation.
+      required:
+        - Code
+        - Message
+        - Errors
+      type: object
+      additionalProperties: false
+    BacsErrorResponse:
+      '$ref': '#/components/schemas/OBErrorResponse1_PolErrorCode-or-BacsErrorCode_'
+    Amount:
+      description: |2-
+
+        The Amount object allows users to submit an amount and currency.
+      properties:
+        Amount:
+          type: string
+          description: A number of monetary units specified in an active currency
+            where the unit of currency is explicit and compliant with ISO 4217.
+          pattern: "^[0-9]*\\.[0-9][0-9]$"
+        Currency:
+          type: string
+          enum:
+            - GBP
+          nullable: false
+      required:
+        - Amount
+        - Currency
+      type: object
+      additionalProperties: false
+      example:
+        Amount: '10.00'
+        Currency: GBP
+    OBCreateDirectDebitCollection:
+      properties:
+        PaymentAmount:
+          '$ref': '#/components/schemas/Amount'
+        PaymentDate:
+          type: string
+          format: date-time
+      required:
+        - PaymentAmount
+        - PaymentDate
+      type: object
+      additionalProperties: false
+    CreateDirectDebitCollection:
+      properties:
+        Data:
+          properties:
+            DirectDebitCollection:
+              '$ref': '#/components/schemas/OBCreateDirectDebitCollection'
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    IdempotencyKey:
+      type: string
+      minLength: 1
+    Debtor:
+      description: |2-
+
+        The Debtor object allows users to submit name of the client.
+      properties:
+        Name:
+          type: string
+          pattern: "^(?!.*\\*)(?!.*\\#)([\\x00-\\x7F\\s]+){1,50}$"
+      required:
+        - Name
+      type: object
+      additionalProperties: false
+      example:
+        Name: Test Name
+    DebtorAccount:
+      description: |2-
+
+        The DebtorAccount object allows users to submit direct debit account information.
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - SortCodeAccountNumber
+          nullable: false
+        Identification:
+          type: string
+          minLength: 14
+          maxLength: 14
+        Name:
+          type: string
+          pattern: "^(?!.*\\*)(?!.*\\#)([\\x00-\\x7F\\s]+){1,18}$"
+      required:
+        - SchemeName
+        - Identification
+        - Name
+      type: object
+      additionalProperties: false
+      example:
+        SchemeName: SortCodeAccountNumber
+        Identification: 1234567891234
+        Name: Test Name
+    Frequency:
+      properties:
+        Schedule:
+          type: string
+          enum:
+            - Ad-hoc
+            - Ad-hoc Plus
+            - Monthly
+        DayOfMonth:
+          type: number
+          format: double
+          description: Required if Schedule is `Monthly`. Zero-indexed, max value
+            30
+          minimum: 0
+          maximum: 30
+      required:
+        - Schedule
+      type: object
+      additionalProperties: false
+    StatusCode:
+      type: string
+      enum:
+        - Active
+        - Suspended
+        - Cancelled
+        - Inactive
+      description: Specifies the status of the direct debit in code form.
+    OBDirectDebit:
+      description: Account to or from which a cash entry is made.
+      properties:
+        MandateIdentification:
+          type: string
+          description: Direct Debit reference. For AUDDIS service users provide Core
+            Reference. For non AUDDIS service users provide Core reference if possible
+            or last used reference.
+        Debtor:
+          '$ref': '#/components/schemas/Debtor'
+          description: The customer
+        DebtorAccount:
+          '$ref': '#/components/schemas/DebtorAccount'
+          description: The account used to pay the DDI
+        Frequency:
+          '$ref': '#/components/schemas/Frequency'
+        RecurringPaymentAmount:
+          '$ref': '#/components/schemas/Amount'
+          description: Required if Schedule is `Ad-hoc Plus` or `Monthly`
+        StatusCode:
+          '$ref': '#/components/schemas/StatusCode'
+        FirstPaymentDate:
+          type: string
+          format: date-time
+        FirstPaymentAmount:
+          '$ref': '#/components/schemas/Amount'
+      required:
+        - MandateIdentification
+        - Debtor
+        - DebtorAccount
+        - Frequency
+        - StatusCode
+      type: object
+      additionalProperties: false
+    Meta:
+      description: |-
+        MetaData
+        Meta Data relevant to the payload
+    OBReadDirectDebit:
+      properties:
+        Data:
+          properties:
+            DirectDebitInstruction:
+              '$ref': '#/components/schemas/OBDirectDebit'
+          type: object
+        Meta:
+          '$ref': '#/components/schemas/Meta'
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    Response200DirectDebitInstructionRead:
+      '$ref': '#/components/schemas/OBReadDirectDebit'
+    OBCreateDirectDebitInstruction:
+      properties:
+        Debtor:
+          '$ref': '#/components/schemas/Debtor'
+          description: The customer
+        DebtorAccount:
+          '$ref': '#/components/schemas/DebtorAccount'
+          description: The account used to pay the DDI.
+        Frequency:
+          '$ref': '#/components/schemas/Frequency'
+        RecurringPaymentAmount:
+          '$ref': '#/components/schemas/Amount'
+        FirstPaymentDate:
+          type: string
+          format: date-time
+        FirstPaymentAmount:
+          '$ref': '#/components/schemas/Amount'
+      required:
+        - Debtor
+        - DebtorAccount
+        - Frequency
+      type: object
+      additionalProperties: false
+    DirectDebitInstruction:
+      properties:
+        Data:
+          properties:
+            DirectDebitInstruction:
+              '$ref': '#/components/schemas/OBCreateDirectDebitInstruction'
+          type: object
+        Meta:
+          '$ref': '#/components/schemas/Meta'
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    OBReadUpdateDirectDebit:
+      properties:
+        Meta:
+          '$ref': '#/components/schemas/Meta'
+      required:
+        - Meta
+      type: object
+      additionalProperties: false
+    Response200UpdateDirectDebitInstructionRead:
+      '$ref': '#/components/schemas/OBReadUpdateDirectDebit'
+    UpdateDirectDebitInstructionStatus:
+      properties:
+        Data:
+          properties:
+            StatusCode:
+              '$ref': '#/components/schemas/StatusCode'
+          required:
+            - StatusCode
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    Response200DirectDebitInstructionUpdateStatus:
+      '$ref': '#/components/schemas/UpdateDirectDebitInstructionStatus'
+    Response200BulkCollectionsFileRead:
+      properties:
+        Data:
+          properties:
+            CollectionFileIdentification:
+              type: string
+          required:
+            - CollectionFileIdentification
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    BulkCollectionStatus:
+      enum:
+        - INITIALISING
+        - PROCESSING
+        - PENDING_UPLOAD
+        - COMPLETED
+      type: string
+    Response200BulkCollectionsFileProgressRead:
+      properties:
+        Data:
+          properties:
+            NumberOfProcessingErrors:
+              type: number
+              format: double
+            ProcessingPercentageComplete:
+              type: number
+              format: double
+            Status:
+              '$ref': '#/components/schemas/BulkCollectionStatus'
+            CollectionFileIdentification:
+              type: string
+          required:
+            - NumberOfProcessingErrors
+            - ProcessingPercentageComplete
+            - Status
+            - CollectionFileIdentification
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    CreditorAccount:
+      properties:
+        SchemeName:
+          type: string
+          enum:
+            - SortCodeAccountNumber
+          nullable: false
+        Identification:
+          type: string
+          minLength: 14
+          maxLength: 14
+        Name:
+          type: string
+          pattern: "^(?!.*\\*)(?!.*\\#)([\\x00-\\x7F\\s]+){1,18}$"
+      required:
+        - SchemeName
+        - Identification
+        - Name
+      type: object
+      additionalProperties: false
+    CreditorAmount:
+      properties:
+        Amount:
+          type: string
+          description: A number of monetary units specified in an active currency
+            where the unit of currency is explicit and compliant with ISO 4217.
+          pattern: "^[0-9]*\\.[0-9][0-9]$"
+        Currency:
+          type: string
+          enum:
+            - GBP
+          nullable: false
+      required:
+        - Amount
+        - Currency
+      type: object
+      additionalProperties: false
+    DirectCreditInstruction:
+      description: |2-
+
+        The DirectCreditInstruction object allows users to submit a direct credit to be created.
+      properties:
+        Creditor:
+          properties:
+            Name:
+              type: string
+              pattern: "^(?!.*\\*)(?!.*\\#)([\\x00-\\x7F\\s]+){1,50}$"
+          required:
+            - Name
+          type: object
+        CreditorAccount:
+          '$ref': '#/components/schemas/CreditorAccount'
+        CreditAmount:
+          '$ref': '#/components/schemas/CreditorAmount'
+        MandateIdentification:
+          type: string
+      required:
+        - Creditor
+        - CreditorAccount
+        - CreditAmount
+      type: object
+      additionalProperties: false
+      example:
+        Creditor:
+          Name: Test name
+        CreditorAccount:
+          SchemeName: SortCodeAccountNumber
+          Identification: 1234567891234
+          Name: Test name
+        CreditAmount:
+          Amount: '10.00'
+          Currency: GBP
+    Meta1: {}
+    CreateDirectCredit:
+      properties:
+        Data:
+          properties:
+            DirectCreditInstruction:
+              '$ref': '#/components/schemas/DirectCreditInstruction'
+          required:
+            - DirectCreditInstruction
+          type: object
+        Meta:
+          '$ref': '#/components/schemas/Meta1'
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    Response200DirectCreditInstructionRead:
+      '$ref': '#/components/schemas/CreateDirectCredit'
+    LocalInstrument:
+      enum:
+        - UK.POL.All
+        - UK.POL.Cards
+      type: string
+    Currency:
+      enum:
+        - GBP
+      type: string
+    OBCreatePaymentSession:
+      properties:
+        LocalInstrument:
+          '$ref': '#/components/schemas/LocalInstrument'
+        InstructedAmount:
+          properties:
+            Currency:
+              '$ref': '#/components/schemas/Currency'
+            Amount:
+              type: string
+          type: object
+        Metadata:
+          properties:
+            CustomerAddressCountry:
+              type: string
+              pattern: '^[a-zA-Z]{2}$'
+            CustomerAddressPostCode:
+              type: string
+            CustomerAddressCity:
+              type: string
+            CustomerAddressCounty:
+              type: string
+            CustomerAddressLine2:
+              type: string
+            CustomerAddressLine1:
+              type: string
+            CustomerEmail:
+              type: string
+              pattern: "^\\S+@\\S+\\.\\S+$"
+          additionalProperties: {}
+          type: object
+      required:
+        - LocalInstrument
+        - Metadata
+      type: object
+      additionalProperties: false
+    CreatePaymentSession:
+      properties:
+        Data:
+          properties:
+            Initiation:
+              '$ref': '#/components/schemas/OBCreatePaymentSession'
+          required:
+            - Initiation
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    UUID1:
+      type: string
+    ErrorItem:
+      properties:
+        ErrorCode:
+          type: string
+        Message:
+          type: string
+        Path:
+          type: string
+        Url:
+          type: string
+      required:
+        - Message
+      type: object
+      additionalProperties: false
+    ErrorList:
+      items:
+        '$ref': '#/components/schemas/ErrorItem'
+      type: array
+    ErrorResponseBody:
+      properties:
+        Code:
+          type: string
+        Id:
+          type: string
+        Message:
+          type: string
+        Errors:
+          '$ref': '#/components/schemas/ErrorList'
+      required:
+        - Code
+        - Message
+        - Errors
+      type: object
+      additionalProperties: false
+    CreatePaymentRefund:
+      properties:
+        Data:
+          properties:
+            Amount:
+              type: string
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    SuccessResponseBody:
+      properties:
+        Data:
+          properties:
+            RefundIdentifier:
+              type: string
+              example: act_y3oqhf46pyzuxjbcn2giaqnb44
+            Amount:
+              type: string
+          required:
+            - RefundIdentifier
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    AccountId:
+      type: string
+      description: A unique and immutable identifier used to identify the account
+        resource. This identifier has no meaning to the account owner.
+    TransactionId:
+      type: string
+      description: Unique identifier for the transaction within an servicing institution.
+        This identifier is both unique and immutable.
+    TransactionReference:
+      type: string
+      description: Unique reference for the transaction. This reference is optionally
+        populated, and may as an example be the FPID in the Faster Payments context.
+    OBCreditDebitCode1:
+      description: Indicates whether the transaction is a credit or a debit entry.
+      enum:
+        - Credit
+        - Debit
+      type: string
+    OBEntryStatus1Code:
+      description: Status of a transaction entry on the books of the account servicer.
+      enum:
+        - Booked
+        - Pending
+        - Rejected
+      type: string
+    BookingDateTime:
+      type: string
+      format: date-time
+      description: "Date and time when a transaction entry is posted to an account
+        on the account servicer's books.\nUsage: Booking date is the expected booking
+        date, unless the status is booked, in which case it is the actual booking
+        date.All dates in the JSON payloads are represented in ISO 8601 date-time
+        format. \nAll date-time fields in responses must include the timezone. An
+        example is below:\n2017-04-05T10:43:07+00:00"
+    ValueDateTime:
+      type: string
+      format: date-time
+      description: "Date and time at which assets become available to the account
+        owner in case of a credit entry, or cease to be available to the account owner
+        in case of a debit transaction entry.\nUsage: If transaction entry status
+        is pending and value date is present, then the value date refers to an expected/requested
+        value date.\nFor transaction entries subject to availability/float and for
+        which availability information is provided, the value date must not be used.
+        In this case the availability component identifies the number of availability
+        days.All dates in the JSON payloads are represented in ISO 8601 date-time
+        format. \nAll date-time fields in responses must include the timezone. An
+        example is below:\n2017-04-05T10:43:07+00:00"
+    OBActiveCurrencyAndAmountSimpleType:
+      type: string
+      description: A number of monetary units specified in an active currency where
+        the unit of currency is explicit and compliant with ISO 4217.
+      pattern: "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+    ActiveOrHistoricCurrencyCode1:
+      type: string
+      description: A code allocated to a currency by a Maintenance Agency under an
+        international identification scheme, as described in the latest edition of
+        the international standard ISO 4217 "Codes for the representation of currencies
+        and funds".
+      pattern: '^[A-Z]{3,3}$'
+    OBActiveOrHistoricCurrencyAndAmount9:
+      description: Amount of money in the cash transaction entry.
+      properties:
+        Amount:
+          '$ref': '#/components/schemas/OBActiveCurrencyAndAmountSimpleType'
+          description: A number of monetary units specified in an active currency
+            where the unit of currency is explicit and compliant with ISO 4217.
+        Currency:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyCode1'
+          description: A code allocated to a currency by a Maintenance Agency under
+            an international identification scheme, as described in the latest edition
+            of the international standard ISO 4217 "Codes for the representation of
+            currencies and funds".
+      required:
+        - Amount
+        - Currency
+      type: object
+      additionalProperties: false
+    OBCreditDebitCode2:
+      description: "Indicates whether the balance is a credit or a debit balance.
+        \nUsage: A zero balance is considered to be a credit balance."
+      enum:
+        - Credit
+        - Debit
+      type: string
+    OBBalanceType1Code:
+      description: Balance type, in a coded form.
+      enum:
+        - ClosingAvailable
+        - ClosingBooked
+        - ClosingCleared
+        - Expected
+        - ForwardAvailable
+        - Information
+        - InterimAvailable
+        - InterimBooked
+        - InterimCleared
+        - OpeningAvailable
+        - OpeningBooked
+        - OpeningCleared
+        - PreviouslyClosedBooked
+      type: string
+    OBTransactionCashBalance:
+      description: Set of elements used to define the balance as a numerical representation
+        of the net increases and decreases in an account after a transaction entry
+        is applied to the account.
+      properties:
+        CreditDebitIndicator:
+          '$ref': '#/components/schemas/OBCreditDebitCode2'
+          description: |-
+            Indicates whether the balance is a credit or a debit balance.
+            Usage: A zero balance is considered to be a credit balance.
+        Type:
+          '$ref': '#/components/schemas/OBBalanceType1Code'
+          description: Balance type, in a coded form.
+        Amount:
+          properties:
+            Currency:
+              '$ref': '#/components/schemas/ActiveOrHistoricCurrencyCode1'
+            Amount:
+              '$ref': '#/components/schemas/OBActiveCurrencyAndAmountSimpleType'
+          required:
+            - Currency
+            - Amount
+          type: object
+          description: Amount of money of the cash balance after a transaction entry
+            is applied to the account..
+      required:
+        - CreditDebitIndicator
+        - Type
+        - Amount
+      type: object
+      additionalProperties: false
+    Identification2:
+      type: string
+      description: Unique and unambiguous identification of a financial institution
+        or a branch of a financial institution.
+    Name1:
+      type: string
+      description: Name by which an agent is known and which is usually used to identify
+        that agent.
+    OBBranchAndFinancialInstitutionIdentification61:
+      description: Financial institution servicing an account for the creditor.
+      properties:
+        Identification:
+          '$ref': '#/components/schemas/Identification2'
+          description: Unique and unambiguous identification of a financial institution
+            or a branch of a financial institution.
+        Name:
+          '$ref': '#/components/schemas/Name1'
+          description: Name by which an agent is known and which is usually used to
+            identify that agent.
+      type: object
+      additionalProperties: false
+    OBExternalAccountIdentification4Code:
+      description: Name of the identification scheme, in a coded form as published
+        in an external list.
+      enum:
+        - UK.OBIE.BBAN
+        - UK.OBIE.IBAN
+        - UK.OBIE.PAN
+        - UK.OBIE.Paym
+        - UK.OBIE.SortCodeAccountNumber
+      type: string
+    Identification0:
+      type: string
+      description: Identification assigned by an institution to identify an account.
+        This identification is known by the account owner.
+    Name0:
+      type: string
+      description: |-
+        The account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels.
+        Note, the account name is not the product name or the nickname of the account.
+    SecondaryIdentification:
+      type: string
+      description: "This is secondary identification of the account, as assigned by
+        the account servicing institution. \nThis can be used by building societies
+        to additionally identify accounts with a roll number (in addition to a sort
+        code and account number combination)."
+    OBCashAccount60:
+      description: Unambiguous identification of the account of the creditor, in the
+        case of a debit transaction.
+      properties:
+        SchemeName:
+          '$ref': '#/components/schemas/OBExternalAccountIdentification4Code'
+          description: Name of the identification scheme, in a coded form as published
+            in an external list.
+        Identification:
+          '$ref': '#/components/schemas/Identification0'
+          description: Identification assigned by an institution to identify an account.
+            This identification is known by the account owner.
+        Name:
+          '$ref': '#/components/schemas/Name0'
+          description: |-
+            The account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels.
+            Note, the account name is not the product name or the nickname of the account.
+        SecondaryIdentification:
+          '$ref': '#/components/schemas/SecondaryIdentification'
+          description: |-
+            This is secondary identification of the account, as assigned by the account servicing institution.
+            This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).
+      type: object
+      additionalProperties: false
+    OBBranchAndFinancialInstitutionIdentification62:
+      description: Financial institution servicing an account for the debtor.
+      properties:
+        Identification:
+          '$ref': '#/components/schemas/Identification2'
+          description: Unique and unambiguous identification of a financial institution
+            or a branch of a financial institution.
+        Name:
+          '$ref': '#/components/schemas/Name1'
+          description: Name by which an agent is known and which is usually used to
+            identify that agent.
+      type: object
+      additionalProperties: false
+    OBCashAccount61:
+      description: Unambiguous identification of the account of the debtor, in the
+        case of a crebit transaction.
+      properties:
+        SchemeName:
+          '$ref': '#/components/schemas/OBExternalAccountIdentification4Code'
+          description: Name of the identification scheme, in a coded form as published
+            in an external list.
+        Identification:
+          '$ref': '#/components/schemas/Identification0'
+          description: Identification assigned by an institution to identify an account.
+            This identification is known by the account owner.
+        Name:
+          '$ref': '#/components/schemas/Name0'
+          description: |-
+            The account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels.
+            Note, the account name is not the product name or the nickname of the account.
+        SecondaryIdentification:
+          '$ref': '#/components/schemas/SecondaryIdentification'
+          description: |-
+            This is secondary identification of the account, as assigned by the account servicing institution.
+            This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).
+      type: object
+      additionalProperties: false
+    Record_string.any_:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
+    OBSupplementaryData1:
+      '$ref': '#/components/schemas/Record_string.any_'
+      description: Additional information that can not be captured in the structured
+        fields and/or any other specific block.
+    OBTransaction6:
+      description: Provides further details on an entry in the report.
+      properties:
+        AccountId:
+          '$ref': '#/components/schemas/AccountId'
+          description: A unique and immutable identifier used to identify the account
+            resource. This identifier has no meaning to the account owner.
+        TransactionId:
+          '$ref': '#/components/schemas/TransactionId'
+          description: Unique identifier for the transaction within an servicing institution.
+            This identifier is both unique and immutable.
+        TransactionReference:
+          '$ref': '#/components/schemas/TransactionReference'
+          description: Unique reference for the transaction. This reference is optionally
+            populated, and may as an example be the FPID in the Faster Payments context.
+        CreditDebitIndicator:
+          '$ref': '#/components/schemas/OBCreditDebitCode1'
+          description: Indicates whether the transaction is a credit or a debit entry.
+        Status:
+          '$ref': '#/components/schemas/OBEntryStatus1Code'
+          description: Status of a transaction entry on the books of the account servicer.
+        BookingDateTime:
+          '$ref': '#/components/schemas/BookingDateTime'
+          description: |-
+            Date and time when a transaction entry is posted to an account on the account servicer's books.
+            Usage: Booking date is the expected booking date, unless the status is booked, in which case it is the actual booking date.All dates in the JSON payloads are represented in ISO 8601 date-time format.
+            All date-time fields in responses must include the timezone. An example is below:
+            2017-04-05T10:43:07+00:00
+        ValueDateTime:
+          '$ref': '#/components/schemas/ValueDateTime'
+          description: |-
+            Date and time at which assets become available to the account owner in case of a credit entry, or cease to be available to the account owner in case of a debit transaction entry.
+            Usage: If transaction entry status is pending and value date is present, then the value date refers to an expected/requested value date.
+            For transaction entries subject to availability/float and for which availability information is provided, the value date must not be used. In this case the availability component identifies the number of availability days.All dates in the JSON payloads are represented in ISO 8601 date-time format.
+            All date-time fields in responses must include the timezone. An example is below:
+            2017-04-05T10:43:07+00:00
+        Amount:
+          '$ref': '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount9'
+          description: Amount of money in the cash transaction entry.
+        Balance:
+          '$ref': '#/components/schemas/OBTransactionCashBalance'
+          description: Set of elements used to define the balance as a numerical representation
+            of the net increases and decreases in an account after a transaction entry
+            is applied to the account.
+        CreditorAgent:
+          '$ref': '#/components/schemas/OBBranchAndFinancialInstitutionIdentification61'
+          description: Financial institution servicing an account for the creditor.
+        CreditorAccount:
+          '$ref': '#/components/schemas/OBCashAccount60'
+          description: Unambiguous identification of the account of the creditor,
+            in the case of a debit transaction.
+        DebtorAgent:
+          '$ref': '#/components/schemas/OBBranchAndFinancialInstitutionIdentification62'
+          description: Financial institution servicing an account for the debtor.
+        DebtorAccount:
+          '$ref': '#/components/schemas/OBCashAccount61'
+          description: Unambiguous identification of the account of the debtor, in
+            the case of a crebit transaction.
+        SupplementaryData:
+          '$ref': '#/components/schemas/OBSupplementaryData1'
+          description: Additional information that can not be captured in the structured
+            fields and/or any other specific block.
+      required:
+        - AccountId
+        - CreditDebitIndicator
+        - Status
+        - BookingDateTime
+        - Amount
+      type: object
+      additionalProperties: false
+    TransactionsErrorResponse:
+      '$ref': '#/components/schemas/OBErrorResponse1_PolErrorCode_'
+    OBReadDataTransaction6:
+      properties:
+        Transaction:
+          items:
+            '$ref': '#/components/schemas/OBTransaction6'
+          type: array
+      type: object
+      additionalProperties: false
+    Links:
+      description: Links relevant to the payload
+      properties:
+        Self:
+          type: string
+          format: uri
+        First:
+          type: string
+          format: uri
+        Prev:
+          type: string
+          format: uri
+        Next:
+          type: string
+          format: uri
+        Last:
+          type: string
+          format: uri
+      required:
+        - Self
+      type: object
+      additionalProperties: false
+    ISODateTime:
+      type: string
+      format: date-time
+      description: "All dates in the JSON payloads are represented in ISO 8601 date-time
+        format. \nAll date-time fields in responses must include the timezone. An
+        example is below:\n2017-04-05T10:43:07+00:00"
+    Meta2:
+      description: Meta Data relevant to the payload
+      properties:
+        TotalPages:
+          type: number
+          format: int32
+        FirstAvailableDateTime:
+          '$ref': '#/components/schemas/ISODateTime'
+          description: |-
+            All dates in the JSON payloads are represented in ISO 8601 date-time format.
+            All date-time fields in responses must include the timezone. An example is below:
+            2017-04-05T10:43:07+00:00
+        LastAvailableDateTime:
+          '$ref': '#/components/schemas/ISODateTime'
+          description: |-
+            All dates in the JSON payloads are represented in ISO 8601 date-time format.
+            All date-time fields in responses must include the timezone. An example is below:
+            2017-04-05T10:43:07+00:00
+      type: object
+      additionalProperties: false
+    OBReadTransaction6:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/OBReadDataTransaction6'
+        Links:
+          '$ref': '#/components/schemas/Links'
+          description: Links relevant to the payload
+        Meta:
+          '$ref': '#/components/schemas/Meta2'
+          description: Meta Data relevant to the payload
+      required:
+        - Data
+        - Links
+      type: object
+      additionalProperties: false
+    PageParam:
+      type: integer
+      format: int32
+      minimum: 1
+    FromBookingDateTimeParam:
+      type: string
+      format: date-time
+      description: The ISO 8601 Date Time to filter transactions FROM.
+    ToBookingDateTimeParam:
+      type: string
+      format: date-time
+      description: The ISO 8601 Date Time to filter transactions TO.
+    BillingSystem:
+      enum:
+        - Gentrack
+        - Orion
+      type: string
+    UpdateTransactionBody:
+      properties:
+        Data:
+          properties:
+            Brand:
+              '$ref': '#/components/schemas/BillingSystem'
+            CustomerAccountNumber:
+              type: string
+              pattern: "^\\d{7,8}$"
+          required:
+            - Brand
+            - CustomerAccountNumber
+          type: object
+      required:
+        - Data
+      type: object
+      additionalProperties: false
+    DirectDebitReportType:
+      enum:
+        - AUDDIS
+        - ADDACS
+        - ARUDD
+        - DDIC
+        - AWACS
+        - ARUCS
+      type: string
+    DirectDebitReportResponseData:
+      properties:
+        ReportId:
+          type: string
+        ReportType:
+          '$ref': '#/components/schemas/DirectDebitReportType'
+        ReportContent:
+          type: string
+        ReportName:
+          type: string
+      required:
+        - ReportId
+        - ReportType
+        - ReportContent
+        - ReportName
+      type: object
+      additionalProperties: false
+    DirectDebitReportResponse:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/DirectDebitReportResponseData'
+        UploadToSFTP:
+          type: boolean
+      required:
+        - Data
+        - UploadToSFTP
+      type: object
+      additionalProperties: false
+    AddacsData:
+      properties:
+        AddacsRecordCount:
+          type: number
+          format: double
+        PayerName:
+          type: string
+        AccountNumber:
+          type: string
+        SortCode:
+          type: string
+        ReasonCode:
+          type: string
+        NewAccountNumber:
+          type: string
+        NewSortCode:
+          type: string
+        DdiReference:
+          type: string
+        Sun:
+          type: string
+        InvalidBody:
+          type: boolean
+      type: object
+      additionalProperties: false
+    AddacsReport:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/AddacsData'
+        UploadToSFTP:
+          type: boolean
+      required:
+        - Data
+        - UploadToSFTP
+      type: object
+      additionalProperties: false
+    ArucsData:
+      properties:
+        ArucsRecordCount:
+          type: number
+          format: double
+        Amount:
+          type: number
+          format: double
+        Currency:
+          type: string
+        AccountNumber:
+          type: string
+        DdiReference:
+          type: string
+        AccountName:
+          type: string
+        SortCode:
+          type: string
+        BankName:
+          type: string
+        BranchName:
+          type: string
+        ReturnCode:
+          type: string
+        ReturnDescription:
+          type: string
+        Sun:
+          type: string
+      type: object
+      additionalProperties: false
+    ArucsReport:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/ArucsData'
+        UploadToSFTP:
+          type: boolean
+      required:
+        - Data
+        - UploadToSFTP
+      type: object
+      additionalProperties: false
+    AruddData:
+      properties:
+        AruddRecordCount:
+          type: number
+          format: double
+        Amount:
+          type: number
+          format: double
+        Currency:
+          type: string
+        AccountNumber:
+          type: string
+        DdiReference:
+          type: string
+        AccountName:
+          type: string
+        SortCode:
+          type: string
+        AccountType:
+          type: string
+        BankName:
+          type: string
+        BranchName:
+          type: string
+        returnCode:
+          type: string
+        returnDescription:
+          type: string
+        Sun:
+          type: string
+        InvalidBody:
+          type: boolean
+      type: object
+      additionalProperties: false
+    AruddReport:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/AruddData'
+        UploadToSFTP:
+          type: boolean
+      required:
+        - Data
+        - UploadToSFTP
+      type: object
+      additionalProperties: false
+    AuddisData:
+      properties:
+        AuddisRecordCount:
+          type: number
+          format: double
+        PayerName:
+          type: string
+        PayerAccountNumber:
+          type: string
+        PayerSortCode:
+          type: string
+        ReasonCode:
+          type: string
+        NewSortCode:
+          type: string
+        NewAccountNumber:
+          type: string
+        Sun:
+          type: string
+        DdiReference:
+          type: string
+        InvalidBody:
+          type: boolean
+      type: object
+      additionalProperties: false
+    AuddisReport:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/AuddisData'
+        UploadToSFTP:
+          type: boolean
+      required:
+        - Data
+        - UploadToSFTP
+      type: object
+      additionalProperties: false
+    AwacsData:
+      properties:
+        AwacsRecordCount:
+          type: number
+          format: double
+        Sun:
+          type: string
+        ReasonCode:
+          type: string
+        PayerName:
+          type: string
+        PayerAccountNumber:
+          type: string
+        PayerSortCode:
+          type: string
+        PayerNewSortCode:
+          type: string
+        PayerNewAccountNumber:
+          type: string
+        TransactionCode:
+          type: string
+        OriginalSortCode:
+          type: string
+        OriginalAccountNumber:
+          type: string
+        DdiReference:
+          type: string
+      type: object
+      additionalProperties: false
+    AwacsReport:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/AwacsData'
+        UploadToSFTP:
+          type: boolean
+      required:
+        - Data
+        - UploadToSFTP
+      type: object
+      additionalProperties: false
+    DDICData:
+      properties:
+        DDICRecordCount:
+          type: number
+          format: double
+        PayingBankReference:
+          type: string
+        SUReference:
+          type: string
+        ReasonCode:
+          type: string
+        PayerSortCode:
+          type: string
+        PayerAccount:
+          type: string
+        PayerName:
+          type: string
+        Sun:
+          type: string
+        InvalidBody:
+          type: boolean
+      type: object
+      additionalProperties: false
+    DDICReport:
+      properties:
+        Data:
+          '$ref': '#/components/schemas/DDICData'
+        UploadToSFTP:
+          type: boolean
+      required:
+        - Data
+        - UploadToSFTP
+      type: object
+      additionalProperties: false
+    Max35Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 35
+    schemas-ISODateTime:
+      type: string
+      format: date-time
+    GroupHeader80:
+      required:
+        - message_identification
+        - creation_date_time
+      type: object
+      properties:
+        message_identification:
+          '$ref': '#/components/schemas/Max35Text'
+          description: |
+            From AUDDIS return report, concatenation of:
+
+            MessagingAdvices/MessagingHeader/@report-generation-date
+            MessagingAdvices/MessagingAdvice/@user-number
+            MessagingAdvices/MessagingHeader/@envelope-sequence-number
+
+            Used for uniquely identifying the event
+          example: 2015-03-26-123456-00006712
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+          description: Date/time at which the event was generated by POL, in RFC3339
+            format
+          example: '2017-07-21T17:32:28.123Z'
+    YesNoIndicator:
+      type: boolean
+    MandateReason1Choice:
+      required:
+        - proprietary
+      type: object
+      properties:
+        proprietary:
+          '$ref': '#/components/schemas/Max35Text'
+          description: |
+            The reason code for the AUDDIS failure:
+
+            1 - Instruction cancelled by payer
+
+            Client must liaise with the payer to agree the payment method for collection of any outstanding funds. Usually received when cancelling a DDI that has already been cancelled. Exceptionally, may be sent when the customer cancels their DDI shortly after setup, and the bank incorrectly sends an AUDDIS message instead of an ADDACS message.
+
+            2 - Payer deceased
+
+            3 - Account transferred
+
+            New DDI to be obtained from payer. Collection must be suspended until new DDI set-up and Advance Notice issued to Payer
+
+            5 - No account
+
+            Client should check Direct Debit information and/or liaise with payer
+
+            6 - No instruction
+
+            There was no Direct Debit Instruction to cancel matching the details you submitted. Client should check Direct Debit information and/or liaise with payer
+
+            B - Account closed
+
+            If the Direct Debit is to continue the client must obtain a new DDI for a different/new account
+
+            C - Account transferred to another Bank/Building Society
+
+            Client should apply change to billing/customer platform and continue with Direct Debit collections. AddtlRjctRsnInf[0] will contain the payer-new-sort-code and AddtlRjctRsnInf[1] will contain the payer-new-account-number, which need to be used to update billing platforms/customer records
+
+            F - Invalid account type
+
+            The account belongs to a type of accounts which can't have DDIs set up on them. For example, some savings accounts do not allow Direct Debits. Client will need to obtain new account details from the payer. The Direct Debit cannot be applied
+
+            G - Bank will not accept Direct Debits on account
+
+            Client must liaise with payer and obtain a new DDI for a different/new account
+
+            H - Instruction has expired
+
+            The Direct Debit Instruction the client requested to cancel had already expired. Possible to reinstate this DDI with payers permission
+
+            N - Transaction disallowed at payer's branch
+
+            Client should refer back to their payer and obtain a DDI for a different/new account. Direct Debits can't be collected from this sort code. For example, this sort code may be reserved for savings accounts.
+    Max105Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 105
+    AcceptanceResult6:
+      required:
+        - accepted
+      type: object
+      properties:
+        accepted:
+          '$ref': '#/components/schemas/YesNoIndicator'
+          description: |
+            Indicates whether the mandate has been lodged at the debtors bank
+
+            Will usually be set to false, except when reason-code from Bacs is "C" (mandate has lodged but has been diverted to a new sort code/account number)
+
+            If this value is true, it is expected that AddtlRjctRsnInf[0] will contain the payer-new-sort-code and AddtlRjctRsnInf[1] will contain the payer-new-account-number, which need to be used to update billing platforms/customer records
+        reject_reason:
+          '$ref': '#/components/schemas/MandateReason1Choice'
+        additional_reject_reason_information:
+          type: array
+          items:
+            '$ref': '#/components/schemas/Max105Text'
+            description: |-
+              When reason code from Bacs is "C" (mandate has lodged but has been diverted to a new sort code/account number), array indexes 0 and 1 will be populated.
+              AddtlRjctRsnInf[0] will contain the payer-new-sort-code and AddtlRjctRsnInf[1] will contain the payer-new-account-number
+              These must be used to update billing platforms/customer records
+            example:
+              - 123456
+              - 1234567
+          minItems: 0
+    LocalInstrument2Choice:
+      required:
+        - proprietary
+      type: object
+      properties:
+        proprietary:
+          '$ref': '#/components/schemas/Max35Text'
+          description: |
+            The transaction code of the advice:
+
+            0C - The transaction code used in the AUDDIS service to cancel an existing DDI with a PSP
+            0N - The transaction code used in the AUDDIS service to set up a new DDI with a PSP
+            0S - The transaction code used in the AUDDIS service to convert an existing manually set up DDI with a PSP
+    MandateTypeInformation2:
+      type: object
+      properties:
+        local_instrument:
+          '$ref': '#/components/schemas/LocalInstrument2Choice'
+    ISODate:
+      type: string
+      format: date
+    MandateOccurrences5Modified:
+      nullable: true
+      type: object
+      properties:
+        first_collection_date:
+          '$ref': '#/components/schemas/ISODate'
+    GenericOrganisationIdentification1:
+      required:
+        - identification
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+    OrganisationIdentification29:
+      type: object
+      properties:
+        other:
+          type: array
+          items:
+            '$ref': '#/components/schemas/GenericOrganisationIdentification1'
+          minItems: 0
+    Party38Choice:
+      required:
+        - organisation_identification
+      type: object
+      properties:
+        organisation_identification:
+          '$ref': '#/components/schemas/OrganisationIdentification29'
+    PartyIdentification135:
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Party38Choice'
+    Max34Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 34
+    GenericAccountIdentification1:
+      required:
+        - identification
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max34Text'
+    AccountIdentification4Choice:
+      required:
+        - other
+      type: object
+      properties:
+        other:
+          '$ref': '#/components/schemas/GenericAccountIdentification1'
+    Max70Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 70
+    CashAccount40:
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/AccountIdentification4Choice'
+        name:
+          '$ref': '#/components/schemas/Max70Text'
+    ClearingSystemMemberIdentification2:
+      type: object
+      required:
+        - member_identification
+      properties:
+        member_identification:
+          '$ref': '#/components/schemas/Max35Text'
+    FinancialInstitutionIdentification18:
+      type: object
+      properties:
+        clearing_system_member_identification:
+          '$ref': '#/components/schemas/ClearingSystemMemberIdentification2'
+    BranchAndFinancialInstitutionIdentification6:
+      required:
+        - financial_institution_identification
+      type: object
+      properties:
+        financial_institution_identification:
+          '$ref': '#/components/schemas/FinancialInstitutionIdentification18'
+    Max140Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 140
+    PartyIdentification135Modification1:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+    Mandate16:
+      type: object
+      properties:
+        mandate_identification:
+          '$ref': '#/components/schemas/Max35Text'
+          description: The unique reference of the DDI
+        type:
+          '$ref': '#/components/schemas/MandateTypeInformation2'
+        occurrences:
+          '$ref': '#/components/schemas/MandateOccurrences5Modified'
+          description: Contains the date of the first collection of a direct debit
+            as per the mandate
+        creditor:
+          '$ref': '#/components/schemas/PartyIdentification135'
+          description: Contains the client's SUN
+        creditor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+          description: Contains the client's account number and bank account name
+        creditor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6'
+          description: Contains the client's sort code
+        debtor:
+          '$ref': '#/components/schemas/PartyIdentification135Modification1'
+          description: Contains the bank account name
+        debtor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+          description: Contains the payer's account number and bank account name
+        debtor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6'
+          description: Contains the payer's sort code
+      required:
+        - mandate_identification
+        - type
+        - creditor
+        - creditor_account
+        - creditor_agent
+        - debtor
+        - debtor_account
+        - debtor_agent
+    OriginalMandate8Choice:
+      required:
+        - original_mandate
+      type: object
+      properties:
+        original_mandate:
+          '$ref': '#/components/schemas/Mandate16'
+    Max350Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 350
+    SupplementaryDataEnvelope1:
+      type: string
+      nullable: true
+    SupplementaryData1:
+      type: object
+      properties:
+        place_and_name:
+          '$ref': '#/components/schemas/Max350Text'
+        envelope:
+          '$ref': '#/components/schemas/SupplementaryDataEnvelope1'
+      required:
+        - envelope
+    MandateAcceptance7:
+      type: object
+      properties:
+        acceptance_result:
+          '$ref': '#/components/schemas/AcceptanceResult6'
+        original_mandate:
+          '$ref': '#/components/schemas/OriginalMandate8Choice'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+      required:
+        - acceptance_result
+    MandateAcceptanceReportV07:
+      required:
+        - group_header
+        - underlying_acceptance_details
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/GroupHeader80'
+        underlying_acceptance_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/MandateAcceptance7'
+          minItems: 1
+    Document:
+      required:
+        - mandate_acceptance_report
+      type: object
+      properties:
+        mandate_acceptance_report:
+          '$ref': '#/components/schemas/MandateAcceptanceReportV07'
+    AuddisBankReturnedReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/Document'
+      description: AUDDIS Bank Returned Report Payload
+      required:
+        - document
+    GroupHeader81:
+      required:
+        - message_identification
+        - creation_date_time
+      type: object
+      properties:
+        message_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+    CashAccount41:
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/AccountIdentification4Choice'
+    FixedFalseModified1:
+      allOf:
+        - type: boolean
+        - {}
+      enum:
+        - false
+    CreditDebitCode:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - DBIT
+    ActiveOrHistoricCurrencyAndAmountModified1:
+      type: string
+      nullable: false
+    EntryStatus1Choice:
+      required:
+        - proprietary
+      type: object
+      properties:
+        proprietary:
+          '$ref': '#/components/schemas/Max35Text'
+    ExternalBankTransactionDomain1CodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - PMNT
+    ExternalBankTransactionFamily1CodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - IDDT
+    ExternalBankTransactionSubFamily1CodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - UPDD
+    BankTransactionCodeStructure6:
+      required:
+        - code
+        - sub_family_code
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionFamily1CodeModified1'
+        sub_family_code:
+          '$ref': '#/components/schemas/ExternalBankTransactionSubFamily1CodeModified1'
+    BankTransactionCodeStructure5:
+      required:
+        - code
+        - family
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionDomain1CodeModified1'
+        family:
+          '$ref': '#/components/schemas/BankTransactionCodeStructure6'
+    ProprietaryBankTransactionCodeStructure1:
+      required:
+        - code
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/Max35Text'
+    BankTransactionCodeStructure4:
+      type: object
+      properties:
+        domain:
+          '$ref': '#/components/schemas/BankTransactionCodeStructure5'
+        proprietary:
+          '$ref': '#/components/schemas/ProprietaryBankTransactionCodeStructure1'
+    Max35TextNullable:
+      nullable: true
+      type: string
+      minLength: 1
+      maxLength: 35
+    TransactionReferences6:
+      type: object
+      properties:
+        instruction_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        end_to_end_identification:
+          '$ref': '#/components/schemas/Max35TextNullable'
+    schemas-PartyIdentification135:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+        identification:
+          '$ref': '#/components/schemas/Party38Choice'
+    Party40Choice:
+      required:
+        - party
+      type: object
+      properties:
+        party:
+          '$ref': '#/components/schemas/schemas-PartyIdentification135'
+    CashAccount40Modified1:
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/AccountIdentification4Choice'
+    TransactionParties9:
+      type: object
+      properties:
+        debtor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+        creditor:
+          '$ref': '#/components/schemas/Party40Choice'
+        creditor_account:
+          '$ref': '#/components/schemas/CashAccount40Modified1'
+    schemas-FinancialInstitutionIdentification18:
+      type: object
+      properties:
+        clearing_system_member_identification:
+          '$ref': '#/components/schemas/ClearingSystemMemberIdentification2'
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+    BranchData3:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+    BranchAndFinancialInstitutionIdentification6Modified2:
+      required:
+        - financial_institution_identification
+      type: object
+      properties:
+        financial_institution_identification:
+          '$ref': '#/components/schemas/schemas-FinancialInstitutionIdentification18'
+        branch_identification:
+          '$ref': '#/components/schemas/BranchData3'
+    BranchAndFinancialInstitutionIdentification6Modified1:
+      required:
+        - financial_institution_identification
+      type: object
+      properties:
+        financial_institution_identification:
+          '$ref': '#/components/schemas/schemas-FinancialInstitutionIdentification18'
+    TransactionAgents5:
+      type: object
+      properties:
+        debtor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6Modified2'
+        creditor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6Modified1'
+    EntryTransaction11:
+      type: object
+      properties:
+        references:
+          '$ref': '#/components/schemas/TransactionReferences6'
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/CreditDebitCode'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/BankTransactionCodeStructure4'
+        related_parties:
+          '$ref': '#/components/schemas/TransactionParties9'
+        related_agents:
+          '$ref': '#/components/schemas/TransactionAgents5'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    EntryDetails10:
+      type: object
+      properties:
+        transaction_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/EntryTransaction11'
+          minItems: 0
+    ReportEntry11:
+      type: object
+      properties:
+        reversal_indicator:
+          '$ref': '#/components/schemas/FixedFalseModified1'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/CreditDebitCode'
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        status:
+          '$ref': '#/components/schemas/EntryStatus1Choice'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/BankTransactionCodeStructure4'
+        entry_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/EntryDetails10'
+          minItems: 0
+      required:
+        - amount
+        - status
+        - bank_transaction_code
+    AccountNotification19:
+      required:
+        - identification
+        - account
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+        account:
+          '$ref': '#/components/schemas/CashAccount41'
+        entry:
+          type: array
+          items:
+            '$ref': '#/components/schemas/ReportEntry11'
+          minItems: 0
+    BankToCustomerDebitCreditNotificationV09:
+      required:
+        - group_header
+        - notification
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/GroupHeader81'
+        notification:
+          type: array
+          items:
+            '$ref': '#/components/schemas/AccountNotification19'
+          minItems: 1
+    schemas-Document:
+      required:
+        - bank_to_customer_debit_credit_notification
+      type: object
+      properties:
+        bank_to_customer_debit_credit_notification:
+          '$ref': '#/components/schemas/BankToCustomerDebitCreditNotificationV09'
+    AruddReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/schemas-Document'
+      description: ARUDD Unpaid Debit Debit Report Payload
+      required:
+        - document
+    schemas-GroupHeader80:
+      required:
+        - message_identification
+        - creation_date_time
+      type: object
+      properties:
+        message_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+    schemas-MandateReason1Choice:
+      required:
+        - proprietary
+      type: object
+      properties:
+        proprietary:
+          '$ref': '#/components/schemas/Max35Text'
+    MandateAmendmentReason2:
+      type: object
+      properties:
+        reason:
+          '$ref': '#/components/schemas/schemas-MandateReason1Choice'
+      required:
+        - reason
+    TrueFalseIndicator:
+      type: boolean
+    Mandate18:
+      type: object
+      properties:
+        debtor_account:
+          '$ref': '#/components/schemas/CashAccount40Modified1'
+        debtor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6'
+        tracking_indicator:
+          '$ref': '#/components/schemas/TrueFalseIndicator'
+        mandate_identification:
+          '$ref': '#/components/schemas/Max35Text'
+      required:
+        - tracking_indicator
+        - mandate_identification
+    PartyIdentification135Modified1:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+    Mandate17:
+      required:
+        - mandate_identification
+        - creditor
+        - debtor_agent
+        - tracking_indicator
+        - debtor
+      type: object
+      properties:
+        mandate_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creditor:
+          '$ref': '#/components/schemas/PartyIdentification135'
+        debtor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+        debtor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6'
+        tracking_indicator:
+          '$ref': '#/components/schemas/TrueFalseIndicator'
+        debtor:
+          '$ref': '#/components/schemas/PartyIdentification135Modified1'
+    OriginalMandate9Choice:
+      required:
+        - original_mandate
+      type: object
+      properties:
+        original_mandate:
+          '$ref': '#/components/schemas/Mandate17'
+    MandateAmendment7:
+      type: object
+      properties:
+        amendment_reason:
+          '$ref': '#/components/schemas/MandateAmendmentReason2'
+        mandate:
+          '$ref': '#/components/schemas/Mandate18'
+        original_mandate:
+          '$ref': '#/components/schemas/OriginalMandate9Choice'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+      required:
+        - amendment_reason
+        - mandate
+        - original_mandate
+    MandateAmendmentRequestV07:
+      required:
+        - group_header
+        - underlying_amendment_details
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/schemas-GroupHeader80'
+        underlying_amendment_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/MandateAmendment7'
+          minItems: 1
+    components-schemas-Document:
+      required:
+        - mandate_amendment_request
+      type: object
+      properties:
+        mandate_amendment_request:
+          '$ref': '#/components/schemas/MandateAmendmentRequestV07'
+    AddacsAmendmentsReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/components-schemas-Document'
+      description: ADDACS Amendments Report Payload
+      required:
+        - document
+    MandateCancellationReason1:
+      type: object
+      properties:
+        reason:
+          '$ref': '#/components/schemas/schemas-MandateReason1Choice'
+      required:
+        - reason
+    Party38ChoiceModified1:
+      required:
+        - organisation_identification
+      type: object
+      properties:
+        organisation_identification:
+          '$ref': '#/components/schemas/OrganisationIdentification29'
+    schemas-PartyIdentification135Modified1:
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Party38ChoiceModified1'
+    components-schemas-PartyIdentification135:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+    schemas-Mandate17:
+      required:
+        - mandate_identification
+        - tracking_indicator
+        - creditor
+        - debtor
+        - debtor_agent
+      type: object
+      properties:
+        mandate_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        tracking_indicator:
+          '$ref': '#/components/schemas/TrueFalseIndicator'
+        creditor:
+          '$ref': '#/components/schemas/schemas-PartyIdentification135Modified1'
+        debtor:
+          '$ref': '#/components/schemas/components-schemas-PartyIdentification135'
+        debtor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+        debtor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6'
+    schemas-OriginalMandate9Choice:
+      required:
+        - original_mandate
+      type: object
+      properties:
+        original_mandate:
+          '$ref': '#/components/schemas/schemas-Mandate17'
+    MandateCancellation7:
+      type: object
+      properties:
+        cancellation_reason:
+          '$ref': '#/components/schemas/MandateCancellationReason1'
+        original_mandate:
+          '$ref': '#/components/schemas/schemas-OriginalMandate9Choice'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+      required:
+        - cancellation_reason
+        - original_mandate
+    MandateCancellationRequestV07:
+      required:
+        - group_header
+        - underlying_cancellation_details
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/schemas-GroupHeader80'
+        underlying_cancellation_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/MandateCancellation7'
+          minItems: 1
+    addacs-cancellations_components-schemas-Document:
+      required:
+        - mandate_cancellation_request
+      type: object
+      properties:
+        mandate_cancellation_request:
+          '$ref': '#/components/schemas/MandateCancellationRequestV07'
+    AddacsCancellationsReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/addacs-cancellations_components-schemas-Document'
+      description: ADDACS Cancelations Report Payload
+      required:
+        - document
+    Max500Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 500
+    FixedTrueModified1:
+      allOf:
+        - type: boolean
+        - {}
+      enum:
+        - true
+    CreditDebitCodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - DBIT
+    schemas-ExternalBankTransactionSubFamily1CodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - PRDD
+    schemas-BankTransactionCodeStructure6:
+      required:
+        - code
+        - sub_family_code
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionFamily1CodeModified1'
+        sub_family_code:
+          '$ref': '#/components/schemas/schemas-ExternalBankTransactionSubFamily1CodeModified1'
+    schemas-BankTransactionCodeStructure5:
+      required:
+        - code
+        - family
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionDomain1CodeModified1'
+        family:
+          '$ref': '#/components/schemas/schemas-BankTransactionCodeStructure6'
+    schemas-BankTransactionCodeStructure4:
+      type: object
+      properties:
+        domain:
+          '$ref': '#/components/schemas/schemas-BankTransactionCodeStructure5'
+        proprietary:
+          '$ref': '#/components/schemas/ProprietaryBankTransactionCodeStructure1'
+    schemas-TransactionReferences6:
+      type: object
+      properties:
+        mandate_identification:
+          '$ref': '#/components/schemas/Max35Text'
+    schemas-TransactionParties9:
+      type: object
+      properties:
+        debtor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+    FinancialInstitutionIdentification18Modified1:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+    schemas-BranchAndFinancialInstitutionIdentification6Modified2:
+      required:
+        - financial_institution_identification
+      type: object
+      properties:
+        financial_institution_identification:
+          '$ref': '#/components/schemas/FinancialInstitutionIdentification18Modified1'
+    schemas-TransactionAgents5:
+      type: object
+      properties:
+        debtor_agent:
+          '$ref': '#/components/schemas/schemas-BranchAndFinancialInstitutionIdentification6Modified2'
+    schemas-EntryTransaction11:
+      type: object
+      properties:
+        references:
+          '$ref': '#/components/schemas/schemas-TransactionReferences6'
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/CreditDebitCodeModified1'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/schemas-BankTransactionCodeStructure4'
+        related_parties:
+          '$ref': '#/components/schemas/schemas-TransactionParties9'
+        related_agents:
+          '$ref': '#/components/schemas/schemas-TransactionAgents5'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    schemas-EntryDetails10:
+      type: object
+      properties:
+        transaction_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/schemas-EntryTransaction11'
+          minItems: 0
+    schemas-ReportEntry11:
+      type: object
+      properties:
+        additional_entry_information:
+          '$ref': '#/components/schemas/Max500Text'
+        reversal_indicator:
+          '$ref': '#/components/schemas/FixedTrueModified1'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/CreditDebitCodeModified1'
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        status:
+          '$ref': '#/components/schemas/EntryStatus1Choice'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/schemas-BankTransactionCodeStructure4'
+        entry_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/schemas-EntryDetails10'
+          minItems: 0
+      required:
+        - amount
+        - status
+        - bank_transaction_code
+    schemas-AccountNotification19:
+      required:
+        - identification
+        - account
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+        account:
+          '$ref': '#/components/schemas/CashAccount41'
+        entry:
+          type: array
+          items:
+            '$ref': '#/components/schemas/schemas-ReportEntry11'
+          minItems: 0
+    schemas-BankToCustomerDebitCreditNotificationV09:
+      required:
+        - group_header
+        - notification
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/GroupHeader81'
+        notification:
+          type: array
+          items:
+            '$ref': '#/components/schemas/schemas-AccountNotification19'
+          minItems: 1
+    ddic_components-schemas-Document:
+      required:
+        - bank_to_customer_debit_credit_notification
+      type: object
+      properties:
+        bank_to_customer_debit_credit_notification:
+          '$ref': '#/components/schemas/schemas-BankToCustomerDebitCreditNotificationV09'
+    DdicReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/ddic_components-schemas-Document'
+      description: DDIC Indemnity Claim Report Payload
+      required:
+        - document
+    schemas-CreditDebitCode:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - CRDT
+    components-schemas-ExternalBankTransactionSubFamily1CodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - UPDD
+        - PMDD
+    components-schemas-BankTransactionCodeStructure6:
+      required:
+        - code
+        - sub_family_code
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionFamily1CodeModified1'
+        sub_family_code:
+          '$ref': '#/components/schemas/components-schemas-ExternalBankTransactionSubFamily1CodeModified1'
+    components-schemas-BankTransactionCodeStructure5:
+      required:
+        - code
+        - family
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionDomain1CodeModified1'
+        family:
+          '$ref': '#/components/schemas/components-schemas-BankTransactionCodeStructure6'
+    components-schemas-BankTransactionCodeStructure4:
+      type: object
+      properties:
+        domain:
+          '$ref': '#/components/schemas/components-schemas-BankTransactionCodeStructure5'
+        proprietary:
+          '$ref': '#/components/schemas/ProprietaryBankTransactionCodeStructure1'
+    Max140TextAndMin0:
+      allOf:
+        - type: string
+        - minLength: 0
+          maxLength: 140
+    Max35TextAndMin0:
+      allOf:
+        - type: string
+        - minLength: 0
+          maxLength: 140
+    ClearingSystemMemberIdentification2Modified:
+      type: object
+      properties:
+        member_identification:
+          '$ref': '#/components/schemas/Max35TextAndMin0'
+      required:
+        - member_identification
+    schemas-FinancialInstitutionIdentification18Modified1:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140TextAndMin0'
+        clearing_system_member_identification:
+          '$ref': '#/components/schemas/ClearingSystemMemberIdentification2Modified'
+    schemas-BranchData3:
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140TextAndMin0'
+    components-schemas-BranchAndFinancialInstitutionIdentification6Modified2:
+      required:
+        - financial_institution_identification
+      type: object
+      properties:
+        financial_institution_identification:
+          '$ref': '#/components/schemas/schemas-FinancialInstitutionIdentification18Modified1'
+        branch_identification:
+          '$ref': '#/components/schemas/schemas-BranchData3'
+    components-schemas-TransactionAgents5:
+      type: object
+      properties:
+        debtor_agent:
+          '$ref': '#/components/schemas/components-schemas-BranchAndFinancialInstitutionIdentification6Modified2'
+        creditor_agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6Modified1'
+    components-schemas-EntryTransaction11:
+      type: object
+      properties:
+        references:
+          '$ref': '#/components/schemas/TransactionReferences6'
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/schemas-CreditDebitCode'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/components-schemas-BankTransactionCodeStructure4'
+        related_parties:
+          '$ref': '#/components/schemas/TransactionParties9'
+        related_agents:
+          '$ref': '#/components/schemas/components-schemas-TransactionAgents5'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    components-schemas-EntryDetails10:
+      type: object
+      properties:
+        transaction_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/components-schemas-EntryTransaction11'
+          minItems: 0
+    components-schemas-ReportEntry11:
+      type: object
+      properties:
+        reversal_indicator:
+          '$ref': '#/components/schemas/FixedFalseModified1'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/schemas-CreditDebitCode'
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        status:
+          '$ref': '#/components/schemas/EntryStatus1Choice'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/components-schemas-BankTransactionCodeStructure4'
+        entry_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/components-schemas-EntryDetails10'
+          minItems: 0
+      required:
+        - amount
+        - status
+        - bank_transaction_code
+    components-schemas-AccountNotification19:
+      required:
+        - identification
+        - account
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+        account:
+          '$ref': '#/components/schemas/CashAccount41'
+        entry:
+          type: array
+          items:
+            '$ref': '#/components/schemas/components-schemas-ReportEntry11'
+          minItems: 0
+    components-schemas-BankToCustomerDebitCreditNotificationV09:
+      required:
+        - group_header
+        - notification
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/GroupHeader81'
+        notification:
+          type: array
+          items:
+            '$ref': '#/components/schemas/components-schemas-AccountNotification19'
+          minItems: 1
+    collection-advices_components-schemas-Document:
+      required:
+        - bank_to_customer_debit_credit_notification
+      type: object
+      properties:
+        bank_to_customer_debit_credit_notification:
+          '$ref': '#/components/schemas/components-schemas-BankToCustomerDebitCreditNotificationV09'
+    CollectionAdvicesReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/collection-advices_components-schemas-Document'
+      description: Collection Advices Report Payload
+      required:
+        - document
+    IdentificationAssignment3:
+      required:
+        - message_identification
+        - creation_date_time
+        - assigner
+        - assignee
+      type: object
+      properties:
+        message_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+        assigner:
+          '$ref': '#/components/schemas/Party40Choice'
+        assignee:
+          '$ref': '#/components/schemas/Party40Choice'
+    PaymentIdentification5:
+      required:
+        - end_to_end_identification
+      type: object
+      properties:
+        instruction_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        end_to_end_identification:
+          '$ref': '#/components/schemas/Max35Text'
+    OriginalTransactionReference30:
+      type: object
+      properties:
+        original_transaction:
+          type: array
+          items:
+            '$ref': '#/components/schemas/PaymentIdentification5'
+          minItems: 0
+    schemas-CashAccount40:
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/AccountIdentification4Choice'
+    IdentificationInformation4:
+      type: object
+      properties:
+        party:
+          '$ref': '#/components/schemas/PartyIdentification135Modified1'
+        account:
+          '$ref': '#/components/schemas/schemas-CashAccount40'
+        agent:
+          '$ref': '#/components/schemas/BranchAndFinancialInstitutionIdentification6'
+    IdentificationModification4:
+      required:
+        - identification
+        - updated_party_and_account_identification
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+        original_party_and_account_identification:
+          '$ref': '#/components/schemas/IdentificationInformation4'
+        updated_party_and_account_identification:
+          '$ref': '#/components/schemas/IdentificationInformation4'
+        additional_information:
+          '$ref': '#/components/schemas/Max140Text'
+    IdentificationModificationAdviceV03:
+      required:
+        - assignment
+        - modification
+      type: object
+      properties:
+        assignment:
+          '$ref': '#/components/schemas/IdentificationAssignment3'
+        original_transaction_reference:
+          '$ref': '#/components/schemas/OriginalTransactionReference30'
+        modification:
+          type: array
+          items:
+            '$ref': '#/components/schemas/IdentificationModification4'
+          minItems: 1
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    awacs_components-schemas-Document:
+      required:
+        - identification_modification_advice
+      type: object
+      properties:
+        identification_modification_advice:
+          '$ref': '#/components/schemas/IdentificationModificationAdviceV03'
+    AwacsWrongAccountForCreditsReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/awacs_components-schemas-Document'
+      description: Awacs Wrong Account for Credits Report Payload
+      required:
+        - document
+    schemas-ExternalBankTransactionFamily1CodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - ICDT
+    arucs_components-schemas-ExternalBankTransactionSubFamily1CodeModified1:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - RRTN
+    arucs_components-schemas-BankTransactionCodeStructure6:
+      required:
+        - code
+        - sub_family_code
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/schemas-ExternalBankTransactionFamily1CodeModified1'
+        sub_family_code:
+          '$ref': '#/components/schemas/arucs_components-schemas-ExternalBankTransactionSubFamily1CodeModified1'
+    arucs_components-schemas-BankTransactionCodeStructure5:
+      required:
+        - code
+        - family
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionDomain1CodeModified1'
+        family:
+          '$ref': '#/components/schemas/arucs_components-schemas-BankTransactionCodeStructure6'
+    arucs_components-schemas-BankTransactionCodeStructure4:
+      type: object
+      properties:
+        domain:
+          '$ref': '#/components/schemas/arucs_components-schemas-BankTransactionCodeStructure5'
+        proprietary:
+          '$ref': '#/components/schemas/ProprietaryBankTransactionCodeStructure1'
+    BranchData3Nullable:
+      nullable: true
+      type: object
+      properties:
+        name:
+          '$ref': '#/components/schemas/Max140Text'
+    schemas-BranchAndFinancialInstitutionIdentification6:
+      required:
+        - financial_institution_identification
+      type: object
+      properties:
+        financial_institution_identification:
+          '$ref': '#/components/schemas/schemas-FinancialInstitutionIdentification18'
+        branch_identification:
+          '$ref': '#/components/schemas/BranchData3Nullable'
+    arucs_components-schemas-TransactionAgents5:
+      type: object
+      properties:
+        creditor_agent:
+          '$ref': '#/components/schemas/schemas-BranchAndFinancialInstitutionIdentification6'
+        debtor_agent:
+          '$ref': '#/components/schemas/schemas-BranchAndFinancialInstitutionIdentification6'
+    Party40ChoiceModified1:
+      required:
+        - party
+      type: object
+      properties:
+        party:
+          '$ref': '#/components/schemas/PartyIdentification135Modified1'
+    components-schemas-TransactionParties9:
+      type: object
+      properties:
+        creditor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+        creditor:
+          '$ref': '#/components/schemas/Party40ChoiceModified1'
+        debtor_account:
+          '$ref': '#/components/schemas/CashAccount40'
+        debtor:
+          '$ref': '#/components/schemas/Party40Choice'
+    components-schemas-TransactionReferences6:
+      type: object
+      properties:
+        instruction_identification:
+          '$ref': '#/components/schemas/Max35Text'
+    arucs_components-schemas-EntryTransaction11:
+      type: object
+      properties:
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        related_agents:
+          '$ref': '#/components/schemas/arucs_components-schemas-TransactionAgents5'
+        related_parties:
+          '$ref': '#/components/schemas/components-schemas-TransactionParties9'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/schemas-CreditDebitCode'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/arucs_components-schemas-BankTransactionCodeStructure4'
+        references:
+          '$ref': '#/components/schemas/components-schemas-TransactionReferences6'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    arucs_components-schemas-EntryDetails10:
+      type: object
+      properties:
+        transaction_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/arucs_components-schemas-EntryTransaction11'
+          minItems: 0
+    arucs_components-schemas-ReportEntry11:
+      type: object
+      required:
+        - amount
+        - bank_transaction_code
+        - credit_debit_indicator
+        - status
+      properties:
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmountModified1'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/arucs_components-schemas-BankTransactionCodeStructure4'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/schemas-CreditDebitCode'
+        status:
+          '$ref': '#/components/schemas/EntryStatus1Choice'
+        entry_details:
+          type: array
+          items:
+            '$ref': '#/components/schemas/arucs_components-schemas-EntryDetails10'
+          minItems: 0
+    arucs_components-schemas-AccountNotification19:
+      required:
+        - identification
+        - account
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+        account:
+          '$ref': '#/components/schemas/CashAccount41'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+        entry:
+          type: array
+          items:
+            '$ref': '#/components/schemas/arucs_components-schemas-ReportEntry11'
+          minItems: 0
+    arucs_components-schemas-BankToCustomerDebitCreditNotificationV09:
+      required:
+        - group_header
+        - notification
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/GroupHeader81'
+        notification:
+          type: array
+          items:
+            '$ref': '#/components/schemas/arucs_components-schemas-AccountNotification19'
+          minItems: 1
+    arucs_components-schemas-Document:
+      required:
+        - bank_to_customer_debit_credit_notification
+      type: object
+      properties:
+        bank_to_customer_debit_credit_notification:
+          '$ref': '#/components/schemas/arucs_components-schemas-BankToCustomerDebitCreditNotificationV09'
+    ArucsReportBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/arucs_components-schemas-Document'
+      description: ARUCS unapplied credits Report Payload
+      required:
+        - document
+    MessageFunction42Code:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - AUTQ
+        - AUTP
+        - CCAV
+        - CCAK
+        - CCAQ
+        - CCAP
+        - CMPV
+        - CMPK
+        - DCAV
+        - DCRR
+        - DCCQ
+        - DCCP
+        - DGNP
+        - DGNQ
+        - FAUQ
+        - FAUP
+        - FCMV
+        - FCMK
+        - FRVA
+        - FRVR
+        - RCLQ
+        - RCLP
+        - RVRA
+        - RVRR
+        - CDDQ
+        - CDDK
+        - CDDR
+        - CDDP
+        - TRNR
+        - TRNA
+        - NFRQ
+        - NFRP
+        - TRPQ
+        - TRPP
+    Max6Text:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 6
+    InitiatingPartyIdentification:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - CHECKOUT
+    GenericIdentification176:
+      required:
+        - identification
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/InitiatingPartyIdentification'
+    Header59:
+      required:
+        - message_function
+        - protocol_version
+        - exchange_identification
+        - creation_date_time
+        - initiating_party
+      type: object
+      properties:
+        message_function:
+          '$ref': '#/components/schemas/MessageFunction42Code'
+        protocol_version:
+          '$ref': '#/components/schemas/Max6Text'
+        exchange_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        creation_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+        initiating_party:
+          '$ref': '#/components/schemas/GenericIdentification176'
+    Max15NumericText:
+      nullable: true
+      type: string
+      pattern: '[0-9]{1,15}'
+    Max3Text:
+      nullable: true
+      type: string
+      minLength: 1
+      maxLength: 3
+    CardProductType1Code:
+      type: string
+      nullable: true
+      enum:
+        - COMM
+        - CONS
+        -
+    PaymentCard31:
+      type: object
+      properties:
+        issuer_bin:
+          '$ref': '#/components/schemas/Max15NumericText'
+        card_country_code:
+          '$ref': '#/components/schemas/Max3Text'
+        card_brand:
+          '$ref': '#/components/schemas/Max35TextNullable'
+        card_product_type:
+          '$ref': '#/components/schemas/CardProductType1Code'
+    GenericIdentification4:
+      required:
+        - identification
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+    PersonIdentification15:
+      nullable: true
+      type: object
+      properties:
+        email_address:
+          nullable: true
+          type: string
+          minLength: 1
+          maxLength: 256
+        other:
+          nullable: true
+          type: array
+          items:
+            '$ref': '#/components/schemas/GenericIdentification4'
+          minItems: 0
+    Cardholder17:
+      nullable: true
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/PersonIdentification15'
+    CardPaymentEnvironment77:
+      type: object
+      properties:
+        card:
+          '$ref': '#/components/schemas/PaymentCard31'
+        cardholder:
+          '$ref': '#/components/schemas/Cardholder17'
+    TransactionIdentifier1:
+      required:
+        - transaction_date_time
+        - transaction_reference
+      type: object
+      properties:
+        transaction_date_time:
+          '$ref': '#/components/schemas/schemas-ISODateTime'
+        transaction_reference:
+          '$ref': '#/components/schemas/Max35TextNullable'
+    ActiveCurrencyCode:
+      nullable: true
+      type: string
+      pattern: '[A-Z]{3,3}'
+    DecimalNumberAsString:
+      type: string
+      pattern: "[0-9]*\\.[0-9]{2}$"
+    ImpliedCurrencyAndAmount:
+      allOf:
+        - '$ref': '#/components/schemas/DecimalNumberAsString'
+        - minimum: 0
+          exclusiveMinimum: false
+    CardAccountType3Code:
+      type: string
+      nullable: true
+      enum:
+        - CTDP
+        - CHCK
+        - CRDT
+        - CURR
+        - CDBT
+        - DFLT
+        - EPRS
+        - HEQL
+        - ISTL
+        - INVS
+        - LCDT
+        - MBNW
+        - MNMK
+        - MNMC
+        - MTGL
+        - RTRM
+        - RVLV
+        - SVNG
+        - STBD
+        - UVRL
+        - PRPD
+        - FLTC
+        -
+    CardPaymentTransactionDetails49:
+      type: object
+      properties:
+        currency:
+          '$ref': '#/components/schemas/ActiveCurrencyCode'
+        total_amount:
+          '$ref': '#/components/schemas/ImpliedCurrencyAndAmount'
+        authorised_amount:
+          '$ref': '#/components/schemas/DecimalNumberAsString'
+        account_type:
+          '$ref': '#/components/schemas/CardAccountType3Code'
+      required:
+        - total_amount
+    CardPaymentTransaction111:
+      type: object
+      properties:
+        transaction_identification:
+          '$ref': '#/components/schemas/TransactionIdentifier1'
+        transaction_details:
+          '$ref': '#/components/schemas/CardPaymentTransactionDetails49'
+      required:
+        - transaction_identification
+        - transaction_details
+    Response9Code:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - APPR
+        - DECL
+        - PART
+        - SUSP
+        - TECH
+    ResponseType10:
+      required:
+        - response
+      type: object
+      properties:
+        response:
+          '$ref': '#/components/schemas/Response9Code'
+    Min5Max6Text:
+      allOf:
+        - type: string
+        - minLength: 5
+          maxLength: 6
+    AuthorisationResult14:
+      type: object
+      properties:
+        response_to_authorisation:
+          '$ref': '#/components/schemas/ResponseType10'
+        authorisation_code:
+          '$ref': '#/components/schemas/Min5Max6Text'
+      required:
+        - response_to_authorisation
+    CardPaymentTransaction109:
+      required:
+        - authorisation_result
+      type: object
+      properties:
+        authorisation_result:
+          '$ref': '#/components/schemas/AuthorisationResult14'
+    AcceptorAuthorisationResponse10:
+      required:
+        - environment
+        - transaction
+        - transaction_response
+      type: object
+      properties:
+        environment:
+          '$ref': '#/components/schemas/CardPaymentEnvironment77'
+        transaction:
+          '$ref': '#/components/schemas/CardPaymentTransaction111'
+        transaction_response:
+          '$ref': '#/components/schemas/CardPaymentTransaction109'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    AcceptorAuthorisationResponseV10:
+      required:
+        - header
+        - authorisation_response
+      type: object
+      properties:
+        header:
+          '$ref': '#/components/schemas/Header59'
+        authorisation_response:
+          '$ref': '#/components/schemas/AcceptorAuthorisationResponse10'
+    payment-approved_components-schemas-Document:
+      required:
+        - acceptor_authorisation_response
+      type: object
+      properties:
+        acceptor_authorisation_response:
+          '$ref': '#/components/schemas/AcceptorAuthorisationResponseV10'
+    PaymentApprovedEventBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/payment-approved_components-schemas-Document'
+      description: Payment Approved Webhook Event Payload
+      required:
+        - document
+    schemas-CardPaymentEnvironment77:
+      type: object
+    CardPaymentTransactionDetails34:
+      type: object
+      properties:
+        currency:
+          '$ref': '#/components/schemas/ActiveCurrencyCode'
+        total_amount:
+          '$ref': '#/components/schemas/ImpliedCurrencyAndAmount'
+      required:
+        - total_amount
+    CardPaymentTransaction97:
+      type: object
+      properties:
+        transaction_identification:
+          '$ref': '#/components/schemas/TransactionIdentifier1'
+        transaction_details:
+          '$ref': '#/components/schemas/CardPaymentTransactionDetails34'
+      required:
+        - transaction_identification
+        - transaction_details
+    Min6Max8Text:
+      allOf:
+        - type: string
+        - minLength: 6
+          maxLength: 8
+    AuthorisationResult16:
+      type: object
+      properties:
+        response_to_authorisation:
+          '$ref': '#/components/schemas/ResponseType10'
+        AuthstnCd:
+          '$ref': '#/components/schemas/Min6Max8Text'
+      required:
+        - response_to_authorisation
+    CardPaymentTransaction105:
+      required:
+        - authorisation_result
+      type: object
+      properties:
+        authorisation_result:
+          '$ref': '#/components/schemas/AuthorisationResult16'
+    AcceptorCancellationResponse9:
+      required:
+        - environment
+        - transaction
+        - transaction_response
+      type: object
+      properties:
+        environment:
+          '$ref': '#/components/schemas/schemas-CardPaymentEnvironment77'
+        transaction:
+          '$ref': '#/components/schemas/CardPaymentTransaction97'
+        transaction_response:
+          '$ref': '#/components/schemas/CardPaymentTransaction105'
+    AcceptorCancellationResponseV09:
+      required:
+        - header
+        - cancellation_response
+      type: object
+      properties:
+        header:
+          '$ref': '#/components/schemas/Header59'
+        cancellation_response:
+          '$ref': '#/components/schemas/AcceptorCancellationResponse9'
+    payment-voided_components-schemas-Document:
+      required:
+        - acceptor_cancellation_response
+      type: object
+      properties:
+        acceptor_cancellation_response:
+          '$ref': '#/components/schemas/AcceptorCancellationResponseV09'
+    PaymentVoidedEventBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/payment-voided_components-schemas-Document'
+      description: Payment Voided Webhook Event Payload
+      required:
+        - document
+    CardPaymentTransactionAdviceResponse8:
+      type: object
+      properties:
+        transaction_identification:
+          '$ref': '#/components/schemas/TransactionIdentifier1'
+        response:
+          '$ref': '#/components/schemas/Response9Code'
+      required:
+        - transaction_identification
+        - response
+    AcceptorCompletionAdviceResponse9:
+      required:
+        - environment
+        - transaction
+      type: object
+      properties:
+        environment:
+          '$ref': '#/components/schemas/schemas-CardPaymentEnvironment77'
+        transaction:
+          '$ref': '#/components/schemas/CardPaymentTransactionAdviceResponse8'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    AcceptorCompletionAdviceResponseV09:
+      required:
+        - header
+        - completion_advice_response
+      type: object
+      properties:
+        header:
+          '$ref': '#/components/schemas/Header59'
+        completion_advice_response:
+          '$ref': '#/components/schemas/AcceptorCompletionAdviceResponse9'
+    payment-captured_components-schemas-Document:
+      required:
+        - acceptor_completion_advice_response
+      type: object
+      properties:
+        acceptor_completion_advice_response:
+          '$ref': '#/components/schemas/AcceptorCompletionAdviceResponseV09'
+    PaymentCapturedEventBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/payment-captured_components-schemas-Document'
+      description: Payment Captured Webhook Event Payload
+      required:
+        - document
+    schemas-PaymentCard31:
+      nullable: true
+      type: object
+      properties:
+        issuer_bin:
+          '$ref': '#/components/schemas/Max15NumericText'
+        card_country_code:
+          '$ref': '#/components/schemas/Max3Text'
+        card_brand:
+          '$ref': '#/components/schemas/Max35TextNullable'
+        card_product_type:
+          '$ref': '#/components/schemas/CardProductType1Code'
+    schemas-PersonIdentification15:
+      type: object
+      properties:
+        email_address:
+          nullable: true
+          type: string
+          minLength: 1
+          maxLength: 256
+        other:
+          nullable: true
+          type: array
+          items:
+            '$ref': '#/components/schemas/GenericIdentification4'
+          minItems: 0
+    schemas-Cardholder17:
+      nullable: true
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/schemas-PersonIdentification15'
+    components-schemas-CardPaymentEnvironment77:
+      type: object
+      properties:
+        card:
+          '$ref': '#/components/schemas/schemas-PaymentCard31'
+        cardholder:
+          '$ref': '#/components/schemas/schemas-Cardholder17'
+    schemas-CardPaymentTransactionDetails49:
+      type: object
+      properties:
+        currency:
+          '$ref': '#/components/schemas/ActiveCurrencyCode'
+        total_amount:
+          '$ref': '#/components/schemas/ImpliedCurrencyAndAmount'
+      required:
+        - total_amount
+    schemas-CardPaymentTransaction111:
+      type: object
+      properties:
+        transaction_identification:
+          '$ref': '#/components/schemas/TransactionIdentifier1'
+        initiator_transaction_identification:
+          '$ref': '#/components/schemas/Max35Text'
+        transaction_details:
+          '$ref': '#/components/schemas/schemas-CardPaymentTransactionDetails49'
+      required:
+        - transaction_identification
+        - transaction_details
+    Max6TextNullable:
+      nullable: true
+      type: string
+      maxLength: 6
+    schemas-AuthorisationResult14:
+      type: object
+      properties:
+        response_to_authorisation:
+          '$ref': '#/components/schemas/ResponseType10'
+        authorisation_code:
+          '$ref': '#/components/schemas/Max6TextNullable'
+      required:
+        - response_to_authorisation
+    schemas-CardPaymentTransaction109:
+      required:
+        - authorisation_result
+      type: object
+      properties:
+        authorisation_result:
+          '$ref': '#/components/schemas/schemas-AuthorisationResult14'
+    schemas-AcceptorCancellationResponse9:
+      required:
+        - environment
+        - transaction
+        - transaction_response
+      type: object
+      properties:
+        environment:
+          '$ref': '#/components/schemas/components-schemas-CardPaymentEnvironment77'
+        transaction:
+          '$ref': '#/components/schemas/schemas-CardPaymentTransaction111'
+        transaction_response:
+          '$ref': '#/components/schemas/schemas-CardPaymentTransaction109'
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+          minItems: 0
+    schemas-AcceptorCancellationResponseV09:
+      required:
+        - header
+        - cancellation_response
+      type: object
+      properties:
+        header:
+          '$ref': '#/components/schemas/Header59'
+        cancellation_response:
+          '$ref': '#/components/schemas/schemas-AcceptorCancellationResponse9'
+    payment-declined_components-schemas-Document:
+      required:
+        - acceptor_cancellation_response
+      type: object
+      properties:
+        acceptor_cancellation_response:
+          '$ref': '#/components/schemas/schemas-AcceptorCancellationResponseV09'
+    PaymentDeclinedEventBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/payment-declined_components-schemas-Document'
+      description: Payment Declined Webhook Event Payload
+      required:
+        - document
+    IBAN2007Identifier:
+      allOf:
+        - type: string
+        - pattern: '[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}'
+    ExternalAccountIdentification1Code:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 4
+    AccountSchemeName1Choice:
+      required:
+        - code
+        - proprietary
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalAccountIdentification1Code'
+        proprietary:
+          '$ref': '#/components/schemas/Max35Text'
+    schemas-GenericAccountIdentification1:
+      required:
+        - identification
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max34Text'
+        schemeName:
+          '$ref': '#/components/schemas/AccountSchemeName1Choice'
+        issuer:
+          '$ref': '#/components/schemas/Max35Text'
+    schemas-AccountIdentification4Choice:
+      required:
+        - IBAN
+        - other
+      type: object
+      properties:
+        IBAN:
+          '$ref': '#/components/schemas/IBAN2007Identifier'
+        other:
+          '$ref': '#/components/schemas/schemas-GenericAccountIdentification1'
+    schemas-CashAccount41:
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/schemas-AccountIdentification4Choice'
+    ActiveOrHistoricCurrencyCode:
+      allOf:
+        - type: string
+        - pattern: '[A-Z]{3,3}'
+    ActiveOrHistoricCurrencyAndAmount_SimpleType:
+      allOf:
+        - type: string
+    ActiveOrHistoricCurrencyAndAmount:
+      required:
+        - currency
+        - value
+      type: object
+      properties:
+        currency:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyCode'
+        value:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmount_SimpleType'
+    components-schemas-CreditDebitCode:
+      allOf:
+        - type: string
+        - {}
+      enum:
+        - CRDT
+        - DBIT
+    ExternalBankTransactionDomain1Code:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 4
+    ExternalBankTransactionFamily1Code:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 4
+    ExternalBankTransactionSubFamily1Code:
+      allOf:
+        - type: string
+        - minLength: 1
+          maxLength: 4
+    payment-refund-declined_components-schemas-BankTransactionCodeStructure6:
+      required:
+        - code
+        - sub_family_code
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionFamily1Code'
+        sub_family_code:
+          '$ref': '#/components/schemas/ExternalBankTransactionSubFamily1Code'
+    payment-refund-declined_components-schemas-BankTransactionCodeStructure5:
+      required:
+        - code
+        - family
+      type: object
+      properties:
+        code:
+          '$ref': '#/components/schemas/ExternalBankTransactionDomain1Code'
+        family:
+          '$ref': '#/components/schemas/payment-refund-declined_components-schemas-BankTransactionCodeStructure6'
+    payment-refund-declined_components-schemas-BankTransactionCodeStructure4:
+      type: object
+      properties:
+        domain:
+          '$ref': '#/components/schemas/payment-refund-declined_components-schemas-BankTransactionCodeStructure5'
+    ReportEntry12:
+      required:
+        - amount
+        - credit_debit_indicator
+        - status
+        - bank_transaction_code
+      type: object
+      properties:
+        amount:
+          '$ref': '#/components/schemas/ActiveOrHistoricCurrencyAndAmount'
+        credit_debit_indicator:
+          '$ref': '#/components/schemas/components-schemas-CreditDebitCode'
+        reversal_indicator:
+          '$ref': '#/components/schemas/TrueFalseIndicator'
+        status:
+          '$ref': '#/components/schemas/EntryStatus1Choice'
+        bank_transaction_code:
+          '$ref': '#/components/schemas/payment-refund-declined_components-schemas-BankTransactionCodeStructure4'
+    AccountNotification20:
+      required:
+        - identification
+        - account
+      type: object
+      properties:
+        identification:
+          '$ref': '#/components/schemas/Max35Text'
+        account:
+          '$ref': '#/components/schemas/schemas-CashAccount41'
+        entry:
+          type: array
+          items:
+            '$ref': '#/components/schemas/ReportEntry12'
+          minItems: 0
+    BankToCustomerDebitCreditNotificationV10:
+      required:
+        - group_header
+        - notification
+      type: object
+      properties:
+        group_header:
+          '$ref': '#/components/schemas/GroupHeader81'
+        notification:
+          type: array
+          items:
+            '$ref': '#/components/schemas/AccountNotification20'
+          minItems: 1
+        supplementary_data:
+          type: array
+          items:
+            '$ref': '#/components/schemas/SupplementaryData1'
+    payment-refund-declined_components-schemas-Document:
+      required:
+        - bank_to_customer_debit_credit_notification
+      type: object
+      properties:
+        bank_to_customer_debit_credit_notification:
+          '$ref': '#/components/schemas/BankToCustomerDebitCreditNotificationV10'
+    PaymentRefundDeclinedEventBody:
+      properties:
+        document:
+          '$ref': '#/components/schemas/payment-refund-declined_components-schemas-Document'
+      description: Payment Refund Declined Webhook Event Payload
+      required:
+        - document
+  responses:
+    200SuccessResponse:
+      description: OK
+  parameters: {}
+  examples: {}
+  requestBodies: {}
+  headers: {}
+  securitySchemes:
+    ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://example.com/authentication/v1.0.0/oauth/token
+          scopes: {}

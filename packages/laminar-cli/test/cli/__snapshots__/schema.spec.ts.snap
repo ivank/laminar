@@ -1135,11 +1135,11 @@ Object {
 ]
 
 export type item = [
-    sub-item,
-    sub-item
+    sub_item,
+    sub_item
 ];
 
-export type sub-item = any;
+export type sub_item = any;
 ",
 }
 `;
@@ -1968,11 +1968,11 @@ Object {
     },
   },
   "ts": "{
-    $ref?: is-string;
+    $ref?: is_string;
     [key: string]: unknown;
 }
 
-export type is-string = string;
+export type is_string = string;
 ",
 }
 `;
@@ -4148,11 +4148,11 @@ Object {
 ]
 
 export type item = [
-    sub-item,
-    sub-item
+    sub_item,
+    sub_item
 ];
 
-export type sub-item = any;
+export type sub_item = any;
 ",
 }
 `;
@@ -5138,11 +5138,11 @@ Object {
     },
   },
   "ts": "{
-    $ref?: is-string;
+    $ref?: is_string;
     [key: string]: unknown;
 }
 
-export type is-string = string;
+export type is_string = string;
 ",
 }
 `;
@@ -7588,11 +7588,11 @@ Object {
 ]
 
 export type item = [
-    sub-item,
-    sub-item
+    sub_item,
+    sub_item
 ];
 
-export type sub-item = any;
+export type sub_item = any;
 ",
 }
 `;
@@ -8578,11 +8578,11 @@ Object {
     },
   },
   "ts": "{
-    $ref?: is-string;
+    $ref?: is_string;
     [key: string]: unknown;
 }
 
-export type is-string = string;
+export type is_string = string;
 ",
 }
 `;
@@ -10965,11 +10965,11 @@ Object {
 ]
 
 export type item = [
-    sub-item,
-    sub-item
+    sub_item,
+    sub_item
 ];
 
-export type sub-item = any;
+export type sub_item = any;
 ",
 }
 `;
@@ -11999,11 +11999,11 @@ Object {
     },
   },
   "ts": "{
-    $ref?: is-string;
+    $ref?: is_string;
     [key: string]: unknown;
 }
 
-export type is-string = string;
+export type is_string = string;
 ",
 }
 `;
