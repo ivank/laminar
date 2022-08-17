@@ -16,6 +16,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "addresses",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -38,6 +39,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "installations",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -48,6 +50,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "tariffs",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -58,6 +61,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "tariffs",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -73,6 +77,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "addresses",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -87,6 +92,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "contacts",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -102,6 +108,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "addresses",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -116,6 +123,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "contacts",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -131,6 +139,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "addresses",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -145,6 +154,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "customers",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -158,6 +168,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "accounts",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -174,6 +185,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "contracts",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -189,6 +201,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "meters",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -201,6 +214,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "installation_meters",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -216,6 +230,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "meters",
+    "updateMaxSerial": true,
   },
   Object {
     "columns": Object {
@@ -228,6 +243,7 @@ Array [
     },
     "serialColumn": "id",
     "table": "installation_meters",
+    "updateMaxSerial": true,
   },
 ]
 `;

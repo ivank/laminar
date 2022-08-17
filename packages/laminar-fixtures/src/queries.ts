@@ -18,6 +18,7 @@ export const toSetupQueries = (chunkSize: number, entities: Entity[]): QueryConf
   [...groupByMap((entity) => entity.table, entities).entries()].flatMap(([table, tableEntities]) => {
     const columns = toColumnsFromEntites(tableEntities);
     const serialColumn = tableEntities[0].serialColumn;
+    const updateMaxSerial = tableEntities[0].updateMaxSerial;
 
     return chunk(chunkSize, tableEntities)
       .map((entities) => ({
@@ -26,10 +27,14 @@ export const toSetupQueries = (chunkSize: number, entities: Entity[]): QueryConf
         )}`,
         values: entities.flatMap((entity) => columns.map((name) => entity.columns[name] ?? null)),
       }))
-      .concat({
-        text: `SELECT setval(pg_get_serial_sequence('${table}', '${serialColumn}'), coalesce(max(id), 0)+1 , false) FROM "${table}";`,
-        values: [],
-      });
+      .concat(
+        updateMaxSerial
+          ? {
+              text: `SELECT setval(pg_get_serial_sequence('${table}', '${serialColumn}'), coalesce(max(id), 0)+1 , false) FROM "${table}";`,
+              values: [],
+            }
+          : [],
+      );
   });
 
 /**
