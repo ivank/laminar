@@ -494,6 +494,27 @@ export type tariffs = Fixture<{
 }>;
 
 /**
+ * Fixture type for table \\"transactions\\" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@ovotech/laminar-fixtures';
+ * const mytransactions = fixture<transactions>({
+ *   // ...
+ * });
+ *
+ * const buildtransactions: BuildFixture<transactions> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type transactions = Fixture<{
+    id?: string;
+    amount: number;
+}>;
+
+/**
  * Fixture type for table \\"users\\" with column types loaded from the database
  * You can use the type with a fixutre, or by creating a fixture builder
  *
@@ -1008,6 +1029,27 @@ export type TariffsFixture = Fixture<{
     created_at?: Date;
     updated_at?: Date;
     source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table \\"transactions\\" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@ovotech/laminar-fixtures';
+ * const myTransactionsFixture = fixture<TransactionsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildTransactionsFixture: BuildFixture<TransactionsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type TransactionsFixture = Fixture<{
+    id?: string;
+    amount: number;
 }>;
 
 /**
