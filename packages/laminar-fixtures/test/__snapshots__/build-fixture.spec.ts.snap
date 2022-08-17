@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Laminar fixtures Should build queries for uuid: Setup Queries 1`] = `
+Array [
+  Object {
+    "text": "INSERT INTO \\"transactions\\" (\\"id\\", \\"amount\\") VALUES ($1,$2)",
+    "values": Array [
+      "cc2e2b52-ecd3-454a-8143-e0476f2fe6f1",
+      10,
+    ],
+  },
+]
+`;
+
 exports[`Laminar fixtures Should resolve circular refs 1`] = `
 Array [
   Object {

@@ -145,6 +145,11 @@ type FitAccountFixture = Fixture<{
   primary_contact_id: number;
 }>;
 
+type TransactionFixture = Fixture<{
+  id: string;
+  amount: number;
+}>;
+
 type FitContactFixture = Fixture<{
   id: number;
   account_id: number;
@@ -487,10 +492,24 @@ const buildFitAccount: BuildFixture<FitAccountFixture> = ({ columns } = {}) => {
 
   return account;
 };
+const buildTransaction: BuildFixture<TransactionFixture> = ({ columns } = {}) =>
+  fixture(
+    'transactions',
+    {
+      id: (id) => String(id).padStart(36, 'cc2e2b52-ecd3-454a-8143-e0476f2fe6f3'),
+      amount: 10,
+      ...columns,
+    },
+    { updateMaxSerial: false },
+  );
 
 describe('Laminar fixtures', () => {
   it('Should resolve circular refs', () => {
     expect(generate([buildFitAccount(), buildFitAccount()])).toMatchSnapshot();
+  });
+
+  it('Should build queries for uuid', () => {
+    expect(toSetupQueries(500, generate([buildTransaction()]))).toMatchSnapshot('Setup Queries');
   });
 
   it('Should start and stop services', async () => {

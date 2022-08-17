@@ -228,3 +228,8 @@ CREATE TABLE fixtures_meter_reads (
     submitted_at date,
     history jsonb NOT NULL DEFAULT '[]'::jsonb
 );
+
+CREATE TABLE transactions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  amount INTEGER NOT NULL
+);

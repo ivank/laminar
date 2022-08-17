@@ -181,10 +181,7 @@ export const alternate = <TFixtureColumn extends FixtureColumn>(
 export const fixture = <TFixture extends Fixture>(
   table: string,
   columns: TFixture['columns'],
-  { serialColumn = 'id', updateMaxSerial = true }: { serialColumn: string; updateMaxSerial: boolean } = {
-    serialColumn: 'id',
-    updateMaxSerial: true,
-  },
+  { serialColumn = 'id', updateMaxSerial = true }: { serialColumn?: string; updateMaxSerial?: boolean } = {},
 ): TFixture => ({ table, columns, serialColumn, updateMaxSerial } as TFixture);
 
 /**
