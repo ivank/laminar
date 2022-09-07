@@ -147,7 +147,7 @@ Laminar includes packages that are used internally or are additions to its core 
 - [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
 - [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/main/packages/json-schema) - Lightweight json-schema validator
 - [@ovotech/laminar-pg](https://github.com/ovotech/laminar/tree/main/packages/laminar-pg) - Connect to postgres db
-- [@ovotech/laminar-winstong](https://github.com/ovotech/laminar/tree/main/packages/laminar-winstong) - Use winston logger
-- [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/main/packages/laminar-winstong) - Use kafkajs to consumer and produce kafka messages, with schema registry support
-- [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/main/packages/laminar-winstong) - Use pgboss to schedule jobs
+- [@ovotech/laminar-winston](https://github.com/ovotech/laminar/tree/main/packages/laminar-winston) - Use winston logger
+- [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/main/packages/laminar-kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
+- [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/main/packages/laminar-pgboss) - Use pgboss to schedule jobs
 - [@ovotech/laminar-fixtures](https://github.com/ovotech/laminar/tree/main/packages/laminar-fixtures) - Fixtures for pg with relationships
