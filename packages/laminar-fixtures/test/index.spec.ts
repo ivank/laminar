@@ -138,7 +138,24 @@ describe('Laminar fixtures', () => {
       },
     });
 
-    const fixtures = [contract, generationInstallationMeter, exportInstallationMeter];
+    const issue = fixture(
+      'issues',
+      {
+        id,
+        description: template('Issue %s'),
+        account_id: rel(account, 'id'),
+        account_identifier: rel(account, 'account_number'),
+        comments: '[]',
+        created_at: new Date('2021-07-30'),
+        type: 'Account Pending',
+        state: 'Open',
+        reference_type: 'Account',
+        reference_id: rel(account, 'id'),
+      },
+      { serialIndex: 'issues_id_seq' },
+    );
+
+    const fixtures = [contract, generationInstallationMeter, exportInstallationMeter, issue];
 
     const entities = generate(fixtures);
     expect(entities).toMatchSnapshot('Entites');
@@ -154,6 +171,9 @@ describe('Laminar fixtures', () => {
       await setUp({ db, fixtures });
       await expect(db.query(`SELECT nextval('meters_id_seq'::regclass)`)).resolves.toMatchObject({
         rows: [{ nextval: '3' }],
+      });
+      await expect(db.query(`SELECT nextval('issues_id_seq'::regclass)`)).resolves.toMatchObject({
+        rows: [{ nextval: '2' }],
       });
       await tearDown({ db, fixtures });
     } finally {

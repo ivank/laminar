@@ -19,6 +19,7 @@ export const toSetupQueries = (chunkSize: number, entities: Entity[]): QueryConf
     const columns = toColumnsFromEntites(tableEntities);
     const serialColumn = tableEntities[0].serialColumn;
     const updateMaxSerial = tableEntities[0].updateMaxSerial;
+    const serialIndex = tableEntities[0].serialIndex;
 
     return chunk(chunkSize, tableEntities)
       .map((entities) => ({
@@ -30,7 +31,9 @@ export const toSetupQueries = (chunkSize: number, entities: Entity[]): QueryConf
       .concat(
         updateMaxSerial
           ? {
-              text: `SELECT setval(pg_get_serial_sequence('${table}', '${serialColumn}'), coalesce(max(id), 0)+1 , false) FROM "${table}";`,
+              text: `SELECT setval(${
+                serialIndex ? `'${serialIndex}'` : `pg_get_serial_sequence('${table}', '${serialColumn}')`
+              }, coalesce(max("${serialColumn}"), 0)+1 , false) FROM "${table}";`,
               values: [],
             }
           : [],

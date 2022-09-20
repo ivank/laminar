@@ -1,4 +1,6 @@
 
+CREATE EXTENSION pgcrypto;
+
 CREATE TABLE addresses (
     id SERIAL PRIMARY KEY,
     city character varying(50),
@@ -233,3 +235,56 @@ CREATE TABLE transactions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   amount INTEGER NOT NULL
 );
+
+CREATE TYPE public.issue_type AS ENUM (
+    'Read Tolerance',
+    'Account Levelisation',
+    'Installation',
+    'Payment',
+    'Meter',
+    'Account Pending'
+);
+
+CREATE TYPE public.issue_reference_type AS ENUM (
+    'Read',
+    'Account Levelisation',
+    'Account',
+    'Installation',
+    'Comm',
+    'Payment',
+    'Meter'
+);
+
+CREATE TYPE public.issue_state AS ENUM (
+    'Open',
+    'In Progress',
+    'Closed',
+    'Blocked',
+    'Resolved',
+    'Unresolvable',
+    'Awaiting Answers'
+);
+
+CREATE TABLE issues (
+    id SERIAL,
+    description character varying NOT NULL,
+    due_date timestamp without time zone,
+    account_id integer REFERENCES accounts(id),
+    account_identifier character varying,
+    comments jsonb NOT NULL DEFAULT '[]'::jsonb,
+    created_at timestamp without time zone NOT NULL,
+    type issue_type,
+    state issue_state NOT NULL,
+    reference_type issue_reference_type,
+    reference_id integer,
+    payload jsonb,
+    CONSTRAINT issues_pkey PRIMARY KEY (reference_id, reference_type, type)
+);
+
+-- Indices -------------------------------------------------------
+
+CREATE UNIQUE INDEX idx_id ON issues(id int4_ops);
+CREATE INDEX issues_reference_id_idx ON issues(reference_id int4_ops);
+CREATE INDEX issues_reference_state_idx ON issues(state enum_ops);
+CREATE INDEX issues_reference_type_idx ON issues(reference_type enum_ops);
+CREATE INDEX issues_type_idx ON issues(type enum_ops);

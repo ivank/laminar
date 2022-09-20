@@ -56,6 +56,7 @@ const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Cont
         columns,
         serialColumn: fixture.serialColumn,
         updateMaxSerial: fixture.updateMaxSerial,
+        serialIndex: fixture.serialIndex,
       }),
     };
   }, initialContext);
@@ -181,8 +182,12 @@ export const alternate = <TFixtureColumn extends FixtureColumn>(
 export const fixture = <TFixture extends Fixture>(
   table: string,
   columns: TFixture['columns'],
-  { serialColumn = 'id', updateMaxSerial = true }: { serialColumn?: string; updateMaxSerial?: boolean } = {},
-): TFixture => ({ table, columns, serialColumn, updateMaxSerial } as TFixture);
+  {
+    serialColumn = 'id',
+    updateMaxSerial = true,
+    serialIndex,
+  }: { serialColumn?: string; updateMaxSerial?: boolean; serialIndex?: string } = {},
+): TFixture => ({ table, columns, serialColumn, updateMaxSerial, serialIndex } as TFixture);
 
 /**
  * Create a copy of the fixture, with optionally some columns altered.

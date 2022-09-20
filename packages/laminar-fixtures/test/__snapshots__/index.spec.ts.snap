@@ -15,6 +15,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "addresses",
     "updateMaxSerial": true,
   },
@@ -38,6 +39,7 @@ Array [
       "type": "Retrofit",
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "installations",
     "updateMaxSerial": true,
   },
@@ -49,6 +51,7 @@ Array [
       "type": "Generation",
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "tariffs",
     "updateMaxSerial": true,
   },
@@ -60,6 +63,7 @@ Array [
       "type": "Export",
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "tariffs",
     "updateMaxSerial": true,
   },
@@ -76,6 +80,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "addresses",
     "updateMaxSerial": true,
   },
@@ -91,6 +96,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "contacts",
     "updateMaxSerial": true,
   },
@@ -107,6 +113,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "addresses",
     "updateMaxSerial": true,
   },
@@ -122,6 +129,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "contacts",
     "updateMaxSerial": true,
   },
@@ -138,6 +146,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "addresses",
     "updateMaxSerial": true,
   },
@@ -153,6 +162,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "customers",
     "updateMaxSerial": true,
   },
@@ -167,6 +177,7 @@ Array [
       "updated_at": null,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "accounts",
     "updateMaxSerial": true,
   },
@@ -184,6 +195,7 @@ Array [
       "terms_and_conditions_agreed": true,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "contracts",
     "updateMaxSerial": true,
   },
@@ -200,6 +212,7 @@ Array [
       "source_system_id": 1,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "meters",
     "updateMaxSerial": true,
   },
@@ -213,6 +226,7 @@ Array [
       "start_on": 2020-01-01T00:00:00.000Z,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "installation_meters",
     "updateMaxSerial": true,
   },
@@ -229,6 +243,7 @@ Array [
       "source_system_id": 2,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "meters",
     "updateMaxSerial": true,
   },
@@ -242,7 +257,26 @@ Array [
       "start_on": 2020-01-01T00:00:00.000Z,
     },
     "serialColumn": "id",
+    "serialIndex": undefined,
     "table": "installation_meters",
+    "updateMaxSerial": true,
+  },
+  Object {
+    "columns": Object {
+      "account_id": 1,
+      "account_identifier": undefined,
+      "comments": "[]",
+      "created_at": 2021-07-30T00:00:00.000Z,
+      "description": "Issue 1",
+      "id": 1,
+      "reference_id": 1,
+      "reference_type": "Account",
+      "state": "Open",
+      "type": "Account Pending",
+    },
+    "serialColumn": "id",
+    "serialIndex": "issues_id_seq",
+    "table": "issues",
     "updateMaxSerial": true,
   },
 ]
@@ -292,7 +326,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('addresses', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"addresses\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('addresses', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"addresses\\";",
     "values": Array [],
   },
   Object {
@@ -317,7 +351,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('installations', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"installations\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('installations', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"installations\\";",
     "values": Array [],
   },
   Object {
@@ -334,7 +368,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('tariffs', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"tariffs\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('tariffs', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"tariffs\\";",
     "values": Array [],
   },
   Object {
@@ -359,7 +393,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('contacts', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"contacts\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('contacts', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"contacts\\";",
     "values": Array [],
   },
   Object {
@@ -376,7 +410,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('customers', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"customers\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('customers', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"customers\\";",
     "values": Array [],
   },
   Object {
@@ -392,7 +426,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('accounts', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"accounts\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('accounts', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"accounts\\";",
     "values": Array [],
   },
   Object {
@@ -411,7 +445,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('contracts', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"contracts\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('contracts', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"contracts\\";",
     "values": Array [],
   },
   Object {
@@ -438,7 +472,7 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('meters', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"meters\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('meters', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"meters\\";",
     "values": Array [],
   },
   Object {
@@ -459,7 +493,26 @@ Array [
     ],
   },
   Object {
-    "text": "SELECT setval(pg_get_serial_sequence('installation_meters', 'id'), coalesce(max(id), 0)+1 , false) FROM \\"installation_meters\\";",
+    "text": "SELECT setval(pg_get_serial_sequence('installation_meters', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"installation_meters\\";",
+    "values": Array [],
+  },
+  Object {
+    "text": "INSERT INTO \\"issues\\" (\\"id\\", \\"description\\", \\"account_id\\", \\"account_identifier\\", \\"comments\\", \\"created_at\\", \\"type\\", \\"state\\", \\"reference_type\\", \\"reference_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+    "values": Array [
+      1,
+      "Issue 1",
+      1,
+      null,
+      "[]",
+      2021-07-30T00:00:00.000Z,
+      "Account Pending",
+      "Open",
+      "Account",
+      1,
+    ],
+  },
+  Object {
+    "text": "SELECT setval('issues_id_seq', coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"issues\\";",
     "values": Array [],
   },
 ]
@@ -467,6 +520,12 @@ Array [
 
 exports[`Laminar fixtures Should start and stop services: Teardown Queries 1`] = `
 Array [
+  Object {
+    "text": "DELETE FROM \\"issues\\" WHERE id IN ($1)",
+    "values": Array [
+      1,
+    ],
+  },
   Object {
     "text": "DELETE FROM \\"installation_meters\\" WHERE id IN ($1, $2)",
     "values": Array [

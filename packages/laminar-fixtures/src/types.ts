@@ -68,8 +68,15 @@ export type Fixture<TFixtureValues extends FixtureValues = FixtureValues> = {
   table: string;
   serialColumn: string;
   updateMaxSerial: boolean;
+  serialIndex?: string;
 };
-export type Entity = { columns: EntityColumns; table: string; serialColumn: string; updateMaxSerial: boolean };
+export interface Entity {
+  columns: EntityColumns;
+  table: string;
+  serialColumn: string;
+  updateMaxSerial: boolean;
+  serialIndex?: string;
+}
 
 export type BuildColumns<TFixture extends Fixture> = Partial<TFixture['columns']>;
 

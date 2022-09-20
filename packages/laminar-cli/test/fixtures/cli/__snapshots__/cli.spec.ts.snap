@@ -366,6 +366,37 @@ export type installations = Fixture<{
 }>;
 
 /**
+ * Fixture type for table \\"issues\\" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@ovotech/laminar-fixtures';
+ * const myissues = fixture<issues>({
+ *   // ...
+ * });
+ *
+ * const buildissues: BuildFixture<issues> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type issues = Fixture<{
+    id: number;
+    description: string;
+    due_date?: Date;
+    account_id?: number;
+    account_identifier?: string;
+    comments?: string;
+    created_at: Date;
+    type: \\"Read Tolerance\\" | \\"Account Levelisation\\" | \\"Installation\\" | \\"Payment\\" | \\"Meter\\" | \\"Account Pending\\";
+    state: \\"Open\\" | \\"In Progress\\" | \\"Closed\\" | \\"Blocked\\" | \\"Resolved\\" | \\"Unresolvable\\" | \\"Awaiting Answers\\";
+    reference_type: \\"Read\\" | \\"Account Levelisation\\" | \\"Account\\" | \\"Installation\\" | \\"Comm\\" | \\"Payment\\" | \\"Meter\\";
+    reference_id: number;
+    payload?: string;
+}>;
+
+/**
  * Fixture type for table \\"meter_reads\\" with column types loaded from the database
  * You can use the type with a fixutre, or by creating a fixture builder
  *
@@ -901,6 +932,37 @@ export type InstallationsFixture = Fixture<{
     switched_to?: string;
     switched_on?: Date;
     address_id: number;
+}>;
+
+/**
+ * Fixture type for table \\"issues\\" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@ovotech/laminar-fixtures';
+ * const myIssuesFixture = fixture<IssuesFixture>({
+ *   // ...
+ * });
+ *
+ * const buildIssuesFixture: BuildFixture<IssuesFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type IssuesFixture = Fixture<{
+    id: number;
+    description: string;
+    due_date?: Date;
+    account_id?: number;
+    account_identifier?: string;
+    comments?: string;
+    created_at: Date;
+    type: \\"Read Tolerance\\" | \\"Account Levelisation\\" | \\"Installation\\" | \\"Payment\\" | \\"Meter\\" | \\"Account Pending\\";
+    state: \\"Open\\" | \\"In Progress\\" | \\"Closed\\" | \\"Blocked\\" | \\"Resolved\\" | \\"Unresolvable\\" | \\"Awaiting Answers\\";
+    reference_type: \\"Read\\" | \\"Account Levelisation\\" | \\"Account\\" | \\"Installation\\" | \\"Comm\\" | \\"Payment\\" | \\"Meter\\";
+    reference_id: number;
+    payload?: string;
 }>;
 
 /**
