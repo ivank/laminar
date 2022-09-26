@@ -15,7 +15,7 @@ const isPrimitive = (obj: unknown): obj is string => obj !== undefined && !(type
 const setQuery = (path: string[], value: unknown, obj: any): Obj | unknown[] => {
   const [current, ...rest] = path;
   if (current && !/^\d+$/.test(current)) {
-    const currentValue = obj[current];
+    const currentValue = obj?.[current];
     return {
       ...obj,
       [current]: Array.isArray(currentValue)
