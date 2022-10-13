@@ -25,7 +25,7 @@ const nodeType = (type: string): ts.LiteralTypeNode | ts.KeywordTypeNode | ts.Ar
   }
 };
 
-const toTypeScriptName = (name: string): string => name.replace(/-/g, '_');
+const toTypeScriptName = (name: string): string => name.replace(/[-\.\#\s]/g, '_');
 
 const convertArrayType: AstConvert<ts.UnionTypeNode> = (context, schema) =>
   isSchemaObject(schema) && Array.isArray(schema.type)

@@ -4787,9 +4787,9 @@ export interface OBCashAccount61 {
     SecondaryIdentification?: SecondaryIdentification;
 }
 
-export type OBSupplementaryData1 = Record_string.any_;
+export type OBSupplementaryData1 = Record_string_any_;
 
-export interface Record_string.any_ {
+export interface Record_string_any_ {
     [key: string]: unknown;
 }
 

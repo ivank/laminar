@@ -581,9 +581,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-04/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     id?: string;
     $schema?: string;
     title?: string;
@@ -597,15 +597,15 @@ export interface schema# {
     maxLength?: positiveInteger;
     minLength?: positiveIntegerDefault0;
     pattern?: string;
-    additionalItems: boolean | #;
-    items: # | schemaArray;
+    additionalItems: boolean | _;
+    items: _ | schemaArray;
     maxItems?: positiveInteger;
     minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
     maxProperties?: positiveInteger;
     minProperties?: positiveIntegerDefault0;
     required?: stringArray;
-    additionalProperties: boolean | #;
+    additionalProperties: boolean | _;
     definitions: any;
     properties: any;
     patternProperties: any;
@@ -619,7 +619,7 @@ export interface schema# {
     /**
      * Core schema meta-schema
      */
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -627,7 +627,7 @@ export type positiveInteger = number;
 
 export type positiveIntegerDefault0 = positiveInteger & any;
 
-export interface # {
+export interface _ {
     id?: string;
     $schema?: string;
     title?: string;
@@ -641,15 +641,15 @@ export interface # {
     maxLength?: positiveInteger;
     minLength?: positiveIntegerDefault0;
     pattern?: string;
-    additionalItems: boolean | #;
-    items: # | schemaArray;
+    additionalItems: boolean | _;
+    items: _ | schemaArray;
     maxItems?: positiveInteger;
     minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
     maxProperties?: positiveInteger;
     minProperties?: positiveIntegerDefault0;
     required?: stringArray;
-    additionalProperties: boolean | #;
+    additionalProperties: boolean | _;
     definitions: any;
     properties: any;
     patternProperties: any;
@@ -663,11 +663,11 @@ export interface # {
     /**
      * Core schema meta-schema
      */
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -681,9 +681,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-04/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     id?: string;
     $schema?: string;
     title?: string;
@@ -697,15 +697,15 @@ export interface schema# {
     maxLength?: positiveInteger;
     minLength?: positiveIntegerDefault0;
     pattern?: string;
-    additionalItems: boolean | #;
-    items: # | schemaArray;
+    additionalItems: boolean | _;
+    items: _ | schemaArray;
     maxItems?: positiveInteger;
     minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
     maxProperties?: positiveInteger;
     minProperties?: positiveIntegerDefault0;
     required?: stringArray;
-    additionalProperties: boolean | #;
+    additionalProperties: boolean | _;
     definitions: any;
     properties: any;
     patternProperties: any;
@@ -719,7 +719,7 @@ export interface schema# {
     /**
      * Core schema meta-schema
      */
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -727,7 +727,7 @@ export type positiveInteger = number;
 
 export type positiveIntegerDefault0 = positiveInteger & any;
 
-export interface # {
+export interface _ {
     id?: string;
     $schema?: string;
     title?: string;
@@ -741,15 +741,15 @@ export interface # {
     maxLength?: positiveInteger;
     minLength?: positiveIntegerDefault0;
     pattern?: string;
-    additionalItems: boolean | #;
-    items: # | schemaArray;
+    additionalItems: boolean | _;
+    items: _ | schemaArray;
     maxItems?: positiveInteger;
     minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
     maxProperties?: positiveInteger;
     minProperties?: positiveIntegerDefault0;
     required?: stringArray;
-    additionalProperties: boolean | #;
+    additionalProperties: boolean | _;
     definitions: any;
     properties: any;
     patternProperties: any;
@@ -763,11 +763,11 @@ export interface # {
     /**
      * Core schema meta-schema
      */
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -1748,9 +1748,9 @@ Object {
       },
     },
   },
-  "ts": "#foo
+  "ts": "_foo
 
-export type #foo = number;
+export type _foo = number;
 ",
 }
 `;
@@ -1770,9 +1770,9 @@ Object {
       },
     },
   },
-  "ts": "bar#foo
+  "ts": "bar_foo
 
-export type bar#foo = number;
+export type bar_foo = number;
 ",
 }
 `;
@@ -1798,9 +1798,9 @@ Object {
     },
     "id": "http://localhost:1234/root",
   },
-  "ts": "nested.json#foo
+  "ts": "nested_json_foo
 
-export type nested.json#foo = number;
+export type nested_json_foo = number;
 ",
 }
 `;
@@ -1847,22 +1847,22 @@ Object {
   },
   "ts": "{
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 
-export interface node# {
+export interface node_ {
     value: number;
     /**
      * tree of nodes
      */
-    subtree?: tree#;
+    subtree?: tree_;
     [key: string]: unknown;
 }
 
-export interface tree# {
+export interface tree_ {
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 ",
@@ -2073,9 +2073,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-04/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     id?: string;
     $schema?: string;
     title?: string;
@@ -2089,15 +2089,15 @@ export interface schema# {
     maxLength?: positiveInteger;
     minLength?: positiveIntegerDefault0;
     pattern?: string;
-    additionalItems: boolean | #;
-    items: # | schemaArray;
+    additionalItems: boolean | _;
+    items: _ | schemaArray;
     maxItems?: positiveInteger;
     minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
     maxProperties?: positiveInteger;
     minProperties?: positiveIntegerDefault0;
     required?: stringArray;
-    additionalProperties: boolean | #;
+    additionalProperties: boolean | _;
     definitions: any;
     properties: any;
     patternProperties: any;
@@ -2111,7 +2111,7 @@ export interface schema# {
     /**
      * Core schema meta-schema
      */
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -2119,7 +2119,7 @@ export type positiveInteger = number;
 
 export type positiveIntegerDefault0 = positiveInteger & any;
 
-export interface # {
+export interface _ {
     id?: string;
     $schema?: string;
     title?: string;
@@ -2133,15 +2133,15 @@ export interface # {
     maxLength?: positiveInteger;
     minLength?: positiveIntegerDefault0;
     pattern?: string;
-    additionalItems: boolean | #;
-    items: # | schemaArray;
+    additionalItems: boolean | _;
+    items: _ | schemaArray;
     maxItems?: positiveInteger;
     minItems?: positiveIntegerDefault0;
     uniqueItems: boolean;
     maxProperties?: positiveInteger;
     minProperties?: positiveIntegerDefault0;
     required?: stringArray;
-    additionalProperties: boolean | #;
+    additionalProperties: boolean | _;
     definitions: any;
     properties: any;
     patternProperties: any;
@@ -2155,11 +2155,11 @@ export interface # {
     /**
      * Core schema meta-schema
      */
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -2179,11 +2179,11 @@ Object {
     },
   },
   "ts": "{
-    foo?: #;
+    foo?: _;
 }
 
-export interface # {
-    foo?: #;
+export interface _ {
+    foo?: _;
 }
 ",
 }
@@ -2214,9 +2214,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type baz = folderInteger.json#[];
+export type baz = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -2250,9 +2250,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type bar = folderInteger.json#[];
+export type bar = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -2268,9 +2268,9 @@ Object {
       },
     },
   },
-  "ts": "folderInteger.json#[][]
+  "ts": "folderInteger_json_[][]
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -2306,9 +2306,9 @@ Object {
   "schema": Object {
     "$ref": "http://localhost:1234/integer.json",
   },
-  "ts": "integer.json#
+  "ts": "integer_json_
 
-export type integer.json# = number;
+export type integer_json_ = number;
 ",
 }
 `;
@@ -2329,9 +2329,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type orNull = any | #;
+export type orNull = any | _;
 
-export type # = string;
+export type _ = string;
 ",
 }
 `;
@@ -3511,9 +3511,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-06/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -3529,21 +3529,21 @@ export interface schema# {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
@@ -3551,7 +3551,7 @@ export interface schema# {
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -3559,7 +3559,7 @@ export type nonNegativeInteger = number;
 
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-export interface # {
+export interface _ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -3575,21 +3575,21 @@ export interface # {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
@@ -3597,11 +3597,11 @@ export interface # {
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -3615,9 +3615,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-06/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -3633,21 +3633,21 @@ export interface schema# {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
@@ -3655,7 +3655,7 @@ export interface schema# {
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -3663,7 +3663,7 @@ export type nonNegativeInteger = number;
 
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-export interface # {
+export interface _ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -3679,21 +3679,21 @@ export interface # {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
@@ -3701,11 +3701,11 @@ export interface # {
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -4918,9 +4918,9 @@ Object {
       },
     },
   },
-  "ts": "#foo
+  "ts": "_foo
 
-export type #foo = number;
+export type _foo = number;
 ",
 }
 `;
@@ -4940,9 +4940,9 @@ Object {
       },
     },
   },
-  "ts": "bar#foo
+  "ts": "bar_foo
 
-export type bar#foo = number;
+export type bar_foo = number;
 ",
 }
 `;
@@ -4968,9 +4968,9 @@ Object {
       },
     },
   },
-  "ts": "nested.json#foo
+  "ts": "nested_json_foo
 
-export type nested.json#foo = number;
+export type nested_json_foo = number;
 ",
 }
 `;
@@ -5017,22 +5017,22 @@ Object {
   },
   "ts": "{
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 
-export interface node# {
+export interface node_ {
     value: number;
     /**
      * tree of nodes
      */
-    subtree?: tree#;
+    subtree?: tree_;
     [key: string]: unknown;
 }
 
-export interface tree# {
+export interface tree_ {
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 ",
@@ -5243,9 +5243,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-06/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -5261,21 +5261,21 @@ export interface schema# {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
@@ -5283,7 +5283,7 @@ export interface schema# {
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -5291,7 +5291,7 @@ export type nonNegativeInteger = number;
 
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-export interface # {
+export interface _ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -5307,21 +5307,21 @@ export interface # {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
@@ -5329,11 +5329,11 @@ export interface # {
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -5353,11 +5353,11 @@ Object {
     },
   },
   "ts": "{
-    foo?: #;
+    foo?: _;
 }
 
-export interface # {
-    foo?: #;
+export interface _ {
+    foo?: _;
 }
 ",
 }
@@ -5388,9 +5388,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type baz = folderInteger.json#[];
+export type baz = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -5424,9 +5424,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type bar = folderInteger.json#[];
+export type bar = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -5442,9 +5442,9 @@ Object {
       },
     },
   },
-  "ts": "folderInteger.json#[][]
+  "ts": "folderInteger_json_[][]
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -5480,9 +5480,9 @@ Object {
   "schema": Object {
     "$ref": "http://localhost:1234/integer.json",
   },
-  "ts": "integer.json#
+  "ts": "integer_json_
 
-export type integer.json# = number;
+export type integer_json_ = number;
 ",
 }
 `;
@@ -5503,9 +5503,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type orNull = any | #;
+export type orNull = any | _;
 
-export type # = string;
+export type _ = string;
 ",
 }
 `;
@@ -6701,9 +6701,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-07/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -6721,34 +6721,34 @@ export interface schema# {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
     format?: string;
     contentMediaType?: string;
     contentEncoding?: string;
-    if: #;
-    then: #;
-    else: #;
+    if: _;
+    then: _;
+    else: _;
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -6756,7 +6756,7 @@ export type nonNegativeInteger = number;
 
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-export interface # {
+export interface _ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -6774,38 +6774,38 @@ export interface # {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
     format?: string;
     contentMediaType?: string;
     contentEncoding?: string;
-    if: #;
-    then: #;
-    else: #;
+    if: _;
+    then: _;
+    else: _;
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -6819,9 +6819,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-07/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -6839,34 +6839,34 @@ export interface schema# {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
     format?: string;
     contentMediaType?: string;
     contentEncoding?: string;
-    if: #;
-    then: #;
-    else: #;
+    if: _;
+    then: _;
+    else: _;
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -6874,7 +6874,7 @@ export type nonNegativeInteger = number;
 
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-export interface # {
+export interface _ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -6892,38 +6892,38 @@ export interface # {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
     format?: string;
     contentMediaType?: string;
     contentEncoding?: string;
-    if: #;
-    then: #;
-    else: #;
+    if: _;
+    then: _;
+    else: _;
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -8358,9 +8358,9 @@ Object {
       },
     },
   },
-  "ts": "#foo
+  "ts": "_foo
 
-export type #foo = number;
+export type _foo = number;
 ",
 }
 `;
@@ -8380,9 +8380,9 @@ Object {
       },
     },
   },
-  "ts": "bar#foo
+  "ts": "bar_foo
 
-export type bar#foo = number;
+export type bar_foo = number;
 ",
 }
 `;
@@ -8408,9 +8408,9 @@ Object {
       },
     },
   },
-  "ts": "nested.json#foo
+  "ts": "nested_json_foo
 
-export type nested.json#foo = number;
+export type nested_json_foo = number;
 ",
 }
 `;
@@ -8457,22 +8457,22 @@ Object {
   },
   "ts": "{
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 
-export interface node# {
+export interface node_ {
     value: number;
     /**
      * tree of nodes
      */
-    subtree?: tree#;
+    subtree?: tree_;
     [key: string]: unknown;
 }
 
-export interface tree# {
+export interface tree_ {
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 ",
@@ -8683,9 +8683,9 @@ Object {
   "schema": Object {
     "$ref": "http://json-schema.org/draft-07/schema#",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -8703,34 +8703,34 @@ export interface schema# {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
     format?: string;
     contentMediaType?: string;
     contentEncoding?: string;
-    if: #;
-    then: #;
-    else: #;
+    if: _;
+    then: _;
+    else: _;
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
@@ -8738,7 +8738,7 @@ export type nonNegativeInteger = number;
 
 export type nonNegativeIntegerDefault0 = nonNegativeInteger & any;
 
-export interface # {
+export interface _ {
     $id?: string;
     $schema?: string;
     $ref?: string;
@@ -8756,38 +8756,38 @@ export interface # {
     maxLength?: nonNegativeInteger;
     minLength?: nonNegativeIntegerDefault0;
     pattern?: string;
-    additionalItems: #;
-    items: # | schemaArray;
+    additionalItems: _;
+    items: _ | schemaArray;
     maxItems?: nonNegativeInteger;
     minItems?: nonNegativeIntegerDefault0;
     uniqueItems: boolean;
-    contains: #;
+    contains: _;
     maxProperties?: nonNegativeInteger;
     minProperties?: nonNegativeIntegerDefault0;
     required: stringArray;
-    additionalProperties: #;
+    additionalProperties: _;
     definitions: any;
     properties: any;
     patternProperties: any;
     dependencies?: any;
-    propertyNames: #;
+    propertyNames: _;
     const?: any;
     enum?: any[];
     type?: simpleTypes | simpleTypes[];
     format?: string;
     contentMediaType?: string;
     contentEncoding?: string;
-    if: #;
-    then: #;
-    else: #;
+    if: _;
+    then: _;
+    else: _;
     allOf?: schemaArray;
     anyOf?: schemaArray;
     oneOf?: schemaArray;
-    not: #;
+    not: _;
     [key: string]: unknown;
 }
 
-export type schemaArray = #[];
+export type schemaArray = _[];
 
 export type stringArray = string[];
 
@@ -8807,11 +8807,11 @@ Object {
     },
   },
   "ts": "{
-    foo?: #;
+    foo?: _;
 }
 
-export interface # {
-    foo?: #;
+export interface _ {
+    foo?: _;
 }
 ",
 }
@@ -8842,9 +8842,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type baz = folderInteger.json#[];
+export type baz = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -8878,9 +8878,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type bar = folderInteger.json#[];
+export type bar = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -8896,9 +8896,9 @@ Object {
       },
     },
   },
-  "ts": "folderInteger.json#[][]
+  "ts": "folderInteger_json_[][]
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -8934,9 +8934,9 @@ Object {
   "schema": Object {
     "$ref": "http://localhost:1234/integer.json",
   },
-  "ts": "integer.json#
+  "ts": "integer_json_
 
-export type integer.json# = number;
+export type integer_json_ = number;
 ",
 }
 `;
@@ -8957,9 +8957,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type orNull = any | #;
+export type orNull = any | _;
 
-export type # = string;
+export type _ = string;
 ",
 }
 `;
@@ -9722,9 +9722,9 @@ Object {
     },
     "$ref": "#foo",
   },
-  "ts": "#foo
+  "ts": "_foo
 
-export type #foo = number;
+export type _foo = number;
 ",
 }
 `;
@@ -9741,9 +9741,9 @@ Object {
     },
     "$ref": "http://localhost:1234/bar#foo",
   },
-  "ts": "bar#foo
+  "ts": "bar_foo
 
-export type bar#foo = number;
+export type bar_foo = number;
 ",
 }
 `;
@@ -9765,9 +9765,9 @@ Object {
     "$id": "http://localhost:1234/root",
     "$ref": "http://localhost:1234/nested.json#foo",
   },
-  "ts": "nested.json#foo
+  "ts": "nested_json_foo
 
-export type nested.json#foo = number;
+export type nested_json_foo = number;
 ",
 }
 `;
@@ -10198,9 +10198,9 @@ Object {
   "schema": Object {
     "$ref": "https://json-schema.org/draft/2019-09/schema",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $defs: any;
     definitions: any;
     dependencies?: any;
@@ -10215,9 +10215,9 @@ Object {
   "schema": Object {
     "$ref": "https://json-schema.org/draft/2019-09/schema",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $defs: any;
     definitions: any;
     dependencies?: any;
@@ -10704,9 +10704,9 @@ Object {
   "schema": Object {
     "$ref": "https://json-schema.org/draft/2019-09/schema",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $defs: any;
     definitions: any;
     dependencies?: any;
@@ -10721,9 +10721,9 @@ Object {
   "schema": Object {
     "$ref": "https://json-schema.org/draft/2019-09/schema",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $defs: any;
     definitions: any;
     dependencies?: any;
@@ -10738,9 +10738,9 @@ Object {
   "schema": Object {
     "$ref": "https://json-schema.org/draft/2019-09/schema",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $defs: any;
     definitions: any;
     dependencies?: any;
@@ -11876,22 +11876,22 @@ Object {
   },
   "ts": "{
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 
-export interface node# {
+export interface node_ {
     value: number;
     /**
      * tree of nodes
      */
-    subtree?: tree#;
+    subtree?: tree_;
     [key: string]: unknown;
 }
 
-export interface tree# {
+export interface tree_ {
     meta: string;
-    nodes: node#[];
+    nodes: node_[];
     [key: string]: unknown;
 }
 ",
@@ -12126,9 +12126,9 @@ Object {
   "schema": Object {
     "$ref": "https://json-schema.org/draft/2019-09/schema",
   },
-  "ts": "schema#
+  "ts": "schema_
 
-export interface schema# {
+export interface schema_ {
     $defs: any;
     definitions: any;
     dependencies?: any;
@@ -12149,11 +12149,11 @@ Object {
     },
   },
   "ts": "{
-    foo?: #;
+    foo?: _;
 }
 
-export interface # {
-    foo?: #;
+export interface _ {
+    foo?: _;
 }
 ",
 }
@@ -12180,13 +12180,13 @@ Object {
     "type": "object",
   },
   "ts": "{
-    list?: #;
+    list?: _;
     [key: string]: unknown;
 }
 
-export type # = folderInteger.json#[];
+export type _ = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -12220,9 +12220,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type bar = folderInteger.json#[];
+export type bar = folderInteger_json_[];
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -12238,9 +12238,9 @@ Object {
       },
     },
   },
-  "ts": "folderInteger.json#[][]
+  "ts": "folderInteger_json_[][]
 
-export type folderInteger.json# = number;
+export type folderInteger_json_ = number;
 ",
 }
 `;
@@ -12276,9 +12276,9 @@ Object {
   "schema": Object {
     "$ref": "http://localhost:1234/integer.json",
   },
-  "ts": "integer.json#
+  "ts": "integer_json_
 
-export type integer.json# = number;
+export type integer_json_ = number;
 ",
 }
 `;
@@ -12299,9 +12299,9 @@ Object {
     [key: string]: unknown;
 }
 
-export type orNull = any | #;
+export type orNull = any | _;
 
-export type # = string;
+export type _ = string;
 ",
 }
 `;

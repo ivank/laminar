@@ -3,14 +3,14 @@ openapi: '3.0.0'
 info:
   title: 'Schemes public'
   description: |
-    REST API for http://public-schemes.bizval.ovotech.org.uk
+    REST API for http://public-schemes.bizval.example.com
     Source: https://github.com/ovotech/schemes
   version: 1.0.0
 
 servers:
-  - url: https://public-schemes.bizval-nonprod.ovotech.org.uk
+  - url: https://public-schemes.bizval-nonprod.example.com
     description: Nonprod server
-  - url: https://public-schemes.bizval.ovotech.org.uk
+  - url: https://public-schemes.bizval.example.com
     description: Production server
 
 paths:
