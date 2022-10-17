@@ -123,6 +123,13 @@ export {
   HttpErrorHandler,
 } from './http/middleware/errors.middleware';
 export {
+  toMultipartBoundary,
+  toMultipartData,
+  MultipartData,
+  MultipartItem,
+  MultipartParser,
+} from './http/multipart-parser';
+export {
   HttpContext,
   HttpResponseBody,
   HttpResponse,
