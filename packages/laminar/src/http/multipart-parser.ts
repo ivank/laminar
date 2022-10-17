@@ -97,6 +97,81 @@ const newLine = Buffer.from('\r\n');
 const newLineDouble = Buffer.from('\r\n\r\n');
 
 /**
+ * Parse header lines.
+ * Headers are guaranteed to have "content-disposition", and optionally content-type
+ *
+ * @param headers Header lines
+ */
+function parseHeaders(headersText: string): Omit<MultipartItem, 'data'> {
+  const headers = toHeaders(headersText.split('\n'));
+  const params = toContentDispositionParams(headers['content-disposition']);
+
+  return { name: params?.name ?? '', filename: params?.filename, type: headers['content-type'] };
+}
+
+/**
+ * Parse a multipart body chunk, as part of the {@link MultipartParser} transform
+ */
+export function parseMultipartBuffer(
+  /**
+   * The boundary for the data. The -- with the boundary string from {@link toMultipartBoundary }
+   */
+  boundary: Buffer,
+  /**
+   * The current headers, if we've passed through the "Headers" state but still haven't gotten to the end of "Body" state.
+   * Body state can spill over to the next buffer in the transform, so we need to keep it in the context
+   */
+  headers: string,
+  /**
+   * Current {@link State} of the parsing
+   */
+  state: State,
+  /**
+   * The text body buffer being processed
+   */
+  buffer: Buffer,
+): { index: number; state: State; headers: string; items: MultipartItem[] } {
+  const result: { items: MultipartItem[]; index: number; state: State; headers: string } = {
+    index: 0,
+    state,
+    items: [],
+    headers,
+  };
+  for (let index = 0; index < buffer.length; index++) {
+    switch (result.state) {
+      case State.Start:
+        if (endsWith(boundary, index, buffer)) {
+          result.state = State.Headers;
+          result.index = index + newLine.length;
+        }
+        break;
+
+      case State.Headers:
+        if (endsWith(newLineDouble, index, buffer)) {
+          result.headers = buffer.slice(result.index, index - newLineDouble.length).toString();
+          result.state = State.Body;
+          result.index = index;
+        }
+        break;
+
+      case State.Body:
+        if (endsWith(boundary, index, buffer)) {
+          result.items.push({
+            ...parseHeaders(result.headers),
+            data: buffer.slice(result.index, index - boundary.length - newLine.length),
+          });
+          result.headers = '';
+          result.index = index + newLine.length;
+          result.state = State.Headers;
+        }
+        break;
+    }
+  }
+
+  return result;
+}
+
+/**
  * A node stream transformer, that would transform a buffer stream into a stream of parsed {@link MultipartItem} objects
  *
  * ```typescript
@@ -112,7 +187,6 @@ export class MultipartParser extends Transform {
   private headers = '';
   private state: State = State.Start;
   private boundary: Buffer;
-  private index = 0;
   private remainingChunk: Buffer | undefined;
 
   /**
@@ -126,19 +200,6 @@ export class MultipartParser extends Transform {
   }
 
   /**
-   * Parse header lines.
-   * Headers are guaranteed to have "content-disposition", and optionally content-type
-   *
-   * @param headers Header lines
-   */
-  private parseHeaders(headersText: string): Omit<MultipartItem, 'data'> {
-    const headers = toHeaders(headersText.split('\n'));
-    const params = toContentDispositionParams(headers['content-disposition']);
-
-    return { name: params?.name ?? '', filename: params?.filename, type: headers['content-type'] };
-  }
-
-  /**
    * Transform incomming chunks into MultipartItem[].
    *
    * We are either parsing http header, that are new line terminated, or the body, which is terminated by the boundary string.
@@ -149,43 +210,13 @@ export class MultipartParser extends Transform {
    * All operations are performed with buffer.slice, which does not allocate new memory for the objects.
    */
   _transform(chunk: Buffer, encoding: BufferEncoding, done: TransformCallback): void {
-    const multipartItems: MultipartItem[] = [];
     const buffer = this.remainingChunk ? Buffer.concat([this.remainingChunk, chunk]) : chunk;
+    const { state, index, headers, items } = parseMultipartBuffer(this.boundary, this.headers, this.state, buffer);
 
-    for (let index = 0; index < buffer.length; index++) {
-      switch (this.state) {
-        case State.Start:
-          if (endsWith(this.boundary, index, buffer)) {
-            this.state = State.Headers;
-            this.index = index + newLine.length;
-          }
-          break;
+    this.remainingChunk = chunk.slice(index);
+    this.state = state;
+    this.headers = headers;
 
-        case State.Headers:
-          if (endsWith(newLineDouble, index, buffer)) {
-            this.headers = buffer.slice(this.index, index - newLineDouble.length).toString();
-            this.state = State.Body;
-            this.index = index;
-          }
-          break;
-
-        case State.Body:
-          if (endsWith(this.boundary, index, buffer)) {
-            multipartItems.push({
-              ...this.parseHeaders(this.headers),
-              data: buffer.slice(this.index, index - this.boundary.length - newLine.length),
-            });
-
-            this.headers = '';
-            this.index = index + newLine.length;
-            this.state = State.Headers;
-          }
-          break;
-      }
-    }
-    this.remainingChunk = chunk.slice(this.index);
-    this.index = 0;
-
-    done(undefined, multipartItems);
+    done(undefined, items);
   }
 }

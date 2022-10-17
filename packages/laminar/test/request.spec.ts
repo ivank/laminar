@@ -1,6 +1,6 @@
 import axios from 'axios';
 import FormData from 'form-data';
-import { createReadStream, readFileSync, statSync } from 'fs';
+import { createReadStream, readFileSync } from 'fs';
 import { join } from 'path';
 import { Application, HttpService, run, textOk } from '../src';
 
@@ -150,12 +150,15 @@ describe('Requests', () => {
 
       formData.append('name', 'test-name');
       formData.append('age', 21);
-      formData.append('file', createReadStream(join(__dirname, 'test.html')), {
-        knownLength: statSync(join(__dirname, 'test.html')).size,
-      });
+      formData.append('file', createReadStream(join(__dirname, 'test.html')));
 
       const result = await api.post('/post', formData, {
-        headers: { ...formData.getHeaders(), 'Content-Length': formData.getLengthSync() },
+        headers: {
+          ...formData.getHeaders(),
+          'Content-Length': await new Promise((resolve, reject) =>
+            formData.getLength((error, length) => (error ? reject(error) : resolve(length))),
+          ),
+        },
       });
 
       expect(listener).toHaveBeenCalledWith(
@@ -186,15 +189,16 @@ describe('Requests', () => {
 
       formData.append('name', 'test-name');
       formData.append('age', 21);
-      formData.append('file', createReadStream(join(__dirname, 'test.html')), {
-        knownLength: statSync(join(__dirname, 'test.html')).size,
-      });
+      formData.append('file', createReadStream(join(__dirname, 'test.html')));
+      formData.append('file', createReadStream(join(__dirname, 'test.txt')));
 
-      formData.append('file', createReadStream(join(__dirname, 'test.txt')), {
-        knownLength: statSync(join(__dirname, 'test.txt')).size,
-      });
       const result = await api.post('/post', formData, {
-        headers: { ...formData.getHeaders(), 'Content-Length': formData.getLengthSync() },
+        headers: {
+          ...formData.getHeaders(),
+          'Content-Length': await new Promise((resolve, reject) =>
+            formData.getLength((error, length) => (error ? reject(error) : resolve(length))),
+          ),
+        },
       });
 
       expect(listener).toHaveBeenCalledWith(

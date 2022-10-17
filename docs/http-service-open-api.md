@@ -165,7 +165,7 @@ You will probably want to add some additional props to your openApi context, for
 
 ```typescript
 const createHttpListener = async () => {
-  return await openApi<LoggerContext>({
+  return await openApi<LoggerContext<Console>>({
     api: join(__dirname, '../../schema/api.yaml'),
     paths: {
       '/user/{id}': {
@@ -226,7 +226,7 @@ Providing context types works the same too.
 import { openApiTyped } from './__generated__/api.yaml';
 
 const createHttpListener = async () => {
-  return await openApiTyped<LoggerContext>({
+  return await openApiTyped<LoggerContext<Console>>({
     api: join(__dirname, '../../schema/api.yaml'),
     paths: {
       '/user/{id}': {
