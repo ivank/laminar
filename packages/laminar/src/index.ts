@@ -125,6 +125,7 @@ export {
 export {
   toMultipartBoundary,
   toMultipartData,
+  parseMultipartBuffer,
   MultipartData,
   MultipartItem,
   MultipartParser,
