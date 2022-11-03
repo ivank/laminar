@@ -1,3 +1,5 @@
+CREATE EXTENSION pgcrypto;
+
 CREATE TABLE meter_reads (
   id SERIAL PRIMARY KEY,
   serial_number varchar NOT NULL,

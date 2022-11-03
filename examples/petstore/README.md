@@ -2,6 +2,14 @@
 
 This is a simple but functional example of building a petstore api.
 
+## Environment variables
+
+The app needs env variables set to run. It has [dotenv](https://www.npmjs.com/package/dotenv) set so you can
+
+```shell
+mv .env.dist .env
+```
+
 ## Usage
 
 You can start interacting with the service by initializing a postgres instance, using docker-compose
