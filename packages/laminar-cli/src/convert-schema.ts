@@ -118,7 +118,7 @@ const convertAdditionalPropertiesSchema = (
   return document(context, Type.Void);
 };
 
-const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
+const convertObject: AstConvert<ts.TypeNode> = (context, schema) => {
   if (isSchemaObject(schema) && schema.properties !== undefined) {
     const additional = convertAdditionalPropertiesSchema(context, schema);
 
@@ -137,16 +137,15 @@ const convertObject: AstConvert<ts.TypeLiteralNode> = (context, schema) => {
       },
     );
 
-    return document(
-      props.context,
-      Type.TypeLiteral({
-        props: props.items,
-        index:
-          additional.type === Type.Void
-            ? undefined
-            : Type.Index({ name: 'key', nameType: Type.String, type: additional.type }),
-      }),
-    );
+    const type = Type.TypeLiteral({
+      props: props.items,
+      index:
+        additional.type === Type.Void
+          ? undefined
+          : Type.Index({ name: 'key', nameType: Type.String, type: additional.type }),
+    });
+
+    return document(props.context, schema.nullable ? Type.Union([type, Type.Undefined]) : type);
   } else {
     return null;
   }

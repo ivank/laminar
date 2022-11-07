@@ -3277,10 +3277,10 @@ export interface LocalInstrument2Choice {
     [key: string]: unknown;
 }
 
-export interface MandateOccurrences5Modified {
+export type MandateOccurrences5Modified = {
     first_collection_date?: ISODate;
     [key: string]: unknown;
-}
+} | undefined;
 
 export type ISODate = string;
 
@@ -4082,10 +4082,10 @@ export interface schemas_BranchAndFinancialInstitutionIdentification6 {
     [key: string]: unknown;
 }
 
-export interface BranchData3Nullable {
+export type BranchData3Nullable = {
     name?: Max140Text;
     [key: string]: unknown;
-}
+} | undefined;
 
 export interface components_schemas_TransactionParties9 {
     creditor_account?: CashAccount40;
@@ -4217,16 +4217,16 @@ export type Max3Text = string;
 
 export type CardProductType1Code = \\"COMM\\" | \\"CONS\\" | any;
 
-export interface Cardholder17 {
+export type Cardholder17 = {
     identification?: PersonIdentification15;
     [key: string]: unknown;
-}
+} | undefined;
 
-export interface PersonIdentification15 {
+export type PersonIdentification15 = {
     email_address?: string;
     other?: GenericIdentification4[];
     [key: string]: unknown;
-}
+} | undefined;
 
 export interface GenericIdentification4 {
     identification: Max35Text;
@@ -4408,18 +4408,18 @@ export interface components_schemas_CardPaymentEnvironment77 {
     [key: string]: unknown;
 }
 
-export interface schemas_PaymentCard31 {
+export type schemas_PaymentCard31 = {
     issuer_bin?: Max15NumericText;
     card_country_code?: Max3Text;
     card_brand?: Max35TextNullable;
     card_product_type?: CardProductType1Code;
     [key: string]: unknown;
-}
+} | undefined;
 
-export interface schemas_Cardholder17 {
+export type schemas_Cardholder17 = {
     identification?: schemas_PersonIdentification15;
     [key: string]: unknown;
-}
+} | undefined;
 
 export interface schemas_PersonIdentification15 {
     email_address?: string;
