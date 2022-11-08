@@ -1,9 +1,11 @@
 version: 2.1
 
-orbs:
-  postgres: onehq/postgres@1.1.0
-
 commands:
+  install-psql:
+    description: Install packages to run arbitrary queries for postgres setup
+    steps:
+      - run: sudo apt-get update && sudo apt-get install postgresql
+
   yarn-install:
     description: Install cached yarn packages
     steps:
@@ -29,7 +31,7 @@ commands:
   init-postgres:
     description: Initialize postgres client and data
     steps:
-      - postgres/install_postgres_client
+      - install-psql
       - run:
           name: 'Run install scripts for examples'
           command: |

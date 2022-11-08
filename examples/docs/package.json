@@ -23,7 +23,7 @@
     "nock": "^13.2.2",
     "prettier": "^2.5.1",
     "ts-jest": "^27.1.3",
-    "typescript": "^4.5.5"
+    "typescript": "^4.8.3"
   },
   "jest": {
     "preset": "../../jest.json"
@@ -32,7 +32,7 @@
     "build:api": "laminar api --file schema/api.yaml | prettier --stdin-filepath api.yaml.ts > src/http-service-open-api/__generated__/api.yaml.ts",
     "build:security": "laminar api --file schema/security.yaml | prettier --stdin-filepath security.yaml.ts > src/http-service-open-api/__generated__/security.yaml.ts",
     "build": "tsc && yarn build:api && yarn build:security",
-    "test": "jest test",
+    "test": "jest test --runInBand",
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {

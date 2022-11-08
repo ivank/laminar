@@ -330,7 +330,6 @@ export const Type = {
   Prop: ({
     name,
     type,
-    initializer,
     isReadonly,
     isOptional,
     isPublic,
@@ -345,12 +344,11 @@ export const Type = {
     isPublic?: boolean;
     isPrivate?: boolean;
     isProtected?: boolean;
-    initializer?: ts.Expression;
     jsDoc?: string;
   }): ts.PropertySignature =>
     withJSDoc(
       jsDoc,
-      ts.createPropertySignature(
+      ts.factory.createPropertySignature(
         [
           ...Type.Readonly(isReadonly),
           ...Type.Public(isPublic),
@@ -360,7 +358,6 @@ export const Type = {
         typeof name === 'string' && !isIdentifierString(name) ? ts.factory.createStringLiteral(name) : name,
         Type.Optional(isOptional),
         type,
-        initializer,
       ),
     ),
 
@@ -408,11 +405,30 @@ export const Type = {
     name,
     ext,
     defaultType,
+    isReadonly,
+    isPublic,
+    isPrivate,
+    isProtected,
   }: {
     name: string | ts.Identifier;
     ext?: ts.TypeNode;
     defaultType?: ts.TypeNode;
-  }): ts.TypeParameterDeclaration => ts.factory.createTypeParameterDeclaration(name, ext, defaultType),
+    isReadonly?: boolean;
+    isPublic?: boolean;
+    isPrivate?: boolean;
+    isProtected?: boolean;
+  }): ts.TypeParameterDeclaration =>
+    ts.factory.createTypeParameterDeclaration(
+      [
+        ...Type.Readonly(isReadonly),
+        ...Type.Public(isPublic),
+        ...Type.Private(isPrivate),
+        ...Type.Protected(isProtected),
+      ],
+      name,
+      ext,
+      defaultType,
+    ),
 
   /**
    * Index signature for alias
@@ -487,7 +503,10 @@ export const Type = {
     name: string | ts.Identifier;
     types?: ts.TypeNode[];
   }): ts.ExpressionWithTypeArguments =>
-    ts.factory.createExpressionWithTypeArguments(typeof name === 'string' ? ts.createIdentifier(name) : name, types),
+    ts.factory.createExpressionWithTypeArguments(
+      typeof name === 'string' ? ts.factory.createIdentifier(name) : name,
+      types,
+    ),
 
   /**
    * Type alias

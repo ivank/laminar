@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version: 6
   cacheKey: 8
 
 "@apidevtools/openapi-schemas@npm:2.1.0":
@@ -886,19 +886,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cspotcode/source-map-consumer@npm:0.8.0":
-  version: 0.8.0
-  resolution: "@cspotcode/source-map-consumer@npm:0.8.0"
-  checksum: c0c16ca3d2f58898f1bd74c4f41a189dbcc202e642e60e489cbcc2e52419c4e89bdead02c886a12fb13ea37798ede9e562b2321df997ebc210ae9bd881561b4e
-  languageName: node
-  linkType: hard
-
-"@cspotcode/source-map-support@npm:0.7.0":
-  version: 0.7.0
-  resolution: "@cspotcode/source-map-support@npm:0.7.0"
+"@cspotcode/source-map-support@npm:^0.8.0":
+  version: 0.8.1
+  resolution: "@cspotcode/source-map-support@npm:0.8.1"
   dependencies:
-    "@cspotcode/source-map-consumer": 0.8.0
-  checksum: 9faddda7757cd778b5fd6812137b2cc265810043680d6399acc20441668fafcdc874053be9dccd0d9110087287bfad27eb3bf342f72bceca9aa9059f5d0c4be8
+    "@jridgewell/trace-mapping": 0.3.9
+  checksum: 5718f267085ed8edb3e7ef210137241775e607ee18b77d95aa5bd7514f47f5019aa2d82d96b3bf342ef7aa890a346fa1044532ff7cc3009e7d24fce3ce6200fa
   languageName: node
   linkType: hard
 
@@ -953,9 +946,9 @@ __metadata:
     pg: ^8.7.1
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
+    ts-node: ^10.9.1
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -993,9 +986,9 @@ __metadata:
     runtypes: ^6.5.0
     sql-template-tag: ^4.0.0
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
+    ts-node: ^10.9.1
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     winston: ^3.4.0
   languageName: unknown
   linkType: soft
@@ -1019,7 +1012,7 @@ __metadata:
     pg: ^8.7.1
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     yaml: ^1.10.2
   languageName: unknown
   linkType: soft
@@ -1044,8 +1037,8 @@ __metadata:
     pg: ^8.7.1
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
-    typescript: ^4.5.5
+    ts-node: ^10.9.1
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -1065,8 +1058,8 @@ __metadata:
     jest: ^27.4.7
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
-    typescript: ^4.5.5
+    ts-node: ^10.9.1
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -1085,8 +1078,8 @@ __metadata:
     jest: ^27.4.7
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
-    typescript: ^4.5.5
+    ts-node: ^10.9.1
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -1107,8 +1100,8 @@ __metadata:
     pg: ^8.7.1
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
-    typescript: ^4.5.5
+    ts-node: ^10.9.1
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -1386,6 +1379,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/resolve-uri@npm:^3.0.3":
+  version: 3.1.0
+  resolution: "@jridgewell/resolve-uri@npm:3.1.0"
+  checksum: b5ceaaf9a110fcb2780d1d8f8d4a0bfd216702f31c988d8042e5f8fbe353c55d9b0f55a1733afdc64806f8e79c485d2464680ac48a0d9fcadb9548ee6b81d267
+  languageName: node
+  linkType: hard
+
+"@jridgewell/sourcemap-codec@npm:^1.4.10":
+  version: 1.4.14
+  resolution: "@jridgewell/sourcemap-codec@npm:1.4.14"
+  checksum: 61100637b6d173d3ba786a5dff019e1a74b1f394f323c1fee337ff390239f053b87266c7a948777f4b1ee68c01a8ad0ab61e5ff4abb5a012a0b091bec391ab97
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:0.3.9":
+  version: 0.3.9
+  resolution: "@jridgewell/trace-mapping@npm:0.3.9"
+  dependencies:
+    "@jridgewell/resolve-uri": ^3.0.3
+    "@jridgewell/sourcemap-codec": ^1.4.10
+  checksum: d89597752fd88d3f3480845691a05a44bd21faac18e2185b6f436c3b0fd0c5a859fbbd9aaa92050c4052caf325ad3e10e2e1d1b64327517471b7d51babc0ddef
+  languageName: node
+  linkType: hard
+
 "@kafkajs/confluent-schema-registry@npm:^3.2.0":
   version: 3.2.0
   resolution: "@kafkajs/confluent-schema-registry@npm:3.2.0"
@@ -1462,7 +1479,7 @@ __metadata:
     nock: ^13.2.2
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     yaml: ^1.10.2
   languageName: unknown
   linkType: soft
@@ -1493,7 +1510,7 @@ __metadata:
     pg: ^8.7.1
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     yaml: ^1.10.2
   bin:
     laminar: ./scripts/laminar
@@ -1517,8 +1534,8 @@ __metadata:
     pg: ^8.7.1
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
-    typescript: ^4.5.5
+    ts-node: ^10.9.1
+    typescript: ^4.8.3
   peerDependencies:
     pg: "*"
   languageName: unknown
@@ -1543,7 +1560,7 @@ __metadata:
     prettier: ^2.5.1
     ts-jest: ^27.1.3
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
   peerDependencies:
     "@ovotech/laminar": "*"
   languageName: unknown
@@ -1575,7 +1592,7 @@ __metadata:
     prettier: ^2.5.1
     tough-cookie: ^4.0.0
     ts-jest: ^27.1.3
-    typescript: ^4.5.5
+    typescript: ^4.8.3
   peerDependencies:
     "@ovotech/laminar": "*"
   languageName: unknown
@@ -1602,7 +1619,7 @@ __metadata:
     prettier: ^2.5.1
     ts-jest: ^27.1.3
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     uuid: ^8.3.2
   peerDependencies:
     "@kafkajs/confluent-schema-registry": "*"
@@ -1621,8 +1638,8 @@ __metadata:
     benchmark: ^2.1.4
     nock: ^13.2.2
     node-fetch: ^3.2.0
-    ts-node: ^10.4.0
-    typescript: ^4.5.5
+    ts-node: ^10.9.1
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -1645,7 +1662,7 @@ __metadata:
     prettier: ^2.5.1
     ts-jest: ^27.1.3
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
   peerDependencies:
     "@ovotech/laminar": "*"
     pg: "*"
@@ -1672,7 +1689,7 @@ __metadata:
     prettier: ^2.5.1
     ts-jest: ^27.1.3
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     uuid: ^8.3.2
   peerDependencies:
     "@ovotech/laminar": "*"
@@ -1697,7 +1714,7 @@ __metadata:
     prettier: ^2.5.1
     ts-jest: ^27.1.3
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     winston: ^3.4.0
   peerDependencies:
     "@ovotech/laminar": "*"
@@ -1737,9 +1754,9 @@ __metadata:
     stream-mock: ^2.0.5
     tough-cookie: ^4.0.0
     ts-jest: ^27.1.3
-    ts-node: ^10.4.0
+    ts-node: ^10.9.1
     ts-retry-promise: ^0.6.0
-    typescript: ^4.5.5
+    typescript: ^4.8.3
     uuid: ^8.3.2
   languageName: unknown
   linkType: soft
@@ -1758,7 +1775,7 @@ __metadata:
     jest: ^27.4.7
     prettier: ^2.5.1
     ts-jest: ^27.1.3
-    typescript: ^4.5.5
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -2701,6 +2718,15 @@ __metadata:
     balanced-match: ^1.0.0
     concat-map: 0.0.1
   checksum: faf34a7bb0c3fcf4b59c7808bc5d2a96a40988addf2e7e09dfbb67a2251800e0d14cd2bfc1aa79174f2f5095c54ff27f46fb1289fe2d77dac755b5eb3434cc07
+  languageName: node
+  linkType: hard
+
+"brace-expansion@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "brace-expansion@npm:2.0.1"
+  dependencies:
+    balanced-match: ^1.0.0
+  checksum: a61e7cd2e8a8505e9f0036b3b6108ba5e926b4b55089eeb5550cd04a471fe216c96d4fe7e4c7f995c728c554ae20ddfc4244cad10aef255e72b62930afd233d1
   languageName: node
   linkType: hard
 
@@ -3962,20 +3988,6 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "glob@npm:7.2.0"
-  dependencies:
-    fs.realpath: ^1.0.0
-    inflight: ^1.0.4
-    inherits: 2
-    minimatch: ^3.0.4
-    once: ^1.3.0
-    path-is-absolute: ^1.0.0
-  checksum: 78a8ea942331f08ed2e055cb5b9e40fe6f46f579d7fd3d694f3412fe5db23223d29b7fee1575440202e9a7ff9a72ab106a39fee39934c7bedafe5e5f8ae20134
-  languageName: node
-  linkType: hard
-
 "globals@npm:^11.1.0":
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
@@ -5176,8 +5188,8 @@ fsevents@^2.3.2:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^4.0.0
     prettier: ^2.5.1
-    typedoc: ^0.22.11
-    typescript: ^4.5.5
+    typedoc: ^0.23.15
+    typescript: ^4.8.3
   languageName: unknown
   linkType: soft
 
@@ -5397,12 +5409,12 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"marked@npm:^4.0.10":
-  version: 4.0.10
-  resolution: "marked@npm:4.0.10"
+"marked@npm:^4.0.19":
+  version: 4.1.0
+  resolution: "marked@npm:4.1.0"
   bin:
     marked: bin/marked.js
-  checksum: 46cd8ef1a7cfcf5e461727c7f3e16dd4244369ef58f60485e75d3f5df9d53a8249b9609e96a336521eaa5c88d9531cbd296509a148718056e9375e69609f4442
+  checksum: f0b3732a9d6208c933541342e60eb78029bd046c143a6ade0e76ed80b6174f92b186205a9dfe805e435070806ec475b0e87e62d04348eafd2f761c24281b192a
   languageName: node
   linkType: hard
 
@@ -5475,6 +5487,15 @@ fsevents@^2.3.2:
   dependencies:
     brace-expansion: ^1.1.7
   checksum: 66ac295f8a7b59788000ea3749938b0970344c841750abd96694f80269b926ebcafad3deeb3f1da2522978b119e6ae3a5869b63b13a7859a456b3408bd18a078
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "minimatch@npm:5.1.0"
+  dependencies:
+    brace-expansion: ^2.0.1
+  checksum: 15ce53d31a06361e8b7a629501b5c75491bc2b59712d53e802b1987121d91b433d73fcc5be92974fde66b2b51d8fb28d75a9ae900d249feb792bb1ba2a4f0a90
   languageName: node
   linkType: hard
 
@@ -6453,14 +6474,14 @@ resolve@^1.3.2:
   languageName: node
   linkType: hard
 
-"shiki@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "shiki@npm:0.10.0"
+"shiki@npm:^0.11.1":
+  version: 0.11.1
+  resolution: "shiki@npm:0.11.1"
   dependencies:
     jsonc-parser: ^3.0.0
     vscode-oniguruma: ^1.6.1
-    vscode-textmate: 5.2.0
-  checksum: b72630a56c5e4384128a57443fc188ca8f6cf239c16defb6624b2aa500c0c953d41fb53e49f9d583cf093ddc522ff07e1b19fab8f0ae40a03304805c4fd5894b
+    vscode-textmate: ^6.0.0
+  checksum: 2a4ebc3b466816263fc244ae4f67a4ff96aa74d863b9c5e7e4affc50f37fd6d1a781405de0dbf763b777bc33e49a0d441de7ff3fededb8b01e3b8dbb37e2927d
   languageName: node
   linkType: hard
 
@@ -6919,11 +6940,11 @@ resolve@^1.3.2:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.4.0":
-  version: 10.4.0
-  resolution: "ts-node@npm:10.4.0"
+"ts-node@npm:^10.9.1":
+  version: 10.9.1
+  resolution: "ts-node@npm:10.9.1"
   dependencies:
-    "@cspotcode/source-map-support": 0.7.0
+    "@cspotcode/source-map-support": ^0.8.0
     "@tsconfig/node10": ^1.0.7
     "@tsconfig/node12": ^1.0.7
     "@tsconfig/node14": ^1.0.0
@@ -6934,6 +6955,7 @@ resolve@^1.3.2:
     create-require: ^1.1.0
     diff: ^4.0.1
     make-error: ^1.1.1
+    v8-compile-cache-lib: ^3.0.1
     yn: 3.1.1
   peerDependencies:
     "@swc/core": ">=1.2.50"
@@ -6948,10 +6970,11 @@ resolve@^1.3.2:
   bin:
     ts-node: dist/bin.js
     ts-node-cwd: dist/bin-cwd.js
+    ts-node-esm: dist/bin-esm.js
     ts-node-script: dist/bin-script.js
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
-  checksum: 3933ac0a937d33c45e04a6750fcdd3e765eb2897d1da1307cd97ac52af093bcfb632ec0453a75000a65c8b5b7bdb32b1077050a186dcc556e62657cb592e6d49
+  checksum: 090adff1302ab20bd3486e6b4799e90f97726ed39e02b39e566f8ab674fd5bd5f727f43615debbfc580d33c6d9d1c6b1b3ce7d8e3cca3e20530a145ffa232c35
   languageName: node
   linkType: hard
 
@@ -7044,40 +7067,39 @@ resolve@^1.3.2:
   languageName: node
   linkType: hard
 
-"typedoc@npm:^0.22.11":
-  version: 0.22.11
-  resolution: "typedoc@npm:0.22.11"
+"typedoc@npm:^0.23.15":
+  version: 0.23.15
+  resolution: "typedoc@npm:0.23.15"
   dependencies:
-    glob: ^7.2.0
     lunr: ^2.3.9
-    marked: ^4.0.10
-    minimatch: ^3.0.4
-    shiki: ^0.10.0
+    marked: ^4.0.19
+    minimatch: ^5.1.0
+    shiki: ^0.11.1
   peerDependencies:
-    typescript: 4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x
+    typescript: 4.6.x || 4.7.x || 4.8.x
   bin:
     typedoc: bin/typedoc
-  checksum: 7d29f4b771d3eadc612d0b35509ee88c153d7310b7adb57faf0740132765613d6ceceb94877148d674cfc8242ca3c2e22e3ae2060768b2d96842bf14659d1b1c
+  checksum: 2313bcda09755332e15e40fb2e72ac8d72447abfcd60f7c555d3a232ad1fe3596afd87ddcfbdf17eb081fc65f1cbf43b02e05adf38e6ade55f64d475da4271d7
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.5.5":
-  version: 4.5.5
-  resolution: "typescript@npm:4.5.5"
+"typescript@npm:^4.8.3":
+  version: 4.8.3
+  resolution: "typescript@npm:4.8.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
+  checksum: 8286a5edcaf3d68e65c451aa1e7150ad1cf53ee0813c07ec35b7abdfdb10f355ecaa13c6a226a694ae7a67785fd7eeebf89f845da0b4f7e4a35561ddc459aba0
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
-  version: 4.5.5
-  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"
+"typescript@patch:typescript@^4.8.3#~builtin<compat/typescript>":
+  version: 4.8.3
+  resolution: "typescript@patch:typescript@npm%3A4.8.3#~builtin<compat/typescript>::version=4.8.3&hash=a1c5e5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: c05c318d79c690f101d7ffb34cd6c7d6bbd884d3af9cefe7749ad0cd6be43c7082f098280982ca945dcba23fde34a08fed9602bb26540936baf8c0520727d3ba
+  checksum: 2222d2382fb3146089b1d27ce2b55e9d1f99cc64118f1aba75809b693b856c5d3c324f052f60c75b577947fc538bc1c27bad0eb76cbdba9a63a253489504ba7e
   languageName: node
   linkType: hard
 
@@ -7131,6 +7153,13 @@ resolve@^1.3.2:
   languageName: node
   linkType: hard
 
+"v8-compile-cache-lib@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "v8-compile-cache-lib@npm:3.0.1"
+  checksum: 78089ad549e21bcdbfca10c08850022b22024cdcc2da9b168bcf5a73a6ed7bf01a9cebb9eac28e03cd23a684d81e0502797e88f3ccd27a32aeab1cfc44c39da0
+  languageName: node
+  linkType: hard
+
 "v8-compile-cache@npm:^2.0.3":
   version: 2.1.1
   resolution: "v8-compile-cache@npm:2.1.1"
@@ -7167,10 +7196,10 @@ resolve@^1.3.2:
   languageName: node
   linkType: hard
 
-"vscode-textmate@npm:5.2.0":
-  version: 5.2.0
-  resolution: "vscode-textmate@npm:5.2.0"
-  checksum: 5449b42d451080f6f3649b66948f4b5ee4643c4e88cfe3558a3b31c84c78060cfdd288c4958c1690eaa5cd65d09992fa6b7c3bef9d4aa72b3651054a04624d20
+"vscode-textmate@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "vscode-textmate@npm:6.0.0"
+  checksum: ff6f17a406c2906586afc14ef01cb122e33acd35312e815abb5c924347a777c6783ce3fe7db8b83f1760ebf843c669843b9390f905b69c433b3395af28e4b483
   languageName: node
   linkType: hard
 
