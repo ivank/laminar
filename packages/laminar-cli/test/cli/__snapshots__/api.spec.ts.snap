@@ -4062,7 +4062,7 @@ export interface SupplementaryData1 {
 
 export type Max350Text = string & string;
 
-export type SupplementaryDataEnvelope1 = string;
+export type SupplementaryDataEnvelope1 = string | undefined;
 
 export type ResponseDirectdebitwebhooksV100AuddisbankreturnedadvicesPost = ResponseOapi<unknown, 200, string>;
 
@@ -4185,7 +4185,7 @@ export interface TransactionReferences6 {
     [key: string]: unknown;
 }
 
-export type Max35TextNullable = string;
+export type Max35TextNullable = string | undefined;
 
 export interface TransactionParties9 {
     debtor_account?: CashAccount40;
@@ -5015,9 +5015,9 @@ export interface PaymentCard31 {
     [key: string]: unknown;
 }
 
-export type Max15NumericText = string;
+export type Max15NumericText = string | undefined;
 
-export type Max3Text = string;
+export type Max3Text = string | undefined;
 
 export type CardProductType1Code = \\"COMM\\" | \\"CONS\\" | any;
 
@@ -5027,8 +5027,8 @@ export type Cardholder17 = {
 } | undefined;
 
 export type PersonIdentification15 = {
-    email_address?: string;
-    other?: GenericIdentification4[];
+    email_address?: string | undefined;
+    other?: GenericIdentification4[] | undefined;
     [key: string]: unknown;
 } | undefined;
 
@@ -5057,7 +5057,7 @@ export interface CardPaymentTransactionDetails49 {
     [key: string]: unknown;
 }
 
-export type ActiveCurrencyCode = string;
+export type ActiveCurrencyCode = string | undefined;
 
 export type ImpliedCurrencyAndAmount = DecimalNumberAsString & number;
 
@@ -5250,8 +5250,8 @@ export type schemas_Cardholder17 = {
 } | undefined;
 
 export interface schemas_PersonIdentification15 {
-    email_address?: string;
-    other?: GenericIdentification4[];
+    email_address?: string | undefined;
+    other?: GenericIdentification4[] | undefined;
     [key: string]: unknown;
 }
 
@@ -5279,7 +5279,7 @@ export interface schemas_AuthorisationResult14 {
     [key: string]: unknown;
 }
 
-export type Max6TextNullable = string;
+export type Max6TextNullable = string | undefined;
 
 export type ResponseWebhookV100DeclinedPost = ResponseOapi<unknown, 200, string>;
 

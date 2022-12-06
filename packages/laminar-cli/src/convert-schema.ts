@@ -27,6 +27,9 @@ const nodeType = (type: string): ts.LiteralTypeNode | ts.KeywordTypeNode | ts.Ar
 
 const toTypeScriptName = (name: string): string => name.replace(/[-\.\#\s]/g, '_');
 
+const withNullable = <T extends ts.TypeNode>(schema: unknown, type: T): ts.UnionTypeNode | T =>
+  isSchemaObject(schema) && schema.nullable ? Type.Union([type, Type.Undefined]) : type;
+
 const convertArrayType: AstConvert<ts.UnionTypeNode> = (context, schema) =>
   isSchemaObject(schema) && Array.isArray(schema.type)
     ? document(context, Type.Union(schema.type.map(nodeType)))
@@ -38,24 +41,24 @@ const convertBooleanSchema: AstConvert<ts.KeywordTypeNode> = (context, schema) =
 const convertBoolean: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
   isSchemaObject(schema) && schema.type === 'boolean' ? document(context, Type.Boolean) : null;
 
-const convertDateString: AstConvert<ts.TypeReferenceType> = (context, schema) =>
+const convertDateString: AstConvert<ts.TypeReferenceType | ts.UnionTypeNode> = (context, schema) =>
   isSchemaObject(schema) &&
   context.convertDates &&
   schema.type === 'string' &&
   (schema.format === 'date-time' || schema.format === 'date')
-    ? document(context, Type.TypeExpression({ name: 'Date' }))
+    ? document(context, withNullable(schema, Type.TypeExpression({ name: 'Date' })))
     : null;
 
-const convertString: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
+const convertString: AstConvert<ts.KeywordTypeNode | ts.UnionTypeNode> = (context, schema) =>
   isSchemaObject(schema) &&
   (schema.type === 'string' ||
     schema.pattern !== undefined ||
     schema.minLength !== undefined ||
     schema.maxLength !== undefined)
-    ? document(context, Type.String)
+    ? document(context, withNullable(schema, Type.String))
     : null;
 
-const convertNumber: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
+const convertNumber: AstConvert<ts.KeywordTypeNode | ts.UnionTypeNode> = (context, schema) =>
   isSchemaObject(schema) &&
   (schema.type === 'integer' ||
     schema.type === 'number' ||
@@ -63,7 +66,7 @@ const convertNumber: AstConvert<ts.KeywordTypeNode> = (context, schema) =>
     schema.exclusiveMinimum !== undefined ||
     schema.maximum !== undefined ||
     schema.exclusiveMaximum !== undefined)
-    ? document(context, Type.Number)
+    ? document(context, withNullable(schema, Type.Number))
     : null;
 
 const convertEnum: AstConvert<ts.UnionTypeNode> = (context, schema) =>
@@ -137,15 +140,19 @@ const convertObject: AstConvert<ts.TypeNode> = (context, schema) => {
       },
     );
 
-    const type = Type.TypeLiteral({
-      props: props.items,
-      index:
-        additional.type === Type.Void
-          ? undefined
-          : Type.Index({ name: 'key', nameType: Type.String, type: additional.type }),
-    });
-
-    return document(props.context, schema.nullable ? Type.Union([type, Type.Undefined]) : type);
+    return document(
+      props.context,
+      withNullable(
+        schema,
+        Type.TypeLiteral({
+          props: props.items,
+          index:
+            additional.type === Type.Void
+              ? undefined
+              : Type.Index({ name: 'key', nameType: Type.String, type: additional.type }),
+        }),
+      ),
+    );
   } else {
     return null;
   }
@@ -154,7 +161,7 @@ const convertObject: AstConvert<ts.TypeNode> = (context, schema) => {
 const convertOneOf: AstConvert<ts.UnionTypeNode> = (context, schema) => {
   if (isSchemaObject(schema) && schema.oneOf && Array.isArray(schema.oneOf)) {
     const schemas = mapWithContext(context, schema.oneOf, convertSchema);
-    return document(schemas.context, Type.Union(schemas.items));
+    return document(schemas.context, withNullable(schema, Type.Union(schemas.items)));
   } else {
     return null;
   }
@@ -163,7 +170,7 @@ const convertOneOf: AstConvert<ts.UnionTypeNode> = (context, schema) => {
 const convertAnyOf: AstConvert<ts.UnionTypeNode> = (context, schema) => {
   if (isSchemaObject(schema) && schema.anyOf && Array.isArray(schema.anyOf)) {
     const schemas = mapWithContext(context, schema.anyOf, convertSchema);
-    return document(schemas.context, Type.Union(schemas.items));
+    return document(schemas.context, withNullable(schema, Type.Union(schemas.items)));
   } else {
     return null;
   }
@@ -178,7 +185,7 @@ const convertAllOf: AstConvert<ts.IntersectionTypeNode> = (context, schema) => {
   }
 };
 
-const convertArray: AstConvert<ts.ArrayTypeNode | ts.TupleTypeNode> = (context, schema) => {
+const convertArray: AstConvert<ts.ArrayTypeNode | ts.TupleTypeNode | ts.UnionTypeNode> = (context, schema) => {
   if (isSchemaObject(schema) && (schema.items || schema.maxItems || schema.minItems)) {
     if (schema.items && Array.isArray(schema.items)) {
       if (schema.additionalItems === false) {
@@ -192,7 +199,7 @@ const convertArray: AstConvert<ts.ArrayTypeNode | ts.TupleTypeNode> = (context, 
       }
     } else {
       const value = schema.items ? convertSchema(context, schema.items) : document(context, Type.Any);
-      return document(value.context, Type.Array(value.type));
+      return document(value.context, withNullable(schema, Type.Array(value.type)));
     }
   } else {
     return null;
