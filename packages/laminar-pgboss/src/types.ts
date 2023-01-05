@@ -50,6 +50,7 @@ export interface Worker<TData extends Empty = Empty, TContext extends Empty = Em
  */
 export interface Queue {
   send<TData extends object>(request: Send<TData>): Promise<string | null>;
+  insert<TData extends object>(jobs: Send<TData>[]): Promise<void>;
   work<TData extends object>(request: Worker<TData>): Promise<string>;
   offWork(name: string): Promise<void>;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@ovotech/laminar-pgboss",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Use pgboss with @ovotech/laminar",
@@ -21,7 +21,7 @@
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "jest": "^29.3.1",
-    "pg-boss": "^7.4.0",
+    "pg-boss": "^8.2.0",
     "prettier": "^2.5.1",
     "ts-jest": "^29.0.3",
     "ts-retry-promise": "^0.6.0",

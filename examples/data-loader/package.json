@@ -55,7 +55,7 @@
     "dotenv": "^14.3.2",
     "kafkajs": "^1.15.0",
     "pg": "^8.7.1",
-    "pg-boss": "^7.4.0",
+    "pg-boss": "^8.2.0",
     "runtypes": "^6.5.0",
     "sql-template-tag": "^4.0.0",
     "winston": "^3.4.0"

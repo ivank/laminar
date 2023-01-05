@@ -952,7 +952,7 @@ __metadata:
     jest: ^29.3.1
     kafkajs: ^1.15.0
     pg: ^8.7.1
-    pg-boss: ^7.4.0
+    pg-boss: ^8.2.0
     prettier: ^2.5.1
     runtypes: ^6.5.0
     sql-template-tag: ^4.0.0
@@ -1697,7 +1697,7 @@ __metadata:
     eslint: ^8.7.0
     eslint-config-prettier: ^8.3.0
     jest: ^29.3.1
-    pg-boss: ^7.4.0
+    pg-boss: ^8.2.0
     prettier: ^2.5.1
     ts-jest: ^29.0.3
     ts-retry-promise: ^0.6.0
@@ -5488,17 +5488,18 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"pg-boss@npm:^7.4.0":
-  version: 7.4.0
-  resolution: "pg-boss@npm:7.4.0"
+"pg-boss@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "pg-boss@npm:8.2.0"
   dependencies:
     cron-parser: ^4.0.0
     delay: ^5.0.0
     lodash.debounce: ^4.0.8
     p-map: ^4.0.0
     pg: ^8.5.1
-    uuid: ^8.3.2
-  checksum: f65f4d5bdb99089a29e82a96dde8b72cd2fb5456846a34e6bb4b20baff19b23c11b2640ca4217f250e2f0c01ee96f5bd2623d9119bf9f94d929b3bfcbdbf6fd8
+    serialize-error: ^8.1.0
+    uuid: ^9.0.0
+  checksum: 6e8e7d73a9fc49297300bbe0b7c460e292d7bcb1b258ccbe103377ba8facb3a157f35757ef17ae2988042ad54d257b637655ed4ad2a2730c6b88b56318a576b4
   languageName: node
   linkType: hard
 
@@ -6027,6 +6028,15 @@ resolve@^1.20.0:
   bin:
     semver: bin/semver.js
   checksum: ba9c7cbbf2b7884696523450a61fee1a09930d888b7a8d7579025ad93d459b2d1949ee5bbfeb188b2be5f4ac163544c5e98491ad6152df34154feebc2cc337c1
+  languageName: node
+  linkType: hard
+
+"serialize-error@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "serialize-error@npm:8.1.0"
+  dependencies:
+    type-fest: ^0.20.2
+  checksum: 2eef236d50edd2d7926e602c14fb500dc3a125ee52e9f08f67033181b8e0be5d1122498bdf7c23c80683cddcad083a27974e9e7111ce23165f4d3bcdd6d65102
   languageName: node
   linkType: hard
 
@@ -6683,6 +6693,15 @@ resolve@^1.20.0:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 

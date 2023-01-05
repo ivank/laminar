@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { queueMiddleware, QueueService, QueueWorkerService, QueueWorkersService } from '../src';
-import { HttpService, loggerMiddleware, textOk, run } from '@ovotech/laminar';
+import { HttpService, loggerMiddleware, textOk, run, router, get } from '@ovotech/laminar';
 import PgBoss from 'pg-boss';
 
 describe('Integration', () => {
@@ -16,8 +16,8 @@ describe('Integration', () => {
       .mockRejectedValueOnce(new Error('Test Crashed'))
       .mockResolvedValueOnce('Test Completed')
       .mockResolvedValueOnce('Test Completed')
-      .mockResolvedValueOnce('Multi Completed')
-      .mockResolvedValueOnce('Multi Completed');
+      .mockResolvedValueOnce('Test Completed')
+      .mockResolvedValueOnce('Test Completed');
 
     const queue = new QueueService(
       new PgBoss({
@@ -41,19 +41,29 @@ describe('Integration', () => {
     const http = new HttpService({
       port,
       listener: withQueue(
-        logging(async ({ logger, queue, query: { data } }) => {
-          logger.info('test');
-          for (const item of data) {
-            queue.send({ name: 'test', data: item });
-          }
-          return textOk('OK');
-        }),
+        logging(
+          router(
+            get('/send', async ({ logger, queue, query: { data } }) => {
+              logger.info('test');
+              for (const item of data) {
+                await queue.send({ name: 'test', data: item });
+              }
+              return textOk('OK');
+            }),
+            get('/insert', async ({ logger, queue, query: { data } }) => {
+              logger.info('test multiple');
+              await queue.insert(data.map((item: any) => ({ name: 'test', data: Number(item) })));
+              return textOk('OK');
+            }),
+          ),
+        ),
       ),
     });
 
     await run({ initOrder: [queue, [http, worker]] }, async () => {
-      await axios.get(`http://localhost:${port}?data[]=1&data[]=2&data[]=3`);
-      await axios.get(`http://localhost:${port}?data[]=4`);
+      await axios.get(`http://localhost:${port}/send?data[]=1&data[]=2&data[]=3`);
+      await axios.get(`http://localhost:${port}/send?data[]=4`);
+      await axios.get(`http://localhost:${port}/insert?data[]=5&data[]=6`);
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
     });
@@ -62,8 +72,10 @@ describe('Integration', () => {
     expect(logger.info).toHaveBeenCalledWith(2, 'Test Completed');
     expect(logger.info).toHaveBeenCalledWith(3, 'Test Completed');
     expect(logger.info).toHaveBeenCalledWith(4, 'Test Completed');
+    expect(logger.info).toHaveBeenCalledWith(5, 'Test Completed');
+    expect(logger.info).toHaveBeenCalledWith(6, 'Test Completed');
 
-    expect(logger.info).toHaveBeenCalledTimes(6);
+    expect(logger.info).toHaveBeenCalledTimes(9);
   });
 
   it('Should work with multiple workers', async () => {

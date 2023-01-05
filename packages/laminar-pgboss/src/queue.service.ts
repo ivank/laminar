@@ -26,6 +26,11 @@ export class QueueService implements Queue, Service {
     return await this.boss.send({ options: { ...this.sendOptions?.[ctx.name], ...ctx.options }, ...ctx });
   }
 
+  async insert<TData extends object>(items: Send<TData>[], options?: PgBoss.InsertOptions): Promise<void> {
+    const jobs = items.map((item) => ({ options: { ...this.sendOptions?.[item.name], ...item.options }, ...item }));
+    await (options ? this.boss.insert(jobs, options) : this.boss.insert(jobs));
+  }
+
   async work<TData extends object>(ctx: Worker<TData>): Promise<string> {
     return await this.boss.work<TData, void>(ctx.name, ctx.options ?? {}, (job) => ctx.worker({ ...job, queue: this }));
   }
