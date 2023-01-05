@@ -1,5 +1,5 @@
 import { AbstractMiddleware, Empty } from '@ovotech/laminar';
-import type { WorkOptions, SendOptions } from 'pg-boss';
+import type { WorkOptions, SendOptions, InsertOptions } from 'pg-boss';
 
 /**
  * Send a job to a queue.
@@ -50,7 +50,7 @@ export interface Worker<TData extends Empty = Empty, TContext extends Empty = Em
  */
 export interface Queue {
   send<TData extends object>(request: Send<TData>): Promise<string | null>;
-  insert<TData extends object>(jobs: Send<TData>[]): Promise<void>;
+  insert<TData extends object>(items: Send<TData>[], options?: InsertOptions): Promise<void>;
   work<TData extends object>(request: Worker<TData>): Promise<string>;
   offWork(name: string): Promise<void>;
 }
