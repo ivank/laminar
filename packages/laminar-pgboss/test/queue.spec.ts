@@ -15,7 +15,9 @@ describe('Integration', () => {
       .mockResolvedValueOnce('Test Completed')
       .mockRejectedValueOnce(new Error('Test Crashed'))
       .mockResolvedValueOnce('Test Completed')
-      .mockResolvedValueOnce('Test Completed');
+      .mockResolvedValueOnce('Test Completed')
+      .mockResolvedValueOnce('Multi Completed')
+      .mockResolvedValueOnce('Multi Completed');
 
     const queue = new QueueService(
       new PgBoss({

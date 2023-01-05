@@ -1,39 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`json-refs Should resolve complex recursive 1`] = `
-Object {
-  "#/components/parameters/id": Object {
+{
+  "#/components/parameters/id": {
     "description": "Single resource identifier",
     "in": "path",
     "name": "id",
     "required": true,
-    "schema": Object {
+    "schema": {
       "type": "integer",
     },
   },
-  "#/components/parameters/page": Object {
+  "#/components/parameters/page": {
     "description": "Just single page parameter",
     "in": "query",
     "name": "page",
     "required": true,
-    "schema": Object {
+    "schema": {
       "minimum": 1,
       "type": "integer",
     },
   },
-  "#/components/parameters/queryId": Object {
+  "#/components/parameters/queryId": {
     "description": "Single resource identifier",
     "in": "query",
     "name": "id",
     "required": true,
-    "schema": Object {
+    "schema": {
       "type": "integer",
     },
   },
-  "#/components/requestBodies/CommBatchRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/requestBodies/CommBatchRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/NewCommBatch",
         },
       },
@@ -41,25 +41,25 @@ Object {
     "description": "All data needed for new Comm Job creation",
     "required": true,
   },
-  "#/components/requestBodies/PaymentExport": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/requestBodies/PaymentExport": {
+    "content": {
+      "application/json": {
+        "schema": {
           "additionalProperties": false,
-          "properties": Object {
-            "paymentType": Object {
-              "enum": Array [
+          "properties": {
+            "paymentType": {
+              "enum": [
                 "Cheque",
                 "BACS",
               ],
               "type": "string",
             },
-            "quarter": Object {
+            "quarter": {
               "pattern": "^F[0-9]{2}Q[1-4]$",
               "type": "string",
             },
           },
-          "required": Array [
+          "required": [
             "paymentType",
             "quarter",
           ],
@@ -69,23 +69,23 @@ Object {
     "description": "Payment Export parameters",
     "required": true,
   },
-  "#/components/requestBodies/SessionRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/requestBodies/SessionRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
           "additionalProperties": false,
-          "properties": Object {
-            "token": Object {
+          "properties": {
+            "token": {
               "type": "string",
             },
-            "type": Object {
-              "enum": Array [
+            "type": {
+              "enum": [
                 "oauth",
                 "jwt",
               ],
             },
           },
-          "required": Array [
+          "required": [
             "token",
             "type",
           ],
@@ -95,23 +95,23 @@ Object {
     "description": "Token to verify and create jwt session. Accepts google sign in id_token, or a valid jwt token.",
     "required": true,
   },
-  "#/components/responses/AccountListItemsResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "allOf": Array [
-            Object {
+  "#/components/responses/AccountListItemsResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "allOf": [
+            {
               "$ref": "schemes/components.yaml#/components/schemas/List",
             },
-            Object {
-              "properties": Object {
-                "data": Object {
-                  "items": Object {
+            {
+              "properties": {
+                "data": {
+                  "items": {
                     "$ref": "#/components/schemas/AccountListItem",
                   },
                 },
               },
-              "required": Array [
+              "required": [
                 "data",
               ],
             },
@@ -121,21 +121,21 @@ Object {
     },
     "description": "A list of accounts with some data for each account",
   },
-  "#/components/responses/ContactResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/responses/ContactResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/Contact",
         },
       },
     },
     "description": "Return contract",
   },
-  "#/components/responses/ContractsResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "items": Object {
+  "#/components/responses/ContractsResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "items": {
             "$ref": "#/components/schemas/Contract",
           },
           "type": "array",
@@ -144,51 +144,51 @@ Object {
     },
     "description": "Return accounts active contracts",
   },
-  "#/components/responses/CsvResponse": Object {
-    "content": Object {
-      "text/csv": Object {
-        "schema": Object {
+  "#/components/responses/CsvResponse": {
+    "content": {
+      "text/csv": {
+        "schema": {
           "type": "string",
         },
       },
     },
     "description": "Csv File",
   },
-  "#/components/responses/HtmlResponse": Object {
-    "content": Object {
-      "text/html": Object {
-        "schema": Object {
+  "#/components/responses/HtmlResponse": {
+    "content": {
+      "text/html": {
+        "schema": {
           "type": "string",
         },
       },
     },
     "description": "Html File",
   },
-  "#/components/responses/HttpErrorResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/responses/HttpErrorResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/HttpError",
         },
       },
     },
     "description": "Unknown Error",
   },
-  "#/components/responses/ItemNotFoundResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/responses/ItemNotFoundResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/HttpError",
         },
       },
     },
     "description": "No item with that id has been found",
   },
-  "#/components/responses/MeterReadsResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "items": Object {
+  "#/components/responses/MeterReadsResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "items": {
             "$ref": "#/components/schemas/MeterRead",
           },
           "type": "array",
@@ -197,27 +197,27 @@ Object {
     },
     "description": "Return account",
   },
-  "#/components/responses/SessionResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/responses/SessionResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/Session",
         },
       },
     },
     "description": "JWT Session",
   },
-  "#/components/responses/SuccessResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "#/components/responses/SuccessResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "additionalProperties": false,
-          "properties": Object {
-            "success": Object {
+          "properties": {
+            "success": {
               "type": "boolean",
             },
           },
-          "required": Array [
+          "required": [
             "success",
           ],
         },
@@ -225,74 +225,74 @@ Object {
     },
     "description": "OK",
   },
-  "#/components/schemas/Account": Object {
+  "#/components/schemas/Account": {
     "additionalProperties": false,
-    "properties": Object {
-      "beneficiaryAccountNumber": Object {
+    "properties": {
+      "beneficiaryAccountNumber": {
         "type": "string",
       },
-      "beneficiaryName": Object {
+      "beneficiaryName": {
         "type": "string",
       },
-      "beneficiarySortCode": Object {
+      "beneficiarySortCode": {
         "type": "string",
       },
-      "companyName": Object {
+      "companyName": {
         "type": "string",
       },
-      "companyRegNumber": Object {
+      "companyRegNumber": {
         "type": "string",
       },
-      "companyVatNumber": Object {
+      "companyVatNumber": {
         "type": "string",
       },
-      "contracts": Object {
-        "items": Object {
+      "contracts": {
+        "items": {
           "$ref": "#/components/schemas/AccountContract",
         },
         "type": "array",
       },
-      "endOn": Object {
+      "endOn": {
         "format": "date-time",
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "paymentPlan": Object {
-        "enum": Array [
+      "paymentPlan": {
+        "enum": [
           "Cheque",
           "BACS",
         ],
         "type": "string",
       },
-      "paymentSuspended": Object {
+      "paymentSuspended": {
         "type": "boolean",
       },
-      "primaryContact": Object {
+      "primaryContact": {
         "$ref": "#/components/schemas/Contact",
       },
-      "primaryContactId": Object {
+      "primaryContactId": {
         "type": "number",
       },
-      "secondaryContact": Object {
+      "secondaryContact": {
         "$ref": "#/components/schemas/Contact",
       },
-      "secondaryContactId": Object {
+      "secondaryContactId": {
         "type": "number",
       },
-      "startOn": Object {
+      "startOn": {
         "format": "date-time",
         "type": "string",
       },
-      "state": Object {
+      "state": {
         "$ref": "#/components/schemas/AccountStateType",
       },
-      "tosReceived": Object {
+      "tosReceived": {
         "type": "boolean",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "state",
       "paymentSuspended",
@@ -300,61 +300,61 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/AccountContract": Object {
+  "#/components/schemas/AccountContract": {
     "additionalProperties": false,
-    "properties": Object {
-      "confirmationOn": Object {
+    "properties": {
+      "confirmationOn": {
         "format": "date-time",
         "type": "string",
       },
-      "contactId": Object {
+      "contactId": {
         "type": "number",
       },
-      "contractId": Object {
+      "contractId": {
         "type": "number",
       },
-      "createdAt": Object {
+      "createdAt": {
         "format": "date-time",
         "type": "string",
       },
-      "expTariffCode": Object {
+      "expTariffCode": {
         "type": "string",
       },
-      "exportSplit": Object {
+      "exportSplit": {
         "type": "number",
       },
-      "exportTariffId": Object {
+      "exportTariffId": {
         "type": "number",
       },
-      "fullName": Object {
+      "fullName": {
         "type": "string",
       },
-      "genTariffCode": Object {
+      "genTariffCode": {
         "type": "string",
       },
-      "generationSplit": Object {
+      "generationSplit": {
         "type": "number",
       },
-      "generationTariffId": Object {
+      "generationTariffId": {
         "type": "number",
       },
-      "installationId": Object {
+      "installationId": {
         "type": "number",
       },
-      "schemeAccountReference": Object {
+      "schemeAccountReference": {
         "type": "string",
       },
-      "schemeType": Object {
+      "schemeType": {
         "$ref": "#/components/schemas/SchemeType",
       },
-      "title": Object {
+      "title": {
         "type": "string",
       },
-      "tosAgreed": Object {
+      "tosAgreed": {
         "type": "boolean",
       },
     },
-    "required": Array [
+    "required": [
       "contractId",
       "schemeAccountReference",
       "installationId",
@@ -362,20 +362,20 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/AccountLevelisation": Object {
-    "allOf": Array [
-      Object {
+  "#/components/schemas/AccountLevelisation": {
+    "allOf": [
+      {
         "$ref": "#/components/schemas/AccountLevelisationList",
       },
-      Object {
-        "properties": Object {
-          "exportPeriods": Object {
-            "items": Object {
+      {
+        "properties": {
+          "exportPeriods": {
+            "items": {
               "$ref": "#/components/schemas/PeriodWithCalculatedAmount",
             },
           },
-          "generationPeriods": Object {
-            "items": Object {
+          "generationPeriods": {
+            "items": {
               "$ref": "#/components/schemas/PeriodWithCalculatedAmount",
             },
           },
@@ -383,83 +383,83 @@ Object {
       },
     ],
   },
-  "#/components/schemas/AccountLevelisationList": Object {
-    "properties": Object {
-      "accountId": Object {
+  "#/components/schemas/AccountLevelisationList": {
+    "properties": {
+      "accountId": {
         "type": "number",
       },
-      "cfrFitId": Object {
+      "cfrFitId": {
         "type": "string",
       },
-      "exportEndReadOn": Object {
+      "exportEndReadOn": {
         "format": "date-time",
         "type": "string",
       },
-      "exportEndReadValue": Object {
+      "exportEndReadValue": {
         "type": "number",
       },
-      "exportEnergy": Object {
+      "exportEnergy": {
         "type": "number",
       },
-      "exportPayment": Object {
+      "exportPayment": {
         "$ref": "components.yaml#/components/schemas/Pennies",
       },
-      "exportPercentageSplit": Object {
+      "exportPercentageSplit": {
         "type": "number",
       },
-      "exportStartReadOn": Object {
+      "exportStartReadOn": {
         "format": "date-time",
         "type": "string",
       },
-      "exportStartReadValue": Object {
+      "exportStartReadValue": {
         "type": "number",
       },
-      "generationEndReadOn": Object {
+      "generationEndReadOn": {
         "format": "date-time",
         "type": "string",
       },
-      "generationEndReadValue": Object {
+      "generationEndReadValue": {
         "type": "number",
       },
-      "generationEnergy": Object {
+      "generationEnergy": {
         "type": "number",
       },
-      "generationPayment": Object {
+      "generationPayment": {
         "$ref": "components.yaml#/components/schemas/Pennies",
       },
-      "generationPercentageSplit": Object {
+      "generationPercentageSplit": {
         "type": "number",
       },
-      "generationStartReadOn": Object {
+      "generationStartReadOn": {
         "format": "date-time",
         "type": "string",
       },
-      "generationStartReadValue": Object {
+      "generationStartReadValue": {
         "type": "number",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "installationId": Object {
+      "installationId": {
         "type": "number",
       },
-      "isAccepted": Object {
+      "isAccepted": {
         "type": "boolean",
       },
-      "levelisationId": Object {
+      "levelisationId": {
         "type": "number",
       },
-      "state": Object {
+      "state": {
         "$ref": "#/components/schemas/AccountLevelisationState",
       },
-      "totalPayment": Object {
+      "totalPayment": {
         "$ref": "components.yaml#/components/schemas/Pennies",
       },
-      "vatPayment": Object {
+      "vatPayment": {
         "$ref": "components.yaml#/components/schemas/Pennies",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "levelisationId",
       "accountId",
@@ -469,58 +469,58 @@ Object {
       "isAccepted",
     ],
   },
-  "#/components/schemas/AccountLevelisationSave": Object {
-    "properties": Object {
-      "id": Object {
+  "#/components/schemas/AccountLevelisationSave": {
+    "properties": {
+      "id": {
         "type": "number",
       },
-      "isAccepted": Object {
+      "isAccepted": {
         "type": "boolean",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "isAccepted",
     ],
   },
-  "#/components/schemas/AccountLevelisationState": Object {
-    "enum": Array [
+  "#/components/schemas/AccountLevelisationState": {
+    "enum": [
       "Pending",
       "Done",
     ],
   },
-  "#/components/schemas/AccountListItem": Object {
-    "properties": Object {
-      "address": Object {
+  "#/components/schemas/AccountListItem": {
+    "properties": {
+      "address": {
         "type": "string",
       },
-      "email": Object {
+      "email": {
         "type": "string",
       },
-      "firstName": Object {
+      "firstName": {
         "type": "string",
       },
-      "fitIds": Object {
+      "fitIds": {
         "$ref": "schemes/components.yaml#/components/schemas/ListOfStrings",
       },
-      "id": Object {
+      "id": {
         "type": "integer",
       },
-      "lastName": Object {
+      "lastName": {
         "type": "string",
       },
-      "state": Object {
+      "state": {
         "$ref": "#/components/schemas/AccountStateType",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "firstName",
       "lastName",
     ],
   },
-  "#/components/schemas/AccountStateType": Object {
-    "enum": Array [
+  "#/components/schemas/AccountStateType": {
+    "enum": [
       "Active",
       "Pending",
       "Dispute",
@@ -528,101 +528,101 @@ Object {
     ],
     "type": "string",
   },
-  "#/components/schemas/Address": Object {
+  "#/components/schemas/Address": {
     "additionalProperties": false,
-    "properties": Object {
-      "company": Object {
+    "properties": {
+      "company": {
         "type": "string",
       },
-      "contactName": Object {
+      "contactName": {
         "type": "string",
       },
-      "country": Object {
+      "country": {
         "type": "string",
       },
-      "county": Object {
+      "county": {
         "type": "string",
       },
-      "line1": Object {
+      "line1": {
         "type": "string",
       },
-      "line2": Object {
+      "line2": {
         "type": "string",
       },
-      "line3": Object {
+      "line3": {
         "type": "string",
       },
-      "postcode": Object {
+      "postcode": {
         "type": "string",
       },
-      "town": Object {
+      "town": {
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "country",
       "postcode",
     ],
     "type": "object",
   },
-  "#/components/schemas/BulkAccountLevelisationSave": Object {
-    "properties": Object {
-      "isAccepted": Object {
+  "#/components/schemas/BulkAccountLevelisationSave": {
+    "properties": {
+      "isAccepted": {
         "type": "boolean",
       },
     },
-    "required": Array [
+    "required": [
       "isAccepted",
     ],
   },
-  "#/components/schemas/CommBatch": Object {
+  "#/components/schemas/CommBatch": {
     "additionalProperties": false,
-    "properties": Object {
-      "createdAt": Object {
+    "properties": {
+      "createdAt": {
         "format": "date-time",
         "type": "string",
       },
-      "filename": Object {
+      "filename": {
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "integer",
       },
-      "items": Object {
-        "items": Object {
+      "items": {
+        "items": {
           "additionalProperties": false,
-          "properties": Object {
-            "commBatchId": Object {
+          "properties": {
+            "commBatchId": {
               "type": "number",
             },
-            "commId": Object {
+            "commId": {
               "type": "string",
             },
-            "contactAddress": Object {
+            "contactAddress": {
               "type": "object",
             },
-            "createdAt": Object {
+            "createdAt": {
               "format": "date-time",
               "type": "string",
             },
-            "error": Object {
+            "error": {
               "type": "string",
             },
-            "id": Object {
+            "id": {
               "type": "integer",
             },
-            "status": Object {
+            "status": {
               "$ref": "#/components/schemas/CommBatchItemStatus",
             },
-            "templateParams": Object {
+            "templateParams": {
               "type": "object",
             },
-            "updatedAt": Object {
+            "updatedAt": {
               "format": "date-time",
               "type": "string",
             },
           },
-          "required": Array [
+          "required": [
             "id",
             "status",
             "createdAt",
@@ -634,26 +634,26 @@ Object {
         },
         "type": "array",
       },
-      "itemsDelivered": Object {
+      "itemsDelivered": {
         "type": "number",
       },
-      "itemsExpired": Object {
+      "itemsExpired": {
         "type": "number",
       },
-      "itemsFailed": Object {
+      "itemsFailed": {
         "type": "number",
       },
-      "itemsPending": Object {
+      "itemsPending": {
         "type": "number",
       },
-      "itemsScheduled": Object {
+      "itemsScheduled": {
         "type": "number",
       },
-      "type": Object {
+      "type": {
         "$ref": "#/components/schemas/CommBatchType",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "type",
       "createdAt",
@@ -661,8 +661,8 @@ Object {
       "items",
     ],
   },
-  "#/components/schemas/CommBatchItemStatus": Object {
-    "enum": Array [
+  "#/components/schemas/CommBatchItemStatus": {
+    "enum": [
       "Scheduled",
       "Pending",
       "Delivered",
@@ -671,153 +671,153 @@ Object {
     ],
     "type": "string",
   },
-  "#/components/schemas/CommBatchList": Object {
+  "#/components/schemas/CommBatchList": {
     "additionalProperties": false,
-    "properties": Object {
-      "createdAt": Object {
+    "properties": {
+      "createdAt": {
         "format": "date-time",
         "type": "string",
       },
-      "filename": Object {
+      "filename": {
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "integer",
       },
-      "itemsDelivered": Object {
+      "itemsDelivered": {
         "type": "number",
       },
-      "itemsExpired": Object {
+      "itemsExpired": {
         "type": "number",
       },
-      "itemsFailed": Object {
+      "itemsFailed": {
         "type": "number",
       },
-      "itemsPending": Object {
+      "itemsPending": {
         "type": "number",
       },
-      "itemsScheduled": Object {
+      "itemsScheduled": {
         "type": "number",
       },
-      "type": Object {
+      "type": {
         "$ref": "#/components/schemas/CommBatchType",
       },
-      "updatedAt": Object {
+      "updatedAt": {
         "format": "date-time",
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "type",
       "filename",
       "createdAt",
     ],
   },
-  "#/components/schemas/CommBatchType": Object {
-    "enum": Array [
+  "#/components/schemas/CommBatchType": {
+    "enum": [
       "FITMeterInspectionDue",
       "Statement",
     ],
     "type": "string",
   },
-  "#/components/schemas/CommContactAddress": Object {
-    "oneOf": Array [
-      Object {
+  "#/components/schemas/CommContactAddress": {
+    "oneOf": [
+      {
         "$ref": "#/components/schemas/CommsEmailAddress",
       },
-      Object {
+      {
         "$ref": "#/components/schemas/CommsPostalAddress",
       },
-      Object {
+      {
         "$ref": "#/components/schemas/CommsPhoneNumber",
       },
     ],
   },
-  "#/components/schemas/CommsEmailAddress": Object {
+  "#/components/schemas/CommsEmailAddress": {
     "additionalProperties": false,
-    "properties": Object {
-      "emailAddress": Object {
+    "properties": {
+      "emailAddress": {
         "pattern": "@",
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "emailAddress",
     ],
     "type": "object",
   },
-  "#/components/schemas/CommsPhoneNumber": Object {
+  "#/components/schemas/CommsPhoneNumber": {
     "additionalProperties": false,
-    "properties": Object {
-      "phoneNumber": Object {
+    "properties": {
+      "phoneNumber": {
         "pattern": "[0-9 ]+",
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "phoneNumber",
     ],
     "type": "object",
   },
-  "#/components/schemas/CommsPostalAddress": Object {
+  "#/components/schemas/CommsPostalAddress": {
     "additionalProperties": false,
-    "properties": Object {
-      "postalAddress": Object {
+    "properties": {
+      "postalAddress": {
         "$ref": "#/components/schemas/Address",
       },
     },
-    "required": Array [
+    "required": [
       "postalAddress",
     ],
   },
-  "#/components/schemas/Contact": Object {
+  "#/components/schemas/Contact": {
     "additionalProperties": false,
-    "properties": Object {
-      "addressLine1": Object {
+    "properties": {
+      "addressLine1": {
         "type": "string",
       },
-      "addressLine2": Object {
+      "addressLine2": {
         "type": "string",
       },
-      "addressLine3": Object {
+      "addressLine3": {
         "type": "string",
       },
-      "city": Object {
+      "city": {
         "type": "string",
       },
-      "country": Object {
+      "country": {
         "type": "string",
       },
-      "county": Object {
+      "county": {
         "type": "string",
       },
-      "email": Object {
+      "email": {
         "type": "string",
       },
-      "fullName": Object {
+      "fullName": {
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "phone": Object {
+      "phone": {
         "type": "string",
       },
-      "postCode": Object {
+      "postCode": {
         "type": "string",
       },
-      "title": Object {
+      "title": {
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "id",
     ],
     "type": "object",
   },
-  "#/components/schemas/ExportType": Object {
-    "enum": Array [
+  "#/components/schemas/ExportType": {
+    "enum": [
       "PPA",
       "Off Grid",
       "Metered Export",
@@ -825,188 +825,188 @@ Object {
     ],
     "type": "string",
   },
-  "#/components/schemas/HttpError": Object {
+  "#/components/schemas/HttpError": {
     "additionalProperties": false,
-    "properties": Object {
-      "message": Object {
+    "properties": {
+      "message": {
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "message",
     ],
   },
-  "#/components/schemas/Installation": Object {
+  "#/components/schemas/Installation": {
     "additionalProperties": false,
-    "properties": Object {
-      "accountId": Object {
+    "properties": {
+      "accountId": {
         "type": "number",
       },
-      "address": Object {
+      "address": {
         "$ref": "#/components/schemas/Address",
       },
-      "addressId": Object {
+      "addressId": {
         "type": "number",
       },
-      "batteryInstallationDateOn": Object {
+      "batteryInstallationDateOn": {
         "type": "string",
       },
-      "commissionedOn": Object {
+      "commissionedOn": {
         "format": "date-time",
         "type": "string",
       },
-      "confirmationOn": Object {
+      "confirmationOn": {
         "format": "date-time",
         "type": "string",
       },
-      "contracts": Object {
-        "items": Object {
+      "contracts": {
+        "items": {
           "$ref": "#/components/schemas/AccountContract",
         },
         "type": "array",
       },
-      "createdAt": Object {
+      "createdAt": {
         "format": "date-time",
         "type": "string",
       },
-      "dateGrantRepaid": Object {
+      "dateGrantRepaid": {
         "format": "date-time",
         "type": "string",
       },
-      "decommissionedOn": Object {
+      "decommissionedOn": {
         "format": "date-time",
         "type": "string",
       },
-      "dncReference": Object {
+      "dncReference": {
         "type": "number",
       },
-      "eligibilityEndOn": Object {
+      "eligibilityEndOn": {
         "format": "date-time",
         "type": "string",
       },
-      "eligibilityStartOn": Object {
+      "eligibilityStartOn": {
         "format": "date-time",
         "type": "string",
       },
-      "epcDate": Object {
+      "epcDate": {
         "format": "date-time",
         "type": "string",
       },
-      "epcNumber": Object {
+      "epcNumber": {
         "type": "number",
       },
-      "epcRate": Object {
+      "epcRate": {
         "type": "string",
       },
-      "exportMpan": Object {
+      "exportMpan": {
         "type": "string",
       },
-      "exportPercentageSplit": Object {
+      "exportPercentageSplit": {
         "type": "number",
       },
-      "exportTariffId": Object {
+      "exportTariffId": {
         "type": "number",
       },
-      "exportType": Object {
+      "exportType": {
         "$ref": "#/components/schemas/ExportType",
       },
-      "generationPercentageSplit": Object {
+      "generationPercentageSplit": {
         "type": "number",
       },
-      "generationTariffId": Object {
+      "generationTariffId": {
         "type": "number",
       },
-      "hasBatteryStorage": Object {
+      "hasBatteryStorage": {
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "inspectedOn": Object {
+      "inspectedOn": {
         "format": "date-time",
         "type": "string",
       },
-      "installedOn": Object {
+      "installedOn": {
         "format": "date-time",
         "type": "string",
       },
-      "legacyFitDbId": Object {
+      "legacyFitDbId": {
         "type": "string",
       },
-      "maxCapacity": Object {
+      "maxCapacity": {
         "type": "number",
       },
-      "mcsReference": Object {
+      "mcsReference": {
         "type": "string",
       },
-      "meters": Object {
-        "items": Object {
+      "meters": {
+        "items": {
           "$ref": "#/components/schemas/InstallationMeter",
         },
         "type": "array",
       },
-      "name": Object {
+      "name": {
         "type": "string",
       },
-      "nameOfGrant": Object {
+      "nameOfGrant": {
         "type": "string",
       },
-      "propertyType": Object {
+      "propertyType": {
         "$ref": "#/components/schemas/PropertyType",
       },
-      "reverifiedOn": Object {
+      "reverifiedOn": {
         "format": "date-time",
         "type": "string",
       },
-      "roofitReference": Object {
+      "roofitReference": {
         "type": "string",
       },
-      "scheme": Object {
+      "scheme": {
         "$ref": "#/components/schemas/SchemeType",
       },
-      "schemeReference": Object {
+      "schemeReference": {
         "type": "string",
       },
-      "sourceSystemId": Object {
+      "sourceSystemId": {
         "type": "number",
       },
-      "supplyMpan": Object {
+      "supplyMpan": {
         "type": "string",
       },
-      "switchedFrom": Object {
+      "switchedFrom": {
         "type": "string",
       },
-      "switchedTo": Object {
+      "switchedTo": {
         "type": "string",
       },
-      "tariffRates": Object {
-        "items": Object {
+      "tariffRates": {
+        "items": {
           "$ref": "#/components/schemas/TariffRate",
         },
         "type": "array",
       },
-      "technologyType": Object {
+      "technologyType": {
         "$ref": "#/components/schemas/TechnologyType",
       },
-      "termsAndConditionsAgreed": Object {
+      "termsAndConditionsAgreed": {
         "type": "boolean",
       },
-      "type": Object {
+      "type": {
         "$ref": "#/components/schemas/InstallationType",
       },
-      "updatedAt": Object {
+      "updatedAt": {
         "format": "date-time",
         "type": "string",
       },
-      "valueOfGrant": Object {
+      "valueOfGrant": {
         "type": "number",
       },
-      "verifiedOn": Object {
+      "verifiedOn": {
         "format": "date-time",
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "type",
       "installedOn",
@@ -1015,60 +1015,60 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/InstallationMeter": Object {
+  "#/components/schemas/InstallationMeter": {
     "additionalProperties": false,
-    "properties": Object {
-      "addedToInstallationAt": Object {
+    "properties": {
+      "addedToInstallationAt": {
         "format": "date-time",
         "type": "string",
       },
-      "distributionRegion": Object {
+      "distributionRegion": {
         "type": "string",
       },
-      "endOn": Object {
+      "endOn": {
         "format": "date-time",
         "type": "string",
       },
-      "gsp": Object {
+      "gsp": {
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "installationId": Object {
+      "installationId": {
         "type": "number",
       },
-      "make": Object {
+      "make": {
         "type": "string",
       },
-      "meterId": Object {
+      "meterId": {
         "type": "number",
       },
-      "model": Object {
+      "model": {
         "type": "string",
       },
-      "mpan": Object {
+      "mpan": {
         "type": "string",
       },
-      "msn": Object {
+      "msn": {
         "type": "string",
       },
-      "shared": Object {
+      "shared": {
         "type": "boolean",
       },
-      "startOn": Object {
+      "startOn": {
         "format": "date-time",
         "type": "string",
       },
-      "type": Object {
+      "type": {
         "$ref": "#/components/schemas/MeterType",
       },
-      "updatedAt": Object {
+      "updatedAt": {
         "format": "date-time",
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "meterId",
       "type",
@@ -1078,8 +1078,8 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/InstallationType": Object {
-    "enum": Array [
+  "#/components/schemas/InstallationType": {
+    "enum": [
       "None",
       "Extension of an existing FiT-accredited installation",
       "Standalone",
@@ -1088,176 +1088,176 @@ Object {
     ],
     "type": "string",
   },
-  "#/components/schemas/Levelisation": Object {
-    "allOf": Array [
-      Object {
+  "#/components/schemas/Levelisation": {
+    "allOf": [
+      {
         "$ref": "#/components/schemas/LevelisationList",
       },
-      Object {
-        "properties": Object {
-          "doneCount": Object {
+      {
+        "properties": {
+          "doneCount": {
             "type": "number",
           },
-          "pendingCount": Object {
+          "pendingCount": {
             "type": "number",
           },
-          "totalCount": Object {
+          "totalCount": {
             "type": "number",
           },
-          "totalDeemedExportEnergy": Object {
+          "totalDeemedExportEnergy": {
             "type": "number",
           },
-          "totalDeemedExportPayment": Object {
+          "totalDeemedExportPayment": {
             "$ref": "components.yaml#/components/schemas/Pennies",
           },
-          "totalExportPayment": Object {
+          "totalExportPayment": {
             "$ref": "components.yaml#/components/schemas/Pennies",
           },
-          "totalGenerationPayment": Object {
+          "totalGenerationPayment": {
             "$ref": "components.yaml#/components/schemas/Pennies",
           },
-          "totalMeteredExportEnergy": Object {
+          "totalMeteredExportEnergy": {
             "type": "number",
           },
-          "totalMeteredExportPayment": Object {
+          "totalMeteredExportPayment": {
             "$ref": "components.yaml#/components/schemas/Pennies",
           },
         },
       },
     ],
   },
-  "#/components/schemas/LevelisationCreate": Object {
-    "properties": Object {
-      "quarter": Object {
+  "#/components/schemas/LevelisationCreate": {
+    "properties": {
+      "quarter": {
         "$ref": "#/components/schemas/LevelisationQuarter",
       },
     },
-    "required": Array [
+    "required": [
       "quarter",
     ],
   },
-  "#/components/schemas/LevelisationList": Object {
-    "properties": Object {
-      "endOn": Object {
+  "#/components/schemas/LevelisationList": {
+    "properties": {
+      "endOn": {
         "format": "date-time",
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "isAccepted": Object {
+      "isAccepted": {
         "type": "boolean",
       },
-      "quarter": Object {
+      "quarter": {
         "$ref": "#/components/schemas/LevelisationQuarter",
       },
-      "startOn": Object {
+      "startOn": {
         "format": "date-time",
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "quarter",
       "isAccepted",
     ],
   },
-  "#/components/schemas/LevelisationMeterRead": Object {
-    "properties": Object {
-      "dateOn": Object {
+  "#/components/schemas/LevelisationMeterRead": {
+    "properties": {
+      "dateOn": {
         "format": "date-time",
         "type": "string",
       },
-      "value": Object {
+      "value": {
         "type": "number",
       },
     },
-    "required": Array [
+    "required": [
       "dateOn",
       "value",
     ],
   },
-  "#/components/schemas/LevelisationQuarter": Object {
-    "pattern": "^F\\\\d+Q[1234]$",
+  "#/components/schemas/LevelisationQuarter": {
+    "pattern": "^F\\d+Q[1234]$",
     "type": "string",
   },
-  "#/components/schemas/LevelisationRate": Object {
-    "properties": Object {
-      "endOn": Object {
+  "#/components/schemas/LevelisationRate": {
+    "properties": {
+      "endOn": {
         "format": "date-time",
         "type": "string",
       },
-      "rate": Object {
+      "rate": {
         "type": "number",
       },
-      "startOn": Object {
+      "startOn": {
         "format": "date-time",
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "startOn",
       "endOn",
       "rate",
     ],
   },
-  "#/components/schemas/LevelisationSave": Object {
-    "properties": Object {
-      "isAccepted": Object {
+  "#/components/schemas/LevelisationSave": {
+    "properties": {
+      "isAccepted": {
         "type": "boolean",
       },
-      "isRestarted": Object {
+      "isRestarted": {
         "type": "boolean",
       },
     },
-    "required": Array [
+    "required": [
       "isAccepted",
     ],
   },
-  "#/components/schemas/ListOfIds": Object {
-    "items": Object {
+  "#/components/schemas/ListOfIds": {
+    "items": {
       "type": "integer",
     },
     "type": "array",
   },
-  "#/components/schemas/Meter": Object {
+  "#/components/schemas/Meter": {
     "additionalProperties": false,
-    "properties": Object {
-      "createdAt": Object {
+    "properties": {
+      "createdAt": {
         "type": "string",
       },
-      "distributionRegion": Object {
+      "distributionRegion": {
         "type": "string",
       },
-      "gsp": Object {
+      "gsp": {
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "isExport": Object {
+      "isExport": {
         "type": "boolean",
       },
-      "make": Object {
+      "make": {
         "type": "string",
       },
-      "model": Object {
+      "model": {
         "type": "string",
       },
-      "mpan": Object {
+      "mpan": {
         "type": "string",
       },
-      "msn": Object {
+      "msn": {
         "type": "string",
       },
-      "shared": Object {
+      "shared": {
         "type": "boolean",
       },
-      "updatedAt": Object {
+      "updatedAt": {
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "msn",
       "isExport",
@@ -1265,41 +1265,41 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/MeterRead": Object {
+  "#/components/schemas/MeterRead": {
     "additionalProperties": false,
-    "properties": Object {
-      "createdAt": Object {
+    "properties": {
+      "createdAt": {
         "format": "date-time",
         "type": "string",
       },
-      "dateOn": Object {
+      "dateOn": {
         "format": "date-time",
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "meterId": Object {
+      "meterId": {
         "type": "number",
       },
-      "reason": Object {
+      "reason": {
         "type": "string",
       },
-      "sourceSystemId": Object {
+      "sourceSystemId": {
         "type": "number",
       },
-      "type": Object {
+      "type": {
         "$ref": "#/components/schemas/MeterReadType",
       },
-      "updatedAt": Object {
+      "updatedAt": {
         "format": "date-time",
         "type": "string",
       },
-      "value": Object {
+      "value": {
         "type": "number",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "meterId",
       "dateOn",
@@ -1309,47 +1309,47 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/MeterReadCheck": Object {
-    "properties": Object {
-      "accountId": Object {
+  "#/components/schemas/MeterReadCheck": {
+    "properties": {
+      "accountId": {
         "type": "number",
       },
-      "cfrFitId": Object {
+      "cfrFitId": {
         "type": "string",
       },
-      "createdAt": Object {
+      "createdAt": {
         "format": "date-time",
         "type": "string",
       },
-      "dateOn": Object {
+      "dateOn": {
         "format": "date-time",
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "isAccepted": Object {
+      "isAccepted": {
         "type": "boolean",
       },
-      "reason": Object {
+      "reason": {
         "type": "string",
       },
-      "tolerance": Object {
+      "tolerance": {
         "$ref": "#/components/schemas/MeterReadTolerance",
       },
-      "type": Object {
-        "enum": Array [
+      "type": {
+        "enum": [
           "Closing",
           "Meter Verification",
           "Opening",
           "Quarterly",
         ],
       },
-      "value": Object {
+      "value": {
         "type": "number",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "accountId",
       "cfrFitId",
@@ -1360,46 +1360,46 @@ Object {
       "isAccepted",
     ],
   },
-  "#/components/schemas/MeterReadCheckSave": Object {
-    "properties": Object {
-      "isAccepted": Object {
+  "#/components/schemas/MeterReadCheckSave": {
+    "properties": {
+      "isAccepted": {
         "type": "boolean",
       },
     },
-    "required": Array [
+    "required": [
       "isAccepted",
     ],
   },
-  "#/components/schemas/MeterReadTolerance": Object {
-    "properties": Object {
-      "error": Object {
+  "#/components/schemas/MeterReadTolerance": {
+    "properties": {
+      "error": {
         "type": "string",
       },
-      "expected": Object {
+      "expected": {
         "$ref": "#/components/schemas/MeterReadToleranceRead",
       },
-      "previousRead": Object {
+      "previousRead": {
         "$ref": "#/components/schemas/MeterReadToleranceRead",
       },
     },
   },
-  "#/components/schemas/MeterReadToleranceRead": Object {
-    "properties": Object {
-      "dateOn": Object {
+  "#/components/schemas/MeterReadToleranceRead": {
+    "properties": {
+      "dateOn": {
         "format": "date-time",
         "type": "string",
       },
-      "value": Object {
+      "value": {
         "type": "number",
       },
     },
-    "required": Array [
+    "required": [
       "dateOn",
       "value",
     ],
   },
-  "#/components/schemas/MeterReadType": Object {
-    "enum": Array [
+  "#/components/schemas/MeterReadType": {
+    "enum": [
       "Closing",
       "Meter Verification",
       "Opening",
@@ -1407,375 +1407,375 @@ Object {
     ],
     "type": "string",
   },
-  "#/components/schemas/MeterType": Object {
-    "enum": Array [
+  "#/components/schemas/MeterType": {
+    "enum": [
       "Export",
       "Generation",
     ],
     "type": "string",
   },
-  "#/components/schemas/NewCommBatch": Object {
-    "discriminator": Object {
+  "#/components/schemas/NewCommBatch": {
+    "discriminator": {
       "propertyName": "type",
     },
-    "oneOf": Array [
-      Object {
+    "oneOf": [
+      {
         "$ref": "#/components/schemas/NewCommBatchFITMeterInspectionDue",
       },
-      Object {
+      {
         "$ref": "#/components/schemas/NewCommBatchStatement",
       },
     ],
   },
-  "#/components/schemas/NewCommBatchFITMeterInspectionDue": Object {
+  "#/components/schemas/NewCommBatchFITMeterInspectionDue": {
     "additionalProperties": true,
-    "properties": Object {
-      "filename": Object {
+    "properties": {
+      "filename": {
         "type": "string",
       },
-      "items": Object {
-        "items": Object {
+      "items": {
+        "items": {
           "additionalProperties": false,
-          "properties": Object {
-            "contactAddress": Object {
+          "properties": {
+            "contactAddress": {
               "$ref": "#/components/schemas/CommContactAddress",
             },
-            "templateParams": Object {
+            "templateParams": {
               "additionalProperties": false,
-              "properties": Object {
-                "fitId": Object {
+              "properties": {
+                "fitId": {
                   "type": "string",
                 },
               },
-              "required": Array [
+              "required": [
                 "fitId",
               ],
               "type": "object",
             },
           },
-          "required": Array [
+          "required": [
             "templateParams",
           ],
           "type": "object",
         },
         "type": "array",
       },
-      "type": Object {
-        "enum": Array [
+      "type": {
+        "enum": [
           "FITMeterInspectionDue",
         ],
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "type",
       "filename",
       "items",
     ],
     "type": "object",
   },
-  "#/components/schemas/NewCommBatchStatement": Object {
+  "#/components/schemas/NewCommBatchStatement": {
     "additionalProperties": true,
-    "properties": Object {
-      "filename": Object {
+    "properties": {
+      "filename": {
         "type": "string",
       },
-      "items": Object {
-        "items": Object {
+      "items": {
+        "items": {
           "additionalProperties": false,
-          "properties": Object {
-            "contactAddress": Object {
+          "properties": {
+            "contactAddress": {
               "$ref": "#/components/schemas/CommContactAddress",
             },
-            "templateParams": Object {
+            "templateParams": {
               "additionalProperties": false,
-              "properties": Object {
-                "accountNumber": Object {
+              "properties": {
+                "accountNumber": {
                   "type": "string",
                 },
-                "emailAddress": Object {
+                "emailAddress": {
                   "pattern": "@",
                   "type": "string",
                 },
-                "payment": Object {
+                "payment": {
                   "additionalProperties": false,
-                  "properties": Object {
-                    "deemedExport": Object {
+                  "properties": {
+                    "deemedExport": {
                       "additionalProperties": false,
-                      "properties": Object {
-                        "endDate": Object {
+                      "properties": {
+                        "endDate": {
                           "type": "string",
                         },
-                        "value": Object {
+                        "value": {
                           "type": "string",
                         },
                       },
                       "type": "object",
                     },
-                    "endDate": Object {
+                    "endDate": {
                       "type": "string",
                     },
-                    "endDateLong": Object {
+                    "endDateLong": {
                       "type": "string",
                     },
-                    "export": Object {
+                    "export": {
                       "additionalProperties": false,
-                      "properties": Object {
-                        "endDate": Object {
+                      "properties": {
+                        "endDate": {
                           "type": "string",
                         },
-                        "value": Object {
+                        "value": {
                           "type": "string",
                         },
                       },
                       "type": "object",
                     },
-                    "generation": Object {
+                    "generation": {
                       "additionalProperties": false,
-                      "properties": Object {
-                        "endDate": Object {
+                      "properties": {
+                        "endDate": {
                           "type": "string",
                         },
-                        "value": Object {
+                        "value": {
                           "type": "string",
                         },
                       },
                       "type": "object",
                     },
-                    "startDate": Object {
+                    "startDate": {
                       "type": "string",
                     },
-                    "startDateLong": Object {
+                    "startDateLong": {
                       "type": "string",
                     },
-                    "total": Object {
+                    "total": {
                       "type": "string",
                     },
-                    "vat": Object {
+                    "vat": {
                       "type": "string",
                     },
                   },
-                  "required": Array [
+                  "required": [
                     "startDate",
                     "endDate",
                     "total",
                   ],
                   "type": "object",
                 },
-                "rates": Object {
+                "rates": {
                   "additionalProperties": false,
-                  "properties": Object {
-                    "expPeriod": Object {
+                  "properties": {
+                    "expPeriod": {
                       "type": "string",
                     },
-                    "export": Object {
+                    "export": {
                       "type": "string",
                     },
-                    "exportOld": Object {
+                    "exportOld": {
                       "type": "string",
                     },
-                    "from": Object {
+                    "from": {
                       "type": "string",
                     },
-                    "genPeriod": Object {
+                    "genPeriod": {
                       "type": "string",
                     },
-                    "generation": Object {
+                    "generation": {
                       "type": "string",
                     },
-                    "generationOld": Object {
+                    "generationOld": {
                       "type": "string",
                     },
                   },
                   "type": "object",
                 },
-                "reads": Object {
+                "reads": {
                   "additionalProperties": false,
-                  "properties": Object {
-                    "exportClosing": Object {
+                  "properties": {
+                    "exportClosing": {
                       "additionalProperties": false,
-                      "properties": Object {
-                        "date": Object {
+                      "properties": {
+                        "date": {
                           "type": "string",
                         },
-                        "value": Object {
+                        "value": {
                           "type": "string",
                         },
                       },
                       "type": "object",
                     },
-                    "exportOpening": Object {
+                    "exportOpening": {
                       "additionalProperties": false,
-                      "properties": Object {
-                        "date": Object {
+                      "properties": {
+                        "date": {
                           "type": "string",
                         },
-                        "value": Object {
+                        "value": {
                           "type": "string",
                         },
                       },
                       "type": "object",
                     },
-                    "generationClosing": Object {
+                    "generationClosing": {
                       "additionalProperties": false,
-                      "properties": Object {
-                        "date": Object {
+                      "properties": {
+                        "date": {
                           "type": "string",
                         },
-                        "value": Object {
+                        "value": {
                           "type": "string",
                         },
                       },
                       "type": "object",
                     },
-                    "generationOpening": Object {
+                    "generationOpening": {
                       "additionalProperties": false,
-                      "properties": Object {
-                        "date": Object {
+                      "properties": {
+                        "date": {
                           "type": "string",
                         },
-                        "value": Object {
+                        "value": {
                           "type": "string",
                         },
                       },
                       "type": "object",
                     },
-                    "percentageSplit": Object {
+                    "percentageSplit": {
                       "type": "string",
                     },
                   },
                   "type": "object",
                 },
               },
-              "required": Array [
+              "required": [
                 "accountNumber",
                 "payment",
               ],
               "type": "object",
             },
           },
-          "required": Array [
+          "required": [
             "templateParams",
           ],
           "type": "object",
         },
         "type": "array",
       },
-      "type": Object {
-        "enum": Array [
+      "type": {
+        "enum": [
           "Statement",
         ],
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "type",
       "filename",
       "items",
     ],
     "type": "object",
   },
-  "#/components/schemas/Payment": Object {
+  "#/components/schemas/Payment": {
     "additionalProperties": false,
-    "properties": Object {
-      "accountId": Object {
+    "properties": {
+      "accountId": {
         "type": "number",
       },
-      "amount": Object {
+      "amount": {
         "type": "number",
       },
-      "comment": Object {
+      "comment": {
         "type": "string",
       },
-      "createdAt": Object {
+      "createdAt": {
         "format": "date-time",
         "type": "string",
       },
-      "deemedTotalOutput": Object {
+      "deemedTotalOutput": {
         "type": "number",
       },
-      "expTariffCode": Object {
+      "expTariffCode": {
         "type": "string",
       },
-      "exportMeterEndReadDate": Object {
+      "exportMeterEndReadDate": {
         "format": "date-time",
         "type": "string",
       },
-      "exportMeterEndReadId": Object {
+      "exportMeterEndReadId": {
         "type": "number",
       },
-      "exportMeterEndReadValue": Object {
+      "exportMeterEndReadValue": {
         "type": "number",
       },
-      "exportMeterId": Object {
+      "exportMeterId": {
         "type": "number",
       },
-      "exportMeterStartReadDate": Object {
+      "exportMeterStartReadDate": {
         "format": "date-time",
         "type": "string",
       },
-      "exportMeterStartReadId": Object {
+      "exportMeterStartReadId": {
         "type": "number",
       },
-      "exportMeterStartReadValue": Object {
+      "exportMeterStartReadValue": {
         "type": "number",
       },
-      "exportTotalOutput": Object {
+      "exportTotalOutput": {
         "type": "number",
       },
-      "fitReference": Object {
+      "fitReference": {
         "type": "string",
       },
-      "genMeterEndReadDate": Object {
+      "genMeterEndReadDate": {
         "format": "date-time",
         "type": "string",
       },
-      "genMeterEndReadId": Object {
+      "genMeterEndReadId": {
         "type": "number",
       },
-      "genMeterEndReadValue": Object {
+      "genMeterEndReadValue": {
         "type": "number",
       },
-      "genMeterId": Object {
+      "genMeterId": {
         "type": "number",
       },
-      "genMeterStartReadDate": Object {
+      "genMeterStartReadDate": {
         "format": "date-time",
         "type": "string",
       },
-      "genMeterStartReadId": Object {
+      "genMeterStartReadId": {
         "type": "number",
       },
-      "genMeterStartReadValue": Object {
+      "genMeterStartReadValue": {
         "type": "number",
       },
-      "genMeterTotalOutput": Object {
+      "genMeterTotalOutput": {
         "type": "number",
       },
-      "genTariffCode": Object {
+      "genTariffCode": {
         "type": "string",
       },
-      "id": Object {
+      "id": {
         "type": "number",
       },
-      "isCompany": Object {
+      "isCompany": {
         "type": "boolean",
       },
-      "levelisationReference": Object {
+      "levelisationReference": {
         "type": "string",
       },
-      "periods": Object {
+      "periods": {
         "$ref": "#/components/schemas/PaymentPeriods",
       },
-      "sentAt": Object {
+      "sentAt": {
         "format": "date-time",
         "type": "string",
       },
-      "type": Object {
+      "type": {
         "$ref": "#/components/schemas/PaymentType",
       },
     },
-    "required": Array [
+    "required": [
       "id",
       "accountId",
       "amount",
@@ -1785,22 +1785,22 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/PaymentPeriods": Object {
-    "properties": Object {
-      "deemed": Object {
-        "items": Object {
+  "#/components/schemas/PaymentPeriods": {
+    "properties": {
+      "deemed": {
+        "items": {
           "$ref": "#/components/schemas/Period",
         },
         "type": "array",
       },
-      "export": Object {
-        "items": Object {
+      "export": {
+        "items": {
           "$ref": "#/components/schemas/Period",
         },
         "type": "array",
       },
-      "generation": Object {
-        "items": Object {
+      "generation": {
+        "items": {
           "$ref": "#/components/schemas/Period",
         },
         "type": "array",
@@ -1808,35 +1808,35 @@ Object {
     },
     "type": "object",
   },
-  "#/components/schemas/PaymentType": Object {
-    "enum": Array [
+  "#/components/schemas/PaymentType": {
+    "enum": [
       "Levelisation",
     ],
     "type": "string",
   },
-  "#/components/schemas/Period": Object {
+  "#/components/schemas/Period": {
     "additionalProperties": false,
-    "properties": Object {
-      "amount": Object {
+    "properties": {
+      "amount": {
         "type": "string",
       },
-      "end": Object {
+      "end": {
         "$ref": "#/components/schemas/SimpleMeterRead",
       },
-      "energy": Object {
+      "energy": {
         "type": "number",
       },
-      "percentageSplit": Object {
+      "percentageSplit": {
         "type": "number",
       },
-      "rate": Object {
+      "rate": {
         "type": "number",
       },
-      "start": Object {
+      "start": {
         "$ref": "#/components/schemas/SimpleMeterRead",
       },
     },
-    "required": Array [
+    "required": [
       "start",
       "end",
       "rate",
@@ -1844,28 +1844,28 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/PeriodWithCalculatedAmount": Object {
-    "properties": Object {
-      "amount": Object {
+  "#/components/schemas/PeriodWithCalculatedAmount": {
+    "properties": {
+      "amount": {
         "type": "string",
       },
-      "end": Object {
+      "end": {
         "$ref": "#/components/schemas/LevelisationMeterRead",
       },
-      "energy": Object {
+      "energy": {
         "type": "number",
       },
-      "percentageSplit": Object {
+      "percentageSplit": {
         "type": "number",
       },
-      "rate": Object {
+      "rate": {
         "$ref": "#/components/schemas/LevelisationRate",
       },
-      "start": Object {
+      "start": {
         "$ref": "#/components/schemas/LevelisationMeterRead",
       },
     },
-    "requiered": Array [
+    "requiered": [
       "start",
       "end",
       "rate",
@@ -1874,8 +1874,8 @@ Object {
       "amount",
     ],
   },
-  "#/components/schemas/PropertyType": Object {
-    "enum": Array [
+  "#/components/schemas/PropertyType": {
+    "enum": [
       "Other",
       "School/Education",
       "Not for profit",
@@ -1886,91 +1886,91 @@ Object {
     ],
     "type": "string",
   },
-  "#/components/schemas/SchemeType": Object {
-    "enum": Array [
+  "#/components/schemas/SchemeType": {
+    "enum": [
       "FIT",
       "SEG",
     ],
     "type": "string",
   },
-  "#/components/schemas/Session": Object {
-    "properties": Object {
-      "expiresAt": Object {
+  "#/components/schemas/Session": {
+    "properties": {
+      "expiresAt": {
         "format": "date-time",
         "type": "string",
       },
-      "jwt": Object {
+      "jwt": {
         "type": "string",
       },
-      "user": Object {
-        "properties": Object {
-          "avatar": Object {
+      "user": {
+        "properties": {
+          "avatar": {
             "type": "string",
           },
-          "email": Object {
+          "email": {
             "type": "string",
           },
-          "fullName": Object {
+          "fullName": {
             "type": "string",
           },
-          "scopes": Object {
-            "items": Object {
+          "scopes": {
+            "items": {
               "type": "string",
             },
           },
         },
-        "required": Array [
+        "required": [
           "email",
         ],
       },
     },
-    "required": Array [
+    "required": [
       "jwt",
       "user",
     ],
   },
-  "#/components/schemas/SimpleMeterRead": Object {
+  "#/components/schemas/SimpleMeterRead": {
     "additionalProperties": false,
-    "properties": Object {
-      "dateOn": Object {
+    "properties": {
+      "dateOn": {
         "format": "date-time",
         "type": "string",
       },
-      "value": Object {
+      "value": {
         "type": "number",
       },
     },
-    "required": Array [
+    "required": [
       "dateOn",
       "value",
     ],
     "type": "object",
   },
-  "#/components/schemas/TariffRate": Object {
+  "#/components/schemas/TariffRate": {
     "additionalProperties": false,
-    "properties": Object {
-      "endOn": Object {
+    "properties": {
+      "endOn": {
         "format": "date-time",
         "type": "string",
       },
-      "rate": Object {
+      "rate": {
         "type": "number",
       },
-      "startOn": Object {
+      "startOn": {
         "format": "date-time",
         "type": "string",
       },
-      "tariffCode": Object {
+      "tariffCode": {
         "type": "string",
       },
-      "tariffId": Object {
+      "tariffId": {
         "type": "number",
       },
-      "tariffType": Object {
+      "tariffType": {
         "$ref": "#/components/schemas/TariffType",
       },
     },
-    "required": Array [
+    "required": [
       "tariffId",
       "tariffCode",
       "tariffType",
@@ -1979,16 +1979,16 @@ Object {
     ],
     "type": "object",
   },
-  "#/components/schemas/TariffType": Object {
-    "enum": Array [
+  "#/components/schemas/TariffType": {
+    "enum": [
       "Export",
       "Generation",
       "SEG",
     ],
     "type": "string",
   },
-  "#/components/schemas/TechnologyType": Object {
-    "enum": Array [
+  "#/components/schemas/TechnologyType": {
+    "enum": [
       "CHP",
       "AD",
       "W",
@@ -1997,68 +1997,68 @@ Object {
     ],
     "type": "string",
   },
-  "components.yaml": Object {
-    "components": Object {
-      "parameters": Object {
-        "filter": Object {
-          "description": "React admin filter object. It should contain different filters, for example \\"q\\" is for a search.",
-          "example": "{ \\"q\\": \\"test\\" }",
+  "components.yaml": {
+    "components": {
+      "parameters": {
+        "filter": {
+          "description": "React admin filter object. It should contain different filters, for example "q" is for a search.",
+          "example": "{ "q": "test" }",
           "in": "query",
           "name": "filter",
-          "schema": Object {
-            "default": Object {},
+          "schema": {
+            "default": {},
             "type": "object",
           },
         },
-        "ids": Object {
+        "ids": {
           "description": "Retern individual records from the list, matching the specified ids",
           "in": "query",
           "name": "ids",
-          "schema": Object {
-            "items": Object {
+          "schema": {
+            "items": {
               "type": "integer",
             },
             "type": "array",
           },
         },
-        "pagination": Object {
+        "pagination": {
           "description": "React admin pagination object",
-          "examples": Object {
-            "customPerPage": Object {
+          "examples": {
+            "customPerPage": {
               "summary": "Page with custom page size",
-              "value": Object {
+              "value": {
                 "page": 1,
                 "perPage": 200,
               },
             },
-            "firstPage": Object {
+            "firstPage": {
               "summary": "First page",
-              "value": Object {
+              "value": {
                 "page": 1,
               },
             },
-            "secondPage": Object {
+            "secondPage": {
               "summary": "Second page",
-              "value": Object {
+              "value": {
                 "page": 2,
               },
             },
           },
           "in": "query",
           "name": "pagination",
-          "schema": Object {
+          "schema": {
             "additionalProperties": false,
-            "default": Object {
+            "default": {
               "page": 1,
               "perPage": 100,
             },
-            "properties": Object {
-              "page": Object {
+            "properties": {
+              "page": {
                 "default": 1,
                 "minimum": 1,
                 "type": "integer",
               },
-              "perPage": Object {
+              "perPage": {
                 "default": 100,
                 "maximum": 1000,
                 "minimum": 1,
@@ -2068,21 +2068,21 @@ Object {
             "type": "object",
           },
         },
-        "sort": Object {
+        "sort": {
           "description": "React admin sort object",
-          "example": "{ \\"field\\": \\"createdAt\\", \\"order\\": \\"ASC\\" }",
+          "example": "{ "field": "createdAt", "order": "ASC" }",
           "in": "query",
           "name": "sort",
-          "schema": Object {
+          "schema": {
             "additionalProperties": false,
-            "default": Object {},
-            "properties": Object {
-              "field": Object {
+            "default": {},
+            "properties": {
+              "field": {
                 "type": "string",
               },
-              "order": Object {
+              "order": {
                 "default": "ASC",
-                "enum": Array [
+                "enum": [
                   "ASC",
                   "DESC",
                 ],
@@ -2091,31 +2091,31 @@ Object {
             "type": "object",
           },
         },
-        "traceToken": Object {
+        "traceToken": {
           "description": "An optional trace token to be passed to the service and used for logging",
           "in": "header",
           "name": "X-Trace-Token",
-          "schema": Object {
+          "schema": {
             "format": "uuid",
             "type": "string",
           },
         },
       },
-      "responses": Object {
-        "ListOfIdsResonse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+      "responses": {
+        "ListOfIdsResonse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/ListOfIds",
               },
             },
           },
           "description": "List of Ids that were affected",
         },
-        "TextResponse": Object {
-          "content": Object {
-            "*/*": Object {
-              "schema": Object {
+        "TextResponse": {
+          "content": {
+            "*/*": {
+              "schema": {
                 "type": "string",
               },
             },
@@ -2123,152 +2123,152 @@ Object {
           "description": "Yaml File",
         },
       },
-      "schemas": Object {
-        "BulkDelete": Object {
-          "properties": Object {
-            "ids": Object {
+      "schemas": {
+        "BulkDelete": {
+          "properties": {
+            "ids": {
               "$ref": "#/components/schemas/ListOfIds",
             },
           },
-          "required": Array [
+          "required": [
             "ids",
           ],
         },
-        "BulkUpdate": Object {
-          "properties": Object {
-            "ids": Object {
+        "BulkUpdate": {
+          "properties": {
+            "ids": {
               "$ref": "#/components/schemas/ListOfIds",
             },
           },
-          "required": Array [
+          "required": [
             "ids",
           ],
         },
-        "List": Object {
-          "properties": Object {
-            "total": Object {
+        "List": {
+          "properties": {
+            "total": {
               "type": "integer",
             },
           },
-          "required": Array [
+          "required": [
             "total",
           ],
         },
-        "ListOfIds": Object {
-          "items": Object {
+        "ListOfIds": {
+          "items": {
             "type": "integer",
           },
           "type": "array",
         },
-        "ListOfStrings": Object {
-          "items": Object {
+        "ListOfStrings": {
+          "items": {
             "type": "string",
           },
           "type": "array",
         },
-        "Pennies": Object {
+        "Pennies": {
           "description": "Payment amount in pennies. (140 represnets £1.40)",
           "type": "number",
         },
       },
     },
   },
-  "components.yaml#/components/schemas/BulkDelete": Object {
-    "properties": Object {
-      "ids": Object {
+  "components.yaml#/components/schemas/BulkDelete": {
+    "properties": {
+      "ids": {
         "$ref": "#/components/schemas/ListOfIds",
       },
     },
-    "required": Array [
+    "required": [
       "ids",
     ],
   },
-  "components.yaml#/components/schemas/BulkUpdate": Object {
-    "properties": Object {
-      "ids": Object {
+  "components.yaml#/components/schemas/BulkUpdate": {
+    "properties": {
+      "ids": {
         "$ref": "#/components/schemas/ListOfIds",
       },
     },
-    "required": Array [
+    "required": [
       "ids",
     ],
   },
-  "components.yaml#/components/schemas/List": Object {
-    "properties": Object {
-      "total": Object {
+  "components.yaml#/components/schemas/List": {
+    "properties": {
+      "total": {
         "type": "integer",
       },
     },
-    "required": Array [
+    "required": [
       "total",
     ],
   },
-  "components.yaml#/components/schemas/Pennies": Object {
+  "components.yaml#/components/schemas/Pennies": {
     "description": "Payment amount in pennies. (140 represnets £1.40)",
     "type": "number",
   },
-  "schemes/components.yaml": Object {
-    "components": Object {
-      "parameters": Object {
-        "filter": Object {
-          "description": "React admin filter object. It should contain different filters, for example \\"q\\" is for a search.",
-          "example": "{ \\"q\\": \\"test\\" }",
+  "schemes/components.yaml": {
+    "components": {
+      "parameters": {
+        "filter": {
+          "description": "React admin filter object. It should contain different filters, for example "q" is for a search.",
+          "example": "{ "q": "test" }",
           "in": "query",
           "name": "filter",
-          "schema": Object {
-            "default": Object {},
+          "schema": {
+            "default": {},
             "type": "object",
           },
         },
-        "ids": Object {
+        "ids": {
           "description": "Retern individual records from the list, matching the specified ids",
           "in": "query",
           "name": "ids",
-          "schema": Object {
-            "items": Object {
+          "schema": {
+            "items": {
               "type": "integer",
             },
             "type": "array",
           },
         },
-        "pagination": Object {
+        "pagination": {
           "description": "React admin pagination object",
-          "examples": Object {
-            "customPerPage": Object {
+          "examples": {
+            "customPerPage": {
               "summary": "Page with custom page size",
-              "value": Object {
+              "value": {
                 "page": 1,
                 "perPage": 200,
               },
             },
-            "firstPage": Object {
+            "firstPage": {
               "summary": "First page",
-              "value": Object {
+              "value": {
                 "page": 1,
               },
             },
-            "secondPage": Object {
+            "secondPage": {
               "summary": "Second page",
-              "value": Object {
+              "value": {
                 "page": 2,
               },
             },
           },
           "in": "query",
           "name": "pagination",
-          "schema": Object {
+          "schema": {
             "additionalProperties": false,
-            "default": Object {
+            "default": {
               "page": 1,
               "perPage": 100,
             },
-            "properties": Object {
-              "page": Object {
+            "properties": {
+              "page": {
                 "default": 1,
                 "minimum": 1,
                 "type": "integer",
               },
-              "perPage": Object {
+              "perPage": {
                 "default": 100,
                 "maximum": 1000,
                 "minimum": 1,
@@ -2278,21 +2278,21 @@ Object {
             "type": "object",
           },
         },
-        "sort": Object {
+        "sort": {
           "description": "React admin sort object",
-          "example": "{ \\"field\\": \\"createdAt\\", \\"order\\": \\"ASC\\" }",
+          "example": "{ "field": "createdAt", "order": "ASC" }",
           "in": "query",
           "name": "sort",
-          "schema": Object {
+          "schema": {
             "additionalProperties": false,
-            "default": Object {},
-            "properties": Object {
-              "field": Object {
+            "default": {},
+            "properties": {
+              "field": {
                 "type": "string",
               },
-              "order": Object {
+              "order": {
                 "default": "ASC",
-                "enum": Array [
+                "enum": [
                   "ASC",
                   "DESC",
                 ],
@@ -2301,31 +2301,31 @@ Object {
             "type": "object",
           },
         },
-        "traceToken": Object {
+        "traceToken": {
           "description": "An optional trace token to be passed to the service and used for logging",
           "in": "header",
           "name": "X-Trace-Token",
-          "schema": Object {
+          "schema": {
             "format": "uuid",
             "type": "string",
           },
         },
       },
-      "responses": Object {
-        "ListOfIdsResonse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+      "responses": {
+        "ListOfIdsResonse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/ListOfIds",
               },
             },
           },
           "description": "List of Ids that were affected",
         },
-        "TextResponse": Object {
-          "content": Object {
-            "*/*": Object {
-              "schema": Object {
+        "TextResponse": {
+          "content": {
+            "*/*": {
+              "schema": {
                 "type": "string",
               },
             },
@@ -2333,115 +2333,115 @@ Object {
           "description": "Yaml File",
         },
       },
-      "schemas": Object {
-        "BulkDelete": Object {
-          "properties": Object {
-            "ids": Object {
+      "schemas": {
+        "BulkDelete": {
+          "properties": {
+            "ids": {
               "$ref": "#/components/schemas/ListOfIds",
             },
           },
-          "required": Array [
+          "required": [
             "ids",
           ],
         },
-        "BulkUpdate": Object {
-          "properties": Object {
-            "ids": Object {
+        "BulkUpdate": {
+          "properties": {
+            "ids": {
               "$ref": "#/components/schemas/ListOfIds",
             },
           },
-          "required": Array [
+          "required": [
             "ids",
           ],
         },
-        "List": Object {
-          "properties": Object {
-            "total": Object {
+        "List": {
+          "properties": {
+            "total": {
               "type": "integer",
             },
           },
-          "required": Array [
+          "required": [
             "total",
           ],
         },
-        "ListOfIds": Object {
-          "items": Object {
+        "ListOfIds": {
+          "items": {
             "type": "integer",
           },
           "type": "array",
         },
-        "ListOfStrings": Object {
-          "items": Object {
+        "ListOfStrings": {
+          "items": {
             "type": "string",
           },
           "type": "array",
         },
-        "Pennies": Object {
+        "Pennies": {
           "description": "Payment amount in pennies. (140 represnets £1.40)",
           "type": "number",
         },
       },
     },
   },
-  "schemes/components.yaml#/components/parameters/filter": Object {
-    "description": "React admin filter object. It should contain different filters, for example \\"q\\" is for a search.",
-    "example": "{ \\"q\\": \\"test\\" }",
+  "schemes/components.yaml#/components/parameters/filter": {
+    "description": "React admin filter object. It should contain different filters, for example "q" is for a search.",
+    "example": "{ "q": "test" }",
     "in": "query",
     "name": "filter",
-    "schema": Object {
-      "default": Object {},
+    "schema": {
+      "default": {},
       "type": "object",
     },
   },
-  "schemes/components.yaml#/components/parameters/ids": Object {
+  "schemes/components.yaml#/components/parameters/ids": {
     "description": "Retern individual records from the list, matching the specified ids",
     "in": "query",
     "name": "ids",
-    "schema": Object {
-      "items": Object {
+    "schema": {
+      "items": {
         "type": "integer",
       },
       "type": "array",
     },
   },
-  "schemes/components.yaml#/components/parameters/pagination": Object {
+  "schemes/components.yaml#/components/parameters/pagination": {
     "description": "React admin pagination object",
-    "examples": Object {
-      "customPerPage": Object {
+    "examples": {
+      "customPerPage": {
         "summary": "Page with custom page size",
-        "value": Object {
+        "value": {
           "page": 1,
           "perPage": 200,
         },
       },
-      "firstPage": Object {
+      "firstPage": {
         "summary": "First page",
-        "value": Object {
+        "value": {
           "page": 1,
         },
       },
-      "secondPage": Object {
+      "secondPage": {
         "summary": "Second page",
-        "value": Object {
+        "value": {
           "page": 2,
         },
       },
     },
     "in": "query",
     "name": "pagination",
-    "schema": Object {
+    "schema": {
       "additionalProperties": false,
-      "default": Object {
+      "default": {
         "page": 1,
         "perPage": 100,
       },
-      "properties": Object {
-        "page": Object {
+      "properties": {
+        "page": {
           "default": 1,
           "minimum": 1,
           "type": "integer",
         },
-        "perPage": Object {
+        "perPage": {
           "default": 100,
           "maximum": 1000,
           "minimum": 1,
@@ -2451,21 +2451,21 @@ Object {
       "type": "object",
     },
   },
-  "schemes/components.yaml#/components/parameters/sort": Object {
+  "schemes/components.yaml#/components/parameters/sort": {
     "description": "React admin sort object",
-    "example": "{ \\"field\\": \\"createdAt\\", \\"order\\": \\"ASC\\" }",
+    "example": "{ "field": "createdAt", "order": "ASC" }",
     "in": "query",
     "name": "sort",
-    "schema": Object {
+    "schema": {
       "additionalProperties": false,
-      "default": Object {},
-      "properties": Object {
-        "field": Object {
+      "default": {},
+      "properties": {
+        "field": {
           "type": "string",
         },
-        "order": Object {
+        "order": {
           "default": "ASC",
-          "enum": Array [
+          "enum": [
             "ASC",
             "DESC",
           ],
@@ -2474,69 +2474,69 @@ Object {
       "type": "object",
     },
   },
-  "schemes/components.yaml#/components/parameters/traceToken": Object {
+  "schemes/components.yaml#/components/parameters/traceToken": {
     "description": "An optional trace token to be passed to the service and used for logging",
     "in": "header",
     "name": "X-Trace-Token",
-    "schema": Object {
+    "schema": {
       "format": "uuid",
       "type": "string",
     },
   },
-  "schemes/components.yaml#/components/responses/ListOfIdsResonse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/components.yaml#/components/responses/ListOfIdsResonse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/ListOfIds",
         },
       },
     },
     "description": "List of Ids that were affected",
   },
-  "schemes/components.yaml#/components/responses/TextResponse": Object {
-    "content": Object {
-      "*/*": Object {
-        "schema": Object {
+  "schemes/components.yaml#/components/responses/TextResponse": {
+    "content": {
+      "*/*": {
+        "schema": {
           "type": "string",
         },
       },
     },
     "description": "Yaml File",
   },
-  "schemes/components.yaml#/components/schemas/List": Object {
-    "properties": Object {
-      "total": Object {
+  "schemes/components.yaml#/components/schemas/List": {
+    "properties": {
+      "total": {
         "type": "integer",
       },
     },
-    "required": Array [
+    "required": [
       "total",
     ],
   },
-  "schemes/components.yaml#/components/schemas/ListOfStrings": Object {
-    "items": Object {
+  "schemes/components.yaml#/components/schemas/ListOfStrings": {
+    "items": {
       "type": "string",
     },
     "type": "array",
   },
-  "schemes/levelisations.yaml": Object {
-    "components": Object {
-      "requestBodies": Object {
-        "AccountLevelisationBulkSaveRequest": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "allOf": Array [
-                  Object {
+  "schemes/levelisations.yaml": {
+    "components": {
+      "requestBodies": {
+        "AccountLevelisationBulkSaveRequest": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
                     "$ref": "components.yaml#/components/schemas/BulkUpdate",
                   },
-                  Object {
-                    "properties": Object {
-                      "data": Object {
+                  {
+                    "properties": {
+                      "data": {
                         "$ref": "#/components/schemas/BulkAccountLevelisationSave",
                       },
                     },
-                    "required": Array [
+                    "required": [
                       "data",
                     ],
                   },
@@ -2547,10 +2547,10 @@ Object {
           "description": "Update multiple Account levelisation entities",
           "required": true,
         },
-        "AccountLevelisationSaveRequest": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "AccountLevelisationSaveRequest": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/AccountLevelisationSave",
               },
             },
@@ -2558,10 +2558,10 @@ Object {
           "description": "Update an Account Levelisation entity",
           "required": true,
         },
-        "LevelisationCreateRequest": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "LevelisationCreateRequest": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/LevelisationCreate",
               },
             },
@@ -2569,10 +2569,10 @@ Object {
           "description": "Create a new Levelisation process",
           "required": true,
         },
-        "LevelisationSaveRequest": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "LevelisationSaveRequest": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/LevelisationSave",
               },
             },
@@ -2581,19 +2581,19 @@ Object {
           "required": true,
         },
       },
-      "responses": Object {
-        "AccountLevelisationListResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "allOf": Array [
-                  Object {
+      "responses": {
+        "AccountLevelisationListResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
                     "$ref": "components.yaml#/components/schemas/List",
                   },
-                  Object {
-                    "properties": Object {
-                      "data": Object {
-                        "items": Object {
+                  {
+                    "properties": {
+                      "data": {
+                        "items": {
                           "$ref": "#/components/schemas/AccountLevelisation",
                         },
                       },
@@ -2605,38 +2605,38 @@ Object {
           },
           "description": "List of Levelisations for specific accounts",
         },
-        "AccountLevelisationResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "AccountLevelisationResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/AccountLevelisation",
               },
             },
           },
           "description": "Levelisation calculations for a single account",
         },
-        "AccountLevelisationTariffResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "AccountLevelisationTariffResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/AccountLevelisation",
               },
             },
           },
           "description": "Levelisation calculations for a single account",
         },
-        "LevelisationListResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "allOf": Array [
-                  Object {
+        "LevelisationListResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
                     "$ref": "components.yaml#/components/schemas/List",
                   },
-                  Object {
-                    "properties": Object {
-                      "data": Object {
-                        "items": Object {
+                  {
+                    "properties": {
+                      "data": {
+                        "items": {
                           "$ref": "#/components/schemas/LevelisationList",
                         },
                       },
@@ -2648,10 +2648,10 @@ Object {
           },
           "description": "List of Levelisations",
         },
-        "LevelisationResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "LevelisationResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/Levelisation",
               },
             },
@@ -2659,21 +2659,21 @@ Object {
           "description": "Levelisation calculations for whole quarter",
         },
       },
-      "schemas": Object {
-        "AccountLevelisation": Object {
-          "allOf": Array [
-            Object {
+      "schemas": {
+        "AccountLevelisation": {
+          "allOf": [
+            {
               "$ref": "#/components/schemas/AccountLevelisationList",
             },
-            Object {
-              "properties": Object {
-                "exportPeriods": Object {
-                  "items": Object {
+            {
+              "properties": {
+                "exportPeriods": {
+                  "items": {
                     "$ref": "#/components/schemas/PeriodWithCalculatedAmount",
                   },
                 },
-                "generationPeriods": Object {
-                  "items": Object {
+                "generationPeriods": {
+                  "items": {
                     "$ref": "#/components/schemas/PeriodWithCalculatedAmount",
                   },
                 },
@@ -2681,83 +2681,83 @@ Object {
             },
           ],
         },
-        "AccountLevelisationList": Object {
-          "properties": Object {
-            "accountId": Object {
+        "AccountLevelisationList": {
+          "properties": {
+            "accountId": {
               "type": "number",
             },
-            "cfrFitId": Object {
+            "cfrFitId": {
               "type": "string",
             },
-            "exportEndReadOn": Object {
+            "exportEndReadOn": {
               "format": "date-time",
               "type": "string",
             },
-            "exportEndReadValue": Object {
+            "exportEndReadValue": {
               "type": "number",
             },
-            "exportEnergy": Object {
+            "exportEnergy": {
               "type": "number",
             },
-            "exportPayment": Object {
+            "exportPayment": {
               "$ref": "components.yaml#/components/schemas/Pennies",
             },
-            "exportPercentageSplit": Object {
+            "exportPercentageSplit": {
               "type": "number",
             },
-            "exportStartReadOn": Object {
+            "exportStartReadOn": {
               "format": "date-time",
               "type": "string",
             },
-            "exportStartReadValue": Object {
+            "exportStartReadValue": {
               "type": "number",
             },
-            "generationEndReadOn": Object {
+            "generationEndReadOn": {
               "format": "date-time",
               "type": "string",
             },
-            "generationEndReadValue": Object {
+            "generationEndReadValue": {
               "type": "number",
             },
-            "generationEnergy": Object {
+            "generationEnergy": {
               "type": "number",
             },
-            "generationPayment": Object {
+            "generationPayment": {
               "$ref": "components.yaml#/components/schemas/Pennies",
             },
-            "generationPercentageSplit": Object {
+            "generationPercentageSplit": {
               "type": "number",
             },
-            "generationStartReadOn": Object {
+            "generationStartReadOn": {
               "format": "date-time",
               "type": "string",
             },
-            "generationStartReadValue": Object {
+            "generationStartReadValue": {
               "type": "number",
             },
-            "id": Object {
+            "id": {
               "type": "number",
             },
-            "installationId": Object {
+            "installationId": {
               "type": "number",
             },
-            "isAccepted": Object {
+            "isAccepted": {
               "type": "boolean",
             },
-            "levelisationId": Object {
+            "levelisationId": {
               "type": "number",
             },
-            "state": Object {
+            "state": {
               "$ref": "#/components/schemas/AccountLevelisationState",
             },
-            "totalPayment": Object {
+            "totalPayment": {
               "$ref": "components.yaml#/components/schemas/Pennies",
             },
-            "vatPayment": Object {
+            "vatPayment": {
               "$ref": "components.yaml#/components/schemas/Pennies",
             },
           },
-          "required": Array [
+          "required": [
             "id",
             "levelisationId",
             "accountId",
@@ -2767,184 +2767,184 @@ Object {
             "isAccepted",
           ],
         },
-        "AccountLevelisationSave": Object {
-          "properties": Object {
-            "id": Object {
+        "AccountLevelisationSave": {
+          "properties": {
+            "id": {
               "type": "number",
             },
-            "isAccepted": Object {
+            "isAccepted": {
               "type": "boolean",
             },
           },
-          "required": Array [
+          "required": [
             "id",
             "isAccepted",
           ],
         },
-        "AccountLevelisationState": Object {
-          "enum": Array [
+        "AccountLevelisationState": {
+          "enum": [
             "Pending",
             "Done",
           ],
         },
-        "BulkAccountLevelisationSave": Object {
-          "properties": Object {
-            "isAccepted": Object {
+        "BulkAccountLevelisationSave": {
+          "properties": {
+            "isAccepted": {
               "type": "boolean",
             },
           },
-          "required": Array [
+          "required": [
             "isAccepted",
           ],
         },
-        "Levelisation": Object {
-          "allOf": Array [
-            Object {
+        "Levelisation": {
+          "allOf": [
+            {
               "$ref": "#/components/schemas/LevelisationList",
             },
-            Object {
-              "properties": Object {
-                "doneCount": Object {
+            {
+              "properties": {
+                "doneCount": {
                   "type": "number",
                 },
-                "pendingCount": Object {
+                "pendingCount": {
                   "type": "number",
                 },
-                "totalCount": Object {
+                "totalCount": {
                   "type": "number",
                 },
-                "totalDeemedExportEnergy": Object {
+                "totalDeemedExportEnergy": {
                   "type": "number",
                 },
-                "totalDeemedExportPayment": Object {
+                "totalDeemedExportPayment": {
                   "$ref": "components.yaml#/components/schemas/Pennies",
                 },
-                "totalExportPayment": Object {
+                "totalExportPayment": {
                   "$ref": "components.yaml#/components/schemas/Pennies",
                 },
-                "totalGenerationPayment": Object {
+                "totalGenerationPayment": {
                   "$ref": "components.yaml#/components/schemas/Pennies",
                 },
-                "totalMeteredExportEnergy": Object {
+                "totalMeteredExportEnergy": {
                   "type": "number",
                 },
-                "totalMeteredExportPayment": Object {
+                "totalMeteredExportPayment": {
                   "$ref": "components.yaml#/components/schemas/Pennies",
                 },
               },
             },
           ],
         },
-        "LevelisationCreate": Object {
-          "properties": Object {
-            "quarter": Object {
+        "LevelisationCreate": {
+          "properties": {
+            "quarter": {
               "$ref": "#/components/schemas/LevelisationQuarter",
             },
           },
-          "required": Array [
+          "required": [
             "quarter",
           ],
         },
-        "LevelisationList": Object {
-          "properties": Object {
-            "endOn": Object {
+        "LevelisationList": {
+          "properties": {
+            "endOn": {
               "format": "date-time",
               "type": "string",
             },
-            "id": Object {
+            "id": {
               "type": "number",
             },
-            "isAccepted": Object {
+            "isAccepted": {
               "type": "boolean",
             },
-            "quarter": Object {
+            "quarter": {
               "$ref": "#/components/schemas/LevelisationQuarter",
             },
-            "startOn": Object {
+            "startOn": {
               "format": "date-time",
               "type": "string",
             },
           },
-          "required": Array [
+          "required": [
             "id",
             "quarter",
             "isAccepted",
           ],
         },
-        "LevelisationMeterRead": Object {
-          "properties": Object {
-            "dateOn": Object {
+        "LevelisationMeterRead": {
+          "properties": {
+            "dateOn": {
               "format": "date-time",
               "type": "string",
             },
-            "value": Object {
+            "value": {
               "type": "number",
             },
           },
-          "required": Array [
+          "required": [
             "dateOn",
             "value",
           ],
         },
-        "LevelisationQuarter": Object {
-          "pattern": "^F\\\\d+Q[1234]$",
+        "LevelisationQuarter": {
+          "pattern": "^F\\d+Q[1234]$",
           "type": "string",
         },
-        "LevelisationRate": Object {
-          "properties": Object {
-            "endOn": Object {
+        "LevelisationRate": {
+          "properties": {
+            "endOn": {
               "format": "date-time",
               "type": "string",
             },
-            "rate": Object {
+            "rate": {
               "type": "number",
             },
-            "startOn": Object {
+            "startOn": {
               "format": "date-time",
               "type": "string",
             },
           },
-          "required": Array [
+          "required": [
             "startOn",
             "endOn",
             "rate",
           ],
         },
-        "LevelisationSave": Object {
-          "properties": Object {
-            "isAccepted": Object {
+        "LevelisationSave": {
+          "properties": {
+            "isAccepted": {
               "type": "boolean",
             },
-            "isRestarted": Object {
+            "isRestarted": {
               "type": "boolean",
             },
           },
-          "required": Array [
+          "required": [
             "isAccepted",
           ],
         },
-        "PeriodWithCalculatedAmount": Object {
-          "properties": Object {
-            "amount": Object {
+        "PeriodWithCalculatedAmount": {
+          "properties": {
+            "amount": {
               "type": "string",
             },
-            "end": Object {
+            "end": {
               "$ref": "#/components/schemas/LevelisationMeterRead",
             },
-            "energy": Object {
+            "energy": {
               "type": "number",
             },
-            "percentageSplit": Object {
+            "percentageSplit": {
               "type": "number",
             },
-            "rate": Object {
+            "rate": {
               "$ref": "#/components/schemas/LevelisationRate",
             },
-            "start": Object {
+            "start": {
               "$ref": "#/components/schemas/LevelisationMeterRead",
             },
           },
-          "requiered": Array [
+          "requiered": [
             "start",
             "end",
             "rate",
@@ -2956,21 +2956,21 @@ Object {
       },
     },
   },
-  "schemes/levelisations.yaml#/components/requestBodies/AccountLevelisationBulkSaveRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "allOf": Array [
-            Object {
+  "schemes/levelisations.yaml#/components/requestBodies/AccountLevelisationBulkSaveRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "allOf": [
+            {
               "$ref": "components.yaml#/components/schemas/BulkUpdate",
             },
-            Object {
-              "properties": Object {
-                "data": Object {
+            {
+              "properties": {
+                "data": {
                   "$ref": "#/components/schemas/BulkAccountLevelisationSave",
                 },
               },
-              "required": Array [
+              "required": [
                 "data",
               ],
             },
@@ -2981,10 +2981,10 @@ Object {
     "description": "Update multiple Account levelisation entities",
     "required": true,
   },
-  "schemes/levelisations.yaml#/components/requestBodies/AccountLevelisationSaveRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/levelisations.yaml#/components/requestBodies/AccountLevelisationSaveRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/AccountLevelisationSave",
         },
       },
@@ -2992,10 +2992,10 @@ Object {
     "description": "Update an Account Levelisation entity",
     "required": true,
   },
-  "schemes/levelisations.yaml#/components/requestBodies/LevelisationCreateRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/levelisations.yaml#/components/requestBodies/LevelisationCreateRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/LevelisationCreate",
         },
       },
@@ -3003,10 +3003,10 @@ Object {
     "description": "Create a new Levelisation process",
     "required": true,
   },
-  "schemes/levelisations.yaml#/components/requestBodies/LevelisationSaveRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/levelisations.yaml#/components/requestBodies/LevelisationSaveRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/LevelisationSave",
         },
       },
@@ -3014,18 +3014,18 @@ Object {
     "description": "Update a Levelisation entity",
     "required": true,
   },
-  "schemes/levelisations.yaml#/components/responses/AccountLevelisationListResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "allOf": Array [
-            Object {
+  "schemes/levelisations.yaml#/components/responses/AccountLevelisationListResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "allOf": [
+            {
               "$ref": "components.yaml#/components/schemas/List",
             },
-            Object {
-              "properties": Object {
-                "data": Object {
-                  "items": Object {
+            {
+              "properties": {
+                "data": {
+                  "items": {
                     "$ref": "#/components/schemas/AccountLevelisation",
                   },
                 },
@@ -3037,28 +3037,28 @@ Object {
     },
     "description": "List of Levelisations for specific accounts",
   },
-  "schemes/levelisations.yaml#/components/responses/AccountLevelisationResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/levelisations.yaml#/components/responses/AccountLevelisationResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/AccountLevelisation",
         },
       },
     },
     "description": "Levelisation calculations for a single account",
   },
-  "schemes/levelisations.yaml#/components/responses/LevelisationListResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "allOf": Array [
-            Object {
+  "schemes/levelisations.yaml#/components/responses/LevelisationListResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "allOf": [
+            {
               "$ref": "components.yaml#/components/schemas/List",
             },
-            Object {
-              "properties": Object {
-                "data": Object {
-                  "items": Object {
+            {
+              "properties": {
+                "data": {
+                  "items": {
                     "$ref": "#/components/schemas/LevelisationList",
                   },
                 },
@@ -3070,23 +3070,23 @@ Object {
     },
     "description": "List of Levelisations",
   },
-  "schemes/levelisations.yaml#/components/responses/LevelisationResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/levelisations.yaml#/components/responses/LevelisationResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/Levelisation",
         },
       },
     },
     "description": "Levelisation calculations for whole quarter",
   },
-  "schemes/read-checks.yaml": Object {
-    "components": Object {
-      "requestBodies": Object {
-        "MeterReadBulkCheckDeleteRequest": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+  "schemes/read-checks.yaml": {
+    "components": {
+      "requestBodies": {
+        "MeterReadBulkCheckDeleteRequest": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "components.yaml#/components/schemas/BulkDelete",
               },
             },
@@ -3094,21 +3094,21 @@ Object {
           "description": "Delete multiple MeterReadCheck entities",
           "required": true,
         },
-        "MeterReadBulkCheckSaveRequest": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "allOf": Array [
-                  Object {
+        "MeterReadBulkCheckSaveRequest": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
                     "$ref": "components.yaml#/components/schemas/BulkUpdate",
                   },
-                  Object {
-                    "properties": Object {
-                      "data": Object {
+                  {
+                    "properties": {
+                      "data": {
                         "$ref": "#/components/schemas/MeterReadCheckSave",
                       },
                     },
-                    "required": Array [
+                    "required": [
                       "data",
                     ],
                   },
@@ -3119,10 +3119,10 @@ Object {
           "description": "Update multiple MeterReadCheck entities",
           "required": true,
         },
-        "MeterReadCheckSaveRequest": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "MeterReadCheckSaveRequest": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/MeterReadCheckSave",
               },
             },
@@ -3131,19 +3131,19 @@ Object {
           "required": true,
         },
       },
-      "responses": Object {
-        "MeterReadCheckListResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
-                "allOf": Array [
-                  Object {
+      "responses": {
+        "MeterReadCheckListResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
                     "$ref": "components.yaml#/components/schemas/List",
                   },
-                  Object {
-                    "properties": Object {
-                      "data": Object {
-                        "items": Object {
+                  {
+                    "properties": {
+                      "data": {
+                        "items": {
                           "$ref": "#/components/schemas/MeterReadCheck",
                         },
                       },
@@ -3155,10 +3155,10 @@ Object {
           },
           "description": "List of Meter Reads with tolernace failures",
         },
-        "MeterReadCheckResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+        "MeterReadCheckResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/MeterReadCheck",
               },
             },
@@ -3166,48 +3166,48 @@ Object {
           "description": "Meter Read tolerance check",
         },
       },
-      "schemas": Object {
-        "MeterReadCheck": Object {
-          "properties": Object {
-            "accountId": Object {
+      "schemas": {
+        "MeterReadCheck": {
+          "properties": {
+            "accountId": {
               "type": "number",
             },
-            "cfrFitId": Object {
+            "cfrFitId": {
               "type": "string",
             },
-            "createdAt": Object {
+            "createdAt": {
               "format": "date-time",
               "type": "string",
             },
-            "dateOn": Object {
+            "dateOn": {
               "format": "date-time",
               "type": "string",
             },
-            "id": Object {
+            "id": {
               "type": "number",
             },
-            "isAccepted": Object {
+            "isAccepted": {
               "type": "boolean",
             },
-            "reason": Object {
+            "reason": {
               "type": "string",
             },
-            "tolerance": Object {
+            "tolerance": {
               "$ref": "#/components/schemas/MeterReadTolerance",
             },
-            "type": Object {
-              "enum": Array [
+            "type": {
+              "enum": [
                 "Closing",
                 "Meter Verification",
                 "Opening",
                 "Quarterly",
               ],
             },
-            "value": Object {
+            "value": {
               "type": "number",
             },
           },
-          "required": Array [
+          "required": [
             "id",
             "accountId",
             "cfrFitId",
@@ -3218,40 +3218,40 @@ Object {
             "isAccepted",
           ],
         },
-        "MeterReadCheckSave": Object {
-          "properties": Object {
-            "isAccepted": Object {
+        "MeterReadCheckSave": {
+          "properties": {
+            "isAccepted": {
               "type": "boolean",
             },
           },
-          "required": Array [
+          "required": [
             "isAccepted",
           ],
         },
-        "MeterReadTolerance": Object {
-          "properties": Object {
-            "error": Object {
+        "MeterReadTolerance": {
+          "properties": {
+            "error": {
               "type": "string",
             },
-            "expected": Object {
+            "expected": {
               "$ref": "#/components/schemas/MeterReadToleranceRead",
             },
-            "previousRead": Object {
+            "previousRead": {
               "$ref": "#/components/schemas/MeterReadToleranceRead",
             },
           },
         },
-        "MeterReadToleranceRead": Object {
-          "properties": Object {
-            "dateOn": Object {
+        "MeterReadToleranceRead": {
+          "properties": {
+            "dateOn": {
               "format": "date-time",
               "type": "string",
             },
-            "value": Object {
+            "value": {
               "type": "number",
             },
           },
-          "required": Array [
+          "required": [
             "dateOn",
             "value",
           ],
@@ -3259,10 +3259,10 @@ Object {
       },
     },
   },
-  "schemes/read-checks.yaml#/components/requestBodies/MeterReadBulkCheckDeleteRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/read-checks.yaml#/components/requestBodies/MeterReadBulkCheckDeleteRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "components.yaml#/components/schemas/BulkDelete",
         },
       },
@@ -3270,21 +3270,21 @@ Object {
     "description": "Delete multiple MeterReadCheck entities",
     "required": true,
   },
-  "schemes/read-checks.yaml#/components/requestBodies/MeterReadBulkCheckSaveRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "allOf": Array [
-            Object {
+  "schemes/read-checks.yaml#/components/requestBodies/MeterReadBulkCheckSaveRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "allOf": [
+            {
               "$ref": "components.yaml#/components/schemas/BulkUpdate",
             },
-            Object {
-              "properties": Object {
-                "data": Object {
+            {
+              "properties": {
+                "data": {
                   "$ref": "#/components/schemas/MeterReadCheckSave",
                 },
               },
-              "required": Array [
+              "required": [
                 "data",
               ],
             },
@@ -3295,10 +3295,10 @@ Object {
     "description": "Update multiple MeterReadCheck entities",
     "required": true,
   },
-  "schemes/read-checks.yaml#/components/requestBodies/MeterReadCheckSaveRequest": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/read-checks.yaml#/components/requestBodies/MeterReadCheckSaveRequest": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/MeterReadCheckSave",
         },
       },
@@ -3306,18 +3306,18 @@ Object {
     "description": "Update a MeterReadCheck entity",
     "required": true,
   },
-  "schemes/read-checks.yaml#/components/responses/MeterReadCheckListResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
-          "allOf": Array [
-            Object {
+  "schemes/read-checks.yaml#/components/responses/MeterReadCheckListResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "allOf": [
+            {
               "$ref": "components.yaml#/components/schemas/List",
             },
-            Object {
-              "properties": Object {
-                "data": Object {
-                  "items": Object {
+            {
+              "properties": {
+                "data": {
+                  "items": {
                     "$ref": "#/components/schemas/MeterReadCheck",
                   },
                 },
@@ -3329,10 +3329,10 @@ Object {
     },
     "description": "List of Meter Reads with tolernace failures",
   },
-  "schemes/read-checks.yaml#/components/responses/MeterReadCheckResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "schemes/read-checks.yaml#/components/responses/MeterReadCheckResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/MeterReadCheck",
         },
       },
@@ -3343,101 +3343,101 @@ Object {
 `;
 
 exports[`json-refs Should resolve complex refs 1`] = `
-Object {
-  "refs": Object {
-    "#/$defs/address": Object {
-      "properties": Object {
-        "id": Object {
+{
+  "refs": {
+    "#/$defs/address": {
+      "properties": {
+        "id": {
           "$ref": "#/$defs/id",
         },
-        "num": Object {
+        "num": {
           "$ref": "#/$defs/test%25percent",
         },
-        "price": Object {
+        "price": {
           "$ref": "#/$defs/test~1slash",
         },
-        "street": Object {
+        "street": {
           "$ref": "#/$defs/title",
         },
-        "town": Object {
+        "town": {
           "$ref": "#/$defs/test~0tilde",
         },
       },
       "type": "object",
     },
-    "#/$defs/id": Object {
+    "#/$defs/id": {
       "maxLength": 4,
       "minLength": 3,
       "type": "string",
     },
-    "#/$defs/test%25percent": Object {
+    "#/$defs/test%25percent": {
       "type": "integer",
     },
-    "#/$defs/test~0tilde": Object {
+    "#/$defs/test~0tilde": {
       "type": "string",
     },
-    "#/$defs/test~1slash": Object {
+    "#/$defs/test~1slash": {
       "type": "number",
     },
-    "#/$defs/title": Object {
+    "#/$defs/title": {
       "pattern": "^[A-Z]",
       "type": "string",
     },
   },
-  "schema": Object {
-    "$defs": Object {
-      "address": Object {
-        "properties": Object {
-          "id": Object {
+  "schema": {
+    "$defs": {
+      "address": {
+        "properties": {
+          "id": {
             "$ref": "#/$defs/id",
           },
-          "num": Object {
+          "num": {
             "$ref": "#/$defs/test%25percent",
           },
-          "price": Object {
+          "price": {
             "$ref": "#/$defs/test~1slash",
           },
-          "street": Object {
+          "street": {
             "$ref": "#/$defs/title",
           },
-          "town": Object {
+          "town": {
             "$ref": "#/$defs/test~0tilde",
           },
         },
         "type": "object",
       },
-      "id": Object {
+      "id": {
         "maxLength": 4,
         "minLength": 3,
         "type": "string",
       },
-      "test%percent": Object {
+      "test%percent": {
         "type": "integer",
       },
-      "test/slash": Object {
+      "test/slash": {
         "type": "number",
       },
-      "test~tilde": Object {
+      "test~tilde": {
         "type": "string",
       },
-      "title": Object {
+      "title": {
         "pattern": "^[A-Z]",
         "type": "string",
       },
     },
-    "properties": Object {
-      "mangled": Object {
+    "properties": {
+      "mangled": {
         "$ref": "#/$defs/unknown/more-unknown",
       },
-      "user": Object {
-        "properties": Object {
-          "address": Object {
+      "user": {
+        "properties": {
+          "address": {
             "$ref": "#/$defs/address",
           },
-          "id": Object {
+          "id": {
             "$ref": "#/$defs/id",
           },
-          "name": Object {
+          "name": {
             "$ref": "#/$defs/title",
           },
         },
@@ -3446,43 +3446,43 @@ Object {
     },
     "type": "object",
   },
-  "uris": Array [],
+  "uris": [],
 }
 `;
 
 exports[`json-refs Should resolve nested recursive 1`] = `
-Object {
-  "#/components/responses/SessionResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+{
+  "#/components/responses/SessionResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "#/components/schemas/Session",
         },
       },
     },
     "description": "JWT Session",
   },
-  "#/components/schemas/Session": Object {
-    "properties": Object {
-      "expiresAt": Object {
+  "#/components/schemas/Session": {
+    "properties": {
+      "expiresAt": {
         "format": "date-time",
         "type": "string",
       },
-      "jwt": Object {
+      "jwt": {
         "type": "string",
       },
     },
-    "required": Array [
+    "required": [
       "jwt",
     ],
   },
-  "./schema.yaml": Object {
-    "components": Object {
-      "responses": Object {
-        "SessionResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+  "./schema.yaml": {
+    "components": {
+      "responses": {
+        "SessionResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/Session",
               },
             },
@@ -3490,88 +3490,88 @@ Object {
           "description": "JWT Session",
         },
       },
-      "schemas": Object {
-        "Message": Object {
+      "schemas": {
+        "Message": {
           "type": "string",
         },
-        "Session": Object {
-          "properties": Object {
-            "expiresAt": Object {
+        "Session": {
+          "properties": {
+            "expiresAt": {
               "format": "date-time",
               "type": "string",
             },
-            "jwt": Object {
+            "jwt": {
               "type": "string",
             },
           },
-          "required": Array [
+          "required": [
             "jwt",
           ],
         },
       },
     },
     "openapi": "3.0.0",
-    "paths": Object {
-      "/v1/session": Object {
-        "post": Object {
+    "paths": {
+      "/v1/session": {
+        "post": {
           "description": "Create a session for the current user. It requires google's oauth identity token, as it uses it for authentication.",
-          "requestBody": Object {
+          "requestBody": {
             "$ref": "#/components/requestBodies/SessionRequest",
           },
-          "responses": Object {
-            "200": Object {
+          "responses": {
+            "200": {
               "$ref": "#/components/responses/SessionResponse",
             },
-            "500": Object {
+            "500": {
               "$ref": "shared-responses.yaml#/components/responses/HttpErrorResponse",
             },
           },
           "summary": "Create Session",
-          "tags": Array [
+          "tags": [
             "auth",
           ],
         },
       },
     },
   },
-  "./schema.yaml#/components/schemas/Message": Object {
+  "./schema.yaml#/components/schemas/Message": {
     "type": "string",
   },
-  "./shared-schemas.yaml": Object {
-    "components": Object {
-      "schemas": Object {
-        "HttpError": Object {
+  "./shared-schemas.yaml": {
+    "components": {
+      "schemas": {
+        "HttpError": {
           "additionalProperties": false,
-          "properties": Object {
-            "message": Object {
+          "properties": {
+            "message": {
               "$ref": "./schema.yaml#/components/schemas/Message",
             },
           },
-          "required": Array [
+          "required": [
             "message",
           ],
         },
       },
     },
   },
-  "./shared-schemas.yaml#/components/schemas/HttpError": Object {
+  "./shared-schemas.yaml#/components/schemas/HttpError": {
     "additionalProperties": false,
-    "properties": Object {
-      "message": Object {
+    "properties": {
+      "message": {
         "$ref": "./schema.yaml#/components/schemas/Message",
       },
     },
-    "required": Array [
+    "required": [
       "message",
     ],
   },
-  "shared-responses.yaml": Object {
-    "components": Object {
-      "responses": Object {
-        "HttpErrorResponse": Object {
-          "content": Object {
-            "application/json": Object {
-              "schema": Object {
+  "shared-responses.yaml": {
+    "components": {
+      "responses": {
+        "HttpErrorResponse": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "./shared-schemas.yaml#/components/schemas/HttpError",
               },
             },
@@ -3581,10 +3581,10 @@ Object {
       },
     },
   },
-  "shared-responses.yaml#/components/responses/HttpErrorResponse": Object {
-    "content": Object {
-      "application/json": Object {
-        "schema": Object {
+  "shared-responses.yaml#/components/responses/HttpErrorResponse": {
+    "content": {
+      "application/json": {
+        "schema": {
           "$ref": "./shared-schemas.yaml#/components/schemas/HttpError",
         },
       },
@@ -3595,54 +3595,54 @@ Object {
 `;
 
 exports[`json-refs Should resolve nested recursive with files 1`] = `
-Object {
-  "refs": Object {
-    "http://localhost:1234/node": Object {
+{
+  "refs": {
+    "http://localhost:1234/node": {
       "$id": "http://localhost:1234/node",
       "description": "node",
-      "properties": Object {
-        "subtree": Object {
+      "properties": {
+        "subtree": {
           "$ref": "http://localhost:1234/tree#",
         },
-        "value": Object {
+        "value": {
           "type": "number",
         },
       },
-      "required": Array [
+      "required": [
         "value",
       ],
       "type": "object",
     },
-    "http://localhost:1234/node#": Object {
+    "http://localhost:1234/node#": {
       "$id": "http://localhost:1234/node",
       "description": "node",
-      "properties": Object {
-        "subtree": Object {
+      "properties": {
+        "subtree": {
           "$ref": "http://localhost:1234/tree#",
         },
-        "value": Object {
+        "value": {
           "type": "number",
         },
       },
-      "required": Array [
+      "required": [
         "value",
       ],
       "type": "object",
     },
-    "http://localhost:1234/tree": Object {
-      "$defs": Object {
-        "node": Object {
+    "http://localhost:1234/tree": {
+      "$defs": {
+        "node": {
           "$id": "http://localhost:1234/node",
           "description": "node",
-          "properties": Object {
-            "subtree": Object {
+          "properties": {
+            "subtree": {
               "$ref": "http://localhost:1234/tree#",
             },
-            "value": Object {
+            "value": {
               "type": "number",
             },
           },
-          "required": Array [
+          "required": [
             "value",
           ],
           "type": "object",
@@ -3650,37 +3650,37 @@ Object {
       },
       "$id": "http://localhost:1234/tree",
       "description": "tree of nodes",
-      "properties": Object {
-        "meta": Object {
+      "properties": {
+        "meta": {
           "type": "string",
         },
-        "nodes": Object {
-          "items": Object {
+        "nodes": {
+          "items": {
             "$ref": "http://localhost:1234/node#",
           },
           "type": "array",
         },
       },
-      "required": Array [
+      "required": [
         "meta",
         "nodes",
       ],
       "type": "object",
     },
-    "http://localhost:1234/tree#": Object {
-      "$defs": Object {
-        "node": Object {
+    "http://localhost:1234/tree#": {
+      "$defs": {
+        "node": {
           "$id": "http://localhost:1234/node",
           "description": "node",
-          "properties": Object {
-            "subtree": Object {
+          "properties": {
+            "subtree": {
               "$ref": "http://localhost:1234/tree#",
             },
-            "value": Object {
+            "value": {
               "type": "number",
             },
           },
-          "required": Array [
+          "required": [
             "value",
           ],
           "type": "object",
@@ -3688,38 +3688,38 @@ Object {
       },
       "$id": "http://localhost:1234/tree",
       "description": "tree of nodes",
-      "properties": Object {
-        "meta": Object {
+      "properties": {
+        "meta": {
           "type": "string",
         },
-        "nodes": Object {
-          "items": Object {
+        "nodes": {
+          "items": {
             "$ref": "http://localhost:1234/node#",
           },
           "type": "array",
         },
       },
-      "required": Array [
+      "required": [
         "meta",
         "nodes",
       ],
       "type": "object",
     },
   },
-  "schema": Object {
-    "$defs": Object {
-      "node": Object {
+  "schema": {
+    "$defs": {
+      "node": {
         "$id": "http://localhost:1234/node",
         "description": "node",
-        "properties": Object {
-          "subtree": Object {
+        "properties": {
+          "subtree": {
             "$ref": "http://localhost:1234/tree#",
           },
-          "value": Object {
+          "value": {
             "type": "number",
           },
         },
-        "required": Array [
+        "required": [
           "value",
         ],
         "type": "object",
@@ -3727,23 +3727,23 @@ Object {
     },
     "$id": "http://localhost:1234/tree",
     "description": "tree of nodes",
-    "properties": Object {
-      "meta": Object {
+    "properties": {
+      "meta": {
         "type": "string",
       },
-      "nodes": Object {
-        "items": Object {
+      "nodes": {
+        "items": {
           "$ref": "http://localhost:1234/node#",
         },
         "type": "array",
       },
     },
-    "required": Array [
+    "required": [
       "meta",
       "nodes",
     ],
     "type": "object",
   },
-  "uris": Array [],
+  "uris": [],
 }
 `;

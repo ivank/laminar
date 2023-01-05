@@ -113,7 +113,7 @@ workflows:
       - test:
           matrix:
             parameters:
-              node-image: ['circleci/node:12', 'circleci/node:14']
+              node-image: ['circleci/node:14']
               subset: ['packages', 'examples']
           filters:
             branches:

@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Fixtures ts test Should convert fixtures successfully: Normal 1`] = `
-"import { Fixture } from \\"@ovotech/laminar-fixtures\\";
+"import { Fixture } from "@ovotech/laminar-fixtures";
 
 /**
  * Fixtures generated for postgres tables */
 
 /**
- * Fixture type for table \\"test\\" with column types loaded from the database
+ * Fixture type for table "test" with column types loaded from the database
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
@@ -25,7 +25,7 @@ exports[`Fixtures ts test Should convert fixtures successfully: Normal 1`] = `
 export type test = Fixture<{
     id: number;
     name?: string;
-    title: \\"mr\\" | \\"mrs\\";
+    title: "mr" | "mrs";
     created_at: Date;
     updated_at?: Date;
     end_on?: Date;
@@ -35,13 +35,13 @@ export type test = Fixture<{
 `;
 
 exports[`Fixtures ts test Should convert fixtures successfully: Suffix 1`] = `
-"import { Fixture } from \\"@ovotech/laminar-fixtures\\";
+"import { Fixture } from "@ovotech/laminar-fixtures";
 
 /**
  * Fixtures generated for postgres tables */
 
 /**
- * Fixture type for table \\"test\\" with column types loaded from the database
+ * Fixture type for table "test" with column types loaded from the database
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
@@ -59,7 +59,7 @@ exports[`Fixtures ts test Should convert fixtures successfully: Suffix 1`] = `
 export type testFixture = Fixture<{
     id: number;
     name?: string;
-    title: \\"mr\\" | \\"mrs\\";
+    title: "mr" | "mrs";
     created_at: Date;
     updated_at?: Date;
     end_on?: Date;
@@ -69,13 +69,13 @@ export type testFixture = Fixture<{
 `;
 
 exports[`Fixtures ts test Should convert fixtures successfully: TitleCase 1`] = `
-"import { Fixture } from \\"@ovotech/laminar-fixtures\\";
+"import { Fixture } from "@ovotech/laminar-fixtures";
 
 /**
  * Fixtures generated for postgres tables */
 
 /**
- * Fixture type for table \\"test\\" with column types loaded from the database
+ * Fixture type for table "test" with column types loaded from the database
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
@@ -93,7 +93,7 @@ exports[`Fixtures ts test Should convert fixtures successfully: TitleCase 1`] = 
 export type TestFixture = Fixture<{
     id: number;
     name?: string;
-    title: \\"mr\\" | \\"mrs\\";
+    title: "mr" | "mrs";
     created_at: Date;
     updated_at?: Date;
     end_on?: Date;

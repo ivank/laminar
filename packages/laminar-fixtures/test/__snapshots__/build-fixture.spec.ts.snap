@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Laminar fixtures Should build queries for uuid: Setup Queries 1`] = `
-Array [
-  Object {
-    "text": "INSERT INTO \\"transactions\\" (\\"id\\", \\"amount\\") VALUES ($1,$2)",
-    "values": Array [
+[
+  {
+    "text": "INSERT INTO "transactions" ("id", "amount") VALUES ($1,$2)",
+    "values": [
       "cc2e2b52-ecd3-454a-8143-e0476f2fe6f1",
       10,
     ],
@@ -13,9 +13,9 @@ Array [
 `;
 
 exports[`Laminar fixtures Should resolve circular refs 1`] = `
-Array [
-  Object {
-    "columns": Object {
+[
+  {
+    "columns": {
       "account_id": 1,
       "id": 1,
       "title": "contact 1",
@@ -25,8 +25,8 @@ Array [
     "table": "fit_contact",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "id": 1,
       "primary_contact_id": 1,
     },
@@ -35,8 +35,8 @@ Array [
     "table": "fit_account",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "account_id": 2,
       "id": 2,
       "title": "contact 2",
@@ -46,8 +46,8 @@ Array [
     "table": "fit_contact",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "id": 2,
       "primary_contact_id": 2,
     },
@@ -60,9 +60,9 @@ Array [
 `;
 
 exports[`Laminar fixtures Should start and stop services: Entites 1`] = `
-Array [
-  Object {
-    "columns": Object {
+[
+  {
+    "columns": {
       "address_line_1": "Address 1 1",
       "address_line_2": "Address 1 2",
       "city": "City 1",
@@ -77,8 +77,8 @@ Array [
     "table": "addresses",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_id": 1,
       "email": "email1@example.com",
       "first_name": "Test",
@@ -92,8 +92,8 @@ Array [
     "table": "contacts",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_line_1": "Address 2 1",
       "address_line_2": "Address 2 2",
       "city": "City 2",
@@ -108,8 +108,8 @@ Array [
     "table": "addresses",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_id": 2,
       "email": "email2@example.com",
       "first_name": "Name 2",
@@ -123,8 +123,8 @@ Array [
     "table": "contacts",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_line_1": "Address 3 1",
       "address_line_2": "Address 3 2",
       "city": "City 3",
@@ -139,8 +139,8 @@ Array [
     "table": "addresses",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "billing_address_id": 3,
       "customer_reference": "customer-1",
       "generator_id": "11111-1",
@@ -154,8 +154,8 @@ Array [
     "table": "customers",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "customer_id": 1,
       "end_on": undefined,
       "id": 1,
@@ -168,8 +168,8 @@ Array [
     "table": "accounts",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_line_1": "Address 4 1",
       "address_line_2": "Address 4 2",
       "city": "City 4",
@@ -184,8 +184,8 @@ Array [
     "table": "addresses",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_id": 4,
       "commissioned_on": 2020-01-01T00:00:00.000Z,
       "dnc_reference": 1000,
@@ -208,8 +208,8 @@ Array [
     "table": "installations",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "code": "Tariff 1",
       "id": 1,
       "source_system_id": 1,
@@ -220,8 +220,8 @@ Array [
     "table": "tariffs",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "code": "Tariff 2",
       "id": 2,
       "source_system_id": 2,
@@ -232,8 +232,8 @@ Array [
     "table": "tariffs",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_line_1": "Address 5 1",
       "address_line_2": "Address 5 2",
       "city": "City 5",
@@ -248,8 +248,8 @@ Array [
     "table": "addresses",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "address_id": 5,
       "email": "email3@example.com",
       "first_name": "Name 3",
@@ -263,8 +263,8 @@ Array [
     "table": "contacts",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "account_id": 1,
       "contact_id": 3,
       "export_tariff_id": 2,
@@ -281,8 +281,8 @@ Array [
     "table": "contracts",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "gsp": "_L",
       "hh_metered": true,
       "id": 1,
@@ -298,8 +298,8 @@ Array [
     "table": "meters",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "id": 1,
       "installation_id": 1,
       "meter_id": 1,
@@ -312,8 +312,8 @@ Array [
     "table": "installation_meters",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "gsp": "_L",
       "hh_metered": true,
       "id": 2,
@@ -329,8 +329,8 @@ Array [
     "table": "meters",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "id": 2,
       "installation_id": 1,
       "meter_id": 2,
@@ -343,8 +343,8 @@ Array [
     "table": "installation_meters",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "end_date_on": 3000-01-01T00:00:00.000Z,
       "id": 1,
       "rate": 5,
@@ -357,8 +357,8 @@ Array [
     "table": "tariff_rates",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "end_date_on": 3000-01-01T00:00:00.000Z,
       "id": 2,
       "rate": 5,
@@ -371,8 +371,8 @@ Array [
     "table": "tariff_rates",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "date_on": 2021-01-01T00:00:00.000Z,
       "deleted_at": undefined,
       "history": "[]",
@@ -391,8 +391,8 @@ Array [
     "table": "fixtures_meter_reads",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "date_on": 2021-03-01T00:00:00.000Z,
       "deleted_at": undefined,
       "history": "[]",
@@ -411,8 +411,8 @@ Array [
     "table": "fixtures_meter_reads",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "date_on": 2021-01-01T00:00:00.000Z,
       "deleted_at": undefined,
       "history": "[]",
@@ -431,8 +431,8 @@ Array [
     "table": "fixtures_meter_reads",
     "updateMaxSerial": true,
   },
-  Object {
-    "columns": Object {
+  {
+    "columns": {
       "date_on": 2021-03-01T00:00:00.000Z,
       "deleted_at": undefined,
       "history": "[]",
@@ -455,10 +455,10 @@ Array [
 `;
 
 exports[`Laminar fixtures Should start and stop services: Setup Queries 1`] = `
-Array [
-  Object {
-    "text": "INSERT INTO \\"addresses\\" (\\"id\\", \\"city\\", \\"county\\", \\"country\\", \\"postcode\\", \\"address_line_1\\", \\"address_line_2\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8),($9,$10,$11,$12,$13,$14,$15,$16),($17,$18,$19,$20,$21,$22,$23,$24),($25,$26,$27,$28,$29,$30,$31,$32),($33,$34,$35,$36,$37,$38,$39,$40)",
-    "values": Array [
+[
+  {
+    "text": "INSERT INTO "addresses" ("id", "city", "county", "country", "postcode", "address_line_1", "address_line_2", "source_system_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8),($9,$10,$11,$12,$13,$14,$15,$16),($17,$18,$19,$20,$21,$22,$23,$24),($25,$26,$27,$28,$29,$30,$31,$32),($33,$34,$35,$36,$37,$38,$39,$40)",
+    "values": [
       1,
       "City 1",
       "County 1",
@@ -501,13 +501,13 @@ Array [
       5,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('addresses', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"addresses\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('addresses', 'id'), coalesce(max("id"), 0)+1 , false) FROM "addresses";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"contacts\\" (\\"id\\", \\"address_id\\", \\"title\\", \\"first_name\\", \\"last_name\\", \\"email\\", \\"phone\\") VALUES ($1,$2,$3,$4,$5,$6,$7),($8,$9,$10,$11,$12,$13,$14),($15,$16,$17,$18,$19,$20,$21)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "contacts" ("id", "address_id", "title", "first_name", "last_name", "email", "phone") VALUES ($1,$2,$3,$4,$5,$6,$7),($8,$9,$10,$11,$12,$13,$14),($15,$16,$17,$18,$19,$20,$21)",
+    "values": [
       1,
       1,
       "Mr",
@@ -531,13 +531,13 @@ Array [
       "11111 %s",
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('contacts', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"contacts\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('contacts', 'id'), coalesce(max("id"), 0)+1 , false) FROM "contacts";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"customers\\" (\\"id\\", \\"customer_reference\\", \\"primary_contact_id\\", \\"secondary_contact_id\\", \\"billing_address_id\\", \\"source_system_id\\", \\"generator_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "customers" ("id", "customer_reference", "primary_contact_id", "secondary_contact_id", "billing_address_id", "source_system_id", "generator_id") VALUES ($1,$2,$3,$4,$5,$6,$7)",
+    "values": [
       1,
       "customer-1",
       1,
@@ -547,13 +547,13 @@ Array [
       "11111-1",
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('customers', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"customers\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('customers', 'id'), coalesce(max("id"), 0)+1 , false) FROM "customers";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"accounts\\" (\\"id\\", \\"customer_id\\", \\"state\\", \\"payment_plan\\", \\"start_on\\", \\"end_on\\") VALUES ($1,$2,$3,$4,$5,$6)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "accounts" ("id", "customer_id", "state", "payment_plan", "start_on", "end_on") VALUES ($1,$2,$3,$4,$5,$6)",
+    "values": [
       1,
       1,
       "Active",
@@ -562,13 +562,13 @@ Array [
       null,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('accounts', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"accounts\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('accounts', 'id'), coalesce(max("id"), 0)+1 , false) FROM "accounts";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"installations\\" (\\"id\\", \\"name\\", \\"type\\", \\"technology_type\\", \\"property_type\\", \\"export_type\\", \\"commissioned_on\\", \\"installed_on\\", \\"mcs_reference\\", \\"tic_reference\\", \\"dnc_reference\\", \\"export_mpan\\", \\"source_system_id\\", \\"legacy_fit_db_id\\", \\"supply_mpan\\", \\"address_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "installations" ("id", "name", "type", "technology_type", "property_type", "export_type", "commissioned_on", "installed_on", "mcs_reference", "tic_reference", "dnc_reference", "export_mpan", "source_system_id", "legacy_fit_db_id", "supply_mpan", "address_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)",
+    "values": [
       1,
       "Installation 1",
       "Retrofit",
@@ -587,13 +587,13 @@ Array [
       4,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('installations', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"installations\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('installations', 'id'), coalesce(max("id"), 0)+1 , false) FROM "installations";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"tariffs\\" (\\"id\\", \\"code\\", \\"type\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4),($5,$6,$7,$8)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "tariffs" ("id", "code", "type", "source_system_id") VALUES ($1,$2,$3,$4),($5,$6,$7,$8)",
+    "values": [
       1,
       "Tariff 1",
       "Generation",
@@ -604,13 +604,13 @@ Array [
       2,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('tariffs', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"tariffs\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('tariffs', 'id'), coalesce(max("id"), 0)+1 , false) FROM "tariffs";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"contracts\\" (\\"id\\", \\"scheme_type\\", \\"scheme_account_reference\\", \\"terms_and_conditions_agreed\\", \\"installation_id\\", \\"generation_tariff_id\\", \\"export_tariff_id\\", \\"source_system_id\\", \\"contact_id\\", \\"account_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "contracts" ("id", "scheme_type", "scheme_account_reference", "terms_and_conditions_agreed", "installation_id", "generation_tariff_id", "export_tariff_id", "source_system_id", "contact_id", "account_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+    "values": [
       1,
       "FIT",
       "FIT1",
@@ -623,13 +623,13 @@ Array [
       1,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('contracts', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"contracts\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('contracts', 'id'), coalesce(max("id"), 0)+1 , false) FROM "contracts";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"meters\\" (\\"id\\", \\"mpan\\", \\"shared\\", \\"serial_number\\", \\"make\\", \\"model\\", \\"hh_metered\\", \\"gsp\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9),($10,$11,$12,$13,$14,$15,$16,$17,$18)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "meters" ("id", "mpan", "shared", "serial_number", "make", "model", "hh_metered", "gsp", "source_system_id") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9),($10,$11,$12,$13,$14,$15,$16,$17,$18)",
+    "values": [
       1,
       "11111111",
       false,
@@ -650,13 +650,13 @@ Array [
       2,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('meters', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"meters\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('meters', 'id'), coalesce(max("id"), 0)+1 , false) FROM "meters";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"installation_meters\\" (\\"id\\", \\"meter_type\\", \\"meter_id\\", \\"installation_id\\", \\"start_on\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4,$5,$6),($7,$8,$9,$10,$11,$12)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "installation_meters" ("id", "meter_type", "meter_id", "installation_id", "start_on", "source_system_id") VALUES ($1,$2,$3,$4,$5,$6),($7,$8,$9,$10,$11,$12)",
+    "values": [
       1,
       "Generation",
       1,
@@ -671,13 +671,13 @@ Array [
       2,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('installation_meters', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"installation_meters\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('installation_meters', 'id'), coalesce(max("id"), 0)+1 , false) FROM "installation_meters";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"tariff_rates\\" (\\"id\\", \\"tariff_id\\", \\"rate\\", \\"start_date_on\\", \\"end_date_on\\", \\"source_system_id\\") VALUES ($1,$2,$3,$4,$5,$6),($7,$8,$9,$10,$11,$12)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "tariff_rates" ("id", "tariff_id", "rate", "start_date_on", "end_date_on", "source_system_id") VALUES ($1,$2,$3,$4,$5,$6),($7,$8,$9,$10,$11,$12)",
+    "values": [
       1,
       1,
       5,
@@ -692,13 +692,13 @@ Array [
       2,
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('tariff_rates', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"tariff_rates\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('tariff_rates', 'id'), coalesce(max("id"), 0)+1 , false) FROM "tariff_rates";",
+    "values": [],
   },
-  Object {
-    "text": "INSERT INTO \\"fixtures_meter_reads\\" (\\"id\\", \\"meter_id\\", \\"date_on\\", \\"value\\", \\"type\\", \\"reason\\", \\"source_system_id\\", \\"tolerance\\", \\"is_accepted\\", \\"deleted_at\\", \\"submitted_at\\", \\"history\\") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12),($13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24),($25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36),($37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48)",
-    "values": Array [
+  {
+    "text": "INSERT INTO "fixtures_meter_reads" ("id", "meter_id", "date_on", "value", "type", "reason", "source_system_id", "tolerance", "is_accepted", "deleted_at", "submitted_at", "history") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12),($13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24),($25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36),($37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48)",
+    "values": [
       1,
       1,
       2021-01-01T00:00:00.000Z,
@@ -749,87 +749,87 @@ Array [
       "[]",
     ],
   },
-  Object {
-    "text": "SELECT setval(pg_get_serial_sequence('fixtures_meter_reads', 'id'), coalesce(max(\\"id\\"), 0)+1 , false) FROM \\"fixtures_meter_reads\\";",
-    "values": Array [],
+  {
+    "text": "SELECT setval(pg_get_serial_sequence('fixtures_meter_reads', 'id'), coalesce(max("id"), 0)+1 , false) FROM "fixtures_meter_reads";",
+    "values": [],
   },
 ]
 `;
 
 exports[`Laminar fixtures Should start and stop services: Teardown Queries 1`] = `
-Array [
-  Object {
-    "text": "DELETE FROM \\"fixtures_meter_reads\\" WHERE id IN ($1, $2, $3, $4)",
-    "values": Array [
+[
+  {
+    "text": "DELETE FROM "fixtures_meter_reads" WHERE id IN ($1, $2, $3, $4)",
+    "values": [
       1,
       2,
       3,
       4,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"tariff_rates\\" WHERE id IN ($1, $2)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "tariff_rates" WHERE id IN ($1, $2)",
+    "values": [
       1,
       2,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"installation_meters\\" WHERE id IN ($1, $2)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "installation_meters" WHERE id IN ($1, $2)",
+    "values": [
       1,
       2,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"meters\\" WHERE id IN ($1, $2)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "meters" WHERE id IN ($1, $2)",
+    "values": [
       1,
       2,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"contracts\\" WHERE id IN ($1)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "contracts" WHERE id IN ($1)",
+    "values": [
       1,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"tariffs\\" WHERE id IN ($1, $2)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "tariffs" WHERE id IN ($1, $2)",
+    "values": [
       1,
       2,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"installations\\" WHERE id IN ($1)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "installations" WHERE id IN ($1)",
+    "values": [
       1,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"accounts\\" WHERE id IN ($1)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "accounts" WHERE id IN ($1)",
+    "values": [
       1,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"customers\\" WHERE id IN ($1)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "customers" WHERE id IN ($1)",
+    "values": [
       1,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"contacts\\" WHERE id IN ($1, $2, $3)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "contacts" WHERE id IN ($1, $2, $3)",
+    "values": [
       1,
       2,
       3,
     ],
   },
-  Object {
-    "text": "DELETE FROM \\"addresses\\" WHERE id IN ($1, $2, $3, $4, $5)",
-    "values": Array [
+  {
+    "text": "DELETE FROM "addresses" WHERE id IN ($1, $2, $3, $4, $5)",
+    "values": [
       1,
       2,
       3,

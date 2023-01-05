@@ -5,7 +5,7 @@ exports[`Document Test print document with context 1`] = `
 
 // other
 
-import MyTest, { other as Other, inspect, tmp } from \\"utils\\";
+import MyTest, { other as Other, inspect, tmp } from "utils";
 
 interface Orange {
     value: number;
@@ -15,7 +15,7 @@ interface Orange {
 type test = string;
 
 const a = {
-    test1: \\"other\\",
+    test1: "other",
     k: 12
 };
 
@@ -25,7 +25,7 @@ enum b {
 }
 
 export namespace FirstNamespace {
-    const z1 = \\"123\\";
+    const z1 = "123";
     interface z2 {
         value: number;
         other: test;
@@ -33,7 +33,7 @@ export namespace FirstNamespace {
 }
 
 export namespace OtherNamespace {
-    const z1 = \\"123\\";
+    const z1 = "123";
     interface z2 {
         value: number;
         other: test;

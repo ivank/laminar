@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Axios Content Test api-with-examples.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Simple API overview
@@ -12,11 +12,11 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * List API versions
      */
-    \\"GET /\\": config => api.get(\`/\`, config),
+    "GET /": config => api.get(\`/\`, config),
     /**
      * Show API version details
      */
-    \\"GET /v2\\": config => api.get(\`/v2\`, config),
+    "GET /v2": config => api.get(\`/v2\`, config),
     api: api
 });
 
@@ -24,18 +24,18 @@ export interface AxiosOapiInstance {
     /**
      * List API versions
      */
-    \\"GET /\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     /**
      * Show API version details
      */
-    \\"GET /v2\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /v2": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test balance-service.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Swagger Balance Service
@@ -50,41 +50,41 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Health check endpoint
      * Returns 200 if the application is up. It does not do deep check. Always gives back 200.
      */
-    \\"GET /internal/status\\": config => api.get(\`/internal/status\`, config),
+    "GET /internal/status": config => api.get(\`/internal/status\`, config),
     /**
      * Returns application swagger definition
      */
-    \\"GET /internal/swagger.yaml\\": config => api.get(\`/internal/swagger.yaml\`, config),
+    "GET /internal/swagger.yaml": config => api.get(\`/internal/swagger.yaml\`, config),
     /**
      * DEPRECATED: Find Balance for the given accountId
      * Returns the balance
      */
-    \\"GET /api/v2/accounts/{accountId}/balance\\": (accountId, config) => api.get<BalanceSummaryHttpResponse>(\`/api/v2/accounts/\${accountId}/balance\`, config),
+    "GET /api/v2/accounts/{accountId}/balance": (accountId, config) => api.get<BalanceSummaryHttpResponse>(\`/api/v2/accounts/\${accountId}/balance\`, config),
     /**
      * DEPRECATED: Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
      * Returns the transaction history
      */
-    \\"GET /api/v2/accounts/{accountId}/transactions\\": (accountId, config) => api.get<TransactionHistoryHttpResponseV2>(\`/api/v2/accounts/\${accountId}/transactions\`, config),
+    "GET /api/v2/accounts/{accountId}/transactions": (accountId, config) => api.get<TransactionHistoryHttpResponseV2>(\`/api/v2/accounts/\${accountId}/transactions\`, config),
     /**
      * DEPRECATED: Adjust balance for a given accountId
      * Returns with the adjusted balance
      */
-    \\"POST /api/v2/accounts/{accountId}/adjust-balance\\": (accountId, data, config) => api.post<BalanceSummaryHttpResponse>(\`/api/v2/accounts/\${accountId}/adjust-balance\`, data, config),
+    "POST /api/v2/accounts/{accountId}/adjust-balance": (accountId, data, config) => api.post<BalanceSummaryHttpResponse>(\`/api/v2/accounts/\${accountId}/adjust-balance\`, data, config),
     /**
      * Find Balance for the given accountId
      * Returns the balance
      */
-    \\"GET /api/v3/accounts/{accountId}/balance\\": (accountId, config) => api.get<BalanceSummaryHttpResponse>(\`/api/v3/accounts/\${accountId}/balance\`, config),
+    "GET /api/v3/accounts/{accountId}/balance": (accountId, config) => api.get<BalanceSummaryHttpResponse>(\`/api/v3/accounts/\${accountId}/balance\`, config),
     /**
      * Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
      * Returns the transaction history
      */
-    \\"GET /api/v3/accounts/{accountId}/transactions\\": (accountId, config) => api.get<TransactionHistoryHttpResponseV3>(\`/api/v3/accounts/\${accountId}/transactions\`, config),
+    "GET /api/v3/accounts/{accountId}/transactions": (accountId, config) => api.get<TransactionHistoryHttpResponseV3>(\`/api/v3/accounts/\${accountId}/transactions\`, config),
     /**
      * Adjust balance for a given accountId
      * Returns with the adjusted balance
      */
-    \\"POST /api/v3/accounts/{accountId}/adjust-balance\\": (accountId, data, config) => api.post<BalanceSummaryHttpResponse>(\`/api/v3/accounts/\${accountId}/adjust-balance\`, data, config),
+    "POST /api/v3/accounts/{accountId}/adjust-balance": (accountId, data, config) => api.post<BalanceSummaryHttpResponse>(\`/api/v3/accounts/\${accountId}/adjust-balance\`, data, config),
     api: api
 });
 
@@ -119,7 +119,7 @@ export interface TransactionHistorySummary {
 }
 
 export interface GenericTransactionEntity {
-    transactionType?: \\"TopUp\\" | \\"BalanceAdjustment\\";
+    transactionType?: "TopUp" | "BalanceAdjustment";
     amount?: number;
     transactionDateTime?: string;
     /**
@@ -130,10 +130,10 @@ export interface GenericTransactionEntity {
 }
 
 export interface ChargeTransactionEntity {
-    transactionType?: \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\";
+    transactionType?: "ElectricityUsageCharge" | "ElectricityStandingCharge";
     amount?: number;
     transactionDateTime?: string;
-    fuelType?: \\"Electricity\\" | \\"Gas\\";
+    fuelType?: "Electricity" | "Gas";
     [key: string]: unknown;
 }
 
@@ -153,7 +153,7 @@ export interface GetApiV2AccountsAccountIdTransactions {
         /**
          * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
          */
-        transactionType?: (\\"TopUp\\" | \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\" | \\"BalanceAdjustment\\")[];
+        transactionType?: ("TopUp" | "ElectricityUsageCharge" | "ElectricityStandingCharge" | "BalanceAdjustment")[];
     };
 }
 
@@ -184,10 +184,10 @@ export interface TransactionHistoryHttpResponseV3 {
 }
 
 export interface UsageChargeTransactionEntity {
-    transactionType?: \\"ElectricityUsageCharge\\";
+    transactionType?: "ElectricityUsageCharge";
     amount?: number;
     transactionDateTime?: string;
-    fuelType?: \\"Electricity\\" | \\"Gas\\";
+    fuelType?: "Electricity" | "Gas";
     /**
      * Meter Serial Number
      */
@@ -204,10 +204,10 @@ export interface UsageChargeTransactionEntity {
 }
 
 export interface StandingChargeTransactionEntity {
-    transactionType?: \\"ElectricityStandingCharge\\";
+    transactionType?: "ElectricityStandingCharge";
     amount?: number;
     transactionDateTime?: string;
-    fuelType?: \\"Electricity\\" | \\"Gas\\";
+    fuelType?: "Electricity" | "Gas";
     [key: string]: unknown;
 }
 
@@ -224,7 +224,7 @@ export interface GetApiV3AccountsAccountIdTransactions {
         /**
          * Transaction type to search. If not provided every transaction will be fetched relevant for the account/period
          */
-        transactionType?: (\\"TopUp\\" | \\"ElectricityUsageCharge\\" | \\"ElectricityStandingCharge\\" | \\"BalanceAdjustment\\")[];
+        transactionType?: ("TopUp" | "ElectricityUsageCharge" | "ElectricityStandingCharge" | "BalanceAdjustment")[];
     };
 }
 
@@ -233,48 +233,48 @@ export interface AxiosOapiInstance {
      * Health check endpoint
      * Returns 200 if the application is up. It does not do deep check. Always gives back 200.
      */
-    \\"GET /internal/status\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /internal/status": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     /**
      * Returns application swagger definition
      */
-    \\"GET /internal/swagger.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /internal/swagger.yaml": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     /**
      * DEPRECATED: Find Balance for the given accountId
      * Returns the balance
      */
-    \\"GET /api/v2/accounts/{accountId}/balance\\": (accountId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
+    "GET /api/v2/accounts/{accountId}/balance": (accountId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
     /**
      * DEPRECATED: Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
      * Returns the transaction history
      */
-    \\"GET /api/v2/accounts/{accountId}/transactions\\": (accountId: string, config?: AxiosRequestConfig & GetApiV2AccountsAccountIdTransactions) => Promise<AxiosResponse<TransactionHistoryHttpResponseV2>>;
+    "GET /api/v2/accounts/{accountId}/transactions": (accountId: string, config?: AxiosRequestConfig & GetApiV2AccountsAccountIdTransactions) => Promise<AxiosResponse<TransactionHistoryHttpResponseV2>>;
     /**
      * DEPRECATED: Adjust balance for a given accountId
      * Returns with the adjusted balance
      */
-    \\"POST /api/v2/accounts/{accountId}/adjust-balance\\": (accountId: string, data: AdjustBalanceRequest, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
+    "POST /api/v2/accounts/{accountId}/adjust-balance": (accountId: string, data: AdjustBalanceRequest, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
     /**
      * Find Balance for the given accountId
      * Returns the balance
      */
-    \\"GET /api/v3/accounts/{accountId}/balance\\": (accountId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
+    "GET /api/v3/accounts/{accountId}/balance": (accountId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
     /**
      * Find Transactions for the given accountId. Generic endpoint capable of returning with all the supported transaction types. See transactionType parameter!
      * Returns the transaction history
      */
-    \\"GET /api/v3/accounts/{accountId}/transactions\\": (accountId: string, config?: AxiosRequestConfig & GetApiV3AccountsAccountIdTransactions) => Promise<AxiosResponse<TransactionHistoryHttpResponseV3>>;
+    "GET /api/v3/accounts/{accountId}/transactions": (accountId: string, config?: AxiosRequestConfig & GetApiV3AccountsAccountIdTransactions) => Promise<AxiosResponse<TransactionHistoryHttpResponseV3>>;
     /**
      * Adjust balance for a given accountId
      * Returns with the adjusted balance
      */
-    \\"POST /api/v3/accounts/{accountId}/adjust-balance\\": (accountId: string, data: AdjustBalanceRequest, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
+    "POST /api/v3/accounts/{accountId}/adjust-balance": (accountId: string, data: AdjustBalanceRequest, config?: AxiosRequestConfig) => Promise<AxiosResponse<BalanceSummaryHttpResponse>>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test cloudtasks.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Cloud Tasks API
@@ -292,11 +292,11 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * cannot be deleted if it has executed successfully or permanently
      * failed.
      */
-    \\"DELETE /v2/{+name}\\": (+name, config) => api.delete<Empty>(\`/v2/\${+name}\`, config),
+    "DELETE /v2/{+name}": (+name, config) => api.delete<Empty>(\`/v2/\${+name}\`, config),
     /**
      * Gets a task.
      */
-    \\"GET /v2/{+name}\\": (+name, config) => api.get<Task>(\`/v2/\${+name}\`, config),
+    "GET /v2/{+name}": (+name, config) => api.get<Task>(\`/v2/\${+name}\`, config),
     /**
      * Updates a queue.
      *
@@ -314,11 +314,11 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
      * this method.
      */
-    \\"PATCH /v2/{+name}\\": (+name, data, config) => api.patch<Queue>(\`/v2/\${+name}\`, data, config),
+    "PATCH /v2/{+name}": (+name, data, config) => api.patch<Queue>(\`/v2/\${+name}\`, data, config),
     /**
      * Lists information about the supported locations for this service.
      */
-    \\"GET /v2/{+name}/locations\\": (+name, config) => api.get<ListLocationsResponse>(\`/v2/\${+name}/locations\`, config),
+    "GET /v2/{+name}/locations": (+name, config) => api.get<ListLocationsResponse>(\`/v2/\${+name}/locations\`, config),
     /**
      * Pauses the queue.
      *
@@ -328,7 +328,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * when the queue is paused. A queue is paused if its
      * state is PAUSED.
      */
-    \\"POST /v2/{+name}:pause\\": (+name, data, config) => api.post<Queue>(\`/v2/\${+name}:pause\`, data, config),
+    "POST /v2/{+name}:pause": (+name, data, config) => api.post<Queue>(\`/v2/\${+name}:pause\`, data, config),
     /**
      * Purges a queue by deleting all of its tasks.
      *
@@ -337,7 +337,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Purge operations can take up to one minute to take effect. Tasks
      * might be dispatched before the purge takes effect. A purge is irreversible.
      */
-    \\"POST /v2/{+name}:purge\\": (+name, data, config) => api.post<Queue>(\`/v2/\${+name}:purge\`, data, config),
+    "POST /v2/{+name}:purge": (+name, data, config) => api.post<Queue>(\`/v2/\${+name}:purge\`, data, config),
     /**
      * Resume a queue.
      *
@@ -353,7 +353,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * [Managing Cloud Tasks Scaling
      * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
      */
-    \\"POST /v2/{+name}:resume\\": (+name, data, config) => api.post<Queue>(\`/v2/\${+name}:resume\`, data, config),
+    "POST /v2/{+name}:resume": (+name, data, config) => api.post<Queue>(\`/v2/\${+name}:resume\`, data, config),
     /**
      * Forces a task to run now.
      *
@@ -380,13 +380,13 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * NOT_FOUND when it is called on a
      * task that has already succeeded or permanently failed.
      */
-    \\"POST /v2/{+name}:run\\": (+name, data, config) => api.post<Task>(\`/v2/\${+name}:run\`, data, config),
+    "POST /v2/{+name}:run": (+name, data, config) => api.post<Task>(\`/v2/\${+name}:run\`, data, config),
     /**
      * Lists queues.
      *
      * Queues are returned in lexicographical order.
      */
-    \\"GET /v2/{+parent}/queues\\": (+parent, config) => api.get<ListQueuesResponse>(\`/v2/\${+parent}/queues\`, config),
+    "GET /v2/{+parent}/queues": (+parent, config) => api.get<ListQueuesResponse>(\`/v2/\${+parent}/queues\`, config),
     /**
      * Creates a queue.
      *
@@ -401,7 +401,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
      * this method.
      */
-    \\"POST /v2/{+parent}/queues\\": (+parent, data, config) => api.post<Queue>(\`/v2/\${+parent}/queues\`, data, config),
+    "POST /v2/{+parent}/queues": (+parent, data, config) => api.post<Queue>(\`/v2/\${+parent}/queues\`, data, config),
     /**
      * Lists the tasks in a queue.
      *
@@ -413,7 +413,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * The tasks may be returned in any order. The ordering may change at any
      * time.
      */
-    \\"GET /v2/{+parent}/tasks\\": (+parent, config) => api.get<ListTasksResponse>(\`/v2/\${+parent}/tasks\`, config),
+    "GET /v2/{+parent}/tasks": (+parent, config) => api.get<ListTasksResponse>(\`/v2/\${+parent}/tasks\`, config),
     /**
      * Creates a task and adds it to a queue.
      *
@@ -421,7 +421,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      *
      * * The maximum task size is 100KB.
      */
-    \\"POST /v2/{+parent}/tasks\\": (+parent, data, config) => api.post<Task>(\`/v2/\${+parent}/tasks\`, data, config),
+    "POST /v2/{+parent}/tasks": (+parent, data, config) => api.post<Task>(\`/v2/\${+parent}/tasks\`, data, config),
     /**
      * Gets the access control policy for a Queue.
      * Returns an empty policy if the resource exists and does not have a policy
@@ -433,7 +433,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      *
      * * \`cloudtasks.queues.getIamPolicy\`
      */
-    \\"POST /v2/{+resource}:getIamPolicy\\": (+resource, data, config) => api.post<Policy>(\`/v2/\${+resource}:getIamPolicy\`, data, config),
+    "POST /v2/{+resource}:getIamPolicy": (+resource, data, config) => api.post<Policy>(\`/v2/\${+resource}:getIamPolicy\`, data, config),
     /**
      * Sets the access control policy for a Queue. Replaces any existing
      * policy.
@@ -447,7 +447,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      *
      * * \`cloudtasks.queues.setIamPolicy\`
      */
-    \\"POST /v2/{+resource}:setIamPolicy\\": (+resource, data, config) => api.post<Policy>(\`/v2/\${+resource}:setIamPolicy\`, data, config),
+    "POST /v2/{+resource}:setIamPolicy": (+resource, data, config) => api.post<Policy>(\`/v2/\${+resource}:setIamPolicy\`, data, config),
     /**
      * Returns permissions that a caller has on a Queue.
      * If the resource does not exist, this will return an empty set of
@@ -455,9 +455,9 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      *
      * Note: This operation is designed to be used for building permission-aware
      * UIs and command-line tools, not for authorization checking. This operation
-     * may \\"fail open\\" without warning.
+     * may "fail open" without warning.
      */
-    \\"POST /v2/{+resource}:testIamPermissions\\": (+resource, data, config) => api.post<TestIamPermissionsResponse>(\`/v2/\${+resource}:testIamPermissions\`, data, config),
+    "POST /v2/{+resource}:testIamPermissions": (+resource, data, config) => api.post<TestIamPermissionsResponse>(\`/v2/\${+resource}:testIamPermissions\`, data, config),
     api: api
 });
 
@@ -476,7 +476,7 @@ export interface DeleteV2Name {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -488,7 +488,7 @@ export interface DeleteV2Name {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -498,7 +498,7 @@ export interface DeleteV2Name {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -510,7 +510,7 @@ export interface DeleteV2Name {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -668,7 +668,7 @@ export interface Task {
      * Output only. The view specifies which subset of the Task has
      * been returned.
      */
-    view?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    view?: "VIEW_UNSPECIFIED" | "BASIC" | "FULL";
     [key: string]: unknown;
 }
 
@@ -715,19 +715,19 @@ export interface AppEngineHttpRequest {
      * Cloud Tasks sets some headers to default values:
      *
      * * \`User-Agent\`: By default, this header is
-     *   \`\\"AppEngine-Google; (+http://code.google.com/appengine)\\"\`.
+     *   \`"AppEngine-Google; (+http://code.google.com/appengine)"\`.
      *   This header can be modified, but Cloud Tasks will append
-     *   \`\\"AppEngine-Google; (+http://code.google.com/appengine)\\"\` to the
+     *   \`"AppEngine-Google; (+http://code.google.com/appengine)"\` to the
      *   modified \`User-Agent\`.
      *
      * If the task has a body, Cloud
      * Tasks sets the following headers:
      *
      * * \`Content-Type\`: By default, the \`Content-Type\` header is set to
-     *   \`\\"application/octet-stream\\"\`. The default can be overridden by explicitly
+     *   \`"application/octet-stream"\`. The default can be overridden by explicitly
      *   setting \`Content-Type\` to a particular media type when the
      *   task is created.
-     *   For example, \`Content-Type\` can be set to \`\\"application/json\\"\`.
+     *   For example, \`Content-Type\` can be set to \`"application/json"\`.
      * * \`Content-Length\`: This is computed by Cloud Tasks. This value is
      *   output only.   It cannot be changed.
      *
@@ -762,13 +762,13 @@ export interface AppEngineHttpRequest {
      * [Python Request
      * Handler](https://cloud.google.com/appengine/docs/python/tools/webapp/requesthandlerclass).
      */
-    httpMethod?: \\"HTTP_METHOD_UNSPECIFIED\\" | \\"POST\\" | \\"GET\\" | \\"HEAD\\" | \\"PUT\\" | \\"DELETE\\" | \\"PATCH\\" | \\"OPTIONS\\";
+    httpMethod?: "HTTP_METHOD_UNSPECIFIED" | "POST" | "GET" | "HEAD" | "PUT" | "DELETE" | "PATCH" | "OPTIONS";
     /**
      * The relative URI.
      *
-     * The relative URI must begin with \\"/\\" and must be a valid HTTP relative URI.
+     * The relative URI must begin with "/" and must be a valid HTTP relative URI.
      * It can contain a path and query string arguments.
-     * If the relative URI is empty, then the root path \\"/\\" will be used.
+     * If the relative URI is empty, then the root path "/" will be used.
      * No spaces are allowed, and the maximum length allowed is 2083 characters.
      */
     relativeUri?: string;
@@ -909,7 +909,7 @@ export interface GetV2Name {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -921,7 +921,7 @@ export interface GetV2Name {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -931,7 +931,7 @@ export interface GetV2Name {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -943,7 +943,7 @@ export interface GetV2Name {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
         /**
          * The response_view specifies which subset of the Task will be
          * returned.
@@ -958,7 +958,7 @@ export interface GetV2Name {
          * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
          * permission on the Task resource.
          */
-        responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+        responseView?: "VIEW_UNSPECIFIED" | "BASIC" | "FULL";
     };
 }
 
@@ -1048,7 +1048,7 @@ export interface Queue {
      * [queue.yaml/xml](https://cloud.google.com/appengine/docs/python/config/queueref).
      * UpdateQueue cannot be used to change \`state\`.
      */
-    state?: \\"STATE_UNSPECIFIED\\" | \\"RUNNING\\" | \\"PAUSED\\" | \\"DISABLED\\";
+    state?: "STATE_UNSPECIFIED" | "RUNNING" | "PAUSED" | "DISABLED";
     [key: string]: unknown;
 }
 
@@ -1242,7 +1242,7 @@ export interface PatchV2Name {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1254,7 +1254,7 @@ export interface PatchV2Name {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1264,7 +1264,7 @@ export interface PatchV2Name {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1276,7 +1276,7 @@ export interface PatchV2Name {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
         /**
          * A mask used to specify which fields of the queue are being updated.
          *
@@ -1301,17 +1301,17 @@ export interface ListLocationsResponse {
 export interface Location {
     /**
      * The friendly name for this location, typically a nearby city name.
-     * For example, \\"Tokyo\\".
+     * For example, "Tokyo".
      */
     displayName?: string;
     /**
      * Cross-service attributes for the location. For example
      *
-     *     {\\"cloud.googleapis.com/region\\": \\"us-east1\\"}
+     *     {"cloud.googleapis.com/region": "us-east1"}
      */
     labels?: any;
     /**
-     * The canonical id for this location. For example: \`\\"us-east1\\"\`.
+     * The canonical id for this location. For example: \`"us-east1"\`.
      */
     locationId?: string;
     /**
@@ -1321,7 +1321,7 @@ export interface Location {
     metadata?: any;
     /**
      * Resource name for the location, which may vary between implementations.
-     * For example: \`\\"projects/example-project/locations/us-east1\\"\`
+     * For example: \`"projects/example-project/locations/us-east1"\`
      */
     name?: string;
     [key: string]: unknown;
@@ -1338,7 +1338,7 @@ export interface GetV2NameLocations {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1350,7 +1350,7 @@ export interface GetV2NameLocations {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1360,7 +1360,7 @@ export interface GetV2NameLocations {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1372,7 +1372,7 @@ export interface GetV2NameLocations {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
         /**
          * The standard list filter.
          */
@@ -1403,7 +1403,7 @@ export interface PostV2Namepause {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1415,7 +1415,7 @@ export interface PostV2Namepause {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1425,7 +1425,7 @@ export interface PostV2Namepause {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1437,7 +1437,7 @@ export interface PostV2Namepause {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -1456,7 +1456,7 @@ export interface PostV2Namepurge {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1468,7 +1468,7 @@ export interface PostV2Namepurge {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1478,7 +1478,7 @@ export interface PostV2Namepurge {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1490,7 +1490,7 @@ export interface PostV2Namepurge {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -1509,7 +1509,7 @@ export interface PostV2Nameresume {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1521,7 +1521,7 @@ export interface PostV2Nameresume {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1531,7 +1531,7 @@ export interface PostV2Nameresume {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1543,7 +1543,7 @@ export interface PostV2Nameresume {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -1562,7 +1562,7 @@ export interface RunTaskRequest {
      * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
      * permission on the Task resource.
      */
-    responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    responseView?: "VIEW_UNSPECIFIED" | "BASIC" | "FULL";
     [key: string]: unknown;
 }
 
@@ -1577,7 +1577,7 @@ export interface PostV2Namerun {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1589,7 +1589,7 @@ export interface PostV2Namerun {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1599,7 +1599,7 @@ export interface PostV2Namerun {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1611,7 +1611,7 @@ export interface PostV2Namerun {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -1646,7 +1646,7 @@ export interface GetV2ParentQueues {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1658,7 +1658,7 @@ export interface GetV2ParentQueues {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1668,7 +1668,7 @@ export interface GetV2ParentQueues {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1680,7 +1680,7 @@ export interface GetV2ParentQueues {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
         /**
          * \`filter\` can be used to specify a subset of queues. Any Queue
          * field can be used as a filter and several operators as supported.
@@ -1689,7 +1689,7 @@ export interface GetV2ParentQueues {
          * [Stackdriver's Advanced Logs
          * Filters](https://cloud.google.com/logging/docs/view/advanced_filters).
          *
-         * Sample filter \\"state: PAUSED\\".
+         * Sample filter "state: PAUSED".
          *
          * Note that using filters might cause fewer queues than the
          * requested page_size to be returned.
@@ -1730,7 +1730,7 @@ export interface PostV2ParentQueues {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1742,7 +1742,7 @@ export interface PostV2ParentQueues {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1752,7 +1752,7 @@ export interface PostV2ParentQueues {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1764,7 +1764,7 @@ export interface PostV2ParentQueues {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -1797,7 +1797,7 @@ export interface GetV2ParentTasks {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1809,7 +1809,7 @@ export interface GetV2ParentTasks {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1819,7 +1819,7 @@ export interface GetV2ParentTasks {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1831,7 +1831,7 @@ export interface GetV2ParentTasks {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
         /**
          * Maximum page size.
          *
@@ -1869,7 +1869,7 @@ export interface GetV2ParentTasks {
          * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
          * permission on the Task resource.
          */
-        responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+        responseView?: "VIEW_UNSPECIFIED" | "BASIC" | "FULL";
     };
 }
 
@@ -1888,7 +1888,7 @@ export interface CreateTaskRequest {
      * \`cloudtasks.tasks.fullView\` [Google IAM](https://cloud.google.com/iam/)
      * permission on the Task resource.
      */
-    responseView?: \\"VIEW_UNSPECIFIED\\" | \\"BASIC\\" | \\"FULL\\";
+    responseView?: "VIEW_UNSPECIFIED" | "BASIC" | "FULL";
     /**
      * A unit of scheduled work.
      */
@@ -1907,7 +1907,7 @@ export interface PostV2ParentTasks {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -1919,7 +1919,7 @@ export interface PostV2ParentTasks {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -1929,7 +1929,7 @@ export interface PostV2ParentTasks {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -1941,7 +1941,7 @@ export interface PostV2ParentTasks {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -1994,9 +1994,9 @@ export interface Binding {
     /**
      * Represents an expression text. Example:
      *
-     *     title: \\"User account presence\\"
-     *     description: \\"Determines whether the request has a user account\\"
-     *     expression: \\"size(request.user) > 0\\"
+     *     title: "User account presence"
+     *     description: "Determines whether the request has a user account"
+     *     expression: "size(request.user) > 0"
      */
     condition?: Expr;
     /**
@@ -2071,7 +2071,7 @@ export interface PostV2ResourcegetIamPolicy {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -2083,7 +2083,7 @@ export interface PostV2ResourcegetIamPolicy {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -2093,7 +2093,7 @@ export interface PostV2ResourcegetIamPolicy {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -2105,7 +2105,7 @@ export interface PostV2ResourcegetIamPolicy {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -2123,19 +2123,19 @@ export interface SetIamPolicyRequest {
      * **JSON Example**
      *
      *     {
-     *       \\"bindings\\": [
+     *       "bindings": [
      *         {
-     *           \\"role\\": \\"roles/owner\\",
-     *           \\"members\\": [
-     *             \\"user:mike@example.com\\",
-     *             \\"group:admins@example.com\\",
-     *             \\"domain:google.com\\",
-     *             \\"serviceAccount:my-other-app@appspot.gserviceaccount.com\\"
+     *           "role": "roles/owner",
+     *           "members": [
+     *             "user:mike@example.com",
+     *             "group:admins@example.com",
+     *             "domain:google.com",
+     *             "serviceAccount:my-other-app@appspot.gserviceaccount.com"
      *           ]
      *         },
      *         {
-     *           \\"role\\": \\"roles/viewer\\",
-     *           \\"members\\": [\\"user:sean@example.com\\"]
+     *           "role": "roles/viewer",
+     *           "members": ["user:sean@example.com"]
      *         }
      *       ]
      *     }
@@ -2172,7 +2172,7 @@ export interface PostV2ResourcesetIamPolicy {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -2184,7 +2184,7 @@ export interface PostV2ResourcesetIamPolicy {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -2194,7 +2194,7 @@ export interface PostV2ResourcesetIamPolicy {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -2206,7 +2206,7 @@ export interface PostV2ResourcesetIamPolicy {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -2241,7 +2241,7 @@ export interface PostV2ResourcetestIamPermissions {
          */
         access_token?: string;
         /**
-         * Upload protocol for media (e.g. \\"raw\\", \\"multipart\\").
+         * Upload protocol for media (e.g. "raw", "multipart").
          */
         upload_protocol?: string;
         /**
@@ -2253,7 +2253,7 @@ export interface PostV2ResourcetestIamPermissions {
          */
         quotaUser?: string;
         /**
-         * Legacy upload protocol for media (e.g. \\"media\\", \\"multipart\\").
+         * Legacy upload protocol for media (e.g. "media", "multipart").
          */
         uploadType?: string;
         /**
@@ -2263,7 +2263,7 @@ export interface PostV2ResourcetestIamPermissions {
         /**
          * V1 error format.
          */
-        \\"$.xgafv\\"?: \\"1\\" | \\"2\\";
+        "$.xgafv"?: "1" | "2";
         /**
          * OAuth 2.0 token for the current user.
          */
@@ -2275,7 +2275,7 @@ export interface PostV2ResourcetestIamPermissions {
         /**
          * Data format for response.
          */
-        alt?: \\"json\\" | \\"media\\" | \\"proto\\";
+        alt?: "json" | "media" | "proto";
     };
 }
 
@@ -2287,11 +2287,11 @@ export interface AxiosOapiInstance {
      * cannot be deleted if it has executed successfully or permanently
      * failed.
      */
-    \\"DELETE /v2/{+name}\\": (+name: string, config?: AxiosRequestConfig & DeleteV2Name) => Promise<AxiosResponse<Empty>>;
+    "DELETE /v2/{+name}": (+name: string, config?: AxiosRequestConfig & DeleteV2Name) => Promise<AxiosResponse<Empty>>;
     /**
      * Gets a task.
      */
-    \\"GET /v2/{+name}\\": (+name: string, config?: AxiosRequestConfig & GetV2Name) => Promise<AxiosResponse<Task>>;
+    "GET /v2/{+name}": (+name: string, config?: AxiosRequestConfig & GetV2Name) => Promise<AxiosResponse<Task>>;
     /**
      * Updates a queue.
      *
@@ -2309,11 +2309,11 @@ export interface AxiosOapiInstance {
      * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
      * this method.
      */
-    \\"PATCH /v2/{+name}\\": (+name: string, data?: Queue, config?: AxiosRequestConfig & PatchV2Name) => Promise<AxiosResponse<Queue>>;
+    "PATCH /v2/{+name}": (+name: string, data?: Queue, config?: AxiosRequestConfig & PatchV2Name) => Promise<AxiosResponse<Queue>>;
     /**
      * Lists information about the supported locations for this service.
      */
-    \\"GET /v2/{+name}/locations\\": (+name: string, config?: AxiosRequestConfig & GetV2NameLocations) => Promise<AxiosResponse<ListLocationsResponse>>;
+    "GET /v2/{+name}/locations": (+name: string, config?: AxiosRequestConfig & GetV2NameLocations) => Promise<AxiosResponse<ListLocationsResponse>>;
     /**
      * Pauses the queue.
      *
@@ -2323,7 +2323,7 @@ export interface AxiosOapiInstance {
      * when the queue is paused. A queue is paused if its
      * state is PAUSED.
      */
-    \\"POST /v2/{+name}:pause\\": (+name: string, data?: PauseQueueRequest, config?: AxiosRequestConfig & PostV2Namepause) => Promise<AxiosResponse<Queue>>;
+    "POST /v2/{+name}:pause": (+name: string, data?: PauseQueueRequest, config?: AxiosRequestConfig & PostV2Namepause) => Promise<AxiosResponse<Queue>>;
     /**
      * Purges a queue by deleting all of its tasks.
      *
@@ -2332,7 +2332,7 @@ export interface AxiosOapiInstance {
      * Purge operations can take up to one minute to take effect. Tasks
      * might be dispatched before the purge takes effect. A purge is irreversible.
      */
-    \\"POST /v2/{+name}:purge\\": (+name: string, data?: PurgeQueueRequest, config?: AxiosRequestConfig & PostV2Namepurge) => Promise<AxiosResponse<Queue>>;
+    "POST /v2/{+name}:purge": (+name: string, data?: PurgeQueueRequest, config?: AxiosRequestConfig & PostV2Namepurge) => Promise<AxiosResponse<Queue>>;
     /**
      * Resume a queue.
      *
@@ -2348,7 +2348,7 @@ export interface AxiosOapiInstance {
      * [Managing Cloud Tasks Scaling
      * Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
      */
-    \\"POST /v2/{+name}:resume\\": (+name: string, data?: ResumeQueueRequest, config?: AxiosRequestConfig & PostV2Nameresume) => Promise<AxiosResponse<Queue>>;
+    "POST /v2/{+name}:resume": (+name: string, data?: ResumeQueueRequest, config?: AxiosRequestConfig & PostV2Nameresume) => Promise<AxiosResponse<Queue>>;
     /**
      * Forces a task to run now.
      *
@@ -2375,13 +2375,13 @@ export interface AxiosOapiInstance {
      * NOT_FOUND when it is called on a
      * task that has already succeeded or permanently failed.
      */
-    \\"POST /v2/{+name}:run\\": (+name: string, data?: RunTaskRequest, config?: AxiosRequestConfig & PostV2Namerun) => Promise<AxiosResponse<Task>>;
+    "POST /v2/{+name}:run": (+name: string, data?: RunTaskRequest, config?: AxiosRequestConfig & PostV2Namerun) => Promise<AxiosResponse<Task>>;
     /**
      * Lists queues.
      *
      * Queues are returned in lexicographical order.
      */
-    \\"GET /v2/{+parent}/queues\\": (+parent: string, config?: AxiosRequestConfig & GetV2ParentQueues) => Promise<AxiosResponse<ListQueuesResponse>>;
+    "GET /v2/{+parent}/queues": (+parent: string, config?: AxiosRequestConfig & GetV2ParentQueues) => Promise<AxiosResponse<ListQueuesResponse>>;
     /**
      * Creates a queue.
      *
@@ -2396,7 +2396,7 @@ export interface AxiosOapiInstance {
      * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using
      * this method.
      */
-    \\"POST /v2/{+parent}/queues\\": (+parent: string, data?: Queue, config?: AxiosRequestConfig & PostV2ParentQueues) => Promise<AxiosResponse<Queue>>;
+    "POST /v2/{+parent}/queues": (+parent: string, data?: Queue, config?: AxiosRequestConfig & PostV2ParentQueues) => Promise<AxiosResponse<Queue>>;
     /**
      * Lists the tasks in a queue.
      *
@@ -2408,7 +2408,7 @@ export interface AxiosOapiInstance {
      * The tasks may be returned in any order. The ordering may change at any
      * time.
      */
-    \\"GET /v2/{+parent}/tasks\\": (+parent: string, config?: AxiosRequestConfig & GetV2ParentTasks) => Promise<AxiosResponse<ListTasksResponse>>;
+    "GET /v2/{+parent}/tasks": (+parent: string, config?: AxiosRequestConfig & GetV2ParentTasks) => Promise<AxiosResponse<ListTasksResponse>>;
     /**
      * Creates a task and adds it to a queue.
      *
@@ -2416,7 +2416,7 @@ export interface AxiosOapiInstance {
      *
      * * The maximum task size is 100KB.
      */
-    \\"POST /v2/{+parent}/tasks\\": (+parent: string, data?: CreateTaskRequest, config?: AxiosRequestConfig & PostV2ParentTasks) => Promise<AxiosResponse<Task>>;
+    "POST /v2/{+parent}/tasks": (+parent: string, data?: CreateTaskRequest, config?: AxiosRequestConfig & PostV2ParentTasks) => Promise<AxiosResponse<Task>>;
     /**
      * Gets the access control policy for a Queue.
      * Returns an empty policy if the resource exists and does not have a policy
@@ -2428,7 +2428,7 @@ export interface AxiosOapiInstance {
      *
      * * \`cloudtasks.queues.getIamPolicy\`
      */
-    \\"POST /v2/{+resource}:getIamPolicy\\": (+resource: string, data?: GetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcegetIamPolicy) => Promise<AxiosResponse<Policy>>;
+    "POST /v2/{+resource}:getIamPolicy": (+resource: string, data?: GetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcegetIamPolicy) => Promise<AxiosResponse<Policy>>;
     /**
      * Sets the access control policy for a Queue. Replaces any existing
      * policy.
@@ -2442,7 +2442,7 @@ export interface AxiosOapiInstance {
      *
      * * \`cloudtasks.queues.setIamPolicy\`
      */
-    \\"POST /v2/{+resource}:setIamPolicy\\": (+resource: string, data?: SetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcesetIamPolicy) => Promise<AxiosResponse<Policy>>;
+    "POST /v2/{+resource}:setIamPolicy": (+resource: string, data?: SetIamPolicyRequest, config?: AxiosRequestConfig & PostV2ResourcesetIamPolicy) => Promise<AxiosResponse<Policy>>;
     /**
      * Returns permissions that a caller has on a Queue.
      * If the resource does not exist, this will return an empty set of
@@ -2450,16 +2450,16 @@ export interface AxiosOapiInstance {
      *
      * Note: This operation is designed to be used for building permission-aware
      * UIs and command-line tools, not for authorization checking. This operation
-     * may \\"fail open\\" without warning.
+     * may "fail open" without warning.
      */
-    \\"POST /v2/{+resource}:testIamPermissions\\": (+resource: string, data?: TestIamPermissionsRequest, config?: AxiosRequestConfig & PostV2ResourcetestIamPermissions) => Promise<AxiosResponse<TestIamPermissionsResponse>>;
+    "POST /v2/{+resource}:testIamPermissions": (+resource: string, data?: TestIamPermissionsRequest, config?: AxiosRequestConfig & PostV2ResourcetestIamPermissions) => Promise<AxiosResponse<TestIamPermissionsResponse>>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test converter.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * PDF Render api
@@ -2470,15 +2470,15 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * HTML Docs
      */
-    \\"GET /.well-known/docs\\": config => api.get(\`/.well-known/docs\`, config),
+    "GET /.well-known/docs": config => api.get(\`/.well-known/docs\`, config),
     /**
      * API
      */
-    \\"GET /.well-known/openapi.yaml\\": config => api.get(\`/.well-known/openapi.yaml\`, config),
+    "GET /.well-known/openapi.yaml": config => api.get(\`/.well-known/openapi.yaml\`, config),
     /**
      * Generate PDF from html
      */
-    \\"POST /html\\": (data, config) => api.post<HttpError>(\`/html\`, data, config),
+    "POST /html": (data, config) => api.post<HttpError>(\`/html\`, data, config),
     api: api
 });
 
@@ -2490,22 +2490,22 @@ export interface AxiosOapiInstance {
     /**
      * HTML Docs
      */
-    \\"GET /.well-known/docs\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /.well-known/docs": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     /**
      * API
      */
-    \\"GET /.well-known/openapi.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /.well-known/openapi.yaml": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     /**
      * Generate PDF from html
      */
-    \\"POST /html\\": (data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<HttpError>>;
+    "POST /html": (data: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<HttpError>>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test link-example.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Link Example
@@ -2513,12 +2513,12 @@ exports[`Axios Content Test link-example.yaml 1`] = `
  * Version: 1.0.0
  */
 export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
-    \\"GET /2.0/users/{username}\\": (username, config) => api.get<user>(\`/2.0/users/\${username}\`, config),
-    \\"GET /2.0/repositories/{username}\\": (username, config) => api.get<repository[]>(\`/2.0/repositories/\${username}\`, config),
-    \\"GET /2.0/repositories/{username}/{slug}\\": (username, slug, config) => api.get<repository>(\`/2.0/repositories/\${username}/\${slug}\`, config),
-    \\"GET /2.0/repositories/{username}/{slug}/pullrequests\\": (username, slug, config) => api.get<pullrequest[]>(\`/2.0/repositories/\${username}/\${slug}/pullrequests\`, config),
-    \\"GET /2.0/repositories/{username}/{slug}/pullrequests/{pid}\\": (username, slug, pid, config) => api.get<pullrequest>(\`/2.0/repositories/\${username}/\${slug}/pullrequests/\${pid}\`, config),
-    \\"POST /2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge\\": (username, slug, pid, data, config) => api.post(\`/2.0/repositories/\${username}/\${slug}/pullrequests/\${pid}/merge\`, data, config),
+    "GET /2.0/users/{username}": (username, config) => api.get<user>(\`/2.0/users/\${username}\`, config),
+    "GET /2.0/repositories/{username}": (username, config) => api.get<repository[]>(\`/2.0/repositories/\${username}\`, config),
+    "GET /2.0/repositories/{username}/{slug}": (username, slug, config) => api.get<repository>(\`/2.0/repositories/\${username}/\${slug}\`, config),
+    "GET /2.0/repositories/{username}/{slug}/pullrequests": (username, slug, config) => api.get<pullrequest[]>(\`/2.0/repositories/\${username}/\${slug}/pullrequests\`, config),
+    "GET /2.0/repositories/{username}/{slug}/pullrequests/{pid}": (username, slug, pid, config) => api.get<pullrequest>(\`/2.0/repositories/\${username}/\${slug}/pullrequests/\${pid}\`, config),
+    "POST /2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge": (username, slug, pid, data, config) => api.post(\`/2.0/repositories/\${username}/\${slug}/pullrequests/\${pid}/merge\`, data, config),
     api: api
 });
 
@@ -2544,24 +2544,24 @@ export interface pullrequest {
 
 export interface Get20RepositoriesUsernameSlugPullrequests {
     params?: {
-        state?: \\"open\\" | \\"merged\\" | \\"declined\\";
+        state?: "open" | "merged" | "declined";
     };
 }
 
 export interface AxiosOapiInstance {
-    \\"GET /2.0/users/{username}\\": (username: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<user>>;
-    \\"GET /2.0/repositories/{username}\\": (username: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<repository[]>>;
-    \\"GET /2.0/repositories/{username}/{slug}\\": (username: string, slug: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<repository>>;
-    \\"GET /2.0/repositories/{username}/{slug}/pullrequests\\": (username: string, slug: string, config?: AxiosRequestConfig & Get20RepositoriesUsernameSlugPullrequests) => Promise<AxiosResponse<pullrequest[]>>;
-    \\"GET /2.0/repositories/{username}/{slug}/pullrequests/{pid}\\": (username: string, slug: string, pid: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<pullrequest>>;
-    \\"POST /2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge\\": (username: string, slug: string, pid: string, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /2.0/users/{username}": (username: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<user>>;
+    "GET /2.0/repositories/{username}": (username: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<repository[]>>;
+    "GET /2.0/repositories/{username}/{slug}": (username: string, slug: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<repository>>;
+    "GET /2.0/repositories/{username}/{slug}/pullrequests": (username: string, slug: string, config?: AxiosRequestConfig & Get20RepositoriesUsernameSlugPullrequests) => Promise<AxiosResponse<pullrequest[]>>;
+    "GET /2.0/repositories/{username}/{slug}/pullrequests/{pid}": (username: string, slug: string, pid: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<pullrequest>>;
+    "POST /2.0/repositories/{username}/{slug}/pullrequests/{pid}/merge": (username: string, slug: string, pid: string, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test petstore.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Swagger Petstore
@@ -2572,15 +2572,15 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * List all pets
      */
-    \\"GET /pets\\": config => api.get<Pets | Error>(\`/pets\`, config),
+    "GET /pets": config => api.get<Pets | Error>(\`/pets\`, config),
     /**
      * Create a pet
      */
-    \\"POST /pets\\": (data, config) => api.post<Error>(\`/pets\`, data, config),
+    "POST /pets": (data, config) => api.post<Error>(\`/pets\`, data, config),
     /**
      * Info for a specific pet
      */
-    \\"GET /pets/{petId}\\": (petId, config) => api.get<Pets | Error>(\`/pets/\${petId}\`, config),
+    "GET /pets/{petId}": (petId, config) => api.get<Pets | Error>(\`/pets/\${petId}\`, config),
     api: api
 });
 
@@ -2612,22 +2612,22 @@ export interface AxiosOapiInstance {
     /**
      * List all pets
      */
-    \\"GET /pets\\": (config?: AxiosRequestConfig & GetPets) => Promise<AxiosResponse<Pets | Error>>;
+    "GET /pets": (config?: AxiosRequestConfig & GetPets) => Promise<AxiosResponse<Pets | Error>>;
     /**
      * Create a pet
      */
-    \\"POST /pets\\": (data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<Error>>;
+    "POST /pets": (data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<Error>>;
     /**
      * Info for a specific pet
      */
-    \\"GET /pets/{petId}\\": (petId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pets | Error>>;
+    "GET /pets/{petId}": (petId: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pets | Error>>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test petstore-expanded.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Swagger Petstore
@@ -2645,19 +2645,19 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
      *
      */
-    \\"GET /pets\\": config => api.get<Pet[] | Error>(\`/pets\`, config),
+    "GET /pets": config => api.get<Pet[] | Error>(\`/pets\`, config),
     /**
      * Creates a new pet in the store.  Duplicates are allowed
      */
-    \\"POST /pets\\": (data, config) => api.post<Pet | Error>(\`/pets\`, data, config),
+    "POST /pets": (data, config) => api.post<Pet | Error>(\`/pets\`, data, config),
     /**
      * Returns a user based on a single ID, if the user does not have access to the pet
      */
-    \\"GET /pets/{id}\\": (id, config) => api.get<Pet | Error>(\`/pets/\${id}\`, config),
+    "GET /pets/{id}": (id, config) => api.get<Pet | Error>(\`/pets/\${id}\`, config),
     /**
      * deletes a single pet based on the ID supplied
      */
-    \\"DELETE /pets/{id}\\": (id, config) => api.delete<Error>(\`/pets/\${id}\`, config),
+    "DELETE /pets/{id}": (id, config) => api.delete<Error>(\`/pets/\${id}\`, config),
     api: api
 });
 
@@ -2699,26 +2699,26 @@ export interface AxiosOapiInstance {
      * Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
      *
      */
-    \\"GET /pets\\": (config?: AxiosRequestConfig & GetPets) => Promise<AxiosResponse<Pet[] | Error>>;
+    "GET /pets": (config?: AxiosRequestConfig & GetPets) => Promise<AxiosResponse<Pet[] | Error>>;
     /**
      * Creates a new pet in the store.  Duplicates are allowed
      */
-    \\"POST /pets\\": (data: NewPet, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pet | Error>>;
+    "POST /pets": (data: NewPet, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pet | Error>>;
     /**
      * Returns a user based on a single ID, if the user does not have access to the pet
      */
-    \\"GET /pets/{id}\\": (id: number, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pet | Error>>;
+    "GET /pets/{id}": (id: number, config?: AxiosRequestConfig) => Promise<AxiosResponse<Pet | Error>>;
     /**
      * deletes a single pet based on the ID supplied
      */
-    \\"DELETE /pets/{id}\\": (id: number, config?: AxiosRequestConfig) => Promise<AxiosResponse<Error>>;
+    "DELETE /pets/{id}": (id: number, config?: AxiosRequestConfig) => Promise<AxiosResponse<Error>>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test pol.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Payment Orchestration Layer
@@ -2732,37 +2732,37 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * Request a Bearer token
      */
-    \\"POST /authentication/v1.0.0/oauth/token\\": (data, config) => api.post<Response200AuthenticationTokenRead>(\`/authentication/v1.0.0/oauth/token\`, data, config),
+    "POST /authentication/v1.0.0/oauth/token": (data, config) => api.post<Response200AuthenticationTokenRead>(\`/authentication/v1.0.0/oauth/token\`, data, config),
     /**
      * Retrieve information on a UK bank account
      *
      * Required OAuth Audience: <code>BankAccounts</code>
      */
-    \\"POST /bank-account/uk/v1.0.0/information\\": (data, config) => api.post<Response200UKBankAccountInformation>(\`/bank-account/uk/v1.0.0/information\`, data, config),
+    "POST /bank-account/uk/v1.0.0/information": (data, config) => api.post<Response200UKBankAccountInformation>(\`/bank-account/uk/v1.0.0/information\`, data, config),
     /**
      * Create Direct Debit Collections
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"POST /direct-debit/v1.0.0/instructions/{MandateIdentification}/collections\\": (MandateIdentification, data, config) => api.post<Response200DirectDebitCollectionRead>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}/collections\`, data, config),
+    "POST /direct-debit/v1.0.0/instructions/{MandateIdentification}/collections": (MandateIdentification, data, config) => api.post<Response200DirectDebitCollectionRead>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}/collections\`, data, config),
     /**
      * Create Direct Debit Instruction
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"POST /direct-debit/v1.0.0/instructions\\": (data, config) => api.post<Response200DirectDebitInstructionRead>(\`/direct-debit/v1.0.0/instructions\`, data, config),
+    "POST /direct-debit/v1.0.0/instructions": (data, config) => api.post<Response200DirectDebitInstructionRead>(\`/direct-debit/v1.0.0/instructions\`, data, config),
     /**
      * Update Direct Debit Instruction
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}\\": (MandateIdentification, data, config) => api.put<Response200UpdateDirectDebitInstructionRead>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}\`, data, config),
+    "PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}": (MandateIdentification, data, config) => api.put<Response200UpdateDirectDebitInstructionRead>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}\`, data, config),
     /**
      * Update Direct Debit Instruction Status
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}/status\\": (MandateIdentification, data, config) => api.put<Response200DirectDebitInstructionUpdateStatus>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}/status\`, data, config),
+    "PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}/status": (MandateIdentification, data, config) => api.put<Response200DirectDebitInstructionUpdateStatus>(\`/direct-debit/v1.0.0/instructions/\${MandateIdentification}/status\`, data, config),
     /**
      * Upload a Direct Debit collection file
      *
@@ -2771,26 +2771,26 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Example file content:
      *
      * <code>{
-     * \\"document\\": {
-     *  \\"fi_to_fi_customer_direct_debit\\": {
-     *    \\"group_header\\": {
-     *      \\"message_identification\\": \\"cc60bfc5-7876-4fba-ae24-2d9c3e32e0b0\\",
-     *      \\"creation_date_time\\": \\"2021-07-23T10:46:56.697Z\\",
-     *      \\"number_of_transactions\\": 3
+     * "document": {
+     *  "fi_to_fi_customer_direct_debit": {
+     *    "group_header": {
+     *      "message_identification": "cc60bfc5-7876-4fba-ae24-2d9c3e32e0b0",
+     *      "creation_date_time": "2021-07-23T10:46:56.697Z",
+     *      "number_of_transactions": 3
      *    },
-     *    \\"direct_debit_transaction_information\\": [
+     *    "direct_debit_transaction_information": [
      *      {
-     *        \\"payment_identification\\": {
-     *          \\"end_to_end_identification\\": \\"5231998b-d704-40e1-aea4-3ac952aa757b\\"
+     *        "payment_identification": {
+     *          "end_to_end_identification": "5231998b-d704-40e1-aea4-3ac952aa757b"
      *        },
-     *        \\"interbank_settlement_amount\\": {
-     *          \\"active_currency\\": \\"GBP\\",
-     *          \\"currency_amount\\": \\"10.00\\"
+     *        "interbank_settlement_amount": {
+     *          "active_currency": "GBP",
+     *          "currency_amount": "10.00"
      *        },
-     *        \\"interbank_settlement_date\\": \\"2021-07-23\\",
-     *        \\"direct_debit_transaction\\": {
-     *          \\"mandate_related_information\\": {
-     *            \\"mandate_id\\": \\"EXE-123456\\"
+     *        "interbank_settlement_date": "2021-07-23",
+     *        "direct_debit_transaction": {
+     *          "mandate_related_information": {
+     *            "mandate_id": "EXE-123456"
      *          }
      *        }
      *      }
@@ -2799,94 +2799,94 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * }
      * }</code>
      */
-    \\"POST /bulk-collections/v1.0.0/collection-files\\": (data, config) => api.post<Response200BulkCollectionsFileRead>(\`/bulk-collections/v1.0.0/collection-files\`, data, config),
+    "POST /bulk-collections/v1.0.0/collection-files": (data, config) => api.post<Response200BulkCollectionsFileRead>(\`/bulk-collections/v1.0.0/collection-files\`, data, config),
     /**
      * Get the status of a Direct Debit collection file
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"GET /bulk-collections/v1.0.0/collection-files/{CollectionFileIdentification}\\": (CollectionFileIdentification, config) => api.get<Response200BulkCollectionsFileProgressRead>(\`/bulk-collections/v1.0.0/collection-files/\${CollectionFileIdentification}\`, config),
+    "GET /bulk-collections/v1.0.0/collection-files/{CollectionFileIdentification}": (CollectionFileIdentification, config) => api.get<Response200BulkCollectionsFileProgressRead>(\`/bulk-collections/v1.0.0/collection-files/\${CollectionFileIdentification}\`, config),
     /**
      * AUDDIS Bank Returned Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices\`, data, config),
+    "POST /direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices\`, data, config),
     /**
      * ARUDD Unpaid Direct Debit Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices\`, data, config),
+    "POST /direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices\`, data, config),
     /**
      * ADDACS Amendments Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/addacs-amendments-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/addacs-amendments-advices\`, data, config),
+    "POST /direct-debit-webhooks/v1.0.0/addacs-amendments-advices": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/addacs-amendments-advices\`, data, config),
     /**
      * ADDACS Cancellations Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/addacs-cancellations-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/addacs-cancellations-advices\`, data, config),
+    "POST /direct-debit-webhooks/v1.0.0/addacs-cancellations-advices": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/addacs-cancellations-advices\`, data, config),
     /**
      * DDIC Indemnity Claim Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices\`, data, config),
+    "POST /direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices\`, data, config),
     /**
      * Collection Advices
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/collection-advices\\": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/collection-advices\`, data, config),
+    "POST /direct-debit-webhooks/v1.0.0/collection-advices": (data, config) => api.post(\`/direct-debit-webhooks/v1.0.0/collection-advices\`, data, config),
     /**
      * Create Direct Credit
      *
      * Required OAuth Audience: <code>DirectCredits</code>
      */
-    \\"POST /direct-credit/v1.0.0/instructions\\": (data, config) => api.post<Response200DirectCreditInstructionRead>(\`/direct-credit/v1.0.0/instructions\`, data, config),
+    "POST /direct-credit/v1.0.0/instructions": (data, config) => api.post<Response200DirectCreditInstructionRead>(\`/direct-credit/v1.0.0/instructions\`, data, config),
     /**
      * AWACS Wrong Account for Credits Advice
      */
-    \\"POST /direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices\\": (data, config) => api.post(\`/direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices\`, data, config),
+    "POST /direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices": (data, config) => api.post(\`/direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices\`, data, config),
     /**
      * ARUCS Unapplied Credits Advice
      */
-    \\"POST /direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices\\": (data, config) => api.post(\`/direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices\`, data, config),
+    "POST /direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices": (data, config) => api.post(\`/direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices\`, data, config),
     /**
      * Request Payment Session
      *
      * Required OAuth Audience: <code>PaymentSession</code>
      */
-    \\"POST /payments/v1.0.0/sessions\\": (data, config) => api.post(\`/payments/v1.0.0/sessions\`, data, config),
+    "POST /payments/v1.0.0/sessions": (data, config) => api.post(\`/payments/v1.0.0/sessions\`, data, config),
     /**
      * Payment approved
      */
-    \\"POST /webhook/v1.0.0/approved\\": (data, config) => api.post(\`/webhook/v1.0.0/approved\`, data, config),
+    "POST /webhook/v1.0.0/approved": (data, config) => api.post(\`/webhook/v1.0.0/approved\`, data, config),
     /**
      * Payment voided
      */
-    \\"POST /webhook/v1.0.0/voided\\": (data, config) => api.post(\`/webhook/v1.0.0/voided\`, data, config),
+    "POST /webhook/v1.0.0/voided": (data, config) => api.post(\`/webhook/v1.0.0/voided\`, data, config),
     /**
      * Payment captured
      */
-    \\"POST /webhook/v1.0.0/captured\\": (data, config) => api.post(\`/webhook/v1.0.0/captured\`, data, config),
+    "POST /webhook/v1.0.0/captured": (data, config) => api.post(\`/webhook/v1.0.0/captured\`, data, config),
     /**
      * Payment declined
      */
-    \\"POST /webhook/v1.0.0/declined\\": (data, config) => api.post(\`/webhook/v1.0.0/declined\`, data, config),
+    "POST /webhook/v1.0.0/declined": (data, config) => api.post(\`/webhook/v1.0.0/declined\`, data, config),
     /**
      * Payment refund declined
      */
-    \\"POST /webhook/v1.0.0/refund-declined\\": (data, config) => api.post(\`/webhook/v1.0.0/refund-declined\`, data, config),
+    "POST /webhook/v1.0.0/refund-declined": (data, config) => api.post(\`/webhook/v1.0.0/refund-declined\`, data, config),
     /**
      * Payment Refund
      * Request Payment Refund
      *
      * Required OAuth Audience: <code>PaymentSession</code>
      */
-    \\"POST /payments/v1.0.0/{id}/refunds\\": (id, data, config) => api.post<SuccessResponseBody>(\`/payments/v1.0.0/\${id}/refunds\`, data, config),
-    \\"POST /inbound-transactions/v1.0.0/transactions/{id}/commit\\": (id, data, config) => api.post<{
+    "POST /payments/v1.0.0/{id}/refunds": (id, data, config) => api.post<SuccessResponseBody>(\`/payments/v1.0.0/\${id}/refunds\`, data, config),
+    "POST /inbound-transactions/v1.0.0/transactions/{id}/commit": (id, data, config) => api.post<{
         /**
          * Provides further details on an entry in the report.
          */
         Data: OBTransaction6;
         [key: string]: unknown;
     }>(\`/inbound-transactions/v1.0.0/transactions/\${id}/commit\`, data, config),
-    \\"GET /inbound-transactions/v1.0.0/accounts/{accountId}/transactions\\": (accountId, config) => api.get<OBReadTransaction6>(\`/inbound-transactions/v1.0.0/accounts/\${accountId}/transactions\`, config),
-    \\"GET /inbound-transactions/v1.0.0/transactions\\": config => api.get<OBReadTransaction6>(\`/inbound-transactions/v1.0.0/transactions\`, config),
-    \\"PATCH /inbound-transactions/v1.0.0/transactions/{id}\\": (id, data, config) => api.patch<{
+    "GET /inbound-transactions/v1.0.0/accounts/{accountId}/transactions": (accountId, config) => api.get<OBReadTransaction6>(\`/inbound-transactions/v1.0.0/accounts/\${accountId}/transactions\`, config),
+    "GET /inbound-transactions/v1.0.0/transactions": config => api.get<OBReadTransaction6>(\`/inbound-transactions/v1.0.0/transactions\`, config),
+    "PATCH /inbound-transactions/v1.0.0/transactions/{id}": (id, data, config) => api.patch<{
         /**
          * Provides further details on an entry in the report.
          */
@@ -2895,21 +2895,21 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     }>(\`/inbound-transactions/v1.0.0/transactions/\${id}\`, data, config),
     /**
      *
-     * NewAccountNumber and New only required if ReasonCode === \\"3\\" || ReasonCode === \\"C\\"
+     * NewAccountNumber and New only required if ReasonCode === "3" || ReasonCode === "C"
      */
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/addacs\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/addacs\`, data, config),
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/arucs\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/arucs\`, data, config),
+    "POST /direct-debit-test-harness/v1.0.0/reports/addacs": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/addacs\`, data, config),
+    "POST /direct-debit-test-harness/v1.0.0/reports/arucs": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/arucs\`, data, config),
     /**
      *
-     * User will either need to provide both returnCode and returnDescription fields or leave both fields as \\"\\"
+     * User will either need to provide both returnCode and returnDescription fields or leave both fields as ""
      */
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/arudd\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/arudd\`, data, config),
+    "POST /direct-debit-test-harness/v1.0.0/reports/arudd": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/arudd\`, data, config),
     /**
-     * NewAccountNumber and NewSortcode only required if ReasonCode === \\"C\\"
+     * NewAccountNumber and NewSortcode only required if ReasonCode === "C"
      */
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/auddis\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/auddis\`, data, config),
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/awacs\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/awacs\`, data, config),
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/ddic\\": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/ddic\`, data, config),
+    "POST /direct-debit-test-harness/v1.0.0/reports/auddis": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/auddis\`, data, config),
+    "POST /direct-debit-test-harness/v1.0.0/reports/awacs": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/awacs\`, data, config),
+    "POST /direct-debit-test-harness/v1.0.0/reports/ddic": (data, config) => api.post<DirectDebitReportResponse>(\`/direct-debit-test-harness/v1.0.0/reports/ddic\`, data, config),
     api: api
 });
 
@@ -2926,12 +2926,12 @@ export interface CreateAuthorizationToken {
          * See [RFC 4112](https://tools.ietf.org/html/rfc4122)
          */
         ClientId: UUID;
-        GrantType: \\"client_credentials\\";
+        GrantType: "client_credentials";
         [key: string]: unknown;
     };
 }
 
-export type Audience = \\"BankAccounts\\" | \\"DirectDebits\\" | \\"PaymentSession\\" | \\"DirectCredits\\" | \\"InboundTransactions\\" | \\"FakeCoEvents\\" | \\"PlatformDatabaseApi\\";
+export type Audience = "BankAccounts" | "DirectDebits" | "PaymentSession" | "DirectCredits" | "InboundTransactions" | "FakeCoEvents" | "PlatformDatabaseApi";
 
 export type UUID = string;
 
@@ -2940,7 +2940,7 @@ export type Response200AuthenticationTokenRead = AuthenticationToken;
 export interface AuthenticationToken {
     Data: {
         ExpiresIn: number;
-        TokenType: \\"Bearer\\";
+        TokenType: "Bearer";
         AccessToken: string;
         [key: string]: unknown;
     };
@@ -2995,7 +2995,7 @@ export interface Amount {
      * A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
      */
     Amount: string;
-    Currency: \\"GBP\\";
+    Currency: "GBP";
 }
 
 export type Response200DirectDebitCollectionRead = OBReadDirectDebitCollection;
@@ -3013,7 +3013,7 @@ export interface OBDirectDebitCollection {
      */
     CollectionIdentification: string;
     PaymentAmount: {
-        Currency: \\"GBP\\";
+        Currency: "GBP";
         Amount: string;
         [key: string]: unknown;
     };
@@ -3026,7 +3026,7 @@ export interface PostDirectdebitV100InstructionsMandateIdentificationCollections
          * A GUID representing the operation (if the key has been used previously
          * the original response is returned).
          */
-        \\"x-idempotency-key\\": IdempotencyKey;
+        "x-idempotency-key": IdempotencyKey;
     };
 }
 
@@ -3072,13 +3072,13 @@ export interface Debtor {
 }
 
 export interface DebtorAccount {
-    SchemeName: \\"SortCodeAccountNumber\\";
+    SchemeName: "SortCodeAccountNumber";
     Identification: string;
     Name: string;
 }
 
 export interface Frequency {
-    Schedule: \\"Ad-hoc\\" | \\"Ad-hoc Plus\\" | \\"Monthly\\";
+    Schedule: "Ad-hoc" | "Ad-hoc Plus" | "Monthly";
     /**
      * Required if Schedule is \`Monthly\`. Zero-indexed, max value 30
      */
@@ -3137,7 +3137,7 @@ export interface OBDirectDebit {
     FirstPaymentAmount?: Amount;
 }
 
-export type StatusCode = \\"Active\\" | \\"Suspended\\" | \\"Cancelled\\" | \\"Inactive\\";
+export type StatusCode = "Active" | "Suspended" | "Cancelled" | "Inactive";
 
 export interface PostDirectdebitV100Instructions {
     headers?: {
@@ -3145,7 +3145,7 @@ export interface PostDirectdebitV100Instructions {
          * A GUID representing the operation (if the key has been used previously
          * the original response is returned).
          */
-        \\"x-idempotency-key\\": IdempotencyKey;
+        "x-idempotency-key": IdempotencyKey;
     };
 }
 
@@ -3184,7 +3184,7 @@ export interface PostBulkcollectionsV100Collectionfiles {
          * A GUID representing the operation (if the key has been used previously
          * the original response is returned).
          */
-        \\"x-idempotency-key\\": IdempotencyKey;
+        "x-idempotency-key": IdempotencyKey;
     };
 }
 
@@ -3198,7 +3198,7 @@ export interface Response200BulkCollectionsFileProgressRead {
     };
 }
 
-export type BulkCollectionStatus = \\"INITIALISING\\" | \\"PROCESSING\\" | \\"PENDING_UPLOAD\\" | \\"COMPLETED\\";
+export type BulkCollectionStatus = "INITIALISING" | "PROCESSING" | "PENDING_UPLOAD" | "COMPLETED";
 
 export interface AuddisBankReturnedReportBody {
     document: Document;
@@ -3358,7 +3358,7 @@ export type SupplementaryDataEnvelope1 = string | undefined;
 
 export interface PostDirectdebitwebhooksV100Auddisbankreturnedadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -3409,7 +3409,7 @@ export interface ReportEntry11 {
 
 export type FixedFalseModified1 = false;
 
-export type CreditDebitCode = \\"DBIT\\";
+export type CreditDebitCode = "DBIT";
 
 export type ActiveOrHistoricCurrencyAndAmountModified1 = string;
 
@@ -3430,7 +3430,7 @@ export interface BankTransactionCodeStructure5 {
     [key: string]: unknown;
 }
 
-export type ExternalBankTransactionDomain1CodeModified1 = \\"PMNT\\";
+export type ExternalBankTransactionDomain1CodeModified1 = "PMNT";
 
 export interface BankTransactionCodeStructure6 {
     code: ExternalBankTransactionFamily1CodeModified1;
@@ -3438,9 +3438,9 @@ export interface BankTransactionCodeStructure6 {
     [key: string]: unknown;
 }
 
-export type ExternalBankTransactionFamily1CodeModified1 = \\"IDDT\\";
+export type ExternalBankTransactionFamily1CodeModified1 = "IDDT";
 
-export type ExternalBankTransactionSubFamily1CodeModified1 = \\"UPDD\\";
+export type ExternalBankTransactionSubFamily1CodeModified1 = "UPDD";
 
 export interface ProprietaryBankTransactionCodeStructure1 {
     code: Max35Text;
@@ -3524,7 +3524,7 @@ export interface BranchAndFinancialInstitutionIdentification6Modified1 {
 
 export interface PostDirectdebitwebhooksV100Aruddunpaiddirectdebitadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -3600,7 +3600,7 @@ export interface PartyIdentification135Modified1 {
 
 export interface PostDirectdebitwebhooksV100Addacsamendmentsadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -3664,7 +3664,7 @@ export interface components_schemas_PartyIdentification135 {
 
 export interface PostDirectdebitwebhooksV100Addacscancellationsadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -3707,7 +3707,7 @@ export type Max500Text = string & string;
 
 export type FixedTrueModified1 = true;
 
-export type CreditDebitCodeModified1 = \\"DBIT\\";
+export type CreditDebitCodeModified1 = "DBIT";
 
 export interface schemas_BankTransactionCodeStructure4 {
     domain?: schemas_BankTransactionCodeStructure5;
@@ -3727,7 +3727,7 @@ export interface schemas_BankTransactionCodeStructure6 {
     [key: string]: unknown;
 }
 
-export type schemas_ExternalBankTransactionSubFamily1CodeModified1 = \\"PRDD\\";
+export type schemas_ExternalBankTransactionSubFamily1CodeModified1 = "PRDD";
 
 export interface schemas_EntryDetails10 {
     transaction_details?: schemas_EntryTransaction11[];
@@ -3772,7 +3772,7 @@ export interface FinancialInstitutionIdentification18Modified1 {
 
 export interface PostDirectdebitwebhooksV100Ddicindemnityclaimadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -3810,7 +3810,7 @@ export interface components_schemas_ReportEntry11 {
     [key: string]: unknown;
 }
 
-export type schemas_CreditDebitCode = \\"CRDT\\";
+export type schemas_CreditDebitCode = "CRDT";
 
 export interface components_schemas_BankTransactionCodeStructure4 {
     domain?: components_schemas_BankTransactionCodeStructure5;
@@ -3830,7 +3830,7 @@ export interface components_schemas_BankTransactionCodeStructure6 {
     [key: string]: unknown;
 }
 
-export type components_schemas_ExternalBankTransactionSubFamily1CodeModified1 = \\"UPDD\\" | \\"PMDD\\";
+export type components_schemas_ExternalBankTransactionSubFamily1CodeModified1 = "UPDD" | "PMDD";
 
 export interface components_schemas_EntryDetails10 {
     transaction_details?: components_schemas_EntryTransaction11[];
@@ -3882,7 +3882,7 @@ export interface schemas_BranchData3 {
 
 export interface PostDirectdebitwebhooksV100Collectionadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -3909,7 +3909,7 @@ export interface DirectCreditInstruction {
 }
 
 export interface CreditorAccount {
-    SchemeName: \\"SortCodeAccountNumber\\";
+    SchemeName: "SortCodeAccountNumber";
     Identification: string;
     Name: string;
 }
@@ -3919,7 +3919,7 @@ export interface CreditorAmount {
      * A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
      */
     Amount: string;
-    Currency: \\"GBP\\";
+    Currency: "GBP";
 }
 
 export type Meta1 = any;
@@ -3932,7 +3932,7 @@ export interface PostDirectcreditV100Instructions {
          * A GUID representing the operation (if the key has been used previously
          * the original response is returned).
          */
-        \\"x-idempotency-key\\": IdempotencyKey;
+        "x-idempotency-key": IdempotencyKey;
     };
 }
 
@@ -3995,7 +3995,7 @@ export interface schemas_CashAccount40 {
 
 export interface PostDirectcreditwebhooksV100Awacswrongaccountforcreditsadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -4050,9 +4050,9 @@ export interface arucs_components_schemas_BankTransactionCodeStructure6 {
     [key: string]: unknown;
 }
 
-export type schemas_ExternalBankTransactionFamily1CodeModified1 = \\"ICDT\\";
+export type schemas_ExternalBankTransactionFamily1CodeModified1 = "ICDT";
 
-export type arucs_components_schemas_ExternalBankTransactionSubFamily1CodeModified1 = \\"RRTN\\";
+export type arucs_components_schemas_ExternalBankTransactionSubFamily1CodeModified1 = "RRTN";
 
 export interface arucs_components_schemas_EntryDetails10 {
     transaction_details?: arucs_components_schemas_EntryTransaction11[];
@@ -4107,7 +4107,7 @@ export interface components_schemas_TransactionReferences6 {
 
 export interface PostDirectcreditwebhooksV100Arucsunappliedcreditsadvices {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -4139,9 +4139,9 @@ export interface OBCreatePaymentSession {
     };
 }
 
-export type LocalInstrument = \\"UK.POL.All\\" | \\"UK.POL.Cards\\";
+export type LocalInstrument = "UK.POL.All" | "UK.POL.Cards";
 
-export type Currency = \\"GBP\\";
+export type Currency = "GBP";
 
 export interface PostPaymentsV100Sessions {
     headers?: {
@@ -4149,7 +4149,7 @@ export interface PostPaymentsV100Sessions {
          * A GUID representing the operation (if the key has been used previously
          * the original response is returned).
          */
-        \\"x-idempotency-key\\": UUID1;
+        "x-idempotency-key": UUID1;
     };
 }
 
@@ -4178,7 +4178,7 @@ export interface Header59 {
     [key: string]: unknown;
 }
 
-export type MessageFunction42Code = \\"AUTQ\\" | \\"AUTP\\" | \\"CCAV\\" | \\"CCAK\\" | \\"CCAQ\\" | \\"CCAP\\" | \\"CMPV\\" | \\"CMPK\\" | \\"DCAV\\" | \\"DCRR\\" | \\"DCCQ\\" | \\"DCCP\\" | \\"DGNP\\" | \\"DGNQ\\" | \\"FAUQ\\" | \\"FAUP\\" | \\"FCMV\\" | \\"FCMK\\" | \\"FRVA\\" | \\"FRVR\\" | \\"RCLQ\\" | \\"RCLP\\" | \\"RVRA\\" | \\"RVRR\\" | \\"CDDQ\\" | \\"CDDK\\" | \\"CDDR\\" | \\"CDDP\\" | \\"TRNR\\" | \\"TRNA\\" | \\"NFRQ\\" | \\"NFRP\\" | \\"TRPQ\\" | \\"TRPP\\";
+export type MessageFunction42Code = "AUTQ" | "AUTP" | "CCAV" | "CCAK" | "CCAQ" | "CCAP" | "CMPV" | "CMPK" | "DCAV" | "DCRR" | "DCCQ" | "DCCP" | "DGNP" | "DGNQ" | "FAUQ" | "FAUP" | "FCMV" | "FCMK" | "FRVA" | "FRVR" | "RCLQ" | "RCLP" | "RVRA" | "RVRR" | "CDDQ" | "CDDK" | "CDDR" | "CDDP" | "TRNR" | "TRNA" | "NFRQ" | "NFRP" | "TRPQ" | "TRPP";
 
 export type Max6Text = string & string;
 
@@ -4187,7 +4187,7 @@ export interface GenericIdentification176 {
     [key: string]: unknown;
 }
 
-export type InitiatingPartyIdentification = \\"CHECKOUT\\";
+export type InitiatingPartyIdentification = "CHECKOUT";
 
 export interface AcceptorAuthorisationResponse10 {
     environment: CardPaymentEnvironment77;
@@ -4215,7 +4215,7 @@ export type Max15NumericText = string | undefined;
 
 export type Max3Text = string | undefined;
 
-export type CardProductType1Code = \\"COMM\\" | \\"CONS\\" | any;
+export type CardProductType1Code = "COMM" | "CONS" | any;
 
 export type Cardholder17 = {
     identification?: PersonIdentification15;
@@ -4259,7 +4259,7 @@ export type ImpliedCurrencyAndAmount = DecimalNumberAsString & number;
 
 export type DecimalNumberAsString = string;
 
-export type CardAccountType3Code = \\"CTDP\\" | \\"CHCK\\" | \\"CRDT\\" | \\"CURR\\" | \\"CDBT\\" | \\"DFLT\\" | \\"EPRS\\" | \\"HEQL\\" | \\"ISTL\\" | \\"INVS\\" | \\"LCDT\\" | \\"MBNW\\" | \\"MNMK\\" | \\"MNMC\\" | \\"MTGL\\" | \\"RTRM\\" | \\"RVLV\\" | \\"SVNG\\" | \\"STBD\\" | \\"UVRL\\" | \\"PRPD\\" | \\"FLTC\\" | any;
+export type CardAccountType3Code = "CTDP" | "CHCK" | "CRDT" | "CURR" | "CDBT" | "DFLT" | "EPRS" | "HEQL" | "ISTL" | "INVS" | "LCDT" | "MBNW" | "MNMK" | "MNMC" | "MTGL" | "RTRM" | "RVLV" | "SVNG" | "STBD" | "UVRL" | "PRPD" | "FLTC" | any;
 
 export interface CardPaymentTransaction109 {
     authorisation_result: AuthorisationResult14;
@@ -4277,13 +4277,13 @@ export interface ResponseType10 {
     [key: string]: unknown;
 }
 
-export type Response9Code = \\"APPR\\" | \\"DECL\\" | \\"PART\\" | \\"SUSP\\" | \\"TECH\\";
+export type Response9Code = "APPR" | "DECL" | "PART" | "SUSP" | "TECH";
 
 export type Min5Max6Text = string & string;
 
 export interface PostWebhookV100Approved {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -4339,7 +4339,7 @@ export type Min6Max8Text = string & string;
 
 export interface PostWebhookV100Voided {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -4374,7 +4374,7 @@ export interface CardPaymentTransactionAdviceResponse8 {
 
 export interface PostWebhookV100Captured {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -4455,7 +4455,7 @@ export type Max6TextNullable = string | undefined;
 
 export interface PostWebhookV100Declined {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -4530,7 +4530,7 @@ export type ActiveOrHistoricCurrencyCode = string & string;
 
 export type ActiveOrHistoricCurrencyAndAmount_SimpleType = string;
 
-export type components_schemas_CreditDebitCode = \\"CRDT\\" | \\"DBIT\\";
+export type components_schemas_CreditDebitCode = "CRDT" | "DBIT";
 
 export interface payment_refund_declined_components_schemas_BankTransactionCodeStructure4 {
     domain?: payment_refund_declined_components_schemas_BankTransactionCodeStructure5;
@@ -4557,7 +4557,7 @@ export type ExternalBankTransactionSubFamily1Code = string & string;
 
 export interface PostWebhookV100Refunddeclined {
     headers?: {
-        \\"x-client-signature\\": string;
+        "x-client-signature": string;
     };
 }
 
@@ -4582,7 +4582,7 @@ export interface PostPaymentsV100IdRefunds {
          * A GUID representing the operation (if the key has been used previously
          * the original response is returned).
          */
-        \\"x-idempotency-key\\": string;
+        "x-idempotency-key": string;
     };
 }
 
@@ -4658,9 +4658,9 @@ export type TransactionId = string;
 
 export type TransactionReference = string;
 
-export type OBCreditDebitCode1 = \\"Credit\\" | \\"Debit\\";
+export type OBCreditDebitCode1 = "Credit" | "Debit";
 
-export type OBEntryStatus1Code = \\"Booked\\" | \\"Pending\\" | \\"Rejected\\";
+export type OBEntryStatus1Code = "Booked" | "Pending" | "Rejected";
 
 export type BookingDateTime = string;
 
@@ -4672,7 +4672,7 @@ export interface OBActiveOrHistoricCurrencyAndAmount9 {
      */
     Amount: OBActiveCurrencyAndAmountSimpleType;
     /**
-     * A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \\"Codes for the representation of currencies and funds\\".
+     * A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".
      */
     Currency: ActiveOrHistoricCurrencyCode1;
 }
@@ -4696,7 +4696,7 @@ export interface OBTransactionCashBalance {
      */
     Amount: {
         /**
-         * A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \\"Codes for the representation of currencies and funds\\".
+         * A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".
          */
         Currency: ActiveOrHistoricCurrencyCode1;
         /**
@@ -4707,9 +4707,9 @@ export interface OBTransactionCashBalance {
     };
 }
 
-export type OBCreditDebitCode2 = \\"Credit\\" | \\"Debit\\";
+export type OBCreditDebitCode2 = "Credit" | "Debit";
 
-export type OBBalanceType1Code = \\"ClosingAvailable\\" | \\"ClosingBooked\\" | \\"ClosingCleared\\" | \\"Expected\\" | \\"ForwardAvailable\\" | \\"Information\\" | \\"InterimAvailable\\" | \\"InterimBooked\\" | \\"InterimCleared\\" | \\"OpeningAvailable\\" | \\"OpeningBooked\\" | \\"OpeningCleared\\" | \\"PreviouslyClosedBooked\\";
+export type OBBalanceType1Code = "ClosingAvailable" | "ClosingBooked" | "ClosingCleared" | "Expected" | "ForwardAvailable" | "Information" | "InterimAvailable" | "InterimBooked" | "InterimCleared" | "OpeningAvailable" | "OpeningBooked" | "OpeningCleared" | "PreviouslyClosedBooked";
 
 export interface OBBranchAndFinancialInstitutionIdentification61 {
     /**
@@ -4747,7 +4747,7 @@ export interface OBCashAccount60 {
     SecondaryIdentification?: SecondaryIdentification;
 }
 
-export type OBExternalAccountIdentification4Code = \\"UK.OBIE.BBAN\\" | \\"UK.OBIE.IBAN\\" | \\"UK.OBIE.PAN\\" | \\"UK.OBIE.Paym\\" | \\"UK.OBIE.SortCodeAccountNumber\\";
+export type OBExternalAccountIdentification4Code = "UK.OBIE.BBAN" | "UK.OBIE.IBAN" | "UK.OBIE.PAN" | "UK.OBIE.Paym" | "UK.OBIE.SortCodeAccountNumber";
 
 export type Identification0 = string;
 
@@ -4795,7 +4795,7 @@ export interface Record_string_any_ {
 
 export interface PostInboundtransactionsV100TransactionsIdCommit {
     headers?: {
-        \\"x-idempotency-key\\": string;
+        "x-idempotency-key": string;
     };
 }
 
@@ -4871,7 +4871,7 @@ export interface UpdateTransactionBody {
     };
 }
 
-export type BillingSystem = \\"Gentrack\\" | \\"Orion\\";
+export type BillingSystem = "Gentrack" | "Orion";
 
 export interface AddacsReport {
     Data: AddacsData;
@@ -4903,7 +4903,7 @@ export interface DirectDebitReportResponseData {
     ReportName: string;
 }
 
-export type DirectDebitReportType = \\"AUDDIS\\" | \\"ADDACS\\" | \\"ARUDD\\" | \\"DDIC\\" | \\"AWACS\\" | \\"ARUCS\\";
+export type DirectDebitReportType = "AUDDIS" | "ADDACS" | "ARUDD" | "DDIC" | "AWACS" | "ARUCS";
 
 export interface ArucsReport {
     Data: ArucsData;
@@ -5006,37 +5006,37 @@ export interface AxiosOapiInstance {
     /**
      * Request a Bearer token
      */
-    \\"POST /authentication/v1.0.0/oauth/token\\": (data: CreateAuthorizationToken, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200AuthenticationTokenRead>>;
+    "POST /authentication/v1.0.0/oauth/token": (data: CreateAuthorizationToken, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200AuthenticationTokenRead>>;
     /**
      * Retrieve information on a UK bank account
      *
      * Required OAuth Audience: <code>BankAccounts</code>
      */
-    \\"POST /bank-account/uk/v1.0.0/information\\": (data: CreateUKBankAccountInformation, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200UKBankAccountInformation>>;
+    "POST /bank-account/uk/v1.0.0/information": (data: CreateUKBankAccountInformation, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200UKBankAccountInformation>>;
     /**
      * Create Direct Debit Collections
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"POST /direct-debit/v1.0.0/instructions/{MandateIdentification}/collections\\": (MandateIdentification: string, data: CreateDirectDebitCollection, config?: AxiosRequestConfig & PostDirectdebitV100InstructionsMandateIdentificationCollections) => Promise<AxiosResponse<Response200DirectDebitCollectionRead>>;
+    "POST /direct-debit/v1.0.0/instructions/{MandateIdentification}/collections": (MandateIdentification: string, data: CreateDirectDebitCollection, config?: AxiosRequestConfig & PostDirectdebitV100InstructionsMandateIdentificationCollections) => Promise<AxiosResponse<Response200DirectDebitCollectionRead>>;
     /**
      * Create Direct Debit Instruction
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"POST /direct-debit/v1.0.0/instructions\\": (data: DirectDebitInstruction, config?: AxiosRequestConfig & PostDirectdebitV100Instructions) => Promise<AxiosResponse<Response200DirectDebitInstructionRead>>;
+    "POST /direct-debit/v1.0.0/instructions": (data: DirectDebitInstruction, config?: AxiosRequestConfig & PostDirectdebitV100Instructions) => Promise<AxiosResponse<Response200DirectDebitInstructionRead>>;
     /**
      * Update Direct Debit Instruction
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}\\": (MandateIdentification: string, data: OBReadUpdateDirectDebit, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200UpdateDirectDebitInstructionRead>>;
+    "PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}": (MandateIdentification: string, data: OBReadUpdateDirectDebit, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200UpdateDirectDebitInstructionRead>>;
     /**
      * Update Direct Debit Instruction Status
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}/status\\": (MandateIdentification: string, data: UpdateDirectDebitInstructionStatus, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200DirectDebitInstructionUpdateStatus>>;
+    "PUT /direct-debit/v1.0.0/instructions/{MandateIdentification}/status": (MandateIdentification: string, data: UpdateDirectDebitInstructionStatus, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200DirectDebitInstructionUpdateStatus>>;
     /**
      * Upload a Direct Debit collection file
      *
@@ -5045,26 +5045,26 @@ export interface AxiosOapiInstance {
      * Example file content:
      *
      * <code>{
-     * \\"document\\": {
-     *  \\"fi_to_fi_customer_direct_debit\\": {
-     *    \\"group_header\\": {
-     *      \\"message_identification\\": \\"cc60bfc5-7876-4fba-ae24-2d9c3e32e0b0\\",
-     *      \\"creation_date_time\\": \\"2021-07-23T10:46:56.697Z\\",
-     *      \\"number_of_transactions\\": 3
+     * "document": {
+     *  "fi_to_fi_customer_direct_debit": {
+     *    "group_header": {
+     *      "message_identification": "cc60bfc5-7876-4fba-ae24-2d9c3e32e0b0",
+     *      "creation_date_time": "2021-07-23T10:46:56.697Z",
+     *      "number_of_transactions": 3
      *    },
-     *    \\"direct_debit_transaction_information\\": [
+     *    "direct_debit_transaction_information": [
      *      {
-     *        \\"payment_identification\\": {
-     *          \\"end_to_end_identification\\": \\"5231998b-d704-40e1-aea4-3ac952aa757b\\"
+     *        "payment_identification": {
+     *          "end_to_end_identification": "5231998b-d704-40e1-aea4-3ac952aa757b"
      *        },
-     *        \\"interbank_settlement_amount\\": {
-     *          \\"active_currency\\": \\"GBP\\",
-     *          \\"currency_amount\\": \\"10.00\\"
+     *        "interbank_settlement_amount": {
+     *          "active_currency": "GBP",
+     *          "currency_amount": "10.00"
      *        },
-     *        \\"interbank_settlement_date\\": \\"2021-07-23\\",
-     *        \\"direct_debit_transaction\\": {
-     *          \\"mandate_related_information\\": {
-     *            \\"mandate_id\\": \\"EXE-123456\\"
+     *        "interbank_settlement_date": "2021-07-23",
+     *        "direct_debit_transaction": {
+     *          "mandate_related_information": {
+     *            "mandate_id": "EXE-123456"
      *          }
      *        }
      *      }
@@ -5073,94 +5073,94 @@ export interface AxiosOapiInstance {
      * }
      * }</code>
      */
-    \\"POST /bulk-collections/v1.0.0/collection-files\\": (data: unknown, config?: AxiosRequestConfig & PostBulkcollectionsV100Collectionfiles) => Promise<AxiosResponse<Response200BulkCollectionsFileRead>>;
+    "POST /bulk-collections/v1.0.0/collection-files": (data: unknown, config?: AxiosRequestConfig & PostBulkcollectionsV100Collectionfiles) => Promise<AxiosResponse<Response200BulkCollectionsFileRead>>;
     /**
      * Get the status of a Direct Debit collection file
      *
      * Required OAuth Audience: <code>DirectDebits</code>
      */
-    \\"GET /bulk-collections/v1.0.0/collection-files/{CollectionFileIdentification}\\": (CollectionFileIdentification: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200BulkCollectionsFileProgressRead>>;
+    "GET /bulk-collections/v1.0.0/collection-files/{CollectionFileIdentification}": (CollectionFileIdentification: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<Response200BulkCollectionsFileProgressRead>>;
     /**
      * AUDDIS Bank Returned Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices\\": (data: AuddisBankReturnedReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Auddisbankreturnedadvices) => Promise<AxiosResponse>;
+    "POST /direct-debit-webhooks/v1.0.0/auddis-bank-returned-advices": (data: AuddisBankReturnedReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Auddisbankreturnedadvices) => Promise<AxiosResponse>;
     /**
      * ARUDD Unpaid Direct Debit Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices\\": (data: AruddReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Aruddunpaiddirectdebitadvices) => Promise<AxiosResponse>;
+    "POST /direct-debit-webhooks/v1.0.0/arudd-unpaid-direct-debit-advices": (data: AruddReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Aruddunpaiddirectdebitadvices) => Promise<AxiosResponse>;
     /**
      * ADDACS Amendments Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/addacs-amendments-advices\\": (data: AddacsAmendmentsReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Addacsamendmentsadvices) => Promise<AxiosResponse>;
+    "POST /direct-debit-webhooks/v1.0.0/addacs-amendments-advices": (data: AddacsAmendmentsReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Addacsamendmentsadvices) => Promise<AxiosResponse>;
     /**
      * ADDACS Cancellations Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/addacs-cancellations-advices\\": (data: AddacsCancellationsReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Addacscancellationsadvices) => Promise<AxiosResponse>;
+    "POST /direct-debit-webhooks/v1.0.0/addacs-cancellations-advices": (data: AddacsCancellationsReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Addacscancellationsadvices) => Promise<AxiosResponse>;
     /**
      * DDIC Indemnity Claim Advice
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices\\": (data: DdicReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Ddicindemnityclaimadvices) => Promise<AxiosResponse>;
+    "POST /direct-debit-webhooks/v1.0.0/ddic-indemnity-claim-advices": (data: DdicReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Ddicindemnityclaimadvices) => Promise<AxiosResponse>;
     /**
      * Collection Advices
      */
-    \\"POST /direct-debit-webhooks/v1.0.0/collection-advices\\": (data: CollectionAdvicesReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Collectionadvices) => Promise<AxiosResponse>;
+    "POST /direct-debit-webhooks/v1.0.0/collection-advices": (data: CollectionAdvicesReportBody, config?: AxiosRequestConfig & PostDirectdebitwebhooksV100Collectionadvices) => Promise<AxiosResponse>;
     /**
      * Create Direct Credit
      *
      * Required OAuth Audience: <code>DirectCredits</code>
      */
-    \\"POST /direct-credit/v1.0.0/instructions\\": (data: CreateDirectCredit, config?: AxiosRequestConfig & PostDirectcreditV100Instructions) => Promise<AxiosResponse<Response200DirectCreditInstructionRead>>;
+    "POST /direct-credit/v1.0.0/instructions": (data: CreateDirectCredit, config?: AxiosRequestConfig & PostDirectcreditV100Instructions) => Promise<AxiosResponse<Response200DirectCreditInstructionRead>>;
     /**
      * AWACS Wrong Account for Credits Advice
      */
-    \\"POST /direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices\\": (data: AwacsWrongAccountForCreditsReportBody, config?: AxiosRequestConfig & PostDirectcreditwebhooksV100Awacswrongaccountforcreditsadvices) => Promise<AxiosResponse>;
+    "POST /direct-credit-webhooks/v1.0.0/awacs-wrong-account-for-credits-advices": (data: AwacsWrongAccountForCreditsReportBody, config?: AxiosRequestConfig & PostDirectcreditwebhooksV100Awacswrongaccountforcreditsadvices) => Promise<AxiosResponse>;
     /**
      * ARUCS Unapplied Credits Advice
      */
-    \\"POST /direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices\\": (data: ArucsReportBody, config?: AxiosRequestConfig & PostDirectcreditwebhooksV100Arucsunappliedcreditsadvices) => Promise<AxiosResponse>;
+    "POST /direct-credit-webhooks/v1.0.0/arucs-unapplied-credits-advices": (data: ArucsReportBody, config?: AxiosRequestConfig & PostDirectcreditwebhooksV100Arucsunappliedcreditsadvices) => Promise<AxiosResponse>;
     /**
      * Request Payment Session
      *
      * Required OAuth Audience: <code>PaymentSession</code>
      */
-    \\"POST /payments/v1.0.0/sessions\\": (data: CreatePaymentSession, config?: AxiosRequestConfig & PostPaymentsV100Sessions) => Promise<AxiosResponse>;
+    "POST /payments/v1.0.0/sessions": (data: CreatePaymentSession, config?: AxiosRequestConfig & PostPaymentsV100Sessions) => Promise<AxiosResponse>;
     /**
      * Payment approved
      */
-    \\"POST /webhook/v1.0.0/approved\\": (data: PaymentApprovedEventBody, config?: AxiosRequestConfig & PostWebhookV100Approved) => Promise<AxiosResponse>;
+    "POST /webhook/v1.0.0/approved": (data: PaymentApprovedEventBody, config?: AxiosRequestConfig & PostWebhookV100Approved) => Promise<AxiosResponse>;
     /**
      * Payment voided
      */
-    \\"POST /webhook/v1.0.0/voided\\": (data: PaymentVoidedEventBody, config?: AxiosRequestConfig & PostWebhookV100Voided) => Promise<AxiosResponse>;
+    "POST /webhook/v1.0.0/voided": (data: PaymentVoidedEventBody, config?: AxiosRequestConfig & PostWebhookV100Voided) => Promise<AxiosResponse>;
     /**
      * Payment captured
      */
-    \\"POST /webhook/v1.0.0/captured\\": (data: PaymentCapturedEventBody, config?: AxiosRequestConfig & PostWebhookV100Captured) => Promise<AxiosResponse>;
+    "POST /webhook/v1.0.0/captured": (data: PaymentCapturedEventBody, config?: AxiosRequestConfig & PostWebhookV100Captured) => Promise<AxiosResponse>;
     /**
      * Payment declined
      */
-    \\"POST /webhook/v1.0.0/declined\\": (data: PaymentDeclinedEventBody, config?: AxiosRequestConfig & PostWebhookV100Declined) => Promise<AxiosResponse>;
+    "POST /webhook/v1.0.0/declined": (data: PaymentDeclinedEventBody, config?: AxiosRequestConfig & PostWebhookV100Declined) => Promise<AxiosResponse>;
     /**
      * Payment refund declined
      */
-    \\"POST /webhook/v1.0.0/refund-declined\\": (data: PaymentRefundDeclinedEventBody, config?: AxiosRequestConfig & PostWebhookV100Refunddeclined) => Promise<AxiosResponse>;
+    "POST /webhook/v1.0.0/refund-declined": (data: PaymentRefundDeclinedEventBody, config?: AxiosRequestConfig & PostWebhookV100Refunddeclined) => Promise<AxiosResponse>;
     /**
      * Payment Refund
      * Request Payment Refund
      *
      * Required OAuth Audience: <code>PaymentSession</code>
      */
-    \\"POST /payments/v1.0.0/{id}/refunds\\": (id: string, data?: CreatePaymentRefund, config?: AxiosRequestConfig & PostPaymentsV100IdRefunds) => Promise<AxiosResponse<SuccessResponseBody>>;
-    \\"POST /inbound-transactions/v1.0.0/transactions/{id}/commit\\": (id: string, data?: unknown, config?: AxiosRequestConfig & PostInboundtransactionsV100TransactionsIdCommit) => Promise<AxiosResponse<{
+    "POST /payments/v1.0.0/{id}/refunds": (id: string, data?: CreatePaymentRefund, config?: AxiosRequestConfig & PostPaymentsV100IdRefunds) => Promise<AxiosResponse<SuccessResponseBody>>;
+    "POST /inbound-transactions/v1.0.0/transactions/{id}/commit": (id: string, data?: unknown, config?: AxiosRequestConfig & PostInboundtransactionsV100TransactionsIdCommit) => Promise<AxiosResponse<{
         /**
          * Provides further details on an entry in the report.
          */
         Data: OBTransaction6;
         [key: string]: unknown;
     }>>;
-    \\"GET /inbound-transactions/v1.0.0/accounts/{accountId}/transactions\\": (accountId: string, config?: AxiosRequestConfig & GetInboundtransactionsV100AccountsAccountIdTransactions) => Promise<AxiosResponse<OBReadTransaction6>>;
-    \\"GET /inbound-transactions/v1.0.0/transactions\\": (config?: AxiosRequestConfig & GetInboundtransactionsV100Transactions) => Promise<AxiosResponse<OBReadTransaction6>>;
-    \\"PATCH /inbound-transactions/v1.0.0/transactions/{id}\\": (id: string, data: UpdateTransactionBody, config?: AxiosRequestConfig) => Promise<AxiosResponse<{
+    "GET /inbound-transactions/v1.0.0/accounts/{accountId}/transactions": (accountId: string, config?: AxiosRequestConfig & GetInboundtransactionsV100AccountsAccountIdTransactions) => Promise<AxiosResponse<OBReadTransaction6>>;
+    "GET /inbound-transactions/v1.0.0/transactions": (config?: AxiosRequestConfig & GetInboundtransactionsV100Transactions) => Promise<AxiosResponse<OBReadTransaction6>>;
+    "PATCH /inbound-transactions/v1.0.0/transactions/{id}": (id: string, data: UpdateTransactionBody, config?: AxiosRequestConfig) => Promise<AxiosResponse<{
         /**
          * Provides further details on an entry in the report.
          */
@@ -5169,28 +5169,28 @@ export interface AxiosOapiInstance {
     }>>;
     /**
      *
-     * NewAccountNumber and New only required if ReasonCode === \\"3\\" || ReasonCode === \\"C\\"
+     * NewAccountNumber and New only required if ReasonCode === "3" || ReasonCode === "C"
      */
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/addacs\\": (data: AddacsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/arucs\\": (data: ArucsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    "POST /direct-debit-test-harness/v1.0.0/reports/addacs": (data: AddacsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    "POST /direct-debit-test-harness/v1.0.0/reports/arucs": (data: ArucsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
     /**
      *
-     * User will either need to provide both returnCode and returnDescription fields or leave both fields as \\"\\"
+     * User will either need to provide both returnCode and returnDescription fields or leave both fields as ""
      */
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/arudd\\": (data: AruddReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    "POST /direct-debit-test-harness/v1.0.0/reports/arudd": (data: AruddReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
     /**
-     * NewAccountNumber and NewSortcode only required if ReasonCode === \\"C\\"
+     * NewAccountNumber and NewSortcode only required if ReasonCode === "C"
      */
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/auddis\\": (data: AuddisReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/awacs\\": (data: AwacsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
-    \\"POST /direct-debit-test-harness/v1.0.0/reports/ddic\\": (data: DDICReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    "POST /direct-debit-test-harness/v1.0.0/reports/auddis": (data: AuddisReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    "POST /direct-debit-test-harness/v1.0.0/reports/awacs": (data: AwacsReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
+    "POST /direct-debit-test-harness/v1.0.0/reports/ddic": (data: DDICReport, config?: AxiosRequestConfig) => Promise<AxiosResponse<DirectDebitReportResponse>>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test schemes.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Schemes
@@ -5202,42 +5202,42 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Health Check
      * Health check endpoint
      */
-    \\"GET /.well-known/health-check\\": config => api.get<{
+    "GET /.well-known/health-check": config => api.get<{
         success: boolean;
     }>(\`/.well-known/health-check\`, config),
     /**
      * OpenApi
      * The open api spec for the service. OpenAPI v3.
      */
-    \\"GET /.well-known/openapi.yaml\\": config => api.get<string>(\`/.well-known/openapi.yaml\`, config),
+    "GET /.well-known/openapi.yaml": config => api.get<string>(\`/.well-known/openapi.yaml\`, config),
     /**
      * OpenApi Components
      * Shared schemas for the open api spec. OpenAPI v3.
      */
-    \\"GET /.well-known/components.yaml\\": config => api.get<string>(\`/.well-known/components.yaml\`, config),
+    "GET /.well-known/components.yaml": config => api.get<string>(\`/.well-known/components.yaml\`, config),
     /**
      * OpenApi Levelisation
      * Schemas for Levelisation endpoints. OpenAPI v3.
      */
-    \\"GET /.well-known/levelisations.yaml\\": config => api.get<string>(\`/.well-known/levelisations.yaml\`, config),
+    "GET /.well-known/levelisations.yaml": config => api.get<string>(\`/.well-known/levelisations.yaml\`, config),
     /**
      * OpenApi Read Checks
      * Schemas for Read Checks endpoints. OpenAPI v3.
      */
-    \\"GET /.well-known/read-checks.yaml\\": config => api.get<string>(\`/.well-known/read-checks.yaml\`, config),
+    "GET /.well-known/read-checks.yaml": config => api.get<string>(\`/.well-known/read-checks.yaml\`, config),
     /**
      * OpenApi HTML
      * The open api spec for the service. OpenAPI v3.
      */
-    \\"GET /.well-known/openapi.html\\": config => api.get(\`/.well-known/openapi.html\`, config),
+    "GET /.well-known/openapi.html": config => api.get(\`/.well-known/openapi.html\`, config),
     /**
      * Create a session for the current user
      */
-    \\"POST /v1/session\\": (data, config) => api.post<Session>(\`/v1/session\`, data, config),
+    "POST /v1/session": (data, config) => api.post<Session>(\`/v1/session\`, data, config),
     /**
      * Get Comm Batches.
      */
-    \\"GET /v1/comm-batches\\": config => api.get<List & {
+    "GET /v1/comm-batches": config => api.get<List & {
         data: CommBatchList[];
         [key: string]: unknown;
     }>(\`/v1/comm-batches\`, config),
@@ -5246,22 +5246,22 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Create new Comm Batch that will be processed and can be monitored responses
      *
      */
-    \\"POST /v1/comm-batches\\": (data, config) => api.post<CommBatch>(\`/v1/comm-batches\`, data, config),
+    "POST /v1/comm-batches": (data, config) => api.post<CommBatch>(\`/v1/comm-batches\`, data, config),
     /**
      * Get Comm Batch by ID
      */
-    \\"GET /v1/comm-batches/{id}\\": (id, config) => api.get<CommBatch>(\`/v1/comm-batches/\${id}\`, config),
+    "GET /v1/comm-batches/{id}": (id, config) => api.get<CommBatch>(\`/v1/comm-batches/\${id}\`, config),
     /**
      * Do a tolerance checks for all the reads that have not been checked
      */
-    \\"POST /v1/process/meter-reads-tolerance\\": (data, config) => api.post<{
+    "POST /v1/process/meter-reads-tolerance": (data, config) => api.post<{
         success: boolean;
     }>(\`/v1/process/meter-reads-tolerance\`, data, config),
     /**
      * Tolerance checks
      * List of Meter Reads that have failed their tolernace checks and need to be reviewed
      */
-    \\"GET /v1/read-checks\\": config => api.get<List & {
+    "GET /v1/read-checks": config => api.get<List & {
         data?: MeterReadCheck[];
         [key: string]: unknown;
     }>(\`/v1/read-checks\`, config),
@@ -5269,34 +5269,34 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Bulk Save Tolerance Check
      * Update Multiple Tolerance check details at once
      */
-    \\"PUT /v1/read-checks\\": (data, config) => api.put<ListOfIds>(\`/v1/read-checks\`, data, config),
+    "PUT /v1/read-checks": (data, config) => api.put<ListOfIds>(\`/v1/read-checks\`, data, config),
     /**
      * Save Tolerance Check
      * Update Tolerance check details
      */
-    \\"DELETE /v1/read-checks\\": config => api.delete<ListOfIds>(\`/v1/read-checks\`, config),
+    "DELETE /v1/read-checks": config => api.delete<ListOfIds>(\`/v1/read-checks\`, config),
     /**
      * Single Tolerance check
      * Details on the meter read tolerance check
      */
-    \\"GET /v1/read-checks/{id}\\": (id, config) => api.get<MeterReadCheck>(\`/v1/read-checks/\${id}\`, config),
+    "GET /v1/read-checks/{id}": (id, config) => api.get<MeterReadCheck>(\`/v1/read-checks/\${id}\`, config),
     /**
      * Save Tolerance Check
      * Update Tolerance check details
      */
-    \\"PUT /v1/read-checks/{id}\\": (id, data, config) => api.put<MeterReadCheck>(\`/v1/read-checks/\${id}\`, data, config),
+    "PUT /v1/read-checks/{id}": (id, data, config) => api.put<MeterReadCheck>(\`/v1/read-checks/\${id}\`, data, config),
     /**
      * Save Tolerance Check
      * Update Tolerance check details
      */
-    \\"DELETE /v1/read-checks/{id}\\": (id, config) => api.delete<{
+    "DELETE /v1/read-checks/{id}": (id, config) => api.delete<{
         success: boolean;
     }>(\`/v1/read-checks/\${id}\`, config),
     /**
      * Levelisations
      * List of Levelisation processes by quarters
      */
-    \\"GET /v1/levelisations\\": config => api.get<List & {
+    "GET /v1/levelisations": config => api.get<List & {
         data?: LevelisationList[];
         [key: string]: unknown;
     }>(\`/v1/levelisations\`, config),
@@ -5304,22 +5304,22 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Create new Levelisation
      * Create a new Levelisation
      */
-    \\"POST /v1/levelisations\\": (data, config) => api.post<Levelisation>(\`/v1/levelisations\`, data, config),
+    "POST /v1/levelisations": (data, config) => api.post<Levelisation>(\`/v1/levelisations\`, data, config),
     /**
      * Quater levelisation
      * Levelisation calculation for all accounts
      */
-    \\"GET /v1/levelisations/{id}\\": (id, config) => api.get<Levelisation>(\`/v1/levelisations/\${id}\`, config),
+    "GET /v1/levelisations/{id}": (id, config) => api.get<Levelisation>(\`/v1/levelisations/\${id}\`, config),
     /**
      * Save Levelisation
      * Update Levelisation
      */
-    \\"PUT /v1/levelisations/{id}\\": (id, data, config) => api.put<Levelisation>(\`/v1/levelisations/\${id}\`, data, config),
+    "PUT /v1/levelisations/{id}": (id, data, config) => api.put<Levelisation>(\`/v1/levelisations/\${id}\`, data, config),
     /**
      * Levelisations
      * List of Levelisation processes by quarters
      */
-    \\"GET /v1/account-levelisations\\": config => api.get<List & {
+    "GET /v1/account-levelisations": config => api.get<List & {
         data?: AccountLevelisation[];
         [key: string]: unknown;
     }>(\`/v1/account-levelisations\`, config),
@@ -5327,27 +5327,27 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Bulk Save Account Levelisations
      * Update Account Levelisations at once
      */
-    \\"PUT /v1/account-levelisations\\": (data, config) => api.put<ListOfIds>(\`/v1/account-levelisations\`, data, config),
+    "PUT /v1/account-levelisations": (data, config) => api.put<ListOfIds>(\`/v1/account-levelisations\`, data, config),
     /**
      * Account levelisation tariff
      * Levelisation tariff for a single account
      */
-    \\"GET /v1/account-levelisations/{id}\\": (id, config) => api.get<AccountLevelisation>(\`/v1/account-levelisations/\${id}\`, config),
+    "GET /v1/account-levelisations/{id}": (id, config) => api.get<AccountLevelisation>(\`/v1/account-levelisations/\${id}\`, config),
     /**
      * Save Account Levelisation
      * Update Account Levelisation
      */
-    \\"PUT /v1/account-levelisations/{id}\\": (id, data, config) => api.put<AccountLevelisation>(\`/v1/account-levelisations/\${id}\`, data, config),
+    "PUT /v1/account-levelisations/{id}": (id, data, config) => api.put<AccountLevelisation>(\`/v1/account-levelisations/\${id}\`, data, config),
     /**
      * Payment CSV Export
      * Cheque Payments
      */
-    \\"GET /v1/payment-export\\": config => api.get(\`/v1/payment-export\`, config),
+    "GET /v1/payment-export": config => api.get(\`/v1/payment-export\`, config),
     /**
      * Accounts
      * A list of fit and seg accounts
      */
-    \\"GET /v1/account\\": config => api.get<List & {
+    "GET /v1/account": config => api.get<List & {
         data: AccountListItem[];
         [key: string]: unknown;
     }>(\`/v1/account\`, config),
@@ -5355,27 +5355,27 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Get reads for the account
      * Account reads
      */
-    \\"GET /v1/account/{id}/reads\\": (id, config) => api.get<MeterRead[]>(\`/v1/account/\${id}/reads\`, config),
+    "GET /v1/account/{id}/reads": (id, config) => api.get<MeterRead[]>(\`/v1/account/\${id}/reads\`, config),
     /**
      * Get reads for the account
      * Account reads
      */
-    \\"GET /v1/account/{id}\\": (id, config) => api.get<Account>(\`/v1/account/\${id}\`, config),
+    "GET /v1/account/{id}": (id, config) => api.get<Account>(\`/v1/account/\${id}\`, config),
     /**
      * Get reads for the account
      * Account reads
      */
-    \\"GET /v1/account/{id}/contracts\\": (id, config) => api.get<Contract[]>(\`/v1/account/\${id}/contracts\`, config),
+    "GET /v1/account/{id}/contracts": (id, config) => api.get<Contract[]>(\`/v1/account/\${id}/contracts\`, config),
     /**
      * Get contact by id
      * Contacts
      */
-    \\"GET /v1/contact/{id}\\": (id, config) => api.get<Contact>(\`/v1/contact/\${id}\`, config),
+    "GET /v1/contact/{id}": (id, config) => api.get<Contact>(\`/v1/contact/\${id}\`, config),
     /**
      * Get contact by id
      * Contacts
      */
-    \\"GET /v1/payment\\": config => api.get<{
+    "GET /v1/payment": config => api.get<{
         data: Payment[];
         total: number;
     }>(\`/v1/payment\`, config),
@@ -5383,7 +5383,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Get installations
      * Installations
      */
-    \\"GET /v1/installation\\": config => api.get<{
+    "GET /v1/installation": config => api.get<{
         data: Installation[];
         total: number;
     }>(\`/v1/installation\`, config),
@@ -5391,12 +5391,12 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Get meter
      * Meter
      */
-    \\"GET /v1/meter/{id}\\": (id, config) => api.get<Meter>(\`/v1/meter/\${id}\`, config),
+    "GET /v1/meter/{id}": (id, config) => api.get<Meter>(\`/v1/meter/\${id}\`, config),
     /**
      * Get meters
      * Meters
      */
-    \\"GET /v1/meter\\": config => api.get<{
+    "GET /v1/meter": config => api.get<{
         data: Meter[];
         total: number;
     }>(\`/v1/meter\`, config),
@@ -5404,7 +5404,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
      * Get meter reads
      * Meter reads
      */
-    \\"GET /v1/read\\": config => api.get<{
+    "GET /v1/read": config => api.get<{
         data: MeterRead[];
         total: number;
     }>(\`/v1/read\`, config),
@@ -5429,7 +5429,7 @@ export interface PostV1Session {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5451,14 +5451,14 @@ export interface CommBatchList {
     updatedAt?: string;
 }
 
-export type CommBatchType = \\"FITMeterInspectionDue\\" | \\"Statement\\";
+export type CommBatchType = "FITMeterInspectionDue" | "Statement";
 
 export interface GetV1Commbatches {
     headers?: {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
@@ -5473,10 +5473,10 @@ export interface GetV1Commbatches {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
         /**
@@ -5489,7 +5489,7 @@ export interface GetV1Commbatches {
 export type NewCommBatch = NewCommBatchFITMeterInspectionDue | NewCommBatchStatement;
 
 export interface NewCommBatchFITMeterInspectionDue {
-    type: \\"FITMeterInspectionDue\\";
+    type: "FITMeterInspectionDue";
     filename: string;
     items: {
         templateParams: {
@@ -5527,7 +5527,7 @@ export interface CommsPhoneNumber {
 }
 
 export interface NewCommBatchStatement {
-    type: \\"Statement\\";
+    type: "Statement";
     filename: string;
     items: {
         templateParams: {
@@ -5610,14 +5610,14 @@ export interface CommBatch {
     }[];
 }
 
-export type CommBatchItemStatus = \\"Scheduled\\" | \\"Pending\\" | \\"Delivered\\" | \\"Expired\\" | \\"Failed\\";
+export type CommBatchItemStatus = "Scheduled" | "Pending" | "Delivered" | "Expired" | "Failed";
 
 export interface PostV1Commbatches {
     headers?: {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5626,7 +5626,7 @@ export interface GetV1CommbatchesId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5635,7 +5635,7 @@ export interface PostV1ProcessMeterreadstolerance {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5645,7 +5645,7 @@ export interface MeterReadCheck {
     accountId: number;
     dateOn: string;
     value: number;
-    type: \\"Closing\\" | \\"Meter Verification\\" | \\"Opening\\" | \\"Quarterly\\";
+    type: "Closing" | "Meter Verification" | "Opening" | "Quarterly";
     reason?: string;
     createdAt: string;
     tolerance?: MeterReadTolerance;
@@ -5671,7 +5671,7 @@ export interface GetV1Readchecks {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
@@ -5686,14 +5686,14 @@ export interface GetV1Readchecks {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
          * Retern individual records from the list, matching the specified ids
          */
         ids?: number[];
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
     };
@@ -5716,7 +5716,7 @@ export interface PutV1Readchecks {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5730,7 +5730,7 @@ export interface DeleteV1Readchecks {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5739,7 +5739,7 @@ export interface GetV1ReadchecksId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5748,7 +5748,7 @@ export interface PutV1ReadchecksId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5757,7 +5757,7 @@ export interface DeleteV1ReadchecksId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5777,7 +5777,7 @@ export interface GetV1Levelisations {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
@@ -5796,10 +5796,10 @@ export interface GetV1Levelisations {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
     };
@@ -5842,7 +5842,7 @@ export interface PostV1Levelisations {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5851,7 +5851,7 @@ export interface GetV1LevelisationsId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5866,7 +5866,7 @@ export interface PutV1LevelisationsId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5915,7 +5915,7 @@ export interface AccountLevelisationList {
     [key: string]: unknown;
 }
 
-export type AccountLevelisationState = \\"Pending\\" | \\"Done\\";
+export type AccountLevelisationState = "Pending" | "Done";
 
 export interface PeriodWithCalculatedAmount {
     start?: LevelisationMeterRead;
@@ -5945,7 +5945,7 @@ export interface GetV1Accountlevelisations {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
@@ -5960,14 +5960,14 @@ export interface GetV1Accountlevelisations {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
          * Retern individual records from the list, matching the specified ids
          */
         ids?: number[];
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
     };
@@ -5983,7 +5983,7 @@ export interface PutV1Accountlevelisations {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -5992,7 +5992,7 @@ export interface GetV1AccountlevelisationsId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -6007,7 +6007,7 @@ export interface PutV1AccountlevelisationsId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -6016,7 +6016,7 @@ export interface GetV1Paymentexport {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
@@ -6037,7 +6037,7 @@ export interface AccountListItem {
     [key: string]: unknown;
 }
 
-export type AccountStateType = \\"Active\\" | \\"Pending\\" | \\"Dispute\\" | \\"Closed\\";
+export type AccountStateType = "Active" | "Pending" | "Dispute" | "Closed";
 
 export type ListOfStrings = string[];
 
@@ -6046,7 +6046,7 @@ export interface GetV1Account {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
@@ -6054,14 +6054,14 @@ export interface GetV1Account {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
          * Retern individual records from the list, matching the specified ids
          */
         ids?: number[];
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
         /**
@@ -6086,14 +6086,14 @@ export interface MeterRead {
     sourceSystemId?: number;
 }
 
-export type MeterReadType = \\"Closing\\" | \\"Meter Verification\\" | \\"Opening\\" | \\"Quarterly\\";
+export type MeterReadType = "Closing" | "Meter Verification" | "Opening" | "Quarterly";
 
 export interface GetV1AccountIdReads {
     headers?: {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
@@ -6120,7 +6120,7 @@ export interface Account {
     beneficiaryName?: string;
     beneficiarySortCode?: string;
     beneficiaryAccountNumber?: string;
-    paymentPlan?: \\"Cheque\\" | \\"BACS\\";
+    paymentPlan?: "Cheque" | "BACS";
     startOn?: string;
     endOn?: string;
     tosReceived: boolean;
@@ -6161,14 +6161,14 @@ export interface AccountContract {
     fullName?: string;
 }
 
-export type SchemeType = \\"FIT\\" | \\"SEG\\";
+export type SchemeType = "FIT" | "SEG";
 
 export interface GetV1AccountId {
     headers?: {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -6179,7 +6179,7 @@ export interface GetV1AccountIdContracts {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -6188,7 +6188,7 @@ export interface GetV1ContactId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -6225,7 +6225,7 @@ export interface Payment {
     levelisationReference?: string;
 }
 
-export type PaymentType = \\"Levelisation\\";
+export type PaymentType = "Levelisation";
 
 export interface PaymentPeriods {
     deemed?: Period[];
@@ -6253,11 +6253,11 @@ export interface GetV1Payment {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
         /**
@@ -6272,7 +6272,7 @@ export interface GetV1Payment {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
          * Single resource identifier
@@ -6332,13 +6332,13 @@ export interface Installation {
     contracts?: AccountContract[];
 }
 
-export type InstallationType = \\"None\\" | \\"Extension of an existing FiT-accredited installation\\" | \\"Standalone\\" | \\"New build\\" | \\"Retrofit\\";
+export type InstallationType = "None" | "Extension of an existing FiT-accredited installation" | "Standalone" | "New build" | "Retrofit";
 
-export type TechnologyType = \\"CHP\\" | \\"AD\\" | \\"W\\" | \\"H\\" | \\"PV\\";
+export type TechnologyType = "CHP" | "AD" | "W" | "H" | "PV";
 
-export type PropertyType = \\"Other\\" | \\"School/Education\\" | \\"Not for profit\\" | \\"Industrial\\" | \\"Farm\\" | \\"Commercial\\" | \\"Domestic\\";
+export type PropertyType = "Other" | "School/Education" | "Not for profit" | "Industrial" | "Farm" | "Commercial" | "Domestic";
 
-export type ExportType = \\"PPA\\" | \\"Off Grid\\" | \\"Metered Export\\" | \\"Deemed\\";
+export type ExportType = "PPA" | "Off Grid" | "Metered Export" | "Deemed";
 
 export interface TariffRate {
     startOn: string;
@@ -6349,7 +6349,7 @@ export interface TariffRate {
     tariffType: TariffType;
 }
 
-export type TariffType = \\"Export\\" | \\"Generation\\" | \\"SEG\\";
+export type TariffType = "Export" | "Generation" | "SEG";
 
 export interface InstallationMeter {
     id: number;
@@ -6369,18 +6369,18 @@ export interface InstallationMeter {
     updatedAt?: string;
 }
 
-export type MeterType = \\"Export\\" | \\"Generation\\";
+export type MeterType = "Export" | "Generation";
 
 export interface GetV1Installation {
     headers?: {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
         /**
@@ -6395,7 +6395,7 @@ export interface GetV1Installation {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
          * Single resource identifier
@@ -6423,7 +6423,7 @@ export interface GetV1MeterId {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -6432,7 +6432,7 @@ export interface GetV1Meter {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
 }
 
@@ -6441,11 +6441,11 @@ export interface GetV1Read {
         /**
          * An optional trace token to be passed to the service and used for logging
          */
-        \\"x-trace-token\\"?: string;
+        "x-trace-token"?: string;
     };
     params?: {
         /**
-         * React admin filter object. It should contain different filters, for example \\"q\\" is for a search.
+         * React admin filter object. It should contain different filters, for example "q" is for a search.
          */
         filter?: any;
         /**
@@ -6460,7 +6460,7 @@ export interface GetV1Read {
          */
         sort?: {
             field?: string;
-            order?: \\"ASC\\" | \\"DESC\\";
+            order?: "ASC" | "DESC";
         };
         /**
          * Single resource identifier
@@ -6474,45 +6474,45 @@ export interface AxiosOapiInstance {
      * Health Check
      * Health check endpoint
      */
-    \\"GET /.well-known/health-check\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<{
+    "GET /.well-known/health-check": (config?: AxiosRequestConfig) => Promise<AxiosResponse<{
         success: boolean;
     }>>;
     /**
      * OpenApi
      * The open api spec for the service. OpenAPI v3.
      */
-    \\"GET /.well-known/openapi.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    "GET /.well-known/openapi.yaml": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
     /**
      * OpenApi Components
      * Shared schemas for the open api spec. OpenAPI v3.
      */
-    \\"GET /.well-known/components.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    "GET /.well-known/components.yaml": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
     /**
      * OpenApi Levelisation
      * Schemas for Levelisation endpoints. OpenAPI v3.
      */
-    \\"GET /.well-known/levelisations.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    "GET /.well-known/levelisations.yaml": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
     /**
      * OpenApi Read Checks
      * Schemas for Read Checks endpoints. OpenAPI v3.
      */
-    \\"GET /.well-known/read-checks.yaml\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    "GET /.well-known/read-checks.yaml": (config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
     /**
      * OpenApi HTML
      * The open api spec for the service. OpenAPI v3.
      */
-    \\"GET /.well-known/openapi.html\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
+    "GET /.well-known/openapi.html": (config?: AxiosRequestConfig) => Promise<AxiosResponse>;
     /**
      * Create a session for the current user
      */
-    \\"POST /v1/session\\": (data: {
-        type: \\"oauth\\" | \\"jwt\\";
+    "POST /v1/session": (data: {
+        type: "oauth" | "jwt";
         token: string;
     }, config?: AxiosRequestConfig & PostV1Session) => Promise<AxiosResponse<Session>>;
     /**
      * Get Comm Batches.
      */
-    \\"GET /v1/comm-batches\\": (config?: AxiosRequestConfig & GetV1Commbatches) => Promise<AxiosResponse<List & {
+    "GET /v1/comm-batches": (config?: AxiosRequestConfig & GetV1Commbatches) => Promise<AxiosResponse<List & {
         data: CommBatchList[];
         [key: string]: unknown;
     }>>;
@@ -6521,22 +6521,22 @@ export interface AxiosOapiInstance {
      * Create new Comm Batch that will be processed and can be monitored responses
      *
      */
-    \\"POST /v1/comm-batches\\": (data: NewCommBatch, config?: AxiosRequestConfig & PostV1Commbatches) => Promise<AxiosResponse<CommBatch>>;
+    "POST /v1/comm-batches": (data: NewCommBatch, config?: AxiosRequestConfig & PostV1Commbatches) => Promise<AxiosResponse<CommBatch>>;
     /**
      * Get Comm Batch by ID
      */
-    \\"GET /v1/comm-batches/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1CommbatchesId) => Promise<AxiosResponse<CommBatch>>;
+    "GET /v1/comm-batches/{id}": (id: number, config?: AxiosRequestConfig & GetV1CommbatchesId) => Promise<AxiosResponse<CommBatch>>;
     /**
      * Do a tolerance checks for all the reads that have not been checked
      */
-    \\"POST /v1/process/meter-reads-tolerance\\": (data?: unknown, config?: AxiosRequestConfig & PostV1ProcessMeterreadstolerance) => Promise<AxiosResponse<{
+    "POST /v1/process/meter-reads-tolerance": (data?: unknown, config?: AxiosRequestConfig & PostV1ProcessMeterreadstolerance) => Promise<AxiosResponse<{
         success: boolean;
     }>>;
     /**
      * Tolerance checks
      * List of Meter Reads that have failed their tolernace checks and need to be reviewed
      */
-    \\"GET /v1/read-checks\\": (config?: AxiosRequestConfig & GetV1Readchecks) => Promise<AxiosResponse<List & {
+    "GET /v1/read-checks": (config?: AxiosRequestConfig & GetV1Readchecks) => Promise<AxiosResponse<List & {
         data?: MeterReadCheck[];
         [key: string]: unknown;
     }>>;
@@ -6544,7 +6544,7 @@ export interface AxiosOapiInstance {
      * Bulk Save Tolerance Check
      * Update Multiple Tolerance check details at once
      */
-    \\"PUT /v1/read-checks\\": (data: BulkUpdate & {
+    "PUT /v1/read-checks": (data: BulkUpdate & {
         data: MeterReadCheckSave;
         [key: string]: unknown;
     }, config?: AxiosRequestConfig & PutV1Readchecks) => Promise<AxiosResponse<ListOfIds>>;
@@ -6552,29 +6552,29 @@ export interface AxiosOapiInstance {
      * Save Tolerance Check
      * Update Tolerance check details
      */
-    \\"DELETE /v1/read-checks\\": (config?: AxiosRequestConfig & DeleteV1Readchecks) => Promise<AxiosResponse<ListOfIds>>;
+    "DELETE /v1/read-checks": (config?: AxiosRequestConfig & DeleteV1Readchecks) => Promise<AxiosResponse<ListOfIds>>;
     /**
      * Single Tolerance check
      * Details on the meter read tolerance check
      */
-    \\"GET /v1/read-checks/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1ReadchecksId) => Promise<AxiosResponse<MeterReadCheck>>;
+    "GET /v1/read-checks/{id}": (id: number, config?: AxiosRequestConfig & GetV1ReadchecksId) => Promise<AxiosResponse<MeterReadCheck>>;
     /**
      * Save Tolerance Check
      * Update Tolerance check details
      */
-    \\"PUT /v1/read-checks/{id}\\": (id: number, data: MeterReadCheckSave, config?: AxiosRequestConfig & PutV1ReadchecksId) => Promise<AxiosResponse<MeterReadCheck>>;
+    "PUT /v1/read-checks/{id}": (id: number, data: MeterReadCheckSave, config?: AxiosRequestConfig & PutV1ReadchecksId) => Promise<AxiosResponse<MeterReadCheck>>;
     /**
      * Save Tolerance Check
      * Update Tolerance check details
      */
-    \\"DELETE /v1/read-checks/{id}\\": (id: number, config?: AxiosRequestConfig & DeleteV1ReadchecksId) => Promise<AxiosResponse<{
+    "DELETE /v1/read-checks/{id}": (id: number, config?: AxiosRequestConfig & DeleteV1ReadchecksId) => Promise<AxiosResponse<{
         success: boolean;
     }>>;
     /**
      * Levelisations
      * List of Levelisation processes by quarters
      */
-    \\"GET /v1/levelisations\\": (config?: AxiosRequestConfig & GetV1Levelisations) => Promise<AxiosResponse<List & {
+    "GET /v1/levelisations": (config?: AxiosRequestConfig & GetV1Levelisations) => Promise<AxiosResponse<List & {
         data?: LevelisationList[];
         [key: string]: unknown;
     }>>;
@@ -6582,22 +6582,22 @@ export interface AxiosOapiInstance {
      * Create new Levelisation
      * Create a new Levelisation
      */
-    \\"POST /v1/levelisations\\": (data: LevelisationCreate, config?: AxiosRequestConfig & PostV1Levelisations) => Promise<AxiosResponse<Levelisation>>;
+    "POST /v1/levelisations": (data: LevelisationCreate, config?: AxiosRequestConfig & PostV1Levelisations) => Promise<AxiosResponse<Levelisation>>;
     /**
      * Quater levelisation
      * Levelisation calculation for all accounts
      */
-    \\"GET /v1/levelisations/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1LevelisationsId) => Promise<AxiosResponse<Levelisation>>;
+    "GET /v1/levelisations/{id}": (id: number, config?: AxiosRequestConfig & GetV1LevelisationsId) => Promise<AxiosResponse<Levelisation>>;
     /**
      * Save Levelisation
      * Update Levelisation
      */
-    \\"PUT /v1/levelisations/{id}\\": (id: number, data: LevelisationSave, config?: AxiosRequestConfig & PutV1LevelisationsId) => Promise<AxiosResponse<Levelisation>>;
+    "PUT /v1/levelisations/{id}": (id: number, data: LevelisationSave, config?: AxiosRequestConfig & PutV1LevelisationsId) => Promise<AxiosResponse<Levelisation>>;
     /**
      * Levelisations
      * List of Levelisation processes by quarters
      */
-    \\"GET /v1/account-levelisations\\": (config?: AxiosRequestConfig & GetV1Accountlevelisations) => Promise<AxiosResponse<List & {
+    "GET /v1/account-levelisations": (config?: AxiosRequestConfig & GetV1Accountlevelisations) => Promise<AxiosResponse<List & {
         data?: AccountLevelisation[];
         [key: string]: unknown;
     }>>;
@@ -6605,7 +6605,7 @@ export interface AxiosOapiInstance {
      * Bulk Save Account Levelisations
      * Update Account Levelisations at once
      */
-    \\"PUT /v1/account-levelisations\\": (data: BulkUpdate & {
+    "PUT /v1/account-levelisations": (data: BulkUpdate & {
         data: BulkAccountLevelisationSave;
         [key: string]: unknown;
     }, config?: AxiosRequestConfig & PutV1Accountlevelisations) => Promise<AxiosResponse<ListOfIds>>;
@@ -6613,22 +6613,22 @@ export interface AxiosOapiInstance {
      * Account levelisation tariff
      * Levelisation tariff for a single account
      */
-    \\"GET /v1/account-levelisations/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1AccountlevelisationsId) => Promise<AxiosResponse<AccountLevelisation>>;
+    "GET /v1/account-levelisations/{id}": (id: number, config?: AxiosRequestConfig & GetV1AccountlevelisationsId) => Promise<AxiosResponse<AccountLevelisation>>;
     /**
      * Save Account Levelisation
      * Update Account Levelisation
      */
-    \\"PUT /v1/account-levelisations/{id}\\": (id: number, data: AccountLevelisationSave, config?: AxiosRequestConfig & PutV1AccountlevelisationsId) => Promise<AxiosResponse<AccountLevelisation>>;
+    "PUT /v1/account-levelisations/{id}": (id: number, data: AccountLevelisationSave, config?: AxiosRequestConfig & PutV1AccountlevelisationsId) => Promise<AxiosResponse<AccountLevelisation>>;
     /**
      * Payment CSV Export
      * Cheque Payments
      */
-    \\"GET /v1/payment-export\\": (config?: AxiosRequestConfig & GetV1Paymentexport) => Promise<AxiosResponse>;
+    "GET /v1/payment-export": (config?: AxiosRequestConfig & GetV1Paymentexport) => Promise<AxiosResponse>;
     /**
      * Accounts
      * A list of fit and seg accounts
      */
-    \\"GET /v1/account\\": (config?: AxiosRequestConfig & GetV1Account) => Promise<AxiosResponse<List & {
+    "GET /v1/account": (config?: AxiosRequestConfig & GetV1Account) => Promise<AxiosResponse<List & {
         data: AccountListItem[];
         [key: string]: unknown;
     }>>;
@@ -6636,27 +6636,27 @@ export interface AxiosOapiInstance {
      * Get reads for the account
      * Account reads
      */
-    \\"GET /v1/account/{id}/reads\\": (id: number, config?: AxiosRequestConfig & GetV1AccountIdReads) => Promise<AxiosResponse<MeterRead[]>>;
+    "GET /v1/account/{id}/reads": (id: number, config?: AxiosRequestConfig & GetV1AccountIdReads) => Promise<AxiosResponse<MeterRead[]>>;
     /**
      * Get reads for the account
      * Account reads
      */
-    \\"GET /v1/account/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1AccountId) => Promise<AxiosResponse<Account>>;
+    "GET /v1/account/{id}": (id: number, config?: AxiosRequestConfig & GetV1AccountId) => Promise<AxiosResponse<Account>>;
     /**
      * Get reads for the account
      * Account reads
      */
-    \\"GET /v1/account/{id}/contracts\\": (id: number, config?: AxiosRequestConfig & GetV1AccountIdContracts) => Promise<AxiosResponse<Contract[]>>;
+    "GET /v1/account/{id}/contracts": (id: number, config?: AxiosRequestConfig & GetV1AccountIdContracts) => Promise<AxiosResponse<Contract[]>>;
     /**
      * Get contact by id
      * Contacts
      */
-    \\"GET /v1/contact/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1ContactId) => Promise<AxiosResponse<Contact>>;
+    "GET /v1/contact/{id}": (id: number, config?: AxiosRequestConfig & GetV1ContactId) => Promise<AxiosResponse<Contact>>;
     /**
      * Get contact by id
      * Contacts
      */
-    \\"GET /v1/payment\\": (config?: AxiosRequestConfig & GetV1Payment) => Promise<AxiosResponse<{
+    "GET /v1/payment": (config?: AxiosRequestConfig & GetV1Payment) => Promise<AxiosResponse<{
         data: Payment[];
         total: number;
     }>>;
@@ -6664,7 +6664,7 @@ export interface AxiosOapiInstance {
      * Get installations
      * Installations
      */
-    \\"GET /v1/installation\\": (config?: AxiosRequestConfig & GetV1Installation) => Promise<AxiosResponse<{
+    "GET /v1/installation": (config?: AxiosRequestConfig & GetV1Installation) => Promise<AxiosResponse<{
         data: Installation[];
         total: number;
     }>>;
@@ -6672,12 +6672,12 @@ export interface AxiosOapiInstance {
      * Get meter
      * Meter
      */
-    \\"GET /v1/meter/{id}\\": (id: number, config?: AxiosRequestConfig & GetV1MeterId) => Promise<AxiosResponse<Meter>>;
+    "GET /v1/meter/{id}": (id: number, config?: AxiosRequestConfig & GetV1MeterId) => Promise<AxiosResponse<Meter>>;
     /**
      * Get meters
      * Meters
      */
-    \\"GET /v1/meter\\": (config?: AxiosRequestConfig & GetV1Meter) => Promise<AxiosResponse<{
+    "GET /v1/meter": (config?: AxiosRequestConfig & GetV1Meter) => Promise<AxiosResponse<{
         data: Meter[];
         total: number;
     }>>;
@@ -6685,7 +6685,7 @@ export interface AxiosOapiInstance {
      * Get meter reads
      * Meter reads
      */
-    \\"GET /v1/read\\": (config?: AxiosRequestConfig & GetV1Read) => Promise<AxiosResponse<{
+    "GET /v1/read": (config?: AxiosRequestConfig & GetV1Read) => Promise<AxiosResponse<{
         data: MeterRead[];
         total: number;
     }>>;
@@ -6695,7 +6695,7 @@ export interface AxiosOapiInstance {
 `;
 
 exports[`Axios Content Test statements.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * Boost statements
@@ -6706,7 +6706,7 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * Get Meters, associated with an account, and its service start and end dates (SSD...SED)
      */
-    \\"GET /accounts/{accountId}/meters\\": (accountId, config) => api.get<AccountMeter[] | HttpError>(\`/accounts/\${accountId}/meters\`, config),
+    "GET /accounts/{accountId}/meters": (accountId, config) => api.get<AccountMeter[] | HttpError>(\`/accounts/\${accountId}/meters\`, config),
     api: api
 });
 
@@ -6715,7 +6715,7 @@ export type AccountId = string;
 export type AccountMeter = AccountMeterElec | AccountMeterGas;
 
 export type AccountMeterElec = AccountMeterBase & {
-    meterType: \\"elec\\";
+    meterType: "elec";
     profileClassId: string;
     meterTimeswitchCode: string;
     lineLossFactorClassId: string;
@@ -6735,7 +6735,7 @@ export interface AccountMeterBase {
 }
 
 export type AccountMeterGas = AccountMeterBase & {
-    meterType: \\"gas\\";
+    meterType: "gas";
     ldz: string;
     [key: string]: unknown;
 };
@@ -6748,14 +6748,14 @@ export interface AxiosOapiInstance {
     /**
      * Get Meters, associated with an account, and its service start and end dates (SSD...SED)
      */
-    \\"GET /accounts/{accountId}/meters\\": (accountId: AccountId, config?: AxiosRequestConfig) => Promise<AxiosResponse<AccountMeter[] | HttpError>>;
+    "GET /accounts/{accountId}/meters": (accountId: AccountId, config?: AxiosRequestConfig) => Promise<AxiosResponse<AccountMeter[] | HttpError>>;
     api: AxiosInstance;
 }
 "
 `;
 
 exports[`Axios Content Test uspto.yaml 1`] = `
-"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from \\"axios\\";
+"import { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 /**
  * USPTO Data Set API
@@ -6769,17 +6769,17 @@ export const axiosOapi = (api: AxiosInstance): AxiosOapiInstance => ({
     /**
      * List available data sets
      */
-    \\"GET /\\": config => api.get<dataSetList>(\`/\`, config),
+    "GET /": config => api.get<dataSetList>(\`/\`, config),
     /**
      * Provides the general information about the API and the list of fields that can be used to query the dataset.
      * This GET API returns the list of all the searchable field names that are in the oa_citations. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the syntax options shown below.
      */
-    \\"GET /{dataset}/{version}/fields\\": (dataset, version, config) => api.get<string>(\`/\${dataset}/\${version}/fields\`, config),
+    "GET /{dataset}/{version}/fields": (dataset, version, config) => api.get<string>(\`/\${dataset}/\${version}/fields\`, config),
     /**
      * Provides search capability for the data set with the given search criteria.
      * This API is based on Solr/Lucense Search. The data is indexed using SOLR. This GET API returns the list of all the searchable field names that are in the Solr Index. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the Solr/Lucene Syntax. Please refer https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview for the query syntax. List of field names that are searchable can be determined using above GET api.
      */
-    \\"POST /{dataset}/{version}/records\\": (dataset, version, data, config) => api.post<any[]>(\`/\${dataset}/\${version}/records\`, data, config),
+    "POST /{dataset}/{version}/records": (dataset, version, data, config) => api.post<any[]>(\`/\${dataset}/\${version}/records\`, data, config),
     api: api
 });
 
@@ -6811,17 +6811,17 @@ export interface AxiosOapiInstance {
     /**
      * List available data sets
      */
-    \\"GET /\\": (config?: AxiosRequestConfig) => Promise<AxiosResponse<dataSetList>>;
+    "GET /": (config?: AxiosRequestConfig) => Promise<AxiosResponse<dataSetList>>;
     /**
      * Provides the general information about the API and the list of fields that can be used to query the dataset.
      * This GET API returns the list of all the searchable field names that are in the oa_citations. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the syntax options shown below.
      */
-    \\"GET /{dataset}/{version}/fields\\": (dataset: string, version: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
+    "GET /{dataset}/{version}/fields": (dataset: string, version: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<string>>;
     /**
      * Provides search capability for the data set with the given search criteria.
      * This API is based on Solr/Lucense Search. The data is indexed using SOLR. This GET API returns the list of all the searchable field names that are in the Solr Index. Please see the 'fields' attribute which returns an array of field names. Each field or a combination of fields can be searched using the Solr/Lucene Syntax. Please refer https://lucene.apache.org/core/3_6_2/queryparsersyntax.html#Overview for the query syntax. List of field names that are searchable can be determined using above GET api.
      */
-    \\"POST /{dataset}/{version}/records\\": (dataset: string, version: string, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<any[]>>;
+    "POST /{dataset}/{version}/records": (dataset: string, version: string, data?: unknown, config?: AxiosRequestConfig) => Promise<AxiosResponse<any[]>>;
     api: AxiosInstance;
 }
 "

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Integration Should process response 1`] = `
-Object {
+{
   "config": Anything,
   "data": "<html>
   <body>
@@ -9,7 +9,7 @@ Object {
   </body>
 </html>
 ",
-  "headers": Object {
+  "headers": {
     "connection": "close",
     "content-length": "57",
     "content-type": "text/html",
@@ -22,7 +22,7 @@ Object {
 `;
 
 exports[`Integration Should process response 2`] = `
-Object {
+{
   "config": Anything,
   "data": "<html>
   <body>
@@ -32,7 +32,7 @@ Object {
   </body>
 </html>
 ",
-  "headers": Object {
+  "headers": {
     "connection": "close",
     "content-length": "123",
     "content-type": "text/html",

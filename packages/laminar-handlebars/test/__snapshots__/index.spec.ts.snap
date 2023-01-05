@@ -19,6 +19,6 @@ exports[`Laminar Handlebars Test compileTemplates 3`] = `
 `;
 
 exports[`Laminar Handlebars Test compileTemplates 4`] = `
-"<div class=\\"entry\\">WARNING</div>
+"<div class="entry">WARNING</div>
 "
 `;

@@ -3,21 +3,21 @@
 exports[`Avro ts test Should convert BalanceAdjustment.avsc successfully 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type BalanceAdjustment = UkCoBoostpowerSupportKafkaMessages.BalanceAdjustment;
 
 export namespace ComOvoenergyKafkaCommonEvent {
-    export const ConfigName = \\"com.ovoenergy.kafka.common.event.Config\\";
+    export const ConfigName = "com.ovoenergy.kafka.common.event.Config";
     export interface Config {
         tokenId: string;
     }
-    export const ConfigExtendedName = \\"com.ovoenergy.kafka.common.event.ConfigExtended\\";
+    export const ConfigExtendedName = "com.ovoenergy.kafka.common.event.ConfigExtended";
     export interface ConfigExtended {
         tokenId: string;
         extensionId: string;
     }
-    export const EventMetadataName = \\"com.ovoenergy.kafka.common.event.EventMetadata\\";
+    export const EventMetadataName = "com.ovoenergy.kafka.common.event.EventMetadata";
     /**
      * Metadata, to be used in each event class
      */
@@ -35,19 +35,19 @@ export namespace ComOvoenergyKafkaCommonEvent {
          */
         createdAt: Moment;
         config: {
-            \\"com.ovoenergy.kafka.common.event.Config\\": ComOvoenergyKafkaCommonEvent.Config;
-            \\"com.ovoenergy.kafka.common.event.ConfigExtended\\"?: never;
+            "com.ovoenergy.kafka.common.event.Config": ComOvoenergyKafkaCommonEvent.Config;
+            "com.ovoenergy.kafka.common.event.ConfigExtended"?: never;
         } | {
-            \\"com.ovoenergy.kafka.common.event.Config\\"?: never;
-            \\"com.ovoenergy.kafka.common.event.ConfigExtended\\": ComOvoenergyKafkaCommonEvent.ConfigExtended;
+            "com.ovoenergy.kafka.common.event.Config"?: never;
+            "com.ovoenergy.kafka.common.event.ConfigExtended": ComOvoenergyKafkaCommonEvent.ConfigExtended;
         };
     }
 }
 
 export namespace UkCoBoostpowerSupportKafkaMessages {
-    export const FuelName = \\"uk.co.boostpower.support.kafka.messages.Fuel\\";
-    export type Fuel = \\"Gas\\" | \\"Electricity\\";
-    export const BalanceAdjustmentRequestName = \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest\\";
+    export const FuelName = "uk.co.boostpower.support.kafka.messages.Fuel";
+    export type Fuel = "Gas" | "Electricity";
+    export const BalanceAdjustmentRequestName = "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest";
     /**
      * Balance Adjustment request has been sent
      */
@@ -77,9 +77,9 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         amount: number;
     }
-    export const StatusName = \\"uk.co.boostpower.support.kafka.messages.Status\\";
-    export type Status = \\"Error\\" | \\"Success\\";
-    export const BalanceAdjustmentResponseName = \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse\\";
+    export const StatusName = "uk.co.boostpower.support.kafka.messages.Status";
+    export type Status = "Error" | "Success";
+    export const BalanceAdjustmentResponseName = "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse";
     /**
      * Balance Adjustment Completion
      */
@@ -97,18 +97,18 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         balance: number;
     }
-    export const BalanceAdjustmentName = \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustment\\";
+    export const BalanceAdjustmentName = "uk.co.boostpower.support.kafka.messages.BalanceAdjustment";
     /**
      * A balance adjustment request and response events
      */
     export interface BalanceAdjustment {
         metadata: ComOvoenergyKafkaCommonEvent.EventMetadata;
         event: {
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest\\": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentRequest;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentRequest;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse\\": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentResponse;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentResponse;
         };
     }
 }
@@ -118,21 +118,21 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
 exports[`Avro ts test Should convert BalanceAdjustment.avsc successfully with default as optional 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type BalanceAdjustment = UkCoBoostpowerSupportKafkaMessages.BalanceAdjustment;
 
 export namespace ComOvoenergyKafkaCommonEvent {
-    export const ConfigName = \\"com.ovoenergy.kafka.common.event.Config\\";
+    export const ConfigName = "com.ovoenergy.kafka.common.event.Config";
     export interface Config {
         tokenId: string;
     }
-    export const ConfigExtendedName = \\"com.ovoenergy.kafka.common.event.ConfigExtended\\";
+    export const ConfigExtendedName = "com.ovoenergy.kafka.common.event.ConfigExtended";
     export interface ConfigExtended {
         tokenId: string;
         extensionId: string;
     }
-    export const EventMetadataName = \\"com.ovoenergy.kafka.common.event.EventMetadata\\";
+    export const EventMetadataName = "com.ovoenergy.kafka.common.event.EventMetadata";
     /**
      * Metadata, to be used in each event class
      */
@@ -150,19 +150,19 @@ export namespace ComOvoenergyKafkaCommonEvent {
          */
         createdAt: Moment;
         config: {
-            \\"com.ovoenergy.kafka.common.event.Config\\": ComOvoenergyKafkaCommonEvent.Config;
-            \\"com.ovoenergy.kafka.common.event.ConfigExtended\\"?: never;
+            "com.ovoenergy.kafka.common.event.Config": ComOvoenergyKafkaCommonEvent.Config;
+            "com.ovoenergy.kafka.common.event.ConfigExtended"?: never;
         } | {
-            \\"com.ovoenergy.kafka.common.event.Config\\"?: never;
-            \\"com.ovoenergy.kafka.common.event.ConfigExtended\\": ComOvoenergyKafkaCommonEvent.ConfigExtended;
+            "com.ovoenergy.kafka.common.event.Config"?: never;
+            "com.ovoenergy.kafka.common.event.ConfigExtended": ComOvoenergyKafkaCommonEvent.ConfigExtended;
         };
     }
 }
 
 export namespace UkCoBoostpowerSupportKafkaMessages {
-    export const FuelName = \\"uk.co.boostpower.support.kafka.messages.Fuel\\";
-    export type Fuel = \\"Gas\\" | \\"Electricity\\";
-    export const BalanceAdjustmentRequestName = \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest\\";
+    export const FuelName = "uk.co.boostpower.support.kafka.messages.Fuel";
+    export type Fuel = "Gas" | "Electricity";
+    export const BalanceAdjustmentRequestName = "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest";
     /**
      * Balance Adjustment request has been sent
      */
@@ -192,9 +192,9 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         amount: number;
     }
-    export const StatusName = \\"uk.co.boostpower.support.kafka.messages.Status\\";
-    export type Status = \\"Error\\" | \\"Success\\";
-    export const BalanceAdjustmentResponseName = \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse\\";
+    export const StatusName = "uk.co.boostpower.support.kafka.messages.Status";
+    export type Status = "Error" | "Success";
+    export const BalanceAdjustmentResponseName = "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse";
     /**
      * Balance Adjustment Completion
      */
@@ -212,18 +212,18 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         balance: number;
     }
-    export const BalanceAdjustmentName = \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustment\\";
+    export const BalanceAdjustmentName = "uk.co.boostpower.support.kafka.messages.BalanceAdjustment";
     /**
      * A balance adjustment request and response events
      */
     export interface BalanceAdjustment {
         metadata: ComOvoenergyKafkaCommonEvent.EventMetadata;
         event: {
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest\\": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentRequest;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentRequest;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse\\": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentResponse;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentRequest"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceAdjustmentResponse": UkCoBoostpowerSupportKafkaMessages.BalanceAdjustmentResponse;
         };
     }
 }
@@ -233,12 +233,12 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
 exports[`Avro ts test Should convert CommUpdateType.avsc successfully 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type CommunicationUpdate = ComExampleKafkaComms.CommunicationUpdate;
 
 export namespace ComExampleKafkaCommonEvent {
-    export const EventMetadataName = \\"com.example.kafka.common.event.EventMetadata\\";
+    export const EventMetadataName = "com.example.kafka.common.event.EventMetadata";
     export interface EventMetadata {
         eventId: string;
         traceToken: string;
@@ -247,18 +247,18 @@ export namespace ComExampleKafkaCommonEvent {
 }
 
 export namespace ComExampleKafkaComms {
-    export const TemplateManifestName = \\"com.example.kafka.comms.TemplateManifest\\";
+    export const TemplateManifestName = "com.example.kafka.comms.TemplateManifest";
     export interface TemplateManifest {
         id: string;
         version: string;
     }
-    export const TemplateName = \\"com.example.kafka.comms.Template\\";
+    export const TemplateName = "com.example.kafka.comms.Template";
     export interface Template {
         manifest: ComExampleKafkaComms.TemplateManifest;
         name: string;
         commType: string;
     }
-    export const PostalAddressName = \\"com.example.kafka.comms.PostalAddress\\";
+    export const PostalAddressName = "com.example.kafka.comms.PostalAddress";
     export interface PostalAddress {
         /**
          * Default: null
@@ -284,22 +284,22 @@ export namespace ComExampleKafkaComms {
          */
         country: null | string;
     }
-    export const FailureName = \\"com.example.kafka.comms.Failure\\";
+    export const FailureName = "com.example.kafka.comms.Failure";
     export interface Failure {
         at: Moment;
         code: string;
         reason: string;
     }
-    export const AttachmentName = \\"com.example.kafka.comms.Attachment\\";
+    export const AttachmentName = "com.example.kafka.comms.Attachment";
     export interface Attachment {
         uri: string;
         fileName: string;
     }
-    export const SpecialRequirementsName = \\"com.example.kafka.comms.SpecialRequirements\\";
+    export const SpecialRequirementsName = "com.example.kafka.comms.SpecialRequirements";
     export interface SpecialRequirements {
         preferences: string[];
     }
-    export const CommunicationName = \\"com.example.kafka.comms.Communication\\";
+    export const CommunicationName = "com.example.kafka.comms.Communication";
     export interface Communication {
         id: string;
         traceToken: string;
@@ -335,27 +335,27 @@ export namespace ComExampleKafkaComms {
          */
         expireAt: null | Moment;
         deliverTo: {
-            \\"DeliverTo.Customer\\": DeliverTo.Customer;
-            \\"DeliverTo.ContactDetails\\"?: never;
+            "DeliverTo.Customer": DeliverTo.Customer;
+            "DeliverTo.ContactDetails"?: never;
         } | {
-            \\"DeliverTo.Customer\\"?: never;
-            \\"DeliverTo.ContactDetails\\": DeliverTo.ContactDetails;
+            "DeliverTo.Customer"?: never;
+            "DeliverTo.ContactDetails": DeliverTo.ContactDetails;
         };
         /**
          * Default: null
          */
         recipient: null | {
-            \\"com.example.kafka.comms.Recipient.Email\\": ComExampleKafkaCommsRecipient.Email;
-            \\"com.example.kafka.comms.Recipient.Phone\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Postal\\"?: never;
+            "com.example.kafka.comms.Recipient.Email": ComExampleKafkaCommsRecipient.Email;
+            "com.example.kafka.comms.Recipient.Phone"?: never;
+            "com.example.kafka.comms.Recipient.Postal"?: never;
         } | {
-            \\"com.example.kafka.comms.Recipient.Email\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Phone\\": ComExampleKafkaCommsRecipient.Phone;
-            \\"com.example.kafka.comms.Recipient.Postal\\"?: never;
+            "com.example.kafka.comms.Recipient.Email"?: never;
+            "com.example.kafka.comms.Recipient.Phone": ComExampleKafkaCommsRecipient.Phone;
+            "com.example.kafka.comms.Recipient.Postal"?: never;
         } | {
-            \\"com.example.kafka.comms.Recipient.Email\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Phone\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Postal\\": ComExampleKafkaCommsRecipient.Postal;
+            "com.example.kafka.comms.Recipient.Email"?: never;
+            "com.example.kafka.comms.Recipient.Phone"?: never;
+            "com.example.kafka.comms.Recipient.Postal": ComExampleKafkaCommsRecipient.Postal;
         };
         /**
          * Default: null
@@ -369,17 +369,17 @@ export namespace ComExampleKafkaComms {
          * Default: null
          */
         content: null | {
-            \\"com.example.kafka.comms.Content.Email\\": ComExampleKafkaCommsContent.Email;
-            \\"com.example.kafka.comms.Content.Sms\\"?: never;
-            \\"com.example.kafka.comms.Content.Print\\"?: never;
+            "com.example.kafka.comms.Content.Email": ComExampleKafkaCommsContent.Email;
+            "com.example.kafka.comms.Content.Sms"?: never;
+            "com.example.kafka.comms.Content.Print"?: never;
         } | {
-            \\"com.example.kafka.comms.Content.Email\\"?: never;
-            \\"com.example.kafka.comms.Content.Sms\\": ComExampleKafkaCommsContent.Sms;
-            \\"com.example.kafka.comms.Content.Print\\"?: never;
+            "com.example.kafka.comms.Content.Email"?: never;
+            "com.example.kafka.comms.Content.Sms": ComExampleKafkaCommsContent.Sms;
+            "com.example.kafka.comms.Content.Print"?: never;
         } | {
-            \\"com.example.kafka.comms.Content.Email\\"?: never;
-            \\"com.example.kafka.comms.Content.Sms\\"?: never;
-            \\"com.example.kafka.comms.Content.Print\\": ComExampleKafkaCommsContent.Print;
+            "com.example.kafka.comms.Content.Email"?: never;
+            "com.example.kafka.comms.Content.Sms"?: never;
+            "com.example.kafka.comms.Content.Print": ComExampleKafkaCommsContent.Print;
         };
         /**
          * Default: []
@@ -390,7 +390,7 @@ export namespace ComExampleKafkaComms {
          */
         specialRequirements: null | ComExampleKafkaComms.SpecialRequirements;
     }
-    export const CommunicationUpdateName = \\"com.example.kafka.comms.CommunicationUpdate\\";
+    export const CommunicationUpdateName = "com.example.kafka.comms.CommunicationUpdate";
     export interface CommunicationUpdate {
         metadata: ComExampleKafkaCommonEvent.EventMetadata;
         communication: ComExampleKafkaComms.Communication;
@@ -398,7 +398,7 @@ export namespace ComExampleKafkaComms {
 }
 
 export namespace DeliverTo {
-    export const ContactDetailsName = \\"DeliverTo.ContactDetails\\";
+    export const ContactDetailsName = "DeliverTo.ContactDetails";
     export interface ContactDetails {
         /**
          * Default: null
@@ -413,7 +413,7 @@ export namespace DeliverTo {
          */
         postalAddress: null | ComExampleKafkaComms.PostalAddress;
     }
-    export const CustomerName = \\"DeliverTo.Customer\\";
+    export const CustomerName = "DeliverTo.Customer";
     export interface Customer {
         profileId: string;
         /**
@@ -424,22 +424,22 @@ export namespace DeliverTo {
 }
 
 export namespace ComExampleKafkaCommsRecipient {
-    export const EmailName = \\"com.example.kafka.comms.Recipient.Email\\";
+    export const EmailName = "com.example.kafka.comms.Recipient.Email";
     export interface Email {
         emailAddress: string;
     }
-    export const PhoneName = \\"com.example.kafka.comms.Recipient.Phone\\";
+    export const PhoneName = "com.example.kafka.comms.Recipient.Phone";
     export interface Phone {
         phoneNumber: string;
     }
-    export const PostalName = \\"com.example.kafka.comms.Recipient.Postal\\";
+    export const PostalName = "com.example.kafka.comms.Recipient.Postal";
     export interface Postal {
         postalAddress: ComExampleKafkaComms.PostalAddress;
     }
 }
 
 export namespace ComExampleKafkaCommsContent {
-    export const EmailName = \\"com.example.kafka.comms.Content.Email\\";
+    export const EmailName = "com.example.kafka.comms.Content.Email";
     export interface Email {
         sender: string;
         subject: string;
@@ -449,11 +449,11 @@ export namespace ComExampleKafkaCommsContent {
          */
         textBody: null | string;
     }
-    export const SmsName = \\"com.example.kafka.comms.Content.Sms\\";
+    export const SmsName = "com.example.kafka.comms.Content.Sms";
     export interface Sms {
         body: string;
     }
-    export const PrintName = \\"com.example.kafka.comms.Content.Print\\";
+    export const PrintName = "com.example.kafka.comms.Content.Print";
     export interface Print {
         body: string;
     }
@@ -464,12 +464,12 @@ export namespace ComExampleKafkaCommsContent {
 exports[`Avro ts test Should convert CommUpdateType.avsc successfully with default as optional 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type CommunicationUpdate = ComExampleKafkaComms.CommunicationUpdate;
 
 export namespace ComExampleKafkaCommonEvent {
-    export const EventMetadataName = \\"com.example.kafka.common.event.EventMetadata\\";
+    export const EventMetadataName = "com.example.kafka.common.event.EventMetadata";
     export interface EventMetadata {
         eventId: string;
         traceToken: string;
@@ -478,18 +478,18 @@ export namespace ComExampleKafkaCommonEvent {
 }
 
 export namespace ComExampleKafkaComms {
-    export const TemplateManifestName = \\"com.example.kafka.comms.TemplateManifest\\";
+    export const TemplateManifestName = "com.example.kafka.comms.TemplateManifest";
     export interface TemplateManifest {
         id: string;
         version: string;
     }
-    export const TemplateName = \\"com.example.kafka.comms.Template\\";
+    export const TemplateName = "com.example.kafka.comms.Template";
     export interface Template {
         manifest: ComExampleKafkaComms.TemplateManifest;
         name: string;
         commType: string;
     }
-    export const PostalAddressName = \\"com.example.kafka.comms.PostalAddress\\";
+    export const PostalAddressName = "com.example.kafka.comms.PostalAddress";
     export interface PostalAddress {
         /**
          * Default: null
@@ -515,22 +515,22 @@ export namespace ComExampleKafkaComms {
          */
         country?: null | string;
     }
-    export const FailureName = \\"com.example.kafka.comms.Failure\\";
+    export const FailureName = "com.example.kafka.comms.Failure";
     export interface Failure {
         at: Moment;
         code: string;
         reason: string;
     }
-    export const AttachmentName = \\"com.example.kafka.comms.Attachment\\";
+    export const AttachmentName = "com.example.kafka.comms.Attachment";
     export interface Attachment {
         uri: string;
         fileName: string;
     }
-    export const SpecialRequirementsName = \\"com.example.kafka.comms.SpecialRequirements\\";
+    export const SpecialRequirementsName = "com.example.kafka.comms.SpecialRequirements";
     export interface SpecialRequirements {
         preferences: string[];
     }
-    export const CommunicationName = \\"com.example.kafka.comms.Communication\\";
+    export const CommunicationName = "com.example.kafka.comms.Communication";
     export interface Communication {
         id: string;
         traceToken: string;
@@ -566,27 +566,27 @@ export namespace ComExampleKafkaComms {
          */
         expireAt?: null | Moment;
         deliverTo: {
-            \\"DeliverTo.Customer\\": DeliverTo.Customer;
-            \\"DeliverTo.ContactDetails\\"?: never;
+            "DeliverTo.Customer": DeliverTo.Customer;
+            "DeliverTo.ContactDetails"?: never;
         } | {
-            \\"DeliverTo.Customer\\"?: never;
-            \\"DeliverTo.ContactDetails\\": DeliverTo.ContactDetails;
+            "DeliverTo.Customer"?: never;
+            "DeliverTo.ContactDetails": DeliverTo.ContactDetails;
         };
         /**
          * Default: null
          */
         recipient?: null | {
-            \\"com.example.kafka.comms.Recipient.Email\\": ComExampleKafkaCommsRecipient.Email;
-            \\"com.example.kafka.comms.Recipient.Phone\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Postal\\"?: never;
+            "com.example.kafka.comms.Recipient.Email": ComExampleKafkaCommsRecipient.Email;
+            "com.example.kafka.comms.Recipient.Phone"?: never;
+            "com.example.kafka.comms.Recipient.Postal"?: never;
         } | {
-            \\"com.example.kafka.comms.Recipient.Email\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Phone\\": ComExampleKafkaCommsRecipient.Phone;
-            \\"com.example.kafka.comms.Recipient.Postal\\"?: never;
+            "com.example.kafka.comms.Recipient.Email"?: never;
+            "com.example.kafka.comms.Recipient.Phone": ComExampleKafkaCommsRecipient.Phone;
+            "com.example.kafka.comms.Recipient.Postal"?: never;
         } | {
-            \\"com.example.kafka.comms.Recipient.Email\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Phone\\"?: never;
-            \\"com.example.kafka.comms.Recipient.Postal\\": ComExampleKafkaCommsRecipient.Postal;
+            "com.example.kafka.comms.Recipient.Email"?: never;
+            "com.example.kafka.comms.Recipient.Phone"?: never;
+            "com.example.kafka.comms.Recipient.Postal": ComExampleKafkaCommsRecipient.Postal;
         };
         /**
          * Default: null
@@ -600,17 +600,17 @@ export namespace ComExampleKafkaComms {
          * Default: null
          */
         content?: null | {
-            \\"com.example.kafka.comms.Content.Email\\": ComExampleKafkaCommsContent.Email;
-            \\"com.example.kafka.comms.Content.Sms\\"?: never;
-            \\"com.example.kafka.comms.Content.Print\\"?: never;
+            "com.example.kafka.comms.Content.Email": ComExampleKafkaCommsContent.Email;
+            "com.example.kafka.comms.Content.Sms"?: never;
+            "com.example.kafka.comms.Content.Print"?: never;
         } | {
-            \\"com.example.kafka.comms.Content.Email\\"?: never;
-            \\"com.example.kafka.comms.Content.Sms\\": ComExampleKafkaCommsContent.Sms;
-            \\"com.example.kafka.comms.Content.Print\\"?: never;
+            "com.example.kafka.comms.Content.Email"?: never;
+            "com.example.kafka.comms.Content.Sms": ComExampleKafkaCommsContent.Sms;
+            "com.example.kafka.comms.Content.Print"?: never;
         } | {
-            \\"com.example.kafka.comms.Content.Email\\"?: never;
-            \\"com.example.kafka.comms.Content.Sms\\"?: never;
-            \\"com.example.kafka.comms.Content.Print\\": ComExampleKafkaCommsContent.Print;
+            "com.example.kafka.comms.Content.Email"?: never;
+            "com.example.kafka.comms.Content.Sms"?: never;
+            "com.example.kafka.comms.Content.Print": ComExampleKafkaCommsContent.Print;
         };
         /**
          * Default: []
@@ -621,7 +621,7 @@ export namespace ComExampleKafkaComms {
          */
         specialRequirements?: null | ComExampleKafkaComms.SpecialRequirements;
     }
-    export const CommunicationUpdateName = \\"com.example.kafka.comms.CommunicationUpdate\\";
+    export const CommunicationUpdateName = "com.example.kafka.comms.CommunicationUpdate";
     export interface CommunicationUpdate {
         metadata: ComExampleKafkaCommonEvent.EventMetadata;
         communication: ComExampleKafkaComms.Communication;
@@ -629,7 +629,7 @@ export namespace ComExampleKafkaComms {
 }
 
 export namespace DeliverTo {
-    export const ContactDetailsName = \\"DeliverTo.ContactDetails\\";
+    export const ContactDetailsName = "DeliverTo.ContactDetails";
     export interface ContactDetails {
         /**
          * Default: null
@@ -644,7 +644,7 @@ export namespace DeliverTo {
          */
         postalAddress?: null | ComExampleKafkaComms.PostalAddress;
     }
-    export const CustomerName = \\"DeliverTo.Customer\\";
+    export const CustomerName = "DeliverTo.Customer";
     export interface Customer {
         profileId: string;
         /**
@@ -655,22 +655,22 @@ export namespace DeliverTo {
 }
 
 export namespace ComExampleKafkaCommsRecipient {
-    export const EmailName = \\"com.example.kafka.comms.Recipient.Email\\";
+    export const EmailName = "com.example.kafka.comms.Recipient.Email";
     export interface Email {
         emailAddress: string;
     }
-    export const PhoneName = \\"com.example.kafka.comms.Recipient.Phone\\";
+    export const PhoneName = "com.example.kafka.comms.Recipient.Phone";
     export interface Phone {
         phoneNumber: string;
     }
-    export const PostalName = \\"com.example.kafka.comms.Recipient.Postal\\";
+    export const PostalName = "com.example.kafka.comms.Recipient.Postal";
     export interface Postal {
         postalAddress: ComExampleKafkaComms.PostalAddress;
     }
 }
 
 export namespace ComExampleKafkaCommsContent {
-    export const EmailName = \\"com.example.kafka.comms.Content.Email\\";
+    export const EmailName = "com.example.kafka.comms.Content.Email";
     export interface Email {
         sender: string;
         subject: string;
@@ -680,11 +680,11 @@ export namespace ComExampleKafkaCommsContent {
          */
         textBody?: null | string;
     }
-    export const SmsName = \\"com.example.kafka.comms.Content.Sms\\";
+    export const SmsName = "com.example.kafka.comms.Content.Sms";
     export interface Sms {
         body: string;
     }
-    export const PrintName = \\"com.example.kafka.comms.Content.Print\\";
+    export const PrintName = "com.example.kafka.comms.Content.Print";
     export interface Print {
         body: string;
     }
@@ -698,11 +698,11 @@ exports[`Avro ts test Should convert ComplexRecord.avsc successfully 1`] = `
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const FooName = \\"com.example.avro.Foo\\";
+    export const FooName = "com.example.avro.Foo";
     export interface Foo {
         label: string;
     }
-    export const EmailAddressName = \\"com.example.avro.EmailAddress\\";
+    export const EmailAddressName = "com.example.avro.EmailAddress";
     /**
      * Stores details about an email address that a user has associated with their account.
      */
@@ -722,7 +722,7 @@ export namespace ComExampleAvro {
          */
         dateAdded: number;
     }
-    export const StatusName = \\"com.example.avro.status\\";
+    export const StatusName = "com.example.avro.status";
     /**
      * * \`PENDING\`: the user has started authorizing, but not yet finished
      * * \`ACTIVE\`: the token should work
@@ -730,8 +730,8 @@ export namespace ComExampleAvro {
      * * \`EXPIRED\`: the token used to work, but now it doesn't
      * * \`REVOKED\`: the user has explicitly revoked the token
      */
-    export type Status = \\"ACTIVE\\" | \\"INACTIVE\\";
-    export const UserName = \\"com.example.avro.User\\";
+    export type Status = "ACTIVE" | "INACTIVE";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -776,11 +776,11 @@ exports[`Avro ts test Should convert ComplexRecord.avsc successfully with defaul
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const FooName = \\"com.example.avro.Foo\\";
+    export const FooName = "com.example.avro.Foo";
     export interface Foo {
         label: string;
     }
-    export const EmailAddressName = \\"com.example.avro.EmailAddress\\";
+    export const EmailAddressName = "com.example.avro.EmailAddress";
     /**
      * Stores details about an email address that a user has associated with their account.
      */
@@ -800,7 +800,7 @@ export namespace ComExampleAvro {
          */
         dateAdded: number;
     }
-    export const StatusName = \\"com.example.avro.status\\";
+    export const StatusName = "com.example.avro.status";
     /**
      * * \`PENDING\`: the user has started authorizing, but not yet finished
      * * \`ACTIVE\`: the token should work
@@ -808,8 +808,8 @@ export namespace ComExampleAvro {
      * * \`EXPIRED\`: the token used to work, but now it doesn't
      * * \`REVOKED\`: the user has explicitly revoked the token
      */
-    export type Status = \\"ACTIVE\\" | \\"INACTIVE\\";
-    export const UserName = \\"com.example.avro.User\\";
+    export type Status = "ACTIVE" | "INACTIVE";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -851,12 +851,12 @@ export namespace ComExampleAvro {
 exports[`Avro ts test Should convert ComplexUnionLogicalTypes.avsc successfully 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type AccountMigrationEvent = UkCoBoostpowerSupportKafkaMessages.AccountMigrationEvent;
 
 export namespace ComOvoenergyKafkaCommonEvent {
-    export const EventMetadataName = \\"com.ovoenergy.kafka.common.event.EventMetadata\\";
+    export const EventMetadataName = "com.ovoenergy.kafka.common.event.EventMetadata";
     /**
      * Metadata, to be used in each event class
      */
@@ -877,7 +877,7 @@ export namespace ComOvoenergyKafkaCommonEvent {
 }
 
 export namespace UkCoBoostpowerSupportKafkaMessages {
-    export const AccountMigrationCancelledEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\";
+    export const AccountMigrationCancelledEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent";
     /**
      * Triggered by Migration Service. Before T2 signals that a siemens account migration has been cancelled. Migration is about to be restarted for the same account that means a new AccountMigrationScheduledEvent with a new flow id will be sent.Consumers should not react on this in normal case.
      */
@@ -908,7 +908,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         cancelledAt: Moment;
     }
-    export const AccountMigrationCompletedEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\";
+    export const AccountMigrationCompletedEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent";
     /**
      * Triggered by SMILE. After SMILE processed the AccountMigrationValidatedEvent and switched over to Billy from Siemens they trigger this event to inform consumers like BIT CSA portal and Salesforce to do the necessary steps for the switchover
      */
@@ -931,7 +931,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         completedAt: Moment;
     }
-    export const AccountMigrationRollBackInitiatedEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\";
+    export const AccountMigrationRollBackInitiatedEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent";
     /**
      * Triggered by Migration Service. After T2 it signals that a siemens account migration roll back was initiated. SMILE should change the data master system for the account from Billy to Siemens and inform other system about the result.
      */
@@ -954,7 +954,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         rollBackInitiatedAt: Moment;
     }
-    export const AccountMigrationRolledBackEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\";
+    export const AccountMigrationRolledBackEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent";
     /**
      * Triggered by SMILE. As the response to the AccountMigrationRollBackInitiatedEvent, SMILE indicates that mastering system for account data has been restored to be Siemens.As an action to this Billy, BIT CSA portal and Salesforce can do the necessary steps to clean up internal data and switch over to use Siemens data.
      */
@@ -977,7 +977,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         rolledBackAt: Moment;
     }
-    export const AccountMigrationScheduledEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\";
+    export const AccountMigrationScheduledEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent";
     /**
      * Triggered by Migration Service. At T-2 it signals that a siemens account migration has been scheduled for T0 (effectiveEnrollmentDate).Consumers should do the necessary steps like removing primary card functionality in PAYG account service. If consumers see a new AccountMigrationScheduledEvent with a new flow id then they have to update their internal state with the new flow id since every subsequent message in the migration flow will use the same id
      */
@@ -1008,7 +1008,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         scheduledAt: Moment;
     }
-    export const AccountMigrationValidatedEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\";
+    export const AccountMigrationValidatedEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent";
     /**
      * Triggered by Balance Service. At T2 it signals that a siemens balance and transaction history was migrated to the new balance platform and the validation was successful. Billy is ready to be the source for balance and transaction history data. SMILE should change the data master system for the account from Siemens to Billy and inform other system about the result
      */
@@ -1031,7 +1031,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         validatedAt: Moment;
     }
-    export const BalanceRetrievedMigrationEventName = \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\";
+    export const BalanceRetrievedMigrationEventName = "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent";
     /**
      * Triggered by Migration Service. At T1 signals that a siemens balance and transaction history is available for Billy. Contains details.
      */
@@ -1058,67 +1058,67 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         retrievedAt: Moment;
     }
-    export const AccountMigrationEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationEvent\\";
+    export const AccountMigrationEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationEvent";
     /**
      * Account migration related events. It describes several flows: 1. Happy path: AccountMigrationScheduledEvent -> BalanceRetrievedMigrationEvent -> AccountMigrationValidatedEvent -> AccountMigrationCompletedEvent 2. Cancel where the migration is about the be restarted: AccountMigrationScheduledEvent -> BalanceRetrievedMigrationEvent -> AccountMigrationCancelledEvent -> Start from the beginning, AccountMigrationScheduledEvent -> AccountMigrationCancelledEvent -> Start from the beginning 3. Rollback: AccountMigrationScheduledEvent -> BalanceRetrievedMigrationEvent -> AccountMigrationValidatedEvent -> AccountMigrationCompletedEvent -> AccountMigrationRollBackInitiatedEvent -> AccountMigrationRolledBackEvent -> Start from the beginning AccountMigrationScheduledEvent generates a flow id which is used in every subsequent migration message to be grouped together
      */
     export interface AccountMigrationEvent {
         event: {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCancelledEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCancelledEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCompletedEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCompletedEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRollBackInitiatedEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRollBackInitiatedEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRolledBackEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRolledBackEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationScheduledEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationScheduledEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationValidatedEvent;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationValidatedEvent;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\": UkCoBoostpowerSupportKafkaMessages.BalanceRetrievedMigrationEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent": UkCoBoostpowerSupportKafkaMessages.BalanceRetrievedMigrationEvent;
         };
     }
 }
@@ -1128,12 +1128,12 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
 exports[`Avro ts test Should convert ComplexUnionLogicalTypes.avsc successfully with default as optional 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type AccountMigrationEvent = UkCoBoostpowerSupportKafkaMessages.AccountMigrationEvent;
 
 export namespace ComOvoenergyKafkaCommonEvent {
-    export const EventMetadataName = \\"com.ovoenergy.kafka.common.event.EventMetadata\\";
+    export const EventMetadataName = "com.ovoenergy.kafka.common.event.EventMetadata";
     /**
      * Metadata, to be used in each event class
      */
@@ -1154,7 +1154,7 @@ export namespace ComOvoenergyKafkaCommonEvent {
 }
 
 export namespace UkCoBoostpowerSupportKafkaMessages {
-    export const AccountMigrationCancelledEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\";
+    export const AccountMigrationCancelledEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent";
     /**
      * Triggered by Migration Service. Before T2 signals that a siemens account migration has been cancelled. Migration is about to be restarted for the same account that means a new AccountMigrationScheduledEvent with a new flow id will be sent.Consumers should not react on this in normal case.
      */
@@ -1185,7 +1185,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         cancelledAt: Moment;
     }
-    export const AccountMigrationCompletedEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\";
+    export const AccountMigrationCompletedEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent";
     /**
      * Triggered by SMILE. After SMILE processed the AccountMigrationValidatedEvent and switched over to Billy from Siemens they trigger this event to inform consumers like BIT CSA portal and Salesforce to do the necessary steps for the switchover
      */
@@ -1208,7 +1208,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         completedAt: Moment;
     }
-    export const AccountMigrationRollBackInitiatedEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\";
+    export const AccountMigrationRollBackInitiatedEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent";
     /**
      * Triggered by Migration Service. After T2 it signals that a siemens account migration roll back was initiated. SMILE should change the data master system for the account from Billy to Siemens and inform other system about the result.
      */
@@ -1231,7 +1231,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         rollBackInitiatedAt: Moment;
     }
-    export const AccountMigrationRolledBackEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\";
+    export const AccountMigrationRolledBackEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent";
     /**
      * Triggered by SMILE. As the response to the AccountMigrationRollBackInitiatedEvent, SMILE indicates that mastering system for account data has been restored to be Siemens.As an action to this Billy, BIT CSA portal and Salesforce can do the necessary steps to clean up internal data and switch over to use Siemens data.
      */
@@ -1254,7 +1254,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         rolledBackAt: Moment;
     }
-    export const AccountMigrationScheduledEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\";
+    export const AccountMigrationScheduledEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent";
     /**
      * Triggered by Migration Service. At T-2 it signals that a siemens account migration has been scheduled for T0 (effectiveEnrollmentDate).Consumers should do the necessary steps like removing primary card functionality in PAYG account service. If consumers see a new AccountMigrationScheduledEvent with a new flow id then they have to update their internal state with the new flow id since every subsequent message in the migration flow will use the same id
      */
@@ -1285,7 +1285,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         scheduledAt: Moment;
     }
-    export const AccountMigrationValidatedEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\";
+    export const AccountMigrationValidatedEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent";
     /**
      * Triggered by Balance Service. At T2 it signals that a siemens balance and transaction history was migrated to the new balance platform and the validation was successful. Billy is ready to be the source for balance and transaction history data. SMILE should change the data master system for the account from Siemens to Billy and inform other system about the result
      */
@@ -1308,7 +1308,7 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         validatedAt: Moment;
     }
-    export const BalanceRetrievedMigrationEventName = \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\";
+    export const BalanceRetrievedMigrationEventName = "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent";
     /**
      * Triggered by Migration Service. At T1 signals that a siemens balance and transaction history is available for Billy. Contains details.
      */
@@ -1335,67 +1335,67 @@ export namespace UkCoBoostpowerSupportKafkaMessages {
          */
         retrievedAt: Moment;
     }
-    export const AccountMigrationEventName = \\"uk.co.boostpower.support.kafka.messages.AccountMigrationEvent\\";
+    export const AccountMigrationEventName = "uk.co.boostpower.support.kafka.messages.AccountMigrationEvent";
     /**
      * Account migration related events. It describes several flows: 1. Happy path: AccountMigrationScheduledEvent -> BalanceRetrievedMigrationEvent -> AccountMigrationValidatedEvent -> AccountMigrationCompletedEvent 2. Cancel where the migration is about the be restarted: AccountMigrationScheduledEvent -> BalanceRetrievedMigrationEvent -> AccountMigrationCancelledEvent -> Start from the beginning, AccountMigrationScheduledEvent -> AccountMigrationCancelledEvent -> Start from the beginning 3. Rollback: AccountMigrationScheduledEvent -> BalanceRetrievedMigrationEvent -> AccountMigrationValidatedEvent -> AccountMigrationCompletedEvent -> AccountMigrationRollBackInitiatedEvent -> AccountMigrationRolledBackEvent -> Start from the beginning AccountMigrationScheduledEvent generates a flow id which is used in every subsequent migration message to be grouped together
      */
     export interface AccountMigrationEvent {
         event: {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCancelledEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCancelledEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCompletedEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationCompletedEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRollBackInitiatedEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRollBackInitiatedEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRolledBackEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationRolledBackEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationScheduledEvent;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationScheduledEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\": UkCoBoostpowerSupportKafkaMessages.AccountMigrationValidatedEvent;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent": UkCoBoostpowerSupportKafkaMessages.AccountMigrationValidatedEvent;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent"?: never;
         } | {
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent\\"?: never;
-            \\"uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent\\": UkCoBoostpowerSupportKafkaMessages.BalanceRetrievedMigrationEvent;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCancelledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationCompletedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRollBackInitiatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationRolledBackEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationScheduledEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.AccountMigrationValidatedEvent"?: never;
+            "uk.co.boostpower.support.kafka.messages.BalanceRetrievedMigrationEvent": UkCoBoostpowerSupportKafkaMessages.BalanceRetrievedMigrationEvent;
         };
     }
 }
@@ -1408,9 +1408,9 @@ exports[`Avro ts test Should convert EpicError.avsc successfully 1`] = `
 export type EpicFailure = Namespace.EpicFailure;
 
 export namespace Namespace {
-    export const ErrorCodeName = \\"namespace.ErrorCode\\";
-    export type ErrorCode = \\"ERROR\\";
-    export const EpicFailureName = \\"namespace.EpicFailure\\";
+    export const ErrorCodeName = "namespace.ErrorCode";
+    export type ErrorCode = "ERROR";
+    export const EpicFailureName = "namespace.EpicFailure";
     export interface EpicFailure {
         code: Namespace.ErrorCode;
         message: string;
@@ -1425,9 +1425,9 @@ exports[`Avro ts test Should convert EpicError.avsc successfully with default as
 export type EpicFailure = Namespace.EpicFailure;
 
 export namespace Namespace {
-    export const ErrorCodeName = \\"namespace.ErrorCode\\";
-    export type ErrorCode = \\"ERROR\\";
-    export const EpicFailureName = \\"namespace.EpicFailure\\";
+    export const ErrorCodeName = "namespace.ErrorCode";
+    export type ErrorCode = "ERROR";
+    export const EpicFailureName = "namespace.EpicFailure";
     export interface EpicFailure {
         code: Namespace.ErrorCode;
         message: string;
@@ -1442,7 +1442,7 @@ exports[`Avro ts test Should convert M03.avsc successfully 1`] = `
 export type M03 = MbrSplitM03.M03;
 
 export namespace MbrSplitM03M03 {
-    export const ItemsName = \\"mbr.split.m03.m03.Items\\";
+    export const ItemsName = "mbr.split.m03.m03.Items";
     export interface Items {
         SHIPPER_REFERENCE: string;
         SEND_REASON_CODE: string;
@@ -1493,7 +1493,7 @@ export namespace MbrSplitM03M03 {
 }
 
 export namespace MetaV1 {
-    export const MetaV1Name = \\"metaV1.metaV1\\";
+    export const MetaV1Name = "metaV1.metaV1";
     export interface MetaV1 {
         eventId: string;
         createdAt: number;
@@ -1518,7 +1518,7 @@ export namespace MetaV1 {
 }
 
 export namespace MbrSplitA00 {
-    export const ItemsName = \\"mbr.split.a00.Items\\";
+    export const ItemsName = "mbr.split.a00.Items";
     export interface Items {
         Organisation_ID: string;
         flowName: string;
@@ -1529,12 +1529,12 @@ export namespace MbrSplitA00 {
 }
 
 export namespace MbrSplit {
-    export const A00Name = \\"mbr.split.A00\\";
+    export const A00Name = "mbr.split.A00";
     export interface A00 {
         groupName: string;
         items: MbrSplitA00.Items;
     }
-    export const Z99Name = \\"mbr.split.Z99\\";
+    export const Z99Name = "mbr.split.Z99";
     export interface Z99 {
         groupName: string;
         items: MbrSplitZ99.Items;
@@ -1542,14 +1542,14 @@ export namespace MbrSplit {
 }
 
 export namespace MbrSplitZ99 {
-    export const ItemsName = \\"mbr.split.z99.Items\\";
+    export const ItemsName = "mbr.split.z99.Items";
     export interface Items {
         Record_Count: string;
     }
 }
 
 export namespace MbrSplitM03 {
-    export const M03Name = \\"mbr.split.m03.M03\\";
+    export const M03Name = "mbr.split.m03.M03";
     export interface M03 {
         groupName: string;
         items: MbrSplitM03M03.Items;
@@ -1571,7 +1571,7 @@ exports[`Avro ts test Should convert M03.avsc successfully with default as optio
 export type M03 = MbrSplitM03.M03;
 
 export namespace MbrSplitM03M03 {
-    export const ItemsName = \\"mbr.split.m03.m03.Items\\";
+    export const ItemsName = "mbr.split.m03.m03.Items";
     export interface Items {
         SHIPPER_REFERENCE: string;
         SEND_REASON_CODE: string;
@@ -1622,7 +1622,7 @@ export namespace MbrSplitM03M03 {
 }
 
 export namespace MetaV1 {
-    export const MetaV1Name = \\"metaV1.metaV1\\";
+    export const MetaV1Name = "metaV1.metaV1";
     export interface MetaV1 {
         eventId: string;
         createdAt: number;
@@ -1647,7 +1647,7 @@ export namespace MetaV1 {
 }
 
 export namespace MbrSplitA00 {
-    export const ItemsName = \\"mbr.split.a00.Items\\";
+    export const ItemsName = "mbr.split.a00.Items";
     export interface Items {
         Organisation_ID: string;
         flowName: string;
@@ -1658,12 +1658,12 @@ export namespace MbrSplitA00 {
 }
 
 export namespace MbrSplit {
-    export const A00Name = \\"mbr.split.A00\\";
+    export const A00Name = "mbr.split.A00";
     export interface A00 {
         groupName: string;
         items: MbrSplitA00.Items;
     }
-    export const Z99Name = \\"mbr.split.Z99\\";
+    export const Z99Name = "mbr.split.Z99";
     export interface Z99 {
         groupName: string;
         items: MbrSplitZ99.Items;
@@ -1671,14 +1671,14 @@ export namespace MbrSplit {
 }
 
 export namespace MbrSplitZ99 {
-    export const ItemsName = \\"mbr.split.z99.Items\\";
+    export const ItemsName = "mbr.split.z99.Items";
     export interface Items {
         Record_Count: string;
     }
 }
 
 export namespace MbrSplitM03 {
-    export const M03Name = \\"mbr.split.m03.M03\\";
+    export const M03Name = "mbr.split.m03.M03";
     export interface M03 {
         groupName: string;
         items: MbrSplitM03M03.Items;
@@ -1700,37 +1700,37 @@ exports[`Avro ts test Should convert NestedRecordNamespace.avsc successfully 1`]
 export type NestRecordEvent = ComAvroExample.NestRecordEvent;
 
 export namespace ComAvroExample {
-    export const Level2RecordName = \\"com.avro.example.Level2Record\\";
+    export const Level2RecordName = "com.avro.example.Level2Record";
     export interface Level2Record {
         id: string;
     }
-    export const Level2SiblingName = \\"com.avro.example.Level2Sibling\\";
+    export const Level2SiblingName = "com.avro.example.Level2Sibling";
     export interface Level2Sibling {
         id: string;
     }
-    export const Level1RecordName = \\"com.avro.example.Level1Record\\";
+    export const Level1RecordName = "com.avro.example.Level1Record";
     export interface Level1Record {
         id: string;
         child: {
-            \\"com.avro.example.Level2Record\\": ComAvroExample.Level2Record;
-            \\"com.avro.example.Level2Sibling\\"?: never;
+            "com.avro.example.Level2Record": ComAvroExample.Level2Record;
+            "com.avro.example.Level2Sibling"?: never;
         } | {
-            \\"com.avro.example.Level2Record\\"?: never;
-            \\"com.avro.example.Level2Sibling\\": ComAvroExample.Level2Sibling;
+            "com.avro.example.Level2Record"?: never;
+            "com.avro.example.Level2Sibling": ComAvroExample.Level2Sibling;
         };
     }
-    export const Level1SiblingName = \\"com.avro.example.Level1Sibling\\";
+    export const Level1SiblingName = "com.avro.example.Level1Sibling";
     export interface Level1Sibling {
         id: string;
     }
-    export const NestRecordEventName = \\"com.avro.example.NestRecordEvent\\";
+    export const NestRecordEventName = "com.avro.example.NestRecordEvent";
     export interface NestRecordEvent {
         event: {
-            \\"com.avro.example.Level1Record\\": ComAvroExample.Level1Record;
-            \\"com.avro.example.Level1Sibling\\"?: never;
+            "com.avro.example.Level1Record": ComAvroExample.Level1Record;
+            "com.avro.example.Level1Sibling"?: never;
         } | {
-            \\"com.avro.example.Level1Record\\"?: never;
-            \\"com.avro.example.Level1Sibling\\": ComAvroExample.Level1Sibling;
+            "com.avro.example.Level1Record"?: never;
+            "com.avro.example.Level1Sibling": ComAvroExample.Level1Sibling;
         };
     }
 }
@@ -1743,37 +1743,37 @@ exports[`Avro ts test Should convert NestedRecordNamespace.avsc successfully wit
 export type NestRecordEvent = ComAvroExample.NestRecordEvent;
 
 export namespace ComAvroExample {
-    export const Level2RecordName = \\"com.avro.example.Level2Record\\";
+    export const Level2RecordName = "com.avro.example.Level2Record";
     export interface Level2Record {
         id: string;
     }
-    export const Level2SiblingName = \\"com.avro.example.Level2Sibling\\";
+    export const Level2SiblingName = "com.avro.example.Level2Sibling";
     export interface Level2Sibling {
         id: string;
     }
-    export const Level1RecordName = \\"com.avro.example.Level1Record\\";
+    export const Level1RecordName = "com.avro.example.Level1Record";
     export interface Level1Record {
         id: string;
         child: {
-            \\"com.avro.example.Level2Record\\": ComAvroExample.Level2Record;
-            \\"com.avro.example.Level2Sibling\\"?: never;
+            "com.avro.example.Level2Record": ComAvroExample.Level2Record;
+            "com.avro.example.Level2Sibling"?: never;
         } | {
-            \\"com.avro.example.Level2Record\\"?: never;
-            \\"com.avro.example.Level2Sibling\\": ComAvroExample.Level2Sibling;
+            "com.avro.example.Level2Record"?: never;
+            "com.avro.example.Level2Sibling": ComAvroExample.Level2Sibling;
         };
     }
-    export const Level1SiblingName = \\"com.avro.example.Level1Sibling\\";
+    export const Level1SiblingName = "com.avro.example.Level1Sibling";
     export interface Level1Sibling {
         id: string;
     }
-    export const NestRecordEventName = \\"com.avro.example.NestRecordEvent\\";
+    export const NestRecordEventName = "com.avro.example.NestRecordEvent";
     export interface NestRecordEvent {
         event: {
-            \\"com.avro.example.Level1Record\\": ComAvroExample.Level1Record;
-            \\"com.avro.example.Level1Sibling\\"?: never;
+            "com.avro.example.Level1Record": ComAvroExample.Level1Record;
+            "com.avro.example.Level1Sibling"?: never;
         } | {
-            \\"com.avro.example.Level1Record\\"?: never;
-            \\"com.avro.example.Level1Sibling\\": ComAvroExample.Level1Sibling;
+            "com.avro.example.Level1Record"?: never;
+            "com.avro.example.Level1Sibling": ComAvroExample.Level1Sibling;
         };
     }
 }
@@ -1786,33 +1786,33 @@ exports[`Avro ts test Should convert NestedWrappedType.avsc successfully 1`] = `
 export type Event = ComExampleAvro.Event;
 
 export namespace ComExampleAvro {
-    export const NestedFieldTypeName = \\"com.example.avro.NestedFieldType\\";
+    export const NestedFieldTypeName = "com.example.avro.NestedFieldType";
     export interface NestedFieldType {
         id: string;
     }
-    export const FieldTypeAName = \\"com.example.avro.FieldTypeA\\";
+    export const FieldTypeAName = "com.example.avro.FieldTypeA";
     export interface FieldTypeA {
         id: string;
         nested: ComExampleAvro.NestedFieldType;
     }
-    export const FieldTypeBName = \\"com.example.avro.FieldTypeB\\";
+    export const FieldTypeBName = "com.example.avro.FieldTypeB";
     export interface FieldTypeB {
         id: string;
     }
-    export const EventName = \\"com.example.avro.Event\\";
+    export const EventName = "com.example.avro.Event";
     export interface Event {
         field: {
-            \\"com.example.avro.FieldTypeA\\": ComExampleAvro.FieldTypeA;
-            \\"com.example.avro.FieldTypeB\\"?: never;
-            \\"com.example.avro.NestedFieldType\\"?: never;
+            "com.example.avro.FieldTypeA": ComExampleAvro.FieldTypeA;
+            "com.example.avro.FieldTypeB"?: never;
+            "com.example.avro.NestedFieldType"?: never;
         } | {
-            \\"com.example.avro.FieldTypeA\\"?: never;
-            \\"com.example.avro.FieldTypeB\\": ComExampleAvro.FieldTypeB;
-            \\"com.example.avro.NestedFieldType\\"?: never;
+            "com.example.avro.FieldTypeA"?: never;
+            "com.example.avro.FieldTypeB": ComExampleAvro.FieldTypeB;
+            "com.example.avro.NestedFieldType"?: never;
         } | {
-            \\"com.example.avro.FieldTypeA\\"?: never;
-            \\"com.example.avro.FieldTypeB\\"?: never;
-            \\"com.example.avro.NestedFieldType\\": ComExampleAvro.NestedFieldType;
+            "com.example.avro.FieldTypeA"?: never;
+            "com.example.avro.FieldTypeB"?: never;
+            "com.example.avro.NestedFieldType": ComExampleAvro.NestedFieldType;
         };
     }
 }
@@ -1825,33 +1825,33 @@ exports[`Avro ts test Should convert NestedWrappedType.avsc successfully with de
 export type Event = ComExampleAvro.Event;
 
 export namespace ComExampleAvro {
-    export const NestedFieldTypeName = \\"com.example.avro.NestedFieldType\\";
+    export const NestedFieldTypeName = "com.example.avro.NestedFieldType";
     export interface NestedFieldType {
         id: string;
     }
-    export const FieldTypeAName = \\"com.example.avro.FieldTypeA\\";
+    export const FieldTypeAName = "com.example.avro.FieldTypeA";
     export interface FieldTypeA {
         id: string;
         nested: ComExampleAvro.NestedFieldType;
     }
-    export const FieldTypeBName = \\"com.example.avro.FieldTypeB\\";
+    export const FieldTypeBName = "com.example.avro.FieldTypeB";
     export interface FieldTypeB {
         id: string;
     }
-    export const EventName = \\"com.example.avro.Event\\";
+    export const EventName = "com.example.avro.Event";
     export interface Event {
         field: {
-            \\"com.example.avro.FieldTypeA\\": ComExampleAvro.FieldTypeA;
-            \\"com.example.avro.FieldTypeB\\"?: never;
-            \\"com.example.avro.NestedFieldType\\"?: never;
+            "com.example.avro.FieldTypeA": ComExampleAvro.FieldTypeA;
+            "com.example.avro.FieldTypeB"?: never;
+            "com.example.avro.NestedFieldType"?: never;
         } | {
-            \\"com.example.avro.FieldTypeA\\"?: never;
-            \\"com.example.avro.FieldTypeB\\": ComExampleAvro.FieldTypeB;
-            \\"com.example.avro.NestedFieldType\\"?: never;
+            "com.example.avro.FieldTypeA"?: never;
+            "com.example.avro.FieldTypeB": ComExampleAvro.FieldTypeB;
+            "com.example.avro.NestedFieldType"?: never;
         } | {
-            \\"com.example.avro.FieldTypeA\\"?: never;
-            \\"com.example.avro.FieldTypeB\\"?: never;
-            \\"com.example.avro.NestedFieldType\\": ComExampleAvro.NestedFieldType;
+            "com.example.avro.FieldTypeA"?: never;
+            "com.example.avro.FieldTypeB"?: never;
+            "com.example.avro.NestedFieldType": ComExampleAvro.NestedFieldType;
         };
     }
 }
@@ -1864,40 +1864,40 @@ exports[`Avro ts test Should convert NullableWrappedUnion.avsc successfully 1`] 
 export type Test = ComOvoenergyKafkaTestEvent.Test;
 
 export namespace ComOvoenergyKafkaTestEvent {
-    export const AName = \\"com.ovoenergy.kafka.test.event.A\\";
+    export const AName = "com.ovoenergy.kafka.test.event.A";
     export interface A {
         foo: string;
         bar: string;
     }
-    export const BName = \\"com.ovoenergy.kafka.test.event.B\\";
+    export const BName = "com.ovoenergy.kafka.test.event.B";
     export interface B {
         /**
          * Default: true
          */
         fuzz: boolean;
     }
-    export const CName = \\"com.ovoenergy.kafka.test.event.C\\";
+    export const CName = "com.ovoenergy.kafka.test.event.C";
     export interface C {
         foo: string;
         bar: string;
     }
-    export const TestName = \\"com.ovoenergy.kafka.test.event.test\\";
+    export const TestName = "com.ovoenergy.kafka.test.event.test";
     export interface Test {
         /**
-         * Default: \\"null\\"
+         * Default: "null"
          */
         event: null | {
-            \\"com.ovoenergy.kafka.test.event.A\\": ComOvoenergyKafkaTestEvent.A;
-            \\"com.ovoenergy.kafka.test.event.B\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.C\\"?: never;
+            "com.ovoenergy.kafka.test.event.A": ComOvoenergyKafkaTestEvent.A;
+            "com.ovoenergy.kafka.test.event.B"?: never;
+            "com.ovoenergy.kafka.test.event.C"?: never;
         } | {
-            \\"com.ovoenergy.kafka.test.event.A\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.B\\": ComOvoenergyKafkaTestEvent.B;
-            \\"com.ovoenergy.kafka.test.event.C\\"?: never;
+            "com.ovoenergy.kafka.test.event.A"?: never;
+            "com.ovoenergy.kafka.test.event.B": ComOvoenergyKafkaTestEvent.B;
+            "com.ovoenergy.kafka.test.event.C"?: never;
         } | {
-            \\"com.ovoenergy.kafka.test.event.A\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.B\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.C\\": ComOvoenergyKafkaTestEvent.C;
+            "com.ovoenergy.kafka.test.event.A"?: never;
+            "com.ovoenergy.kafka.test.event.B"?: never;
+            "com.ovoenergy.kafka.test.event.C": ComOvoenergyKafkaTestEvent.C;
         };
     }
 }
@@ -1910,40 +1910,40 @@ exports[`Avro ts test Should convert NullableWrappedUnion.avsc successfully with
 export type Test = ComOvoenergyKafkaTestEvent.Test;
 
 export namespace ComOvoenergyKafkaTestEvent {
-    export const AName = \\"com.ovoenergy.kafka.test.event.A\\";
+    export const AName = "com.ovoenergy.kafka.test.event.A";
     export interface A {
         foo: string;
         bar: string;
     }
-    export const BName = \\"com.ovoenergy.kafka.test.event.B\\";
+    export const BName = "com.ovoenergy.kafka.test.event.B";
     export interface B {
         /**
          * Default: true
          */
         fuzz?: boolean;
     }
-    export const CName = \\"com.ovoenergy.kafka.test.event.C\\";
+    export const CName = "com.ovoenergy.kafka.test.event.C";
     export interface C {
         foo: string;
         bar: string;
     }
-    export const TestName = \\"com.ovoenergy.kafka.test.event.test\\";
+    export const TestName = "com.ovoenergy.kafka.test.event.test";
     export interface Test {
         /**
-         * Default: \\"null\\"
+         * Default: "null"
          */
         event?: null | {
-            \\"com.ovoenergy.kafka.test.event.A\\": ComOvoenergyKafkaTestEvent.A;
-            \\"com.ovoenergy.kafka.test.event.B\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.C\\"?: never;
+            "com.ovoenergy.kafka.test.event.A": ComOvoenergyKafkaTestEvent.A;
+            "com.ovoenergy.kafka.test.event.B"?: never;
+            "com.ovoenergy.kafka.test.event.C"?: never;
         } | {
-            \\"com.ovoenergy.kafka.test.event.A\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.B\\": ComOvoenergyKafkaTestEvent.B;
-            \\"com.ovoenergy.kafka.test.event.C\\"?: never;
+            "com.ovoenergy.kafka.test.event.A"?: never;
+            "com.ovoenergy.kafka.test.event.B": ComOvoenergyKafkaTestEvent.B;
+            "com.ovoenergy.kafka.test.event.C"?: never;
         } | {
-            \\"com.ovoenergy.kafka.test.event.A\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.B\\"?: never;
-            \\"com.ovoenergy.kafka.test.event.C\\": ComOvoenergyKafkaTestEvent.C;
+            "com.ovoenergy.kafka.test.event.A"?: never;
+            "com.ovoenergy.kafka.test.event.B"?: never;
+            "com.ovoenergy.kafka.test.event.C": ComOvoenergyKafkaTestEvent.C;
         };
     }
 }
@@ -1956,14 +1956,14 @@ exports[`Avro ts test Should convert RecordWithDefault.avsc successfully 1`] = `
 export type RecordWithDefault = ComExampleAvro.RecordWithDefault;
 
 export namespace ComExampleAvro {
-    export const NoNeedForNamespaceName = \\"com.example.avro.NoNeedForNamespace\\";
+    export const NoNeedForNamespaceName = "com.example.avro.NoNeedForNamespace";
     export interface NoNeedForNamespace {
         /**
          * A fictitious id
          */
         id: string;
     }
-    export const RecordWithDefaultName = \\"com.example.avro.RecordWithDefault\\";
+    export const RecordWithDefaultName = "com.example.avro.RecordWithDefault";
     export interface RecordWithDefault {
         /**
          * Default: null
@@ -1980,14 +1980,14 @@ exports[`Avro ts test Should convert RecordWithDefault.avsc successfully with de
 export type RecordWithDefault = ComExampleAvro.RecordWithDefault;
 
 export namespace ComExampleAvro {
-    export const NoNeedForNamespaceName = \\"com.example.avro.NoNeedForNamespace\\";
+    export const NoNeedForNamespaceName = "com.example.avro.NoNeedForNamespace";
     export interface NoNeedForNamespace {
         /**
          * A fictitious id
          */
         id: string;
     }
-    export const RecordWithDefaultName = \\"com.example.avro.RecordWithDefault\\";
+    export const RecordWithDefaultName = "com.example.avro.RecordWithDefault";
     export interface RecordWithDefault {
         /**
          * Default: null
@@ -2004,11 +2004,11 @@ exports[`Avro ts test Should convert RecordWithDefaults.avsc successfully 1`] = 
 export type CreateUser = MyNamespaceMessages.CreateUser;
 
 export namespace MyNamespaceMessages {
-    export const CreateUserName = \\"my.namespace.messages.CreateUser\\";
+    export const CreateUserName = "my.namespace.messages.CreateUser";
     export interface CreateUser {
         userId: string;
         /**
-         * Default: \\"John\\"
+         * Default: "John"
          */
         firstname: string | null;
         /**
@@ -2016,7 +2016,7 @@ export namespace MyNamespaceMessages {
          */
         lastname: null | string;
         /**
-         * Default: \\"john.doe@example.com\\"
+         * Default: "john.doe@example.com"
          */
         email: string;
     }
@@ -2030,11 +2030,11 @@ exports[`Avro ts test Should convert RecordWithDefaults.avsc successfully with d
 export type CreateUser = MyNamespaceMessages.CreateUser;
 
 export namespace MyNamespaceMessages {
-    export const CreateUserName = \\"my.namespace.messages.CreateUser\\";
+    export const CreateUserName = "my.namespace.messages.CreateUser";
     export interface CreateUser {
         userId: string;
         /**
-         * Default: \\"John\\"
+         * Default: "John"
          */
         firstname?: string | null;
         /**
@@ -2042,7 +2042,7 @@ export namespace MyNamespaceMessages {
          */
         lastname?: null | string;
         /**
-         * Default: \\"john.doe@example.com\\"
+         * Default: "john.doe@example.com"
          */
         email?: string;
     }
@@ -2056,7 +2056,7 @@ exports[`Avro ts test Should convert RecordWithEnum.avsc successfully 1`] = `
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const StatusName = \\"com.example.avro.status\\";
+    export const StatusName = "com.example.avro.status";
     /**
      * * \`PENDING\`: the user has started authorizing, but not yet finished
      * * \`ACTIVE\`: the token should work
@@ -2064,8 +2064,8 @@ export namespace ComExampleAvro {
      * * \`EXPIRED\`: the token used to work, but now it doesn't
      * * \`REVOKED\`: the user has explicitly revoked the token
      */
-    export type Status = \\"ACTIVE\\" | \\"INACTIVE\\";
-    export const UserName = \\"com.example.avro.User\\";
+    export type Status = "ACTIVE" | "INACTIVE";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2103,7 +2103,7 @@ exports[`Avro ts test Should convert RecordWithEnum.avsc successfully with defau
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const StatusName = \\"com.example.avro.status\\";
+    export const StatusName = "com.example.avro.status";
     /**
      * * \`PENDING\`: the user has started authorizing, but not yet finished
      * * \`ACTIVE\`: the token should work
@@ -2111,8 +2111,8 @@ export namespace ComExampleAvro {
      * * \`EXPIRED\`: the token used to work, but now it doesn't
      * * \`REVOKED\`: the user has explicitly revoked the token
      */
-    export type Status = \\"ACTIVE\\" | \\"INACTIVE\\";
-    export const UserName = \\"com.example.avro.User\\";
+    export type Status = "ACTIVE" | "INACTIVE";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2150,7 +2150,7 @@ exports[`Avro ts test Should convert RecordWithInterface.avsc successfully 1`] =
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const EmailAddressName = \\"com.example.avro.EmailAddress\\";
+    export const EmailAddressName = "com.example.avro.EmailAddress";
     /**
      * Stores details about an email address that a user has associated with their account.
      */
@@ -2170,7 +2170,7 @@ export namespace ComExampleAvro {
          */
         dateAdded: number;
     }
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2208,7 +2208,7 @@ exports[`Avro ts test Should convert RecordWithInterface.avsc successfully with 
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const EmailAddressName = \\"com.example.avro.EmailAddress\\";
+    export const EmailAddressName = "com.example.avro.EmailAddress";
     /**
      * Stores details about an email address that a user has associated with their account.
      */
@@ -2228,7 +2228,7 @@ export namespace ComExampleAvro {
          */
         dateAdded: number;
     }
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2263,12 +2263,12 @@ export namespace ComExampleAvro {
 exports[`Avro ts test Should convert RecordWithLogicalTypes.avsc successfully 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type Event = ComExampleAvro.Event;
 
 export namespace ComExampleAvro {
-    export const EventName = \\"com.example.avro.Event\\";
+    export const EventName = "com.example.avro.Event";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2291,12 +2291,12 @@ export namespace ComExampleAvro {
 exports[`Avro ts test Should convert RecordWithLogicalTypes.avsc successfully with default as optional 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Moment } from \\"moment\\";
+import { Moment } from "moment";
 
 export type Event = ComExampleAvro.Event;
 
 export namespace ComExampleAvro {
-    export const EventName = \\"com.example.avro.Event\\";
+    export const EventName = "com.example.avro.Event";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2319,12 +2319,12 @@ export namespace ComExampleAvro {
 exports[`Avro ts test Should convert RecordWithLogicalTypesImport.avsc successfully 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Decimal } from \\"decimal.js\\";
+import { Decimal } from "decimal.js";
 
 export type Event = ComExampleAvro.Event;
 
 export namespace ComExampleAvro {
-    export const EventName = \\"com.example.avro.Event\\";
+    export const EventName = "com.example.avro.Event";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2351,12 +2351,12 @@ export namespace ComExampleAvro {
 exports[`Avro ts test Should convert RecordWithLogicalTypesImport.avsc successfully with default as optional 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
-import { Decimal } from \\"decimal.js\\";
+import { Decimal } from "decimal.js";
 
 export type Event = ComExampleAvro.Event;
 
 export namespace ComExampleAvro {
-    export const EventName = \\"com.example.avro.Event\\";
+    export const EventName = "com.example.avro.Event";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2386,11 +2386,11 @@ exports[`Avro ts test Should convert RecordWithMap.avsc successfully 1`] = `
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const FooName = \\"com.example.avro.Foo\\";
+    export const FooName = "com.example.avro.Foo";
     export interface Foo {
         label: string;
     }
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2427,11 +2427,11 @@ exports[`Avro ts test Should convert RecordWithMap.avsc successfully with defaul
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const FooName = \\"com.example.avro.Foo\\";
+    export const FooName = "com.example.avro.Foo";
     export interface Foo {
         label: string;
     }
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2468,7 +2468,7 @@ exports[`Avro ts test Should convert RecordWithNamedBooleanType.avsc successfull
 export type RecordWithNamedStringType = ComExampleAvro.RecordWithNamedStringType;
 
 export namespace ComExampleAvro {
-    export const RecordWithNamedStringTypeName = \\"com.example.avro.RecordWithNamedStringType\\";
+    export const RecordWithNamedStringTypeName = "com.example.avro.RecordWithNamedStringType";
     export interface RecordWithNamedStringType {
         pleaseNoNamespace: boolean;
     }
@@ -2482,7 +2482,7 @@ exports[`Avro ts test Should convert RecordWithNamedBooleanType.avsc successfull
 export type RecordWithNamedStringType = ComExampleAvro.RecordWithNamedStringType;
 
 export namespace ComExampleAvro {
-    export const RecordWithNamedStringTypeName = \\"com.example.avro.RecordWithNamedStringType\\";
+    export const RecordWithNamedStringTypeName = "com.example.avro.RecordWithNamedStringType";
     export interface RecordWithNamedStringType {
         pleaseNoNamespace: boolean;
     }
@@ -2496,7 +2496,7 @@ exports[`Avro ts test Should convert RecordWithNamedStringType.avsc successfully
 export type RecordWithNamedStringType = ComExampleAvro.RecordWithNamedStringType;
 
 export namespace ComExampleAvro {
-    export const RecordWithNamedStringTypeName = \\"com.example.avro.RecordWithNamedStringType\\";
+    export const RecordWithNamedStringTypeName = "com.example.avro.RecordWithNamedStringType";
     export interface RecordWithNamedStringType {
         pleaseNoNamespace: string;
     }
@@ -2510,7 +2510,7 @@ exports[`Avro ts test Should convert RecordWithNamedStringType.avsc successfully
 export type RecordWithNamedStringType = ComExampleAvro.RecordWithNamedStringType;
 
 export namespace ComExampleAvro {
-    export const RecordWithNamedStringTypeName = \\"com.example.avro.RecordWithNamedStringType\\";
+    export const RecordWithNamedStringTypeName = "com.example.avro.RecordWithNamedStringType";
     export interface RecordWithNamedStringType {
         pleaseNoNamespace: string;
     }
@@ -2524,7 +2524,7 @@ exports[`Avro ts test Should convert RecordWithUnion.avsc successfully 1`] = `
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2562,7 +2562,7 @@ exports[`Avro ts test Should convert RecordWithUnion.avsc successfully with defa
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2600,7 +2600,7 @@ exports[`Avro ts test Should convert SimpleRecord.avsc successfully 1`] = `
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2634,7 +2634,7 @@ exports[`Avro ts test Should convert SimpleRecord.avsc successfully with default
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -2666,27 +2666,27 @@ exports[`Avro ts test Should convert TopLevelUnion.avsc successfully 1`] = `
 "/* eslint-disable @typescript-eslint/no-namespace */
 
 export type AvroType = {
-    \\"com.example.avro.Cancelled\\": ComExampleAvro.Cancelled;
-    \\"com.example.avro.Creation\\"?: never;
+    "com.example.avro.Cancelled": ComExampleAvro.Cancelled;
+    "com.example.avro.Creation"?: never;
 } | {
-    \\"com.example.avro.Cancelled\\"?: never;
-    \\"com.example.avro.Creation\\": ComExampleAvro.Creation;
+    "com.example.avro.Cancelled"?: never;
+    "com.example.avro.Creation": ComExampleAvro.Creation;
 };
 
 export namespace ComExampleAvroEvent {
-    export const EventMetadataName = \\"com.example.avro.event.EventMetadata\\";
+    export const EventMetadataName = "com.example.avro.event.EventMetadata";
     export interface EventMetadata {
         eventId: string;
     }
 }
 
 export namespace ComExampleAvro {
-    export const CancelledName = \\"com.example.avro.Cancelled\\";
+    export const CancelledName = "com.example.avro.Cancelled";
     export interface Cancelled {
         metadata: ComExampleAvroEvent.EventMetadata;
         CancellationId: string;
     }
-    export const CreationName = \\"com.example.avro.Creation\\";
+    export const CreationName = "com.example.avro.Creation";
     export interface Creation {
         metadata: ComExampleAvroEvent.EventMetadata;
         creationId: string;
@@ -2699,27 +2699,27 @@ exports[`Avro ts test Should convert TopLevelUnion.avsc successfully with defaul
 "/* eslint-disable @typescript-eslint/no-namespace */
 
 export type AvroType = {
-    \\"com.example.avro.Cancelled\\": ComExampleAvro.Cancelled;
-    \\"com.example.avro.Creation\\"?: never;
+    "com.example.avro.Cancelled": ComExampleAvro.Cancelled;
+    "com.example.avro.Creation"?: never;
 } | {
-    \\"com.example.avro.Cancelled\\"?: never;
-    \\"com.example.avro.Creation\\": ComExampleAvro.Creation;
+    "com.example.avro.Cancelled"?: never;
+    "com.example.avro.Creation": ComExampleAvro.Creation;
 };
 
 export namespace ComExampleAvroEvent {
-    export const EventMetadataName = \\"com.example.avro.event.EventMetadata\\";
+    export const EventMetadataName = "com.example.avro.event.EventMetadata";
     export interface EventMetadata {
         eventId: string;
     }
 }
 
 export namespace ComExampleAvro {
-    export const CancelledName = \\"com.example.avro.Cancelled\\";
+    export const CancelledName = "com.example.avro.Cancelled";
     export interface Cancelled {
         metadata: ComExampleAvroEvent.EventMetadata;
         CancellationId: string;
     }
-    export const CreationName = \\"com.example.avro.Creation\\";
+    export const CreationName = "com.example.avro.Creation";
     export interface Creation {
         metadata: ComExampleAvroEvent.EventMetadata;
         creationId: string;
@@ -2734,14 +2734,14 @@ exports[`Avro ts test Should convert TradeCollection.avsc successfully 1`] = `
 export type TradeCollection = ComExampleAvro.TradeCollection;
 
 export namespace ComExampleAvro {
-    export const TradeTypeName = \\"com.example.avro.TradeType\\";
-    export type TradeType = \\"Market\\" | \\"Limit\\";
-    export const TradeDirectionName = \\"com.example.avro.TradeDirection\\";
-    export type TradeDirection = \\"Buy\\" | \\"Sell\\";
-    export const TradeName = \\"com.example.avro.Trade\\";
+    export const TradeTypeName = "com.example.avro.TradeType";
+    export type TradeType = "Market" | "Limit";
+    export const TradeDirectionName = "com.example.avro.TradeDirection";
+    export type TradeDirection = "Buy" | "Sell";
+    export const TradeName = "com.example.avro.Trade";
     export interface Trade {
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         id: string;
         /**
@@ -2753,7 +2753,7 @@ export namespace ComExampleAvro {
          */
         amount: number;
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         datetime: string;
         /**
@@ -2769,18 +2769,18 @@ export namespace ComExampleAvro {
          */
         side: null | ComExampleAvro.TradeDirection;
     }
-    export const TradeCollectionName = \\"com.example.avro.TradeCollection\\";
+    export const TradeCollectionName = "com.example.avro.TradeCollection";
     export interface TradeCollection {
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         producerId: string;
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         exchange: string;
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         market: string;
         /**
@@ -2798,14 +2798,14 @@ exports[`Avro ts test Should convert TradeCollection.avsc successfully with defa
 export type TradeCollection = ComExampleAvro.TradeCollection;
 
 export namespace ComExampleAvro {
-    export const TradeTypeName = \\"com.example.avro.TradeType\\";
-    export type TradeType = \\"Market\\" | \\"Limit\\";
-    export const TradeDirectionName = \\"com.example.avro.TradeDirection\\";
-    export type TradeDirection = \\"Buy\\" | \\"Sell\\";
-    export const TradeName = \\"com.example.avro.Trade\\";
+    export const TradeTypeName = "com.example.avro.TradeType";
+    export type TradeType = "Market" | "Limit";
+    export const TradeDirectionName = "com.example.avro.TradeDirection";
+    export type TradeDirection = "Buy" | "Sell";
+    export const TradeName = "com.example.avro.Trade";
     export interface Trade {
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         id?: string;
         /**
@@ -2817,7 +2817,7 @@ export namespace ComExampleAvro {
          */
         amount?: number;
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         datetime?: string;
         /**
@@ -2833,18 +2833,18 @@ export namespace ComExampleAvro {
          */
         side?: null | ComExampleAvro.TradeDirection;
     }
-    export const TradeCollectionName = \\"com.example.avro.TradeCollection\\";
+    export const TradeCollectionName = "com.example.avro.TradeCollection";
     export interface TradeCollection {
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         producerId?: string;
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         exchange?: string;
         /**
-         * Default: \\"\\"
+         * Default: ""
          */
         market?: string;
         /**
@@ -2862,7 +2862,7 @@ exports[`Avro ts test Should convert TrfPreNexus.avsc successfully 1`] = `
 export type TrfPreNexus = ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.TrfPreNexus;
 
 export namespace ComExampleKafkaFlowsEventFlow {
-    export const DeletedName = \\"com.example.kafka.flows.event.flow.Deleted\\";
+    export const DeletedName = "com.example.kafka.flows.event.flow.Deleted";
     /**
      * This type indicates that the data has been deleted according to the data retention policy.
      */
@@ -2875,41 +2875,41 @@ export namespace ComExampleKafkaFlowsEventFlow {
 }
 
 export namespace ComExampleKafkaFlowsEventFlowSplitTrfPreNexus {
-    export const LapsedConfirmationDetsName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets\\";
+    export const LapsedConfirmationDetsName = "com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets";
     export interface LapsedConfirmationDets {
         /**
-         * Default: \\"lapsedConfirmationDets\\"
+         * Default: "lapsedConfirmationDets"
          */
         groupName: string;
     }
-    export const TransferOfOwnershipName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership\\";
+    export const TransferOfOwnershipName = "com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership";
     export interface TransferOfOwnership {
         /**
-         * Default: \\"transferOfOwnership\\"
+         * Default: "transferOfOwnership"
          */
         groupName: string;
     }
-    export const FlowContentsName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents\\";
+    export const FlowContentsName = "com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents";
     export interface FlowContents {
         /**
          * The split flow record.
          */
         record: {
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets\\": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.LapsedConfirmationDets;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership\\"?: never;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.LapsedConfirmationDets;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership"?: never;
         } | {
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets\\"?: never;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership\\": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.TransferOfOwnership;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets"?: never;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.TransferOfOwnership;
         };
     }
-    export const TrfPreNexusName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TrfPreNexus\\";
+    export const TrfPreNexusName = "com.example.kafka.flows.event.flow.split.trfPreNexus.TrfPreNexus";
     export interface TrfPreNexus {
         data: {
-            \\"com.example.kafka.flows.event.flow.Deleted\\": ComExampleKafkaFlowsEventFlow.Deleted;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents\\"?: never;
+            "com.example.kafka.flows.event.flow.Deleted": ComExampleKafkaFlowsEventFlow.Deleted;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents"?: never;
         } | {
-            \\"com.example.kafka.flows.event.flow.Deleted\\"?: never;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents\\": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.FlowContents;
+            "com.example.kafka.flows.event.flow.Deleted"?: never;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.FlowContents;
         };
     }
 }
@@ -2922,7 +2922,7 @@ exports[`Avro ts test Should convert TrfPreNexus.avsc successfully with default 
 export type TrfPreNexus = ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.TrfPreNexus;
 
 export namespace ComExampleKafkaFlowsEventFlow {
-    export const DeletedName = \\"com.example.kafka.flows.event.flow.Deleted\\";
+    export const DeletedName = "com.example.kafka.flows.event.flow.Deleted";
     /**
      * This type indicates that the data has been deleted according to the data retention policy.
      */
@@ -2935,41 +2935,41 @@ export namespace ComExampleKafkaFlowsEventFlow {
 }
 
 export namespace ComExampleKafkaFlowsEventFlowSplitTrfPreNexus {
-    export const LapsedConfirmationDetsName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets\\";
+    export const LapsedConfirmationDetsName = "com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets";
     export interface LapsedConfirmationDets {
         /**
-         * Default: \\"lapsedConfirmationDets\\"
+         * Default: "lapsedConfirmationDets"
          */
         groupName?: string;
     }
-    export const TransferOfOwnershipName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership\\";
+    export const TransferOfOwnershipName = "com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership";
     export interface TransferOfOwnership {
         /**
-         * Default: \\"transferOfOwnership\\"
+         * Default: "transferOfOwnership"
          */
         groupName?: string;
     }
-    export const FlowContentsName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents\\";
+    export const FlowContentsName = "com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents";
     export interface FlowContents {
         /**
          * The split flow record.
          */
         record: {
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets\\": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.LapsedConfirmationDets;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership\\"?: never;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.LapsedConfirmationDets;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership"?: never;
         } | {
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets\\"?: never;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership\\": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.TransferOfOwnership;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.LapsedConfirmationDets"?: never;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.TransferOfOwnership": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.TransferOfOwnership;
         };
     }
-    export const TrfPreNexusName = \\"com.example.kafka.flows.event.flow.split.trfPreNexus.TrfPreNexus\\";
+    export const TrfPreNexusName = "com.example.kafka.flows.event.flow.split.trfPreNexus.TrfPreNexus";
     export interface TrfPreNexus {
         data: {
-            \\"com.example.kafka.flows.event.flow.Deleted\\": ComExampleKafkaFlowsEventFlow.Deleted;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents\\"?: never;
+            "com.example.kafka.flows.event.flow.Deleted": ComExampleKafkaFlowsEventFlow.Deleted;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents"?: never;
         } | {
-            \\"com.example.kafka.flows.event.flow.Deleted\\"?: never;
-            \\"com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents\\": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.FlowContents;
+            "com.example.kafka.flows.event.flow.Deleted"?: never;
+            "com.example.kafka.flows.event.flow.split.trfPreNexus.FlowContents": ComExampleKafkaFlowsEventFlowSplitTrfPreNexus.FlowContents;
         };
     }
 }
@@ -2982,7 +2982,7 @@ exports[`Avro ts test Should convert User.avsc successfully 1`] = `
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const EmailAddressName = \\"com.example.avro.EmailAddress\\";
+    export const EmailAddressName = "com.example.avro.EmailAddress";
     /**
      * Stores details about an email address that a user has associated with their account.
      */
@@ -3006,7 +3006,7 @@ export namespace ComExampleAvro {
          */
         dateBounced: null | number;
     }
-    export const OAuthStatusName = \\"com.example.avro.OAuthStatus\\";
+    export const OAuthStatusName = "com.example.avro.OAuthStatus";
     /**
      * * \`PENDING\`: the user has started authorizing, but not yet finished
      * * \`ACTIVE\`: the token should work
@@ -3014,8 +3014,8 @@ export namespace ComExampleAvro {
      * * \`EXPIRED\`: the token used to work, but now it doesn't
      * * \`REVOKED\`: the user has explicitly revoked the token
      */
-    export type OAuthStatus = \\"PENDING\\" | \\"ACTIVE\\" | \\"DENIED\\" | \\"EXPIRED\\" | \\"REVOKED\\";
-    export const TwitterAccountName = \\"com.example.avro.TwitterAccount\\";
+    export type OAuthStatus = "PENDING" | "ACTIVE" | "DENIED" | "EXPIRED" | "REVOKED";
+    export const TwitterAccountName = "com.example.avro.TwitterAccount";
     /**
      * Stores access credentials for one Twitter account, as granted to us by the user by OAuth.
      */
@@ -3045,7 +3045,7 @@ export namespace ComExampleAvro {
          */
         dateAuthorized: number;
     }
-    export const ToDoStatusName = \\"com.example.avro.ToDoStatus\\";
+    export const ToDoStatusName = "com.example.avro.ToDoStatus";
     /**
      * * \`HIDDEN\`: not currently visible, e.g. because it becomes actionable in future
      * * \`ACTIONABLE\`: appears in the current to-do list
@@ -3053,8 +3053,8 @@ export namespace ComExampleAvro {
      * * \`ARCHIVED\`: marked as done and no longer visible
      * * \`DELETED\`: not done and removed from list (preserved for undo purposes)
      */
-    export type ToDoStatus = \\"HIDDEN\\" | \\"ACTIONABLE\\" | \\"DONE\\" | \\"ARCHIVED\\" | \\"DELETED\\";
-    export const ToDoItemName = \\"com.example.avro.ToDoItem\\";
+    export type ToDoStatus = "HIDDEN" | "ACTIONABLE" | "DONE" | "ARCHIVED" | "DELETED";
+    export const ToDoItemName = "com.example.avro.ToDoItem";
     /**
      * A record is one node in a To-Do item tree (every record can contain nested sub-records).
      */
@@ -3080,7 +3080,7 @@ export namespace ComExampleAvro {
          */
         subItems: ComExampleAvro.ToDoItem[];
     }
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -3126,7 +3126,7 @@ exports[`Avro ts test Should convert User.avsc successfully with default as opti
 export type User = ComExampleAvro.User;
 
 export namespace ComExampleAvro {
-    export const EmailAddressName = \\"com.example.avro.EmailAddress\\";
+    export const EmailAddressName = "com.example.avro.EmailAddress";
     /**
      * Stores details about an email address that a user has associated with their account.
      */
@@ -3150,7 +3150,7 @@ export namespace ComExampleAvro {
          */
         dateBounced: null | number;
     }
-    export const OAuthStatusName = \\"com.example.avro.OAuthStatus\\";
+    export const OAuthStatusName = "com.example.avro.OAuthStatus";
     /**
      * * \`PENDING\`: the user has started authorizing, but not yet finished
      * * \`ACTIVE\`: the token should work
@@ -3158,8 +3158,8 @@ export namespace ComExampleAvro {
      * * \`EXPIRED\`: the token used to work, but now it doesn't
      * * \`REVOKED\`: the user has explicitly revoked the token
      */
-    export type OAuthStatus = \\"PENDING\\" | \\"ACTIVE\\" | \\"DENIED\\" | \\"EXPIRED\\" | \\"REVOKED\\";
-    export const TwitterAccountName = \\"com.example.avro.TwitterAccount\\";
+    export type OAuthStatus = "PENDING" | "ACTIVE" | "DENIED" | "EXPIRED" | "REVOKED";
+    export const TwitterAccountName = "com.example.avro.TwitterAccount";
     /**
      * Stores access credentials for one Twitter account, as granted to us by the user by OAuth.
      */
@@ -3189,7 +3189,7 @@ export namespace ComExampleAvro {
          */
         dateAuthorized: number;
     }
-    export const ToDoStatusName = \\"com.example.avro.ToDoStatus\\";
+    export const ToDoStatusName = "com.example.avro.ToDoStatus";
     /**
      * * \`HIDDEN\`: not currently visible, e.g. because it becomes actionable in future
      * * \`ACTIONABLE\`: appears in the current to-do list
@@ -3197,8 +3197,8 @@ export namespace ComExampleAvro {
      * * \`ARCHIVED\`: marked as done and no longer visible
      * * \`DELETED\`: not done and removed from list (preserved for undo purposes)
      */
-    export type ToDoStatus = \\"HIDDEN\\" | \\"ACTIONABLE\\" | \\"DONE\\" | \\"ARCHIVED\\" | \\"DELETED\\";
-    export const ToDoItemName = \\"com.example.avro.ToDoItem\\";
+    export type ToDoStatus = "HIDDEN" | "ACTIONABLE" | "DONE" | "ARCHIVED" | "DELETED";
+    export const ToDoItemName = "com.example.avro.ToDoItem";
     /**
      * A record is one node in a To-Do item tree (every record can contain nested sub-records).
      */
@@ -3224,7 +3224,7 @@ export namespace ComExampleAvro {
          */
         subItems: ComExampleAvro.ToDoItem[];
     }
-    export const UserName = \\"com.example.avro.User\\";
+    export const UserName = "com.example.avro.User";
     /**
      * This is a user record in a fictitious to-do-list management app. It supports arbitrary grouping and nesting of items, and allows you to add items by email or by tweeting.
      *
@@ -3270,7 +3270,7 @@ exports[`Avro ts test Should convert WeirdName.avsc successfully 1`] = `
 export type RecordValue = ComAcmeMyapp.RecordValue;
 
 export namespace ComAcmeMyapp {
-    export const RecordValueName = \\"com.acme.myapp.record-value\\";
+    export const RecordValueName = "com.acme.myapp.record-value";
     export interface RecordValue {
         name: string;
     }
@@ -3284,7 +3284,7 @@ exports[`Avro ts test Should convert WeirdName.avsc successfully with default as
 export type RecordValue = ComAcmeMyapp.RecordValue;
 
 export namespace ComAcmeMyapp {
-    export const RecordValueName = \\"com.acme.myapp.record-value\\";
+    export const RecordValueName = "com.acme.myapp.record-value";
     export interface RecordValue {
         name: string;
     }

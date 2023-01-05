@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Statements Should process response 1`] = `
-Array [
-  Object {
+[
+  {
     "address": "87, TEST AVENUE, TEST TOWN",
     "bool": true,
     "endDate": "2019-06-02",
@@ -19,7 +19,7 @@ Array [
     "startDate": "2019-01-04",
     "tariffName": "SMART PAYG (all online)",
   },
-  Object {
+  {
     "address": "87, TEST AVENUE, LOW HILL, TEST TOWN, WEST MIDLANDS",
     "bool": true,
     "endDate": "2019-06-02",
