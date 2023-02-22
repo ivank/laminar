@@ -53,7 +53,7 @@ jobs:
         enum: ['packages', 'examples']
     docker:
       - image: << parameters.node-image >>
-      - image: postgres:11
+      - image: postgres:13
         environment:
           POSTGRES_DB: example
           POSTGRES_USER: example-admin

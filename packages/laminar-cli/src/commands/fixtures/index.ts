@@ -28,7 +28,9 @@ const columnsSql = `
     udt_name AS "recordName",
     data_type AS "dataType"
   FROM information_schema.columns
-  WHERE table_schema = 'public'
+  WHERE
+    table_schema = 'public'
+    AND is_generated = 'NEVER'
   ORDER BY table_schema ASC, table_name ASC, ordinal_position ASC
 `;
 
