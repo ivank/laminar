@@ -22,6 +22,20 @@ export interface PgClientConfig {
   initEnumTypeParsers?: boolean;
 }
 
+interface TransactionOptions {
+  isolationLevel?: 'serializable' | 'repeatable read' | 'read committed' | 'read uncommitted';
+  write?: boolean;
+  deferrable?: boolean;
+}
+
+const toTransactionModes = (options: TransactionOptions): string =>
+  ['BEGIN']
+    .concat('isolationLevel' in options || 'write' in options || 'deferrable' in options ? ['TRANSACTION'] : [])
+    .concat(options.isolationLevel ? ['ISOLATION LEVEL', options.isolationLevel] : [])
+    .concat(options.write === undefined ? [] : options.write === true ? ['READ WRITE'] : ['READ ONLY'])
+    .concat(options.deferrable === undefined ? [] : options.deferrable === true ? ['DEFERRABLE'] : ['NOT DEFERRABLE'])
+    .join(' ');
+
 /**
  * A class that wraps a PoolClient, cathing errors and re-throwing them with more diagnostic information.
  *
@@ -88,9 +102,16 @@ export class PgClient {
    * });
    * ```
    */
-  async transaction<T>(operation: (db: PgClient) => Promise<T>): Promise<T> {
+  async transaction<T>(options: TransactionOptions, operation: (db: PgClient) => Promise<T>): Promise<T>;
+  async transaction<T>(operation: (db: PgClient) => Promise<T>): Promise<T>;
+  async transaction<T>(
+    ...args:
+      | [options: TransactionOptions, operation: (db: PgClient) => Promise<T>]
+      | [operation: (db: PgClient) => Promise<T>]
+  ): Promise<T> {
+    const [options, operation] = args.length === 1 ? [{}, ...args] : args;
     if (!this.config.transaction) {
-      await this.client.query('BEGIN');
+      await this.client.query(toTransactionModes(options));
     }
     try {
       const result = await operation(new PgClient(this.client, { ...this.config, transaction: true }));

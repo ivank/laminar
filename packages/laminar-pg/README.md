@@ -65,6 +65,47 @@ const http = new HttpService({ listener });
 init({ initOrder: [pool, http], logger: console });
 ```
 
+## Transactions
+
+You can use transactions to make sure related queries are linked together and don't affect the database state unless everything passes. The transaction promise is wrapped in "BEGIN" and "COMMIT" as we as call "ROLLBACK" if the promise is rejected.
+
+> [examples/transactions.ts:(transactions)](https://github.com/ovotech/laminar/tree/main/packages/laminar-pg/examples/transactions.ts#L15-L32)
+
+```typescript
+const insertedIds = await db.transaction(async (t) => {
+  const result1 = await t.query<{ id: number }>('INSERT INTO animals (name) VALUES ($1) RETURNING id', [
+    'transaction-test1',
+  ]);
+
+  const result2 = await t.query<{ id: number }>('INSERT INTO animals (name) VALUES ($1) RETURNING id', [
+    'transaction-test2',
+  ]);
+
+  return [result1.rows[0].id, result2.rows[0].id];
+});
+
+const { rows } = await db.query<{ id: number; name: string }>(
+  'SELECT name, id FROM animals WHERE id = ANY($1) ORDER BY name ASC',
+  [insertedIds],
+);
+```
+
+## Isolation level
+
+Transactions allow for setting isolation options for them.
+
+> [examples/transactions-isolation-level.ts:(transactions)](https://github.com/ovotech/laminar/tree/main/packages/laminar-pg/examples/transactions-isolation-level.ts#L15-L23)
+
+```typescript
+const insertedIds = await db.transaction({ isolationLevel: 'serializable' }, async (t) => {
+  const result1 = await t.query<{ id: number }>('INSERT INTO animals (name) VALUES ($1) RETURNING id', [
+    'transaction-test1',
+  ]);
+
+  return [result1.rows[0].id];
+});
+```
+
 ## Running the tests
 
 You can run the tests with:

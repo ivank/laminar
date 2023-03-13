@@ -35,6 +35,44 @@ describe('Transaction', () => {
       await pool.end();
     }
   });
+
+  it('Should use transaction options', async () => {
+    const pool = new Pool({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' });
+    const client = await pool.connect();
+    try {
+      const pg = new PgClient(client);
+      await pg.query("DELETE FROM animals WHERE name LIKE 'transaction-test%'");
+
+      const insertedIds = await pg.transaction(
+        { isolationLevel: 'serializable', write: true, deferrable: true },
+        async (tpg) => {
+          const result1 = await tpg.query<{ id: number }>('INSERT INTO animals (name) VALUES ($1) RETURNING id', [
+            'transaction-test1',
+          ]);
+
+          const result2 = await tpg.query<{ id: number }>('INSERT INTO animals (name) VALUES ($1) RETURNING id', [
+            'transaction-test2',
+          ]);
+
+          return [result1.rows[0].id, result2.rows[0].id];
+        },
+      );
+
+      const selected = await pg.query<{ id: number; name: string }>(
+        'SELECT name, id FROM animals WHERE id = ANY($1) ORDER BY name ASC',
+        [insertedIds],
+      );
+
+      expect(selected.rows).toEqual([
+        { id: expect.any(Number), name: 'transaction-test1' },
+        { id: expect.any(Number), name: 'transaction-test2' },
+      ]);
+    } finally {
+      client.release();
+      await pool.end();
+    }
+  });
+
   it('Should work with nested transactions', async () => {
     const pool = new Pool({ connectionString: 'postgres://example-admin:example-pass@localhost:5432/example' });
     const client = await pool.connect();

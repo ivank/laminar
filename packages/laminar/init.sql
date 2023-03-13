@@ -3,4 +3,4 @@ CREATE TABLE "public"."animals" (
     "name" varchar(50) NOT NULL,
     PRIMARY KEY ("id")
 );
-CREATE EXTENSION pgcrypto;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

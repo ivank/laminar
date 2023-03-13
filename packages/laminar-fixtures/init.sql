@@ -1,5 +1,5 @@
 
-CREATE EXTENSION pgcrypto;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE addresses (
     id SERIAL PRIMARY KEY,
