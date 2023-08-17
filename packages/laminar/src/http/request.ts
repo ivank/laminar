@@ -18,7 +18,7 @@ export function toHttpRequest(incommingMessage: IncomingMessage): HttpContext {
   const headers = incommingMessage.headers;
   const method = incommingMessage.method ?? '';
   const host = (headers['x-forwarded-host'] as string)?.split(',')[0] ?? headers['host'];
-  let url = ''
+  let url = new URL('/', `${protocol}://${host}`)
     try {
       url = new URL(incommingMessage.url ?? '', `${protocol}://${host}`);
     } catch(err) {
