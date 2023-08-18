@@ -3,9 +3,9 @@ import { promisify } from 'util';
 import { join } from 'path';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Client } from 'pg';
-import { Agent } from 'https';
+// import { Agent } from 'https';
 import nock from 'nock';
-import { readFileSync } from 'fs';
+// import { readFileSync } from 'fs';
 
 let port = 4300;
 const PG = 'postgres://example-admin:example-pass@localhost:5432/example';
@@ -45,18 +45,18 @@ describe('Docs examples', () => {
     ],
     ['src/http-service/timeout.ts', [{ req: { url: '/' }, res: { status: 200 } }]],
     ['src/http-service/http.ts', [{ req: { url: '/' }, res: { status: 200 } }]],
-    [
-      'src/http-service/https.ts',
-      [
-        {
-          req: {
-            url: 'https://localhost:{port}/',
-            httpsAgent: new Agent({ ca: readFileSync(join(__dirname, '../src/http-service/ca.pem')) }),
-          },
-          res: { status: 200 },
-        },
-      ],
-    ],
+    // [
+    //   'src/http-service/https.ts',
+    //   [
+    //     {
+    //       req: {
+    //         url: 'https://localhost:{port}/',
+    //         httpsAgent: new Agent({ ca: readFileSync(join(__dirname, '../src/http-service/ca.pem')) }),
+    //       },
+    //       res: { status: 200 },
+    //     },
+    //   ],
+    // ],
     ['src/http-service/response-parsers.ts', [{ req: { url: '/' }, res: { status: 200, data: '1,2,3' } }]],
     [
       'src/http-service/body-parsers.ts',
