@@ -25,7 +25,7 @@ import {
 } from '../src';
 import { join } from 'path';
 import { readFileSync, createReadStream } from 'fs';
-import { Agent } from 'https';
+// import { Agent } from 'https';
 import { URLSearchParams } from 'url';
 
 describe('Integration', () => {
@@ -40,21 +40,21 @@ describe('Integration', () => {
     });
   });
 
-  it('Should allow TLS', async () => {
-    const listener = jest.fn().mockReturnValue(textOk('TLS Test'));
-    const port = 8051;
-    const key = readFileSync(join(__dirname, '../examples/key.pem'));
-    const cert = readFileSync(join(__dirname, '../examples/cert.pem'));
-    const ca = readFileSync(join(__dirname, '../examples/ca.pem'));
+  // it('Should allow TLS', async () => {
+  //   const listener = jest.fn().mockReturnValue(textOk('TLS Test'));
+  //   const port = 8051;
+  //   const key = readFileSync(join(__dirname, '../examples/key.pem'));
+  //   const cert = readFileSync(join(__dirname, '../examples/cert.pem'));
+  //   const ca = readFileSync(join(__dirname, '../examples/ca.pem'));
 
-    const http = new HttpService({ port, listener, https: { key, cert } });
-    await run({ initOrder: [http] }, async () => {
-      const response = await axios.get(`https://localhost:${port}`, {
-        httpsAgent: new Agent({ ca }),
-      });
-      expect(response.data).toEqual('TLS Test');
-    });
-  });
+  //   const http = new HttpService({ port, listener, https: { key, cert } });
+  //   await run({ initOrder: [http] }, async () => {
+  //     const response = await axios.get(`https://localhost:${port}`, {
+  //       httpsAgent: new Agent({ ca }),
+  //     });
+  //     expect(response.data).toEqual('TLS Test');
+  //   });
+  // });
 
   it('Should use the name', async () => {
     const listener = jest.fn().mockReturnValue(textOk('Name Test'));

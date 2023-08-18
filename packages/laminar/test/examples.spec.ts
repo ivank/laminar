@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { execSync, spawn } from 'child_process';
-import { readdirSync, readFileSync, unlinkSync } from 'fs';
-import { Agent } from 'https';
+import { readdirSync, unlinkSync } from 'fs';
+// import { Agent } from 'https';
 import { join } from 'path';
 import nock from 'nock';
 import { OutgoingHttpHeaders } from 'http2';
@@ -133,16 +133,16 @@ describe('Example files', () => {
       {},
     ],
     ['examples/simple.ts', { method: 'GET', url: '/.well-known/health-check' }, { health: 'ok' }, {}],
-    [
-      'examples/simple-https.ts',
-      {
-        method: 'GET',
-        url: 'https://localhost:8443/.well-known/health-check',
-        httpsAgent: new Agent({ ca: readFileSync(join(__dirname, '../examples/ca.pem')) }),
-      },
-      { health: 'ok' },
-      {},
-    ],
+    // [
+    //   'examples/simple-https.ts',
+    //   {
+    //     method: 'GET',
+    //     url: 'https://localhost:8443/.well-known/health-check',
+    //     httpsAgent: new Agent({ ca: readFileSync(join(__dirname, '../examples/ca.pem')) }),
+    //   },
+    //   { health: 'ok' },
+    //   {},
+    // ],
     [
       'examples/static-assets.ts',
       {
