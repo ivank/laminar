@@ -97,7 +97,7 @@ jobs:
 
   publish:
     docker:
-      - image: circleci/node:18.17.1
+      - image: cimg/node:18.17.0
     steps:
       - checkout
       - yarn-install
@@ -113,7 +113,7 @@ workflows:
       - test:
           matrix:
             parameters:
-              node-image: ['circleci/node:18.17.1']
+              node-image: ['cimg/node:18.17.0']
               subset: ['packages', 'examples']
           filters:
             branches:
@@ -124,7 +124,7 @@ workflows:
       - test:
           matrix:
             parameters:
-              node-image: ['circleci/node:18.17.1']
+              node-image: ['cimg/node:18.17.0']
               subset: ['packages', 'examples']
           filters:
             branches:
