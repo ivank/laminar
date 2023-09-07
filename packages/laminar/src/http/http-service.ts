@@ -84,19 +84,24 @@ export function toRequestListener(resolver: IncommingMessageResolver): http.Requ
   return async function (incommingMessage, serverResponse) {
     const response = await resolver(incommingMessage);
 
+    let contentTypeValue = '';
+    let dispositionValue = '';
+
     for (const [headerName, headerValue] of Object.entries(response.headers)) {
       const parsedHeaderName = String(headerName).toLowerCase();
       const parsedHeaderValue = String(headerValue);
 
-      if (parsedHeaderName === 'content-disposition' && parsedHeaderValue.startsWith('attachment; filename=')) {
-        serverResponse.setHeader(parsedHeaderName, parsedHeaderValue);
-        continue;
-      }
+      if (parsedHeaderName === 'content-type') contentTypeValue = String(parsedHeaderValue);
+      if (parsedHeaderName === 'content-disposition') dispositionValue = String(parsedHeaderValue);
 
       const values = toArray(headerValue).map((item) => String(item));
       if (values.length) {
         serverResponse.setHeader(parsedHeaderName, values);
       }
+    }
+
+    if (dispositionValue.startsWith('attachment; filename=') && !contentTypeValue.startsWith('multipart')) {
+      serverResponse.setHeader('content-disposition', dispositionValue);
     }
 
     serverResponse.statusCode = response.status;
