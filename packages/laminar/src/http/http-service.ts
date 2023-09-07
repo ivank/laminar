@@ -85,9 +85,15 @@ export function toRequestListener(resolver: IncommingMessageResolver): http.Requ
     const response = await resolver(incommingMessage);
 
     for (const [headerName, headerValue] of Object.entries(response.headers)) {
+      const parsedHeaderName = headerName.toLowerCase();
+      if (parsedHeaderName === 'content-disposition' && String(headerValue).startsWith('attachment; filename=')) {
+        serverResponse.setHeader(parsedHeaderName, headerValue);
+        continue;
+      }
+
       const values = toArray(headerValue).map((item) => String(item));
       if (values.length) {
-        serverResponse.setHeader(headerName.toLowerCase(), values);
+        serverResponse.setHeader(parsedHeaderName, values);
       }
     }
 

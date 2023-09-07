@@ -97,7 +97,7 @@ jobs:
 
   publish:
     docker:
-      - image: circleci/node:14-bullseye
+      - image: circleci/node:18.17.1
     steps:
       - checkout
       - yarn-install
@@ -113,7 +113,7 @@ workflows:
       - test:
           matrix:
             parameters:
-              node-image: ['circleci/node:14-bullseye']
+              node-image: ['circleci/node:18.17.1']
               subset: ['packages', 'examples']
           filters:
             branches:
@@ -124,7 +124,7 @@ workflows:
       - test:
           matrix:
             parameters:
-              node-image: ['circleci/node:14-bullseye']
+              node-image: ['circleci/node:18.17.1']
               subset: ['packages', 'examples']
           filters:
             branches:
