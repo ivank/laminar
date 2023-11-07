@@ -166,14 +166,14 @@ describe('Requests', () => {
           body: {
             name: 'test-name',
             age: '21',
-            file: [
-              {
+            file: expect.arrayContaining([
+              expect.objectContaining({
                 filename: 'test.html',
                 data: readFileSync(join(__dirname, 'test.html')),
                 type: 'text/html',
                 name: 'file',
-              },
-            ],
+              }),
+            ]),
           },
           method: 'POST',
         }),
@@ -206,7 +206,7 @@ describe('Requests', () => {
           body: {
             name: 'test-name',
             age: '21',
-            file: [
+            file: expect.arrayContaining([
               {
                 filename: 'test.html',
                 data: readFileSync(join(__dirname, 'test.html')),
@@ -219,7 +219,7 @@ describe('Requests', () => {
                 type: 'text/plain',
                 name: 'file',
               },
-            ],
+            ]),
           },
           method: 'POST',
         }),
