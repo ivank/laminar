@@ -18,9 +18,9 @@ const isJWTData = (data: jsonwebtoken.JwtPayload | string | null): data is JWTDa
 const isUser = <TUser extends User = User>(data: JWTData): data is TUser => typeof data === 'object' && data !== null;
 
 export const toMissing = (userScopes: string[], requiredScopes: string[]): string[] =>
-  requiredScopes.filter((requiredScope) => !userScopes.find((userScope) => requiredScope === userScope));
+  requiredScopes.some((requiredScope) => userScopes.includes(requiredScope)) ? [] : requiredScopes;
 
-export const verifyJWT = <TUser extends User = User>(data: JWTData, scopes: string[] = []): Security<TUser> => {
+  export const verifyJWT = <TUser extends User = User>(data: JWTData, scopes: string[] = []): Security<TUser> => {
   if (!isUser<TUser>(data)) {
     return securityError({
       message:
@@ -30,7 +30,7 @@ export const verifyJWT = <TUser extends User = User>(data: JWTData, scopes: stri
   const missingScopes = toMissing(data.scopes ?? [], scopes);
   if (missingScopes.length) {
     return securityError({
-      message: `Unauthorized. User does not have required scopes: [${missingScopes.join(', ')}]`,
+      message: `Unauthorized. User does not have any of the required scopes: [${missingScopes.join(', ')}]`,
     });
   }
   return securityOk<TUser>(data);
