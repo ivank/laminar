@@ -64,7 +64,9 @@ export const verifyToken = async <TUser extends User>(
       ),
     );
     if (!isJWTData(data)) {
-      return securityError({ message: 'Authorization token malformed, needs to be an jwt object' });
+      return securityError({
+        message: 'Authorization token malformed, needs to be an jwt object',
+      });
     }
     return verify(data, scopes);
   } catch (error) {
@@ -99,7 +101,9 @@ export const verifyBearer = async <TUser extends User>(
   }
   const token = authorization.match(/^Bearer (.*)$/)?.[1];
   if (!token) {
-    return securityError({ message: 'Authorization header is invalid. Needs to be "Bearer ${token}"' });
+    return securityError({
+      message: 'Authorization header is invalid. Needs to be "Bearer ${token}"',
+    });
   }
 
   return verifyToken(options, token, scopes);

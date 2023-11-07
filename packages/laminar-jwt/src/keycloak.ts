@@ -26,7 +26,9 @@ export const verifyKeycloack =
     const missingScopes = toMissing(clientScopes, scopes);
     if (missingScopes.length) {
       return securityError({
-        message: `Client ${data.clientId} does not have any of the required roles: [${missingScopes.join(', ')}] for ${service}`,
+        message: `Client ${data.clientId} does not have any of the required roles: [${missingScopes.join(
+          ', ',
+        )}] for ${service}`,
         service,
       });
     }
