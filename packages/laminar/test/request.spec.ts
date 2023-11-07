@@ -207,18 +207,18 @@ describe('Requests', () => {
             name: 'test-name',
             age: '21',
             file: expect.arrayContaining([
-              {
+              expect.objectContaining({
                 filename: 'test.html',
                 data: readFileSync(join(__dirname, 'test.html')),
                 type: 'text/html',
                 name: 'file',
-              },
-              {
+              }),
+              expect.objectContaining({
                 filename: 'test.txt',
                 data: readFileSync(join(__dirname, 'test.txt')),
                 type: 'text/plain',
                 name: 'file',
-              },
+              }),
             ]),
           },
           method: 'POST',

@@ -32,7 +32,7 @@ export function requestLoggingMiddleware<TLogger extends LoggerLike>(
     try {
       const res = await next({ ...ctx, logger });
       if (!filter || filter(ctx)) {
-        if ((res.status >= 200 && res.status < 400) || res.status == 404) {
+        if (res.status >= 200 && res.status < 500) {
           logger.info(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status });
         } else {
           logger.error(`${ctx.method} ${ctx.url.pathname}: ${res.status}`, { status: res.status, body: res.body });
