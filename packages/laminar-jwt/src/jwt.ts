@@ -20,7 +20,7 @@ const isUser = <TUser extends User = User>(data: JWTData): data is TUser => type
 export const toMissing = (userScopes: string[], requiredScopes: string[]): string[] =>
   requiredScopes.some((requiredScope) => userScopes.includes(requiredScope)) ? [] : requiredScopes;
 
-  export const verifyJWT = <TUser extends User = User>(data: JWTData, scopes: string[] = []): Security<TUser> => {
+export const verifyJWT = <TUser extends User = User>(data: JWTData, scopes: string[] = []): Security<TUser> => {
   if (!isUser<TUser>(data)) {
     return securityError({
       message:
