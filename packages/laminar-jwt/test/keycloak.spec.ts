@@ -83,7 +83,7 @@ describe('Integration', () => {
       await expect(result2.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
         data: {
-          message: 'Client tester does not have required roles: [test1] for test-service',
+          message: 'Client tester does not have any of the required roles: [test1] for test-service',
         },
       });
 
@@ -94,7 +94,7 @@ describe('Integration', () => {
       await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
         data: {
-          message: 'Client tester does not have required roles: [test1] for test-service',
+          message: 'Client tester does not have any of the required roles: [test1] for test-service',
         },
       });
 

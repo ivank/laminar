@@ -81,7 +81,7 @@ describe('Integration', () => {
 
       await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
-        data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
+        data: { message: 'Unauthorized. User does not have any of the required scopes: [test1]' },
       });
 
       const result4 = api.get('/test-scopes', {
@@ -90,7 +90,7 @@ describe('Integration', () => {
 
       await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
-        data: { message: 'Unauthorized. User does not have required scopes: [test1]' },
+        data: { message: 'Unauthorized. User does not have any of the required scopes: [test1]' },
       });
 
       const result5 = api.get('/test', {
@@ -215,7 +215,7 @@ describe('Integration', () => {
       await expect(result3.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
         data: {
-          message: 'Unauthorized. User does not have required scopes: [test1]',
+          message: 'Unauthorized. User does not have any of the required scopes: [test1]',
         },
       });
 
@@ -226,7 +226,7 @@ describe('Integration', () => {
       await expect(result4.catch((error) => error.response)).resolves.toMatchObject({
         status: 403,
         data: {
-          message: 'Unauthorized. User does not have required scopes: [test1]',
+          message: 'Unauthorized. User does not have any of the required scopes: [test1]',
         },
       });
     });
