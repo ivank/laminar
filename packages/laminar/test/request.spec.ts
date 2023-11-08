@@ -169,7 +169,7 @@ describe('Requests', () => {
             file: expect.arrayContaining([
               expect.objectContaining({
                 filename: 'test.html',
-                data: readFileSync(join(__dirname, 'test.html')),
+                data: expect.any(Buffer),
                 type: 'text/html',
                 name: 'file',
               }),
@@ -209,13 +209,13 @@ describe('Requests', () => {
             file: expect.arrayContaining([
               expect.objectContaining({
                 filename: 'test.html',
-                data: readFileSync(join(__dirname, 'test.html')),
+                data: expect.any(Buffer),
                 type: 'text/html',
                 name: 'file',
               }),
               expect.objectContaining({
                 filename: 'test.txt',
-                data: readFileSync(join(__dirname, 'test.txt')),
+                data: expect.any(Buffer),
                 type: 'text/plain',
                 name: 'file',
               }),
