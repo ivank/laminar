@@ -1,5 +1,6 @@
 import { toErrorMetadata } from '../../errors';
 import { withStaticMetadata, LoggerContext, LoggerLike } from '../../logger';
+import { isHttpError } from '../http-error';
 import { HttpContext, HttpMiddleware } from '../types';
 
 export interface RequestLoggingMiddlewareParams {
@@ -41,7 +42,11 @@ export function requestLoggingMiddleware<TLogger extends LoggerLike>(
       return res;
     } catch (error) {
       if (error instanceof Error) {
-        logger.error(error.message, toErrorMetadata(error));
+        if (isHttpError(error) && error.code < 500) {
+          logger.info(error.message, toErrorMetadata(error));
+        } else {
+          logger.error(error.message, toErrorMetadata(error));
+        }
       } else {
         logger.error(String(error));
       }
