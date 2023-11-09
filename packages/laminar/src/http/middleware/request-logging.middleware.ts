@@ -43,14 +43,11 @@ export function requestLoggingMiddleware<TLogger extends LoggerLike>(
     } catch (error) {
       if (error instanceof Error) {
         if (isHttpError(error) && error.code < 500) {
-          logger.info(`isHttpError ${error.code}`);
           logger.info(error.message, toErrorMetadata(error));
         } else {
-          logger.info('notHttpError');
           logger.error(error.message, toErrorMetadata(error));
         }
       } else {
-        logger.info('notInstanceOfError');
         logger.error(String(error));
       }
       throw error;
