@@ -212,6 +212,18 @@ You'll need to start a postgres instance to run the tests for some of the exmapl
 docker-compose up
 ```
 
+As well as build all the packages, as some depend on packages in the same repo, and the tests would fail if the compiled js code is not present
+
+```shell
+yarn build
+```
+
+Finally some tests rely on a submodule git repository, which you'll need to fetch
+
+```shell
+git submodule update --init
+```
+
 You can then run the tests with:
 
 ```shell

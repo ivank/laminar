@@ -7,16 +7,16 @@
   "repository": "git@github.com:ovotech/laminar.git",
   "private": true,
   "scripts": {
-    "test": "yarn workspaces foreach --verbose run test",
-    "lint": "yarn workspaces foreach --parallel --verbose run lint",
-    "build": "yarn workspaces foreach --parallel --topological-dev --verbose run build",
-    "test:examples": "yarn workspaces foreach --verbose --include '@examples/*' run test",
-    "lint:examples": "yarn workspaces foreach --parallel --include '@examples/*' --verbose run lint",
-    "build:examples": "yarn workspaces foreach --parallel --include '@examples/*' --topological-dev --verbose run build",
-    "test:packages": "yarn workspaces foreach --verbose --exclude '@examples/*' --exclude 'laminar' run test",
-    "lint:packages": "yarn workspaces foreach --parallel --exclude '@examples/*' --exclude 'laminar' --verbose run lint",
-    "build:packages": "yarn workspaces foreach --parallel --exclude '@examples/*' --exclude 'laminar' --topological-dev --verbose run build",
-    "publish": "yarn workspaces foreach --no-private --verbose npm publish --tolerate-republish --access public",
+    "test": "yarn workspaces foreach --all --verbose run test",
+    "lint": "yarn workspaces foreach --all --parallel --verbose run lint",
+    "build": "yarn workspaces foreach --all --parallel --topological-dev --verbose run build",
+    "test:examples": "yarn workspaces foreach --all --verbose --include '@examples/*' run test",
+    "lint:examples": "yarn workspaces foreach --all --parallel --include '@examples/*' --verbose run lint",
+    "build:examples": "yarn workspaces foreach --all --parallel --include '@examples/*' --topological-dev --verbose run build",
+    "test:packages": "yarn workspaces foreach --all --verbose --exclude '@examples/*' --exclude 'laminar' run test",
+    "lint:packages": "yarn workspaces foreach --all --parallel --exclude '@examples/*' --exclude 'laminar' --verbose run lint",
+    "build:packages": "yarn workspaces foreach --all --parallel --exclude '@examples/*' --exclude 'laminar' --topological-dev --verbose run build",
+    "publish": "yarn workspaces foreach --all --no-private --verbose npm publish --tolerate-republish --access public",
     "build:readme": "build-readme README.md 'https://github.com/ovotech/laminar/tree/main' && bash -c 'for f in docs/*.md; do yarn build-readme $f https://github.com/ovotech/laminar/tree/main; done' && typedoc"
   },
   "workspaces": [
@@ -38,5 +38,5 @@
     "typedoc": "^0.23.15",
     "typescript": "^4.8.3"
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@4.0.2"
 }
