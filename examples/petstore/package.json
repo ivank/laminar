@@ -13,7 +13,7 @@
     "@ovotech/laminar-cli": "*",
     "@types/jest": "^29.2.4",
     "@types/node": "^14.18.34",
-    "@types/pg": "^8.6.4",
+    "@types/pg": "^8.10.9",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "axios": "^0.27.2",
@@ -40,6 +40,6 @@
     "@ovotech/laminar": "*",
     "@ovotech/laminar-jwt": "*",
     "@ovotech/laminar-pg": "*",
-    "pg": "^8.7.1"
+    "pg": "^8.11.3"
   }
 }
