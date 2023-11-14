@@ -1651,7 +1651,7 @@ __metadata:
     "@ovotech/laminar-cli": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/jsonwebtoken": "npm:^8.5.8"
-    "@types/lru-cache": "npm:^5.1.1"
+    "@types/lru-cache": "npm:^7.10.10"
     "@types/node": "npm:^14.18.34"
     "@types/tough-cookie": "npm:^4.0.5"
     "@typescript-eslint/eslint-plugin": "npm:^5.10.1"
@@ -1662,7 +1662,7 @@ __metadata:
     eslint-config-prettier: "npm:^8.3.0"
     jest: "npm:^29.7.0"
     jsonwebtoken: "npm:^9.0.0"
-    lru-cache: "npm:^6.0.0"
+    lru-cache: "npm:^10.0.2"
     nock: "npm:^13.2.2"
     prettier: "npm:^2.5.1"
     tough-cookie: "npm:^4.1.3"
@@ -2116,10 +2116,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lru-cache@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@types/lru-cache@npm:5.1.1"
-  checksum: 0afadefc983306684a8ef95b6337a0d9e3f687e7e89e1f1f3f2e1ce3fbab5b018bb84cf277d781f871175a2c8f0176762b69e58b6f4296ee1b816cea94d5ef06
+"@types/lru-cache@npm:^7.10.10":
+  version: 7.10.10
+  resolution: "@types/lru-cache@npm:7.10.10"
+  dependencies:
+    lru-cache: "npm:*"
+  checksum: bf0c9a99b3b954adfd1a63621aeea2c7f9412340ac43fad82f2b1ec257df09efa454e6cc7943518659e112b9d650de0e64c5252de9e449576eeb28449e068a1e
   languageName: node
   linkType: hard
 
@@ -5222,6 +5224,15 @@ __metadata:
   version: 4.0.0
   resolution: "long@npm:4.0.0"
   checksum: 8296e2ba7bab30f9cfabb81ebccff89c819af6a7a78b4bb5a70ea411aa764ee0532f7441381549dfa6a1a98d72abe9138bfcf99f4fa41238629849bc035b845b
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:*, lru-cache@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "lru-cache@npm:10.0.2"
+  dependencies:
+    semver: "npm:^7.3.5"
+  checksum: a675b71a19f4b23186549e343792c3eb6196a5fca2a96b59e31a44289459b7e166b3c6cb08952f45ac29d8cfe561cabee88d906fdd5c98fb7cbda8f5d47431a3
   languageName: node
   linkType: hard
 

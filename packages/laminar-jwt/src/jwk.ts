@@ -1,5 +1,5 @@
 import axios from 'axios';
-import LRU from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import { validate, Schema } from '@ovotech/json-schema';
 import { GetPublicKeyOrSecret } from 'jsonwebtoken';
 import { certToPEM, rsaPublicKeyToPEM } from './helpers';
@@ -8,6 +8,7 @@ export interface JWKHandlerOptions {
   maxAge?: number;
   cache?: boolean;
   uri: string;
+  max?: number;
 }
 
 interface JWK {
@@ -43,8 +44,8 @@ const jwkSchema = (kid: string): Schema => ({
   },
 });
 
-export const jwkPublicKey = ({ uri, maxAge, cache = false }: JWKHandlerOptions): GetPublicKeyOrSecret => {
-  const lru = new LRU<string, JWK>({ maxAge });
+export const jwkPublicKey = ({ uri, maxAge, cache = false, max = 5000 }: JWKHandlerOptions): GetPublicKeyOrSecret => {
+  const lru = new LRUCache<string, JWK>(maxAge ? { max, ttl: maxAge, ttlAutopurge: true } : { max });
 
   return async (header, callback) => {
     try {
