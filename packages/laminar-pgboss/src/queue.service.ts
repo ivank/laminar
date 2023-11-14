@@ -32,7 +32,7 @@ export class QueueService implements Queue, Service {
   }
 
   async work<TData extends object>(ctx: Worker<TData>): Promise<string> {
-    return await this.boss.work<TData, void>(ctx.name, ctx.options ?? {}, (job) => ctx.worker({ ...job, queue: this }));
+    return await this.boss.work<TData>(ctx.name, ctx.options ?? {}, (job) => ctx.worker({ ...job, queue: this }));
   }
 
   async offWork(name: string): Promise<void> {
