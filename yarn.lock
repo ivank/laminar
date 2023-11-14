@@ -952,7 +952,7 @@ __metadata:
     jest: "npm:^29.3.1"
     kafkajs: "npm:^1.15.0"
     pg: "npm:^8.7.1"
-    pg-boss: "npm:^8.2.0"
+    pg-boss: "npm:^9.0.3"
     prettier: "npm:^2.5.1"
     runtypes: "npm:^6.5.0"
     sql-template-tag: "npm:^4.0.0"
@@ -1697,7 +1697,7 @@ __metadata:
     eslint: "npm:^8.7.0"
     eslint-config-prettier: "npm:^8.3.0"
     jest: "npm:^29.3.1"
-    pg-boss: "npm:^8.2.0"
+    pg-boss: "npm:^9.0.3"
     prettier: "npm:^2.5.1"
     ts-jest: "npm:^29.0.3"
     ts-retry-promise: "npm:^0.6.0"
@@ -5488,9 +5488,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-boss@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "pg-boss@npm:8.2.0"
+"pg-boss@npm:^9.0.3":
+  version: 9.0.3
+  resolution: "pg-boss@npm:9.0.3"
   dependencies:
     cron-parser: "npm:^4.0.0"
     delay: "npm:^5.0.0"
@@ -5499,7 +5499,7 @@ __metadata:
     pg: "npm:^8.5.1"
     serialize-error: "npm:^8.1.0"
     uuid: "npm:^9.0.0"
-  checksum: 247afae649c2b783564e064d12d312397eebb3cc60faf0db464ba9b3cc287255c3f2bbb1f7db430b21cf96f1b264031976f30a1df9217bdddfa1eb4bdf5cf988
+  checksum: 3652a719ab6ad65bec5e43cd507809d5aa4190bbde36c741abbe0b1c4938c9850f1e177db63e5277c50f4a5d582de955e0e838dad38b2038144663859fd1c33c
   languageName: node
   linkType: hard
 
