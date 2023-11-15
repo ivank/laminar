@@ -21,7 +21,7 @@ services:
       - ./packages/laminar-fixtures/init.sql:/docker-entrypoint-initdb.d/laminar-fixtures.sql
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.2.0
+    image: confluentinc/cp-zookeeper:7.4.3
     ports:
       - '2181:2181'
     environment:
@@ -29,7 +29,9 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: confluentinc/cp-kafka:6.2.0
+    image: confluentinc/cp-kafka:7.4.3
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://zookeeper:2181']
     depends_on:
       - zookeeper
     ports:
@@ -59,6 +61,8 @@ services:
       - registry
     depends_on:
       - kafka
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://kafka:9092']
     ports:
       - '8081:8081'
     environment:
