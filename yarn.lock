@@ -1649,7 +1649,7 @@ __metadata:
     "@ovotech/laminar": "workspace:*"
     "@ovotech/laminar-cli": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/jsonwebtoken": "npm:^8.5.8"
+    "@types/jsonwebtoken": "npm:^9.0.5"
     "@types/lru-cache": "npm:^7.10.10"
     "@types/node": "npm:^14.18.34"
     "@types/tough-cookie": "npm:^4.0.5"
@@ -1805,7 +1805,7 @@ __metadata:
     "@ovotech/json-schema": "workspace:*"
     "@types/cookie": "npm:^0.4.1"
     "@types/jest": "npm:^29.5.8"
-    "@types/jsonwebtoken": "npm:^8.5.8"
+    "@types/jsonwebtoken": "npm:^9.0.5"
     "@types/mime-types": "npm:^2.1.4"
     "@types/node": "npm:^14.18.34"
     "@types/tough-cookie": "npm:^4.0.5"
@@ -2100,12 +2100,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:^8.5.8":
-  version: 8.5.8
-  resolution: "@types/jsonwebtoken@npm:8.5.8"
+"@types/jsonwebtoken@npm:^9.0.5":
+  version: 9.0.5
+  resolution: "@types/jsonwebtoken@npm:9.0.5"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 477adcef32d4aa746f09d5a6c2b84d4e9f8c4a342699c53e9ea247beb63be200712a4b97cccf53c6c62cfdd19acee0cbf22ec27a56cd5af6c95b93ee39020428
+  checksum: 48493129464b88b8ab3c3be7931d41da3ffba6efe97fc138b2b5aa42141725dd9086b0494cc069abd5c41ed7ca86d3cfd8efb256cec063853313c75f6179d066
   languageName: node
   linkType: hard
 

@@ -71,9 +71,9 @@ export const jwkPublicKey = ({ uri, maxAge, cache = false, max = 5000 }: JWKHand
       const key = data.keys.find((key) => key.kid === header.kid)!;
       const signingKey = 'x5c' in key ? certToPEM(key.x5c[0]) : rsaPublicKeyToPEM(key.n, key.e);
 
-      callback(undefined, signingKey);
+      callback(null, signingKey);
     } catch (error) {
-      callback(error);
+      callback(error instanceof Error ? error : Error(String(error)));
     }
   };
 };
