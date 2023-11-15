@@ -1679,7 +1679,6 @@ __metadata:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
     "@ovotech/laminar": "workspace:*"
-    "@types/cookie": "npm:^0.4.1"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^14.18.34"
     "@types/uuid": "npm:^8.3.4"
@@ -1750,7 +1749,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@ovotech/laminar": "workspace:*"
-    "@types/cookie": "npm:^0.4.1"
+    "@types/cookie": "npm:^0.5.4"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^14.18.34"
     "@types/uuid": "npm:^8.3.4"
@@ -1803,7 +1802,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@ovotech/json-schema": "workspace:*"
-    "@types/cookie": "npm:^0.4.1"
+    "@types/cookie": "npm:^0.5.4"
     "@types/jest": "npm:^29.5.8"
     "@types/jsonwebtoken": "npm:^9.0.5"
     "@types/mime-types": "npm:^2.1.4"
@@ -2042,10 +2041,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cookie@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@types/cookie@npm:0.4.1"
-  checksum: 427c9220217d3d74f3e5d53d68cd39502f3bbebdb1af4ecf0d05076bcbe9ddab299ad6369fe0f517389296ba4ca49ddf9a8c22f68e5e9eb8ae6d0076cfab90b2
+"@types/cookie@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "@types/cookie@npm:0.5.4"
+  checksum: 44c09d55b79ccc7701876dae868a4a6a9e1291228792b81983e94ab55482eaa853dfc23dede0165d135817dca2845e48bf280f9b1f8d3401f012d410091513c0
   languageName: node
   linkType: hard
 

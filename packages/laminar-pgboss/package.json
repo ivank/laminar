@@ -11,7 +11,6 @@
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
     "@ovotech/laminar": "workspace:*",
-    "@types/cookie": "^0.4.1",
     "@types/jest": "^29.5.8",
     "@types/node": "^14.18.34",
     "@types/uuid": "^8.3.4",
