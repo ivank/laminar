@@ -31,7 +31,7 @@ api: join(__dirname, '../../schema/api.json'),
 
 Or you can use a plain js object. Though in that case we need to use `as const` as otherwise things like `"string"` would not be converted to their respective type literal values, but would remain as a generic `string`.
 
-> [examples/docs/src/http-service-open-api/object.ts:(api)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/object.ts#L8-L38)
+> [examples/docs/src/http-service-open-api/object.ts:(api)](https://github.com/ovotech/laminar/tree/main/examples/docs/src/http-service-open-api/object.ts#L8-L43)
 
 ```typescript
 const api = {
@@ -40,7 +40,9 @@ const api = {
   paths: {
     '/user/{id}': {
       get: {
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', pattern: '\\d+' } }],
+        parameters: [
+          { name: 'id', in: 'path' as const, required: true, schema: { type: 'string' as const, pattern: '\\d+' } },
+        ],
         responses: {
           '200': {
             description: 'User',
@@ -52,10 +54,13 @@ const api = {
   },
   components: {
     schemas: {
-      UserResponse: { type: 'object', properties: { id: { type: 'string' }, name: { type: 'string' } } },
+      UserResponse: {
+        type: 'object' as const,
+        properties: { id: { type: 'string' as const }, name: { type: 'string' as const } },
+      },
     },
   },
-} as const;
+};
 
 const createHttpListener = async (): Promise<HttpListener> => {
   return await openApi({
