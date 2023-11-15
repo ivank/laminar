@@ -27,6 +27,6 @@
     "packages/laminar-winston/src",
     "packages/laminar-handlebars/src",
     "packages/laminar-cli/src",
-    "packages/json-schema/src",
+    "packages/json-schema/src", "packages/laminar-avro/src/avro-decimal.ts", "packages/laminar-avro/src/avro-timestamp-millis.ts",
   ]
 }

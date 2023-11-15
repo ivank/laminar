@@ -13,8 +13,7 @@ import { httpListener } from './services/http/http.listener';
 import { importWorker } from './services/queue/import.worker';
 import { createLogger, transports } from 'winston';
 import { consoleTransportFormat } from './logger';
-import { AvroTimestampMillis } from '@ovotech/avro-timestamp-millis';
-import { AvroDecimal } from '@ovotech/avro-decimal';
+import { AvroTimestampMillis, AvroDecimal } from '@ovotech/laminar-avro';
 
 /**
  * The main function of our project

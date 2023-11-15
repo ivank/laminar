@@ -901,9 +901,8 @@ __metadata:
   resolution: "@examples/data-loader@workspace:examples/data-loader"
   dependencies:
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@ovotech/avro-decimal": "npm:^0.1.5"
-    "@ovotech/avro-timestamp-millis": "npm:^0.1.5"
     "@ovotech/laminar": "npm:*"
+    "@ovotech/laminar-avro": "npm:^0.12.2"
     "@ovotech/laminar-cli": "npm:*"
     "@ovotech/laminar-jwt": "npm:*"
     "@ovotech/laminar-kafkajs": "npm:*"
@@ -917,7 +916,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^5.10.1"
     avsc: "npm:^5.7.7"
     axios: "npm:^0.27.2"
-    csv-parse: "npm:^4.16.0"
+    csv-parse: "npm:^5.5.2"
     decimal.js: "npm:^10.4.3"
     dotenv: "npm:^14.3.2"
     eslint: "npm:^8.53.0"
@@ -1517,27 +1516,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ovotech/avro-decimal@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@ovotech/avro-decimal@npm:0.1.5"
-  dependencies:
-    decimal.js: "npm:^10.2.1"
-    int64-buffer: "npm:^1.0.0"
-  peerDependencies:
-    avsc: ^5.5.3
-  checksum: 0b3bbcb7b8eb94ff1485dc46595764416a856c17d67b224c0cb160301f1aa665c86be546b743ec672e750ad428935c2fba9271ffa46c7e9579733bdf0cf3c194
-  languageName: node
-  linkType: hard
-
-"@ovotech/avro-timestamp-millis@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@ovotech/avro-timestamp-millis@npm:0.1.5"
-  peerDependencies:
-    avsc: ^5.5.6
-  checksum: a8861eb82f31774bd4ca3a4a78f89fa393db03db75ed8df6ce69b66c2631bcc90e867e1e5b1c35c85e79cd999f6719811e2d3d929f5f238b87df7ca032abfdfd
-  languageName: node
-  linkType: hard
-
 "@ovotech/json-schema@workspace:*, @ovotech/json-schema@workspace:packages/json-schema":
   version: 0.0.0-use.local
   resolution: "@ovotech/json-schema@workspace:packages/json-schema"
@@ -1556,6 +1534,27 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     typescript: "npm:^4.8.3"
     yaml: "npm:^1.10.2"
+  languageName: unknown
+  linkType: soft
+
+"@ovotech/laminar-avro@npm:^0.12.2, @ovotech/laminar-avro@workspace:packages/laminar-avro":
+  version: 0.0.0-use.local
+  resolution: "@ovotech/laminar-avro@workspace:packages/laminar-avro"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^14.18.34"
+    avsc: "npm:^5.7.7"
+    decimal.js: "npm:^10.4.3"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^8.3.0"
+    int64-buffer: "npm:^1.0.0"
+    jest: "npm:^29.7.0"
+    prettier: "npm:^2.5.1"
+    ts-jest: "npm:^29.1.1"
+    typescript: "npm:^4.8.3"
+  peerDependencies:
+    avsc: ^5.7.7
   languageName: unknown
   linkType: soft
 
@@ -1814,8 +1813,8 @@ __metadata:
     "@typescript-eslint/parser": "npm:^5.10.1"
     axios: "npm:^0.27.2"
     axios-cookiejar-support: "npm:^2.0.3"
-    csv-parse: "npm:^4.16.0"
-    csv-stringify: "npm:^5.6.2"
+    csv-parse: "npm:^5.5.2"
+    csv-stringify: "npm:^6.4.4"
     eslint: "npm:^8.53.0"
     eslint-config-prettier: "npm:^8.3.0"
     form-data: "npm:^4.0.0"
@@ -3132,17 +3131,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csv-parse@npm:^4.16.0":
-  version: 4.16.3
-  resolution: "csv-parse@npm:4.16.3"
-  checksum: b873dd2d312ac0329200f13788176bae3073862241483b0339a4777c9eddcebd9f2f48f13d02dc0baf4bc02e957f886ea03a9cb22160d70836b0017432f8fa41
+"csv-parse@npm:^5.5.2":
+  version: 5.5.2
+  resolution: "csv-parse@npm:5.5.2"
+  checksum: 86129018fcef1545a95fec4d5fa0422b97881379d534f5cea8660e54010c3f7bb6b951130839b6ec1a5a576c049955ea05548228016681e92bcfa1a888ac9ca5
   languageName: node
   linkType: hard
 
-"csv-stringify@npm:^5.6.2":
-  version: 5.6.5
-  resolution: "csv-stringify@npm:5.6.5"
-  checksum: efed94869b8426e6a983f2237bd74eff15953e2e27affee9c1324f66a67dabe948573c4c21a8661a79aa20b58efbcafcf11c34e80bdd532a43f35e9cde5985b9
+"csv-stringify@npm:^6.4.4":
+  version: 6.4.4
+  resolution: "csv-stringify@npm:6.4.4"
+  checksum: 11b8fdafb4ad6c3a86b7b850407bd98393256e145d3535a17c7df91cf751114091e30247e0f737236efb422e14bed26d24fbebae507ce5e01884654c010dd19c
   languageName: node
   linkType: hard
 
@@ -3192,13 +3191,6 @@ __metadata:
     supports-color:
       optional: true
   checksum: 723a9570dcd15d146ea4992f0dca12467d1b00f534abb42473df166d36826fcae8bab045aef59ac2f407b47a23266110bc0e646df8ac82f7800c11384f82050e
-  languageName: node
-  linkType: hard
-
-"decimal.js@npm:^10.2.1":
-  version: 10.2.1
-  resolution: "decimal.js@npm:10.2.1"
-  checksum: 2931d044a01b423f6f449c2cadbf6ee0e738096cde3f2d9b4c392b7c0cbdc5a41961855f67c1ba7dbabf439ecd76a923b495d100866984a7bcaac4e225f12fe9
   languageName: node
   linkType: hard
 

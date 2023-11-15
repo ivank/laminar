@@ -12,8 +12,7 @@ import { SchemaRegistry, readAVSC } from '@kafkajs/confluent-schema-registry';
 import { join } from 'path';
 import { MeterReading } from '../src/__generated__/meter-reading.json';
 import Decimal from 'decimal.js';
-import { AvroTimestampMillis } from '@ovotech/avro-timestamp-millis';
-import { AvroDecimal } from '@ovotech/avro-decimal';
+import { AvroTimestampMillis, AvroDecimal } from '@ovotech/laminar-avro';
 
 /**
  * An example integration test.
