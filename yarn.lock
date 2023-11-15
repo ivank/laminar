@@ -918,7 +918,7 @@ __metadata:
     axios: "npm:^0.27.2"
     csv-parse: "npm:^5.5.2"
     decimal.js: "npm:^10.4.3"
-    dotenv: "npm:^14.3.2"
+    dotenv: "npm:^16.3.1"
     eslint: "npm:^8.53.0"
     eslint-config-prettier: "npm:^8.3.0"
     jest: "npm:^29.7.0"
@@ -1681,7 +1681,7 @@ __metadata:
     "@ovotech/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^14.18.34"
-    "@types/uuid": "npm:^8.3.4"
+    "@types/uuid": "npm:^9.0.7"
     "@typescript-eslint/eslint-plugin": "npm:^5.10.1"
     "@typescript-eslint/parser": "npm:^5.10.1"
     axios: "npm:^0.27.2"
@@ -1693,7 +1693,7 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     ts-retry-promise: "npm:^0.6.0"
     typescript: "npm:^4.8.3"
-    uuid: "npm:^8.3.2"
+    uuid: "npm:^9.0.1"
   peerDependencies:
     "@kafkajs/confluent-schema-registry": "*"
     "@ovotech/laminar": "*"
@@ -1749,10 +1749,9 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@ovotech/laminar": "workspace:*"
-    "@types/cookie": "npm:^0.5.4"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^14.18.34"
-    "@types/uuid": "npm:^8.3.4"
+    "@types/uuid": "npm:^9.0.7"
     "@typescript-eslint/eslint-plugin": "npm:^5.10.1"
     "@typescript-eslint/parser": "npm:^5.10.1"
     axios: "npm:^0.27.2"
@@ -1764,7 +1763,7 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     ts-retry-promise: "npm:^0.6.0"
     typescript: "npm:^4.8.3"
-    uuid: "npm:^8.3.2"
+    uuid: "npm:^9.0.1"
   peerDependencies:
     "@ovotech/laminar": "*"
     pg-boss: "*"
@@ -1808,7 +1807,7 @@ __metadata:
     "@types/mime-types": "npm:^2.1.4"
     "@types/node": "npm:^14.18.34"
     "@types/tough-cookie": "npm:^4.0.5"
-    "@types/uuid": "npm:^8.3.4"
+    "@types/uuid": "npm:^9.0.7"
     "@typescript-eslint/eslint-plugin": "npm:^5.10.1"
     "@typescript-eslint/parser": "npm:^5.10.1"
     axios: "npm:^0.27.2"
@@ -1831,7 +1830,7 @@ __metadata:
     ts-node: "npm:^10.9.1"
     ts-retry-promise: "npm:^0.6.0"
     typescript: "npm:^4.8.3"
-    uuid: "npm:^8.3.2"
+    uuid: "npm:^9.0.1"
   languageName: unknown
   linkType: soft
 
@@ -2184,10 +2183,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^8.3.4":
-  version: 8.3.4
-  resolution: "@types/uuid@npm:8.3.4"
-  checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
+"@types/uuid@npm:^9.0.7":
+  version: 9.0.7
+  resolution: "@types/uuid@npm:9.0.7"
+  checksum: c7321194aeba9ea173efd1e721403bdf4e7ae6945f8f8cdbc87c791f4b505ccf3dbc4a8883d90b394ef13b7c2dc778045792b05dbb23b3c746f8ea347804d448
   languageName: node
   linkType: hard
 
@@ -3306,10 +3305,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^14.3.2":
-  version: 14.3.2
-  resolution: "dotenv@npm:14.3.2"
-  checksum: b735b395979a62a046bf3e853e747c6f7128c2c4629c5a1dc598171b7fac90e232d8fb93bee2636934de5b2f78b7de92ca668609911e9b33f3ce2c17e021d84e
+"dotenv@npm:^16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: dbb778237ef8750e9e3cd1473d3c8eaa9cc3600e33a75c0e36415d0fa0848197f56c3800f77924c70e7828f0b03896818cd52f785b07b9ad4d88dba73fbba83f
   languageName: node
   linkType: hard
 
@@ -7153,21 +7152,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^8.3.2":
-  version: 8.3.2
-  resolution: "uuid@npm:8.3.2"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 9a5f7aa1d6f56dd1e8d5f2478f855f25c645e64e26e347a98e98d95781d5ed20062d6cca2eecb58ba7c84bc3910be95c0451ef4161906abaab44f9cb68ffbdd1
-  languageName: node
-  linkType: hard
-
 "uuid@npm:^9.0.0":
   version: 9.0.0
   resolution: "uuid@npm:9.0.0"
   bin:
     uuid: dist/bin/uuid
   checksum: 23857699a616d1b48224bc2b8440eae6e57d25463c3a0200e514ba8279dfa3bde7e92ea056122237839cfa32045e57d8f8f4a30e581d720fd72935572853ae2e
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 9d0b6adb72b736e36f2b1b53da0d559125ba3e39d913b6072f6f033e0c87835b414f0836b45bcfaf2bdf698f92297fea1c3cc19b0b258bc182c9c43cc0fab9f2
   languageName: node
   linkType: hard
 
