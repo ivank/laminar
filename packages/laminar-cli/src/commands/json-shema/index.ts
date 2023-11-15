@@ -7,11 +7,11 @@ import { dirname } from 'path';
 import { Logger } from '../../types';
 import { concatStreamToString, parseSchema } from '../../helpers';
 import { convertSchema } from '../../convert-schema';
-import { SchemaObject } from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 
 export const processFile = async (file: string, name: string): Promise<string> => {
   const { schema, refs } = await compile(file);
-  const converted = convertSchema({ root: schema as SchemaObject, refs }, schema);
+  const converted = convertSchema({ root: schema as oas31.SchemaObject, refs }, schema);
   return printDocument(document(converted.context, Type.Alias({ name, isExport: true, type: converted.type })));
 };
 

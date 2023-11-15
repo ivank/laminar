@@ -1,6 +1,6 @@
 import { Empty } from '../../types';
 import { HttpContext } from '../types';
-import { ReferenceObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import { OapiAuthInfo, OapiSecurity, OapiContext, Security, SecurityOk } from './types';
 import { ResolvedSchema } from '@ovotech/json-schema';
 import { resolveRef } from './compile-oapi';
@@ -57,8 +57,8 @@ export async function validateSecurity<
 >(
   schema: ResolvedSchema,
   ctx: TContext & HttpContext & OapiContext,
-  requirements?: SecurityRequirementObject[],
-  schemes?: { [securityScheme: string]: SecuritySchemeObject | ReferenceObject },
+  requirements?: oas31.SecurityRequirementObject[],
+  schemes?: { [securityScheme: string]: oas31.SecuritySchemeObject | oas31.ReferenceObject },
   security?: OapiSecurity<TContext, TOapiAuthInfo>,
 ): Promise<Security<TOapiAuthInfo> | undefined> {
   if (!requirements?.length || !security || !schemes) {

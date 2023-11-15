@@ -247,21 +247,24 @@ export const extractFiles = async (
   return result;
 };
 
-export const resolve = async (original: Schema, fileContext: FileContext = {}): Promise<ResolvedSchema> => {
-  const copy: Schema = JSON.parse(JSON.stringify(original));
+export const resolve = async <T extends Schema = Schema>(
+  original: T,
+  fileContext: FileContext = {},
+): Promise<ResolvedSchema<T>> => {
+  const copy: T = JSON.parse(JSON.stringify(original));
   const { refs, uris } = await extractFiles(copy, fileContext);
   const context = { schema: copy, refs, uris };
-  const schema = resolveNestedRefs(copy, context, fileContext);
+  const schema = resolveNestedRefs(copy, context, fileContext) as T;
   return { schema, refs, uris };
 };
 
-export const resolveFile = async (file: string): Promise<ResolvedSchema> => {
+export const resolveFile = async <T extends Schema = Schema>(file: string): Promise<ResolvedSchema<T>> => {
   const { content, cwd, uri } = await loadFile(file);
   const resolved = await resolve(content, { cwd });
-  return { ...resolved, uris: [uri, ...resolved.uris] };
+  return { ...resolved, uris: [uri, ...resolved.uris] } as ResolvedSchema<T>;
 };
 
-export const compile = async (schema: Schema | string): Promise<ResolvedSchema> =>
+export const compile = async <T extends Schema = Schema>(schema: T | string): Promise<ResolvedSchema<T>> =>
   typeof schema === 'string' ? resolveFile(schema) : resolve(schema);
 
 export const toSchemaObject = <T extends Schema = Schema>(schema: ResolvedSchema<T>): T => schema.schema;

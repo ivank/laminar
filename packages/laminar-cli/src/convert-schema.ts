@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { compile, Schema } from '@ovotech/json-schema';
 import { document, Document, mapWithContext, printDocument, Type, withIdentifier } from '@ovotech/ts-compose';
-import { SchemaObject } from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 import { AstContext, AstConvert, isSchemaObject, isReferenceObject, getReferencedObject } from './traverse';
 
@@ -99,7 +99,7 @@ const convertRef: AstConvert<ts.TypeReferenceNode> = (context, schema) => {
   }
 };
 
-const areAllPropertiesRequired = ({ properties, required }: SchemaObject): boolean => {
+const areAllPropertiesRequired = ({ properties, required }: oas31.SchemaObject): boolean => {
   return properties !== undefined && required !== undefined
     ? Object.keys(properties).every((name) => required.includes(name))
     : false;
@@ -107,7 +107,7 @@ const areAllPropertiesRequired = ({ properties, required }: SchemaObject): boole
 
 const convertAdditionalPropertiesSchema = (
   context: AstContext,
-  schema: SchemaObject,
+  schema: oas31.SchemaObject,
 ): Document<ts.TypeNode, AstContext> => {
   if (isSchemaObject(schema.additionalProperties)) {
     const converted = convertSchema(context, schema.additionalProperties);
@@ -232,5 +232,5 @@ export const convertSchema = (context: AstContext, schema: unknown): Document<ts
 export const schemaTs = async (api: Schema | string): Promise<string> => {
   const { schema, refs } = await compile(api);
 
-  return printDocument(convertSchema({ root: schema as SchemaObject, refs }, schema));
+  return printDocument(convertSchema({ root: schema as oas31.SchemaObject, refs }, schema));
 };

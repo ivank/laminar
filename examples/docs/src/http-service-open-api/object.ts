@@ -12,7 +12,9 @@ const api = {
   paths: {
     '/user/{id}': {
       get: {
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string', pattern: '\\d+' } }],
+        parameters: [
+          { name: 'id', in: 'path' as const, required: true, schema: { type: 'string' as const, pattern: '\\d+' } },
+        ],
         responses: {
           '200': {
             description: 'User',
@@ -24,10 +26,13 @@ const api = {
   },
   components: {
     schemas: {
-      UserResponse: { type: 'object', properties: { id: { type: 'string' }, name: { type: 'string' } } },
+      UserResponse: {
+        type: 'object' as const,
+        properties: { id: { type: 'string' as const }, name: { type: 'string' as const } },
+      },
     },
   },
-} as const;
+};
 
 const createHttpListener = async (): Promise<HttpListener> => {
   return await openApi({

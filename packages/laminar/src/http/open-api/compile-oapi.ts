@@ -2,27 +2,24 @@ import { compile, withinContext, ensureValid, Schema, ResolvedSchema, toSchemaOb
 import { openapiV3 } from 'openapi-schemas';
 import { OapiConfig } from './types';
 import { Empty } from '../../types';
-import {
-  isReferenceObject,
-  OpenAPIObject,
-  ReferenceObject,
-  ISpecificationExtension,
-  PathItemObject,
-} from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 
 /**
  * Resolve $ref schemas by using context resolved schema
  */
-export function resolveRef<T extends ISpecificationExtension>(schema: ResolvedSchema, item: T | ReferenceObject): T;
-export function resolveRef<T extends ISpecificationExtension>(
+export function resolveRef<T extends oas31.ISpecificationExtension>(
   schema: ResolvedSchema,
-  item?: T | ReferenceObject,
+  item: T | oas31.ReferenceObject,
+): T;
+export function resolveRef<T extends oas31.ISpecificationExtension>(
+  schema: ResolvedSchema,
+  item?: T | oas31.ReferenceObject,
 ): T | undefined;
-export function resolveRef<T extends ISpecificationExtension>(
+export function resolveRef<T extends oas31.ISpecificationExtension>(
   schema: ResolvedSchema,
-  item?: T | ReferenceObject,
+  item?: T | oas31.ReferenceObject,
 ): T | undefined {
-  return item === undefined ? undefined : isReferenceObject(item) ? (schema.refs[item.$ref] as T) : item;
+  return item === undefined ? undefined : oas31.isReferenceObject(item) ? (schema.refs[item.$ref] as T) : item;
 }
 
 /**
@@ -39,11 +36,11 @@ export async function compileOapi<TRequest extends Empty>({
   api,
   paths,
   security,
-}: OapiConfig<TRequest>): Promise<ResolvedSchema<OpenAPIObject>> {
+}: OapiConfig<TRequest>): Promise<ResolvedSchema<oas31.OpenAPIObject & { [key: string]: unknown }>> {
   const compiledApi = await compile(api);
   const apiSchema = toSchemaObject(compiledApi);
 
-  const { value: oapi } = await ensureValid<OpenAPIObject>({
+  const { value: oapi } = await ensureValid<oas31.OpenAPIObject & { [key: string]: unknown }>({
     schema: openapiV3 as Schema,
     value: apiSchema,
     name: 'OpenApi',
@@ -53,8 +50,8 @@ export async function compileOapi<TRequest extends Empty>({
     required: ['paths', ...(oapi.components?.securitySchemes ? ['security'] : [])],
     properties: {
       paths: {
-        required: Object.keys(oapi.paths),
-        properties: Object.entries<PathItemObject | ReferenceObject>(oapi.paths).reduce(
+        required: Object.keys(oapi?.paths ?? []),
+        properties: Object.entries<oas31.PathItemObject | oas31.ReferenceObject>(oapi?.paths ?? []).reduce(
           (all, [path, pathParameters]) => {
             const { parameters, summary, description, ...methods } = resolveRef(compiledApi, pathParameters);
             return { ...all, [path]: { required: Object.keys(methods) } };

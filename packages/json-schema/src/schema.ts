@@ -62,6 +62,7 @@ export interface JsonSchema {
   title?: string;
   description?: string;
   example?: string;
+  default?: unknown;
   enum?: unknown[];
   oneOf?: Schema[];
   allOf?: Schema[];

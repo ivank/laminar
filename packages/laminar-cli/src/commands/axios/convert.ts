@@ -1,13 +1,5 @@
 import { document, Document, mapWithContext, Type, Node, withImports, withIdentifier } from '@ovotech/ts-compose';
-import {
-  OpenAPIObject,
-  ParameterObject,
-  PathItemObject,
-  ReferenceObject,
-  RequestBodyObject,
-  ResponseObject,
-  ResponsesObject,
-} from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 import { convertSchema } from '../../convert-schema';
 import {
@@ -31,7 +23,7 @@ const pathToIdentifier = (method: string, path: string): string =>
 
 const pathRegEx = /\{[^\}]+\}/g;
 
-const pathToImplicitParams = (path: string): ParameterObject[] =>
+const pathToImplicitParams = (path: string): oas31.ParameterObject[] =>
   path.match(pathRegEx)?.map((name) => ({
     in: 'path',
     name: name.slice(1, -1),
@@ -42,7 +34,7 @@ const pathToImplicitParams = (path: string): ParameterObject[] =>
 const convertPathParams = (
   context: AstContext,
   path: string,
-  parameters: ParameterObject[],
+  parameters: oas31.ParameterObject[],
 ): { items: { name: string; type: ts.TypeNode }[]; context: AstContext } => {
   const implicitParams = pathToImplicitParams(path).map(
     (item) => parameters.find((param) => param.in === 'path' && param.name === item.name) ?? item,
@@ -60,7 +52,7 @@ const convertPathParams = (
 
 const convertConfigProps = (
   context: AstContext,
-  parameters: ParameterObject[],
+  parameters: oas31.ParameterObject[],
 ): { items: ts.PropertySignature[]; context: AstContext } => {
   return mapWithContext(context, parameters, (context, param) => {
     const astParams = param.schema
@@ -81,7 +73,7 @@ const convertConfigProps = (
 
 const convertConfigParams = (
   context: AstContext,
-  parameters: ParameterObject[],
+  parameters: oas31.ParameterObject[],
 ): Document<ts.PropertySignature[], AstContext> => {
   const headerItems = convertConfigProps(
     context,
@@ -116,9 +108,9 @@ const convertConfigParams = (
 
 const convertResponses = (
   context: AstContext,
-  responses: ResponsesObject,
+  responses: oas31.ResponsesObject,
 ): Document<ts.TypeNode | undefined, AstContext> => {
-  const responseEntries = Object.entries<ResponseObject | ReferenceObject>(responses)
+  const responseEntries = Object.entries<oas31.ResponseObject | oas31.ReferenceObject>(responses)
     .filter(([status]) => status === 'default' || isStatusOk(status))
     .map(([, response]) => response);
 
@@ -139,7 +131,7 @@ const convertResponses = (
 
 const convertRequestBody = (
   context: AstContext,
-  requestBodyOrRef?: RequestBodyObject | ReferenceObject,
+  requestBodyOrRef?: oas31.RequestBodyObject | oas31.ReferenceObject,
 ): Document<{ isOptional: boolean; body: ts.TypeNode }, AstContext> => {
   const requestBody = requestBodyOrRef
     ? getReferencedObject(requestBodyOrRef, isRequestBodyObject, 'request-body', context)
@@ -152,17 +144,17 @@ const convertRequestBody = (
   });
 };
 
-export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<ts.Node, AstContext> => {
+export const convertOapi = (context: AstContext, api: oas31.OpenAPIObject): Document<ts.Node, AstContext> => {
   const paths = mapWithContext(
     context,
-    Object.entries<PathItemObject>(api.paths),
+    Object.entries<oas31.PathItemObject>(api?.paths ?? []),
     (pathContext, [path, pathApiOrRef]) => {
       const { parameters, description, summary, ...methodsApiOrRef } = pathApiOrRef;
       const pathApi = getReferencedObject(methodsApiOrRef, isSchemaObject, 'schema', context);
 
       const methods = mapWithContext(pathContext, Object.entries(pathApi), (methodContext, [method, operation]) => {
         const combinedParameters = [...(parameters ?? []), ...(operation.parameters ?? [])].map((item) =>
-          getReferencedObject<ParameterObject>(item, isParameterObject, 'parameter', methodContext),
+          getReferencedObject<oas31.ParameterObject>(item, isParameterObject, 'parameter', methodContext),
         );
 
         const requestName = `${method.toUpperCase()} ${path}`;

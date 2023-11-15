@@ -9,19 +9,7 @@ import {
   withIdentifier,
   withImports,
 } from '@ovotech/ts-compose';
-import {
-  MediaTypeObject,
-  OpenAPIObject,
-  OperationObject,
-  ParameterObject,
-  PathItemObject,
-  ReferenceObject,
-  RequestBodyObject,
-  ResponseObject,
-  ResponsesObject,
-  SchemaObject,
-  SecuritySchemeObject,
-} from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 import { convertSchema } from '../../convert-schema';
 import {
@@ -70,7 +58,7 @@ const toParamName = (location: 'header' | 'cookie' | 'path' | 'query', name: str
 
 const convertParameters = (
   context: AstContext,
-  parameters: (ParameterObject | ReferenceObject)[],
+  parameters: (oas31.ParameterObject | oas31.ReferenceObject)[],
 ): Document<ts.TypeLiteralNode, AstContext> => {
   const astParams = parameters.reduce<AstParameters>(
     (node, paramOrRef) => {
@@ -111,7 +99,7 @@ const convertParameters = (
 const convertSecuritySchemas = (
   context: AstContext,
   securitySchemas: {
-    [securityScheme: string]: SecuritySchemeObject | ReferenceObject;
+    [securityScheme: string]: oas31.SecuritySchemeObject | oas31.ReferenceObject;
   },
 ): Document<ts.PropertySignature, AstContext> => {
   const security = mapWithContext(context, Object.keys(securitySchemas), (securityContext, name) => {
@@ -132,7 +120,7 @@ const convertSecuritySchemas = (
  */
 const convertResponse = (
   context: AstContext,
-  schemaOrRef?: SchemaObject | ReferenceObject,
+  schemaOrRef?: oas31.SchemaObject | oas31.ReferenceObject,
 ): Document<ts.TypeNode | undefined, AstContext> => {
   if (schemaOrRef) {
     const schema = getReferencedObject(schemaOrRef, isSchemaObject, 'schema', context);
@@ -153,13 +141,15 @@ const convertResponse = (
 const convertResponses = (
   context: AstContext,
   name: string,
-  responses: ResponsesObject,
+  responses: oas31.ResponsesObject,
 ): Document<ts.TypeReferenceNode, AstContext> => {
-  const responseEntries = Object.entries<ResponseObject | ReferenceObject>(responses);
+  const responseEntries = Object.entries<oas31.ResponseObject | oas31.ReferenceObject>(responses);
 
   const params = mapWithContext(context, responseEntries, (responseContext, [status, responseOrRef]) => {
     const response = getReferencedObject(responseOrRef, isResponseObject, 'response', responseContext);
-    const responseMediaTypes = Object.entries<MediaTypeObject | ReferenceObject>(response.content ?? { '*': {} });
+    const responseMediaTypes = Object.entries<oas31.MediaTypeObject | oas31.ReferenceObject>(
+      response.content ?? { '*': {} },
+    );
 
     const { items, context: mediaTypesContext } = mapWithContext(
       responseContext,
@@ -200,7 +190,7 @@ const convertResponses = (
 
 const convertRequestBody = (
   context: AstContext,
-  requestBodyOrRef: RequestBodyObject | ReferenceObject,
+  requestBodyOrRef: oas31.RequestBodyObject | oas31.ReferenceObject,
 ): Document<ts.TypeLiteralNode, AstContext> => {
   const requestBody = getReferencedObject(requestBodyOrRef, isRequestBodyObject, 'request-body', context);
   const schema =
@@ -217,12 +207,12 @@ const convertRequestBody = (
   );
 };
 
-export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<ts.Node, AstContext> => {
+export const convertOapi = (context: AstContext, api: oas31.OpenAPIObject): Document<ts.Node, AstContext> => {
   const paths = mapWithContext(
     context,
-    Object.entries<PathItemObject>(api.paths),
+    Object.entries<oas31.PathItemObject>(api?.paths ?? []),
     (pathContext, [path, pathApiOrRef]) => {
-      const { parameters, description, summary, ...pathApi } = getReferencedObject(
+      const { parameters, description, summary, servers, $ref, ...pathApi } = getReferencedObject(
         pathApiOrRef,
         isPathItemObject,
         'path',
@@ -231,7 +221,7 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
 
       const methods = mapWithContext(
         pathContext,
-        Object.entries<OperationObject>(pathApi),
+        Object.entries<oas31.OperationObject>(pathApi),
         (methodContextOriginal, [method, operation]) => {
           const methodContext = { ...methodContextOriginal, convertDates: true };
           const astParams =
@@ -411,5 +401,10 @@ export const convertOapi = (context: AstContext, api: OpenAPIObject): Document<t
 
 export const oapiTs = async (api: Schema | string): Promise<string> => {
   const { schema, refs } = await compile(api);
-  return printDocument(convertOapi({ root: schema as OpenAPIObject, refs }, schema as OpenAPIObject));
+  return printDocument(
+    convertOapi(
+      { root: schema as oas31.OpenAPIObject & { [index: string]: unknown }, refs },
+      schema as oas31.OpenAPIObject & { [index: string]: unknown },
+    ),
+  );
 };

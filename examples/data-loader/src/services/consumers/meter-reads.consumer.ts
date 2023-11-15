@@ -6,7 +6,7 @@ import { MeterReading } from '../../__generated__/meter-reading.json';
 
 const toMeterRead = ({ serialNumber, date, value }: MeterReading): InsertMeterRead => ({
   serialNumber,
-  date,
+  date: date.toUTCString(),
   value: value.toString(),
 });
 

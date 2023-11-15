@@ -1,14 +1,5 @@
 import { Document, DocumentContext } from '@ovotech/ts-compose';
-import {
-  ReferenceObject,
-  SchemaObject,
-  ResponseObject,
-  RequestBodyObject,
-  ParameterObject,
-  MediaTypeObject,
-  SecuritySchemeObject,
-  PathItemObject,
-} from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 
 export interface AstRefMap {
@@ -16,7 +7,7 @@ export interface AstRefMap {
 }
 
 export interface AstContext extends DocumentContext {
-  root: SchemaObject;
+  root: oas31.SchemaObject;
   refs: AstRefMap;
   convertDates?: boolean;
   optionalDefaults?: boolean;
@@ -27,32 +18,32 @@ export type AstConvert<TAstType = ts.TypeNode> = (
   schema: unknown,
 ) => Document<TAstType, AstContext> | null;
 
-export const isReferenceObject = (item: unknown): item is ReferenceObject =>
+export const isReferenceObject = (item: unknown): item is oas31.ReferenceObject =>
   typeof item === 'object' && !!item && '$ref' in item;
 
-export const isResponseObject = (item: unknown): item is ResponseObject =>
+export const isResponseObject = (item: unknown): item is oas31.ResponseObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'description' in item;
 
-export const isMediaTypeObject = (item: unknown): item is MediaTypeObject =>
+export const isMediaTypeObject = (item: unknown): item is oas31.MediaTypeObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'schema' in item;
 
-export const isRequestBodyObject = (item: unknown): item is RequestBodyObject =>
+export const isRequestBodyObject = (item: unknown): item is oas31.RequestBodyObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'content' in item;
 
-export const isParameterObject = (item: unknown): item is ParameterObject =>
+export const isParameterObject = (item: unknown): item is oas31.ParameterObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'in' in item && 'name' in item;
 
-export const isSecuritySchemaObject = (item: unknown): item is SecuritySchemeObject =>
+export const isSecuritySchemaObject = (item: unknown): item is oas31.SecuritySchemeObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item && 'type' in item;
 
-export const isSchemaObject = (item: unknown): item is SchemaObject =>
+export const isSchemaObject = (item: unknown): item is oas31.SchemaObject & { [index: string]: unknown } =>
   !isReferenceObject(item) && typeof item === 'object' && !!item;
 
-export const isPathItemObject = (item: unknown): item is PathItemObject =>
+export const isPathItemObject = (item: unknown): item is oas31.PathItemObject =>
   !isReferenceObject(item) && typeof item === 'object' && !!item;
 
 export const getReferencedObject = <T>(
-  item: T | ReferenceObject,
+  item: T | oas31.ReferenceObject,
   guard: (item: unknown) => item is T,
   type: string,
   context: AstContext,

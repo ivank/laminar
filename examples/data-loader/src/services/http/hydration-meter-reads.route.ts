@@ -10,7 +10,7 @@ const CsvRow = Record({ serialNumber: String, value: String, date: String });
 const toMeterRead = ({ serialNumber, value, date }: Static<typeof CsvRow>): InsertMeterRead => ({
   serialNumber,
   value,
-  date: new Date(date),
+  date,
 });
 
 export const hydrationMeterReadsRoute: PathV1HydrationMeterreadsPost<QueueContext> = async ({

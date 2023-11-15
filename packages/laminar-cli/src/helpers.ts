@@ -1,6 +1,6 @@
 import { compile, ensureValid, Schema } from '@ovotech/json-schema';
 import { openapiV3 } from 'openapi-schemas';
-import { OpenAPIObject } from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import { AstContext } from './traverse';
 import * as YAML from 'yaml';
 
@@ -27,9 +27,9 @@ export const toTitleCase = (str: string): string =>
  */
 export const toContext = async (
   fileName: string,
-): Promise<{ context: AstContext; uris: string[]; value: OpenAPIObject }> => {
+): Promise<{ context: AstContext; uris: string[]; value: oas31.OpenAPIObject }> => {
   const { schema, uris, refs } = await compile(fileName);
-  const { value } = await ensureValid<OpenAPIObject>({
+  const { value } = await ensureValid<oas31.OpenAPIObject>({
     schema: openapiV3 as Schema,
     value: schema,
     name: 'OpenAPI',

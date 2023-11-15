@@ -3,18 +3,7 @@ import { Empty } from '../../types';
 import { OapiPaths, Route, Matcher, OapiPath, Coerce } from './types';
 import { ResolvedSchema, Schema, coerceCompiled, withinContext } from '@ovotech/json-schema';
 import { toMatchPattern, toPathKeys, toPathRe } from '../../helpers';
-import {
-  SecurityRequirementObject,
-  SecuritySchemeObject,
-  SchemaObject,
-  OperationObject,
-  PathItemObject,
-  ParameterObject,
-  OpenAPIObject,
-  RequestBodyObject,
-  ReferenceObject,
-  ResponseObject,
-} from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import { resolveRef } from './compile-oapi';
 
 function toMatcher(path: string, method: string): Matcher {
@@ -59,7 +48,7 @@ function toParamName(location: string, name: string): string {
 /**
  * Convert OpenApi parameter schema into an executable json-schema
  */
-function toParameterSchema(param: ParameterObject): SchemaObject {
+function toParameterSchema(param: oas31.ParameterObject) {
   const name = toParamName(param.in, param.name);
 
   return {
@@ -75,7 +64,7 @@ function toParameterSchema(param: ParameterObject): SchemaObject {
 /**
  * Convert a request body OpenApi schema into an executable json-schema
  */
-function toRequestBodySchema(requestBody: RequestBodyObject): Record<string, unknown> {
+function toRequestBodySchema(requestBody: oas31.RequestBodyObject): Record<string, unknown> {
   return {
     ...(requestBody.required ? { required: ['body'] } : {}),
     ...(requestBody.content
@@ -103,8 +92,8 @@ function toRequestBodySchema(requestBody: RequestBodyObject): Record<string, unk
  */
 function toSecuritySchema(
   schema: ResolvedSchema,
-  security: SecurityRequirementObject[],
-  schemes: { [securityScheme: string]: SecuritySchemeObject | ReferenceObject },
+  security: oas31.SecurityRequirementObject[],
+  schemes: { [securityScheme: string]: oas31.SecuritySchemeObject | oas31.ReferenceObject },
 ): void {
   security.map((item) =>
     Object.entries(item).map(([name]) => {
@@ -122,9 +111,9 @@ function toSecuritySchema(
  */
 function toRequestSchema(
   schema: ResolvedSchema,
-  { security: defaultSecurity, components }: OpenAPIObject,
-  { requestBody, parameters, security: operationSecurity }: OperationObject,
-  { parameters: commonParameters }: Pick<PathItemObject, 'summary' | 'parameters' | 'description'>,
+  { security: defaultSecurity, components }: oas31.OpenAPIObject,
+  { requestBody, parameters, security: operationSecurity }: oas31.OperationObject,
+  { parameters: commonParameters }: Pick<oas31.PathItemObject, 'summary' | 'parameters' | 'description'>,
 ): Schema {
   const security = operationSecurity ?? defaultSecurity;
   const securitySchemes = components && components.securitySchemes;
@@ -149,7 +138,7 @@ function toRequestSchema(
  */
 function toParameterCoerce<TContext extends Empty>(
   openapiSchema: ResolvedSchema,
-  parameter: ParameterObject,
+  parameter: oas31.ParameterObject,
   type: 'query' | 'json',
 ): Coerce<TContext> | undefined {
   const schema = resolveRef(openapiSchema, parameter.schema) as Schema | undefined;
@@ -172,7 +161,7 @@ function toParameterCoerce<TContext extends Empty>(
  */
 function toRequestBodyCoerce<TContext extends Empty>(
   openapiSchema: ResolvedSchema,
-  requestBody: RequestBodyObject,
+  requestBody: oas31.RequestBodyObject,
   type: 'query' | 'json',
 ): Coerce<TContext> {
   return (ctx) => {
@@ -197,8 +186,8 @@ function toRequestBodyCoerce<TContext extends Empty>(
  */
 function toRequestConvert<TContext extends Empty>(
   schema: ResolvedSchema,
-  { parameters, requestBody }: OperationObject,
-  { parameters: commonParameters }: Pick<PathItemObject, 'parameters'>,
+  { parameters, requestBody }: oas31.OperationObject,
+  { parameters: commonParameters }: Pick<oas31.PathItemObject, 'parameters'>,
 ): Coerce<TContext> {
   const allParameters = (parameters ?? []).concat(commonParameters ?? []);
 
@@ -218,8 +207,8 @@ function toRequestConvert<TContext extends Empty>(
  */
 function toRequestCoerce<TContext extends Empty>(
   schema: ResolvedSchema,
-  { parameters, requestBody }: OperationObject,
-  { parameters: commonParameters }: Pick<PathItemObject, 'parameters'>,
+  { parameters, requestBody }: oas31.OperationObject,
+  { parameters: commonParameters }: Pick<oas31.PathItemObject, 'parameters'>,
 ): Coerce<TContext> {
   const allParameters = (parameters ?? []).concat(commonParameters ?? []);
 
@@ -236,10 +225,10 @@ function toRequestCoerce<TContext extends Empty>(
  *
  * @category http
  */
-function toResponseSchema(schema: ResolvedSchema, { responses }: OperationObject): Record<string, unknown> {
+function toResponseSchema(schema: ResolvedSchema, { responses }: oas31.OperationObject): Record<string, unknown> {
   return {
     discriminator: { propertyName: 'status' },
-    oneOf: Object.entries<ResponseObject>(responses).map(([status, response]) => ({
+    oneOf: Object.entries<oas31.ResponseObject>(responses).map(([status, response]) => ({
       type: 'object',
       properties: {
         status: status === 'default' ? true : { enum: [Number(status)] },
@@ -293,31 +282,35 @@ function toResponseSchema(schema: ResolvedSchema, { responses }: OperationObject
  */
 export function toRoutes<TContext extends Empty>(
   schema: ResolvedSchema,
-  api: OpenAPIObject,
+  api: oas31.OpenAPIObject,
   oapiPaths: OapiPaths<TContext>,
 ): Route<TContext>[] {
-  return Object.entries<PathItemObject>(api.paths).reduce<Route<TContext>[]>((pathRoutes, [path, pathParameters]) => {
-    const { parameters, summary, description, ...methods } = resolveRef(schema, pathParameters);
-    return [
-      ...pathRoutes,
-      ...Object.entries(methods).reduce<Route<TContext>[]>((methodRoutes, [method, operation]) => {
-        return [
-          ...methodRoutes,
-          {
-            request: toRequestSchema(schema, api, operation, { parameters, summary, description }),
-            response: toResponseSchema(schema, operation),
-            operation,
-            schema,
-            coerce: toRequestCoerce(schema, operation, { parameters }),
-            convertRequest: toRequestConvert(schema, operation, { parameters }),
-            security: operation.security || api.security,
-            matcher: toMatcher(path, method),
-            listener: oapiPaths[path][method],
-          },
-        ];
-      }, []),
-    ];
-  }, []);
+  return Object.entries<oas31.PathItemObject>(api?.paths ?? []).reduce<Route<TContext>[]>(
+    (pathRoutes, [path, pathParameters]) => {
+      const { parameters: pathItemParameters, summary, description, ...methods } = resolveRef(schema, pathParameters);
+      const parameters = pathItemParameters?.map((parameter) => resolveRef(schema, parameter));
+      return [
+        ...pathRoutes,
+        ...Object.entries(methods).reduce<Route<TContext>[]>((methodRoutes, [method, operation]) => {
+          return [
+            ...methodRoutes,
+            {
+              request: toRequestSchema(schema, api, operation, { parameters, summary, description }),
+              response: toResponseSchema(schema, operation),
+              operation,
+              schema,
+              coerce: toRequestCoerce(schema, operation, { parameters }),
+              convertRequest: toRequestConvert(schema, operation, { parameters }),
+              security: operation.security || api.security,
+              matcher: toMatcher(path, method),
+              listener: oapiPaths[path][method],
+            },
+          ];
+        }, []),
+      ];
+    },
+    [],
+  );
 }
 
 /**
