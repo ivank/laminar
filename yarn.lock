@@ -1574,7 +1574,7 @@ __metadata:
     avsc: "npm:^5.7.7"
     axios: "npm:^1.6.2"
     chalk: "npm:^4.1.1"
-    commander: "npm:^8.3.0"
+    commander: "npm:^11.1.0"
     eslint: "npm:^8.53.0"
     eslint-config-prettier: "npm:^8.3.0"
     jest: "npm:^29.7.0"
@@ -3055,10 +3055,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^8.3.0":
-  version: 8.3.0
-  resolution: "commander@npm:8.3.0"
-  checksum: 6b7b5d334483ce24bd73c5dac2eab901a7dbb25fd983ea24a1eeac6e7166bb1967f641546e8abf1920afbde86a45fbfe5812fbc69d0dc451bb45ca416a12a3a3
+"commander@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "commander@npm:11.1.0"
+  checksum: 66bd2d8a0547f6cb1d34022efb25f348e433b0e04ad76a65279b1b09da108f59a4d3001ca539c60a7a46ea38bcf399fc17d91adad76a8cf43845d8dcbaf5cda1
   languageName: node
   linkType: hard
 
