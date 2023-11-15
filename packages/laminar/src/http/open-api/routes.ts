@@ -48,14 +48,14 @@ function toParamName(location: string, name: string): string {
 /**
  * Convert OpenApi parameter schema into an executable json-schema
  */
-function toParameterSchema(param: oas31.ParameterObject) {
+function toParameterSchema(schema: ResolvedSchema, param: oas31.ParameterObject): Schema {
   const name = toParamName(param.in, param.name);
 
   return {
     properties: {
       [toParamLocation(param.in)]: {
         ...(param.required ? { required: [name] } : {}),
-        ...(param.schema ? { properties: { [name]: param.schema } } : {}),
+        ...(param.schema ? { properties: { [name]: resolveRef(schema, param.schema) as Schema } } : {}),
       },
     },
   };
@@ -123,7 +123,7 @@ function toRequestSchema(
   }
   return {
     allOf: [
-      ...allParameters.map((item) => resolveRef(schema, item)).map(toParameterSchema),
+      ...allParameters.map((item) => resolveRef(schema, item)).map((item) => toParameterSchema(schema, item)),
       ...(requestBody ? [toRequestBodySchema(resolveRef(schema, requestBody))] : []),
     ],
   };

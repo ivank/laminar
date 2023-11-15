@@ -28,7 +28,9 @@ describe('Simple App Integration Tests', () => {
        * Since we need to kill the service and _all of its children_ we need to kill the whole group itself
        * https://azimi.me/2014/12/31/kill-child_process-node-js.html
        */
-      process.kill(-service.pid);
+      if (service.pid !== undefined) {
+        process.kill(-service.pid);
+      }
     }
   });
 });

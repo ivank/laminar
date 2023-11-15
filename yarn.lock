@@ -877,7 +877,7 @@ __metadata:
     "@ovotech/laminar-kafkajs": "npm:*"
     "@ovotech/laminar-pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -892,7 +892,7 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -910,7 +910,7 @@ __metadata:
     "@ovotech/laminar-pgboss": "npm:*"
     "@ovotech/laminar-winston": "npm:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -931,7 +931,7 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     winston: "npm:^3.11.0"
   languageName: unknown
   linkType: soft
@@ -944,7 +944,7 @@ __metadata:
     "@ovotech/laminar-cli": "npm:*"
     "@ovotech/laminar-pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -955,7 +955,7 @@ __metadata:
     pg: "npm:^8.11.3"
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     yaml: "npm:^2.3.4"
   languageName: unknown
   linkType: soft
@@ -969,7 +969,7 @@ __metadata:
     "@ovotech/laminar-jwt": "npm:*"
     "@ovotech/laminar-pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -981,7 +981,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -993,7 +993,7 @@ __metadata:
     "@ovotech/laminar-cli": "npm:*"
     "@ovotech/laminar-jwt": "npm:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
     axios: "npm:^1.6.2"
@@ -1002,7 +1002,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -1013,7 +1013,7 @@ __metadata:
     "@ovotech/laminar": "npm:*"
     "@ovotech/laminar-cli": "npm:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
     axios: "npm:^1.6.2"
@@ -1022,7 +1022,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -1033,7 +1033,7 @@ __metadata:
     "@ovotech/laminar": "npm:*"
     "@ovotech/laminar-pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -1044,7 +1044,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -1522,7 +1522,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
     axios: "npm:^1.6.2"
@@ -1532,7 +1532,7 @@ __metadata:
     nock: "npm:^13.3.8"
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     yaml: "npm:^2.3.4"
   languageName: unknown
   linkType: soft
@@ -1543,7 +1543,7 @@ __metadata:
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     avsc: "npm:^5.7.7"
     decimal.js: "npm:^10.4.3"
     eslint: "npm:^8.53.0"
@@ -1552,7 +1552,7 @@ __metadata:
     jest: "npm:^29.7.0"
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   peerDependencies:
     avsc: ^5.7.7
   languageName: unknown
@@ -1567,7 +1567,7 @@ __metadata:
     "@ovotech/laminar": "workspace:*"
     "@ovotech/ts-compose": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -1584,7 +1584,7 @@ __metadata:
     pg: "npm:^8.11.3"
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     yaml: "npm:^2.3.4"
   bin:
     laminar: ./scripts/laminar
@@ -1598,7 +1598,7 @@ __metadata:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@ovotech/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -1609,7 +1609,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   peerDependencies:
     pg: "*"
   languageName: unknown
@@ -1623,7 +1623,7 @@ __metadata:
     "@ovotech/laminar": "workspace:*"
     "@ovotech/laminar-cli": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
     axios: "npm:^1.6.2"
@@ -1634,7 +1634,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   peerDependencies:
     "@ovotech/laminar": "*"
   languageName: unknown
@@ -1651,7 +1651,7 @@ __metadata:
     "@types/jest": "npm:^29.5.8"
     "@types/jsonwebtoken": "npm:^9.0.5"
     "@types/lru-cache": "npm:^7.10.10"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/tough-cookie": "npm:^4.0.5"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -1666,7 +1666,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     tough-cookie: "npm:^4.1.3"
     ts-jest: "npm:^29.1.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   peerDependencies:
     "@ovotech/laminar": "*"
   languageName: unknown
@@ -1680,7 +1680,7 @@ __metadata:
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
     "@ovotech/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/uuid": "npm:^9.0.7"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -1692,7 +1692,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     uuid: "npm:^9.0.1"
   peerDependencies:
     "@kafkajs/confluent-schema-registry": "*"
@@ -1707,13 +1707,13 @@ __metadata:
   dependencies:
     "@ovotech/json-schema": "workspace:*"
     "@types/benchmark": "npm:^2.1.5"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     ajv: "npm:^8.12.0"
     benchmark: "npm:^2.1.4"
     nock: "npm:^13.3.8"
     node-fetch: "npm:^3.3.2"
     ts-node: "npm:^10.9.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -1724,7 +1724,7 @@ __metadata:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@ovotech/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -1736,7 +1736,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   peerDependencies:
     "@ovotech/laminar": "*"
     pg: "*"
@@ -1750,7 +1750,7 @@ __metadata:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@ovotech/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/uuid": "npm:^9.0.7"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
@@ -1762,7 +1762,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     uuid: "npm:^9.0.1"
   peerDependencies:
     "@ovotech/laminar": "*"
@@ -1777,7 +1777,7 @@ __metadata:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@ovotech/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
     axios: "npm:^1.6.2"
@@ -1787,7 +1787,7 @@ __metadata:
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     winston: "npm:^3.11.0"
   peerDependencies:
     "@ovotech/laminar": "*"
@@ -1805,7 +1805,7 @@ __metadata:
     "@types/jest": "npm:^29.5.8"
     "@types/jsonwebtoken": "npm:^9.0.5"
     "@types/mime-types": "npm:^2.1.4"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@types/tough-cookie": "npm:^4.0.5"
     "@types/uuid": "npm:^9.0.7"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
@@ -1829,7 +1829,7 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
     ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
     uuid: "npm:^9.0.1"
   languageName: unknown
   linkType: soft
@@ -1839,7 +1839,7 @@ __metadata:
   resolution: "@ovotech/ts-compose@workspace:packages/ts-compose"
   dependencies:
     "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^14.18.34"
+    "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
     "@typescript-eslint/parser": "npm:^6.11.0"
     eslint: "npm:^8.53.0"
@@ -1848,7 +1848,7 @@ __metadata:
     jest: "npm:^29.7.0"
     prettier: "npm:^3.1.0"
     ts-jest: "npm:^29.1.1"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -2158,10 +2158,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.18.34":
-  version: 14.18.34
-  resolution: "@types/node@npm:14.18.34"
-  checksum: a68d4e35e96e38c172ba0aed010c96ecdfe43e3b0ad4a79dd507a4b5bd42c5faa676fb4c9a652e13a069c882869f8e82f876f9703711180607bdcfd74d3aa723
+"@types/node@npm:^20.9.0":
+  version: 20.9.0
+  resolution: "@types/node@npm:20.9.0"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: a934f7645ed117a27857147403b0c657ffbca578c8f280e4c21d27dfb43e58dc4f24c4319d4335b8a4fa08e28fb2dc905a5bd5e4bc8878047164c56c1b162139
   languageName: node
   linkType: hard
 
@@ -5246,7 +5248,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.0.1"
     prettier: "npm:^3.1.0"
     typedoc: "npm:^0.23.15"
-    typescript: "npm:^4.8.3"
+    typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
 
@@ -7274,23 +7276,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.8.3":
-  version: 4.8.3
-  resolution: "typescript@npm:4.8.3"
+"typescript@npm:^5.2.2":
+  version: 5.2.2
+  resolution: "typescript@npm:5.2.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 1856b74592993778b7bb94696c80708a1355a5a7f8840010da1a2f9c6a321ecd6ecfad2b95c2892f4873d48a8cab1524d94acacf8927fc6fb595ee04cbe0c2f3
+  checksum: d65e50eb849bd21ff8677e5b9447f9c6e74777e346afd67754934264dcbf4bd59e7d2473f6062d9a015d66bd573311166357e3eb07fea0b52859cf9bb2b58555
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^4.8.3#optional!builtin<compat/typescript>":
-  version: 4.8.3
-  resolution: "typescript@patch:typescript@npm%3A4.8.3#optional!builtin<compat/typescript>::version=4.8.3&hash=3b564f"
+"typescript@patch:typescript@npm%3A^5.2.2#optional!builtin<compat/typescript>":
+  version: 5.2.2
+  resolution: "typescript@patch:typescript@npm%3A5.2.2#optional!builtin<compat/typescript>::version=5.2.2&hash=f3b441"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: d99c40b0b0992adf82ec2aef592299d3146a1a8bd0dd022c1ffc70f0f9ca7c39ccfaf9bd12c62bd7a33390e3ade334ae2ac8dedca7a7007081fdb738af87d0ca
+  checksum: f79cc2ba802c94c2b78dbb00d767a10adb67368ae764709737dc277273ec148aa4558033a03ce901406b35fddf4eac46dabc94a1e1d12d2587e2b9cfe5707b4a
   languageName: node
   linkType: hard
 
@@ -7300,6 +7302,13 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: b5706b29fc972efa1c2d82c9e18339c9176c8a6c3dc9ac608bd0d31a52911cd751996cb0c29545f27e9020905327482cf0dfd2454d0bff213cf3fdf81f1f7e06
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
   languageName: node
   linkType: hard
 

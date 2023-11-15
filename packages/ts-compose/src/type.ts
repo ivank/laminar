@@ -382,7 +382,6 @@ export const Type = {
     isReadonly?: boolean;
   }): ts.ParameterDeclaration =>
     ts.factory.createParameterDeclaration(
-      undefined,
       Type.Readonly(isReadonly),
       undefined,
       name,
@@ -454,7 +453,7 @@ export const Type = {
     type: ts.TypeNode;
     isReadonly?: boolean;
   }): ts.IndexSignatureDeclaration =>
-    ts.factory.createIndexSignature(undefined, Type.Readonly(isReadonly), [Type.Param({ name, type: nameType })], type),
+    ts.factory.createIndexSignature(Type.Readonly(isReadonly), [Type.Param({ name, type: nameType })], type),
 
   /**
    * References a type alias
@@ -531,10 +530,7 @@ export const Type = {
     typeArgs?: ts.TypeParameterDeclaration[];
     jsDoc?: string;
   }): ts.TypeAliasDeclaration =>
-    withJSDoc(
-      jsDoc,
-      ts.factory.createTypeAliasDeclaration(undefined, Type.Export(isExport, isDefault), name, typeArgs, type),
-    ),
+    withJSDoc(jsDoc, ts.factory.createTypeAliasDeclaration(Type.Export(isExport, isDefault), name, typeArgs, type)),
 
   /**
    * Define a method type
@@ -572,7 +568,6 @@ export const Type = {
     withJSDoc(
       jsDoc,
       ts.factory.createInterfaceDeclaration(
-        undefined,
         Type.Export(isExport, isDefault),
         name,
         typeArgs,

@@ -189,7 +189,9 @@ describe('Example files', () => {
        * https://azimi.me/2014/12/31/kill-child_process-node-js.html
        */
       service.stderr.off('data', errorLogger);
-      process.kill(-service.pid);
+      if (service.pid !== undefined) {
+        process.kill(-service.pid);
+      }
     }
   });
 });
