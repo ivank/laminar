@@ -55,7 +55,7 @@
     "kafkajs": "^1.15.0",
     "pg": "^8.11.3",
     "pg-boss": "^9.0.3",
-    "runtypes": "^6.5.0",
+    "runtypes": "^6.7.0",
     "sql-template-tag": "^4.0.0",
     "winston": "^3.11.0"
   }

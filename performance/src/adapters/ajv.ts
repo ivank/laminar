@@ -5,7 +5,7 @@ import { Adapter } from '../types';
 const ajv = new Ajv({
   loadSchema: async (uri) => {
     const result = await fetch(uri);
-    return await result.json();
+    return (await result.json()) as any;
   },
 });
 
