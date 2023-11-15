@@ -12,7 +12,7 @@ import {
   run,
   securityError,
 } from '../../../src';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { join } from 'path';
 import { LoggerContext, withLogger } from './middleware/logger';
 import { inspect } from 'util';
@@ -58,6 +58,9 @@ interface GetPetsQuery {
 const isBodyNewPet = (body: unknown): body is NewPet => typeof body === 'object' && body !== null && 'name' in body;
 
 const isPathWithId = (path: unknown): path is PathWithId => typeof path === 'object' && path !== null && 'id' in path;
+
+const isAxiosError = (object: unknown): object is AxiosError =>
+  typeof object === 'object' && object !== null && 'response' in object;
 
 describe('Integration', () => {
   it('Should process response', async () => {
@@ -600,8 +603,8 @@ describe('Integration', () => {
             { id: 224, name: 'Cookie Puppy' },
           ],
         });
-      } catch (error: any) {
-        if (error?.response?.data) {
+      } catch (error) {
+        if (isAxiosError(error)) {
           console.error(inspect(error?.response?.data, { depth: 10, colors: true }));
         }
         throw error;

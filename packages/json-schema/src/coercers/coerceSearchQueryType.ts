@@ -17,8 +17,8 @@ export const coerceSearchQueryType: Coercer = ({ type }, value) => {
           ? trueString.includes(value)
             ? true
             : falseString.includes(value)
-            ? false
-            : value
+              ? false
+              : value
           : value;
       case 'null':
         return value === 'null' ? null : value;

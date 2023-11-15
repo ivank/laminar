@@ -26,8 +26,10 @@ const toColumnBuilder = <TFixtureColumn extends FixtureColumn>(
   (isColumnBuilder(value)
     ? value
     : typeof value === 'function'
-    ? { [ColumnBuilder]: (id, context) => ({ value: value(id, context), context }) }
-    : { [ColumnBuilder]: (_, context) => ({ value, context }) }) as ColumnBuilder<ExtractFixtureValue<TFixtureColumn>>;
+      ? { [ColumnBuilder]: (id, context) => ({ value: value(id, context), context }) }
+      : { [ColumnBuilder]: (_, context) => ({ value, context }) }) as ColumnBuilder<
+    ExtractFixtureValue<TFixtureColumn>
+  >;
 
 const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Context =>
   fixtures.reduce((current, fixture) => {
@@ -187,7 +189,7 @@ export const fixture = <TFixture extends Fixture>(
     updateMaxSerial = true,
     serialIndex,
   }: { serialColumn?: string; updateMaxSerial?: boolean; serialIndex?: string } = {},
-): TFixture => ({ table, columns, serialColumn, updateMaxSerial, serialIndex } as TFixture);
+): TFixture => ({ table, columns, serialColumn, updateMaxSerial, serialIndex }) as TFixture;
 
 /**
  * Create a copy of the fixture, with optionally some columns altered.

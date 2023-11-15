@@ -13,7 +13,7 @@ import {
   ResponseOapi,
   LoggerLike,
 } from '@ovotech/laminar';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { join } from 'path';
 import { openApiTyped, Pet, NewPet } from './__generated__/petstore';
 
@@ -24,6 +24,8 @@ interface AuthInfo {
 const isBodyNewPet = (body: unknown): body is NewPet => typeof body === 'object' && body !== null && 'name' in body;
 
 const isPathWithId = (path: unknown): path is Pet => typeof path === 'object' && path !== null && 'id' in path;
+const isAxiosError = (object: unknown): object is AxiosError =>
+  typeof object === 'object' && object !== null && 'response' in object;
 
 describe('Integration', () => {
   it('Should process response', async () => {
@@ -590,8 +592,8 @@ describe('Integration', () => {
             { id: 224, name: 'Cookie Puppy' },
           ],
         });
-      } catch (error: any) {
-        console.log(error?.response?.data);
+      } catch (error) {
+        console.log(isAxiosError(error) ? error?.response?.data : String(error));
         throw error;
       }
 

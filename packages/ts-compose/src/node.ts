@@ -209,8 +209,8 @@ export const Node = {
               ),
             )
           : allAs
-          ? ts.factory.createNamespaceImport(Node.Identifier(allAs))
-          : undefined,
+            ? ts.factory.createNamespaceImport(Node.Identifier(allAs))
+            : undefined,
       ),
       ts.factory.createStringLiteral(module),
     ),

@@ -3,7 +3,7 @@ import { WinstonService } from '@ovotech/laminar-winston';
 import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService } from '@ovotech/laminar-pgboss';
 import { PgService, pgMiddleware } from '@ovotech/laminar-pg';
 import { KafkaConsumerService, kafkaLogCreator } from '@ovotech/laminar-kafkajs';
-import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
+import { SchemaRegistry, SchemaType } from '@kafkajs/confluent-schema-registry';
 import PgBoss from 'pg-boss';
 import { Kafka, logLevel } from 'kafkajs';
 import { Pool } from 'pg';
@@ -14,13 +14,12 @@ import { importWorker } from './services/queue/import.worker';
 import { createLogger, transports } from 'winston';
 import { consoleTransportFormat } from './logger';
 import { AvroTimestampMillis, AvroDecimal } from '@ovotech/laminar-avro';
-import { MeterReading } from './__generated__/meter-reading.json';
 
 /**
  * The main function of our project
  * Will create all the services it consists of and return them so we can start each one as needed.
  * Only depend on the environment variables, so we can test to as close to prod setting as possible, while not spawining any processes.
- *
+ *y
  * @param env The validated object of environment variables, should come from process.env
  */
 export const createApplication = async (env: EnvVars): Promise<Application> => {
@@ -43,7 +42,9 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
   });
   const schemaRegistry = new SchemaRegistry(
     { host: env.KAFKA_SCHEMA_REGISTRY },
-    { forSchemaOptions: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any } },
+    // We need to specify this type as any since confluent schema is using an old version of avsc
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { [SchemaType.AVRO]: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any } },
   );
   const pool = new Pool({ connectionString: env.DB_CONNECTION });
   const pgBoss = new PgBoss({

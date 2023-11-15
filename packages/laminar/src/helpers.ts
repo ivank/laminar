@@ -12,6 +12,7 @@ type Obj = Record<string, unknown>;
 const isObj = (obj: unknown): obj is Obj => typeof obj === 'object' && obj !== null;
 const isPrimitive = (obj: unknown): obj is string => obj !== undefined && !(typeof obj === 'object');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const setQuery = (path: string[], value: unknown, obj: any): Obj | unknown[] => {
   const [current, ...rest] = path;
   if (current && !/^\d+$/.test(current)) {
@@ -27,10 +28,10 @@ const setQuery = (path: string[], value: unknown, obj: any): Obj | unknown[] => 
             ]
           : [...currentValue, value]
         : rest.length
-        ? setQuery(rest, value, isObj(currentValue) ? currentValue : {})
-        : isPrimitive(currentValue)
-        ? [currentValue, value]
-        : value,
+          ? setQuery(rest, value, isObj(currentValue) ? currentValue : {})
+          : isPrimitive(currentValue)
+            ? [currentValue, value]
+            : value,
     };
   } else {
     return toArray(rest.length ? setQuery(rest, value, obj) : value);
@@ -146,12 +147,12 @@ export function toPathRe(path: string): RegExp {
 export type Json<T> = T extends Date
   ? string
   : T extends string | number | boolean | null | undefined
-  ? T
-  : T extends Buffer
-  ? { type: 'Buffer'; data: number[] }
-  : {
-      [K in keyof T]: T[K] extends (infer U)[] ? Json<U>[] : Json<T[K]>;
-    };
+    ? T
+    : T extends Buffer
+      ? { type: 'Buffer'; data: number[] }
+      : {
+          [K in keyof T]: T[K] extends (infer U)[] ? Json<U>[] : Json<T[K]>;
+        };
 
 /**
  * Convert a javascript object into a JSON plain object.

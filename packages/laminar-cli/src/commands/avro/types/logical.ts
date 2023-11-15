@@ -21,8 +21,8 @@ export const convertLogicalType: Convert<schema.LogicalType> = (context, schema)
           'named' in logicalType
             ? logicalType.named
             : 'defaultAs' in logicalType
-            ? logicalType.defaultAs
-            : logicalType.allAs,
+              ? logicalType.defaultAs
+              : logicalType.allAs,
         ),
       );
     }

@@ -1,5 +1,5 @@
 import { OapiConfig, openApi, HttpService, run, htmlOk } from '../../../src';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { join } from 'path';
 import { LoggerContext, withLogger } from './middleware/logger';
 import { inspect } from 'util';
@@ -10,6 +10,9 @@ interface Reading {
   date: Date;
   value: number;
 }
+
+const isAxiosError = (object: unknown): object is AxiosError =>
+  typeof object === 'object' && object !== null && 'response' in object;
 
 describe('HTML Integration', () => {
   it('Should process response', async () => {
@@ -65,8 +68,8 @@ describe('HTML Integration', () => {
           status: 200,
           data: '<html>{"meterId":2,"date":"2021-01-05T00:00:00.000Z","value":5}, {"meterId":2,"date":"2021-01-10T00:00:00.000Z","value":12}</html>',
         });
-      } catch (error: any) {
-        if (error?.response?.data) {
+      } catch (error) {
+        if (isAxiosError(error)) {
           console.error(inspect(error?.response?.data, { depth: 10, colors: true }));
         }
         throw error;

@@ -51,7 +51,10 @@ const toTransactionModes = (options: TransactionOptions): string =>
  * @category pg
  */
 export class PgClient {
-  constructor(public client: PoolClient, public config: PgClientConfig = {}) {}
+  constructor(
+    public client: PoolClient,
+    public config: PgClientConfig = {},
+  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async query<R extends QueryResultRow = any, I extends any[] = any[]>(

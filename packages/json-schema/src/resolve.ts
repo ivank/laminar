@@ -123,8 +123,8 @@ export const extractNamedRefs = (document: Schema): RefMap =>
       const url = anchorId
         ? [itemId ? toUrl(itemId, id) : id, anchorId].join('#')
         : itemId
-        ? toUrl(itemId, id) ?? itemId
-        : undefined;
+          ? toUrl(itemId, id) ?? itemId
+          : undefined;
       return url ? { ...all, [url]: item } : all;
     },
     {},

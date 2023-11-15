@@ -5,7 +5,10 @@ import { Queue, Worker } from './types';
  * Start multiple queue workers {@link Service}, by subscribing to the queue on start.
  */
 export class QueueWorkersService implements Service {
-  constructor(public queue: Queue, public workers: Worker[]) {}
+  constructor(
+    public queue: Queue,
+    public workers: Worker[],
+  ) {}
 
   async start(): Promise<this> {
     await Promise.all(this.workers.map((item) => this.queue.work(item)));

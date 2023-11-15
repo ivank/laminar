@@ -128,7 +128,10 @@ export const validateSchema: Validator<Schema> = (schema, value, options) =>
   schema === true
     ? empty
     : schema === false
-    ? error('false', options.name, false)
-    : schema
-    ? reduce((validator, index, current) => validator(schema, value, { ...options, ...current }), options.validators)
-    : empty;
+      ? error('false', options.name, false)
+      : schema
+        ? reduce(
+            (validator, index, current) => validator(schema, value, { ...options, ...current }),
+            options.validators,
+          )
+        : empty;

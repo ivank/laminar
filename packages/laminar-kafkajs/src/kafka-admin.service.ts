@@ -20,7 +20,10 @@ export interface CreateTopics {
 export class KafkaAdminService implements Service {
   public client?: Admin;
 
-  constructor(public kafka: Kafka, public config?: AdminConfig & CreateTopics) {}
+  constructor(
+    public kafka: Kafka,
+    public config?: AdminConfig & CreateTopics,
+  ) {}
 
   public async start(): Promise<this> {
     this.client = this.kafka.admin(this.config);

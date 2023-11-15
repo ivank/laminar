@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { exec, execSync, spawn } from 'child_process';
+import { exec, execSync, spawn, SpawnSyncReturns } from 'child_process';
 import { readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { promisify } from 'util';
@@ -8,12 +8,15 @@ const examplesDir = join(__dirname, '../examples/');
 
 let port = 4900;
 
+const isSpawnSyncReturns = <T>(obj: unknown): obj is SpawnSyncReturns<T> =>
+  typeof obj === 'object' && obj !== null && 'output' in obj;
+
 describe('Example files', () => {
   beforeAll(() => {
     try {
       execSync('yarn tsc', { cwd: examplesDir, env: process.env });
-    } catch (error: any) {
-      console.log(error?.output[1].toString());
+    } catch (error) {
+      console.log(isSpawnSyncReturns<Buffer>(error) ? error?.output[1]?.toString() : String(error));
       throw error;
     }
   });

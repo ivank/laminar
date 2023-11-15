@@ -5,7 +5,10 @@ import { Queue, Worker } from './types';
  * Start a queue worker {@link Service}, by subscribing to the queue on start.
  */
 export class QueueWorkerService<TData extends object> implements Service {
-  constructor(public queue: Queue, public subscribe: Worker<TData>) {}
+  constructor(
+    public queue: Queue,
+    public subscribe: Worker<TData>,
+  ) {}
 
   async start(): Promise<this> {
     await this.queue.work(this.subscribe);

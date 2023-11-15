@@ -155,7 +155,7 @@ describe('Requests', () => {
       const result = await api.post('/post', formData, {
         headers: {
           ...formData.getHeaders(),
-          'Content-Length': await new Promise((resolve, reject) =>
+          'Content-Length': await new Promise<number>((resolve, reject) =>
             formData.getLength((error, length) => (error ? reject(error) : resolve(length))),
           ),
         },
@@ -195,7 +195,7 @@ describe('Requests', () => {
       const result = await api.post('/post', formData, {
         headers: {
           ...formData.getHeaders(),
-          'Content-Length': await new Promise((resolve, reject) =>
+          'Content-Length': await new Promise<number>((resolve, reject) =>
             formData.getLength((error, length) => (error ? reject(error) : resolve(length))),
           ),
         },

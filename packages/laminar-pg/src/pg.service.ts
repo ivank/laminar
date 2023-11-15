@@ -6,7 +6,10 @@ import { PgClientConfig } from './pg.client';
  * A laminar {@link Service} that calls `end` on the pool when stopping.
  */
 export class PgService implements Service {
-  constructor(public pool: Pool, public config: PgClientConfig = {}) {}
+  constructor(
+    public pool: Pool,
+    public config: PgClientConfig = {},
+  ) {}
 
   connect(): Promise<PoolClient> {
     return this.pool.connect();

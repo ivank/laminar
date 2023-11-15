@@ -52,7 +52,7 @@ describe('Integration', () => {
             }),
             get('/insert', async ({ logger, queue, query: { data } }) => {
               logger.info('test multiple');
-              await queue.insert(data.map((item: any) => ({ name: 'test', data: Number(item) })));
+              await queue.insert(data.map((item: unknown) => ({ name: 'test', data: Number(item) })));
               return textOk('OK');
             }),
           ),

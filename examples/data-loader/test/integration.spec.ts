@@ -8,7 +8,7 @@ import { EnvVars } from '../src/env';
 import { axiosOapi } from './__generated__/schema.axios';
 import { retry } from 'ts-retry-promise';
 import { Kafka } from 'kafkajs';
-import { SchemaRegistry, readAVSC } from '@kafkajs/confluent-schema-registry';
+import { SchemaRegistry, readAVSC, SchemaType } from '@kafkajs/confluent-schema-registry';
 import { join } from 'path';
 import { MeterReading } from '../src/__generated__/meter-reading.json';
 import Decimal from 'decimal.js';
@@ -133,7 +133,9 @@ describe('Data Loader Integration Tests', () => {
         new SchemaRegistry(
           { host: env.KAFKA_SCHEMA_REGISTRY },
           {
-            forSchemaOptions: {
+            [SchemaType.AVRO]: {
+              // We need to specify this type as any since confluent schema is using an old version of avsc
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any,
             },
           },
