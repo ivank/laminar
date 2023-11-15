@@ -62,6 +62,7 @@ describe('Integration', () => {
     const event2Service = new KafkaConsumerService<Event2>(kafka, schemaRegistry, {
       topic: topic2,
       groupId: groupId2,
+      fromBeginning: true,
       eachBatch: logging(eachEvent2),
     });
 
