@@ -15,7 +15,6 @@ export {
   RegisterSchemasConfig,
 } from './kafka-producer.service';
 export { kafkaLogCreator, produce, Produce } from './helpers';
-export { chunkBatchMiddleware } from './chunk-batch.middleware';
 export {
   DecodedKafkaMessage,
   DecodedEachMessagePayload,

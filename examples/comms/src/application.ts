@@ -50,7 +50,7 @@ export const createApplication = async (env: EnvVars, logger: LoggerLike): Promi
       hostname: env.HOST,
     }),
     new KafkaConsumerService(kafka, schemaRegistry, {
-      topic: env.TOPIC,
+      topics: [env.TOPIC],
       groupId: env.GROUP_ID,
       fromBeginning: true,
       eachMessage: withDb(feedbackConsumer),

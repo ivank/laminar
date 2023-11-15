@@ -57,7 +57,7 @@ describe('Integration', () => {
     const admin = new KafkaAdminService(kafka, { topics: [{ topic: topic1, numPartitions: 3 }] });
 
     const event1Service = new KafkaConsumerService<Event1>(kafka, schemaRegistry, {
-      topic: topic1,
+      topics: [topic1],
       groupId: groupId1,
       fromBeginning: true,
       eachMessage: logging(eachEvent1),
@@ -90,7 +90,7 @@ describe('Integration', () => {
         async () => {
           expect(data).toEqual({
             0: expect.arrayContaining(['test1', 'test4']),
-            1: expect.arrayContaining(['test2']),
+            1: ['test2'],
             2: ['test3'],
           });
 

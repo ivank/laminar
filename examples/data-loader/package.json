@@ -52,7 +52,7 @@
     "csv-parse": "^5.5.2",
     "decimal.js": "^10.4.3",
     "dotenv": "^16.3.1",
-    "kafkajs": "^1.15.0",
+    "kafkajs": "^2.2.4",
     "pg": "^8.11.3",
     "pg-boss": "^9.0.3",
     "runtypes": "^6.7.0",

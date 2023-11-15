@@ -44,7 +44,7 @@
     "@ovotech/laminar": "*",
     "@ovotech/laminar-kafkajs": "*",
     "@ovotech/laminar-pg": "*",
-    "kafkajs": "^1.15.0",
+    "kafkajs": "^2.2.4",
     "pg": "^8.11.3"
   }
 }

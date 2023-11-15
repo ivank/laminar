@@ -1,7 +1,8 @@
 import type { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import { ConfluentSchema, RawAvroSchema } from '@kafkajs/confluent-schema-registry/dist/@types';
 import type {
-  KafkaMessage,
+  RecordBatchEntry,
+  MessageSetEntry,
   EachMessagePayload,
   Batch,
   EachBatchPayload,
@@ -11,15 +12,31 @@ import type {
 } from 'kafkajs';
 import { AbstractMiddleware, Empty } from '@ovotech/laminar';
 
+export type KafkaMessage = MessageSetEntry | RecordBatchEntry;
+
 /**
  * Kafka Message that's been decoded with [kafkajs SchemaRegistry](https://github.com/kafkajs/confluent-schema-registry)
  *
  * @typeParam TValue The decodeed type of the the kafka message value
  */
-export interface DecodedKafkaMessage<TValue, TKey> extends KafkaMessage {
+export interface DecodedMessageSetEntry<TValue, TKey> extends MessageSetEntry {
   decodedValue: TValue | null;
   decodedKey: TKey | null;
 }
+
+/**
+ * Kafka Message that's been decoded with [kafkajs SchemaRegistry](https://github.com/kafkajs/confluent-schema-registry)
+ *
+ * @typeParam TValue The decodeed type of the the kafka message value
+ */
+export interface DecodedRecordBatchEntry<TValue, TKey> extends RecordBatchEntry {
+  decodedValue: TValue | null;
+  decodedKey: TKey | null;
+}
+
+export type DecodedKafkaMessage<TValue, TKey> =
+  | DecodedMessageSetEntry<TValue, TKey>
+  | DecodedRecordBatchEntry<TValue, TKey>;
 
 /**
  * A payload for [eachMessage](https://kafka.js.org/docs/consuming#a-name-each-message-a-eachmessage)

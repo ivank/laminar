@@ -14,6 +14,7 @@ import { importWorker } from './services/queue/import.worker';
 import { createLogger, transports } from 'winston';
 import { consoleTransportFormat } from './logger';
 import { AvroTimestampMillis, AvroDecimal } from '@ovotech/laminar-avro';
+import { MeterReading } from './__generated__/meter-reading.json';
 
 /**
  * The main function of our project
@@ -97,7 +98,7 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
       worker: withDb(withJobLogging(importWorker)),
     }),
     new KafkaConsumerService(kafka, schemaRegistry, {
-      topic: env.KAFKA_TOPIC_METER_READ,
+      topics: [env.KAFKA_TOPIC_METER_READ],
       groupId: `${env.KAFKA_GROUP_ID}-test-1`,
       fromBeginning: true,
       eachMessage: withLogger(withDb(meterReadsConsumer)),

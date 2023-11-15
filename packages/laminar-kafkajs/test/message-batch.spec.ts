@@ -60,7 +60,7 @@ describe('Integration', () => {
     const admin = new KafkaAdminService(kafka, { topics: [{ topic: topic2, numPartitions: 2 }] });
 
     const event2Service = new KafkaConsumerService<Event2>(kafka, schemaRegistry, {
-      topic: topic2,
+      topics: [topic2],
       groupId: groupId2,
       fromBeginning: true,
       eachBatch: logging(eachEvent2),

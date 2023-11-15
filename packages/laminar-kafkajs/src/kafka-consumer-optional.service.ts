@@ -1,5 +1,5 @@
 import type { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
-import type { Kafka, ConsumerSubscribeTopic, ConsumerConfig } from 'kafkajs';
+import type { Kafka, ConsumerSubscribeTopics, ConsumerConfig } from 'kafkajs';
 import { KafkaConsumerService } from './kafka-consumer.service';
 import { SchemaRegistryConsumerRunConfig } from './types';
 
@@ -17,10 +17,10 @@ export class KafkaConsumerOptionalService<TValue> extends KafkaConsumerService<T
   constructor(
     kafka: Kafka,
     schemaRegistry: SchemaRegistry,
-    config: SchemaRegistryConsumerRunConfig<TValue> & ConsumerConfig & Partial<ConsumerSubscribeTopic>,
+    config: SchemaRegistryConsumerRunConfig<TValue> & ConsumerConfig & Partial<ConsumerSubscribeTopics>,
   ) {
-    super(kafka, schemaRegistry, { topic: '', ...config });
-    this.isActive = config.topic !== undefined;
+    super(kafka, schemaRegistry, { topics: [], ...config });
+    this.isActive = config.topics !== undefined;
   }
 
   public async start(): Promise<this> {
@@ -33,7 +33,7 @@ export class KafkaConsumerOptionalService<TValue> extends KafkaConsumerService<T
 
   public describe(): string {
     return this.isActive
-      ? `📥 Optional Kafka Consumer ${this.config.topic}, group: ${this.config.groupId}`
+      ? `📥 Optional Kafka Consumer ${this.config.topics}, group: ${this.config.groupId}`
       : `📥 Optional Kafka Consumer [SKIPPED] group: ${this.config.groupId}`;
   }
 }

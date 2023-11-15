@@ -1,6 +1,6 @@
 import type { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import { Service } from '@ovotech/laminar';
-import type { Kafka, ConsumerSubscribeTopic, ConsumerConfig, Consumer } from 'kafkajs';
+import type { Kafka, ConsumerSubscribeTopics, ConsumerConfig, Consumer } from 'kafkajs';
 import { SchemaRegistryConsumerRunConfig, DecodedKafkaMessage, DecodedEachBatchPayload } from './types';
 
 /**
@@ -17,7 +17,7 @@ export class KafkaConsumerService<TValue, TKey = Buffer> implements Service {
   constructor(
     public kafka: Kafka,
     public schemaRegistry: SchemaRegistry,
-    public config: SchemaRegistryConsumerRunConfig<TValue, TKey> & ConsumerConfig & ConsumerSubscribeTopic,
+    public config: SchemaRegistryConsumerRunConfig<TValue, TKey> & ConsumerConfig & ConsumerSubscribeTopics,
   ) {}
 
   public async start(): Promise<this> {
@@ -38,7 +38,9 @@ export class KafkaConsumerService<TValue, TKey = Buffer> implements Service {
                 ...payload.message,
                 decodedValue: payload.message.value ? await this.schemaRegistry.decode(payload.message.value) : null,
                 decodedKey: this.config.decodeKey
-                  ? await this.schemaRegistry.decode(payload.message.key)
+                  ? payload.message.key === null
+                    ? null
+                    : await this.schemaRegistry.decode(payload.message.key)
                   : payload.message.key,
               },
             })
@@ -52,7 +54,9 @@ export class KafkaConsumerService<TValue, TKey = Buffer> implements Service {
                 : null;
               const key = payload.batch.messages[i].key;
               (payload.batch.messages[i] as DecodedKafkaMessage<TValue, TKey>).decodedKey = this.config.decodeKey
-                ? await this.schemaRegistry.decode(key)
+                ? key === null
+                  ? key
+                  : await this.schemaRegistry.decode(key)
                 : key;
             }
             return eachBatch(payload as DecodedEachBatchPayload<TValue, TKey>);
@@ -69,6 +73,6 @@ export class KafkaConsumerService<TValue, TKey = Buffer> implements Service {
   }
 
   public describe(): string {
-    return `📥 Kafka Consumer ${this.config.topic}, group: ${this.config.groupId}`;
+    return `📥 Kafka Consumer ${this.config.topics}, group: ${this.config.groupId}`;
   }
 }
