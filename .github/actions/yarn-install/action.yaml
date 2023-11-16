@@ -5,6 +5,7 @@ runs:
   steps:
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
+      shell: bash
       run: echo "dir=$(cd client && yarn config get cacheFolder)" >> $GITHUB_ENV
 
     - name: Cache Dependencies

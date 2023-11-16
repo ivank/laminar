@@ -4,4 +4,6 @@ runs:
   using: 'composite'
   steps:
     - run: git submodule sync
+      shell: bash
     - run: git submodule update --init
+      shell: bash
