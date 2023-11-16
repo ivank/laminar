@@ -9,6 +9,7 @@
   "scripts": {
     "test": "yarn workspaces foreach --all --verbose run test",
     "lint": "yarn workspaces foreach --all --parallel --verbose run lint",
+    "pretest": "yarn workspaces foreach --all --parallel --topological-dev --verbose run pretest",
     "build": "yarn workspaces foreach --all --parallel --topological-dev --verbose run build",
     "test:examples": "yarn workspaces foreach --all --verbose --include '@examples/*' run test",
     "lint:examples": "yarn workspaces foreach --all --parallel --include '@examples/*' --verbose run lint",

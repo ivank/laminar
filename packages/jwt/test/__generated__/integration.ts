@@ -17,6 +17,7 @@ export interface CreateSession {
   email: string;
   scopes?: string[];
   other?: string;
+  [key: string]: unknown;
 }
 
 export interface Session {
@@ -31,6 +32,7 @@ export interface User {
   name?: string;
   picture?: string;
   scopes?: string[];
+  [key: string]: unknown;
 }
 
 export interface HttpError {
