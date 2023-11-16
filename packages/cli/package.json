@@ -43,7 +43,7 @@
     "build:examples:convertion": "yarn laminar api --file examples/convertion.yaml --output examples/__generated__/convertion.yaml.ts",
     "build:examples:petstore": "yarn laminar axios --file examples/petstore.json --output examples/__generated__/petstore.json.ts",
     "build:examples": "yarn build:examples:api && yarn build:examples:axios && yarn build:examples:petstore && yarn build:examples:convertion",
-    "build:test": "yarn build:test:petstore && yarn build:test:split && yarn build:test:statements && yarn build:test:loss && yarn build:test:axios && yarn build:test:axios-api",
+    "build:test": "yarn build:test:petstore && yarn build:test:split && yarn build:test:statements && yarn build:test:loss && yarn build:test:axios && yarn build:test:axios-api && yarn build:test:pullrequest",
     "pretest": "yarn build:examples && yarn build:test",
     "build": "tsc --declaration",
     "build:readme": "build-readme README.md https://github.com/ivank/laminar/tree/main/packages/cli",
