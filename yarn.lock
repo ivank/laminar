@@ -901,7 +901,7 @@ __metadata:
   resolution: "@examples/data-loader@workspace:examples/data-loader"
   dependencies:
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@laminarjs/avro": "npm:^0.12.2"
+    "@laminarjs/avro": "npm:*"
     "@laminarjs/cli": "npm:*"
     "@laminarjs/jwt": "npm:*"
     "@laminarjs/kafkajs": "npm:*"
@@ -1462,7 +1462,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@laminarjs/avro@npm:^0.12.2, @laminarjs/avro@workspace:packages/avro":
+"@laminarjs/avro@npm:*, @laminarjs/avro@workspace:packages/avro":
   version: 0.0.0-use.local
   resolution: "@laminarjs/avro@workspace:packages/avro"
   dependencies:

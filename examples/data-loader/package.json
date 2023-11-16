@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@kafkajs/confluent-schema-registry": "^3.3.0",
-    "@laminarjs/avro": "^0.12.2",
+    "@laminarjs/avro": "*",
     "@laminarjs/jwt": "*",
     "@laminarjs/kafkajs": "*",
     "@laminarjs/laminar": "*",
