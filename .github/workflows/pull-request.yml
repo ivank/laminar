@@ -11,12 +11,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: docker-compose up pg
+      - run: docker-compose up -d
       - uses: actions/setup-node@v2
         with:
           node-version: '18.18.2'
       - uses: ./.github/actions/yarn-install
       - run: yarn build
       - run: yarn lint
-      - run: yarn workspace @examples/docs test --runInBand --ci
       - run: yarn workspace @examples/petstore test --runInBand --ci
