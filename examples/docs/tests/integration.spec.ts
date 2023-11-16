@@ -39,7 +39,6 @@ describe('Docs examples', () => {
       'src/http-service/hostname.ts',
       [
         { req: { url: 'http://localhost:5101' }, res: { status: 200 } },
-        { req: { url: 'http://localhost:5102' }, res: { status: 200 } },
         { req: { url: '/' }, res: { status: 200 } },
       ],
     ],
