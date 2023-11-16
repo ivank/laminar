@@ -18,4 +18,4 @@ jobs:
       - uses: ./.github/actions/yarn-install
       - run: yarn build
       - run: yarn lint
-      - run: yarn workspace @examples/petstore test --runInBand --ci
+      - run: yarn test --runInBand --ci
