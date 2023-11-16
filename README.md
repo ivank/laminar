@@ -1,6 +1,6 @@
 ![Laminar logo](docs/assets/laminar-logo.svg)
 
-[![Laminar](https://circleci.com/gh/ivank/laminar.svg?style=svg)](https://circleci.com/gh/ivank/laminar)
+[![Laminar](https://github.com/ivank/laminar/actions/workflows/release.yml/badge.svg)](https://github.com/ivank/laminar/actions/workflows/release.yml)
 
 # Laminar
 
