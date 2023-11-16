@@ -1,6 +1,6 @@
 {
   "name": "@laminar/kafkajs",
-  "version": "0.12.2",
+  "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Use kafkajs with @laminar/laminar",

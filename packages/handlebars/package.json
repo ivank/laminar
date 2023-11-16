@@ -1,6 +1,6 @@
 {
   "name": "@laminar/handlebars",
-  "version": "0.12.1",
+  "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Handlebars implementation for the laminar http server",

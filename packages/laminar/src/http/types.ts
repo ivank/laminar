@@ -78,7 +78,7 @@ export type HttpResponseBody = Readable | Buffer | string;
  */
 export interface HttpResponse<Content = unknown, Status = number> {
   /**
-   * The body content. Should be {@link HttpResponseBody} or anything that the {@link responseParserComponent} can parse.
+   * The body content. Should be {@link HttpResponseBody} or anything that the {@link parseBody} can parse.
    * You can add custom response parser to be able to process different types of objects.
    */
   body: Content;

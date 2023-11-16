@@ -70,7 +70,7 @@ const entitiesWithContext = (initialContext: Context, fixtures: Fixture[]): Cont
  * Directly return the current entity id. Useful for table serial primary keys
  *
  * ```typescript
- * import { fixture, id, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, id, generate } from '@laminar/fixtures';
  * const myFixture = fixture('mytable', { id });
  *
  * console.log(generate([myFixture]));
@@ -84,7 +84,7 @@ export const id: ColumnBuilder<number> = { [ColumnBuilder]: (id, context) => ({ 
  * Generate a column value using the current entity id.
  *
  * ```typescript
- * import { fixture, template, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, template, generate } from '@laminar/fixtures';
  * const myFixture = fixture('mytable', { name: template('My column %s') });
  *
  * console.log(generate([myFixture]));
@@ -102,7 +102,7 @@ export const template = (value: string): ColumnBuilder<string> => ({
  * and then use its columns to get the value.
  *
  * ```typescript
- * import { fixture, id, rel, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, id, rel, generate } from '@laminar/fixtures';
  * const parent = fixture('parents', { id });
  * const child = fixture('children', {
  *   id,
@@ -142,7 +142,7 @@ export const rel = <TFixture extends Fixture, TColumn extends keyof TFixture['co
  * Switch between multiple variants of a column, depending on the id.
  *
  * ```typescript
- * import { fixture, alternate, multiFixture, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, alternate, multiFixture, generate } from '@laminar/fixtures';
  * const myFixture = fixture('mytable', { type: alternate('Generation', 'Export') });
  *
  * console.log(generate(multiFixture(2, myFixture)));
@@ -166,7 +166,7 @@ export const alternate = <TFixtureColumn extends FixtureColumn>(
  * A wrapper to create a fixture that can be used by {@link setUp}, {@link tearDown} and {@link generate} functions
  *
  * ```typescript
- * import { fixture, setUp, id } from '@laminar/laminar-fixtures';
+ * import { fixture, setUp, id } from '@laminar/fixtures';
  * import { Client } from 'pg';
  *
  * const myFixture = fixture('mytable', { id });
@@ -196,7 +196,7 @@ export const fixture = <TFixture extends Fixture>(
  * Pass the `deep: true` option to make sure all the referenced fixtures are also cloned
  *
  * ```typescript
- * import { fixture, cloneFixture, id, setUp } from '@laminar/laminar-fixtures';
+ * import { fixture, cloneFixture, id, setUp } from '@laminar/fixtures';
  * import { Client } from 'pg';
  *
  * const first = fixture('mytable', { id, name: 'First' });
@@ -252,7 +252,7 @@ export const generateIdSequnce: GenerateId = (previousId) => (previousId ?? 0) +
  * Create multiple entities from one fixture. Deep clones all of them and their references
  *
  * ```typescript
- * import { fixture, alternate, multiFixture, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, alternate, multiFixture, generate } from '@laminar/fixtures';
  * const myFixture = fixture('mytable', { type: alternate('Generation', 'Export') });
  *
  * console.log(generate(multiFixture(2, myFixture)));
@@ -278,7 +278,7 @@ export const multiFixture = (
  * Generate entities from fixtures, resolving dependencies
  *
  * ```typescript
- * import { fixture, id, rel, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, id, rel, generate } from '@laminar/fixtures';
  * const one = fixture('table1', { id });
  * const two = fixture('table2', { id });
  *

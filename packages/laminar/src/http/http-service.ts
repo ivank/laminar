@@ -10,7 +10,7 @@ import { Readable } from 'stream';
 import { Service } from '../types';
 
 /**
- * Options supplied when creating the laminar application with {@link httpServer} (or {@link httpsServer}).
+ * Options supplied when creating the laminar application with {@link http.Server} (or {@link https.Server}).
  * Would be passed down to the appropriate components.
  *
  * @category http

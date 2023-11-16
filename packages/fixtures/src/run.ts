@@ -57,7 +57,7 @@ const queryWithError = async (db: ClientBase, queries: QueryConfig[]): Promise<v
  * Run fixtures to create the entities on a database connection.
  *
  * ```typescript
- * import { fixture, id, setUp } from '@laminar/laminar-fixtures';
+ * import { fixture, id, setUp } from '@laminar/fixtures';
  * import { Client } from 'pg';
  *
  * const myFixture = fixture('mytable', { id, name: 'First' });
@@ -70,7 +70,7 @@ const queryWithError = async (db: ClientBase, queries: QueryConfig[]): Promise<v
  * Or you can pre-generate your fixtures and pass them to the `setUp` (and `tearDown`)
  *
  * ```typescript
- * import { fixture, id, setUp, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, id, setUp, generate } from '@laminar/fixtures';
  * import { Client } from 'pg';
  *
  * const myFixture = fixture('mytable', { id, name: 'First' });
@@ -92,7 +92,7 @@ export const setUp = async ({ db, fixtures, entities, chunkSize = 500, generateI
  * Delete the entities created on database connections
  *
  * ```typescript
- * import { fixture, id, setUp, generate } from '@laminar/laminar-fixtures';
+ * import { fixture, id, setUp, generate } from '@laminar/fixtures';
  * import { Client } from 'pg';
  *
  * const myFixture = fixture('mytable', { id, name: 'First' });

@@ -1,6 +1,6 @@
 {
   "name": "@laminar/pg",
-  "version": "0.12.6",
+  "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Use pg with @laminar/laminar",

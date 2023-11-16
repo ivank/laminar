@@ -1,6 +1,6 @@
 {
   "name": "@laminar/jwt",
-  "version": "0.13.19",
+  "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A json web token middleware for laminar",

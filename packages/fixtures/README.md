@@ -55,7 +55,7 @@ Fixture columns
 You can use constants - number, string, Date, null. You can also use a function that will accept the current id as argument
 
 ```typescript
-import { fixture } from '@laminar/laminar-fixtures';
+import { fixture } from '@laminar/fixtures';
 const myFixture = fixture('mytable', { name: (id) => `Name ${id}` });
 
 console.log(generate([myFixture]));
@@ -70,7 +70,7 @@ Additionally there are a number of helpers to build columns with:
 Directly return the current entity id. Useful for table serial primary keys
 
 ```typescript
-import { fixture, id, generate } from '@laminar/laminar-fixtures';
+import { fixture, id, generate } from '@laminar/fixtures';
 const myFixture = fixture('mytable', { id });
 
 console.log(generate([myFixture]));
@@ -83,7 +83,7 @@ console.log(generate([myFixture]));
 Generate a column value using the current entity id.
 
 ```typescript
-import { fixture, template, generate } from '@laminar/laminar-fixtures';
+import { fixture, template, generate } from '@laminar/fixtures';
 const myFixture = fixture('mytable', { name: template('My column %s') });
 
 console.log(generate([myFixture]));
@@ -96,7 +96,7 @@ console.log(generate([myFixture]));
 Get a column from another fixture. We create a map of dependencies, so that if you link another fixture, it will create it first, and then use its columns to get the value.
 
 ```typescript
-import { fixture, id, rel, generate } from '@laminar/laminar-fixtures';
+import { fixture, id, rel, generate } from '@laminar/fixtures';
 const parent = fixture('parents', { id });
 const child = fixture('children', {
   id,
@@ -116,7 +116,7 @@ console.log(generate([child]));
 Switch between multiple variants of a column, depending on the id.
 
 ```typescript
-import { fixture, alternate, multiFixture, generate } from '@laminar/laminar-fixtures';
+import { fixture, alternate, multiFixture, generate } from '@laminar/fixtures';
 const myFixture = fixture('mytable', { type: alternate('Generation', 'Export') });
 
 console.log(generate(multiFixture(2, myFixture)));

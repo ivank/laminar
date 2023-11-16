@@ -35,7 +35,7 @@ init({ initOrder: [pool, http], logger: console });
 
 PG doesn't parse enum arrays properly, since their oids are dynamic https://github.com/brianc/node-pg-types/issues/56
 
-`laminar-pg` can mitigate that by loading all the enum oids at runtime and setting the appropriate parsers, before the pool is set to accept requests.
+`@laminar/pg` can mitigate that by loading all the enum oids at runtime and setting the appropriate parsers, before the pool is set to accept requests.
 
 > [examples/enum-arrays.ts](https://github.com/ivank/laminar/tree/main/packages/pg/examples/enum-arrays.ts)
 
@@ -94,7 +94,7 @@ const { rows } = await db.query<{ id: number; name: string }>(
 
 Transactions allow for setting isolation options for them.
 
-> [examples/transactions-isolation-level.ts:(transactions)](https://github.com/ivank/laminar/tree/main/packages/laminar-pg/examples/transactions-isolation-level.ts#L15-L23)
+> [examples/transactions-isolation-level.ts:(transactions)](https://github.com/ivank/laminar/tree/main/packages/pg/examples/transactions-isolation-level.ts#L15-L23)
 
 ```typescript
 const insertedIds = await db.transaction({ isolationLevel: 'serializable' }, async (t) => {

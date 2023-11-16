@@ -2,12 +2,12 @@
   "entryPoints": [
     "packages/json-schema/src/index.ts",
     "packages/laminar/src/index.ts",
-    "packages/laminar-jwt/src/index.ts",
-    "packages/laminar-handlebars/src/index.ts",
-    "packages/laminar-pg/src/index.ts",
-    "packages/laminar-kafkajs/src/index.ts",
-    "packages/laminar-pgboss/src/index.ts",
-    "packages/laminar-winston/src/index.ts"
+    "packages/jwt/src/index.ts",
+    "packages/handlebars/src/index.ts",
+    "packages/pg/src/index.ts",
+    "packages/kafkajs/src/index.ts",
+    "packages/pgboss/src/index.ts",
+    "packages/winston/src/index.ts"
   ],
   "name": "Laminar",
   "out": "docs/api",

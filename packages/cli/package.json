@@ -1,6 +1,6 @@
 {
   "name": "@laminar/cli",
-  "version": "0.14.2",
+  "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "CLI generating typescript types for @laminar/laminar",

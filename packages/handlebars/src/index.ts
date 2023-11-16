@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @laminar/laminar-handlebars
+ * @module @laminar/handlebars
  */
 
 import { Middleware } from '@laminar/laminar';
