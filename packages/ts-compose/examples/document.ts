@@ -1,4 +1,4 @@
-import { Type, document, mapWithContext, Document, DocumentContext } from '@ovotech/ts-compose';
+import { Type, document, mapWithContext, Document, DocumentContext } from '@laminarjs/ts-compose';
 import { printDocument, withIdentifier } from '../src';
 
 /**

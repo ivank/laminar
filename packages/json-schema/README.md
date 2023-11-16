@@ -18,13 +18,13 @@ Supported JSON Schema drafts
 ### Usage
 
 ```shell
-yarn add @ovotech/json-schema
+yarn add @laminarjs/json-schema
 ```
 
-> [examples/simple.ts](https://github.com/ovotech/laminar/tree/main/packages/json-schema/examples/simple.ts)
+> [examples/simple.ts](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/simple.ts)
 
 ```typescript
-import { validate, Schema } from '@ovotech/json-schema';
+import { validate, Schema } from '@laminarjs/json-schema';
 
 const schema: Schema = {
   type: 'string',
@@ -49,7 +49,7 @@ It is comparatively slower than the venerable [Ajv](https://github.com/epoberezk
 
 It does not rely on any shared state or static parameters returning all the errors for a given validation operation in one result. Which was one of the reasons to develop an alternative to Ajv in the first place.
 
-It was made as a lightweight dependency to [@ovotech/laminar](https://github.com/ovotech/laminar) framework with nice error messages.
+It was made as a lightweight dependency to [@laminarjs/laminar](https://github.com/ivank/laminar) framework with nice error messages.
 
 ### Examples
 
@@ -57,10 +57,10 @@ It was made as a lightweight dependency to [@ovotech/laminar](https://github.com
 
 If we assume we have those 2 http resources at the given URLs, You can compile the schema once, downloading the relevant URLs, and then use the `CompiledSchema` to perform any further validation without downloading and parsing the files again.
 
-> [examples/compile-urls.ts](https://github.com/ovotech/laminar/tree/main/packages/json-schema/examples/compile-urls.ts)
+> [examples/compile-urls.ts](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/compile-urls.ts)
 
 ```typescript
-import { validate, compile } from '@ovotech/json-schema';
+import { validate, compile } from '@laminarjs/json-schema';
 import nock from 'nock';
 
 const mainSchema = `
@@ -106,10 +106,10 @@ compile('https://example.com/schema').then((schema) => {
 
 You can also provide paths to local files to download the schema from. It it ends with "yaml" or "yml" it would be loaded as YAML, otherwise it would be parsed as JSON.
 
-> [examples/validate-local-schema.ts](https://github.com/ovotech/laminar/tree/main/packages/json-schema/examples/validate-local-schema.ts)
+> [examples/validate-local-schema.ts](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/validate-local-schema.ts)
 
 ```typescript
-import { validateCompiled, validate, compile } from '@ovotech/json-schema';
+import { validateCompiled, validate, compile } from '@laminarjs/json-schema';
 import { join } from 'path';
 
 const schema = join(__dirname, 'color-schema.yaml');
@@ -129,7 +129,7 @@ compile({ schema }).then((compiledSchema) => {
 
 You can customize error messages with `formatErrors` option. It gets the full validaiton with its errors, and should return an array of string error messages.
 
-> [examples/format-errors.ts:(format-errors)](https://github.com/ovotech/laminar/tree/main/packages/json-schema/examples/format-errors.ts#L10-L15)
+> [examples/format-errors.ts:(format-errors)](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/format-errors.ts#L10-L15)
 
 ```typescript
 const formatErrors: FormatErrors = (validation) =>
@@ -140,7 +140,7 @@ validate({ schema, value, formatErrors }).then((result) => console.log(result.va
 
 The possible error codes are:
 
-> [src/validation.ts:(error-codes)](https://github.com/ovotech/laminar/tree/main/packages/json-schema/src/validation.ts#L4-L32)
+> [src/validation.ts:(error-codes)](https://github.com/ivank/laminar/tree/main/packages/json-schema/src/validation.ts#L4-L32)
 
 ```typescript
 export type InvalidCode =
@@ -174,7 +174,7 @@ export type InvalidCode =
 
 Alternatively, you can set `formatErrors` to false and receive the raw error message objects.
 
-> [examples/raw-errors.ts:(format-errors)](https://github.com/ovotech/laminar/tree/main/packages/json-schema/examples/raw-errors.ts#L10-L12)
+> [examples/raw-errors.ts:(format-errors)](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/raw-errors.ts#L10-L12)
 
 ```typescript
 validate({ schema, value, formatErrors: false }).then((result) => console.log(result.valid, result.errors));

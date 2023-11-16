@@ -1,8 +1,8 @@
-import { jsonBadRequest, jsonOk } from '@ovotech/laminar';
-import { QueueContext } from '@ovotech/laminar-pgboss';
+import { jsonBadRequest, jsonOk } from '@laminarjs/laminar';
+import { QueueContext } from '@laminarjs/pgboss';
 import { PathV1HydrationMeterreadsPost } from '../../__generated__/schema';
 import { Record, String, Array, Static } from 'runtypes';
-import parse from 'csv-parse/lib/sync';
+import { parse } from 'csv-parse/sync';
 import { InsertMeterRead } from '../../queries/meter-reads-insert.query';
 
 const CsvRow = Record({ serialNumber: String, value: String, date: String });
@@ -10,7 +10,7 @@ const CsvRow = Record({ serialNumber: String, value: String, date: String });
 const toMeterRead = ({ serialNumber, value, date }: Static<typeof CsvRow>): InsertMeterRead => ({
   serialNumber,
   value,
-  date: new Date(date),
+  date,
 });
 
 export const hydrationMeterReadsRoute: PathV1HydrationMeterreadsPost<QueueContext> = async ({

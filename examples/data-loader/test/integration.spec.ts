@@ -1,19 +1,18 @@
 import axios from 'axios';
-import { run } from '@ovotech/laminar';
-import { KafkaProducerService } from '@ovotech/laminar-kafkajs';
+import { run } from '@laminarjs/laminar';
+import { KafkaProducerService } from '@laminarjs/kafkajs';
 import { randomBytes } from 'crypto';
-import { createSession } from '@ovotech/laminar-jwt';
+import { createSession } from '@laminarjs/jwt';
 import { createApplication } from '../src/application';
 import { EnvVars } from '../src/env';
 import { axiosOapi } from './__generated__/schema.axios';
 import { retry } from 'ts-retry-promise';
 import { Kafka } from 'kafkajs';
-import { SchemaRegistry, readAVSC } from '@kafkajs/confluent-schema-registry';
+import { SchemaRegistry, readAVSC, SchemaType } from '@kafkajs/confluent-schema-registry';
 import { join } from 'path';
 import { MeterReading } from '../src/__generated__/meter-reading.json';
 import Decimal from 'decimal.js';
-import { AvroTimestampMillis } from '@ovotech/avro-timestamp-millis';
-import { AvroDecimal } from '@ovotech/avro-decimal';
+import { AvroTimestampMillis, AvroDecimal } from '@laminarjs/avro';
 
 /**
  * An example integration test.
@@ -73,7 +72,7 @@ describe('Data Loader Integration Tests', () => {
     const { jwt } = createSession({ secret: env.SECRET }, { email: 'me@example.com', scopes: ['read', 'update'] });
 
     /**
-     * We create a typed axios instance, by relying on @ovotech/laminar-cli package.
+     * We create a typed axios instance, by relying on @laminarjs/cli package.
      * By running `yarn build:test` before test runs we can take advantage of the OpenApi schema even in the tests.
      */
     const client = axiosOapi(
@@ -134,7 +133,9 @@ describe('Data Loader Integration Tests', () => {
         new SchemaRegistry(
           { host: env.KAFKA_SCHEMA_REGISTRY },
           {
-            forSchemaOptions: {
+            [SchemaType.AVRO]: {
+              // We need to specify this type as any since confluent schema is using an old version of avsc
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any,
             },
           },

@@ -4,7 +4,7 @@ import nock from 'nock';
 import { join } from 'path';
 import { adapter as ajv } from './adapters/ajv';
 import { adapter as jsonSchema } from './adapters/json-schema';
-import { Schema } from '@ovotech/json-schema';
+import { Schema } from '@laminarjs/json-schema';
 
 interface Test {
   description: string;

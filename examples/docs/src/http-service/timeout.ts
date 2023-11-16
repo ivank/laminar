@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, init } from '@laminarjs/laminar';
 
 const listener = async () => jsonOk({ ok: true });
 

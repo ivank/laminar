@@ -1,30 +1,30 @@
 {
-  "name": "@ovotech/json-schema",
-  "version": "0.12.6",
+  "name": "@laminarjs/json-schema",
+  "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A lightweight a json-schema. Depends only on yaml package and node-fetch.",
   "author": "Ivan Kerin <ikerin@gmail.com>",
-  "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/main/packages/json-schema#readme",
+  "repository": "git@github.com:ivank/laminar.git",
+  "homepage": "https://github.com/ivank/laminar/tree/main/packages/json-schema#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
-    "@types/jest": "^29.2.4",
-    "@types/node": "^14.18.34",
-    "@typescript-eslint/eslint-plugin": "^5.10.1",
-    "@typescript-eslint/parser": "^5.10.1",
-    "eslint": "^8.7.0",
-    "eslint-config-prettier": "^8.3.0",
-    "jest": "^29.3.1",
-    "nock": "^13.2.2",
-    "prettier": "^2.5.1",
-    "ts-jest": "^29.0.3",
-    "typescript": "^4.8.3"
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.9.0",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "jest": "^29.7.0",
+    "nock": "^13.3.8",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
   },
   "scripts": {
     "build": "tsc --declaration",
-    "build:readme": "build-readme README.md https://github.com/ovotech/laminar/tree/main/packages/json-schema",
+    "build:readme": "build-readme README.md https://github.com/ivank/laminar/tree/main/packages/json-schema",
     "test": "jest test --runInBand",
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
@@ -32,7 +32,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "axios": "^0.27.2",
-    "yaml": "^1.10.2"
+    "axios": "^1.6.2",
+    "yaml": "^2.3.4"
   }
 }

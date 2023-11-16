@@ -51,8 +51,8 @@ export const validateProperties: Validator = (
           additionalProperties === false
             ? error('additionalProperties', options.name, [key])
             : additionalProperties === true
-            ? evaluateProperty(key, empty)
-            : validateProperty(additionalProperties, key, propertyValue, options),
+              ? evaluateProperty(key, empty)
+              : validateProperty(additionalProperties, key, propertyValue, options),
         );
       }
 

@@ -194,7 +194,6 @@ export const Node = {
   }): ts.ImportDeclaration =>
     ts.factory.createImportDeclaration(
       undefined,
-      undefined,
       ts.factory.createImportClause(
         false,
         defaultAs ? Node.Identifier(defaultAs) : undefined,
@@ -209,8 +208,8 @@ export const Node = {
               ),
             )
           : allAs
-          ? ts.factory.createNamespaceImport(Node.Identifier(allAs))
-          : undefined,
+            ? ts.factory.createNamespaceImport(Node.Identifier(allAs))
+            : undefined,
       ),
       ts.factory.createStringLiteral(module),
     ),
@@ -368,7 +367,7 @@ export const Node = {
     isDefault?: boolean;
     jsDoc?: string;
   }): ts.EnumDeclaration =>
-    withJSDoc(jsDoc, ts.factory.createEnumDeclaration([], Type.Export(isExport, isDefault), name, members)),
+    withJSDoc(jsDoc, ts.factory.createEnumDeclaration(Type.Export(isExport, isDefault), name, members)),
 
   /**
    * A const statement
@@ -434,7 +433,6 @@ export const Node = {
     withJSDoc(
       jsDoc,
       ts.factory.createModuleDeclaration(
-        [],
         Type.Export(isExport, isDefault),
         ts.factory.createIdentifier(name),
         ts.factory.createModuleBlock(block),

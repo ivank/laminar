@@ -1,4 +1,4 @@
-import { validateCompiled, validate, compile } from '@ovotech/json-schema';
+import { validateCompiled, validate, compile } from '@laminarjs/json-schema';
 import { join } from 'path';
 
 const schema = join(__dirname, 'color-schema.yaml');

@@ -1,4 +1,4 @@
-import { get, post, HttpService, router, textOk, jsonOk, init } from '@ovotech/laminar';
+import { get, post, HttpService, router, textOk, jsonOk, init } from '@laminarjs/laminar';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

@@ -1,4 +1,4 @@
-import { defaultResponseParsers, HttpService, response, ResponseParser, init } from '@ovotech/laminar';
+import { defaultResponseParsers, HttpService, response, ResponseParser, init } from '@laminarjs/laminar';
 
 const listener = async () => response({ headers: { 'content-type': 'application/my-special-mime' }, body: [1, 2, 3] });
 

@@ -15,13 +15,13 @@ export const coerceProperties: Coercer = ({ properties, patternProperties, addit
       const coercedPropertyValue = properties[key]
         ? coerceSchema(properties[key], propertyValue, options)
         : matchingPatternPropertiesSchemas.length
-        ? matchingPatternPropertiesSchemas.reduce(
-            (current, patternSchema) => coerceSchema(patternSchema, current, options),
-            propertyValue,
-          )
-        : additionalProperties
-        ? coerceSchema(additionalProperties, propertyValue, options)
-        : propertyValue;
+          ? matchingPatternPropertiesSchemas.reduce(
+              (current, patternSchema) => coerceSchema(patternSchema, current, options),
+              propertyValue,
+            )
+          : additionalProperties
+            ? coerceSchema(additionalProperties, propertyValue, options)
+            : propertyValue;
 
       return coercedPropertyValue === undefined ? all : { ...all, [key]: coercedPropertyValue };
     }, value);

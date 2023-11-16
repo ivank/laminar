@@ -1,5 +1,5 @@
-import { Middleware } from '@ovotech/laminar';
-import { PgContext, PgClient } from '@ovotech/laminar-pg';
+import { Middleware } from '@laminarjs/laminar';
+import { PgContext, PgClient } from '@laminarjs/pg';
 import { NewPet, Pet } from '../__generated__/petstore';
 
 /**
@@ -36,7 +36,7 @@ export class PetsDb {
     return (await this.db.query<Pet>(insertQuery)).rows[0];
   }
 
-  public async remove(id: string): Promise<number> {
+  public async remove(id: string): Promise<number | null> {
     return (await this.db.query('DELETE FROM pets WHERE id = $1', [id])).rowCount;
   }
 }

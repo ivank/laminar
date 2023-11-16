@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, router, get, redirect, openApi, init, HttpListener } from '@ovotech/laminar';
+import { HttpService, jsonOk, router, get, redirect, openApi, init, HttpListener } from '@laminarjs/laminar';
 import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });

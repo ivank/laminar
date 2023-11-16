@@ -1,8 +1,8 @@
-import { HttpListener, jsonOk, HttpService, init } from '@ovotech/laminar';
-import { PgService } from '@ovotech/laminar-pg';
+import { HttpListener, jsonOk, HttpService, init } from '@laminarjs/laminar';
+import { PgService } from '@laminarjs/pg';
 
 // << middleware
-import { Middleware } from '@ovotech/laminar';
+import { Middleware } from '@laminarjs/laminar';
 import { Pool, PoolClient } from 'pg';
 
 interface DBContext {

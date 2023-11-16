@@ -1,4 +1,4 @@
-import { HttpService, init, jsonOk, securityOk, securityError } from '@ovotech/laminar';
+import { HttpService, init, jsonOk, securityOk, securityError } from '@laminarjs/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 

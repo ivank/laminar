@@ -1,4 +1,4 @@
-import { PgClient } from '@ovotech/laminar-pg';
+import { PgClient } from '@laminarjs/pg';
 import { MeterReadRow } from './types';
 import sql from 'sql-template-tag';
 
@@ -17,7 +17,7 @@ export const meterReadsSelectQuery = async (db: PgClient, params: QueryParams): 
       meter_reads
     WHERE
       CASE
-        WHEN ${params.date !== undefined}::bool THEN date = ${params.date}
+        WHEN ${params.date !== undefined}::bool THEN date = ${params.date?.toUTCString()}
         WHEN ${params.serialNumber !== undefined}::bool THEN serial_number = ${params.serialNumber}
         ELSE TRUE
       END

@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Fixtures ts test Should convert fixtures successfully: Normal 1`] = `
+"import { Fixture } from "@laminarjs/fixtures";
+
+/**
+ * Fixtures generated for postgres tables */
+
+/**
+ * Fixture type for table "test" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mytest = fixture<test>({
+ *   // ...
+ * });
+ *
+ * const buildtest: BuildFixture<test> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type test = Fixture<{
+    id: number;
+    name?: string;
+    title: "mr" | "mrs";
+    created_at: Date;
+    updated_at?: Date;
+    end_on?: Date;
+    is_active: boolean;
+}>;
+"
+`;
+
+exports[`Fixtures ts test Should convert fixtures successfully: Suffix 1`] = `
+"import { Fixture } from "@laminarjs/fixtures";
+
+/**
+ * Fixtures generated for postgres tables */
+
+/**
+ * Fixture type for table "test" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mytestFixture = fixture<testFixture>({
+ *   // ...
+ * });
+ *
+ * const buildtestFixture: BuildFixture<testFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type testFixture = Fixture<{
+    id: number;
+    name?: string;
+    title: "mr" | "mrs";
+    created_at: Date;
+    updated_at?: Date;
+    end_on?: Date;
+    is_active: boolean;
+}>;
+"
+`;
+
+exports[`Fixtures ts test Should convert fixtures successfully: TitleCase 1`] = `
+"import { Fixture } from "@laminarjs/fixtures";
+
+/**
+ * Fixtures generated for postgres tables */
+
+/**
+ * Fixture type for table "test" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myTestFixture = fixture<TestFixture>({
+ *   // ...
+ * });
+ *
+ * const buildTestFixture: BuildFixture<TestFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type TestFixture = Fixture<{
+    id: number;
+    name?: string;
+    title: "mr" | "mrs";
+    created_at: Date;
+    updated_at?: Date;
+    end_on?: Date;
+    is_active: boolean;
+}>;
+"
+`;

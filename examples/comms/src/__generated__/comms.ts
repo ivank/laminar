@@ -1,24 +1,24 @@
-import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@ovotech/laminar";
+import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from '@laminarjs/laminar';
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
 export interface SendComm {
-    email: string;
+  email: string;
 }
 
 export interface Comm {
-    id: number;
-    commId: string;
-    status: "Pending" | "Delivered" | "Failed";
+  id: number;
+  commId: string;
+  status: 'Pending' | 'Delivered' | 'Failed';
 }
 
-export type ResponseCommsPost = ResponseOapi<Comm, 200, "application/json">;
+export type ResponseCommsPost = ResponseOapi<Comm, 200, 'application/json'>;
 
 /**
  * Send New Comm
  */
 export interface RequestCommsPost extends OapiContext {
-    body: SendComm;
+  body: SendComm;
 }
 
 /**
@@ -27,18 +27,20 @@ export interface RequestCommsPost extends OapiContext {
 export type PathCommsPost<R extends Empty = Empty> = (req: RequestCommsPost & R) => Promise<ResponseCommsPost>;
 
 export interface Error {
-    message: string;
+  message: string;
 }
 
-export type ResponseCommsIdGet = ResponseOapi<Comm, 200, "application/json"> | ResponseOapi<Error, 404, "application/json">;
+export type ResponseCommsIdGet =
+  | ResponseOapi<Comm, 200, 'application/json'>
+  | ResponseOapi<Error, 404, 'application/json'>;
 
 /**
  * Retrieve Comm
  */
 export interface RequestCommsIdGet extends OapiContext {
-    path: {
-        id: string;
-    };
+  path: {
+    id: string;
+  };
 }
 
 /**
@@ -47,18 +49,18 @@ export interface RequestCommsIdGet extends OapiContext {
 export type PathCommsIdGet<R extends Empty = Empty> = (req: RequestCommsIdGet & R) => Promise<ResponseCommsIdGet>;
 
 export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
-    paths: {
-        "/comms": {
-            /**
-             * Send New Comm
-             */
-            post: PathCommsPost<R>;
-        };
-        "/comms/{id}": {
-            /**
-             * Retrieve Comm
-             */
-            get: PathCommsIdGet<R>;
-        };
+  paths: {
+    '/comms': {
+      /**
+       * Send New Comm
+       */
+      post: PathCommsPost<R>;
     };
+    '/comms/{id}': {
+      /**
+       * Retrieve Comm
+       */
+      get: PathCommsIdGet<R>;
+    };
+  };
 }

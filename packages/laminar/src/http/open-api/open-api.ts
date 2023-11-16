@@ -1,4 +1,4 @@
-import { validate, toSchemaObject, withinContext } from '@ovotech/json-schema';
+import { validate, toSchemaObject, withinContext } from '@laminarjs/json-schema';
 import { Empty } from '../../types';
 import { json } from '../response';
 import { OapiContext, OapiConfig } from './types';

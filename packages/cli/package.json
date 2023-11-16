@@ -1,0 +1,67 @@
+{
+  "name": "@laminarjs/cli",
+  "version": "0.15.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "CLI generating typescript types for @laminarjs/laminar",
+  "author": "Ivan Kerin <ikerin@gmail.com>",
+  "repository": "git@github.com:ivank/laminar.git",
+  "homepage": "https://github.com/ivank/laminar/tree/main/packages/cli#readme",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@ikerin/build-readme": "^1.1.1",
+    "@laminarjs/laminar": "workspace:*",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.9.0",
+    "@types/pg": "^8.10.9",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "axios": "^1.6.2",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "jest": "^29.7.0",
+    "nock": "^13.3.8",
+    "pg": "^8.11.3",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  },
+  "bin": {
+    "laminar": "./scripts/laminar"
+  },
+  "scripts": {
+    "laminar": "yarn tsc && node dist/cli.js",
+    "build:test:split": "yarn laminar api --file test/api/split.yaml --output test/api/__generated__/split.ts",
+    "build:test:petstore": "yarn laminar api --file test/api/petstore.yaml --output test/api/__generated__/petstore.ts",
+    "build:test:loss": "yarn laminar api --file test/api/loss.yaml --output test/api/__generated__/loss.ts",
+    "build:test:statements": "yarn laminar api --file test/api/statements.yaml --output test/api/__generated__/statements.ts",
+    "build:test:axios": "yarn laminar axios --file test/axios/integration.yaml --output test/axios/__generated__/integration.axios.ts",
+    "build:test:axios-api": "yarn laminar api --file test/axios/integration.yaml --output test/axios/__generated__/integration.api.ts",
+    "build:test:pullrequest": "yarn laminar json-schema --file test/json-schema/pullrequest.yaml --output test/json-schema/__generated__/pullrequest.ts",
+    "build:examples:api": "yarn laminar api --file examples/api.yaml --output examples/__generated__/api.yaml.ts",
+    "build:examples:axios": "yarn laminar axios --file examples/axios.yaml --output examples/__generated__/axios.yaml.ts",
+    "build:examples:convertion": "yarn laminar api --file examples/convertion.yaml --output examples/__generated__/convertion.yaml.ts",
+    "build:examples:petstore": "yarn laminar axios --file examples/petstore.json --output examples/__generated__/petstore.json.ts",
+    "build:examples": "yarn build:examples:api && yarn build:examples:axios && yarn build:examples:petstore && yarn build:examples:convertion",
+    "build:test": "yarn build:test:petstore && yarn build:test:split && yarn build:test:statements && yarn build:test:loss && yarn build:test:axios && yarn build:test:axios-api && yarn build:test:pullrequest",
+    "pretest": "yarn build:examples && yarn build:test",
+    "build": "tsc --declaration",
+    "build:readme": "build-readme README.md https://github.com/ivank/laminar/tree/main/packages/cli",
+    "test": "jest test --runInBand",
+    "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
+  },
+  "jest": {
+    "preset": "../../jest.json"
+  },
+  "dependencies": {
+    "@laminarjs/json-schema": "workspace:*",
+    "@laminarjs/ts-compose": "workspace:*",
+    "avsc": "^5.7.7",
+    "chalk": "^4.1.1",
+    "commander": "^11.1.0",
+    "openapi-schemas": "^2.1.0",
+    "openapi3-ts": "^4.1.2",
+    "pg": "^8.11.3",
+    "yaml": "^2.3.4"
+  }
+}

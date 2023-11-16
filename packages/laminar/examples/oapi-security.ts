@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, openApi, securityOk, init, securityError } from '@ovotech/laminar';
+import { HttpService, jsonOk, openApi, securityOk, init, securityError } from '@laminarjs/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi-security.yaml');

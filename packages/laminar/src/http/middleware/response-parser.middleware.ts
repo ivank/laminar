@@ -64,8 +64,8 @@ export function parseResponse(res: HttpResponse, parsers = defaultResponseParser
   const body = parser
     ? parser.parse(res.body)
     : res.body instanceof Readable || res.body instanceof Buffer
-    ? res.body
-    : String(res.body);
+      ? res.body
+      : String(res.body);
 
   const contentLength = res.headers['content-length'] ?? toContentLength(body);
 

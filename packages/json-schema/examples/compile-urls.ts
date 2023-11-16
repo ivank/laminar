@@ -1,4 +1,4 @@
-import { validate, compile } from '@ovotech/json-schema';
+import { validate, compile } from '@laminarjs/json-schema';
 import nock from 'nock';
 
 const mainSchema = `

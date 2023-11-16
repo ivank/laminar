@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker-compose up -d
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18.18.2'
+      - uses: ./.github/actions/yarn-install
+      - uses: ./.github/actions/git-submodule
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn pretest
+      - run: yarn test:packages --runInBand --ci
+      - run: yarn publish
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

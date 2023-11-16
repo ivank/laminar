@@ -1,0 +1,80 @@
+components:
+  pathItems:
+    List:
+      post:
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewUser'
+        responses:
+          '200':
+            description: Newly Created User
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+      get:
+        responses:
+          '200':
+            description: Loaded User
+            content:
+              application/json:
+                schema:
+                  items:
+                    $ref: '#/components/schemas/User'
+    Entity:
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+      get:
+        responses:
+          '200':
+            description: Loaded User
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+          '404':
+            description: User Not Found
+            content:
+              application/json:
+                schema:
+                  type: string
+      delete:
+        responses:
+          '200':
+            description: Is user deleted
+            content:
+              application/json:
+                schema:
+                  type: string
+          '404':
+            description: User Not Found
+            content:
+              application/json:
+                schema:
+                  type: string
+
+  schemas:
+    User:
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+        id:
+          type: number
+      required:
+        - email
+        - id
+    NewUser:
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+      required:
+        - email

@@ -16,23 +16,23 @@ And lastly there is almost no external code dependancies, as we only depend on m
 
 ## Installation
 
-You'll need to install `@ovotech/laminar` package:
+You'll need to install `@laminarjs/laminar` package:
 
 ```shell
-yarn add @ovotech/laminar
+yarn add @laminarjs/laminar
 ```
 
 Additionally, if you want to take advantage of the type generation:
 
 ```shell
-yarn add @ovotech/laminar-cli
+yarn add @laminarjs/cli
 ```
 
 ## A tutorial to get started.
 
 You'll need a very simple OpenAPI schema file, something like:
 
-> [examples/simple/src/api.yaml](https://github.com/ovotech/laminar/tree/main/examples/simple/src/api.yaml)
+> [examples/simple/src/api.yaml](https://github.com/ivank/laminar/tree/main/examples/simple/src/api.yaml)
 
 ```yaml
 openapi: '3.0.0'
@@ -67,16 +67,16 @@ components:
           type: string
 ```
 
-First we'll generate the types for its so its easier to implement it. Since we've already installed `@ovotech/laminar-cli` we can:
+First we'll generate the types for its so its easier to implement it. Since we've already installed `@laminarjs/cli` we can:
 
 ```shell
 yarn laminar api --file api.yaml --output __generated__/api.ts
 ```
 
-> [examples/simple/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/simple/src/index.ts)
+> [examples/simple/src/index.ts](https://github.com/ivank/laminar/tree/main/examples/simple/src/index.ts)
 
 ```typescript
-import { HttpService, init, jsonOk } from '@ovotech/laminar';
+import { HttpService, init, jsonOk } from '@laminarjs/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -125,29 +125,29 @@ main();
 
 ## API
 
-Detailed api for laminar and supporting packages: https://ovotech.github.io/laminar/api/index.html
+Detailed api for laminar and supporting packages: https://ivank.github.io/laminar/api/index.html
 
 ## Functioning examples
 
 You can dive in directly with some example apps:
 
-- [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
-- [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
-- [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
-- [examples/comms](https://github.com/ovotech/laminar/tree/main/examples/comms) An api that holds some state for an external email api.
-- [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).
+- [examples/simple](https://github.com/ivank/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
+- [examples/security](https://github.com/ivank/laminar/tree/main/examples/security) With some simple security built in
+- [examples/petstore](https://github.com/ivank/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
+- [examples/comms](https://github.com/ivank/laminar/tree/main/examples/comms) An api that holds some state for an external email api.
+- [examples/data-loader](https://github.com/ivank/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).
 
 ## Packages in this monorepo
 
 Laminar includes packages that are used internally or are additions to its core features.
 
-- [@ovotech/laminar](https://github.com/ovotech/laminar/tree/main/packages/laminar) - [OpenAPI](https://swagger.io/docs/) http server
-- [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli) - [OpenAPI](https://swagger.io/docs/) type generation
-- [@ovotech/laminar-handlebars](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
-- [@ovotech/laminar-jwt](https://github.com/ovotech/laminar/tree/main/packages/laminar-handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
-- [@ovotech/json-schema](https://github.com/ovotech/laminar/tree/main/packages/json-schema) - Lightweight json-schema validator
-- [@ovotech/laminar-pg](https://github.com/ovotech/laminar/tree/main/packages/laminar-pg) - Connect to postgres db
-- [@ovotech/laminar-winston](https://github.com/ovotech/laminar/tree/main/packages/laminar-winston) - Use winston logger
-- [@ovotech/laminar-kafkajs](https://github.com/ovotech/laminar/tree/main/packages/laminar-kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
-- [@ovotech/laminar-pgboss](https://github.com/ovotech/laminar/tree/main/packages/laminar-pgboss) - Use pgboss to schedule jobs
-- [@ovotech/laminar-fixtures](https://github.com/ovotech/laminar/tree/main/packages/laminar-fixtures) - Fixtures for pg with relationships
+- [@laminarjs/laminar](https://github.com/ivank/laminar/tree/main/packages/laminar) - [OpenAPI](https://swagger.io/docs/) http server
+- [@laminarjs/cli](https://github.com/ivank/laminar/tree/main/packages/cli) - [OpenAPI](https://swagger.io/docs/) type generation
+- [@laminarjs/handlebars](https://github.com/ivank/laminar/tree/main/packages/handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
+- [@laminarjs/jwt](https://github.com/ivank/laminar/tree/main/packages/handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
+- [@laminarjs/json-schema](https://github.com/ivank/laminar/tree/main/packages/json-schema) - Lightweight json-schema validator
+- [@laminarjs/pg](https://github.com/ivank/laminar/tree/main/packages/pg) - Connect to postgres db
+- [@laminarjs/winston](https://github.com/ivank/laminar/tree/main/packages/winston) - Use winston logger
+- [@laminarjs/kafkajs](https://github.com/ivank/laminar/tree/main/packages/kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
+- [@laminarjs/pgboss](https://github.com/ivank/laminar/tree/main/packages/pgboss) - Use pgboss to schedule jobs
+- [@laminarjs/fixtures](https://github.com/ivank/laminar/tree/main/packages/fixtures) - Fixtures for pg with relationships

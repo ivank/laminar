@@ -1,12 +1,12 @@
-import { EachMessageConsumer } from '@ovotech/laminar-kafkajs';
-import { LoggerContext } from '@ovotech/laminar';
-import { PgContext } from '@ovotech/laminar-pg';
+import { EachMessageConsumer } from '@laminarjs/kafkajs';
+import { LoggerContext } from '@laminarjs/laminar';
+import { PgContext } from '@laminarjs/pg';
 import { meterReadsInsertQuery, InsertMeterRead } from '../../queries/meter-reads-insert.query';
 import { MeterReading } from '../../__generated__/meter-reading.json';
 
 const toMeterRead = ({ serialNumber, date, value }: MeterReading): InsertMeterRead => ({
   serialNumber,
-  date,
+  date: date.toUTCString(),
   value: value.toString(),
 });
 

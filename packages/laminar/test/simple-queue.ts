@@ -32,7 +32,10 @@ export class Boss<TData> extends EventEmitter implements Service {
 }
 
 export class SimpleQueue<TData> implements Service {
-  constructor(public boss: EventEmitter, public listeners: Array<SimpleQueueListener<TData>> = []) {}
+  constructor(
+    public boss: EventEmitter,
+    public listeners: Array<SimpleQueueListener<TData>> = [],
+  ) {}
 
   async start(): Promise<this> {
     for (const listener of this.listeners) {

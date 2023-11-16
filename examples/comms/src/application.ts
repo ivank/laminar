@@ -4,9 +4,9 @@ import {
   requestLoggingMiddleware,
   LoggerLike,
   passThroughMiddleware,
-} from '@ovotech/laminar';
-import { pgMiddleware, PgService } from '@ovotech/laminar-pg';
-import { KafkaConsumerService, kafkaLogCreator } from '@ovotech/laminar-kafkajs';
+} from '@laminarjs/laminar';
+import { pgMiddleware, PgService } from '@laminarjs/pg';
+import { KafkaConsumerService, kafkaLogCreator } from '@laminarjs/kafkajs';
 import { Kafka } from 'kafkajs';
 import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import axios, { AxiosInstance } from 'axios';
@@ -50,7 +50,7 @@ export const createApplication = async (env: EnvVars, logger: LoggerLike): Promi
       hostname: env.HOST,
     }),
     new KafkaConsumerService(kafka, schemaRegistry, {
-      topic: env.TOPIC,
+      topics: [env.TOPIC],
       groupId: env.GROUP_ID,
       fromBeginning: true,
       eachMessage: withDb(feedbackConsumer),

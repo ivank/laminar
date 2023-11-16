@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ResolvedSchema, ResultError, Schema, FormatErrors } from '@ovotech/json-schema';
+import { ResolvedSchema, ResultError, Schema, FormatErrors } from '@laminarjs/json-schema';
 import { Empty } from '../../types';
-import { OpenAPIObject, OperationObject, SecurityRequirementObject, SecuritySchemeObject } from 'openapi3-ts';
+import { oas31 } from 'openapi3-ts';
 import { HttpContext, HttpListener, HttpResponse } from '../types';
 import { HttpError } from '../http-error';
 
@@ -34,7 +34,7 @@ export type Security<TOapiAuthInfo extends OapiAuthInfo = OapiAuthInfo> = Securi
  */
 export interface RequestSecurityResolver {
   scopes?: string[];
-  securityScheme: SecuritySchemeObject;
+  securityScheme: oas31.SecuritySchemeObject;
 }
 
 /**
@@ -99,7 +99,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   /**
    * Can be a filename, that would be loaded and parsed (json or yaml). Or it can be the an object representing OpenAPI schema directly. Typescript types would be used to validate that object, as well as using the official json schema to validate it at runtime as well.
    */
-  api: OpenAPIObject | string;
+  api: (oas31.OpenAPIObject & { [key: string]: unknown }) | string;
   /**
    * Aan object closely following the oapi `paths` config, with the "method" function being the actual resolver.
    * All the validations in open api would be run before executing it.
@@ -118,7 +118,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   error?: HttpListener<TContext & { error: HttpError }>;
   /**
    * Format json-schema errors.
-   * Refering to the `formatError` property in https://github.com/ovotech/laminar/tree/main/packages/json-schema#custom-error-messages
+   * Refering to the `formatError` property in https://github.com/ivank/laminar/tree/main/packages/json-schema#custom-error-messages
    */
   formatErrors?: FormatErrors;
 }
@@ -153,8 +153,8 @@ export interface Route<TContext extends Empty> {
   coerce: Coerce<TContext>;
   convertRequest: Coerce<TContext>;
   response: Schema;
-  operation: OperationObject;
+  operation: oas31.OperationObject;
   schema: ResolvedSchema;
-  security?: SecurityRequirementObject[];
+  security?: oas31.SecurityRequirementObject[];
   listener: HttpListener<TContext & OapiContext & SecurityOk>;
 }

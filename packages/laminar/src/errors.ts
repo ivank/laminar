@@ -10,7 +10,10 @@ import { LoggerMetadata } from './logger';
  * ```
  */
 export class LaminarError extends Error {
-  constructor(message: string, public metadata: LoggerMetadata) {
+  constructor(
+    message: string,
+    public metadata: LoggerMetadata,
+  ) {
     super(message);
   }
 }

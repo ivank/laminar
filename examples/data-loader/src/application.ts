@@ -1,9 +1,9 @@
-import { Application, HttpService, LoggerLike, loggerMiddleware, requestLoggingMiddleware } from '@ovotech/laminar';
-import { WinstonService } from '@ovotech/laminar-winston';
-import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService } from '@ovotech/laminar-pgboss';
-import { PgService, pgMiddleware } from '@ovotech/laminar-pg';
-import { KafkaConsumerService, kafkaLogCreator } from '@ovotech/laminar-kafkajs';
-import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
+import { Application, HttpService, LoggerLike, loggerMiddleware, requestLoggingMiddleware } from '@laminarjs/laminar';
+import { WinstonService } from '@laminarjs/winston';
+import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService } from '@laminarjs/pgboss';
+import { PgService, pgMiddleware } from '@laminarjs/pg';
+import { KafkaConsumerService, kafkaLogCreator } from '@laminarjs/kafkajs';
+import { SchemaRegistry, SchemaType } from '@kafkajs/confluent-schema-registry';
 import PgBoss from 'pg-boss';
 import { Kafka, logLevel } from 'kafkajs';
 import { Pool } from 'pg';
@@ -13,14 +13,13 @@ import { httpListener } from './services/http/http.listener';
 import { importWorker } from './services/queue/import.worker';
 import { createLogger, transports } from 'winston';
 import { consoleTransportFormat } from './logger';
-import { AvroTimestampMillis } from '@ovotech/avro-timestamp-millis';
-import { AvroDecimal } from '@ovotech/avro-decimal';
+import { AvroTimestampMillis, AvroDecimal } from '@laminarjs/avro';
 
 /**
  * The main function of our project
  * Will create all the services it consists of and return them so we can start each one as needed.
  * Only depend on the environment variables, so we can test to as close to prod setting as possible, while not spawining any processes.
- *
+ *y
  * @param env The validated object of environment variables, should come from process.env
  */
 export const createApplication = async (env: EnvVars): Promise<Application> => {
@@ -43,7 +42,9 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
   });
   const schemaRegistry = new SchemaRegistry(
     { host: env.KAFKA_SCHEMA_REGISTRY },
-    { forSchemaOptions: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any } },
+    // We need to specify this type as any since confluent schema is using an old version of avsc
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { [SchemaType.AVRO]: { logicalTypes: { 'timestamp-millis': AvroTimestampMillis, decimal: AvroDecimal } as any } },
   );
   const pool = new Pool({ connectionString: env.DB_CONNECTION });
   const pgBoss = new PgBoss({
@@ -98,7 +99,7 @@ export const createApplication = async (env: EnvVars): Promise<Application> => {
       worker: withDb(withJobLogging(importWorker)),
     }),
     new KafkaConsumerService(kafka, schemaRegistry, {
-      topic: env.KAFKA_TOPIC_METER_READ,
+      topics: [env.KAFKA_TOPIC_METER_READ],
       groupId: `${env.KAFKA_GROUP_ID}-test-1`,
       fromBeginning: true,
       eachMessage: withLogger(withDb(meterReadsConsumer)),

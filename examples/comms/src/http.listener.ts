@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { openApiTyped } from './__generated__/comms';
-import { HttpListener, jsonNotFound, jsonOk } from '@ovotech/laminar';
-import { PgContext } from '@ovotech/laminar-pg';
+import { HttpListener, jsonNotFound, jsonOk } from '@laminarjs/laminar';
+import { PgContext } from '@laminarjs/pg';
 import { CommsApiContext } from './application';
 
 // << listener

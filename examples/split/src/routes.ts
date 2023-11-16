@@ -1,4 +1,4 @@
-import { router, get, put } from '@ovotech/laminar';
+import { router, get, put } from '@laminarjs/laminar';
 import { find } from './find.route';
 import { healthCheck } from './health-check.route';
 import { update } from './update.route';

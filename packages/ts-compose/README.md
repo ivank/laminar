@@ -4,7 +4,7 @@ A DSL on top of typescript AST to make it a bit more concise.
 
 ## Usage
 
-> [examples/simple.ts](examples/simple.ts)
+> [examples/simple.ts](https://github.com/ivank/laminar/tree/main/packages/ts-compose/examples/simple.ts)
 
 ```typescript
 import { Type, printNode } from '../src';
@@ -39,10 +39,10 @@ interface MyInterface {
 
 Then you can load the types like this:
 
-> [examples/document.ts](examples/document.ts)
+> [examples/document.ts](https://github.com/ivank/laminar/tree/main/packages/ts-compose/examples/document.ts)
 
 ```typescript
-import { Type, document, mapWithContext, Document, DocumentContext } from '@ovotech/ts-compose';
+import { Type, document, mapWithContext, Document, DocumentContext } from '@laminarjs/ts-compose';
 import { printDocument, withIdentifier } from '../src';
 
 /**

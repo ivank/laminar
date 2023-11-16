@@ -1,4 +1,4 @@
-import { get, router, init, jsonOk, textNotFound, HttpService } from '@ovotech/laminar';
+import { get, router, init, jsonOk, textNotFound, HttpService } from '@laminarjs/laminar';
 
 const http = new HttpService({
   listener: router(

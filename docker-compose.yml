@@ -1,0 +1,78 @@
+version: '3.1'
+
+services:
+  pg:
+    image: postgres:11
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: example
+      POSTGRES_USER: example-admin
+      POSTGRES_PASSWORD: example-pass
+    volumes:
+      - ./examples/docs/init.sql:/docker-entrypoint-initdb.d/docs.sql
+      - ./examples/comms/init.sql:/docker-entrypoint-initdb.d/comms.sql
+      - ./examples/petstore/init.sql:/docker-entrypoint-initdb.d/petstore.sql
+      - ./examples/split/init.sql:/docker-entrypoint-initdb.d/split.sql
+      - ./examples/data-loader/init.sql:/docker-entrypoint-initdb.d/data-loader.sql
+      - ./packages/laminar/init.sql:/docker-entrypoint-initdb.d/laminar.sql
+      - ./packages/pg/init.sql:/docker-entrypoint-initdb.d/pg.sql
+      - ./packages/fixtures/init.sql:/docker-entrypoint-initdb.d/fixtures.sql
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.3
+    ports:
+      - '2181:2181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.3
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://zookeeper:2181']
+    depends_on:
+      - zookeeper
+    ports:
+      - '29092:29092' # External
+      - '9092:9092' # Internal
+    environment:
+      # Listeners:
+      # PLAINTEXT_HOST -> Expose kafka to the host network
+      # PLAINTEXT -> Used by kafka for inter broker communication / containers
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://karapace-registry:8081
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_BROKER_RACK: 'local'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+
+  karapace-registry:
+    image: ghcr.io/aiven/karapace:develop
+    entrypoint:
+      - /bin/bash
+      - /opt/karapace/start.sh
+      - registry
+    depends_on:
+      - kafka
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://kafka:9092']
+    ports:
+      - '8081:8081'
+    environment:
+      KARAPACE_ADVERTISED_HOSTNAME: karapace-registry
+      KARAPACE_BOOTSTRAP_URI: kafka:9092
+      KARAPACE_PORT: 8081
+      KARAPACE_HOST: 0.0.0.0
+      KARAPACE_CLIENT_ID: karapace
+      KARAPACE_GROUP_ID: karapace-registry
+      KARAPACE_MASTER_ELIGIBITY: 'true'
+      KARAPACE_TOPIC_NAME: _schemas
+      KARAPACE_LOG_LEVEL: WARNING
+      KARAPACE_COMPATIBILITY: FULL

@@ -1,0 +1,1139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cli Should generate fixtures file 1`] = `
+"import { Fixture } from "@laminarjs/fixtures";
+
+/**
+ * Fixtures generated for postgres tables */
+
+/**
+ * Fixture type for table "accounts" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myaccounts = fixture<accounts>({
+ *   // ...
+ * });
+ *
+ * const buildaccounts: BuildFixture<accounts> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type accounts = Fixture<{
+    id: number;
+    customer_id: number;
+    state?: "Active" | "Pending" | "Dispute" | "Closed";
+    beneficiary_name?: string;
+    beneficiary_sort_code?: string;
+    beneficiary_account_number?: string;
+    payment_plan?: "BACs" | "Cheque" | "Internal Transfer";
+    payment_suspended?: boolean;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+    start_on?: Date;
+    end_on?: Date;
+}>;
+
+/**
+ * Fixture type for table "addresses" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myaddresses = fixture<addresses>({
+ *   // ...
+ * });
+ *
+ * const buildaddresses: BuildFixture<addresses> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type addresses = Fixture<{
+    id: number;
+    city?: string;
+    country: string;
+    postcode: string;
+    created_at?: Date;
+    updated_at?: Date;
+    county?: string;
+    address_line_1?: string;
+    address_line_2?: string;
+    address_line_3?: string;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "animals" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myanimals = fixture<animals>({
+ *   // ...
+ * });
+ *
+ * const buildanimals: BuildFixture<animals> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type animals = Fixture<{
+    id: number;
+    name: string;
+}>;
+
+/**
+ * Fixture type for table "comms" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mycomms = fixture<comms>({
+ *   // ...
+ * });
+ *
+ * const buildcomms: BuildFixture<comms> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type comms = Fixture<{
+    id: number;
+    comm_id: string;
+    status: string;
+}>;
+
+/**
+ * Fixture type for table "contacts" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mycontacts = fixture<contacts>({
+ *   // ...
+ * });
+ *
+ * const buildcontacts: BuildFixture<contacts> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type contacts = Fixture<{
+    id: number;
+    address_id: number;
+    title?: "Mrs" | "Miss" | "Dr" | "Ms" | "Mr";
+    first_name: string;
+    last_name: string;
+    email?: string;
+    phone?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "contracts" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mycontracts = fixture<contracts>({
+ *   // ...
+ * });
+ *
+ * const buildcontracts: BuildFixture<contracts> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type contracts = Fixture<{
+    id: number;
+    scheme_type: "FIT" | "SEG";
+    scheme_account_reference: string;
+    confirmation_on?: Date;
+    terms_and_conditions_agreed: boolean;
+    created_at?: Date;
+    updated_at?: Date;
+    installation_id: number;
+    generation_tariff_id?: number;
+    export_tariff_id?: number;
+    source_system_id?: number;
+    export_percentage_split?: number;
+    generation_percentage_split?: number;
+    contact_id: number;
+    account_id: number;
+}>;
+
+/**
+ * Fixture type for table "customers" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mycustomers = fixture<customers>({
+ *   // ...
+ * });
+ *
+ * const buildcustomers: BuildFixture<customers> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type customers = Fixture<{
+    id: number;
+    customer_reference: string;
+    orion_account_number?: string;
+    primary_contact_id?: number;
+    secondary_contact_id?: number;
+    tertiary_contact_id?: number;
+    company_reg_number?: string;
+    company_name?: string;
+    company_vat_number?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    billing_address_id?: number;
+    source_system_id?: number;
+    generator_id?: string;
+}>;
+
+/**
+ * Fixture type for table "db_users" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mydb_users = fixture<db_users>({
+ *   // ...
+ * });
+ *
+ * const builddb_users: BuildFixture<db_users> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type db_users = Fixture<{
+    id: number;
+    name: string;
+}>;
+
+/**
+ * Fixture type for table "db_users2" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mydb_users2 = fixture<db_users2>({
+ *   // ...
+ * });
+ *
+ * const builddb_users2: BuildFixture<db_users2> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type db_users2 = Fixture<{
+    id: number;
+    name: string;
+}>;
+
+/**
+ * Fixture type for table "fixtures_meter_reads" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myfixtures_meter_reads = fixture<fixtures_meter_reads>({
+ *   // ...
+ * });
+ *
+ * const buildfixtures_meter_reads: BuildFixture<fixtures_meter_reads> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type fixtures_meter_reads = Fixture<{
+    id: number;
+    meter_id: number;
+    date_on: Date;
+    value: number;
+    type: "Opening" | "Closing" | "Quarterly" | "Meter Verification";
+    reason?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+    tolerance?: string;
+    is_accepted?: boolean;
+    deleted_at?: Date;
+    submitted_at?: Date;
+    history?: string;
+}>;
+
+/**
+ * Fixture type for table "installation_meters" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myinstallation_meters = fixture<installation_meters>({
+ *   // ...
+ * });
+ *
+ * const buildinstallation_meters: BuildFixture<installation_meters> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type installation_meters = Fixture<{
+    id: number;
+    meter_type: "Export" | "Generation";
+    meter_id: number;
+    installation_id: number;
+    start_on?: Date;
+    end_on?: Date;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "installations" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myinstallations = fixture<installations>({
+ *   // ...
+ * });
+ *
+ * const buildinstallations: BuildFixture<installations> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type installations = Fixture<{
+    id: number;
+    name?: string;
+    type: "Retrofit" | "New build" | "Standalone" | "Extension of an existing FiT-accredited installation" | "None";
+    technology_type: "PV" | "H" | "W" | "AD" | "CHP";
+    property_type: "Domestic" | "Commercial" | "Farm" | "Industrial" | "Not for profit" | "School/Education" | "Other";
+    export_type?: "Deemed" | "Metered Export" | "Off Grid" | "PPA";
+    commissioned_on?: Date;
+    decommissioned_on?: Date;
+    installed_on: Date;
+    verified_on?: Date;
+    reverified_on?: Date;
+    inspected_on?: Date;
+    mcs_reference: string;
+    tic_reference: string;
+    dnc_reference: string;
+    roofit_reference?: string;
+    has_battery_storage?: boolean;
+    battery_installation_date_on?: Date;
+    created_at?: Date;
+    updated_at?: Date;
+    export_mpan?: string;
+    source_system_id?: number;
+    name_of_grant?: string;
+    value_of_grant?: string;
+    eligibility_start_on?: Date;
+    eligibility_end_on?: Date;
+    date_grant_repaid?: Date;
+    epc_rate?: string;
+    epc_date?: Date;
+    epc_number?: number;
+    legacy_fit_db_id?: string;
+    supply_mpan?: string;
+    switched_from?: string;
+    switched_to?: string;
+    switched_on?: Date;
+    address_id: number;
+}>;
+
+/**
+ * Fixture type for table "issues" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myissues = fixture<issues>({
+ *   // ...
+ * });
+ *
+ * const buildissues: BuildFixture<issues> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type issues = Fixture<{
+    id: number;
+    description: string;
+    due_date?: Date;
+    account_id?: number;
+    account_identifier?: string;
+    comments?: string;
+    created_at: Date;
+    type: "Read Tolerance" | "Account Levelisation" | "Installation" | "Payment" | "Meter" | "Account Pending";
+    state: "Open" | "In Progress" | "Closed" | "Blocked" | "Resolved" | "Unresolvable" | "Awaiting Answers";
+    reference_type: "Read" | "Account Levelisation" | "Account" | "Installation" | "Comm" | "Payment" | "Meter";
+    reference_id: number;
+    payload?: string;
+}>;
+
+/**
+ * Fixture type for table "meter_reads" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mymeter_reads = fixture<meter_reads>({
+ *   // ...
+ * });
+ *
+ * const buildmeter_reads: BuildFixture<meter_reads> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type meter_reads = Fixture<{
+    id: number;
+    serial_number: string;
+    value: string;
+    date: Date;
+}>;
+
+/**
+ * Fixture type for table "meters" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mymeters = fixture<meters>({
+ *   // ...
+ * });
+ *
+ * const buildmeters: BuildFixture<meters> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type meters = Fixture<{
+    id: number;
+    mpan: string;
+    shared: boolean;
+    serial_number: string;
+    make: string;
+    model: string;
+    hh_metered: boolean;
+    gsp?: string;
+    distribution_region?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "pets" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mypets = fixture<pets>({
+ *   // ...
+ * });
+ *
+ * const buildpets: BuildFixture<pets> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type pets = Fixture<{
+    id: number;
+    name: string;
+    tag?: string;
+}>;
+
+/**
+ * Fixture type for table "tariff_rates" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mytariff_rates = fixture<tariff_rates>({
+ *   // ...
+ * });
+ *
+ * const buildtariff_rates: BuildFixture<tariff_rates> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type tariff_rates = Fixture<{
+    id: number;
+    tariff_id: number;
+    rate: string;
+    start_date_on: Date;
+    end_date_on?: Date;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "tariffs" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mytariffs = fixture<tariffs>({
+ *   // ...
+ * });
+ *
+ * const buildtariffs: BuildFixture<tariffs> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type tariffs = Fixture<{
+    id: number;
+    code: string;
+    type: "Export" | "Generation" | "SEG";
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "transactions" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const mytransactions = fixture<transactions>({
+ *   // ...
+ * });
+ *
+ * const buildtransactions: BuildFixture<transactions> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type transactions = Fixture<{
+    id?: string;
+    amount: number;
+}>;
+
+/**
+ * Fixture type for table "users" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myusers = fixture<users>({
+ *   // ...
+ * });
+ *
+ * const buildusers: BuildFixture<users> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type users = Fixture<{
+    id: number;
+    name: string;
+    created_at?: Date;
+}>;
+"
+`;
+
+exports[`Cli Should generate fixtures file with suffix and title case 1`] = `
+"import { Fixture } from "@laminarjs/fixtures";
+
+/**
+ * Fixtures generated for postgres tables */
+
+/**
+ * Fixture type for table "accounts" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myAccountsFixture = fixture<AccountsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildAccountsFixture: BuildFixture<AccountsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type AccountsFixture = Fixture<{
+    id: number;
+    customer_id: number;
+    state?: "Active" | "Pending" | "Dispute" | "Closed";
+    beneficiary_name?: string;
+    beneficiary_sort_code?: string;
+    beneficiary_account_number?: string;
+    payment_plan?: "BACs" | "Cheque" | "Internal Transfer";
+    payment_suspended?: boolean;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+    start_on?: Date;
+    end_on?: Date;
+}>;
+
+/**
+ * Fixture type for table "addresses" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myAddressesFixture = fixture<AddressesFixture>({
+ *   // ...
+ * });
+ *
+ * const buildAddressesFixture: BuildFixture<AddressesFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type AddressesFixture = Fixture<{
+    id: number;
+    city?: string;
+    country: string;
+    postcode: string;
+    created_at?: Date;
+    updated_at?: Date;
+    county?: string;
+    address_line_1?: string;
+    address_line_2?: string;
+    address_line_3?: string;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "animals" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myAnimalsFixture = fixture<AnimalsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildAnimalsFixture: BuildFixture<AnimalsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type AnimalsFixture = Fixture<{
+    id: number;
+    name: string;
+}>;
+
+/**
+ * Fixture type for table "comms" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myCommsFixture = fixture<CommsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildCommsFixture: BuildFixture<CommsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type CommsFixture = Fixture<{
+    id: number;
+    comm_id: string;
+    status: string;
+}>;
+
+/**
+ * Fixture type for table "contacts" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myContactsFixture = fixture<ContactsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildContactsFixture: BuildFixture<ContactsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type ContactsFixture = Fixture<{
+    id: number;
+    address_id: number;
+    title?: "Mrs" | "Miss" | "Dr" | "Ms" | "Mr";
+    first_name: string;
+    last_name: string;
+    email?: string;
+    phone?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "contracts" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myContractsFixture = fixture<ContractsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildContractsFixture: BuildFixture<ContractsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type ContractsFixture = Fixture<{
+    id: number;
+    scheme_type: "FIT" | "SEG";
+    scheme_account_reference: string;
+    confirmation_on?: Date;
+    terms_and_conditions_agreed: boolean;
+    created_at?: Date;
+    updated_at?: Date;
+    installation_id: number;
+    generation_tariff_id?: number;
+    export_tariff_id?: number;
+    source_system_id?: number;
+    export_percentage_split?: number;
+    generation_percentage_split?: number;
+    contact_id: number;
+    account_id: number;
+}>;
+
+/**
+ * Fixture type for table "customers" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myCustomersFixture = fixture<CustomersFixture>({
+ *   // ...
+ * });
+ *
+ * const buildCustomersFixture: BuildFixture<CustomersFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type CustomersFixture = Fixture<{
+    id: number;
+    customer_reference: string;
+    orion_account_number?: string;
+    primary_contact_id?: number;
+    secondary_contact_id?: number;
+    tertiary_contact_id?: number;
+    company_reg_number?: string;
+    company_name?: string;
+    company_vat_number?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    billing_address_id?: number;
+    source_system_id?: number;
+    generator_id?: string;
+}>;
+
+/**
+ * Fixture type for table "db_users" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myDbUsersFixture = fixture<DbUsersFixture>({
+ *   // ...
+ * });
+ *
+ * const buildDbUsersFixture: BuildFixture<DbUsersFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type DbUsersFixture = Fixture<{
+    id: number;
+    name: string;
+}>;
+
+/**
+ * Fixture type for table "db_users2" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myDbUsers2Fixture = fixture<DbUsers2Fixture>({
+ *   // ...
+ * });
+ *
+ * const buildDbUsers2Fixture: BuildFixture<DbUsers2Fixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type DbUsers2Fixture = Fixture<{
+    id: number;
+    name: string;
+}>;
+
+/**
+ * Fixture type for table "fixtures_meter_reads" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myFixturesMeter_readsFixture = fixture<FixturesMeter_readsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildFixturesMeter_readsFixture: BuildFixture<FixturesMeter_readsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type FixturesMeter_readsFixture = Fixture<{
+    id: number;
+    meter_id: number;
+    date_on: Date;
+    value: number;
+    type: "Opening" | "Closing" | "Quarterly" | "Meter Verification";
+    reason?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+    tolerance?: string;
+    is_accepted?: boolean;
+    deleted_at?: Date;
+    submitted_at?: Date;
+    history?: string;
+}>;
+
+/**
+ * Fixture type for table "installation_meters" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myInstallationMetersFixture = fixture<InstallationMetersFixture>({
+ *   // ...
+ * });
+ *
+ * const buildInstallationMetersFixture: BuildFixture<InstallationMetersFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type InstallationMetersFixture = Fixture<{
+    id: number;
+    meter_type: "Export" | "Generation";
+    meter_id: number;
+    installation_id: number;
+    start_on?: Date;
+    end_on?: Date;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "installations" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myInstallationsFixture = fixture<InstallationsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildInstallationsFixture: BuildFixture<InstallationsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type InstallationsFixture = Fixture<{
+    id: number;
+    name?: string;
+    type: "Retrofit" | "New build" | "Standalone" | "Extension of an existing FiT-accredited installation" | "None";
+    technology_type: "PV" | "H" | "W" | "AD" | "CHP";
+    property_type: "Domestic" | "Commercial" | "Farm" | "Industrial" | "Not for profit" | "School/Education" | "Other";
+    export_type?: "Deemed" | "Metered Export" | "Off Grid" | "PPA";
+    commissioned_on?: Date;
+    decommissioned_on?: Date;
+    installed_on: Date;
+    verified_on?: Date;
+    reverified_on?: Date;
+    inspected_on?: Date;
+    mcs_reference: string;
+    tic_reference: string;
+    dnc_reference: string;
+    roofit_reference?: string;
+    has_battery_storage?: boolean;
+    battery_installation_date_on?: Date;
+    created_at?: Date;
+    updated_at?: Date;
+    export_mpan?: string;
+    source_system_id?: number;
+    name_of_grant?: string;
+    value_of_grant?: string;
+    eligibility_start_on?: Date;
+    eligibility_end_on?: Date;
+    date_grant_repaid?: Date;
+    epc_rate?: string;
+    epc_date?: Date;
+    epc_number?: number;
+    legacy_fit_db_id?: string;
+    supply_mpan?: string;
+    switched_from?: string;
+    switched_to?: string;
+    switched_on?: Date;
+    address_id: number;
+}>;
+
+/**
+ * Fixture type for table "issues" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myIssuesFixture = fixture<IssuesFixture>({
+ *   // ...
+ * });
+ *
+ * const buildIssuesFixture: BuildFixture<IssuesFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type IssuesFixture = Fixture<{
+    id: number;
+    description: string;
+    due_date?: Date;
+    account_id?: number;
+    account_identifier?: string;
+    comments?: string;
+    created_at: Date;
+    type: "Read Tolerance" | "Account Levelisation" | "Installation" | "Payment" | "Meter" | "Account Pending";
+    state: "Open" | "In Progress" | "Closed" | "Blocked" | "Resolved" | "Unresolvable" | "Awaiting Answers";
+    reference_type: "Read" | "Account Levelisation" | "Account" | "Installation" | "Comm" | "Payment" | "Meter";
+    reference_id: number;
+    payload?: string;
+}>;
+
+/**
+ * Fixture type for table "meter_reads" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myMeterReadsFixture = fixture<MeterReadsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildMeterReadsFixture: BuildFixture<MeterReadsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type MeterReadsFixture = Fixture<{
+    id: number;
+    serial_number: string;
+    value: string;
+    date: Date;
+}>;
+
+/**
+ * Fixture type for table "meters" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myMetersFixture = fixture<MetersFixture>({
+ *   // ...
+ * });
+ *
+ * const buildMetersFixture: BuildFixture<MetersFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type MetersFixture = Fixture<{
+    id: number;
+    mpan: string;
+    shared: boolean;
+    serial_number: string;
+    make: string;
+    model: string;
+    hh_metered: boolean;
+    gsp?: string;
+    distribution_region?: string;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "pets" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myPetsFixture = fixture<PetsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildPetsFixture: BuildFixture<PetsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type PetsFixture = Fixture<{
+    id: number;
+    name: string;
+    tag?: string;
+}>;
+
+/**
+ * Fixture type for table "tariff_rates" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myTariffRatesFixture = fixture<TariffRatesFixture>({
+ *   // ...
+ * });
+ *
+ * const buildTariffRatesFixture: BuildFixture<TariffRatesFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type TariffRatesFixture = Fixture<{
+    id: number;
+    tariff_id: number;
+    rate: string;
+    start_date_on: Date;
+    end_date_on?: Date;
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "tariffs" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myTariffsFixture = fixture<TariffsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildTariffsFixture: BuildFixture<TariffsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type TariffsFixture = Fixture<{
+    id: number;
+    code: string;
+    type: "Export" | "Generation" | "SEG";
+    created_at?: Date;
+    updated_at?: Date;
+    source_system_id?: number;
+}>;
+
+/**
+ * Fixture type for table "transactions" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myTransactionsFixture = fixture<TransactionsFixture>({
+ *   // ...
+ * });
+ *
+ * const buildTransactionsFixture: BuildFixture<TransactionsFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type TransactionsFixture = Fixture<{
+    id?: string;
+    amount: number;
+}>;
+
+/**
+ * Fixture type for table "users" with column types loaded from the database
+ * You can use the type with a fixutre, or by creating a fixture builder
+ *
+ * \`\`\`typescript
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
+ * const myUsersFixture = fixture<UsersFixture>({
+ *   // ...
+ * });
+ *
+ * const buildUsersFixture: BuildFixture<UsersFixture> => ({ columns }) => fixture({
+ *   // ...
+ *   ...columns
+ * });
+ * \`\`\`
+ */
+export type UsersFixture = Fixture<{
+    id: number;
+    name: string;
+    created_at?: Date;
+}>;
+"
+`;

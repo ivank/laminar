@@ -1,4 +1,4 @@
-import { get, post, HttpService, router, jsonOk, textOk, init } from '@ovotech/laminar';
+import { get, post, HttpService, router, jsonOk, textOk, init } from '@laminarjs/laminar';
 
 const main = async () => {
   const http = new HttpService({

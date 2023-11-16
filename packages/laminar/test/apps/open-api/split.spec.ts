@@ -1,5 +1,5 @@
 import { OapiConfig, openApi, HttpService, jsonOk, jsonNotFound, run } from '../../../src';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { join } from 'path';
 import { inspect } from 'util';
 
@@ -7,6 +7,9 @@ interface User {
   id: number;
   email: string;
 }
+
+const isAxiosError = (object: unknown): object is AxiosError =>
+  typeof object === 'object' && object !== null && 'response' in object;
 
 describe('Integration', () => {
   it('Should process response', async () => {
@@ -67,8 +70,8 @@ describe('Integration', () => {
           status: 200,
           data: { id: 3, email: 'tommy@example.com' },
         });
-      } catch (error: any) {
-        if (error?.response?.data) {
+      } catch (error) {
+        if (isAxiosError(error)) {
           console.error(inspect(error?.response?.data, { depth: 10, colors: true }));
         }
         throw error;

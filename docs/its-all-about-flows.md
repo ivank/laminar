@@ -10,10 +10,10 @@ This will take a couple of steps to explain properly, but I promise it'll be wor
 
 Lets see the simplest possible app with laminar, a very simple echo app
 
-> [packages/laminar/examples/echo.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo.ts)
+> [packages/laminar/examples/echo.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo.ts)
 
 ```typescript
-import { HttpService, response, init } from '@ovotech/laminar';
+import { HttpService, response, init } from '@laminarjs/laminar';
 
 const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 
@@ -28,10 +28,10 @@ Pretty simple, but what if we wanted to add some authentication? This is usually
 Lets just assume that if Authorization header is `Me` then it's me and its fine, otherwise it must be someone else.
 We can go ahead and write a middleware, that would do stuff just before passing stuff to the next middleware.
 
-> [packages/laminar/examples/echo-auth.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth.ts)
+> [packages/laminar/examples/echo-auth.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@ovotech/laminar';
+import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@laminarjs/laminar';
 
 const auth: HttpMiddleware = (next) => async (req) =>
   req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
@@ -45,10 +45,10 @@ init({ initOrder: [http], logger: console });
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
 
-> [packages/laminar/examples/echo-auth-log.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log.ts)
+> [packages/laminar/examples/echo-auth-log.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@laminarjs/laminar';
 
 const auth: HttpMiddleware = (next) => async (req) =>
   req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
@@ -73,10 +73,10 @@ A simple example would be access to an external resource, say a database. We wan
 
 Lets see how we can go about doing that.
 
-> [packages/laminar/examples/echo-auth-log-db.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log-db.ts)
+> [packages/laminar/examples/echo-auth-log-db.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@laminarjs/laminar';
 
 /**
  * Its a very simple database, that only has one function:

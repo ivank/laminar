@@ -41,8 +41,8 @@ commands:
             psql postgres://example-admin:example-pass@localhost:5432/example < examples/split/init.sql
             psql postgres://example-admin:example-pass@localhost:5432/example < examples/data-loader/init.sql
             psql postgres://example-admin:example-pass@localhost:5432/example < packages/laminar/init.sql
-            psql postgres://example-admin:example-pass@localhost:5432/example < packages/laminar-pg/init.sql
-            psql postgres://example-admin:example-pass@localhost:5432/example < packages/laminar-fixtures/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < packages/pg/init.sql
+            psql postgres://example-admin:example-pass@localhost:5432/example < packages/fixtures/init.sql
 jobs:
   test:
     parameters:

@@ -1,4 +1,4 @@
-import { HttpListener, HttpService, init, jsonOk } from '@ovotech/laminar';
+import { HttpListener, HttpService, init, jsonOk } from '@laminarjs/laminar';
 import { join } from 'path';
 
 /**
