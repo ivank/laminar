@@ -16,13 +16,11 @@ jobs:
         with:
           node-version: '18.18.2'
       - uses: ./.github/actions/yarn-install
-      - run: git submodule sync
-      - run: git submodule update --init
+      - uses: ./.github/actions/git-submodule
       - run: yarn build
       - run: yarn lint
       - run: yarn pretest
       - run: yarn test:packages --runInBand --ci
       - run: yarn publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

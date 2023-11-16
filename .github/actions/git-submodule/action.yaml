@@ -1,0 +1,7 @@
+name: 'Update Git Submodules'
+description: 'Checkout all git submodule repositories'
+runs:
+  using: 'composite'
+  steps:
+    - run: git submodule sync
+    - run: git submodule update --init
