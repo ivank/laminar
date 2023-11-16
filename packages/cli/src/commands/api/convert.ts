@@ -1,4 +1,4 @@
-import { compile, Schema } from '@laminar/json-schema';
+import { compile, Schema } from '@laminarjs/json-schema';
 import {
   document,
   Document,
@@ -8,7 +8,7 @@ import {
   Type,
   withIdentifier,
   withImports,
-} from '@laminar/ts-compose';
+} from '@laminarjs/ts-compose';
 import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 import { convertSchema } from '../../convert-schema';
@@ -162,7 +162,7 @@ const convertResponses = (
         const typeSchema = convertResponse(mediaTypeContext, mediaType.schema);
 
         const typeContext = withImports(typeSchema.context, {
-          module: '@laminar/laminar',
+          module: '@laminarjs/laminar',
           named: [{ name: 'ResponseOapi' }],
         });
 
@@ -183,7 +183,7 @@ const convertResponses = (
         Type.Referance(name),
       )
     : document(
-        withImports(context, { module: '@laminar/laminar', named: [{ name: 'ResponseOapi' }] }),
+        withImports(context, { module: '@laminarjs/laminar', named: [{ name: 'ResponseOapi' }] }),
         Type.Referance('ResponseOapi'),
       );
 };
@@ -352,7 +352,7 @@ export const convertOapi = (context: AstContext, api: oas31.OpenAPIObject): Docu
   return document(
     withIdentifier(
       withImports(finalContext, {
-        module: '@laminar/laminar',
+        module: '@laminarjs/laminar',
         named: [
           { name: 'OapiContext' },
           { name: 'OapiConfig' },

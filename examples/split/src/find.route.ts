@@ -1,5 +1,5 @@
-import { AppRoute, jsonOk, jsonNotFound, optional } from '@laminar/laminar';
-import { PgContext } from '@laminar/pg';
+import { AppRoute, jsonOk, jsonNotFound, optional } from '@laminarjs/laminar';
+import { PgContext } from '@laminarjs/pg';
 
 /**
  * Finding a user requires a PG connection

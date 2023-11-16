@@ -1,4 +1,4 @@
-import { HttpService, init, textOk, corsMiddleware } from '@laminar/laminar';
+import { HttpService, init, textOk, corsMiddleware } from '@laminarjs/laminar';
 
 const listener = async () => textOk('OK');
 

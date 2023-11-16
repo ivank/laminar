@@ -1,4 +1,4 @@
-import { Middleware } from '@laminar/laminar';
+import { Middleware } from '@laminarjs/laminar';
 import { PgService } from './pg.service';
 import { PgClient } from './pg.client';
 

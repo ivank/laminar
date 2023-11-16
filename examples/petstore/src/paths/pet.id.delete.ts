@@ -1,5 +1,5 @@
 import { PathPetsIdDelete } from '../__generated__/petstore';
-import { jsonNotFound, jsonNoContent } from '@laminar/laminar';
+import { jsonNotFound, jsonNoContent } from '@laminarjs/laminar';
 import { PetsDbContext } from '../middleware';
 
 /**

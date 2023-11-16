@@ -1,6 +1,6 @@
 import { schema, Schema } from 'avsc';
 import { Convert } from '../types';
-import { Type, mapWithContext, document } from '@laminar/ts-compose';
+import { Type, mapWithContext, document } from '@laminarjs/ts-compose';
 import { convertType } from '../convert';
 
 export const isUnion = (type: Schema): type is (schema.NamedType | schema.PrimitiveType)[] =>

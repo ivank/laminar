@@ -9,7 +9,7 @@ Here we'll talk mostly about how to implement it with a middleware. What are mid
 > [examples/docs/src/cors/simple.ts](https://github.com/ivank/laminar/tree/main/examples/docs/src/cors/simple.ts)
 
 ```typescript
-import { HttpService, init, jsonOk, openApi, corsMiddleware } from '@laminar/laminar';
+import { HttpService, init, jsonOk, openApi, corsMiddleware } from '@laminarjs/laminar';
 import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });

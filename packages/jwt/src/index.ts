@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @laminar/jwt
+ * @module @laminarjs/jwt
  */
 
 export { RequestAuthInfo, RequestSign, User, Session, JWTData, JWTSign, JWTVerify, VerifyJWTData } from './types';

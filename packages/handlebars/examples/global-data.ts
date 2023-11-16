@@ -1,5 +1,5 @@
-import { init, router, get, HttpService, htmlOk } from '@laminar/laminar';
-import { handlebarsMiddleware } from '@laminar/handlebars';
+import { init, router, get, HttpService, htmlOk } from '@laminarjs/laminar';
+import { handlebarsMiddleware } from '@laminarjs/handlebars';
 import { join } from 'path';
 
 const handlebars = handlebarsMiddleware({

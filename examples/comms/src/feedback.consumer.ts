@@ -1,5 +1,5 @@
-import { EachMessageConsumer } from '@laminar/kafkajs';
-import { PgContext } from '@laminar/pg';
+import { EachMessageConsumer } from '@laminarjs/kafkajs';
+import { PgContext } from '@laminarjs/pg';
 import { Feedback } from './__generated__/feedback.avsc';
 
 // << consumer

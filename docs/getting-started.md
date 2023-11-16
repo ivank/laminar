@@ -1,9 +1,9 @@
 # Getting Started
 
-Install [@laminar/laminar](https://github.com/ivank/laminar/tree/main/packages/laminar) through your favorite (or the one you put up with) package manager:
+Install [@laminarjs/laminar](https://github.com/ivank/laminar/tree/main/packages/laminar) through your favorite (or the one you put up with) package manager:
 
 ```shell
-yarn add @laminar/laminar
+yarn add @laminarjs/laminar
 ```
 
 You'll also need typescript, if you don't have it already:
@@ -12,10 +12,10 @@ You'll also need typescript, if you don't have it already:
 yarn add typescript --dev
 ```
 
-We're not done yet. You're here because of all the fancy types and static type checking, you'd be remiss if you didn't go and install the CLI tools: [@laminar/cli](https://github.com/ivank/laminar/tree/main/packages/cli). Getting the compiler to work for you is fun! It goes to devDependencies though, since you shouldn't need to have it in your deployed service.
+We're not done yet. You're here because of all the fancy types and static type checking, you'd be remiss if you didn't go and install the CLI tools: [@laminarjs/cli](https://github.com/ivank/laminar/tree/main/packages/cli). Getting the compiler to work for you is fun! It goes to devDependencies though, since you shouldn't need to have it in your deployed service.
 
 ```shell
-yarn add @laminar/cli --dev
+yarn add @laminarjs/cli --dev
 ```
 
 ## Your first simple http listener
@@ -65,7 +65,7 @@ components:
 >
 > -- IBM Pollyanna Principle
 
-Now comes the good part. Since we've already installed [@laminar/cli](https://github.com/ivank/laminar/tree/main/packages/cli). We can run it in the command line and get our typescript types directly from openapi yaml.
+Now comes the good part. Since we've already installed [@laminarjs/cli](https://github.com/ivank/laminar/tree/main/packages/cli). We can run it in the command line and get our typescript types directly from openapi yaml.
 
 ```shell
 yarn laminar api --file api.yaml --output __generated__/api.ts
@@ -80,7 +80,7 @@ yarn laminar api --file api.yaml --output __generated__/api.ts --watch
 > [examples/simple/src/index.ts](https://github.com/ivank/laminar/tree/main/examples/simple/src/index.ts)
 
 ```typescript
-import { HttpService, init, jsonOk } from '@laminar/laminar';
+import { HttpService, init, jsonOk } from '@laminarjs/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 

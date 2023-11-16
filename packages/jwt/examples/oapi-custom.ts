@@ -9,8 +9,8 @@ import {
   textForbidden,
   setCookie,
   securityError,
-} from '@laminar/laminar';
-import { createSession, verifyToken } from '@laminar/jwt';
+} from '@laminarjs/laminar';
+import { createSession, verifyToken } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {

@@ -1,4 +1,4 @@
-import { router, jsonOk, get, put, route, init, HttpService } from '@laminar/laminar';
+import { router, jsonOk, get, put, route, init, HttpService } from '@laminarjs/laminar';
 
 // << complex
 

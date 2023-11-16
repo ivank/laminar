@@ -1,5 +1,5 @@
-import { init, HttpService, jsonOk, openApi } from '@laminar/laminar';
-import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@laminar/jwt';
+import { init, HttpService, jsonOk, openApi } from '@laminarjs/laminar';
+import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@laminarjs/jwt';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import nock from 'nock';

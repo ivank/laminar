@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Cli Should generate fixtures file 1`] = `
-"import { Fixture } from "@laminar/fixtures";
+"import { Fixture } from "@laminarjs/fixtures";
 
 /**
  * Fixtures generated for postgres tables */
@@ -11,7 +11,7 @@ exports[`Cli Should generate fixtures file 1`] = `
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myaccounts = fixture<accounts>({
  *   // ...
  * });
@@ -43,7 +43,7 @@ export type accounts = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myaddresses = fixture<addresses>({
  *   // ...
  * });
@@ -73,7 +73,7 @@ export type addresses = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myanimals = fixture<animals>({
  *   // ...
  * });
@@ -94,7 +94,7 @@ export type animals = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mycomms = fixture<comms>({
  *   // ...
  * });
@@ -116,7 +116,7 @@ export type comms = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mycontacts = fixture<contacts>({
  *   // ...
  * });
@@ -145,7 +145,7 @@ export type contacts = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mycontracts = fixture<contracts>({
  *   // ...
  * });
@@ -179,7 +179,7 @@ export type contracts = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mycustomers = fixture<customers>({
  *   // ...
  * });
@@ -212,7 +212,7 @@ export type customers = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mydb_users = fixture<db_users>({
  *   // ...
  * });
@@ -233,7 +233,7 @@ export type db_users = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mydb_users2 = fixture<db_users2>({
  *   // ...
  * });
@@ -254,7 +254,7 @@ export type db_users2 = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myfixtures_meter_reads = fixture<fixtures_meter_reads>({
  *   // ...
  * });
@@ -287,7 +287,7 @@ export type fixtures_meter_reads = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myinstallation_meters = fixture<installation_meters>({
  *   // ...
  * });
@@ -315,7 +315,7 @@ export type installation_meters = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myinstallations = fixture<installations>({
  *   // ...
  * });
@@ -370,7 +370,7 @@ export type installations = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myissues = fixture<issues>({
  *   // ...
  * });
@@ -401,7 +401,7 @@ export type issues = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mymeter_reads = fixture<meter_reads>({
  *   // ...
  * });
@@ -424,7 +424,7 @@ export type meter_reads = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mymeters = fixture<meters>({
  *   // ...
  * });
@@ -455,7 +455,7 @@ export type meters = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mypets = fixture<pets>({
  *   // ...
  * });
@@ -477,7 +477,7 @@ export type pets = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mytariff_rates = fixture<tariff_rates>({
  *   // ...
  * });
@@ -504,7 +504,7 @@ export type tariff_rates = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mytariffs = fixture<tariffs>({
  *   // ...
  * });
@@ -529,7 +529,7 @@ export type tariffs = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mytransactions = fixture<transactions>({
  *   // ...
  * });
@@ -550,7 +550,7 @@ export type transactions = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myusers = fixture<users>({
  *   // ...
  * });
@@ -570,7 +570,7 @@ export type users = Fixture<{
 `;
 
 exports[`Cli Should generate fixtures file with suffix and title case 1`] = `
-"import { Fixture } from "@laminar/fixtures";
+"import { Fixture } from "@laminarjs/fixtures";
 
 /**
  * Fixtures generated for postgres tables */
@@ -580,7 +580,7 @@ exports[`Cli Should generate fixtures file with suffix and title case 1`] = `
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myAccountsFixture = fixture<AccountsFixture>({
  *   // ...
  * });
@@ -612,7 +612,7 @@ export type AccountsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myAddressesFixture = fixture<AddressesFixture>({
  *   // ...
  * });
@@ -642,7 +642,7 @@ export type AddressesFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myAnimalsFixture = fixture<AnimalsFixture>({
  *   // ...
  * });
@@ -663,7 +663,7 @@ export type AnimalsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myCommsFixture = fixture<CommsFixture>({
  *   // ...
  * });
@@ -685,7 +685,7 @@ export type CommsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myContactsFixture = fixture<ContactsFixture>({
  *   // ...
  * });
@@ -714,7 +714,7 @@ export type ContactsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myContractsFixture = fixture<ContractsFixture>({
  *   // ...
  * });
@@ -748,7 +748,7 @@ export type ContractsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myCustomersFixture = fixture<CustomersFixture>({
  *   // ...
  * });
@@ -781,7 +781,7 @@ export type CustomersFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myDbUsersFixture = fixture<DbUsersFixture>({
  *   // ...
  * });
@@ -802,7 +802,7 @@ export type DbUsersFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myDbUsers2Fixture = fixture<DbUsers2Fixture>({
  *   // ...
  * });
@@ -823,7 +823,7 @@ export type DbUsers2Fixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myFixturesMeter_readsFixture = fixture<FixturesMeter_readsFixture>({
  *   // ...
  * });
@@ -856,7 +856,7 @@ export type FixturesMeter_readsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myInstallationMetersFixture = fixture<InstallationMetersFixture>({
  *   // ...
  * });
@@ -884,7 +884,7 @@ export type InstallationMetersFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myInstallationsFixture = fixture<InstallationsFixture>({
  *   // ...
  * });
@@ -939,7 +939,7 @@ export type InstallationsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myIssuesFixture = fixture<IssuesFixture>({
  *   // ...
  * });
@@ -970,7 +970,7 @@ export type IssuesFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myMeterReadsFixture = fixture<MeterReadsFixture>({
  *   // ...
  * });
@@ -993,7 +993,7 @@ export type MeterReadsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myMetersFixture = fixture<MetersFixture>({
  *   // ...
  * });
@@ -1024,7 +1024,7 @@ export type MetersFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myPetsFixture = fixture<PetsFixture>({
  *   // ...
  * });
@@ -1046,7 +1046,7 @@ export type PetsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myTariffRatesFixture = fixture<TariffRatesFixture>({
  *   // ...
  * });
@@ -1073,7 +1073,7 @@ export type TariffRatesFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myTariffsFixture = fixture<TariffsFixture>({
  *   // ...
  * });
@@ -1098,7 +1098,7 @@ export type TariffsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myTransactionsFixture = fixture<TransactionsFixture>({
  *   // ...
  * });
@@ -1119,7 +1119,7 @@ export type TransactionsFixture = Fixture<{
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myUsersFixture = fixture<UsersFixture>({
  *   // ...
  * });

@@ -98,8 +98,8 @@ A more fleshed out example of several services tied together can be seen in [exa
 > [examples/petstore/src/application.ts](https://github.com/ivank/laminar/tree/main/examples/petstore/src/application.ts#L2-L24)
 
 ```typescript
-import { Application, HttpService, requestLoggingMiddleware, LoggerLike } from '@laminar/laminar';
-import { pgMiddleware, PgService } from '@laminar/pg';
+import { Application, HttpService, requestLoggingMiddleware, LoggerLike } from '@laminarjs/laminar';
+import { pgMiddleware, PgService } from '@laminarjs/pg';
 import { createHttp } from './http';
 import { Pool } from 'pg';
 import { EnvVars } from './env';

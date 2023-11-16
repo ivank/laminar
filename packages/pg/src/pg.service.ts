@@ -1,4 +1,4 @@
-import { Service } from '@laminar/laminar';
+import { Service } from '@laminarjs/laminar';
 import { Pool, PoolClient, types } from 'pg';
 import { PgClientConfig } from './pg.client';
 

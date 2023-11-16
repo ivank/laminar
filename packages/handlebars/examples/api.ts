@@ -1,6 +1,6 @@
-import { htmlOk, HttpService, init } from '@laminar/laminar';
+import { htmlOk, HttpService, init } from '@laminarjs/laminar';
 import { join } from 'path';
-import { handlebarsMiddleware, HandlebarsContext } from '@laminar/handlebars';
+import { handlebarsMiddleware, HandlebarsContext } from '@laminarjs/handlebars';
 import { openApiTyped } from './__generated__/api.yaml';
 
 const main = async () => {

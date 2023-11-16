@@ -6,7 +6,7 @@ import {
   Type,
   withIdentifier,
   withImports,
-} from '@laminar/ts-compose';
+} from '@laminarjs/ts-compose';
 import ts from 'typescript';
 import { toTitleCase } from '../../helpers';
 
@@ -57,7 +57,7 @@ export const convertType = (
 You can use the type with a fixutre, or by creating a fixture builder
 
 \`\`\`typescript
-import { fixture, BuildFixture } from '@laminar/fixtures';
+import { fixture, BuildFixture } from '@laminarjs/fixtures';
 const my${tableName} = fixture<${tableName}>({
   // ...
 });
@@ -85,7 +85,7 @@ const build${tableName}: BuildFixture<${tableName}> => ({ columns }) => fixture(
             ]),
           }),
         ),
-        { module: '@laminar/fixtures', named: [{ name: 'Fixture' }] },
+        { module: '@laminarjs/fixtures', named: [{ name: 'Fixture' }] },
       );
     }, context),
     ts.factory.createJSDocComment('Fixtures generated for postgres tables'),

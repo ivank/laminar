@@ -1,7 +1,7 @@
 import { schema, Schema } from 'avsc';
 import ts from 'typescript';
 import { Convert } from '../types';
-import { Type, document } from '@laminar/ts-compose';
+import { Type, document } from '@laminarjs/ts-compose';
 
 const primitiveTypeMap: {
   [key in schema.PrimitiveType]: ts.TypeNode;

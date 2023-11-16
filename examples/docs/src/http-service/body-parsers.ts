@@ -6,7 +6,7 @@ import {
   HttpService,
   init,
   jsonOk,
-} from '@laminar/laminar';
+} from '@laminarjs/laminar';
 
 const listener: HttpListener = async ({ body }) => jsonOk({ ok: true, body });
 

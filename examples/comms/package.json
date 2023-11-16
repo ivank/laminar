@@ -10,7 +10,7 @@
   "homepage": "https://github.com/ivank/laminar/tree/main/examples/comms#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@laminar/cli": "*",
+    "@laminarjs/cli": "*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.9",
@@ -41,9 +41,9 @@
   },
   "dependencies": {
     "@kafkajs/confluent-schema-registry": "^3.3.0",
-    "@laminar/kafkajs": "*",
-    "@laminar/laminar": "*",
-    "@laminar/pg": "*",
+    "@laminarjs/kafkajs": "*",
+    "@laminarjs/laminar": "*",
+    "@laminarjs/pg": "*",
     "kafkajs": "^2.2.4",
     "pg": "^8.11.3"
   }

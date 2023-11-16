@@ -1,5 +1,5 @@
-import { get, init, HttpService, jsonOk, router, HttpListener } from '@laminar/laminar';
-import { PgService, pgMiddleware } from '@laminar/pg';
+import { get, init, HttpService, jsonOk, router, HttpListener } from '@laminarjs/laminar';
+import { PgService, pgMiddleware } from '@laminarjs/pg';
 import { Pool } from 'pg';
 
 const pool = new PgService(

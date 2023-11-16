@@ -1,4 +1,4 @@
-import { htmlBadRequest, HttpErrorHandler, HttpService, init, jsonBadRequest } from '@laminar/laminar';
+import { htmlBadRequest, HttpErrorHandler, HttpService, init, jsonBadRequest } from '@laminarjs/laminar';
 
 const listener = async () => {
   throw new Error('example error');

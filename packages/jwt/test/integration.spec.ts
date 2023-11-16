@@ -1,4 +1,4 @@
-import { HttpService, router, get, post, jsonOk, run, Empty } from '@laminar/laminar';
+import { HttpService, router, get, post, jsonOk, run, Empty } from '@laminarjs/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { jwtSecurityResolver, authMiddleware, jwkPublicKey, createSession } from '../src';

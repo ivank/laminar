@@ -1,6 +1,6 @@
 import { schema, Schema } from 'avsc';
 import { Convert } from '../types';
-import { Type, document, withImports } from '@laminar/ts-compose';
+import { Type, document, withImports } from '@laminarjs/ts-compose';
 import { convertType } from '../convert';
 
 export const isLogicalType = (type: Schema): type is schema.LogicalType =>

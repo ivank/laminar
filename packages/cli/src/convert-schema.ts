@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { compile, Schema } from '@laminar/json-schema';
-import { document, Document, mapWithContext, printDocument, Type, withIdentifier } from '@laminar/ts-compose';
+import { compile, Schema } from '@laminarjs/json-schema';
+import { document, Document, mapWithContext, printDocument, Type, withIdentifier } from '@laminarjs/ts-compose';
 import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 import { AstContext, AstConvert, isSchemaObject, isReferenceObject, getReferencedObject } from './traverse';

@@ -872,10 +872,10 @@ __metadata:
   resolution: "@examples/comms@workspace:examples/comms"
   dependencies:
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@laminar/cli": "npm:*"
-    "@laminar/kafkajs": "npm:*"
-    "@laminar/laminar": "npm:*"
-    "@laminar/pg": "npm:*"
+    "@laminarjs/cli": "npm:*"
+    "@laminarjs/kafkajs": "npm:*"
+    "@laminarjs/laminar": "npm:*"
+    "@laminarjs/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -901,14 +901,14 @@ __metadata:
   resolution: "@examples/data-loader@workspace:examples/data-loader"
   dependencies:
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@laminar/avro": "npm:^0.12.2"
-    "@laminar/cli": "npm:*"
-    "@laminar/jwt": "npm:*"
-    "@laminar/kafkajs": "npm:*"
-    "@laminar/laminar": "npm:*"
-    "@laminar/pg": "npm:*"
-    "@laminar/pgboss": "npm:*"
-    "@laminar/winston": "npm:*"
+    "@laminarjs/avro": "npm:^0.12.2"
+    "@laminarjs/cli": "npm:*"
+    "@laminarjs/jwt": "npm:*"
+    "@laminarjs/kafkajs": "npm:*"
+    "@laminarjs/laminar": "npm:*"
+    "@laminarjs/pg": "npm:*"
+    "@laminarjs/pgboss": "npm:*"
+    "@laminarjs/winston": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -940,9 +940,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/docs@workspace:examples/docs"
   dependencies:
-    "@laminar/cli": "npm:*"
-    "@laminar/laminar": "npm:*"
-    "@laminar/pg": "npm:*"
+    "@laminarjs/cli": "npm:*"
+    "@laminarjs/laminar": "npm:*"
+    "@laminarjs/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -964,10 +964,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/petstore@workspace:examples/petstore"
   dependencies:
-    "@laminar/cli": "npm:*"
-    "@laminar/jwt": "npm:*"
-    "@laminar/laminar": "npm:*"
-    "@laminar/pg": "npm:*"
+    "@laminarjs/cli": "npm:*"
+    "@laminarjs/jwt": "npm:*"
+    "@laminarjs/laminar": "npm:*"
+    "@laminarjs/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -989,9 +989,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/security@workspace:examples/security"
   dependencies:
-    "@laminar/cli": "npm:*"
-    "@laminar/jwt": "npm:*"
-    "@laminar/laminar": "npm:*"
+    "@laminarjs/cli": "npm:*"
+    "@laminarjs/jwt": "npm:*"
+    "@laminarjs/laminar": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
@@ -1010,8 +1010,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/simple@workspace:examples/simple"
   dependencies:
-    "@laminar/cli": "npm:*"
-    "@laminar/laminar": "npm:*"
+    "@laminarjs/cli": "npm:*"
+    "@laminarjs/laminar": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
@@ -1030,8 +1030,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/split@workspace:examples/split"
   dependencies:
-    "@laminar/laminar": "npm:*"
-    "@laminar/pg": "npm:*"
+    "@laminarjs/laminar": "npm:*"
+    "@laminarjs/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -1462,9 +1462,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@laminar/avro@npm:^0.12.2, @laminar/avro@workspace:packages/avro":
+"@laminarjs/avro@npm:^0.12.2, @laminarjs/avro@workspace:packages/avro":
   version: 0.0.0-use.local
-  resolution: "@laminar/avro@workspace:packages/avro"
+  resolution: "@laminarjs/avro@workspace:packages/avro"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@types/jest": "npm:^29.5.8"
@@ -1483,14 +1483,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@laminar/cli@npm:*, @laminar/cli@workspace:*, @laminar/cli@workspace:packages/cli":
+"@laminarjs/cli@npm:*, @laminarjs/cli@workspace:*, @laminarjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
-  resolution: "@laminar/cli@workspace:packages/cli"
+  resolution: "@laminarjs/cli@workspace:packages/cli"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/json-schema": "workspace:*"
-    "@laminar/laminar": "workspace:*"
-    "@laminar/ts-compose": "workspace:*"
+    "@laminarjs/json-schema": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
+    "@laminarjs/ts-compose": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -1516,12 +1516,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@laminar/fixtures@workspace:packages/fixtures":
+"@laminarjs/fixtures@workspace:packages/fixtures":
   version: 0.0.0-use.local
-  resolution: "@laminar/fixtures@workspace:packages/fixtures"
+  resolution: "@laminarjs/fixtures@workspace:packages/fixtures"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/laminar": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -1540,13 +1540,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@laminar/handlebars@workspace:packages/handlebars":
+"@laminarjs/handlebars@workspace:packages/handlebars":
   version: 0.0.0-use.local
-  resolution: "@laminar/handlebars@workspace:packages/handlebars"
+  resolution: "@laminarjs/handlebars@workspace:packages/handlebars"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/cli": "workspace:*"
-    "@laminar/laminar": "workspace:*"
+    "@laminarjs/cli": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
@@ -1561,13 +1561,13 @@ __metadata:
     ts-retry-promise: "npm:^0.7.1"
     typescript: "npm:^5.2.2"
   peerDependencies:
-    "@laminar/laminar": "*"
+    "@laminarjs/laminar": "*"
   languageName: unknown
   linkType: soft
 
-"@laminar/json-schema@workspace:*, @laminar/json-schema@workspace:packages/json-schema":
+"@laminarjs/json-schema@workspace:*, @laminarjs/json-schema@workspace:packages/json-schema":
   version: 0.0.0-use.local
-  resolution: "@laminar/json-schema@workspace:packages/json-schema"
+  resolution: "@laminarjs/json-schema@workspace:packages/json-schema"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@types/jest": "npm:^29.5.8"
@@ -1586,14 +1586,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@laminar/jwt@npm:*, @laminar/jwt@workspace:packages/jwt":
+"@laminarjs/jwt@npm:*, @laminarjs/jwt@workspace:packages/jwt":
   version: 0.0.0-use.local
-  resolution: "@laminar/jwt@workspace:packages/jwt"
+  resolution: "@laminarjs/jwt@workspace:packages/jwt"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/cli": "workspace:*"
-    "@laminar/json-schema": "workspace:*"
-    "@laminar/laminar": "workspace:*"
+    "@laminarjs/cli": "workspace:*"
+    "@laminarjs/json-schema": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/jsonwebtoken": "npm:^9.0.5"
     "@types/lru-cache": "npm:^7.10.10"
@@ -1614,17 +1614,17 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     typescript: "npm:^5.2.2"
   peerDependencies:
-    "@laminar/laminar": "*"
+    "@laminarjs/laminar": "*"
   languageName: unknown
   linkType: soft
 
-"@laminar/kafkajs@npm:*, @laminar/kafkajs@workspace:packages/kafkajs":
+"@laminarjs/kafkajs@npm:*, @laminarjs/kafkajs@workspace:packages/kafkajs":
   version: 0.0.0-use.local
-  resolution: "@laminar/kafkajs@workspace:packages/kafkajs"
+  resolution: "@laminarjs/kafkajs@workspace:packages/kafkajs"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@laminar/laminar": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/uuid": "npm:^9.0.7"
@@ -1642,17 +1642,17 @@ __metadata:
     uuid: "npm:^9.0.1"
   peerDependencies:
     "@kafkajs/confluent-schema-registry": "*"
-    "@laminar/laminar": "*"
+    "@laminarjs/laminar": "*"
     kafkajs: "*"
   languageName: unknown
   linkType: soft
 
-"@laminar/laminar@npm:*, @laminar/laminar@workspace:*, @laminar/laminar@workspace:packages/laminar":
+"@laminarjs/laminar@npm:*, @laminarjs/laminar@workspace:*, @laminarjs/laminar@workspace:packages/laminar":
   version: 0.0.0-use.local
-  resolution: "@laminar/laminar@workspace:packages/laminar"
+  resolution: "@laminarjs/laminar@workspace:packages/laminar"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/json-schema": "workspace:*"
+    "@laminarjs/json-schema": "workspace:*"
     "@types/cookie": "npm:^0.5.4"
     "@types/jest": "npm:^29.5.8"
     "@types/jsonwebtoken": "npm:^9.0.5"
@@ -1686,11 +1686,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@laminar/performance-testing@workspace:performance":
+"@laminarjs/performance-testing@workspace:performance":
   version: 0.0.0-use.local
-  resolution: "@laminar/performance-testing@workspace:performance"
+  resolution: "@laminarjs/performance-testing@workspace:performance"
   dependencies:
-    "@laminar/json-schema": "workspace:*"
+    "@laminarjs/json-schema": "workspace:*"
     "@types/benchmark": "npm:^2.1.5"
     "@types/node": "npm:^20.9.0"
     ajv: "npm:^8.12.0"
@@ -1702,12 +1702,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@laminar/pg@npm:*, @laminar/pg@workspace:packages/pg":
+"@laminarjs/pg@npm:*, @laminarjs/pg@workspace:packages/pg":
   version: 0.0.0-use.local
-  resolution: "@laminar/pg@workspace:packages/pg"
+  resolution: "@laminarjs/pg@workspace:packages/pg"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/laminar": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -1723,17 +1723,17 @@ __metadata:
     ts-retry-promise: "npm:^0.7.1"
     typescript: "npm:^5.2.2"
   peerDependencies:
-    "@laminar/laminar": "*"
+    "@laminarjs/laminar": "*"
     pg: "*"
   languageName: unknown
   linkType: soft
 
-"@laminar/pgboss@npm:*, @laminar/pgboss@workspace:packages/pgboss":
+"@laminarjs/pgboss@npm:*, @laminarjs/pgboss@workspace:packages/pgboss":
   version: 0.0.0-use.local
-  resolution: "@laminar/pgboss@workspace:packages/pgboss"
+  resolution: "@laminarjs/pgboss@workspace:packages/pgboss"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/laminar": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/uuid": "npm:^9.0.7"
@@ -1750,14 +1750,14 @@ __metadata:
     typescript: "npm:^5.2.2"
     uuid: "npm:^9.0.1"
   peerDependencies:
-    "@laminar/laminar": "*"
+    "@laminarjs/laminar": "*"
     pg-boss: "*"
   languageName: unknown
   linkType: soft
 
-"@laminar/ts-compose@workspace:*, @laminar/ts-compose@workspace:packages/ts-compose":
+"@laminarjs/ts-compose@workspace:*, @laminarjs/ts-compose@workspace:packages/ts-compose":
   version: 0.0.0-use.local
-  resolution: "@laminar/ts-compose@workspace:packages/ts-compose"
+  resolution: "@laminarjs/ts-compose@workspace:packages/ts-compose"
   dependencies:
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
@@ -1773,12 +1773,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@laminar/winston@npm:*, @laminar/winston@workspace:packages/winston":
+"@laminarjs/winston@npm:*, @laminarjs/winston@workspace:packages/winston":
   version: 0.0.0-use.local
-  resolution: "@laminar/winston@workspace:packages/winston"
+  resolution: "@laminarjs/winston@workspace:packages/winston"
   dependencies:
     "@ikerin/build-readme": "npm:^1.1.1"
-    "@laminar/laminar": "workspace:*"
+    "@laminarjs/laminar": "workspace:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
@@ -1793,7 +1793,7 @@ __metadata:
     typescript: "npm:^5.2.2"
     winston: "npm:^3.11.0"
   peerDependencies:
-    "@laminar/laminar": "*"
+    "@laminarjs/laminar": "*"
     winston: "*"
   languageName: unknown
   linkType: soft

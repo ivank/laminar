@@ -1,5 +1,5 @@
-import { init, router, get, post, HttpService, htmlOk } from '@laminar/laminar';
-import { handlebars } from '@laminar/handlebars';
+import { init, router, get, post, HttpService, htmlOk } from '@laminarjs/laminar';
+import { handlebars } from '@laminarjs/handlebars';
 import { join } from 'path';
 
 const hbs = handlebars({ dir: join(__dirname, 'templates-html') });

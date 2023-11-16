@@ -1,5 +1,5 @@
 {
-  "name": "@laminar/jwt",
+  "name": "@laminarjs/jwt",
   "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,15 +19,15 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@laminar/json-schema": "workspace:*",
+    "@laminarjs/json-schema": "workspace:*",
     "axios": "^1.6.2",
     "jsonwebtoken": "^9.0.2",
     "lru-cache": "^10.0.2"
   },
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
-    "@laminar/cli": "workspace:*",
-    "@laminar/laminar": "workspace:*",
+    "@laminarjs/cli": "workspace:*",
+    "@laminarjs/laminar": "workspace:*",
     "@types/jest": "^29.5.8",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lru-cache": "^7.10.10",
@@ -46,6 +46,6 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@laminar/laminar": "*"
+    "@laminarjs/laminar": "*"
   }
 }

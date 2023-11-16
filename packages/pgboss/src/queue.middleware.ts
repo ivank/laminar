@@ -1,4 +1,4 @@
-import { Middleware } from '@laminar/laminar';
+import { Middleware } from '@laminarjs/laminar';
 import { Queue } from './types';
 
 /**

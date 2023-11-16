@@ -7,8 +7,8 @@ A json web token middleware for laminar
 > [examples/simple.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/simple.ts)
 
 ```typescript
-import { get, post, init, HttpService, jsonOk, router, HttpListener } from '@laminar/laminar';
-import { authMiddleware, createSession } from '@laminar/jwt';
+import { get, post, init, HttpService, jsonOk, router, HttpListener } from '@laminarjs/laminar';
+import { authMiddleware, createSession } from '@laminarjs/jwt';
 
 const secret = '123';
 const auth = authMiddleware({ secret });
@@ -129,8 +129,8 @@ And then implement it using the helper `jwtSecurityResolver`. That function woul
 > [examples/oapi.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/oapi.ts)
 
 ```typescript
-import { HttpService, init, jsonOk, openApi } from '@laminar/laminar';
-import { createSession, jwtSecurityResolver } from '@laminar/jwt';
+import { HttpService, init, jsonOk, openApi } from '@laminarjs/laminar';
+import { createSession, jwtSecurityResolver } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {
@@ -234,8 +234,8 @@ Implementing it involves reading the cookie and validating its contents.
 > [examples/oapi-api-key.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/oapi-api-key.ts)
 
 ```typescript
-import { HttpService, init, openApi, textOk, setCookie } from '@laminar/laminar';
-import { createSession, verifyToken } from '@laminar/jwt';
+import { HttpService, init, openApi, textOk, setCookie } from '@laminarjs/laminar';
+import { createSession, verifyToken } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {
@@ -368,8 +368,8 @@ import {
   textForbidden,
   setCookie,
   securityError,
-} from '@laminar/laminar';
-import { createSession, verifyToken } from '@laminar/jwt';
+} from '@laminarjs/laminar';
+import { createSession, verifyToken } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {
@@ -417,8 +417,8 @@ You can specify public / private key pair (where the private key is used for sig
 > [examples/keypair.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/keypair.ts)
 
 ```typescript
-import { get, post, HttpService, router, init, jsonOk, HttpListener } from '@laminar/laminar';
-import { authMiddleware, createSession } from '@laminar/jwt';
+import { get, post, HttpService, router, init, jsonOk, HttpListener } from '@laminarjs/laminar';
+import { authMiddleware, createSession } from '@laminarjs/jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -460,8 +460,8 @@ JWK are also supported with the `jwkPublicKey` function. It can also cache the j
 > [examples/jwk.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/jwk.ts)
 
 ```typescript
-import { get, post, init, router, HttpService, jsonOk } from '@laminar/laminar';
-import { jwkPublicKey, createSession, authMiddleware } from '@laminar/jwt';
+import { get, post, init, router, HttpService, jsonOk } from '@laminarjs/laminar';
+import { jwkPublicKey, createSession, authMiddleware } from '@laminarjs/jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import nock from 'nock';
@@ -541,8 +541,8 @@ Then we could implement it with this service:
 > [examples/keycloak.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/keycloak.ts)
 
 ```typescript
-import { get, post, HttpService, router, init, jsonOk } from '@laminar/laminar';
-import { jwkPublicKey, createSession, keycloakAuthMiddleware } from '@laminar/jwt';
+import { get, post, HttpService, router, init, jsonOk } from '@laminarjs/laminar';
+import { jwkPublicKey, createSession, keycloakAuthMiddleware } from '@laminarjs/jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import nock from 'nock';
@@ -600,8 +600,8 @@ With oapi it is the same concempt - we use the scopes that are defined by the op
 > [examples/oapi-keycloak.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/oapi-keycloak.ts)
 
 ```typescript
-import { init, HttpService, jsonOk, openApi } from '@laminar/laminar';
-import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@laminar/jwt';
+import { init, HttpService, jsonOk, openApi } from '@laminarjs/laminar';
+import { jwkPublicKey, keycloakJwtSecurityResolver, createSession } from '@laminarjs/jwt';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import nock from 'nock';

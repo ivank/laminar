@@ -1,4 +1,4 @@
-import { compile, Schema } from '@laminar/json-schema';
+import { compile, Schema } from '@laminarjs/json-schema';
 import { readdirSync, readFileSync } from 'fs';
 import nock from 'nock';
 import { join } from 'path';

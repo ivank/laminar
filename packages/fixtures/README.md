@@ -9,7 +9,7 @@ Statically resolves relational ids _before_ they are saved to the database.
 
 ```typescript
 import { Client } from 'pg';
-import { id, fixture, setUp, tearDown, alternate } from '@laminar/fixtures';
+import { id, fixture, setUp, tearDown, alternate } from '@laminarjs/fixtures';
 
 /**
  * Define the shape of the row we want to exist in the database
@@ -55,7 +55,7 @@ Fixture columns
 You can use constants - number, string, Date, null. You can also use a function that will accept the current id as argument
 
 ```typescript
-import { fixture } from '@laminar/fixtures';
+import { fixture } from '@laminarjs/fixtures';
 const myFixture = fixture('mytable', { name: (id) => `Name ${id}` });
 
 console.log(generate([myFixture]));
@@ -70,7 +70,7 @@ Additionally there are a number of helpers to build columns with:
 Directly return the current entity id. Useful for table serial primary keys
 
 ```typescript
-import { fixture, id, generate } from '@laminar/fixtures';
+import { fixture, id, generate } from '@laminarjs/fixtures';
 const myFixture = fixture('mytable', { id });
 
 console.log(generate([myFixture]));
@@ -83,7 +83,7 @@ console.log(generate([myFixture]));
 Generate a column value using the current entity id.
 
 ```typescript
-import { fixture, template, generate } from '@laminar/fixtures';
+import { fixture, template, generate } from '@laminarjs/fixtures';
 const myFixture = fixture('mytable', { name: template('My column %s') });
 
 console.log(generate([myFixture]));
@@ -96,7 +96,7 @@ console.log(generate([myFixture]));
 Get a column from another fixture. We create a map of dependencies, so that if you link another fixture, it will create it first, and then use its columns to get the value.
 
 ```typescript
-import { fixture, id, rel, generate } from '@laminar/fixtures';
+import { fixture, id, rel, generate } from '@laminarjs/fixtures';
 const parent = fixture('parents', { id });
 const child = fixture('children', {
   id,
@@ -116,7 +116,7 @@ console.log(generate([child]));
 Switch between multiple variants of a column, depending on the id.
 
 ```typescript
-import { fixture, alternate, multiFixture, generate } from '@laminar/fixtures';
+import { fixture, alternate, multiFixture, generate } from '@laminarjs/fixtures';
 const myFixture = fixture('mytable', { type: alternate('Generation', 'Export') });
 
 console.log(generate(multiFixture(2, myFixture)));
@@ -137,7 +137,7 @@ If you want to clone the fixture and use a different version of it, you can also
 
 ```typescript
 import { Client } from 'pg';
-import { id, fixture, setUp, tearDown, rel } from '@laminar/fixtures';
+import { id, fixture, setUp, tearDown, rel } from '@laminarjs/fixtures';
 
 /**
  * Define the shape of the row we want to exist in the database
@@ -212,7 +212,17 @@ You can create multiple rows by using `multiFixture`, and clone a fixture with `
 
 ```typescript
 import { Client } from 'pg';
-import { id, fixture, setUp, tearDown, rel, cloneFixture, multiFixture, alternate, template } from '@laminar/fixtures';
+import {
+  id,
+  fixture,
+  setUp,
+  tearDown,
+  rel,
+  cloneFixture,
+  multiFixture,
+  alternate,
+  template,
+} from '@laminarjs/fixtures';
 
 /**
  * Use the multi fixture directly to create 2 independent tariffs.

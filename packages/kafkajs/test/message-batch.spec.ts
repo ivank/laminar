@@ -6,7 +6,7 @@ import {
   registerSchemas,
   KafkaAdminService,
 } from '../src';
-import { LoggerLike, Middleware, start, stop } from '@laminar/laminar';
+import { LoggerLike, Middleware, start, stop } from '@laminarjs/laminar';
 import { retry } from 'ts-retry-promise';
 import * as uuid from 'uuid';
 import { Kafka } from 'kafkajs';

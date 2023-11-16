@@ -1,6 +1,6 @@
 import { schema, Schema } from 'avsc';
 import { Convert, Context } from '../types';
-import { Type, mapWithContext, document } from '@laminar/ts-compose';
+import { Type, mapWithContext, document } from '@laminarjs/ts-compose';
 import { isUnion } from './union';
 import { isRecordType } from './record';
 import { convertType } from '../convert';

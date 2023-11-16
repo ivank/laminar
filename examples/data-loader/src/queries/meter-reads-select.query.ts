@@ -1,4 +1,4 @@
-import { PgClient } from '@laminar/pg';
+import { PgClient } from '@laminarjs/pg';
 import { MeterReadRow } from './types';
 import sql from 'sql-template-tag';
 

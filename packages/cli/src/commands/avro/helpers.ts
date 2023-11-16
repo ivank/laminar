@@ -1,6 +1,6 @@
 import { Context } from './types';
 import { schema as avroSchema } from 'avsc';
-import { Document, Node, withIdentifier, document, Type } from '@laminar/ts-compose';
+import { Document, Node, withIdentifier, document, Type } from '@laminarjs/ts-compose';
 import ts from 'typescript';
 
 export const fullName = (context: Context, schema: avroSchema.RecordType | avroSchema.EnumType): string =>

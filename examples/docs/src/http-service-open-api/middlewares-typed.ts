@@ -1,4 +1,4 @@
-import { Application, HttpService, init, jsonOk, LoggerContext, loggerMiddleware } from '@laminar/laminar';
+import { Application, HttpService, init, jsonOk, LoggerContext, loggerMiddleware } from '@laminarjs/laminar';
 import { join } from 'path';
 
 /**

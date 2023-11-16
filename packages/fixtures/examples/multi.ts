@@ -1,5 +1,15 @@
 import { Client } from 'pg';
-import { id, fixture, setUp, tearDown, rel, cloneFixture, multiFixture, alternate, template } from '@laminar/fixtures';
+import {
+  id,
+  fixture,
+  setUp,
+  tearDown,
+  rel,
+  cloneFixture,
+  multiFixture,
+  alternate,
+  template,
+} from '@laminarjs/fixtures';
 
 /**
  * Use the multi fixture directly to create 2 independent tariffs.

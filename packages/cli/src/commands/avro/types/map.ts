@@ -1,6 +1,6 @@
 import { schema, Schema } from 'avsc';
 import { Convert } from '../types';
-import { Type } from '@laminar/ts-compose';
+import { Type } from '@laminarjs/ts-compose';
 import { convertType } from '../convert';
 
 export const isMapType = (type: Schema): type is schema.MapType =>

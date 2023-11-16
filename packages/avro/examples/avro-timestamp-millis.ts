@@ -1,5 +1,5 @@
 import { Type, Schema } from 'avsc';
-import { AvroTimestampMillis } from '@laminar/avro';
+import { AvroTimestampMillis } from '@laminarjs/avro';
 
 const eventSchema: Schema = {
   type: 'record',

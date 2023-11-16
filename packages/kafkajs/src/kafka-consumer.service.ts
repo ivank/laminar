@@ -1,5 +1,5 @@
 import type { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
-import { Service } from '@laminar/laminar';
+import { Service } from '@laminarjs/laminar';
 import type { Kafka, ConsumerSubscribeTopics, ConsumerConfig, Consumer } from 'kafkajs';
 import { SchemaRegistryConsumerRunConfig, DecodedKafkaMessage, DecodedEachBatchPayload } from './types';
 

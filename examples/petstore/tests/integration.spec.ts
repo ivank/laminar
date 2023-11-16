@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { run } from '@laminar/laminar';
-import { createSession } from '@laminar/jwt';
+import { run } from '@laminarjs/laminar';
+import { createSession } from '@laminarjs/jwt';
 import { createApplication } from '../src/application';
 import { EnvVars } from '../src/env';
 

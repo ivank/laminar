@@ -1,6 +1,6 @@
 import { Command, createCommand, Option } from 'commander';
 import fs from 'fs';
-import { printDocument } from '@laminar/ts-compose';
+import { printDocument } from '@laminarjs/ts-compose';
 import { convertOapi } from './convert';
 import chalk from 'chalk';
 import { dirname } from 'path';

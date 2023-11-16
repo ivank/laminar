@@ -6,7 +6,7 @@ Lets install postgres
 
 ```shell
 yarn add pg
-yarn add @laminar/pg
+yarn add @laminarjs/pg
 ```
 
 > [examples/docs/src/database.ts:(openApi)](https://github.com/ivank/laminar/tree/main/examples/docs/src/database.ts#L10-L30)
@@ -87,7 +87,7 @@ Tying it all together, we call the `init` method. Now that would start all the s
 
 ## Multiple postgres databases
 
-What if you have multiple database serveres you want to talk to? The `@laminar/pg` can handle that, and with the correct typescript types.
+What if you have multiple database serveres you want to talk to? The `@laminarjs/pg` can handle that, and with the correct typescript types.
 
 > [examples/docs/src/database-multiple.ts:(openApi)](https://github.com/ivank/laminar/tree/main/examples/docs/src/database-multiple.ts#L7-L28)
 
@@ -137,7 +137,7 @@ Notice that we've put the two postgres services in an array. That would mean the
 > [examples/docs/src/middleware.ts:(middleware)](https://github.com/ivank/laminar/tree/main/examples/docs/src/middleware.ts#L4-L23)
 
 ```typescript
-import { Middleware } from '@laminar/laminar';
+import { Middleware } from '@laminarjs/laminar';
 import { Pool, PoolClient } from 'pg';
 
 interface DBContext {

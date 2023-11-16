@@ -1,4 +1,4 @@
-import { Document, DocumentContext } from '@laminar/ts-compose';
+import { Document, DocumentContext } from '@laminarjs/ts-compose';
 import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 

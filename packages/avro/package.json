@@ -1,9 +1,9 @@
 {
-  "name": "@laminar/avro",
+  "name": "@laminarjs/avro",
   "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "Use kafkajs with @laminar/laminar",
+  "description": "Use kafkajs with @laminarjs/laminar",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ivank/laminar.git",
   "homepage": "https://github.com/ivank/laminar/tree/main/packages/avro#readme",

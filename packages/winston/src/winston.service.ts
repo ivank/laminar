@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Service, LoggerLike, LoggerMetadata } from '@laminar/laminar';
+import { Service, LoggerLike, LoggerMetadata } from '@laminarjs/laminar';
 import type { Logger } from 'winston';
 
 /**

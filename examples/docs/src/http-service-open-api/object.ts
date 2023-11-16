@@ -1,4 +1,4 @@
-import { HttpListener, HttpService, init, jsonOk, openApi } from '@laminar/laminar';
+import { HttpListener, HttpService, init, jsonOk, openApi } from '@laminarjs/laminar';
 
 /**
  * A simple function to mock getting data out of a data store

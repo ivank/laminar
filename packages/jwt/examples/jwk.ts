@@ -1,5 +1,5 @@
-import { get, post, init, router, HttpService, jsonOk } from '@laminar/laminar';
-import { jwkPublicKey, createSession, authMiddleware } from '@laminar/jwt';
+import { get, post, init, router, HttpService, jsonOk } from '@laminarjs/laminar';
+import { jwkPublicKey, createSession, authMiddleware } from '@laminarjs/jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import nock from 'nock';

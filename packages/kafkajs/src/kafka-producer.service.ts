@@ -1,7 +1,7 @@
 import type { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import type { ConfluentSchema, RawAvroSchema } from '@kafkajs/confluent-schema-registry/dist/@types';
 import type { Kafka, Producer, ProducerConfig, RecordMetadata, ProducerRecord } from 'kafkajs';
-import { Middleware, Service } from '@laminar/laminar';
+import { Middleware, Service } from '@laminarjs/laminar';
 import { EncodedProducerRecord, EncodedSchemaProducerRecord } from './types';
 
 /**

@@ -23,13 +23,13 @@ yarn add --dev @types/pg typescript
 Next we add typescript and some types
 
 ```shell
-yarn add @laminar/laminar @laminar/kafkajs @laminar/pg
+yarn add @laminarjs/laminar @laminarjs/kafkajs @laminarjs/pg
 ```
 
 We can now add laminar itself, along with connectors for kafkajs and pg.
 
 ```shell
-yarn add --dev @laminar/cli
+yarn add --dev @laminarjs/cli
 ```
 
 And finally we'll need the cli to generate some types for us.

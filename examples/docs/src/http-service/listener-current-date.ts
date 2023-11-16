@@ -1,4 +1,4 @@
-import { HttpListener, HttpService, jsonOk, passThroughMiddleware, init } from '@laminar/laminar';
+import { HttpListener, HttpService, jsonOk, passThroughMiddleware, init } from '@laminarjs/laminar';
 
 // << listener-current-date
 interface CurrentDateContext {

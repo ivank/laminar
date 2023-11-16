@@ -13,7 +13,7 @@ import {
   LoggerContext,
   yamlOk,
   LoggerLike,
-} from '@laminar/laminar';
+} from '@laminarjs/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/statements';

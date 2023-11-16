@@ -26,7 +26,7 @@ laminar avro
   Convert avro to typescript types
 
 laminar fixtures
-  Load pg tables and generate @laminar/fixtures types from them
+  Load pg tables and generate @laminarjs/fixtures types from them
 
 Example:
   laminar api --file openapi.yaml --output src/__generated__/openapi.yaml.ts

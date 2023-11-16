@@ -1,4 +1,4 @@
-import { Service } from '@laminar/laminar';
+import { Service } from '@laminarjs/laminar';
 import type { Kafka, AdminConfig, Admin, ITopicConfig } from 'kafkajs';
 
 /**

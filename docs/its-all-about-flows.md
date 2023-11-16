@@ -13,7 +13,7 @@ Lets see the simplest possible app with laminar, a very simple echo app
 > [packages/laminar/examples/echo.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo.ts)
 
 ```typescript
-import { HttpService, response, init } from '@laminar/laminar';
+import { HttpService, response, init } from '@laminarjs/laminar';
 
 const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 
@@ -31,7 +31,7 @@ We can go ahead and write a middleware, that would do stuff just before passing 
 > [packages/laminar/examples/echo-auth.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@laminar/laminar';
+import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@laminarjs/laminar';
 
 const auth: HttpMiddleware = (next) => async (req) =>
   req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
@@ -48,7 +48,7 @@ Notice that we actually execute the next middleware _inside_ our auth middleware
 > [packages/laminar/examples/echo-auth-log.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@laminar/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@laminarjs/laminar';
 
 const auth: HttpMiddleware = (next) => async (req) =>
   req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
@@ -76,7 +76,7 @@ Lets see how we can go about doing that.
 > [packages/laminar/examples/echo-auth-log-db.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@laminar/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@laminarjs/laminar';
 
 /**
  * Its a very simple database, that only has one function:

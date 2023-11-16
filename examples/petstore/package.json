@@ -10,7 +10,7 @@
   "homepage": "https://github.com/ivank/laminar/tree/main/examples/petstore#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@laminar/cli": "*",
+    "@laminarjs/cli": "*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.9",
@@ -37,9 +37,9 @@
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@laminar/jwt": "*",
-    "@laminar/laminar": "*",
-    "@laminar/pg": "*",
+    "@laminarjs/jwt": "*",
+    "@laminarjs/laminar": "*",
+    "@laminarjs/pg": "*",
     "pg": "^8.11.3"
   }
 }

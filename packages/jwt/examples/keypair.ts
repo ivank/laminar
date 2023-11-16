@@ -1,5 +1,5 @@
-import { get, post, HttpService, router, init, jsonOk, HttpListener } from '@laminar/laminar';
-import { authMiddleware, createSession } from '@laminar/jwt';
+import { get, post, HttpService, router, init, jsonOk, HttpListener } from '@laminarjs/laminar';
+import { authMiddleware, createSession } from '@laminarjs/jwt';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

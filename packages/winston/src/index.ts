@@ -1,5 +1,5 @@
 /**
  * @packageDocumentation
- * @module @laminar/winston
+ * @module @laminarjs/winston
  */
 export { WinstonService } from './winston.service';

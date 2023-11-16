@@ -18,13 +18,13 @@ Supported JSON Schema drafts
 ### Usage
 
 ```shell
-yarn add @laminar/json-schema
+yarn add @laminarjs/json-schema
 ```
 
 > [examples/simple.ts](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/simple.ts)
 
 ```typescript
-import { validate, Schema } from '@laminar/json-schema';
+import { validate, Schema } from '@laminarjs/json-schema';
 
 const schema: Schema = {
   type: 'string',
@@ -49,7 +49,7 @@ It is comparatively slower than the venerable [Ajv](https://github.com/epoberezk
 
 It does not rely on any shared state or static parameters returning all the errors for a given validation operation in one result. Which was one of the reasons to develop an alternative to Ajv in the first place.
 
-It was made as a lightweight dependency to [@laminar/laminar](https://github.com/ivank/laminar) framework with nice error messages.
+It was made as a lightweight dependency to [@laminarjs/laminar](https://github.com/ivank/laminar) framework with nice error messages.
 
 ### Examples
 
@@ -60,7 +60,7 @@ If we assume we have those 2 http resources at the given URLs, You can compile t
 > [examples/compile-urls.ts](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/compile-urls.ts)
 
 ```typescript
-import { validate, compile } from '@laminar/json-schema';
+import { validate, compile } from '@laminarjs/json-schema';
 import nock from 'nock';
 
 const mainSchema = `
@@ -109,7 +109,7 @@ You can also provide paths to local files to download the schema from. It it end
 > [examples/validate-local-schema.ts](https://github.com/ivank/laminar/tree/main/packages/json-schema/examples/validate-local-schema.ts)
 
 ```typescript
-import { validateCompiled, validate, compile } from '@laminar/json-schema';
+import { validateCompiled, validate, compile } from '@laminarjs/json-schema';
 import { join } from 'path';
 
 const schema = join(__dirname, 'color-schema.yaml');

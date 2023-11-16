@@ -1,5 +1,5 @@
 {
-  "name": "@laminar/laminar",
+  "name": "@laminarjs/laminar",
   "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -48,7 +48,7 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@laminar/json-schema": "workspace:*",
+    "@laminarjs/json-schema": "workspace:*",
     "mime-types": "^2.1.35",
     "openapi-schemas": "^2.1.0",
     "openapi3-ts": "^4.1.2"

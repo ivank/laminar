@@ -10,7 +10,7 @@ import {
   Middleware,
   securityError,
   HttpError,
-} from '@laminar/laminar';
+} from '@laminarjs/laminar';
 
 const isJWTData = (data: jsonwebtoken.JwtPayload | string | null): data is JWTData =>
   data !== null && typeof data === 'object';

@@ -1,9 +1,9 @@
 {
-  "name": "@laminar/kafkajs",
+  "name": "@laminarjs/kafkajs",
   "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "Use kafkajs with @laminar/laminar",
+  "description": "Use kafkajs with @laminarjs/laminar",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ivank/laminar.git",
   "homepage": "https://github.com/ivank/laminar/tree/main/packages/kafkajs#readme",
@@ -11,7 +11,7 @@
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
     "@kafkajs/confluent-schema-registry": "^3.3.0",
-    "@laminar/laminar": "workspace:*",
+    "@laminarjs/laminar": "workspace:*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/uuid": "^9.0.7",
@@ -39,7 +39,7 @@
   },
   "peerDependencies": {
     "@kafkajs/confluent-schema-registry": "*",
-    "@laminar/laminar": "*",
+    "@laminarjs/laminar": "*",
     "kafkajs": "*"
   }
 }

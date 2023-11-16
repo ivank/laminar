@@ -5,7 +5,7 @@ A CLI for the Open Api implementation for the laminar http server.
 ## Usage
 
 ```
-yarn add @laminar/cli
+yarn add @laminarjs/cli
 ```
 
 Given a OpenAPI config file:
@@ -79,7 +79,7 @@ Then you can load the types like this:
 > [examples/api.ts](https://github.com/ivank/laminar/tree/main/packages/cli/examples/api.ts)
 
 ```typescript
-import { HttpService, init, jsonOk } from '@laminar/laminar';
+import { HttpService, init, jsonOk } from '@laminarjs/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api.yaml';
 

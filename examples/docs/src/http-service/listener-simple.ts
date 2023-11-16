@@ -1,4 +1,4 @@
-import { HttpContext, HttpResponse, HttpService, jsonOk, init } from '@laminar/laminar';
+import { HttpContext, HttpResponse, HttpService, jsonOk, init } from '@laminarjs/laminar';
 
 // << listener-simple
 const simpleListener = async (ctx: HttpContext): Promise<HttpResponse> => {

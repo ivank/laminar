@@ -1,5 +1,5 @@
-import { Middleware } from '@laminar/laminar';
-import { PgContext, PgClient } from '@laminar/pg';
+import { Middleware } from '@laminarjs/laminar';
+import { PgContext, PgClient } from '@laminarjs/pg';
 import { NewPet, Pet } from '../__generated__/petstore';
 
 /**

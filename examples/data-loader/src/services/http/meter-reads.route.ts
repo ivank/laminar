@@ -1,5 +1,5 @@
-import { jsonOk } from '@laminar/laminar';
-import { PgContext } from '@laminar/pg';
+import { jsonOk } from '@laminarjs/laminar';
+import { PgContext } from '@laminarjs/pg';
 import { PathV1MeterreadsGet } from '../../__generated__/schema';
 import { meterReadsSelectQuery } from '../../queries/meter-reads-select.query';
 

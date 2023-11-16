@@ -1,6 +1,6 @@
 import type { ConfluentSchema } from '@kafkajs/confluent-schema-registry/dist/@types';
 import type { logCreator, RecordMetadata } from 'kafkajs';
-import { LoggerLike } from '@laminar/laminar';
+import { LoggerLike } from '@laminarjs/laminar';
 import { KafkaProducerService } from './kafka-producer.service';
 import { EncodedMessage } from './types';
 

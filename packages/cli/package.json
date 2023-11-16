@@ -1,16 +1,16 @@
 {
-  "name": "@laminar/cli",
+  "name": "@laminarjs/cli",
   "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "CLI generating typescript types for @laminar/laminar",
+  "description": "CLI generating typescript types for @laminarjs/laminar",
   "author": "Ivan Kerin <ikerin@gmail.com>",
   "repository": "git@github.com:ivank/laminar.git",
   "homepage": "https://github.com/ivank/laminar/tree/main/packages/cli#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
-    "@laminar/laminar": "workspace:*",
+    "@laminarjs/laminar": "workspace:*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.9",
@@ -54,8 +54,8 @@
     "preset": "../../jest.json"
   },
   "dependencies": {
-    "@laminar/json-schema": "workspace:*",
-    "@laminar/ts-compose": "workspace:*",
+    "@laminarjs/json-schema": "workspace:*",
+    "@laminarjs/ts-compose": "workspace:*",
     "avsc": "^5.7.7",
     "chalk": "^4.1.1",
     "commander": "^11.1.0",

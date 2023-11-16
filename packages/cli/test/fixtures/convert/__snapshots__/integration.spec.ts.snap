@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Fixtures ts test Should convert fixtures successfully: Normal 1`] = `
-"import { Fixture } from "@laminar/fixtures";
+"import { Fixture } from "@laminarjs/fixtures";
 
 /**
  * Fixtures generated for postgres tables */
@@ -11,7 +11,7 @@ exports[`Fixtures ts test Should convert fixtures successfully: Normal 1`] = `
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mytest = fixture<test>({
  *   // ...
  * });
@@ -35,7 +35,7 @@ export type test = Fixture<{
 `;
 
 exports[`Fixtures ts test Should convert fixtures successfully: Suffix 1`] = `
-"import { Fixture } from "@laminar/fixtures";
+"import { Fixture } from "@laminarjs/fixtures";
 
 /**
  * Fixtures generated for postgres tables */
@@ -45,7 +45,7 @@ exports[`Fixtures ts test Should convert fixtures successfully: Suffix 1`] = `
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const mytestFixture = fixture<testFixture>({
  *   // ...
  * });
@@ -69,7 +69,7 @@ export type testFixture = Fixture<{
 `;
 
 exports[`Fixtures ts test Should convert fixtures successfully: TitleCase 1`] = `
-"import { Fixture } from "@laminar/fixtures";
+"import { Fixture } from "@laminarjs/fixtures";
 
 /**
  * Fixtures generated for postgres tables */
@@ -79,7 +79,7 @@ exports[`Fixtures ts test Should convert fixtures successfully: TitleCase 1`] = 
  * You can use the type with a fixutre, or by creating a fixture builder
  *
  * \`\`\`typescript
- * import { fixture, BuildFixture } from '@laminar/fixtures';
+ * import { fixture, BuildFixture } from '@laminarjs/fixtures';
  * const myTestFixture = fixture<TestFixture>({
  *   // ...
  * });

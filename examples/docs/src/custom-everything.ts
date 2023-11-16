@@ -1,4 +1,4 @@
-import { toRequestListener, response, HttpListener, errorsMiddleware, toHttpRequest } from '@laminar/laminar';
+import { toRequestListener, response, HttpListener, errorsMiddleware, toHttpRequest } from '@laminarjs/laminar';
 import { createServer } from 'http';
 
 /**

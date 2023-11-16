@@ -7,7 +7,7 @@ import {
   optional,
   run,
   securityError,
-} from '@laminar/laminar';
+} from '@laminarjs/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { openApiTyped, Pet } from './__generated__/integration.api';

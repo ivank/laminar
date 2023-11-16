@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @laminar/pgboss
+ * @module @laminarjs/pgboss
  */
 export { QueueService } from './queue.service';
 export { QueueWorkerService } from './queue.worker.service';

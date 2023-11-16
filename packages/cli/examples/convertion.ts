@@ -1,4 +1,4 @@
-import { HttpService, init, jsonOk } from '@laminar/laminar';
+import { HttpService, init, jsonOk } from '@laminarjs/laminar';
 import { openApiTyped } from './__generated__/convertion.yaml';
 import { join } from 'path';
 

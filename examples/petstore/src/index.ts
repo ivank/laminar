@@ -1,5 +1,5 @@
-import { init } from '@laminar/laminar';
-import { createSession } from '@laminar/jwt';
+import { init } from '@laminarjs/laminar';
+import { createSession } from '@laminarjs/jwt';
 import { createApplication } from './application';
 import { toEnvVars } from './env';
 

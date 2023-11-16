@@ -1,5 +1,5 @@
 import { QueryResult, QueryConfig, QueryResultRow, PoolClient, DatabaseError } from 'pg';
-import { LoggerLike, LaminarError } from '@laminar/laminar';
+import { LoggerLike, LaminarError } from '@laminarjs/laminar';
 
 export interface PgClientConfig {
   name?: string;

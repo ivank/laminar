@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Types Content Test api-with-examples.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
@@ -27,7 +27,7 @@ export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
 `;
 
 exports[`Types Content Test balance-service.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<HttpListener<R>> => openApi(config);
 
@@ -389,7 +389,7 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
 `;
 
 exports[`Types Content Test cloudtasks.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<HttpListener<R>> => openApi(config);
 
@@ -2946,7 +2946,7 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
 `;
 
 exports[`Types Content Test converter.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
@@ -2990,7 +2990,7 @@ export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
 `;
 
 exports[`Types Content Test link-example.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
@@ -3109,7 +3109,7 @@ export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
 `;
 
 exports[`Types Content Test petstore.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
@@ -3179,7 +3179,7 @@ export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
 `;
 
 exports[`Types Content Test petstore-expanded.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
@@ -3315,7 +3315,7 @@ export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
 `;
 
 exports[`Types Content Test pol.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(config: Config<R, TAuthInfo>): Promise<HttpListener<R>> => openApi(config);
 
@@ -6216,7 +6216,7 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
 `;
 
 exports[`Types Content Test schemes.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, OapiSecurityResolver, OapiAuthInfo, ResponseOapi } from "@laminarjs/laminar";
 
 import { Readable } from "stream";
 
@@ -7978,7 +7978,7 @@ export interface Config<R extends Empty = Empty, TAuthInfo extends OapiAuthInfo 
 `;
 
 exports[`Types Content Test statements.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminarjs/laminar";
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 
@@ -8040,7 +8040,7 @@ export interface Config<R extends Empty = Empty> extends OapiConfig<R> {
 `;
 
 exports[`Types Content Test uspto.yaml 1`] = `
-"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminar/laminar";
+"import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from "@laminarjs/laminar";
 
 import { Readable } from "stream";
 

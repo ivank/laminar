@@ -1,5 +1,5 @@
-import { ResolvedSchema } from '@laminar/json-schema';
-import { printDocument } from '@laminar/ts-compose';
+import { ResolvedSchema } from '@laminarjs/json-schema';
+import { printDocument } from '@laminarjs/ts-compose';
 import { oas31 } from 'openapi3-ts';
 import { convertOapi as apiConvert } from './commands/api/convert';
 import { convertOapi as axiosConvert } from './commands/axios/convert';

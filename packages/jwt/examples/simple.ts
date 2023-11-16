@@ -1,5 +1,5 @@
-import { get, post, init, HttpService, jsonOk, router, HttpListener } from '@laminar/laminar';
-import { authMiddleware, createSession } from '@laminar/jwt';
+import { get, post, init, HttpService, jsonOk, router, HttpListener } from '@laminarjs/laminar';
+import { authMiddleware, createSession } from '@laminarjs/jwt';
 
 const secret = '123';
 const auth = authMiddleware({ secret });

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @laminar/json-schema
+ * @module @laminarjs/json-schema
  */
 
 export { ValidationError } from './ValidationError';

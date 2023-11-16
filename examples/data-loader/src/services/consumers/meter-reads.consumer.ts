@@ -1,6 +1,6 @@
-import { EachMessageConsumer } from '@laminar/kafkajs';
-import { LoggerContext } from '@laminar/laminar';
-import { PgContext } from '@laminar/pg';
+import { EachMessageConsumer } from '@laminarjs/kafkajs';
+import { LoggerContext } from '@laminarjs/laminar';
+import { PgContext } from '@laminarjs/pg';
 import { meterReadsInsertQuery, InsertMeterRead } from '../../queries/meter-reads-insert.query';
 import { MeterReading } from '../../__generated__/meter-reading.json';
 

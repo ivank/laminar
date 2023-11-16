@@ -1,7 +1,7 @@
 ## Logical Type Decimal
 
 ```bash
-yarn add @laminar/avro
+yarn add @laminarjs/avro
 ```
 
 And then you can use `AvroDecimal` for a logicalType of a field.
@@ -10,7 +10,7 @@ And then you can use `AvroDecimal` for a logicalType of a field.
 
 ```typescript
 import { Type, Schema } from 'avsc';
-import { AvroDecimal } from '@laminar/avro';
+import { AvroDecimal } from '@laminarjs/avro';
 import { Decimal } from 'decimal.js';
 
 const decimalSchema: Schema = {
@@ -36,7 +36,7 @@ You can also use then you can use `AvroEpochDays` for a logicalType of a field.
 
 ```typescript
 import { Type, Schema } from 'avsc';
-import { AvroTimestampMillis } from '@laminar/avro';
+import { AvroTimestampMillis } from '@laminarjs/avro';
 
 const eventSchema: Schema = {
   type: 'record',
@@ -65,7 +65,7 @@ It also supports schema evolution from int, logical:date and string types
 
 ```typescript
 import { Type, Schema } from 'avsc';
-import { AvroTimestampMillis } from '@laminar/avro';
+import { AvroTimestampMillis } from '@laminarjs/avro';
 
 const previousSchema: Schema = {
   type: 'record',
@@ -107,7 +107,7 @@ You can also use `AvroEpochDays` for a logicalType of a field.
 
 ```typescript
 import { Type, Schema } from 'avsc';
-import { AvroEpochDays } from '@laminar/avro';
+import { AvroEpochDays } from '@laminarjs/avro';
 
 const eventSchema: Schema = {
   type: 'record',
@@ -134,7 +134,7 @@ It also supports schema evolution from int, logical:date and string types
 
 ```typescript
 import { Type, Schema } from 'avsc';
-import { AvroEpochDays } from '@laminar/avro';
+import { AvroEpochDays } from '@laminarjs/avro';
 
 const previousSchema: Schema = {
   type: 'record',

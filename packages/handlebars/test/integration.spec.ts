@@ -1,4 +1,4 @@
-import { get, post, router, HttpService, run, htmlOk, htmlCreated } from '@laminar/laminar';
+import { get, post, router, HttpService, run, htmlOk, htmlCreated } from '@laminarjs/laminar';
 import axios, { AxiosResponse } from 'axios';
 import { writeFileSync, mkdirSync } from 'fs';
 import { retry } from 'ts-retry-promise';

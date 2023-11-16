@@ -10,7 +10,7 @@ import type {
   Message,
   ProducerRecord,
 } from 'kafkajs';
-import { AbstractMiddleware, Empty } from '@laminar/laminar';
+import { AbstractMiddleware, Empty } from '@laminarjs/laminar';
 
 export type KafkaMessage = MessageSetEntry | RecordBatchEntry;
 

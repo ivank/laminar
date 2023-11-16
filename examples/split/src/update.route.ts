@@ -1,5 +1,5 @@
-import { AppRoute, LoggerContext, jsonOk } from '@laminar/laminar';
-import { PgContext } from '@laminar/pg';
+import { AppRoute, LoggerContext, jsonOk } from '@laminarjs/laminar';
+import { PgContext } from '@laminarjs/pg';
 
 /**
  * Updating a user requires a PG connection and logging capablilities

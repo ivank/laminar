@@ -197,10 +197,10 @@ const createApplication = async (): Promise<Application> => {
 
 ## Type generation
 
-You can install `@laminar/cli` package to generate types for your OpenApi http listener.
+You can install `@laminarjs/cli` package to generate types for your OpenApi http listener.
 
 ```shell
-yarn add --dev @laminar/cli
+yarn add --dev @laminarjs/cli
 yarn laminar api --file schema/api.yaml --output src/__generated/api.yaml.ts
 ```
 

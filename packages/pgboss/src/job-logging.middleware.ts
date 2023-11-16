@@ -1,4 +1,4 @@
-import { toErrorMetadata, withStaticMetadata, LoggerContext, LoggerLike } from '@laminar/laminar';
+import { toErrorMetadata, withStaticMetadata, LoggerContext, LoggerLike } from '@laminarjs/laminar';
 import { WorkerMiddleware } from './types';
 
 /**

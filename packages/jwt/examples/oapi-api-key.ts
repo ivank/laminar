@@ -1,5 +1,5 @@
-import { HttpService, init, openApi, textOk, setCookie } from '@laminar/laminar';
-import { createSession, verifyToken } from '@laminar/jwt';
+import { HttpService, init, openApi, textOk, setCookie } from '@laminarjs/laminar';
+import { createSession, verifyToken } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {

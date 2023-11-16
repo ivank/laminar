@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, openApi, init } from '@laminar/laminar';
+import { HttpService, jsonOk, openApi, init } from '@laminarjs/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'convertion.yaml');

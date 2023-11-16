@@ -46,7 +46,7 @@ interface Column {
 
 export const fixturesCommand = (logger: Logger = console): Command =>
   createCommand('fixtures')
-    .description('Load pg tables and generate @laminar/fixtures types from them')
+    .description('Load pg tables and generate @laminarjs/fixtures types from them')
     .argument('connection-string', 'Connection string uri for the postgres database')
     .option<string[]>(
       '-s, --table <table-name>',

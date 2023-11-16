@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { Command, createCommand, Option } from 'commander';
 import { mkdirSync, watchFile, writeFileSync } from 'fs';
 import { convertOapi } from './convert';
-import { printDocument } from '@laminar/ts-compose';
+import { printDocument } from '@laminarjs/ts-compose';
 import { dirname } from 'path';
 import { Logger } from '../../types';
 import { parseSchema, toContext, concatStreamToString } from '../../helpers';

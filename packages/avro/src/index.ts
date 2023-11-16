@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @laminar/avro
+ * @module @laminarjs/avro
  */
 export { AvroDecimal, bufferToDecimal, decimalToBuffer, to64Bit } from './avro-decimal';
 export { AvroTimestampMillis } from './avro-timestamp-millis';

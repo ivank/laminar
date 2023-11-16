@@ -1,5 +1,5 @@
 import ts from 'typescript';
-import { Document, DocumentContext } from '@laminar/ts-compose';
+import { Document, DocumentContext } from '@laminarjs/ts-compose';
 import { Schema } from 'avsc';
 
 export type CustomLogicalType =

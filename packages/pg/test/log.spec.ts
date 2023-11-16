@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { HttpService, LoggerLike, Middleware, run, router, post, jsonOk, get, jsonNotFound } from '@laminar/laminar';
+import { HttpService, LoggerLike, Middleware, run, router, post, jsonOk, get, jsonNotFound } from '@laminarjs/laminar';
 import { pgMiddleware, PgService } from '../src';
 import { Pool } from 'pg';
 

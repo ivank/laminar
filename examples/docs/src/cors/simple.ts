@@ -1,4 +1,4 @@
-import { HttpService, init, jsonOk, openApi, corsMiddleware } from '@laminar/laminar';
+import { HttpService, init, jsonOk, openApi, corsMiddleware } from '@laminarjs/laminar';
 import { join } from 'path';
 
 const findUser = (id: string) => ({ id, name: 'John' });

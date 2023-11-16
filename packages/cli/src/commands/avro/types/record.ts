@@ -1,6 +1,6 @@
 import { schema as avroSchema, Schema } from 'avsc';
 import { Convert } from '../types';
-import { Type, document, mapWithContext } from '@laminar/ts-compose';
+import { Type, document, mapWithContext } from '@laminarjs/ts-compose';
 import { convertType } from '../convert';
 import { convertName, firstUpperCase, namedType } from '../helpers';
 

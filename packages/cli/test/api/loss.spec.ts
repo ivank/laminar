@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, run } from '@laminar/laminar';
+import { HttpService, jsonOk, run } from '@laminarjs/laminar';
 import axios from 'axios';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/loss';

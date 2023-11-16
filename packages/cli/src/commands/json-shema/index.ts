@@ -1,7 +1,7 @@
-import { compile } from '@laminar/json-schema';
+import { compile } from '@laminarjs/json-schema';
 import { Command, createCommand } from 'commander';
 import fs from 'fs';
-import { printDocument, Type, document } from '@laminar/ts-compose';
+import { printDocument, Type, document } from '@laminarjs/ts-compose';
 import chalk from 'chalk';
 import { dirname } from 'path';
 import { Logger } from '../../types';

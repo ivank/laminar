@@ -47,7 +47,7 @@ In practice it ends up looking like dependency injection, but it's just function
 > [examples/docs/src/middleware.ts:(middleware)](https://github.com/ivank/laminar/tree/main/examples/docs/src/middleware.ts#L4-L23)
 
 ```typescript
-import { Middleware } from '@laminar/laminar';
+import { Middleware } from '@laminarjs/laminar';
 import { Pool, PoolClient } from 'pg';
 
 interface DBContext {
@@ -68,16 +68,16 @@ const pgPoolMiddleware = (pool: Pool): Middleware<DBContext> => {
 
 ## Installation
 
-You'll need to install `@laminar/laminar` package:
+You'll need to install `@laminarjs/laminar` package:
 
 ```shell
-yarn add @laminar/laminar
+yarn add @laminarjs/laminar
 ```
 
 Additionally, if you want to take advantage of the type generation:
 
 ```shell
-yarn add --dev @laminar/cli
+yarn add --dev @laminarjs/cli
 ```
 
 ## A tutorial to get started.
@@ -119,7 +119,7 @@ components:
           type: string
 ```
 
-First we'll generate the types for its so its easier to implement it. Since we've already installed `@laminar/cli` we can:
+First we'll generate the types for its so its easier to implement it. Since we've already installed `@laminarjs/cli` we can:
 
 ```shell
 yarn laminar api --file api.yaml --output __generated__/api.ts
@@ -128,7 +128,7 @@ yarn laminar api --file api.yaml --output __generated__/api.ts
 > [examples/simple/src/index.ts](https://github.com/ivank/laminar/tree/main/examples/simple/src/index.ts)
 
 ```typescript
-import { HttpService, init, jsonOk } from '@laminar/laminar';
+import { HttpService, init, jsonOk } from '@laminarjs/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -193,16 +193,16 @@ You can dive in directly with some example apps:
 
 Laminar includes packages that are used internally or are additions to its core features.
 
-- [@laminar/laminar](https://github.com/ivank/laminar/main/tree/packages/laminar) - [OpenAPI](https://swagger.io/docs/) the core laminar package
-- [@laminar/cli](https://github.com/ivank/laminar/main/tree/packages/cli) - [OpenAPI](https://swagger.io/docs/) type generation for OpenAPI, json-schema, Avro and axios
-- [@laminar/handlebars](https://github.com/ivank/laminar/main/tree/packages/handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
-- [@laminar/jwt](https://github.com/ivank/laminar/main/tree/packages/handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
-- [@laminar/json-schema](https://github.com/ivank/laminar/main/tree/packages/json-schema) - Lightweight json-schema validator
-- [@laminar/pg](https://github.com/ivank/laminar/main/tree/packages/pg) - Connect to postgres db
-- [@laminar/winston](https://github.com/ivank/laminar/tree/main/packages/winston) - Use winston logger
-- [@laminar/kafkajs](https://github.com/ivank/laminar/tree/main/packages/kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
-- [@laminar/pgboss](https://github.com/ivank/laminar/tree/main/packages/pgboss) - Use pgboss to schedule jobs
-- [@laminar/fixtures](https://github.com/ivank/laminar/tree/main/packages/fixtures) - Fixtures for pg with relationships
+- [@laminarjs/laminar](https://github.com/ivank/laminar/main/tree/packages/laminar) - [OpenAPI](https://swagger.io/docs/) the core laminar package
+- [@laminarjs/cli](https://github.com/ivank/laminar/main/tree/packages/cli) - [OpenAPI](https://swagger.io/docs/) type generation for OpenAPI, json-schema, Avro and axios
+- [@laminarjs/handlebars](https://github.com/ivank/laminar/main/tree/packages/handlebars) - [handlebars](https://github.com/wycats/handlebars.js/) middleware
+- [@laminarjs/jwt](https://github.com/ivank/laminar/main/tree/packages/handlebars) - [JSON Web Token](https://github.com/auth0/node-jsonwebtoken) middleware
+- [@laminarjs/json-schema](https://github.com/ivank/laminar/main/tree/packages/json-schema) - Lightweight json-schema validator
+- [@laminarjs/pg](https://github.com/ivank/laminar/main/tree/packages/pg) - Connect to postgres db
+- [@laminarjs/winston](https://github.com/ivank/laminar/tree/main/packages/winston) - Use winston logger
+- [@laminarjs/kafkajs](https://github.com/ivank/laminar/tree/main/packages/kafkajs) - Use kafkajs to consumer and produce kafka messages, with schema registry support
+- [@laminarjs/pgboss](https://github.com/ivank/laminar/tree/main/packages/pgboss) - Use pgboss to schedule jobs
+- [@laminarjs/fixtures](https://github.com/ivank/laminar/tree/main/packages/fixtures) - Fixtures for pg with relationships
 
 ## Running the tests
 

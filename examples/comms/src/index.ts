@@ -1,4 +1,4 @@
-import { init } from '@laminar/laminar';
+import { init } from '@laminarjs/laminar';
 import { createApplication } from './application';
 import { toEnvVars } from './env';
 

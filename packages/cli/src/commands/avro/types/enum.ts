@@ -1,6 +1,6 @@
 import { schema, Schema } from 'avsc';
 import { Convert } from '../types';
-import { Type } from '@laminar/ts-compose';
+import { Type } from '@laminarjs/ts-compose';
 import { namedType, firstUpperCase } from '../helpers';
 
 export const isEnumType = (type: Schema): type is schema.EnumType =>

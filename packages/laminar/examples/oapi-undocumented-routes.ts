@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, router, get, redirect, openApi, init } from '@laminar/laminar';
+import { HttpService, jsonOk, router, get, redirect, openApi, init } from '@laminarjs/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi.yaml');

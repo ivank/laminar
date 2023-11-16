@@ -1,4 +1,4 @@
-import { HttpService, router, get, jsonOk, HttpListener, run } from '@laminar/laminar';
+import { HttpService, router, get, jsonOk, HttpListener, run } from '@laminarjs/laminar';
 import axios from 'axios';
 import { keycloakAuthMiddleware, createSession } from '../src';
 import { generateKeyPair } from 'crypto';

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ResolvedSchema, ResultError, Schema, FormatErrors } from '@laminar/json-schema';
+import { ResolvedSchema, ResultError, Schema, FormatErrors } from '@laminarjs/json-schema';
 import { Empty } from '../../types';
 import { oas31 } from 'openapi3-ts';
 import { HttpContext, HttpListener, HttpResponse } from '../types';

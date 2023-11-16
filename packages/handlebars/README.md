@@ -7,8 +7,8 @@ Handlebars implementation for the laminar http server.
 > [examples/html.ts](https://github.com/ivank/laminar/tree/main/packages/handlebars/examples/html.ts)
 
 ```typescript
-import { init, router, get, post, HttpService, htmlOk } from '@laminar/laminar';
-import { handlebarsMiddleware } from '@laminar/handlebars';
+import { init, router, get, post, HttpService, htmlOk } from '@laminarjs/laminar';
+import { handlebarsMiddleware } from '@laminarjs/handlebars';
 import { join } from 'path';
 
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html') });
@@ -34,8 +34,8 @@ Creating the middleware would crawl through the directory and all of its subdire
 > [examples/yaml.ts](https://github.com/ivank/laminar/tree/main/packages/handlebars/examples/yaml.ts)
 
 ```typescript
-import { init, router, get, HttpService, yamlOk, yamlBadRequest } from '@laminar/laminar';
-import { handlebarsMiddleware } from '@laminar/handlebars';
+import { init, router, get, HttpService, yamlOk, yamlBadRequest } from '@laminarjs/laminar';
+import { handlebarsMiddleware } from '@laminarjs/handlebars';
 import { join } from 'path';
 
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-yaml'), views: 'yaml', extension: 'hbr' });
@@ -59,8 +59,8 @@ You can also create the handblebars renderer directly without going through a mi
 > [examples/direct.ts](https://github.com/ivank/laminar/tree/main/packages/handlebars/examples/direct.ts)
 
 ```typescript
-import { init, router, get, post, HttpService, htmlOk } from '@laminar/laminar';
-import { handlebars } from '@laminar/handlebars';
+import { init, router, get, post, HttpService, htmlOk } from '@laminarjs/laminar';
+import { handlebars } from '@laminarjs/handlebars';
 import { join } from 'path';
 
 const hbs = handlebars({ dir: join(__dirname, 'templates-html') });
@@ -86,8 +86,8 @@ By default handlebars middleware would preload all the templates and keep them i
 > [examples/expiry-cache.ts](https://github.com/ivank/laminar/tree/main/packages/handlebars/examples/expiry-cache.ts)
 
 ```typescript
-import { init, router, get, post, HttpService, htmlOk } from '@laminar/laminar';
-import { handlebarsMiddleware } from '@laminar/handlebars';
+import { init, router, get, post, HttpService, htmlOk } from '@laminarjs/laminar';
+import { handlebarsMiddleware } from '@laminarjs/handlebars';
 import { join } from 'path';
 
 const handlebars = handlebarsMiddleware({ dir: join(__dirname, 'templates-html'), cacheType: 'expiry' });

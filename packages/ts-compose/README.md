@@ -42,7 +42,7 @@ Then you can load the types like this:
 > [examples/document.ts](https://github.com/ivank/laminar/tree/main/packages/ts-compose/examples/document.ts)
 
 ```typescript
-import { Type, document, mapWithContext, Document, DocumentContext } from '@laminar/ts-compose';
+import { Type, document, mapWithContext, Document, DocumentContext } from '@laminarjs/ts-compose';
 import { printDocument, withIdentifier } from '../src';
 
 /**

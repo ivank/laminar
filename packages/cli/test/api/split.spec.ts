@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, jsonNotFound, run } from '@laminar/laminar';
+import { HttpService, jsonOk, jsonNotFound, run } from '@laminarjs/laminar';
 import axios, { AxiosError } from 'axios';
 import { join } from 'path';
 import { inspect } from 'util';

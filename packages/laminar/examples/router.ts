@@ -1,4 +1,4 @@
-import { get, put, HttpService, router, jsonOk, jsonNotFound, init } from '@laminar/laminar';
+import { get, put, HttpService, router, jsonOk, jsonNotFound, init } from '@laminarjs/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',

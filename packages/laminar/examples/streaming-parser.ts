@@ -1,4 +1,4 @@
-import { HttpService, HttpListener, BodyParser, defaultBodyParsers, csv, ok, init } from '@laminar/laminar';
+import { HttpService, HttpListener, BodyParser, defaultBodyParsers, csv, ok, init } from '@laminarjs/laminar';
 import { pipeline, Readable, Transform } from 'stream';
 import { parse } from 'csv-parse';
 import { stringify } from 'csv-stringify';

@@ -7,8 +7,8 @@ Handle lifecyle of the pg connection pool.
 > [examples/simple.ts](https://github.com/ivank/laminar/tree/main/packages/pg/examples/simple.ts)
 
 ```typescript
-import { get, init, HttpService, jsonOk, router, HttpListener } from '@laminar/laminar';
-import { PgService, pgMiddleware } from '@laminar/pg';
+import { get, init, HttpService, jsonOk, router, HttpListener } from '@laminarjs/laminar';
+import { PgService, pgMiddleware } from '@laminarjs/pg';
 import { Pool } from 'pg';
 
 const pool = new PgService(
@@ -35,13 +35,13 @@ init({ initOrder: [pool, http], logger: console });
 
 PG doesn't parse enum arrays properly, since their oids are dynamic https://github.com/brianc/node-pg-types/issues/56
 
-`@laminar/pg` can mitigate that by loading all the enum oids at runtime and setting the appropriate parsers, before the pool is set to accept requests.
+`@laminarjs/pg` can mitigate that by loading all the enum oids at runtime and setting the appropriate parsers, before the pool is set to accept requests.
 
 > [examples/enum-arrays.ts](https://github.com/ivank/laminar/tree/main/packages/pg/examples/enum-arrays.ts)
 
 ```typescript
-import { get, init, HttpService, jsonOk, router, HttpListener } from '@laminar/laminar';
-import { PgService, pgMiddleware } from '@laminar/pg';
+import { get, init, HttpService, jsonOk, router, HttpListener } from '@laminarjs/laminar';
+import { PgService, pgMiddleware } from '@laminarjs/pg';
 import { Pool } from 'pg';
 
 const pool = new PgService(

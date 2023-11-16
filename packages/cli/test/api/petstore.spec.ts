@@ -12,7 +12,7 @@ import {
   file,
   ResponseOapi,
   LoggerLike,
-} from '@laminar/laminar';
+} from '@laminarjs/laminar';
 import axios, { AxiosError } from 'axios';
 import { join } from 'path';
 import { openApiTyped, Pet, NewPet } from './__generated__/petstore';

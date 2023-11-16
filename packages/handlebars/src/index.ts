@@ -1,9 +1,9 @@
 /**
  * @packageDocumentation
- * @module @laminar/handlebars
+ * @module @laminarjs/handlebars
  */
 
-import { Middleware } from '@laminar/laminar';
+import { Middleware } from '@laminarjs/laminar';
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { compile, RuntimeOptions, TemplateDelegate } from 'handlebars';
 import { join, relative } from 'path';

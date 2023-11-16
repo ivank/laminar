@@ -1,4 +1,4 @@
-import { HttpMiddleware, Empty, OapiSecurityResolver, securityOk, securityError, Security } from '@laminar/laminar';
+import { HttpMiddleware, Empty, OapiSecurityResolver, securityOk, securityError, Security } from '@laminarjs/laminar';
 import { authMiddleware, jwtSecurityResolver, toMissing } from './jwt';
 import { JWTVerify, RequestAuthInfo, User, JWTData, VerifyJWTData } from './types';
 

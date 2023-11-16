@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { queueMiddleware, QueueService, QueueWorkerService, QueueWorkersService } from '../src';
-import { HttpService, loggerMiddleware, textOk, run, router, get } from '@laminar/laminar';
+import { HttpService, loggerMiddleware, textOk, run, router, get } from '@laminarjs/laminar';
 import PgBoss from 'pg-boss';
 
 describe('Integration', () => {

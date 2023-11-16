@@ -1,4 +1,4 @@
-import { AbstractMiddleware, Empty } from '@laminar/laminar';
+import { AbstractMiddleware, Empty } from '@laminarjs/laminar';
 import type { WorkOptions, SendOptions, InsertOptions } from 'pg-boss';
 
 /**

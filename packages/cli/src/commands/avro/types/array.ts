@@ -1,6 +1,6 @@
 import { schema, Schema } from 'avsc';
 import { Convert } from '../types';
-import { Type, document } from '@laminar/ts-compose';
+import { Type, document } from '@laminarjs/ts-compose';
 import { convertType } from '../convert';
 
 export const isArrayType = (type: Schema): type is schema.ArrayType =>

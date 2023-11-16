@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { id, fixture, setUp, tearDown, rel } from '@laminar/fixtures';
+import { id, fixture, setUp, tearDown, rel } from '@laminarjs/fixtures';
 
 /**
  * Define the shape of the row we want to exist in the database

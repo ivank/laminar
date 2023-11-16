@@ -1,5 +1,5 @@
 {
-  "name": "@laminar/fixtures",
+  "name": "@laminarjs/fixtures",
   "version": "0.15.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ikerin/build-readme": "^1.1.1",
-    "@laminar/laminar": "workspace:*",
+    "@laminarjs/laminar": "workspace:*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.9",

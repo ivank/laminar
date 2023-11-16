@@ -1,4 +1,4 @@
-import { compile } from '@laminar/json-schema';
+import { compile } from '@laminarjs/json-schema';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { axiosContent } from '../../src';

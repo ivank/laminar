@@ -18,7 +18,7 @@ import {
   badRequest,
   textOk,
   init,
-} from '@laminar/laminar';
+} from '@laminarjs/laminar';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { Service } from '@laminar/laminar';
+import { Service } from '@laminarjs/laminar';
 
 export interface SimpleQueueJob<TData> {
   queue: string;

@@ -1,4 +1,4 @@
-import { Security } from '@laminar/laminar';
+import { Security } from '@laminarjs/laminar';
 import { SignOptions, Secret, GetPublicKeyOrSecret, VerifyOptions } from 'jsonwebtoken';
 
 export interface JWTData {

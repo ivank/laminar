@@ -1,4 +1,4 @@
-import { document, Document, mapWithContext, Type, Node, withImports, withIdentifier } from '@laminar/ts-compose';
+import { document, Document, mapWithContext, Type, Node, withImports, withIdentifier } from '@laminarjs/ts-compose';
 import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 import { convertSchema } from '../../convert-schema';

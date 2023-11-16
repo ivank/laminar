@@ -1,5 +1,5 @@
 import type PgBoss from 'pg-boss';
-import { Service } from '@laminar/laminar';
+import { Service } from '@laminarjs/laminar';
 import { Queue, Send, Worker } from './types';
 
 /**

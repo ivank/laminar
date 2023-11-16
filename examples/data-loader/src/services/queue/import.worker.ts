@@ -1,6 +1,6 @@
-import { LoggerContext } from '@laminar/laminar';
-import { PgContext } from '@laminar/pg';
-import { JobWorker } from '@laminar/pgboss';
+import { LoggerContext } from '@laminarjs/laminar';
+import { PgContext } from '@laminarjs/pg';
+import { JobWorker } from '@laminarjs/pgboss';
 import { meterReadsInsertQuery, InsertMeterRead } from '../../queries/meter-reads-insert.query';
 
 export interface Import {

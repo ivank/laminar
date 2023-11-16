@@ -10,7 +10,7 @@
   "homepage": "https://github.com/ivank/laminar/tree/main/examples/security#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@laminar/cli": "*",
+    "@laminarjs/cli": "*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
@@ -35,7 +35,7 @@
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@laminar/jwt": "*",
-    "@laminar/laminar": "*"
+    "@laminarjs/jwt": "*",
+    "@laminarjs/laminar": "*"
   }
 }

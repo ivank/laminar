@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @laminar/kafkajs
+ * @module @laminarjs/kafkajs
  */
 export { KafkaConsumerService } from './kafka-consumer.service';
 export { KafkaConsumerOptionalService } from './kafka-consumer-optional.service';

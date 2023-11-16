@@ -1,5 +1,5 @@
 import { Schema, schema } from 'avsc';
-import { document, Type, printDocument, withHeader, withImports } from '@laminar/ts-compose';
+import { document, Type, printDocument, withHeader, withImports } from '@laminarjs/ts-compose';
 import { Convert, Context } from './types';
 import { isWrappedUnion, convertWrappedUnionType } from './types/wrapped-union';
 import { isUnion, convertUnionType } from './types/union';

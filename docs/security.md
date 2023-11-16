@@ -50,7 +50,7 @@ If the user is authenticated, then laminar will add the user auth info in the `u
 > [examples/security/src/index.ts](https://github.com/ivank/laminar/tree/main/examples/security/src/index.ts)
 
 ```typescript
-import { HttpService, init, jsonOk, securityOk, securityError } from '@laminar/laminar';
+import { HttpService, init, jsonOk, securityOk, securityError } from '@laminarjs/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -185,8 +185,8 @@ And then implement it using the helper `jwtSecurityResolver`. That function woul
 > [packages/jwt/examples/oapi.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/oapi.ts)
 
 ```typescript
-import { HttpService, init, jsonOk, openApi } from '@laminar/laminar';
-import { createSession, jwtSecurityResolver } from '@laminar/jwt';
+import { HttpService, init, jsonOk, openApi } from '@laminarjs/laminar';
+import { createSession, jwtSecurityResolver } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {
@@ -290,8 +290,8 @@ Implementing it involves reading the cookie and validating its contents.
 > [packages/jwt/examples/oapi-api-key.ts](https://github.com/ivank/laminar/tree/main/packages/jwt/examples/oapi-api-key.ts)
 
 ```typescript
-import { HttpService, init, openApi, textOk, setCookie } from '@laminar/laminar';
-import { createSession, verifyToken } from '@laminar/jwt';
+import { HttpService, init, openApi, textOk, setCookie } from '@laminarjs/laminar';
+import { createSession, verifyToken } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {
@@ -424,8 +424,8 @@ import {
   textForbidden,
   setCookie,
   securityError,
-} from '@laminar/laminar';
-import { createSession, verifyToken } from '@laminar/jwt';
+} from '@laminarjs/laminar';
+import { createSession, verifyToken } from '@laminarjs/jwt';
 import { join } from 'path';
 
 const main = async () => {

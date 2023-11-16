@@ -1,5 +1,5 @@
 import { Type, Schema } from 'avsc';
-import { AvroEpochDays } from '@laminar/avro';
+import { AvroEpochDays } from '@laminarjs/avro';
 
 const previousSchema: Schema = {
   type: 'record',

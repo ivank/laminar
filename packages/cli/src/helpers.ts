@@ -1,4 +1,4 @@
-import { compile, ensureValid, Schema } from '@laminar/json-schema';
+import { compile, ensureValid, Schema } from '@laminarjs/json-schema';
 import { openapiV3 } from 'openapi-schemas';
 import { oas31 } from 'openapi3-ts';
 import { AstContext } from './traverse';

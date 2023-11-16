@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Pool } from 'pg';
-import { HttpService, textOk, Middleware, run } from '@laminar/laminar';
+import { HttpService, textOk, Middleware, run } from '@laminarjs/laminar';
 import { PgService, pgMiddleware } from '../src';
 import { SimpleQueue, Boss } from './simple-queue';
 

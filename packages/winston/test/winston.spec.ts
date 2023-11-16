@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { HttpService, textOk, Middleware, run } from '@laminar/laminar';
+import { HttpService, textOk, Middleware, run } from '@laminarjs/laminar';
 import { SimpleQueue, Boss } from './simple-queue';
 import { WinstonService } from '../src';
 import { createLogger, transports } from 'winston';

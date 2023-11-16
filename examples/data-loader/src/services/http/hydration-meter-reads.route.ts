@@ -1,5 +1,5 @@
-import { jsonBadRequest, jsonOk } from '@laminar/laminar';
-import { QueueContext } from '@laminar/pgboss';
+import { jsonBadRequest, jsonOk } from '@laminarjs/laminar';
+import { QueueContext } from '@laminarjs/pgboss';
 import { PathV1HydrationMeterreadsPost } from '../../__generated__/schema';
 import { Record, String, Array, Static } from 'runtypes';
 import { parse } from 'csv-parse/sync';

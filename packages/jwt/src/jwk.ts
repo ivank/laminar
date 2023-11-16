@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { LRUCache } from 'lru-cache';
-import { validate, Schema } from '@laminar/json-schema';
+import { validate, Schema } from '@laminarjs/json-schema';
 import { GetPublicKeyOrSecret } from 'jsonwebtoken';
 import { certToPEM, rsaPublicKeyToPEM } from './helpers';
 

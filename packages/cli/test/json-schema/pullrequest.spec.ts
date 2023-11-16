@@ -1,5 +1,5 @@
 import { Type } from './__generated__/pullrequest';
-import { ensureValid } from '@laminar/json-schema';
+import { ensureValid } from '@laminarjs/json-schema';
 import { join } from 'path';
 
 describe('Json Schema', () => {

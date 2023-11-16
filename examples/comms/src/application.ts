@@ -4,9 +4,9 @@ import {
   requestLoggingMiddleware,
   LoggerLike,
   passThroughMiddleware,
-} from '@laminar/laminar';
-import { pgMiddleware, PgService } from '@laminar/pg';
-import { KafkaConsumerService, kafkaLogCreator } from '@laminar/kafkajs';
+} from '@laminarjs/laminar';
+import { pgMiddleware, PgService } from '@laminarjs/pg';
+import { KafkaConsumerService, kafkaLogCreator } from '@laminarjs/kafkajs';
 import { Kafka } from 'kafkajs';
 import { SchemaRegistry } from '@kafkajs/confluent-schema-registry';
 import axios, { AxiosInstance } from 'axios';
