@@ -18,5 +18,4 @@ jobs:
       - uses: ./.github/actions/yarn-install
       - run: yarn build
       - run: yarn lint
-      - run: yarn test
       - run: yarn test --runInBand --ci
