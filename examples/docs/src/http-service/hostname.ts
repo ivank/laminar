@@ -9,9 +9,9 @@ const listener = async () => jsonOk({ ok: true });
 const localhost = new HttpService({ hostname: 'localhost', listener });
 
 /**
- * Listen only to all
+ * Listen only to localhost ip
  */
-const internet = new HttpService({ hostname: '0.0.0.0', listener });
+const internet = new HttpService({ hostname: '127.0.0.1', listener });
 
 /**
  * Listen node's default (all)
