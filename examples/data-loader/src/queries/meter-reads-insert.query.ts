@@ -1,4 +1,4 @@
-import { PgClient } from '@ovotech/laminar-pg';
+import { PgClient } from '@laminar/pg';
 import { MeterReadRow } from './types';
 import sql, { join } from 'sql-template-tag';
 

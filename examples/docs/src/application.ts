@@ -1,4 +1,4 @@
-import { jsonOk, init, start, stop, run, HttpService, Service } from '@ovotech/laminar';
+import { jsonOk, init, start, stop, run, HttpService, Service } from '@laminar/laminar';
 
 // << Service
 class MyService implements Service {

@@ -6,12 +6,12 @@
   "types": "dist/index.d.ts",
   "description": "This is a collection of example snippets for the docs",
   "author": "Ivan Kerin <ikerin@gmail.com>",
-  "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/main/examples/docs#readme",
+  "repository": "git@github.com:ivank/laminar.git",
+  "homepage": "https://github.com/ivank/laminar/tree/main/examples/docs#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar": "*",
-    "@ovotech/laminar-cli": "*",
+    "@laminar/cli": "*",
+    "@laminar/laminar": "*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.9",
@@ -36,8 +36,8 @@
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@ovotech/laminar": "*",
-    "@ovotech/laminar-pg": "*",
+    "@laminar/laminar": "*",
+    "@laminar/pg": "*",
     "pg": "^8.11.3",
     "yaml": "^2.3.4"
   }

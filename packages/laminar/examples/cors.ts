@@ -1,4 +1,4 @@
-import { jsonOk, get, put, HttpService, router, corsMiddleware, init } from '@ovotech/laminar';
+import { jsonOk, get, put, HttpService, router, corsMiddleware, init } from '@laminar/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',

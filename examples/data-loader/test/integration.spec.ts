@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { run } from '@ovotech/laminar';
-import { KafkaProducerService } from '@ovotech/laminar-kafkajs';
+import { run } from '@laminar/laminar';
+import { KafkaProducerService } from '@laminar/kafkajs';
 import { randomBytes } from 'crypto';
-import { createSession } from '@ovotech/laminar-jwt';
+import { createSession } from '@laminar/jwt';
 import { createApplication } from '../src/application';
 import { EnvVars } from '../src/env';
 import { axiosOapi } from './__generated__/schema.axios';
@@ -12,7 +12,7 @@ import { SchemaRegistry, readAVSC, SchemaType } from '@kafkajs/confluent-schema-
 import { join } from 'path';
 import { MeterReading } from '../src/__generated__/meter-reading.json';
 import Decimal from 'decimal.js';
-import { AvroTimestampMillis, AvroDecimal } from '@ovotech/laminar-avro';
+import { AvroTimestampMillis, AvroDecimal } from '@laminar/avro';
 
 /**
  * An example integration test.
@@ -72,7 +72,7 @@ describe('Data Loader Integration Tests', () => {
     const { jwt } = createSession({ secret: env.SECRET }, { email: 'me@example.com', scopes: ['read', 'update'] });
 
     /**
-     * We create a typed axios instance, by relying on @ovotech/laminar-cli package.
+     * We create a typed axios instance, by relying on @laminar/cli package.
      * By running `yarn build:test` before test runs we can take advantage of the OpenApi schema even in the tests.
      */
     const client = axiosOapi(

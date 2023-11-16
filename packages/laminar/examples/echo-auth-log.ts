@@ -1,4 +1,4 @@
-import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@laminar/laminar';
 
 const auth: HttpMiddleware = (next) => async (req) =>
   req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');

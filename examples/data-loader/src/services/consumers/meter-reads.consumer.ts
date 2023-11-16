@@ -1,6 +1,6 @@
-import { EachMessageConsumer } from '@ovotech/laminar-kafkajs';
-import { LoggerContext } from '@ovotech/laminar';
-import { PgContext } from '@ovotech/laminar-pg';
+import { EachMessageConsumer } from '@laminar/kafkajs';
+import { LoggerContext } from '@laminar/laminar';
+import { PgContext } from '@laminar/pg';
 import { meterReadsInsertQuery, InsertMeterRead } from '../../queries/meter-reads-insert.query';
 import { MeterReading } from '../../__generated__/meter-reading.json';
 

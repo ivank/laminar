@@ -1,4 +1,4 @@
-import { init } from '@ovotech/laminar';
+import { init } from '@laminar/laminar';
 import { EnvVarsRecord } from './env';
 import { createApplication } from './application';
 import { config } from 'dotenv';

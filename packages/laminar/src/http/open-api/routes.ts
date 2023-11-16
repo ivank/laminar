@@ -1,7 +1,7 @@
 import { HttpContext } from '../types';
 import { Empty } from '../../types';
 import { OapiPaths, Route, Matcher, OapiPath, Coerce } from './types';
-import { ResolvedSchema, Schema, coerceCompiled, withinContext } from '@ovotech/json-schema';
+import { ResolvedSchema, Schema, coerceCompiled, withinContext } from '@laminar/json-schema';
 import { toMatchPattern, toPathKeys, toPathRe } from '../../helpers';
 import { oas31 } from 'openapi3-ts';
 import { resolveRef } from './compile-oapi';

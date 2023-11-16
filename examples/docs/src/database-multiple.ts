@@ -1,5 +1,5 @@
-import { HttpService, jsonOk, init, openApi, jsonNotFound } from '@ovotech/laminar';
-import { PgContext, PgService, pgMiddleware } from '@ovotech/laminar-pg';
+import { HttpService, jsonOk, init, openApi, jsonNotFound } from '@laminar/laminar';
+import { PgContext, PgService, pgMiddleware } from '@laminar/pg';
 import { Pool } from 'pg';
 import { join } from 'path';
 

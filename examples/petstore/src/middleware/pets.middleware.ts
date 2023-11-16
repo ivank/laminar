@@ -1,5 +1,5 @@
-import { Middleware } from '@ovotech/laminar';
-import { PgContext, PgClient } from '@ovotech/laminar-pg';
+import { Middleware } from '@laminar/laminar';
+import { PgContext, PgClient } from '@laminar/pg';
 import { NewPet, Pet } from '../__generated__/petstore';
 
 /**

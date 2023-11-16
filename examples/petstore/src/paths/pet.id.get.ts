@@ -1,5 +1,5 @@
 import { PathPetsIdGet } from '../__generated__/petstore';
-import { jsonNotFound, jsonOk, optional } from '@ovotech/laminar';
+import { jsonNotFound, jsonOk, optional } from '@laminar/laminar';
 import { PetsDbContext } from '../middleware';
 
 /**

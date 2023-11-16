@@ -1,4 +1,4 @@
-import { compile, withinContext, ensureValid, Schema, ResolvedSchema, toSchemaObject } from '@ovotech/json-schema';
+import { compile, withinContext, ensureValid, Schema, ResolvedSchema, toSchemaObject } from '@laminar/json-schema';
 import { openapiV3 } from 'openapi-schemas';
 import { OapiConfig } from './types';
 import { Empty } from '../../types';

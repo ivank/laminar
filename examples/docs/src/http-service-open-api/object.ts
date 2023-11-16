@@ -1,4 +1,4 @@
-import { HttpListener, HttpService, init, jsonOk, openApi } from '@ovotech/laminar';
+import { HttpListener, HttpService, init, jsonOk, openApi } from '@laminar/laminar';
 
 /**
  * A simple function to mock getting data out of a data store

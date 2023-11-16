@@ -1,4 +1,4 @@
-import { Application, HttpService, init, jsonOk, LoggerContext, loggerMiddleware } from '@ovotech/laminar';
+import { Application, HttpService, init, jsonOk, LoggerContext, loggerMiddleware } from '@laminar/laminar';
 import { join } from 'path';
 
 /**

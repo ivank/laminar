@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, init } from '@laminar/laminar';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

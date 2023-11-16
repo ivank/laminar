@@ -1,5 +1,5 @@
-import { AppRoute, jsonOk, jsonNotFound, optional } from '@ovotech/laminar';
-import { PgContext } from '@ovotech/laminar-pg';
+import { AppRoute, jsonOk, jsonNotFound, optional } from '@laminar/laminar';
+import { PgContext } from '@laminar/pg';
 
 /**
  * Finding a user requires a PG connection

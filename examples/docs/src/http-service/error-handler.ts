@@ -1,4 +1,4 @@
-import { htmlBadRequest, HttpErrorHandler, HttpService, init, jsonBadRequest } from '@ovotech/laminar';
+import { htmlBadRequest, HttpErrorHandler, HttpService, init, jsonBadRequest } from '@laminar/laminar';
 
 const listener = async () => {
   throw new Error('example error');

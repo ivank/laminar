@@ -2,7 +2,7 @@ import { Empty } from '../../types';
 import { HttpContext } from '../types';
 import { oas31 } from 'openapi3-ts';
 import { OapiAuthInfo, OapiSecurity, OapiContext, Security, SecurityOk } from './types';
-import { ResolvedSchema } from '@ovotech/json-schema';
+import { ResolvedSchema } from '@laminar/json-schema';
 import { resolveRef } from './compile-oapi';
 import { HttpError, isHttpError } from '../http-error';
 import { OutgoingHttpHeaders } from 'http';

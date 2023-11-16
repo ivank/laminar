@@ -1,5 +1,5 @@
 import { PathPetsPost } from '../__generated__/petstore';
-import { jsonOk } from '@ovotech/laminar';
+import { jsonOk } from '@laminar/laminar';
 import { PetsDbContext } from '../middleware';
 
 /**

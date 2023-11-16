@@ -1,4 +1,4 @@
-import { BodyParser, defaultBodyParsers, HttpListener, HttpService, init, textOk } from '@ovotech/laminar';
+import { BodyParser, defaultBodyParsers, HttpListener, HttpService, init, textOk } from '@laminar/laminar';
 
 import { Transform, TransformCallback } from 'stream';
 

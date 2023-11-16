@@ -6,11 +6,11 @@
   "types": "dist/index.d.ts",
   "description": "This is a simple but functional example of building a comms api.",
   "author": "Ivan Kerin <ikerin@gmail.com>",
-  "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/main/examples/comms#readme",
+  "repository": "git@github.com:ivank/laminar.git",
+  "homepage": "https://github.com/ivank/laminar/tree/main/examples/comms#readme",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ovotech/laminar-cli": "*",
+    "@laminar/cli": "*",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/pg": "^8.10.9",
@@ -41,9 +41,9 @@
   },
   "dependencies": {
     "@kafkajs/confluent-schema-registry": "^3.3.0",
-    "@ovotech/laminar": "*",
-    "@ovotech/laminar-kafkajs": "*",
-    "@ovotech/laminar-pg": "*",
+    "@laminar/kafkajs": "*",
+    "@laminar/laminar": "*",
+    "@laminar/pg": "*",
     "kafkajs": "^2.2.4",
     "pg": "^8.11.3"
   }

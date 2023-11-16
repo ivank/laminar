@@ -146,7 +146,7 @@ export function toPathRe(path: string): RegExp {
  */
 export type Json<T> = T extends Date
   ? string
-  : T extends string | number | boolean | null | undefined
+  : T extends string | number | boolean | null | undefined | unknown
     ? T
     : T extends Buffer
       ? { type: 'Buffer'; data: number[] }

@@ -1,4 +1,4 @@
-import { router, jsonOk, get, put, HttpService, init } from '@ovotech/laminar';
+import { router, jsonOk, get, put, HttpService, init } from '@laminar/laminar';
 
 // << app
 

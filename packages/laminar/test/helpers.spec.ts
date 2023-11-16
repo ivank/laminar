@@ -1,5 +1,5 @@
 import { URLSearchParams } from 'url';
-import { parseQueryObjects } from '../src';
+import { parseQueryObjects, toJson, Json } from '../src';
 
 describe('queryParserMiddleware', () => {
   it.each`
@@ -17,5 +17,25 @@ describe('queryParserMiddleware', () => {
     ${'this[one][two][]=one&this[one][two][]=two'}                                   | ${{ this: { one: { two: ['one', 'two'] } } }}
   `('Should parse $query', ({ query, expected }) => {
     expect(parseQueryObjects(new URLSearchParams(query))).toEqual(expected);
+  });
+
+  it('Should convert json types and values', () => {
+    interface User {
+      email: string;
+      title?: string;
+      createdAt?: Date;
+      [key: string]: unknown;
+    }
+
+    const value: Json<User> = toJson({
+      email: 'me@example.com',
+      createdAt: new Date('2020-01-01T12:00:00Z'),
+      title: undefined,
+    });
+
+    expect(value).toEqual({
+      email: 'me@example.com',
+      createdAt: '2020-01-01T12:00:00.000Z',
+    });
   });
 });

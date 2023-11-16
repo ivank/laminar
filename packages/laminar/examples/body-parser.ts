@@ -6,7 +6,7 @@ import {
   concatStream,
   defaultBodyParsers,
   init,
-} from '@ovotech/laminar';
+} from '@laminar/laminar';
 
 const csvParser: BodyParser = {
   name: 'CsvParser',

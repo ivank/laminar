@@ -1,8 +1,8 @@
 import { join } from 'path';
 import { openApiTyped } from './__generated__/petstore';
 import { pathPetsGet, pathPetsIdGet, pathPetsIdDelete, pathPetsPost } from './paths';
-import { jwtSecurityResolver, verifyToken } from '@ovotech/laminar-jwt';
-import { HttpListener } from '@ovotech/laminar';
+import { jwtSecurityResolver, verifyToken } from '@laminar/jwt';
+import { HttpListener } from '@laminar/laminar';
 import { PetsDbContext } from './middleware';
 import { EnvVars } from './env';
 

@@ -1,4 +1,4 @@
-import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from '@ovotech/laminar';
+import { OapiContext, OapiConfig, Empty, HttpListener, openApi, ResponseOapi } from '@laminar/laminar';
 
 export const openApiTyped = <R extends Empty = Empty>(config: Config<R>): Promise<HttpListener<R>> => openApi(config);
 

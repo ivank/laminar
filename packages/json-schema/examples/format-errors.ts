@@ -1,4 +1,4 @@
-import { validate, Schema, FormatErrors } from '@ovotech/json-schema';
+import { validate, Schema, FormatErrors } from '@laminar/json-schema';
 
 const schema: Schema = {
   type: 'string',

@@ -6,7 +6,7 @@ Lets look at a hypothetical comms api. It has an endpoint to initiate the comm t
 
 Now we want to build an api that will talk to this service, save the state in a database, and track it using the kafka topic.
 
-You can explore the whole solution [examples/comms](https://github.com/ovotech/laminar/tree/main/examples/comms), but we'll explain everything here in detail.
+You can explore the whole solution [examples/comms](https://github.com/ivank/laminar/tree/main/examples/comms), but we'll explain everything here in detail.
 
 ## Dependencies
 
@@ -23,20 +23,20 @@ yarn add --dev @types/pg typescript
 Next we add typescript and some types
 
 ```shell
-yarn add @ovotech/laminar @ovotech/laminar-kafkajs @ovotech/laminar-pg
+yarn add @laminar/laminar @laminar/kafkajs @laminar/pg
 ```
 
 We can now add laminar itself, along with connectors for kafkajs and pg.
 
 ```shell
-yarn add --dev @ovotech/laminar-cli
+yarn add --dev @laminar/cli
 ```
 
 And finally we'll need the cli to generate some types for us.
 
 ## Generating types
 
-We have the schema for what we want our service to look like, [examples/comms/comms.yaml](https://github.com/ovotech/laminar/tree/main/examples/comms/comms.yaml) and we have the avro type of that kafka message - [examples/comms/avro/feedback.avsc](https://github.com/ovotech/laminar/tree/main/examples/comms/avro/feedback.avsc).
+We have the schema for what we want our service to look like, [examples/comms/comms.yaml](https://github.com/ivank/laminar/tree/main/examples/comms/comms.yaml) and we have the avro type of that kafka message - [examples/comms/avro/feedback.avsc](https://github.com/ivank/laminar/tree/main/examples/comms/avro/feedback.avsc).
 
 Using the cli, we can start generating the types for us.
 
@@ -47,7 +47,7 @@ yarn laminar avro avro/* --output-dir src/__generated__
 
 ## Http Listener
 
-> [examples/comms/src/http.listener.ts:(listener)](https://github.com/ovotech/laminar/tree/main/examples/comms/src/http.listener.ts#L7-L33)
+> [examples/comms/src/http.listener.ts:(listener)](https://github.com/ivank/laminar/tree/main/examples/comms/src/http.listener.ts#L7-L33)
 
 ```typescript
 export const httpListener = async (): Promise<HttpListener<PgContext & CommsApiContext>> => {
@@ -81,7 +81,7 @@ That should take care of the REST part - when we geet the comm, we hit the exter
 
 ## Kafka Consumer
 
-> [examples/comms/src/feedback.consumer.ts:(consumer)](https://github.com/ovotech/laminar/tree/main/examples/comms/src/feedback.consumer.ts#L5-L14)
+> [examples/comms/src/feedback.consumer.ts:(consumer)](https://github.com/ivank/laminar/tree/main/examples/comms/src/feedback.consumer.ts#L5-L14)
 
 ```typescript
 export const feedbackConsumer: EachMessageConsumer<Feedback, Buffer, PgContext> = async ({ db, message }) => {
@@ -98,7 +98,7 @@ The kafka topic consumer itself is pretty minimal, just updates the status of th
 
 ## Application
 
-> [examples/comms/src/application.ts:(application)](https://github.com/ovotech/laminar/tree/main/examples/comms/src/application.ts#L22-L62)
+> [examples/comms/src/application.ts:(application)](https://github.com/ivank/laminar/tree/main/examples/comms/src/application.ts#L22-L62)
 
 ```typescript
 export const createApplication = async (env: EnvVars, logger: LoggerLike): Promise<Application> => {
@@ -146,7 +146,7 @@ And now we can create both http and kafka consumer service, with all of its depe
 
 ## Starting
 
-> [examples/comms/src/index.ts:(create)](https://github.com/ovotech/laminar/tree/main/examples/comms/src/index.ts#L5-L9)
+> [examples/comms/src/index.ts:(create)](https://github.com/ivank/laminar/tree/main/examples/comms/src/index.ts#L5-L9)
 
 ```typescript
 createApplication(toEnvVars(process.env), console)
@@ -154,11 +154,11 @@ createApplication(toEnvVars(process.env), console)
   .catch((error) => console.error(error));
 ```
 
-Starting it all up is just a matter of calling `init` on the application itself, after it is created. [toEnvVars](https://github.com/ovotech/laminar/tree/main/examples/comms/src/env.ts) just validates environment variables and returns them.
+Starting it all up is just a matter of calling `init` on the application itself, after it is created. [toEnvVars](https://github.com/ivank/laminar/tree/main/examples/comms/src/env.ts) just validates environment variables and returns them.
 
 ## Producing Messages
 
-> [examples/comms/tests/integration.spec.ts:(KafkaProducerService)](https://github.com/ovotech/laminar/tree/main/examples/comms/tests/integration.spec.ts#L59-L63)
+> [examples/comms/tests/integration.spec.ts:(KafkaProducerService)](https://github.com/ivank/laminar/tree/main/examples/comms/tests/integration.spec.ts#L59-L63)
 
 ```typescript
 const producer = new KafkaProducerService(kafka, schemaRegistry, {
@@ -172,7 +172,7 @@ the `registerSchemas` function will register the avsc schemas for each topic in 
 
 Of course, you can skip that pre-register and use the `sendWithSchema` which will do this ad-hoc.
 
-> [examples/comms/tests/integration.spec.ts:(send)](https://github.com/ovotech/laminar/tree/main/examples/comms/tests/integration.spec.ts#L95-L100)
+> [examples/comms/tests/integration.spec.ts:(send)](https://github.com/ivank/laminar/tree/main/examples/comms/tests/integration.spec.ts#L95-L100)
 
 ```typescript
 await producer.send<Feedback>({

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ResolvedSchema, ResultError, Schema, FormatErrors } from '@ovotech/json-schema';
+import { ResolvedSchema, ResultError, Schema, FormatErrors } from '@laminar/json-schema';
 import { Empty } from '../../types';
 import { oas31 } from 'openapi3-ts';
 import { HttpContext, HttpListener, HttpResponse } from '../types';
@@ -118,7 +118,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   error?: HttpListener<TContext & { error: HttpError }>;
   /**
    * Format json-schema errors.
-   * Refering to the `formatError` property in https://github.com/ovotech/laminar/tree/main/packages/json-schema#custom-error-messages
+   * Refering to the `formatError` property in https://github.com/ivank/laminar/tree/main/packages/json-schema#custom-error-messages
    */
   formatErrors?: FormatErrors;
 }

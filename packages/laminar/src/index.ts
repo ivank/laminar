@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @ovotech/laminar
+ * @module @laminar/laminar
  */
 export {
   toIncommingMessageResolver,

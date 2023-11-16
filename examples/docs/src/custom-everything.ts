@@ -1,4 +1,4 @@
-import { toRequestListener, response, HttpListener, errorsMiddleware, toHttpRequest } from '@ovotech/laminar';
+import { toRequestListener, response, HttpListener, errorsMiddleware, toHttpRequest } from '@laminar/laminar';
 import { createServer } from 'http';
 
 /**

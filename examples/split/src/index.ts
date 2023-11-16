@@ -1,5 +1,5 @@
-import { loggerMiddleware, HttpService, init, LoggerLike } from '@ovotech/laminar';
-import { pgMiddleware, PgService } from '@ovotech/laminar-pg';
+import { loggerMiddleware, HttpService, init, LoggerLike } from '@laminar/laminar';
+import { pgMiddleware, PgService } from '@laminar/pg';
 import { Pool } from 'pg';
 import { routes } from './routes';
 

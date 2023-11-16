@@ -1,5 +1,5 @@
 import { EnvVarsRecord } from './env';
-import { createSession } from '@ovotech/laminar-jwt';
+import { createSession } from '@laminar/jwt';
 import { config } from 'dotenv';
 
 /**

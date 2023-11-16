@@ -1,4 +1,4 @@
-import { HttpListener, HttpService, jsonOk, passThroughMiddleware, init } from '@ovotech/laminar';
+import { HttpListener, HttpService, jsonOk, passThroughMiddleware, init } from '@laminar/laminar';
 
 // << listener-current-date
 interface CurrentDateContext {

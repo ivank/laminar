@@ -1,4 +1,4 @@
-import { HttpService, response, init } from '@ovotech/laminar';
+import { HttpService, response, init } from '@laminar/laminar';
 
 const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 

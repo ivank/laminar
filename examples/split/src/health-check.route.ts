@@ -1,3 +1,3 @@
-import { AppRoute, jsonOk } from '@ovotech/laminar';
+import { AppRoute, jsonOk } from '@laminar/laminar';
 
 export const healthCheck: AppRoute = async () => jsonOk({ health: 'ok' });

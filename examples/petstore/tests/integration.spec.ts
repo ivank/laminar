@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { run } from '@ovotech/laminar';
-import { createSession } from '@ovotech/laminar-jwt';
+import { run } from '@laminar/laminar';
+import { createSession } from '@laminar/jwt';
 import { createApplication } from '../src/application';
 import { EnvVars } from '../src/env';
 

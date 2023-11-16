@@ -6,8 +6,8 @@
   "types": "dist/index.d.ts",
   "description": "This is a simple example of a laminar app split into files",
   "author": "Ivan Kerin <ikerin@gmail.com>",
-  "repository": "git@github.com:ovotech/laminar.git",
-  "homepage": "https://github.com/ovotech/laminar/tree/main/examples/split#readme",
+  "repository": "git@github.com:ivank/laminar.git",
+  "homepage": "https://github.com/ivank/laminar/tree/main/examples/split#readme",
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^29.5.8",
@@ -33,8 +33,8 @@
     "lint": "F='{src,test}/**/*.ts' && prettier --check $F && eslint $F"
   },
   "dependencies": {
-    "@ovotech/laminar": "*",
-    "@ovotech/laminar-pg": "*",
+    "@laminar/laminar": "*",
+    "@laminar/pg": "*",
     "pg": "^8.11.3"
   }
 }

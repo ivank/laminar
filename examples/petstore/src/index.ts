@@ -1,5 +1,5 @@
-import { init } from '@ovotech/laminar';
-import { createSession } from '@ovotech/laminar-jwt';
+import { init } from '@laminar/laminar';
+import { createSession } from '@laminar/jwt';
 import { createApplication } from './application';
 import { toEnvVars } from './env';
 

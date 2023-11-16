@@ -1,4 +1,4 @@
-import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@laminar/laminar';
 
 /**
  * Its a very simple database, that only has one function:

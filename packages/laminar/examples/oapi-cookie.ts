@@ -1,4 +1,4 @@
-import { HttpService, jsonOk, openApi, init, setCookie } from '@ovotech/laminar';
+import { HttpService, jsonOk, openApi, init, setCookie } from '@laminar/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi.yaml');

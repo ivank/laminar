@@ -5,12 +5,12 @@ A minimal nodejs http server, built around the concept of strictly typed middlew
 ### Usage
 
 ```shell
-yarn add @ovotech/laminar
+yarn add @laminar/laminar
 ```
 
 Docs for open api itself: https://swagger.io/docs/
 
-> [examples/oapi.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/oapi.yaml)
+> [examples/oapi.yaml](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/oapi.yaml)
 
 ```yaml
 ---
@@ -63,10 +63,10 @@ components:
         - user
 ```
 
-> [examples/oapi.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/oapi.ts)
+> [examples/oapi.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/oapi.ts)
 
 ```typescript
-import { HttpService, jsonOk, openApi, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, openApi, init } from '@laminar/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi.yaml');
@@ -90,7 +90,7 @@ main();
 
 ### Configuration options
 
-> [src/http/open-api/types.ts:(OapiConfig)](https://github.com/ovotech/laminar/tree/main/packages/laminar/src/http/open-api/types.ts#L94-L125)
+> [src/http/open-api/types.ts:(OapiConfig)](https://github.com/ivank/laminar/tree/main/packages/laminar/src/http/open-api/types.ts#L94-L125)
 
 ```typescript
 /**
@@ -119,7 +119,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   error?: HttpListener<TContext & { error: HttpError }>;
   /**
    * Format json-schema errors.
-   * Refering to the `formatError` property in https://github.com/ovotech/laminar/tree/main/packages/json-schema#custom-error-messages
+   * Refering to the `formatError` property in https://github.com/ivank/laminar/tree/main/packages/json-schema#custom-error-messages
    */
   formatErrors?: FormatErrors;
 }
@@ -129,7 +129,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
 
 When you define OpenAPI security, you can configure a function that implements that security, and it will be automatically applied to all paths / methods that require it.
 
-> [examples/oapi-security.yaml](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/oapi-security.yaml)
+> [examples/oapi-security.yaml](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/oapi-security.yaml)
 
 ```yaml
 ---
@@ -191,10 +191,10 @@ components:
         - user
 ```
 
-> [examples/oapi-security.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/oapi-security.ts)
+> [examples/oapi-security.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/oapi-security.ts)
 
 ```typescript
-import { HttpService, jsonOk, openApi, securityOk, init, securityError } from '@ovotech/laminar';
+import { HttpService, jsonOk, openApi, securityOk, init, securityError } from '@laminar/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi-security.yaml');
@@ -232,7 +232,7 @@ const MySecurity = ({ headers }, { scopes }) => {
 
 ### Generating types
 
-You can use [@ovotech/lamina-cli](../lamina-cli) package to generate types.
+You can use [@laminar/cli](../lamina-cli) package to generate types.
 
 ### Json Type Convertion
 
@@ -240,10 +240,10 @@ JSON and JS object are not _exactly_ the same, as you can [read to your horror a
 
 This works on type level too. The types generated from the OpenApi schema would match JS objects passed to the helper functions `jsonOk`, `jsonNotFound` etc.
 
-> [examples/convertion.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/convertion.ts)
+> [examples/convertion.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/convertion.ts)
 
 ```typescript
-import { HttpService, jsonOk, openApi, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, openApi, init } from '@laminar/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'convertion.yaml');
@@ -278,10 +278,10 @@ main();
 
 You can define additional paths that are not defined by openapi schema. To do that you can use the `notFound` property, which accepts any laminar app.
 
-> [examples/oapi-undocumented-routes.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/oapi-undocumented-routes.ts)
+> [examples/oapi-undocumented-routes.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/oapi-undocumented-routes.ts)
 
 ```typescript
-import { HttpService, jsonOk, router, get, redirect, openApi, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, router, get, redirect, openApi, init } from '@laminar/laminar';
 import { join } from 'path';
 
 const api = join(__dirname, 'oapi.yaml');
@@ -312,10 +312,10 @@ main();
 
 To create an http server that responds to `GET .well-known/health-check`, `GET test` and `POST test`
 
-> [examples/simple.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/simple.ts)
+> [examples/simple.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/simple.ts)
 
 ```typescript
-import { get, post, HttpService, router, jsonOk, textOk, init } from '@ovotech/laminar';
+import { get, post, HttpService, router, jsonOk, textOk, init } from '@laminar/laminar';
 
 const main = async () => {
   const http = new HttpService({
@@ -337,10 +337,10 @@ Well it's more about typescript types that automatically apply over middlewares,
 
 Lets see the simplest possible app with laminar, a very simple echo app
 
-> [examples/echo.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo.ts)
+> [examples/echo.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo.ts)
 
 ```typescript
-import { HttpService, response, init } from '@ovotech/laminar';
+import { HttpService, response, init } from '@laminar/laminar';
 
 const http = new HttpService({ listener: async ({ body }) => response({ body }) });
 
@@ -355,10 +355,10 @@ Pretty simple, but what if we wanted to add some authentication? This is usually
 Lets just assume that if Authorization header is `Me` then it's me and its fine, otherwise it must be someone else.
 We can go ahead and write a middleware, that would do stuff just before passing stuff to the next middleware.
 
-> [examples/echo-auth.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth.ts)
+> [examples/echo-auth.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth.ts)
 
 ```typescript
-import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@ovotech/laminar';
+import { HttpService, textForbidden, textOk, HttpListener, HttpMiddleware, init } from '@laminar/laminar';
 
 const auth: HttpMiddleware = (next) => async (req) =>
   req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
@@ -372,10 +372,10 @@ init({ initOrder: [http], logger: console });
 
 Notice that we actually execute the next middleware _inside_ our auth middleware. This allows us to do stuff before and after whatever follows. For example say we wanted to log what the request and response was.
 
-> [examples/echo-auth-log.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log.ts)
+> [examples/echo-auth-log.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth-log.ts)
 
 ```typescript
-import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, textOk, HttpService, init } from '@laminar/laminar';
 
 const auth: HttpMiddleware = (next) => async (req) =>
   req.headers.authorization === 'Me' ? next(req) : textForbidden('Not Me');
@@ -400,10 +400,10 @@ A simple example would be access to an external resource, say a database. We wan
 
 Lets see how we can go about doing that.
 
-> [examples/echo-auth-log-db.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/echo-auth-log-db.ts)
+> [examples/echo-auth-log-db.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/echo-auth-log-db.ts)
 
 ```typescript
-import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@ovotech/laminar';
+import { HttpMiddleware, HttpListener, textForbidden, jsonOk, HttpService, init } from '@laminar/laminar';
 
 /**
  * Its a very simple database, that only has one function:
@@ -462,7 +462,7 @@ By default bodyParser has parsers for json, urlencoded and plain text. If nothin
 
 You can write and add your own parsers. Each one has a 'match' function and a 'parse' function. Parse also gets the raw http.IncomingMessage from node.
 
-> [examples/body-parser.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/body-parser.ts)
+> [examples/body-parser.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/body-parser.ts)
 
 ```typescript
 import {
@@ -473,7 +473,7 @@ import {
   concatStream,
   defaultBodyParsers,
   init,
-} from '@ovotech/laminar';
+} from '@laminar/laminar';
 
 const csvParser: BodyParser = {
   name: 'CsvParser',
@@ -497,10 +497,10 @@ By default the body parser will concat the incoming request body stream into a s
 
 You can achieve that by writing your own parser that will preserve the `Readable` body object and just pass it inside.
 
-> [examples/streaming-parser.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/streaming-parser.ts)
+> [examples/streaming-parser.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/streaming-parser.ts)
 
 ```typescript
-import { HttpService, HttpListener, BodyParser, defaultBodyParsers, csv, ok, init } from '@ovotech/laminar';
+import { HttpService, HttpListener, BodyParser, defaultBodyParsers, csv, ok, init } from '@laminar/laminar';
 import { pipeline, Readable, Transform } from 'stream';
 import parse from 'csv-parse';
 import stringify from 'csv-stringify';
@@ -543,10 +543,10 @@ Alternatively, you can also set `bodyParsers` option to an empty array (`[]`), a
 
 The router middleware allows you to respond to requests based on what path was requested, as well as extract information from that path for use in processing your request.
 
-> [examples/router.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/router.ts)
+> [examples/router.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/router.ts)
 
 ```typescript
-import { get, put, HttpService, router, jsonOk, jsonNotFound, init } from '@ovotech/laminar';
+import { get, put, HttpService, router, jsonOk, jsonNotFound, init } from '@laminar/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -574,10 +574,10 @@ Path parameters are written in `{nameOfParameter}` style, and each name is extra
 
 If none of the routes match, the router would return a generic 404. You can modify that by using `defaultRoute` at the end of all the matchers. You can also use `response` helper to set custom status code.
 
-> [examples/default-route.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/default-route.ts)
+> [examples/default-route.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/default-route.ts)
 
 ```typescript
-import { get, router, init, jsonOk, textNotFound, HttpService } from '@ovotech/laminar';
+import { get, router, init, jsonOk, textNotFound, HttpService } from '@laminar/laminar';
 
 const http = new HttpService({
   listener: router(
@@ -591,10 +591,10 @@ init({ initOrder: [http], logger: console });
 
 You can also configure a route to ba a static folder with assets. Works with nested folders as well, does not support index pages.
 
-> [examples/static-assets.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/static-assets.ts)
+> [examples/static-assets.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/static-assets.ts)
 
 ```typescript
-import { get, HttpService, router, staticAssets, jsonOk, init } from '@ovotech/laminar';
+import { get, HttpService, router, staticAssets, jsonOk, init } from '@laminar/laminar';
 import { join } from 'path';
 
 const main = async () => {
@@ -627,7 +627,7 @@ All the available route matchers are:
 
 Each laminar app must return a response object. Response objects are created with the various helpers. Example how it all looks like:
 
-> [examples/cors.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/response.ts)
+> [examples/cors.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/response.ts)
 
 ```typescript
 import {
@@ -650,7 +650,7 @@ import {
   badRequest,
   textOk,
   init,
-} from '@ovotech/laminar';
+} from '@laminar/laminar';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 
@@ -749,10 +749,10 @@ A cors handling middleware comes with laminar as well.
 
 For example this would allow only 'example.com' and 'localhost' as origins.
 
-> [examples/cors.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/cors.ts)
+> [examples/cors.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/cors.ts)
 
 ```typescript
-import { jsonOk, get, put, HttpService, router, corsMiddleware, init } from '@ovotech/laminar';
+import { jsonOk, get, put, HttpService, router, corsMiddleware, init } from '@laminar/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -783,10 +783,10 @@ init({ initOrder: [http], logger: console });
 
 Laminar has a built in parser form request with content-type 'multipart/form-data'. This allows it to process html forms with native uploads.
 
-> [examples/multipart.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/multipart.ts)
+> [examples/multipart.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/multipart.ts)
 
 ```typescript
-import { HttpService, jsonOk, init } from '@ovotech/laminar';
+import { HttpService, jsonOk, init } from '@laminar/laminar';
 
 const http = new HttpService({
   listener: async ({ body }) => jsonOk({ name: body.name, file: body['my-file'][0].data.toString() }),
@@ -809,10 +809,10 @@ With that curl command you should see a response like:
 
 There's a simple middleware that allows you to log requests, responses and pass in a your own logger as a context.
 
-> [examples/logging.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/logging.ts)
+> [examples/logging.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/logging.ts)
 
 ```typescript
-import { get, put, HttpService, router, jsonOk, requestLoggingMiddleware, init } from '@ovotech/laminar';
+import { get, put, HttpService, router, jsonOk, requestLoggingMiddleware, init } from '@laminar/laminar';
 
 const users: Record<string, string> = {
   '1': 'John',
@@ -843,10 +843,10 @@ init({ initOrder: [http], logger: console });
 
 laminar can use node's https server.
 
-> [examples/simple-https.ts](https://github.com/ovotech/laminar/tree/main/packages/laminar/examples/simple-https.ts)
+> [examples/simple-https.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/simple-https.ts)
 
 ```typescript
-import { get, post, HttpService, router, textOk, jsonOk, init } from '@ovotech/laminar';
+import { get, post, HttpService, router, textOk, jsonOk, init } from '@laminar/laminar';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

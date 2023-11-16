@@ -872,10 +872,10 @@ __metadata:
   resolution: "@examples/comms@workspace:examples/comms"
   dependencies:
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@ovotech/laminar": "npm:*"
-    "@ovotech/laminar-cli": "npm:*"
-    "@ovotech/laminar-kafkajs": "npm:*"
-    "@ovotech/laminar-pg": "npm:*"
+    "@laminar/cli": "npm:*"
+    "@laminar/kafkajs": "npm:*"
+    "@laminar/laminar": "npm:*"
+    "@laminar/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -901,14 +901,14 @@ __metadata:
   resolution: "@examples/data-loader@workspace:examples/data-loader"
   dependencies:
     "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@ovotech/laminar": "npm:*"
-    "@ovotech/laminar-avro": "npm:^0.12.2"
-    "@ovotech/laminar-cli": "npm:*"
-    "@ovotech/laminar-jwt": "npm:*"
-    "@ovotech/laminar-kafkajs": "npm:*"
-    "@ovotech/laminar-pg": "npm:*"
-    "@ovotech/laminar-pgboss": "npm:*"
-    "@ovotech/laminar-winston": "npm:*"
+    "@laminar/avro": "npm:^0.12.2"
+    "@laminar/cli": "npm:*"
+    "@laminar/jwt": "npm:*"
+    "@laminar/kafkajs": "npm:*"
+    "@laminar/laminar": "npm:*"
+    "@laminar/pg": "npm:*"
+    "@laminar/pgboss": "npm:*"
+    "@laminar/winston": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -940,9 +940,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/docs@workspace:examples/docs"
   dependencies:
-    "@ovotech/laminar": "npm:*"
-    "@ovotech/laminar-cli": "npm:*"
-    "@ovotech/laminar-pg": "npm:*"
+    "@laminar/cli": "npm:*"
+    "@laminar/laminar": "npm:*"
+    "@laminar/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -964,10 +964,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/petstore@workspace:examples/petstore"
   dependencies:
-    "@ovotech/laminar": "npm:*"
-    "@ovotech/laminar-cli": "npm:*"
-    "@ovotech/laminar-jwt": "npm:*"
-    "@ovotech/laminar-pg": "npm:*"
+    "@laminar/cli": "npm:*"
+    "@laminar/jwt": "npm:*"
+    "@laminar/laminar": "npm:*"
+    "@laminar/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -989,9 +989,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/security@workspace:examples/security"
   dependencies:
-    "@ovotech/laminar": "npm:*"
-    "@ovotech/laminar-cli": "npm:*"
-    "@ovotech/laminar-jwt": "npm:*"
+    "@laminar/cli": "npm:*"
+    "@laminar/jwt": "npm:*"
+    "@laminar/laminar": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
@@ -1010,8 +1010,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/simple@workspace:examples/simple"
   dependencies:
-    "@ovotech/laminar": "npm:*"
-    "@ovotech/laminar-cli": "npm:*"
+    "@laminar/cli": "npm:*"
+    "@laminar/laminar": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
@@ -1030,8 +1030,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@examples/split@workspace:examples/split"
   dependencies:
-    "@ovotech/laminar": "npm:*"
-    "@ovotech/laminar-pg": "npm:*"
+    "@laminar/laminar": "npm:*"
+    "@laminar/pg": "npm:*"
     "@types/jest": "npm:^29.5.8"
     "@types/node": "npm:^20.9.0"
     "@types/pg": "npm:^8.10.9"
@@ -1462,6 +1462,342 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@laminar/avro@npm:^0.12.2, @laminar/avro@workspace:packages/avro":
+  version: 0.0.0-use.local
+  resolution: "@laminar/avro@workspace:packages/avro"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    avsc: "npm:^5.7.7"
+    decimal.js: "npm:^10.4.3"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    int64-buffer: "npm:^1.0.1"
+    jest: "npm:^29.7.0"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    typescript: "npm:^5.2.2"
+  peerDependencies:
+    avsc: ^5.7.7
+  languageName: unknown
+  linkType: soft
+
+"@laminar/cli@npm:*, @laminar/cli@workspace:*, @laminar/cli@workspace:packages/cli":
+  version: 0.0.0-use.local
+  resolution: "@laminar/cli@workspace:packages/cli"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/json-schema": "workspace:*"
+    "@laminar/laminar": "workspace:*"
+    "@laminar/ts-compose": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@types/pg": "npm:^8.10.9"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    avsc: "npm:^5.7.7"
+    axios: "npm:^1.6.2"
+    chalk: "npm:^4.1.1"
+    commander: "npm:^11.1.0"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    nock: "npm:^13.3.8"
+    openapi-schemas: "npm:^2.1.0"
+    openapi3-ts: "npm:^4.1.2"
+    pg: "npm:^8.11.3"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    typescript: "npm:^5.2.2"
+    yaml: "npm:^2.3.4"
+  bin:
+    laminar: ./scripts/laminar
+  languageName: unknown
+  linkType: soft
+
+"@laminar/fixtures@workspace:packages/fixtures":
+  version: 0.0.0-use.local
+  resolution: "@laminar/fixtures@workspace:packages/fixtures"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/laminar": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@types/pg": "npm:^8.10.9"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    pg: "npm:^8.11.3"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    ts-node: "npm:^10.9.1"
+    typescript: "npm:^5.2.2"
+  peerDependencies:
+    pg: "*"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/handlebars@workspace:packages/handlebars":
+  version: 0.0.0-use.local
+  resolution: "@laminar/handlebars@workspace:packages/handlebars"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/cli": "workspace:*"
+    "@laminar/laminar": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    handlebars: "npm:^4.7.8"
+    jest: "npm:^29.7.0"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    ts-retry-promise: "npm:^0.7.1"
+    typescript: "npm:^5.2.2"
+  peerDependencies:
+    "@laminar/laminar": "*"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/json-schema@workspace:*, @laminar/json-schema@workspace:packages/json-schema":
+  version: 0.0.0-use.local
+  resolution: "@laminar/json-schema@workspace:packages/json-schema"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    nock: "npm:^13.3.8"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    typescript: "npm:^5.2.2"
+    yaml: "npm:^2.3.4"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/jwt@npm:*, @laminar/jwt@workspace:packages/jwt":
+  version: 0.0.0-use.local
+  resolution: "@laminar/jwt@workspace:packages/jwt"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/cli": "workspace:*"
+    "@laminar/json-schema": "workspace:*"
+    "@laminar/laminar": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/jsonwebtoken": "npm:^9.0.5"
+    "@types/lru-cache": "npm:^7.10.10"
+    "@types/node": "npm:^20.9.0"
+    "@types/tough-cookie": "npm:^4.0.5"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    axios-cookiejar-support: "npm:^4.0.7"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    jsonwebtoken: "npm:^9.0.2"
+    lru-cache: "npm:^10.0.2"
+    nock: "npm:^13.3.8"
+    prettier: "npm:^3.1.0"
+    tough-cookie: "npm:^4.1.3"
+    ts-jest: "npm:^29.1.1"
+    typescript: "npm:^5.2.2"
+  peerDependencies:
+    "@laminar/laminar": "*"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/kafkajs@npm:*, @laminar/kafkajs@workspace:packages/kafkajs":
+  version: 0.0.0-use.local
+  resolution: "@laminar/kafkajs@workspace:packages/kafkajs"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
+    "@laminar/laminar": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@types/uuid": "npm:^9.0.7"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    kafkajs: "npm:^2.2.4"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    ts-retry-promise: "npm:^0.7.1"
+    typescript: "npm:^5.2.2"
+    uuid: "npm:^9.0.1"
+  peerDependencies:
+    "@kafkajs/confluent-schema-registry": "*"
+    "@laminar/laminar": "*"
+    kafkajs: "*"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/laminar@npm:*, @laminar/laminar@workspace:*, @laminar/laminar@workspace:packages/laminar":
+  version: 0.0.0-use.local
+  resolution: "@laminar/laminar@workspace:packages/laminar"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/json-schema": "workspace:*"
+    "@types/cookie": "npm:^0.5.4"
+    "@types/jest": "npm:^29.5.8"
+    "@types/jsonwebtoken": "npm:^9.0.5"
+    "@types/mime-types": "npm:^2.1.4"
+    "@types/node": "npm:^20.9.0"
+    "@types/tough-cookie": "npm:^4.0.5"
+    "@types/uuid": "npm:^9.0.7"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    axios-cookiejar-support: "npm:^4.0.7"
+    csv-parse: "npm:^5.5.2"
+    csv-stringify: "npm:^6.4.4"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    form-data: "npm:^4.0.0"
+    jest: "npm:^29.7.0"
+    jsonwebtoken: "npm:^9.0.2"
+    mime-types: "npm:^2.1.35"
+    nock: "npm:^13.3.8"
+    openapi-schemas: "npm:^2.1.0"
+    openapi3-ts: "npm:^4.1.2"
+    prettier: "npm:^3.1.0"
+    stream-mock: "npm:^2.0.5"
+    tough-cookie: "npm:^4.1.3"
+    ts-jest: "npm:^29.1.1"
+    ts-node: "npm:^10.9.1"
+    ts-retry-promise: "npm:^0.7.1"
+    typescript: "npm:^5.2.2"
+    uuid: "npm:^9.0.1"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/performance-testing@workspace:performance":
+  version: 0.0.0-use.local
+  resolution: "@laminar/performance-testing@workspace:performance"
+  dependencies:
+    "@laminar/json-schema": "workspace:*"
+    "@types/benchmark": "npm:^2.1.5"
+    "@types/node": "npm:^20.9.0"
+    ajv: "npm:^8.12.0"
+    benchmark: "npm:^2.1.4"
+    nock: "npm:^13.3.8"
+    node-fetch: "npm:^3.3.2"
+    ts-node: "npm:^10.9.1"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/pg@npm:*, @laminar/pg@workspace:packages/pg":
+  version: 0.0.0-use.local
+  resolution: "@laminar/pg@workspace:packages/pg"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/laminar": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@types/pg": "npm:^8.10.9"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    pg: "npm:^8.11.3"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    ts-retry-promise: "npm:^0.7.1"
+    typescript: "npm:^5.2.2"
+  peerDependencies:
+    "@laminar/laminar": "*"
+    pg: "*"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/pgboss@npm:*, @laminar/pgboss@workspace:packages/pgboss":
+  version: 0.0.0-use.local
+  resolution: "@laminar/pgboss@workspace:packages/pgboss"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/laminar": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@types/uuid": "npm:^9.0.7"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    pg-boss: "npm:^9.0.3"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    ts-retry-promise: "npm:^0.7.1"
+    typescript: "npm:^5.2.2"
+    uuid: "npm:^9.0.1"
+  peerDependencies:
+    "@laminar/laminar": "*"
+    pg-boss: "*"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/ts-compose@workspace:*, @laminar/ts-compose@workspace:packages/ts-compose":
+  version: 0.0.0-use.local
+  resolution: "@laminar/ts-compose@workspace:packages/ts-compose"
+  dependencies:
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    eslint-plugin-prettier: "npm:^5.0.1"
+    jest: "npm:^29.7.0"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
+"@laminar/winston@npm:*, @laminar/winston@workspace:packages/winston":
+  version: 0.0.0-use.local
+  resolution: "@laminar/winston@workspace:packages/winston"
+  dependencies:
+    "@ikerin/build-readme": "npm:^1.1.1"
+    "@laminar/laminar": "workspace:*"
+    "@types/jest": "npm:^29.5.8"
+    "@types/node": "npm:^20.9.0"
+    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
+    "@typescript-eslint/parser": "npm:^6.11.0"
+    axios: "npm:^1.6.2"
+    eslint: "npm:^8.53.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    jest: "npm:^29.7.0"
+    prettier: "npm:^3.1.0"
+    ts-jest: "npm:^29.1.1"
+    ts-retry-promise: "npm:^0.7.1"
+    typescript: "npm:^5.2.2"
+    winston: "npm:^3.11.0"
+  peerDependencies:
+    "@laminar/laminar": "*"
+    winston: "*"
+  languageName: unknown
+  linkType: soft
+
 "@nodelib/fs.scandir@npm:2.1.3":
   version: 2.1.3
   resolution: "@nodelib/fs.scandir@npm:2.1.3"
@@ -1515,342 +1851,6 @@ __metadata:
   checksum: 40033e33e96e97d77fba5a238e4bba4487b8284678906a9f616b5579ddaf868a18874c0054a75402c9fbaaa033a25ceae093af58c9c30278e35c23c9479e79b0
   languageName: node
   linkType: hard
-
-"@ovotech/json-schema@workspace:*, @ovotech/json-schema@workspace:packages/json-schema":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/json-schema@workspace:packages/json-schema"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    nock: "npm:^13.3.8"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    typescript: "npm:^5.2.2"
-    yaml: "npm:^2.3.4"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-avro@npm:^0.12.2, @ovotech/laminar-avro@workspace:packages/laminar-avro":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-avro@workspace:packages/laminar-avro"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    avsc: "npm:^5.7.7"
-    decimal.js: "npm:^10.4.3"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    int64-buffer: "npm:^1.0.1"
-    jest: "npm:^29.7.0"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    typescript: "npm:^5.2.2"
-  peerDependencies:
-    avsc: ^5.7.7
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-cli@npm:*, @ovotech/laminar-cli@workspace:*, @ovotech/laminar-cli@workspace:packages/laminar-cli":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-cli@workspace:packages/laminar-cli"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/json-schema": "workspace:*"
-    "@ovotech/laminar": "workspace:*"
-    "@ovotech/ts-compose": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@types/pg": "npm:^8.10.9"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    avsc: "npm:^5.7.7"
-    axios: "npm:^1.6.2"
-    chalk: "npm:^4.1.1"
-    commander: "npm:^11.1.0"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    nock: "npm:^13.3.8"
-    openapi-schemas: "npm:^2.1.0"
-    openapi3-ts: "npm:^4.1.2"
-    pg: "npm:^8.11.3"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    typescript: "npm:^5.2.2"
-    yaml: "npm:^2.3.4"
-  bin:
-    laminar: ./scripts/laminar
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-fixtures@workspace:packages/laminar-fixtures":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-fixtures@workspace:packages/laminar-fixtures"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/laminar": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@types/pg": "npm:^8.10.9"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    pg: "npm:^8.11.3"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    ts-node: "npm:^10.9.1"
-    typescript: "npm:^5.2.2"
-  peerDependencies:
-    pg: "*"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-handlebars@workspace:packages/laminar-handlebars"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/laminar": "workspace:*"
-    "@ovotech/laminar-cli": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    handlebars: "npm:^4.7.8"
-    jest: "npm:^29.7.0"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^5.2.2"
-  peerDependencies:
-    "@ovotech/laminar": "*"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-jwt@npm:*, @ovotech/laminar-jwt@workspace:packages/laminar-jwt":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-jwt@workspace:packages/laminar-jwt"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/json-schema": "workspace:*"
-    "@ovotech/laminar": "workspace:*"
-    "@ovotech/laminar-cli": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/jsonwebtoken": "npm:^9.0.5"
-    "@types/lru-cache": "npm:^7.10.10"
-    "@types/node": "npm:^20.9.0"
-    "@types/tough-cookie": "npm:^4.0.5"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    axios-cookiejar-support: "npm:^4.0.7"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    jsonwebtoken: "npm:^9.0.2"
-    lru-cache: "npm:^10.0.2"
-    nock: "npm:^13.3.8"
-    prettier: "npm:^3.1.0"
-    tough-cookie: "npm:^4.1.3"
-    ts-jest: "npm:^29.1.1"
-    typescript: "npm:^5.2.2"
-  peerDependencies:
-    "@ovotech/laminar": "*"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-kafkajs@npm:*, @ovotech/laminar-kafkajs@workspace:packages/laminar-kafkajs":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-kafkajs@workspace:packages/laminar-kafkajs"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@kafkajs/confluent-schema-registry": "npm:^3.3.0"
-    "@ovotech/laminar": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@types/uuid": "npm:^9.0.7"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    kafkajs: "npm:^2.2.4"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^5.2.2"
-    uuid: "npm:^9.0.1"
-  peerDependencies:
-    "@kafkajs/confluent-schema-registry": "*"
-    "@ovotech/laminar": "*"
-    kafkajs: "*"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-performance-testing@workspace:performance":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-performance-testing@workspace:performance"
-  dependencies:
-    "@ovotech/json-schema": "workspace:*"
-    "@types/benchmark": "npm:^2.1.5"
-    "@types/node": "npm:^20.9.0"
-    ajv: "npm:^8.12.0"
-    benchmark: "npm:^2.1.4"
-    nock: "npm:^13.3.8"
-    node-fetch: "npm:^3.3.2"
-    ts-node: "npm:^10.9.1"
-    typescript: "npm:^5.2.2"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-pg@npm:*, @ovotech/laminar-pg@workspace:packages/laminar-pg":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-pg@workspace:packages/laminar-pg"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/laminar": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@types/pg": "npm:^8.10.9"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    pg: "npm:^8.11.3"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^5.2.2"
-  peerDependencies:
-    "@ovotech/laminar": "*"
-    pg: "*"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-pgboss@npm:*, @ovotech/laminar-pgboss@workspace:packages/laminar-pgboss":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-pgboss@workspace:packages/laminar-pgboss"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/laminar": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@types/uuid": "npm:^9.0.7"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    pg-boss: "npm:^9.0.3"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^5.2.2"
-    uuid: "npm:^9.0.1"
-  peerDependencies:
-    "@ovotech/laminar": "*"
-    pg-boss: "*"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar-winston@npm:*, @ovotech/laminar-winston@workspace:packages/laminar-winston":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar-winston@workspace:packages/laminar-winston"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/laminar": "workspace:*"
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    jest: "npm:^29.7.0"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^5.2.2"
-    winston: "npm:^3.11.0"
-  peerDependencies:
-    "@ovotech/laminar": "*"
-    winston: "*"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/laminar@npm:*, @ovotech/laminar@workspace:*, @ovotech/laminar@workspace:packages/laminar":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/laminar@workspace:packages/laminar"
-  dependencies:
-    "@ikerin/build-readme": "npm:^1.1.1"
-    "@ovotech/json-schema": "workspace:*"
-    "@types/cookie": "npm:^0.5.4"
-    "@types/jest": "npm:^29.5.8"
-    "@types/jsonwebtoken": "npm:^9.0.5"
-    "@types/mime-types": "npm:^2.1.4"
-    "@types/node": "npm:^20.9.0"
-    "@types/tough-cookie": "npm:^4.0.5"
-    "@types/uuid": "npm:^9.0.7"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    axios: "npm:^1.6.2"
-    axios-cookiejar-support: "npm:^4.0.7"
-    csv-parse: "npm:^5.5.2"
-    csv-stringify: "npm:^6.4.4"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    form-data: "npm:^4.0.0"
-    jest: "npm:^29.7.0"
-    jsonwebtoken: "npm:^9.0.2"
-    mime-types: "npm:^2.1.35"
-    nock: "npm:^13.3.8"
-    openapi-schemas: "npm:^2.1.0"
-    openapi3-ts: "npm:^4.1.2"
-    prettier: "npm:^3.1.0"
-    stream-mock: "npm:^2.0.5"
-    tough-cookie: "npm:^4.1.3"
-    ts-jest: "npm:^29.1.1"
-    ts-node: "npm:^10.9.1"
-    ts-retry-promise: "npm:^0.7.1"
-    typescript: "npm:^5.2.2"
-    uuid: "npm:^9.0.1"
-  languageName: unknown
-  linkType: soft
-
-"@ovotech/ts-compose@workspace:*, @ovotech/ts-compose@workspace:packages/ts-compose":
-  version: 0.0.0-use.local
-  resolution: "@ovotech/ts-compose@workspace:packages/ts-compose"
-  dependencies:
-    "@types/jest": "npm:^29.5.8"
-    "@types/node": "npm:^20.9.0"
-    "@typescript-eslint/eslint-plugin": "npm:^6.11.0"
-    "@typescript-eslint/parser": "npm:^6.11.0"
-    eslint: "npm:^8.53.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    eslint-plugin-prettier: "npm:^5.0.1"
-    jest: "npm:^29.7.0"
-    prettier: "npm:^3.1.0"
-    ts-jest: "npm:^29.1.1"
-    typescript: "npm:^5.2.2"
-  languageName: unknown
-  linkType: soft
 
 "@pkgr/utils@npm:^2.3.1":
   version: 2.4.2

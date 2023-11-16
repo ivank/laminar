@@ -1,4 +1,4 @@
-import { get, HttpService, router, staticAssets, jsonOk, init } from '@ovotech/laminar';
+import { get, HttpService, router, staticAssets, jsonOk, init } from '@laminar/laminar';
 import { join } from 'path';
 
 const main = async () => {

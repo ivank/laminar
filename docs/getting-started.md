@@ -1,9 +1,9 @@
 # Getting Started
 
-Install [@ovotech/laminar](https://github.com/ovotech/laminar/tree/main/packages/laminar) through your favorite (or the one you put up with) package manager:
+Install [@laminar/laminar](https://github.com/ivank/laminar/tree/main/packages/laminar) through your favorite (or the one you put up with) package manager:
 
 ```shell
-yarn add @ovotech/laminar
+yarn add @laminar/laminar
 ```
 
 You'll also need typescript, if you don't have it already:
@@ -12,10 +12,10 @@ You'll also need typescript, if you don't have it already:
 yarn add typescript --dev
 ```
 
-We're not done yet. You're here because of all the fancy types and static type checking, you'd be remiss if you didn't go and install the CLI tools: [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli). Getting the compiler to work for you is fun! It goes to devDependencies though, since you shouldn't need to have it in your deployed service.
+We're not done yet. You're here because of all the fancy types and static type checking, you'd be remiss if you didn't go and install the CLI tools: [@laminar/cli](https://github.com/ivank/laminar/tree/main/packages/cli). Getting the compiler to work for you is fun! It goes to devDependencies though, since you shouldn't need to have it in your deployed service.
 
 ```shell
-yarn add @ovotech/laminar-cli --dev
+yarn add @laminar/cli --dev
 ```
 
 ## Your first simple http listener
@@ -26,7 +26,7 @@ We'll be implementing this [OpenAPI contract](https://swagger.io/specification/)
 
 Today though we'll start with service that just returns a user, given an id.
 
-> [examples/simple/src/api.yaml](https://github.com/ovotech/laminar/tree/main/examples/simple/src/api.yaml)
+> [examples/simple/src/api.yaml](https://github.com/ivank/laminar/tree/main/examples/simple/src/api.yaml)
 
 ```yaml
 openapi: '3.0.0'
@@ -65,7 +65,7 @@ components:
 >
 > -- IBM Pollyanna Principle
 
-Now comes the good part. Since we've already installed [@ovotech/laminar-cli](https://github.com/ovotech/laminar/tree/main/packages/laminar-cli). We can run it in the command line and get our typescript types directly from openapi yaml.
+Now comes the good part. Since we've already installed [@laminar/cli](https://github.com/ivank/laminar/tree/main/packages/cli). We can run it in the command line and get our typescript types directly from openapi yaml.
 
 ```shell
 yarn laminar api --file api.yaml --output __generated__/api.ts
@@ -77,10 +77,10 @@ If you want to keep the types up to date as you're making updates to the yaml fi
 yarn laminar api --file api.yaml --output __generated__/api.ts --watch
 ```
 
-> [examples/simple/src/index.ts](https://github.com/ovotech/laminar/tree/main/examples/simple/src/index.ts)
+> [examples/simple/src/index.ts](https://github.com/ivank/laminar/tree/main/examples/simple/src/index.ts)
 
 ```typescript
-import { HttpService, init, jsonOk } from '@ovotech/laminar';
+import { HttpService, init, jsonOk } from '@laminar/laminar';
 import { join } from 'path';
 import { openApiTyped } from './__generated__/api';
 
@@ -136,8 +136,8 @@ node index.js
 
 You can dive in directly with some other example apps:
 
-- [examples/simple](https://github.com/ovotech/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
-- [examples/security](https://github.com/ovotech/laminar/tree/main/examples/security) With some simple security built in
-- [examples/petstore](https://github.com/ovotech/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
-- [examples/comms](https://github.com/ovotech/laminar/tree/main/examples/comms) An api that holds some state for an external email api.
-- [examples/data-loader](https://github.com/ovotech/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).
+- [examples/simple](https://github.com/ivank/laminar/tree/main/examples/simple) Where you see how the most minimal laminar app with generated types can look like
+- [examples/security](https://github.com/ivank/laminar/tree/main/examples/security) With some simple security built in
+- [examples/petstore](https://github.com/ivank/laminar/tree/main/examples/petstore) A minimal but functional petstore implementation - with working jwt security and database access
+- [examples/comms](https://github.com/ivank/laminar/tree/main/examples/comms) An api that holds some state for an external email api.
+- [examples/data-loader](https://github.com/ivank/laminar/tree/main/examples/data-loader) This is a complex example, showing the use of various laminar services (kafka, database, queue).

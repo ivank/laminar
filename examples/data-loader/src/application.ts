@@ -1,8 +1,8 @@
-import { Application, HttpService, LoggerLike, loggerMiddleware, requestLoggingMiddleware } from '@ovotech/laminar';
-import { WinstonService } from '@ovotech/laminar-winston';
-import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService } from '@ovotech/laminar-pgboss';
-import { PgService, pgMiddleware } from '@ovotech/laminar-pg';
-import { KafkaConsumerService, kafkaLogCreator } from '@ovotech/laminar-kafkajs';
+import { Application, HttpService, LoggerLike, loggerMiddleware, requestLoggingMiddleware } from '@laminar/laminar';
+import { WinstonService } from '@laminar/winston';
+import { jobLoggingMiddleware, QueueService, queueMiddleware, QueueWorkerService } from '@laminar/pgboss';
+import { PgService, pgMiddleware } from '@laminar/pg';
+import { KafkaConsumerService, kafkaLogCreator } from '@laminar/kafkajs';
 import { SchemaRegistry, SchemaType } from '@kafkajs/confluent-schema-registry';
 import PgBoss from 'pg-boss';
 import { Kafka, logLevel } from 'kafkajs';
@@ -13,7 +13,7 @@ import { httpListener } from './services/http/http.listener';
 import { importWorker } from './services/queue/import.worker';
 import { createLogger, transports } from 'winston';
 import { consoleTransportFormat } from './logger';
-import { AvroTimestampMillis, AvroDecimal } from '@ovotech/laminar-avro';
+import { AvroTimestampMillis, AvroDecimal } from '@laminar/avro';
 
 /**
  * The main function of our project

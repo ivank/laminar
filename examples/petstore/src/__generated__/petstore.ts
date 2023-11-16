@@ -7,7 +7,7 @@ import {
   OapiSecurityResolver,
   OapiAuthInfo,
   ResponseOapi,
-} from '@ovotech/laminar';
+} from '@laminar/laminar';
 
 export const openApiTyped = <R extends Empty = Empty, TAuthInfo extends OapiAuthInfo = OapiAuthInfo>(
   config: Config<R, TAuthInfo>,

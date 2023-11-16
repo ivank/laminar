@@ -1,4 +1,4 @@
-import { HttpListener, HttpService, jsonOk, init } from '@ovotech/laminar';
+import { HttpListener, HttpService, jsonOk, init } from '@laminar/laminar';
 
 // << listener-http
 const httpListener: HttpListener = async (ctx) => jsonOk({ message: ctx.body });

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @ovotech/json-schema
+ * @module @laminar/json-schema
  */
 
 export { ValidationError } from './ValidationError';
