@@ -11,9 +11,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: adambirds/docker-compose-action@v1.3.0
-        with:
-          down-flags: '--volumes'
+      - run: docker-compose up pg
       - uses: actions/setup-node@v2
         with:
           node-version: '18.18.2'
