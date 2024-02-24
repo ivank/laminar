@@ -242,7 +242,7 @@ describe('Example files', () => {
       {},
     ],
     [
-      'examples/convertion.ts',
+      'examples/conversion.ts',
       {
         method: 'GET',
         url: '/user',

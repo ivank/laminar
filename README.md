@@ -42,7 +42,7 @@ A typical laminar app will concist of setting up the various instances that you 
 
 A key concept in Laminar is the use of middlewares, those are async function wrappers, that can be used to inject dependencies into function calls, while themselves being just functions. Very similar to [express middlewares](https://expressjs.com/en/guide/using-middleware.html), but allowing you to statically define and enforce the types all around.
 
-In practice it ends up looking like dependency injection, but it's just function calls and without the magic. As fancy as that may sound, a middleware is just a function wrapper. An example postgres middleware that take a pool and for each incomming request (function execution) will get a connection to the pool, pass it down to the function, and cleanup after its done.
+In practice it ends up looking like dependency injection, but it's just function calls and without the magic. As fancy as that may sound, a middleware is just a function wrapper. An example postgres middleware that take a pool and for each incoming request (function execution) will get a connection to the pool, pass it down to the function, and cleanup after its done.
 
 > [examples/docs/src/middleware.ts:(middleware)](https://github.com/ivank/laminar/tree/main/examples/docs/src/middleware.ts#L4-L23)
 

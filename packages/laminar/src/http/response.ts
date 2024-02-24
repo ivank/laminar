@@ -10,7 +10,7 @@ import { CookieOptions, serializeCookie } from './cookie';
 import { Readable } from 'stream';
 
 /**
- * Set additional paramters for the cookie
+ * Set additional parameters for the cookie
  *
  * @category HttpResponse
  */
@@ -78,9 +78,9 @@ export function redirect(
  */
 export interface FileOptions {
   /**
-   * The raw incommingMessage from the request, would be used to get the Range headers
+   * The raw incomingMessage from the request, would be used to get the Range headers
    */
-  incommingMessage?: IncomingMessage;
+  incomingMessage?: IncomingMessage;
   /**
    * A file stats object. If you've already made a `stat` call to the filesystem, you can reuse that data and spare that IO call, by providing the data directly.
    */
@@ -90,27 +90,27 @@ export interface FileOptions {
 /**
  * Return a file response.
  * Setting the 'content-type', 'content-length', 'last-modified' headers based on the file itself.
- * Supports content ranges as well, if you pass the incommingMessage from the request, so it can determine the range.
+ * Supports content ranges as well, if you pass the incomingMessage from the request, so it can determine the range.
  *
- * 'Content-Type' header is set by inspecting the file extention. If no match could be found, defaults to 'text/plain'.
+ * 'Content-Type' header is set by inspecting the file extension. If no match could be found, defaults to 'text/plain'.
  *
  * Would set the 'Last-Modified', 'Content-Type' and 'Content-Length' headers
- * If you provide `incommingMessage`, would set 'Last-Modified', 'Content-Type' and 'Accept-Ranges'. Also 'Content-Range' if there was a 'Range' header in the request
+ * If you provide `incomingMessage`, would set 'Last-Modified', 'Content-Type' and 'Accept-Ranges'. Also 'Content-Range' if there was a 'Range' header in the request
  *
  * @param filename a local path to the file.
  * @category HttpResponse
  */
 export function file(
   filename: string,
-  { headers, status = 200, incommingMessage, stats }: Partial<HttpResponse> & FileOptions = {},
+  { headers, status = 200, incomingMessage, stats }: Partial<HttpResponse> & FileOptions = {},
 ): HttpResponse<Readable | string> {
   const stat = stats ?? statSync(filename);
   const contentType = lookup(filename) || 'text/plain';
   const lastModified = stat.mtime.toISOString();
-  const hasRange = incommingMessage?.headers.range?.match(/^bytes=/);
+  const hasRange = incomingMessage?.headers.range?.match(/^bytes=/);
 
   if (hasRange) {
-    const range = incommingMessage?.headers.range ? parseRange(incommingMessage.headers.range, stat.size) : undefined;
+    const range = incomingMessage?.headers.range ? parseRange(incomingMessage.headers.range, stat.size) : undefined;
 
     if (range) {
       return {
@@ -136,7 +136,7 @@ export function file(
       status,
       body: createReadStream(filename),
       headers: {
-        ...(incommingMessage ? { 'accept-ranges': 'bytes' } : {}),
+        ...(incomingMessage ? { 'accept-ranges': 'bytes' } : {}),
         'content-type': contentType,
         'content-length': stat.size,
         'last-modified': lastModified,
@@ -298,7 +298,7 @@ export function badRequest<TResponseBody, TResponse extends Partial<HttpResponse
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
- * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
+ * 401 semantically means "unauthorized", the user does not have valid authentication credentials for the target resource.
  *
  * @typeParam TResponseBody Strictly type the response body
  * @typeParam TResponse A generic response, allowing us to preserve the types passed from previous helpers
@@ -398,7 +398,7 @@ export type ResponseCreator<TResponseBody, TStatus, THeaders> = (
 ) => { status: TStatus; body: TResponseBody; headers: THeaders };
 
 /**
- * A helper to allow optional bodies to be chained with nullish coallesing
+ * A helper to allow optional bodies to be chained with nullish coalescing
  * For example you can combine {@link jsonOk} and {@link jsonNotFound}
  *
  * ```typescript
@@ -763,7 +763,7 @@ export function jsonBadRequest<TResponseBody>(
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
- * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
+ * 401 semantically means "unauthorized", the user does not have valid authentication credentials for the target resource.
  *
  * @typeParam TResponseBody Strictly type the response body
  *
@@ -1040,7 +1040,7 @@ export function textBadRequest<TResponseBody>(body: TResponseBody, headers: Outg
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
- * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
+ * 401 semantically means "unauthorized", the user does not have valid authentication credentials for the target resource.
  *
  * @typeParam TResponseBody Strictly type the response body
  *
@@ -1321,7 +1321,7 @@ export function htmlBadRequest<TResponseBody>(
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
- * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
+ * 401 semantically means "unauthorized", the user does not have valid authentication credentials for the target resource.
  *
  * @typeParam TResponseBody Strictly type the response body
  *
@@ -1602,7 +1602,7 @@ export function yamlBadRequest<TResponseBody>(
  * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.
  * The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
  * See Basic access authentication and Digest access authentication.
- * 401 semantically means "unauthorised", the user does not have valid authentication credentials for the target resource.
+ * 401 semantically means "unauthorized", the user does not have valid authentication credentials for the target resource.
  *
  * @typeParam TResponseBody Strictly type the response body
  *

@@ -3,12 +3,12 @@
  * @module @laminarjs/laminar
  */
 export {
-  toIncommingMessageResolver,
+  toIncomingMessageResolver,
   toRequestListener,
   HttpService,
   HttpServiceParams,
   HttpsServiceParams,
-  IncommingMessageResolverParams,
+  IncomingMessageResolverParams,
   HttpParams,
 } from './http/http-service';
 export {
@@ -136,7 +136,7 @@ export {
   HttpResponse,
   HttpListener,
   HttpMiddleware,
-  IncommingMessageResolver,
+  IncomingMessageResolver,
 } from './http/types';
 export { HttpError, isHttpError } from './http/http-error';
 export {

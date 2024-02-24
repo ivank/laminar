@@ -339,7 +339,7 @@ describe('Requests', () => {
   it('Should process laminar file with range', async () => {
     const http = new HttpService({
       port: 8052,
-      listener: async ({ incommingMessage }) => file(join(__dirname, 'test.txt'), { incommingMessage }),
+      listener: async ({ incomingMessage }) => file(join(__dirname, 'test.txt'), { incomingMessage }),
     });
     await run({ initOrder: [http] }, async () => {
       await expect(api.get('/test', { headers: { Range: 'bytes=0-3' } })).resolves.toMatchObject({

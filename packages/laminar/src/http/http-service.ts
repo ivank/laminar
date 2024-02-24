@@ -1,5 +1,5 @@
 import { toHttpRequest } from './request';
-import { HttpListener, IncommingMessageResolver } from './types';
+import { HttpListener, IncomingMessageResolver } from './types';
 import { errorsMiddleware, HttpErrorHandler } from './middleware/errors.middleware';
 import { responseParserMiddleware, ResponseParser } from './middleware/response-parser.middleware';
 import { bodyParserMiddleware, BodyParser } from './middleware/body-parser.middleware';
@@ -8,6 +8,7 @@ import https from 'https';
 import { toArray } from '../helpers';
 import { Readable } from 'stream';
 import { Service } from '../types';
+import { Socket } from 'net';
 
 /**
  * Options supplied when creating the laminar application with {@link http.Server} (or {@link https.Server}).
@@ -15,7 +16,7 @@ import { Service } from '../types';
  *
  * @category http
  */
-export interface IncommingMessageResolverParams {
+export interface IncomingMessageResolverParams {
   /**
    * Convert a response body into a string / buffer / readable stream
    *
@@ -32,7 +33,7 @@ export interface IncommingMessageResolverParams {
   responseParsers?: ResponseParser[];
 
   /**
-   * Parse incomming request body
+   * Parse incoming request body
    *
    * Default parsers:
    *
@@ -55,24 +56,24 @@ export interface IncommingMessageResolverParams {
  *
  * @category http
  */
-export function toIncommingMessageResolver({
+export function toIncomingMessageResolver({
   responseParsers,
   bodyParsers,
   errorHandler,
   listener,
-}: IncommingMessageResolverParams): IncommingMessageResolver {
+}: IncomingMessageResolverParams): IncomingMessageResolver {
   const parseBody = bodyParserMiddleware(bodyParsers);
   const parseResponse = responseParserMiddleware(responseParsers);
   const handleErrors = errorsMiddleware(errorHandler);
   const resolver = parseResponse(handleErrors(parseBody(listener)));
 
-  return async function (incommingMessage) {
-    return resolver(toHttpRequest(incommingMessage));
+  return async function (incomingMessage) {
+    return resolver(toHttpRequest(incomingMessage));
   };
 }
 
 /**
- * Creeate a request listner to be used for [http.createServer](https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener)
+ * Create a request listener to be used for [http.createServer](https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener)
  *
  * A {@link HttpListener} would convert an incomingRequest to a {@link HttpResponse} object.
  * This function would also use the parameters of the {@link HttpResponse} to set the statusCode, headers and body in the Request Listener
@@ -80,9 +81,9 @@ export function toIncommingMessageResolver({
  *
  * @category http
  */
-export function toRequestListener(resolver: IncommingMessageResolver): http.RequestListener {
-  return async function (incommingMessage, serverResponse) {
-    const response = await resolver(incommingMessage);
+export function toRequestListener(resolver: IncomingMessageResolver): http.RequestListener {
+  return async function (incomingMessage, serverResponse) {
+    const response = await resolver(incomingMessage);
 
     let contentTypeValue = '';
     let dispositionValue = '';
@@ -141,7 +142,7 @@ export interface HttpParams {
 /**
  * @category http
  */
-export interface HttpServiceParams extends IncommingMessageResolverParams, HttpParams {
+export interface HttpServiceParams extends IncomingMessageResolverParams, HttpParams {
   /**
    * Options passed directly to [http.createServer](https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener)
    */
@@ -151,7 +152,7 @@ export interface HttpServiceParams extends IncommingMessageResolverParams, HttpP
 /**
  * @category http
  */
-export interface HttpsServiceParams extends IncommingMessageResolverParams, HttpParams {
+export interface HttpsServiceParams extends IncomingMessageResolverParams, HttpParams {
   /**
    * Options passed directly to [https.createServer](https://nodejs.org/api/https.html#https_https_createserver_options_requestlistener)
    */
@@ -169,18 +170,24 @@ export class HttpService implements Service {
   public hostname?: string;
   public name?: string;
   public server: https.Server | http.Server;
+  public sockets = new Set<Socket>();
 
   constructor(public params: HttpServiceParams | HttpsServiceParams) {
     this.port = params.port ?? (process.env.LAMINAR_HTTP_PORT ? Number(process.env.LAMINAR_HTTP_PORT) : 3300);
     this.hostname = params.hostname ?? process.env.LAMINAR_HTTP_HOST;
     this.name = params.name ?? '⛲ Laminar';
 
-    const requestListener = toRequestListener(toIncommingMessageResolver(params));
+    const requestListener = toRequestListener(toIncomingMessageResolver(params));
 
     this.server =
       'https' in params
         ? https.createServer(params.https, requestListener)
         : http.createServer(params.http ?? {}, requestListener);
+
+    this.server.on('connection', (socket) => {
+      socket.on('close', () => this.sockets.delete(socket));
+      this.sockets.add(socket);
+    });
 
     if (params.timeout !== undefined) {
       this.server.setTimeout(params.timeout);
@@ -191,8 +198,27 @@ export class HttpService implements Service {
     return new Promise((resolve) => this.server.listen(this.port, this.hostname, () => resolve(this)));
   }
 
-  stop(): Promise<this> {
-    return new Promise((resolve, reject) => this.server.close((err) => (err ? reject(err) : resolve(this))));
+  async stop(): Promise<this> {
+    await Promise.all([
+      new Promise((resolve, reject) => this.server.close((err) => (err ? reject(err) : resolve(true)))),
+      new Promise((resolve) => {
+        if (this.sockets.size === 0) {
+          resolve(true);
+        } else {
+          for (const socket of this.sockets) {
+            socket.on('close', () => {
+              this.sockets.delete(socket);
+              if (this.sockets.size === 0) {
+                setTimeout(() => resolve(true));
+              }
+            });
+            socket.destroy();
+          }
+        }
+      }),
+    ]);
+
+    return this;
   }
 
   url(): string {

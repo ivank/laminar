@@ -13,7 +13,7 @@
     "@kafkajs/confluent-schema-registry": "^3.3.0",
     "@laminarjs/laminar": "workspace:*",
     "@types/jest": "^29.5.8",
-    "@types/node": "^20.9.0",
+    "@types/node": "^20.11.20",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",

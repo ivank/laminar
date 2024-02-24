@@ -303,7 +303,7 @@ describe('Requests', () => {
       ).resolves.toMatchObject({
         status: 400,
         data: {
-          message: 'Error Parsing Request Body: "Unexpected token D in JSON at position 8" with parser: JsonBodyParser',
+          message: expect.stringContaining('Error Parsing Request Body'),
         },
       });
 

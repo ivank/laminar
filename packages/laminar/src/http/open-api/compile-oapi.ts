@@ -26,7 +26,7 @@ export function resolveRef<T extends oas31.ISpecificationExtension>(
  * Compile an OpenApi file, loading all the referenced schemas.
  * Validate against the official OpenApi schema to make sure the api is valid.
  *
- * Additioanlly ensure that all the paths resolvers and security resolvers are present for all paths
+ * Additionally ensure that all the paths resolvers and security resolvers are present for all paths
  *
  * @typeParam TRequest pass the request properties that the app requires. Usually added by the middlewares
  *

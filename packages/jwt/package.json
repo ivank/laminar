@@ -31,7 +31,7 @@
     "@types/jest": "^29.5.8",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lru-cache": "^7.10.10",
-    "@types/node": "^20.9.0",
+    "@types/node": "^20.11.20",
     "@types/tough-cookie": "^4.0.5",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",

@@ -3,9 +3,9 @@ import { createServer } from 'http';
 
 /**
  * A resolver is a function that gets a raw request and returns a Response object.
- * By default the requestListener would supply only the raw unprocessed incomming message
+ * By default the requestListener would supply only the raw unprocessed incoming message
  */
-const app: HttpListener = async ({ incommingMessage }) => response({ body: incommingMessage.url });
+const app: HttpListener = async ({ incomingMessage }) => response({ body: incomingMessage.url });
 
 export const server = createServer(
   {},

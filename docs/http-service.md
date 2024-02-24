@@ -130,7 +130,7 @@ const service = new HttpService({
 });
 ```
 
-Since body parsers are getting the raw incomming message stream, you can write your own streaming parsers, that can leave the request as a stream, and allow you to process it as such in your application.
+Since body parsers are getting the raw incoming message stream, you can write your own streaming parsers, that can leave the request as a stream, and allow you to process it as such in your application.
 
 > [examples/docs/src/http-service/body-parser-streaming.ts:(CustomStreamingBodyParser)](https://github.com/ivank/laminar/tree/main/examples/docs/src/http-service/body-parser-streaming.ts#L15-L46)
 

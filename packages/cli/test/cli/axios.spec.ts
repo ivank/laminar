@@ -3,7 +3,9 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import { axiosContent } from '../../src';
 
-const oapiSchemas = readdirSync(join(__dirname, '../specs')).filter((file) => file.endsWith('.yaml'));
+const oapiSchemas = readdirSync(join(__dirname, '../specs')).filter(
+  (file) => file.endsWith('.yaml') || file.endsWith('.json'),
+);
 
 describe('Axios Content', () => {
   it.each(oapiSchemas)('Test %s', async (file) => {

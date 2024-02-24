@@ -78,17 +78,17 @@ describe('Integration', () => {
             logger('Auth Successful');
             return securityOk({ user: 'dinkey' });
           } else {
-            return securityError({ message: 'Unathorized user' });
+            return securityError({ message: 'Unauthorized user' });
           }
         },
         BasicAuth: ({ headers }) =>
           headers.authorization === 'Basic 123'
             ? securityOk({ user: 'apikey' })
-            : securityError({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unauthorized user' }),
         ApiKeyAuth: ({ headers }) =>
           headers['x-api-key'] === 'Me'
             ? securityOk({ user: 'apikey' })
-            : securityError({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unauthorized user' }),
         CookieAuth: ({ cookies, securityScheme: { name } }) =>
           name && cookies?.[name] === 'Me'
             ? securityOk({ user: 'cookie' })
@@ -366,7 +366,7 @@ describe('Integration', () => {
             .catch((error) => error.response),
         ).resolves.toMatchObject({
           status: 403,
-          data: { message: 'Unathorized user' },
+          data: { message: 'Unauthorized user' },
         });
 
         await expect(
@@ -395,7 +395,7 @@ describe('Integration', () => {
             .catch((error) => error.response),
         ).resolves.toMatchObject({
           status: 403,
-          data: { message: 'Unathorized user' },
+          data: { message: 'Unauthorized user' },
         });
 
         await expect(
@@ -414,7 +414,7 @@ describe('Integration', () => {
             .catch((error) => error.response),
         ).resolves.toMatchObject({
           status: 403,
-          data: { message: 'Unathorized user' },
+          data: { message: 'Unauthorized user' },
         });
 
         await expect(
@@ -588,7 +588,7 @@ describe('Integration', () => {
 
         await expect(
           api.delete('/pets/222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
-        ).resolves.toMatchObject({ status: 403, data: { message: 'Unathorized user' } });
+        ).resolves.toMatchObject({ status: 403, data: { message: 'Unauthorized user' } });
 
         await expect(api.delete('/pets/222', { headers: { 'X-API-KEY': 'Me' } })).resolves.toMatchObject({
           status: 204,

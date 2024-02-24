@@ -24,7 +24,7 @@ const listener: HttpListener = router(
 
 The simplest possible http listener app you can write is just a function. Takes a request object, and returns response object.
 
-A request object has at its core this `incommingMessage` which is an instance from node's own [http.IncommingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage) though in practice you wouldn't need to interact with it much.
+A request object has at its core this `incomingMessage` which is an instance from node's own [http.IncomingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage) though in practice you wouldn't need to interact with it much.
 
 > [examples/docs/src/http-service-router/function.ts:(function)](https://github.com/ivank/laminar/tree/main/examples/docs/src/http-service-router/function.ts#L3-L10)
 
@@ -32,7 +32,7 @@ A request object has at its core this `incommingMessage` which is an instance fr
 /**
  * Returns the url path being accessed
  */
-const listener: HttpListener = async ({ incommingMessage }) => jsonOk({ accessedUrl: incommingMessage.url });
+const listener: HttpListener = async ({ incomingMessage }) => jsonOk({ accessedUrl: incomingMessage.url });
 ```
 
 While simple the app sits at the heart of all of laminar and is an essential building block, so don't dismiss it out of hand.

@@ -1,6 +1,6 @@
 {
   "name": "@laminarjs/laminar",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
@@ -14,7 +14,7 @@
     "@types/jest": "^29.5.8",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/mime-types": "^2.1.4",
-    "@types/node": "^20.9.0",
+    "@types/node": "^20.11.20",
     "@types/tough-cookie": "^4.0.5",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
