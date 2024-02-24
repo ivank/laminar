@@ -1,8 +1,8 @@
 import { HttpService, init, jsonOk } from '@laminarjs/laminar';
-import { openApiTyped } from './__generated__/convertion.yaml';
+import { openApiTyped } from './__generated__/conversion.yaml';
 import { join } from 'path';
 
-const api = join(__dirname, 'convertion.yaml');
+const api = join(__dirname, 'conversion.yaml');
 
 const main = async () => {
   const listener = await openApiTyped({

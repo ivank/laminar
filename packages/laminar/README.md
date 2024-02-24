@@ -234,19 +234,19 @@ const MySecurity = ({ headers }, { scopes }) => {
 
 You can use [@laminarjs/cli](../lamina-cli) package to generate types.
 
-### Json Type Convertion
+### Json Type conversion
 
 JSON and JS object are not _exactly_ the same, as you can [read to your horror at MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#Description). Laminar tries to follow that spec, converting your JS objects into stuff that your json-schema can validate. For example Date objects are converted to iso strings and undefined fields are omitted from the object.
 
 This works on type level too. The types generated from the OpenApi schema would match JS objects passed to the helper functions `jsonOk`, `jsonNotFound` etc.
 
-> [examples/convertion.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/convertion.ts)
+> [examples/conversion.ts](https://github.com/ivank/laminar/tree/main/packages/laminar/examples/conversion.ts)
 
 ```typescript
 import { HttpService, jsonOk, openApi, init } from '@laminarjs/laminar';
 import { join } from 'path';
 
-const api = join(__dirname, 'convertion.yaml');
+const api = join(__dirname, 'conversion.yaml');
 
 const main = async () => {
   const listener = await openApi({

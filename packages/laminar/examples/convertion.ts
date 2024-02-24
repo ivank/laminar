@@ -1,7 +1,7 @@
 import { HttpService, jsonOk, openApi, init } from '@laminarjs/laminar';
 import { join } from 'path';
 
-const api = join(__dirname, 'convertion.yaml');
+const api = join(__dirname, 'conversion.yaml');
 
 const main = async () => {
   const listener = await openApi({

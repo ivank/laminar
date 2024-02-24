@@ -41,7 +41,7 @@ describe('Example files', () => {
       { text: 'ok', user: { email: 'me@example.com' } },
     ],
     [
-      'examples/convertion.ts',
+      'examples/conversion.ts',
       {
         method: 'GET',
         url: '/user',
