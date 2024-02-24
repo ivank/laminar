@@ -1,6 +1,6 @@
 {
   "name": "@laminarjs/laminar",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A minimal nodejs http server, built around the concept of strictly typed middlewares",
