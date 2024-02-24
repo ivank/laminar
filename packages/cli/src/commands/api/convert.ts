@@ -22,6 +22,7 @@ import {
   isMediaTypeObject,
   isPathItemObject,
 } from '../../traverse';
+import { findMediaType } from '../../helpers';
 
 interface AstParameters {
   in: {
@@ -194,7 +195,7 @@ const convertRequestBody = (
 ): Document<ts.TypeLiteralNode, AstContext> => {
   const requestBody = getReferencedObject(requestBodyOrRef, isRequestBodyObject, 'request-body', context);
   const schema =
-    requestBody.content['application/json']?.schema ??
+    findMediaType('application/json', requestBody.content)?.schema ??
     requestBody.content['application/x-www-form-urlencoded']?.schema ??
     requestBody.content['multipart/form-data']?.schema ??
     {};

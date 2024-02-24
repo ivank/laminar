@@ -12,7 +12,7 @@
   "devDependencies": {
     "@laminarjs/cli": "*",
     "@types/jest": "^29.5.8",
-    "@types/node": "^20.9.0",
+    "@types/node": "^20.11.20",
     "@types/pg": "^8.10.9",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",

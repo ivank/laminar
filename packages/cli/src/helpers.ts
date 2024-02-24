@@ -1,5 +1,5 @@
 import { compile, ensureValid, Schema } from '@laminarjs/json-schema';
-import { openapiV3 } from 'openapi-schemas';
+import { openapiV3, openapiV31 } from 'openapi-schemas';
 import { oas31 } from 'openapi3-ts';
 import { AstContext } from './traverse';
 import * as YAML from 'yaml';
@@ -20,6 +20,18 @@ export const toTitleCase = (str: string): string =>
     .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
     .replace(' ', '');
 
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const matchMediaQuery = <T>(mediaType: string, resources: Record<string, T>): T | undefined => {
+  const [base, type] = mediaType.split('/');
+  const matcher = new RegExp(`^(${base}/\\w+\\+${escapeRegExp(type)})|${base}/\\*|\\*/\\*$`);
+  const key = Object.keys(resources).find((key) => matcher.test(key));
+  return key ? resources[key] : undefined;
+};
+
+export const findMediaType = <T>(mediaType: string, resources?: Record<string, T>): T | undefined =>
+  resources ? resources[mediaType] ?? matchMediaQuery(mediaType, resources) : undefined;
+
 /**
  * Compile an openapi schema, converting it into a context.
  * This context allows you to use it in conjuction with parts of the schema as
@@ -29,8 +41,17 @@ export const toContext = async (
   fileName: string,
 ): Promise<{ context: AstContext; uris: string[]; value: oas31.OpenAPIObject }> => {
   const { schema, uris, refs } = await compile(fileName);
+
+  const openapiSchema =
+    typeof schema === 'object' &&
+    'openapi' in schema &&
+    typeof schema.openapi === 'string' &&
+    schema.openapi.startsWith('3.1')
+      ? openapiV31
+      : openapiV3;
+
   const { value } = await ensureValid<oas31.OpenAPIObject>({
-    schema: openapiV3 as Schema,
+    schema: openapiSchema as Schema,
     value: schema,
     name: 'OpenAPI',
   });

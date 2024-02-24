@@ -22,7 +22,7 @@ export interface RouteContext {
 }
 
 /**
- * A function to check if a route matches. If it does, returns the captured path parameters, otherwsie - false.
+ * A function to check if a route matches. If it does, returns the captured path parameters, otherwise - false.
  *
  * @typeParam TContext pass the request properties that the listener requires. Usually added by the middlewares
  * @category http
@@ -59,7 +59,7 @@ export interface PathRouteOptions<TContext extends Empty> {
    */
   method?: string;
   /**
-   * If a pathname has a {some_name} in it it would be captured and accessible with the `path` paramters.
+   * If a pathname has a {some_name} in it it would be captured and accessible with the `path` parameters.
    * You can have multiple parameters in the path, all of them will be extracted.
    *
    * You match pathnames with regex.
@@ -91,7 +91,7 @@ export interface PathRouteOptions<TContext extends Empty> {
  */
 export type Method = <TContext extends Empty = Empty>(
   /**
-   * If a pathname has a {some_name} in it it would be captured and accessible with the `path` paramters.
+   * If a pathname has a {some_name} in it it would be captured and accessible with the `path` parameters.
    * You can have multiple parameters in the path, all of them will be extracted.
    *
    * You match pathnames with regex.
@@ -259,7 +259,7 @@ export const options: Method = (path, listener) => route({ method: 'OPTIONS', pa
 const parentPathRegEx = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
 
 /**
- * You can serve a directory of static assesets with `staticAssets` helper.
+ * You can serve a directory of static assets with `staticAssets` helper.
  *
  * @param prefixPath The pathname where the directory would be located, example: '/assets'
  * @param root The directory containing the files
@@ -277,37 +277,37 @@ export function staticAssets<T extends Empty = Empty>(
     fileNotFound = async () => textNotFound('File not found'),
   }: StaticAssetsOptions = {},
 ): PathRoute<T> {
-  const allwoedMethods = ['GET', 'HEAD'];
+  const allowedMethods = ['GET', 'HEAD'];
 
   return {
     matcher: (ctx) => {
-      return allwoedMethods.includes(ctx.incommingMessage.method ?? '') &&
-        ctx.incommingMessage.url?.startsWith(prefixPath)
+      return allowedMethods.includes(ctx.incomingMessage.method ?? '') &&
+        ctx.incomingMessage.url?.startsWith(prefixPath)
         ? { path: {} }
         : false;
     },
     listener: async (ctx) => {
-      const relativePath = join('.', normalize(ctx.incommingMessage.url ?? '').substring(prefixPath.length));
+      const relativePath = join('.', normalize(ctx.incomingMessage.url ?? '').substring(prefixPath.length));
 
       if (parentPathRegEx.test(relativePath)) {
         return textForbidden('Access Denied');
       }
 
       const filename = resolve(normalize(root), relativePath);
-      const incommingMessage = acceptRanges ? ctx.incommingMessage : undefined;
+      const incomingMessage = acceptRanges ? ctx.incomingMessage : undefined;
 
       if (existsSync(filename)) {
         const stats = statSync(filename);
         if (stats.isDirectory()) {
           if (index) {
-            const indexname = join(filename, index);
-            if (existsSync(indexname)) {
-              return file(indexname, { incommingMessage });
+            const indexName = join(filename, index);
+            if (existsSync(indexName)) {
+              return file(indexName, { incomingMessage });
             }
           }
           return indexNotFound(ctx);
         } else {
-          return file(filename, { incommingMessage, stats });
+          return file(filename, { incomingMessage, stats });
         }
       } else {
         return fileNotFound(ctx);

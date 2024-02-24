@@ -2,6 +2,7 @@ import { document, Document, mapWithContext, Type, Node, withImports, withIdenti
 import { oas31 } from 'openapi3-ts';
 import ts from 'typescript';
 import { convertSchema } from '../../convert-schema';
+import { findMediaType } from '../../helpers';
 import {
   AstContext,
   isSchemaObject,
@@ -116,7 +117,7 @@ const convertResponses = (
 
   const astResponses = mapWithContext(context, responseEntries, (responseContext, responseOrRef) => {
     const response = getReferencedObject(responseOrRef, isResponseObject, 'response', responseContext);
-    const schema = response?.content?.['application/json']?.schema ?? response?.content?.['*/*']?.schema;
+    const schema = findMediaType('application/json', response?.content)?.schema;
 
     return schema ? convertSchema(responseContext, schema) : document(responseContext, undefined);
   });
@@ -136,7 +137,7 @@ const convertRequestBody = (
   const requestBody = requestBodyOrRef
     ? getReferencedObject(requestBodyOrRef, isRequestBodyObject, 'request-body', context)
     : undefined;
-  const schema = requestBody?.content['application/json']?.schema;
+  const schema = findMediaType('application/json', requestBody?.content)?.schema;
   const convertedSchema = schema ? convertSchema(context, schema) : document(context, Type.Unknown);
   return document(convertedSchema.context, {
     isOptional: !requestBody?.required,

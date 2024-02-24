@@ -32,15 +32,15 @@ describe('Integration', () => {
         BearerAuth: ({ headers }) =>
           headers.authorization === 'Bearer 123'
             ? securityOk({ user: 'dinkey' })
-            : securityError({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unauthorized user' }),
         BasicAuth: ({ headers }) =>
           headers.authorization === 'Basic 123'
             ? securityOk({ user: 'basickey' })
-            : securityError({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unauthorized user' }),
         ApiKeyAuth: ({ headers }) =>
           headers['x-api-key'] === 'Me'
             ? securityOk({ user: 'apikey' })
-            : securityError({ message: 'Unathorized user' }),
+            : securityError({ message: 'Unauthorized user' }),
       },
       paths: {
         '/pets': {
@@ -49,7 +49,7 @@ describe('Integration', () => {
           post: async ({ body, authInfo }) => {
             const pet = { ...body, id: Math.max(...db.map((item) => item.id)) + 1 };
             db.push(pet);
-            return jsonOk({ pet, user: authInfo && authInfo.user });
+            return jsonOk({ pet, user: authInfo && authInfo.user }, { 'Content-Type': 'application/pet+json' });
           },
         },
         '/pets/{id}': {
@@ -106,7 +106,7 @@ describe('Integration', () => {
         ).catch((error) => error.response),
       ).resolves.toMatchObject({
         status: 403,
-        data: { message: 'Unathorized user' },
+        data: { message: 'Unauthorized user' },
       });
 
       await expect(
@@ -171,7 +171,7 @@ describe('Integration', () => {
         api['DELETE /pets/{id}']('222', { headers: { 'X-API-missing': 'Me' } }).catch((error) => error.response),
       ).resolves.toMatchObject({
         status: 403,
-        data: { message: 'Unathorized user' },
+        data: { message: 'Unauthorized user' },
       });
 
       await expect(api['DELETE /pets/{id}']('222', { headers: { 'X-API-KEY': 'Me' } })).resolves.toMatchObject({

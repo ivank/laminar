@@ -118,7 +118,7 @@ export interface OapiConfig<TContext extends Empty = Empty, TOapiAuthInfo extend
   error?: HttpListener<TContext & { error: HttpError }>;
   /**
    * Format json-schema errors.
-   * Refering to the `formatError` property in https://github.com/ivank/laminar/tree/main/packages/json-schema#custom-error-messages
+   * Referring to the `formatError` property in https://github.com/ivank/laminar/tree/main/packages/json-schema#custom-error-messages
    */
   formatErrors?: FormatErrors;
 }

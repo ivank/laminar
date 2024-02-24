@@ -200,12 +200,12 @@ export class MultipartParser extends Transform {
   }
 
   /**
-   * Transform incomming chunks into MultipartItem[].
+   * Transform incoming chunks into MultipartItem[].
    *
    * We are either parsing http header, that are new line terminated, or the body, which is terminated by the boundary string.
    * That's why we need to keep track which state we're currently in.
    *
-   * Depending on the state, for each index in the buffer we check for the termination string, and if matches, save eithere the header or the body.
+   * Depending on the state, for each index in the buffer we check for the termination string, and if matches, save either the header or the body.
    *
    * All operations are performed with buffer.slice, which does not allocate new memory for the objects.
    */

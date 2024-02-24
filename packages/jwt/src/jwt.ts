@@ -114,7 +114,7 @@ export const authMiddleware =
   (scopes) =>
   (next) =>
   async (req) => {
-    const result = await verifyBearer(options, req.incommingMessage.headers.authorization, scopes);
+    const result = await verifyBearer(options, req.incomingMessage.headers.authorization, scopes);
     if (isSecurityOk(result)) {
       return next({ ...req, ...result });
     } else {

@@ -5,7 +5,7 @@ import { HttpListener, HttpService, jsonOk, init } from '@laminarjs/laminar';
 /**
  * Returns the url path being accessed
  */
-const listener: HttpListener = async ({ incommingMessage }) => jsonOk({ accessedUrl: incommingMessage.url });
+const listener: HttpListener = async ({ incomingMessage }) => jsonOk({ accessedUrl: incomingMessage.url });
 
 // function
 

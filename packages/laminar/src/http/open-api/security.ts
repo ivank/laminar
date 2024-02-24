@@ -8,7 +8,7 @@ import { HttpError, isHttpError } from '../http-error';
 import { OutgoingHttpHeaders } from 'http';
 
 /**
- * Return a {@link SecurityOk} object, indicating a successfull security check. Should be returned by a {@link OapiSecurityResolver}
+ * Return a {@link SecurityOk} object, indicating a successful security check. Should be returned by a {@link OapiSecurityResolver}
  *
  * @category http
  */
@@ -17,7 +17,7 @@ export function securityOk<TOapiAuthInfo extends OapiAuthInfo>(authInfo: TOapiAu
 }
 
 /**
- * Return a {@link HttpError} object, indicating a faild security check. Should be returned by a {@link OapiSecurityResolver}
+ * Return a {@link HttpError} object, indicating a failed security check. Should be returned by a {@link OapiSecurityResolver}
  *
  * @category http
  */
@@ -26,7 +26,7 @@ export function securityError(body: { message: string; [key: string]: unknown })
 }
 
 /**
- * Return a {@link HttpError} object, indicating a faild security check, to redirect to a new page Should be returned by a {@link OapiSecurityResolver}
+ * Return a {@link HttpError} object, indicating a failed security check, to redirect to a new page Should be returned by a {@link OapiSecurityResolver}
  *
  * @category http
  */
@@ -38,7 +38,7 @@ export function securityRedirect(
 }
 
 /**
- * Check if a response from {@link OapiSecurityResolver} is a {@link SecurityOk} object, indicating a successfull security check
+ * Check if a response from {@link OapiSecurityResolver} is a {@link SecurityOk} object, indicating a successful security check
  *
  * @category http
  */
@@ -47,7 +47,7 @@ export function isSecurityOk(item: unknown): item is SecurityOk {
 }
 
 /**
- * Using the OpenApi schema requiremnts over the current request.
+ * Using the OpenApi schema requirements over the current request.
  *
  * @category http
  */

@@ -8,7 +8,7 @@ import { Empty, AbstractMiddleware } from '../types';
  * The initial Request that comes from node's [http.createServer](https://nodejs.org/api/http.html#http_http_createserver_options_requestlistener)
  */
 export interface HttpContext {
-  incommingMessage: IncomingMessage;
+  incomingMessage: IncomingMessage;
 
   /**
    * The host header, takes proxies into account using x-forwarded-host into account
@@ -16,12 +16,12 @@ export interface HttpContext {
   host: string;
 
   /**
-   * Check if the incommingMessage is from a TLSSocket or Socket
+   * Check if the incomingMessage is from a TLSSocket or Socket
    */
   protocol: 'http' | 'https';
 
   /**
-   * http.IncomingHttpHeaders from the incommingMessage
+   * http.IncomingHttpHeaders from the incomingMessage
    */
   headers: IncomingHttpHeaders;
 
@@ -133,4 +133,4 @@ export type HttpMiddleware<TProvide extends Empty = Empty, TRequire extends Empt
   TRequire
 >;
 
-export type IncommingMessageResolver = (incommingMessage: IncomingMessage) => Promise<HttpResponse>;
+export type IncomingMessageResolver = (incomingMessage: IncomingMessage) => Promise<HttpResponse>;
